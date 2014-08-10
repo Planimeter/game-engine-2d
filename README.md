@@ -1,4 +1,1 @@
-grid-sdk
-========
-
-The Grid SDK
+![Grid](/src/images/gui/logo.png?raw=true "Grid")
