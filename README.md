@@ -14,7 +14,7 @@ Features
 * Common convenience classes
 * Client, server, shared engine codebase abstraction layer
 * GUI
-* Console
+* In-game console
 * Moddable options menu
 * ENet-based networking with high-performance localhost network backdoor
 * Persistent framebuffers
