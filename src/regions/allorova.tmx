@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="100" height="100" tilewidth="32" tileheight="32" backgroundcolor="#1f2324">
+ <tileset firstgid="1" name="World" tilewidth="32" tileheight="32">
+  <image source="../images/tilesets/world.png" width="1920" height="1080"/>
+ </tileset>
+ <layer name="Dirt" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJztwwEJAAAMBKH7/qUHy6Hgqqmqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqv8AX0MnEQ==
+  </data>
+ </layer>
+ <layer name="Grass" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt2NlS1FAQxvFzeB+3iMsrubC4XKKi+CoqzuBy44aovJKKoOCF3ZXTlU7gDJOBSgrz/1V9RRhgajidPktCAAAAAAAAAAAAAAAAAAAAAAAAADA0K5IHkoeSJ5I1ydNeP9FwaS1+SXYlr2IIX+TrV8k3yXaPn2uItBZzKXuS3yl/JPuSA8nf3j7d/+99ygfJR8knyWYo63FZemM+ltePJKuSx+71K5KrkmuS6yk4me+SH5Kfkp1QzVPjWPWJ5rNkK5Rzl64pvj6sL9M5F+v3vr+XlV+zL8prl2K9L0axqovNXTZvLcnry5I7kruSe5L7kZpMckPG56bkVizv+SKWY6/Xdt/r9V6o94KN9Vw4HPt9rZNfX3StP+j0vztbfF/ofa+1WMyM8SzRmlkfzac+sflM92LNXhyy5vq8kGph6/Ss2W18b2uK9pL1lJ/D/Dw2VM31WWP1WIz1dWDaOizEqsc23ftpDfS9NmJVGz/faV30/PJa8kbydoB18b2ha7TmZVqbR26OsbpMqoONsf691aCI9e+XUi3s/bZCfd7iDHn0eaKI9XvXny0m9YWN+bqrq/6sWROthdWEvXCd31fdduOm46j7oo00jxy3Vtj4+mv/O1afceO9/VmFHqk8l7F54eoxOqYGPoXrIX+dq4f1BL2Rl3sO0ja+B3xsrlp2PeF7w9by7W7+3TNBz+jnJRdidQYvGvulk+yBrR9sPrOvtufl+eNhuWdUbeavafZhrBft5Hpl1jo0n2nRC+3kzu2z1CL3zB3traT488Sk+PO27ZWHfOY+Tbk5y89buWfpOD3NOozi0fPVmB7oRO7MbvPVauAM16V3ob6e29qh5w/2qt3LnUHYt/YnN2exb+3Hs1g9Y1xP6zb7KAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAEPwD+vAHjg==
+  </data>
+ </layer>
+ <layer name="Detail Grass" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt2ItOwjAUANAmivLwp+Sh/v8XuYbdWEsREMYInJM0bmtDmra3tzUlAAAAAAAAAAAAAAAAAIDbNu/KYuxOPLh1Vzb93+eufHblq6ifjNGpBzXpy0v1PeLk6eo9uj+rtF3rx8rzkeMiYiI/f6TdOOF/pl2ZpZ81/pa245rfyzgo137dPiW55FIiH+Q13pqbPCeve+rKmBAj56vHuJybGNtl2u5py0bdsb+9qeqeL9P9u9Ma/zpft/am+J61cvi+vN46C/Bbax/K4xZjWs/XX/tXdsrZgF2H8kes6XIOVqkdW2W7EDHH6VpjnN8jh0R9LeeD96pdKf/WfJgu371WjMS3XMocUMdO65nztGJk1n+LHB4xUsdEPJdzeep9k7ZyTMu5ad37yraL5C4yhNa+tU6785HbleNvHobR2rdS/x6cm66rzM/+dzu+nJ9jz8rEw7jiXDU91JBBxb0i8ofz6rhij3J3uA0RFwAAAAAAAAAAAAAAAAAAAAA8tm+kaCJ/
+  </data>
+ </layer>
+ <layer name="World Gate" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJztzsERQFAQBcGfAOJCXIgLiXm1Oai9dFfNfcYAAAAAAAAAAAAAAAAAAAAA+M+U5rR0j1DWtKW9e4RypDNd3SOUOz3p7R4BAAAAAAAAAAAAAAAAAAAAAAAAAACg3Qc+AwTh
+  </data>
+ </layer>
+ <layer name="World Gate Detail" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJztzqEBADAIwDAEZvx/MAaxDxAkprYRAAAAAAAAAAAAAAAAAAAAAADk9K1e8KvtAQAAAAAAAAAAAAAAAAAAAAAAAAAA4KwGVtQAGA==
+  </data>
+ </layer>
+ <layer name="Trees" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt12FOhDAQBlC4gd6HI+i99F56L1EhljK0JVm3RN9LmiVLf5CZfB0YBgAAAAAAAAAAAAAAgL/tYV6PvR/in0t78DSv547PwrYHL/N6HeSkp7UHn97m9T7ISU9rD76M3z9pj3KyczthLcefy2m53vQoIzu3E9VyGoON0X+LUnY4p7WWeY/SXJWyw17pfF9reXYGbHJVyA57xfN9bNgz7PuV5irNjtlel59Jac2m4P0pqmner6Mzymyvy2sX1SzdE93fzZmDM8psb5DVLqzZWL6f9zR8Bwv2sZfXLqpZuies6XK/Oh/M9vNqNQvuT41z/yg3HKvVbCpkwXzopzb3+T3NWXAe3UVrFsyH+5CFa5GF/jYzQ+27S2eGLPTnW+JafEtcjDPqUswMAAAAAAAAAAAAAAAAAAAAAD4APrI5IQ==
+  </data>
+ </layer>
+ <layer name="Trees Nearer" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt2MFNxDAUBNClA+iHEqAv6Av6IqeArFXkOMaeld+TfNib5bUy43+7AQAAAAAAAAAAwP963tbL7E2we9vW++xNsPvY1ufsTbD72tb37E3w62n2BvjrdfH/Q5/Jos9k0Wey6DNhFs/PNDV9RuZnkflZZH4WmR9G5kdZfYbxyMouppu163F2ZRfTzdr1OLuyi+lm7XqcXdnFdLN2Xc6uzH5doN2dszubKWUXK3/L93r3em3vPJbv1/TOY/l+Te88lu8X9c5j+X5J71nJ6rMXfSaLPlNvxN3VZ+qNuLv6TL0hd3fx/Dzj6O72+pat3mdOOTgrOTze0d2Vw1nkcBjf/ShyGGAcs8ws3lBZvKGyeEOF0dmjeEMBAAA8BvPYLOaxWcxjs5jHhjH/i2IeCwAAAAAA1PoBhYYuaw==
+  </data>
+ </layer>
+ <layer name="Trees Farther" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt18ENwjAMBdCyAezDCLAX7AV7kXNlyRYYKOQ9KafmEP24trIsAAAAAAAAAAAAAAAAALH9WIdvH+JPZFlWsj6NdW470dyyLCtZX8a6tp1oblmWlaxvY93bTjSPqPdkWZay3r1wqImFvSfLcvU9utOj+3hK1HuyLNffze4+HX3e7G7U0FfM7j4tfd6s2JToTr3Pt8WM71et8WifGd+vWuPRPjO+X7XGw31mfLtqjUf7vM/foJqp7D+iWuP+BQAAAAAAAAAAAAAAAAAAAAAAAOCXPACbBhyR
+  </data>
+ </layer>
+ <layer name="Outer Trees" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJztnFlOBDEMRMN2AZbzcAOWa7Fci+VWBCE0CHWm7cSOy46flD+Ekky5qnrUmlKSxAeXdV3VdV3XjfFeklLu6rqv66GuR+O9JKU81fVc10tdr8Z7SUp5q+u9ro+6Po33kpRyelLKWV3ndV2cWO8m+eY2P4dEgEjdMMJZInXDCGeJ1A0jnEWyG1r7RYSeK9kNrf0iSs/d6oY9Wkfwi6g9t0frEfwClR6te/AL64zrpVfr6H5BnXu0z82D1nugzr11N9kCXes9UOceoZtsgTC3knugzv2sbsI9G8LcSu+BMvez/Jp7NoS5tdrDDL/mng3hmQJhD1pwz4bQsxD2oEXP2STntjebI3a9XyzPNqsfIPRCD8zKZoRe6IFZ2YzQCz0wks0cD4rcyaTpzS+OB0XuZC1mZybXgyJ3si1mZ2Z60HFmZ2Z0Dxr1Gwu97nmQ5+eOUb9B1Kvn5w4Jv0HLTM/PHVS/8eQBnjOf6jeePADRQzlQ/MabB6B5qDSePSAi3j0gIn89wFO+r4CnfF8Bb/lOwfPMR8x3zzPvId+5evc+8+gdn6v3iDOP5MFcvXuYeS5IHtyjd/SZ54LkwRH1zqXXgyk+1+OF0fTOpVeTFJ9D8kJP9GiS4nNIXhgdis+N9lGk7ocOxedG8zn9jgfF537/xutvRyAi4Rv52xH7UO9Zwjei/naEJNR7bt3ljHfXvTyPSHgIVbOtu8x31w9IeAhVs627zHfXD0h0D45mt+5ytbw9htRdjGg2ugdxQLmLyB7UopXdK94FAvm9ARZRvzcY6eyW3zVG7TEjc2/pGQjZraHHkbm39gzr7NbQ48jce/MMaT1r6HFk7hE8g4O0nrX0ODL31p7BQVrP3vSIRkvPIz7mSY9otPScz5Z2bOlZuyfmOyE8tHtizh8P7Vy2fk7ziGYue3tOi072Yh4aefv/f2YvPrB33xp5mxneZu9uNPI2M7zN3t1o5C1qhiM8C+3djUbeomY4go9S7kYjbxEzHMVHEe/GAlQfXRVJH0XIoghIeQVCFiUHULIo+WH1LELza9ROP4uWX1t+Tiv31pZfZ67a0PLrzFUbWn69eq5asuXXq+cqIivnapLM4gswwzQe
+  </data>
+ </layer>
+ <objectgroup name="Spawn Points" width="100" height="100">
+  <object name="Allorova World Gate" type="info_worldgate_spawn" gid="194" x="1664" y="1440"/>
+ </objectgroup>
+</map>

@@ -1,0 +1,275 @@
+--========= Copyright © 2013-2014, Planimeter, All rights reserved. ==========--
+--
+-- Purpose: Region class
+--
+--============================================================================--
+
+require( "engine.shared.region.tileset" )
+require( "engine.shared.region.layer" )
+
+-- These values are preserved during real-time scripting.
+local regions = region and region.regions or {}
+
+class( "region" )
+
+region.regions = regions
+
+function region.drawWorld()
+	for _, region in ipairs( region.regions ) do
+		region:draw()
+	end
+end
+
+function region.exists( name )
+	return filesystem.exists( "regions/" .. name .. ".lua" )
+end
+
+function region.getAll()
+	return table.shallowcopy( region.regions )
+end
+
+function region.getByName( name )
+	for _, region in ipairs( region.regions ) do
+		if ( name == region:getName() ) then
+			return region
+		end
+	end
+end
+
+function region.load( name )
+	if ( region.getByName( name ) ) then
+		return
+	end
+
+	local region = region( name )
+	table.insert( region.regions, region )
+end
+
+function region.unload( name )
+	unrequire( "regions." .. name )
+
+	for i, region in ipairs( region.regions ) do
+		if ( name == region:getName() ) then
+			table.remove( region.regions, i )
+			return
+		end
+	end
+end
+
+function region.unloadAll()
+	for i = #region.regions, 1, -1 do
+		local region = region.regions[ i ]
+		unrequire( "regions." .. region:getName() )
+		table.remove( region.regions, i )
+	end
+end
+
+concommand( "region", "Loads the specified region",
+	function( _, _, _, _, argT )
+		local name = argT[ 1 ]
+		if ( name == nil ) then
+			print( "region <region name>" )
+			return
+		end
+
+		if ( not region.exists( name ) ) then
+			print( name .. " does not exist." )
+			return
+		end
+
+		engine.disconnect()
+
+		if ( _AXIS and not engine.isSignedIntoAxis() ) then
+			print( "You are not signed into Axis." )
+			return
+		end
+
+		local args = engine.getArguments()
+
+		if ( _CLIENT and not _SERVER ) then
+			local status, ret = pcall( require, "engine.server" )
+			if ( status ~= false ) then
+				_SERVER = true
+				engineserver = ret
+				engineserver.load( args )
+				hook.call( "shared", "onLoad" )
+			else
+				print( ret )
+				return
+			end
+		end
+
+		region.load( name )
+
+		engine.connectToListenServer()
+	end
+)
+
+function region:region( name )
+	self.name = name
+	self.data = require( "regions." .. name )
+
+	self:parse()
+end
+
+if ( _CLIENT ) then
+function region:draw()
+	local layers = self:getLayers()
+	if ( layers ) then
+		for _, layer in ipairs( layers ) do
+			graphics.push()
+				graphics.setOpacity( layer:getOpacity() )
+				if ( layer:isVisible() ) then
+					layer:draw()
+				end
+				graphics.setOpacity( 1 )
+			graphics.pop()
+		end
+	end
+end
+end
+
+function region:getEntities()
+	return self.entities
+end
+
+function region:getFilename()
+	return self.name .. ".lua"
+end
+
+function region:getFormatVersion()
+	return self.formatVersion
+end
+
+function region:getLayers()
+	return self.layers
+end
+
+function region:getName()
+	return self.name
+end
+
+function region:getOrientation()
+	return self.orientation
+end
+
+function region:getProperties()
+	return self.properties
+end
+
+function region:getTilesets()
+	return self.tilesets
+end
+
+function region:getTileWidth()
+	return self.tileWidth
+end
+
+function region:getTileHeight()
+	return self.tileHeight
+end
+
+function region:getWidth()
+	return self.width
+end
+
+function region:getHeight()
+	return self.height
+end
+
+function region:loadTilesets( tilesets )
+	if ( self.tilesets ) then
+		return
+	end
+
+	self.tilesets = {}
+
+	for _, tilesetData in ipairs( tilesets ) do
+		local tileset = regiontileset( tilesetData )
+		table.insert( self.tilesets, tileset )
+	end
+end
+
+function region:loadLayers( layers )
+	if ( self.layers ) then
+		return
+	end
+
+	self.layers = {}
+
+	for _, layerData in ipairs( layers ) do
+		local layer	  = regionlayer( layerData )
+		layer:setRegion( self )
+		layer:parse()
+
+		local gid	  = layer:getHighestTileGid()
+		local tileset = nil
+		for _, t in ipairs( self:getTilesets() ) do
+			if ( t:getFirstGid() <= gid ) then
+				tileset = t
+			end
+		end
+		layer:setTileset( tileset )
+		table.insert( self.layers, layer )
+	end
+end
+
+function region:parse()
+	if ( not self.data ) then
+		return
+	end
+
+	local data = self.data
+	self:setFormatVersion( data[ "version" ] )
+	self:setOrientation( data[ "orientation" ] )
+	self:setWidth( data[ "width" ] )
+	self:setHeight( data[ "height" ] )
+	self:setTileWidth( data[ "tilewidth" ] )
+	self:setTileHeight( data[ "tileheight" ] )
+	self:setProperties( table.copy( data[ "properties" ] ) )
+
+	self:loadTilesets( data[ "tilesets" ] )
+	self:loadLayers( data[ "layers" ] )
+
+	self.data = nil
+end
+
+function region:setEntities( entities )
+	self.entities = entities
+end
+
+function region:setFormatVersion( formatVersion )
+	self.formatVersion = formatVersion
+end
+
+function region:setName( name )
+	self.name = name
+end
+
+function region:setOrientation( orientation )
+	self.orientation = orientation
+end
+
+function region:setProperties( properties )
+	self.properties = properties
+end
+
+function region:setTileWidth( tileWidth )
+	self.tileWidth = tileWidth
+end
+
+function region:setTileHeight( tileHeight )
+	self.tileHeight = tileHeight
+end
+
+function region:setWidth( width )
+	self.width = width
+end
+
+function region:setHeight( height )
+	self.height = height
+end
+
+function region:__tostring()
+	return "region: \"" .. self:getFilename() .. "\""
+end
