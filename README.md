@@ -39,3 +39,18 @@ Features
 * UTF-8 aware string functions via [utf8.lua](http://www.curse.com/addons/wow/utf8 "utf8.lua")
 * GUI scheme system
 * Classes via [lclass](https://github.com/andrewmcwatters/lclass "lclass")
+
+Requirements
+============
+
+Windows 64-bit
+--------------
+
+Microsoft Visual C++ 2008 Redistributable Package (x64)  
+http://www.microsoft.com/en-us/download/details.aspx?id=15336
+
+Windows 32-bit
+--------------
+
+Microsoft Visual C++ 2008 Redistributable Package (x86)  
+http://www.microsoft.com/en-us/download/details.aspx?id=29
