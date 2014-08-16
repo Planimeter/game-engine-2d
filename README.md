@@ -23,6 +23,7 @@ Features
 * Player system
 * Efficient UDP payload abstraction
 * [Tiled](http://www.mapeditor.org/ "Tiled")-based region system
+* [LuaSec](https://github.com/brunoos/luasec "LuaSec") support
 * Threaded HTTP/HTTPS requests
 * Lua 5.1.5 base library extensions
 * Console commands
@@ -33,8 +34,8 @@ Features
 * Table extensions
 * Threaded tasks
 * Moddable main menu
-* JSON decoding and encoding via JSON4Lua
-* MD5 sums via md5.lua
-* UTF-8 aware string functions via utf8.lua
+* JSON decoding and encoding via [JSON4Lua](http://json.luaforge.net/ "JSON4Lua")
+* MD5 sums via [md5.lua](https://github.com/kikito/md5.lua "md5.lua")
+* UTF-8 aware string functions via [utf8.lua](http://www.curse.com/addons/wow/utf8 "utf8.lua")
 * GUI scheme system
 * Classes via [lclass](https://github.com/andrewmcwatters/lclass "lclass")
