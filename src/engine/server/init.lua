@@ -14,6 +14,7 @@ local debug		   = debug
 local getmetatable = getmetatable
 local filesystem   = filesystem
 local network	   = engine.server.network
+_G.networkserver   = network
 local love		   = love
 local payload	   = payload
 local print		   = print
@@ -145,6 +146,8 @@ function onDisconnect( event )
 				print( "Player " .. username .. " has left the game." )
 			end
 		end
+
+		player:remove()
 	end
 
 	print( tostring( event.peer ) .. " has disconnected." )
@@ -170,8 +173,9 @@ if ( _AXIS ) then
 
 				local account = player:getAccount()
 				if ( account ) then
-					print( "Player " .. account:getUsername() ..
-						   " has joined the game." )
+					local username = account:getUsername()
+					player:setName( username )
+					print( "Player " .. username .. " has joined the game." )
 					player:onAuthenticated()
 					sendServerInfo( player )
 				else
@@ -207,48 +211,51 @@ function quit()
 	region.unloadAll()
 
 	unrequire( "engine.server.network" )
+	_G.networkserver = nil
 	unrequire( "engine.server" )
-	_G.engineserver = nil
+	_G.serverengine = nil
 end
 
 if ( _AXIS ) then
+	function setSavedGame( player, save )
+		require( "common.vector" )
+		local x = save.position.x
+		local y = save.position.y
+		player:setPosition( _G.vector( x, y ) )
+	end
+
 	function sendSavedGame( player )
 		require( "engine.shared.axis" )
 		local account	= player:getAccount()
 		local username 	= account:getUsername()
 		local appSecret = _G.game.appSecret
-		_G.axis.getSavedGame( username, appSecret, nil,
-			function( r, c, h, s )
-				local payload = payload( "serverInfo" )
+		_G.axis.getSavedGame( username, appSecret, nil, function( r, c, h, s )
+			local payload = payload( "serverInfo" )
 
-				require( "public.json" )
+			require( "public.json" )
 
-				local save = nil
+			local save = nil
 
-				if ( c == 200 ) then
-					-- FIXME; Decode twice since we get back escaped save data.
-					save = _G.json.decode( r )
-					save = _G.json.decode( save )
-					_G.region.load( save.region )
+			if ( c == 200 ) then
+				-- FIXME; Decode twice since we get back escaped save data.
+				save = _G.json.decode( r )
+				save = _G.json.decode( save )
+				_G.region.load( save.region )
+			elseif ( c == 404 ) then
+				local region = _G.game.getStartingRegion()
+				_G.region.load( region )
 
-					require( "common.vector" )
-					local x = save.position.x
-					local y = save.position.y
-					player:setPosition( _G.vector( x, y ) )
-				elseif ( c == 404 ) then
-					local region = _G.game.getStartingRegion()
-					_G.region.load( region )
-
-					save = player:createInitialSave( region )
-					local r = _G.json.encode( save )
-					_G.axis.setSavedGame( username, appSecret, nil, r )
-				end
-
-				payload:set( "region", save.region )
-				payload:set( "save", c == 200 and r or _G.json.encode( save ) )
-				player:send( payload )
+				save = player:createInitialSave( region )
+				local r = _G.json.encode( save )
+				_G.axis.setSavedGame( username, appSecret, nil, r )
 			end
-		)
+
+			setSavedGame( player, save )
+
+			payload:set( "region", save.region )
+			payload:set( "save", c == 200 and r or _G.json.encode( save ) )
+			player:send( payload )
+		end )
 	end
 end
 

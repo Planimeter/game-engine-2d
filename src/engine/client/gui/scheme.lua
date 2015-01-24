@@ -6,7 +6,6 @@
 
 class( "scheme" )
 
--- These values are preserved during real-time scripting.
 scheme.schemes = scheme.schemes or {}
 
 local properties = {}

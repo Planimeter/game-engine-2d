@@ -8,6 +8,7 @@
 local players	   = player and player.players		or {}
 local lastPlayerId = player and player.lastPlayerId or 0
 
+require( "engine.shared.entities" )
 require( "engine.shared.entities.entity" )
 
 class "player" ( "entity" )
@@ -37,7 +38,7 @@ end
 
 function player.getById( id )
 	for _, player in ipairs( players ) do
-		if ( player.id == peer ) then
+		if ( player:getId() == id ) then
 			return player
 		end
 	end
@@ -59,8 +60,12 @@ end
 
 function player:player()
 	entity.entity( self )
-	self.id				= player.lastPlayerId + 1
-	player.lastPlayerId = self.id
+
+	self:networkNumber( "id", player.lastPlayerId + 1 )
+
+	if ( _SERVER ) then
+		player.lastPlayerId = self:getNetworkVar( "id" )
+	end
 
 	table.insert( players, self )
 end
@@ -86,8 +91,7 @@ if ( _AXIS ) then
 	end
 end
 
-function player:getId()
-	return self.id
+function player:draw()
 end
 
 function player:getName()
@@ -95,7 +99,7 @@ function player:getName()
 		return self.account:getUsername()
 	end
 
-	return self.name
+	return self:getNetworkVar( "name" )
 end
 
 function player:getRegion()
@@ -119,15 +123,22 @@ function player:getViewportSize()
 end
 
 function player:initialSpawn()
-	self:spawn()
+	if ( self.initialized ) then
+		return
+	else
+		self.initialized = true
+	end
 
 	if ( _SERVER ) then
+		self:spawn()
+
 		local payload = payload( "playerInitialized" )
 		payload:set( "entIndex", self.entIndex )
 		payload:set( "id", self:getId() )
-		payload:set( "position", self:getPosition() )
 		self:send( payload )
 	end
+
+	hook.call( "shared", "onPlayerInitialSpawn", self )
 end
 
 if ( _AXIS ) then
@@ -164,6 +175,7 @@ function player:onDisconnect()
 	for i, player in ipairs( players ) do
 		if ( player == self ) then
 			table.remove( players, i )
+			self:remove()
 			return
 		end
 	end
@@ -211,3 +223,12 @@ function player:update( dt )
 		self:think()
 	end
 end
+
+function player:__tostring()
+	return "player: " .. self:getName()
+end
+
+-- Preserve the player interface
+local class = player
+entities.linkToClassname( player, "player" )
+_G.player = class

@@ -56,16 +56,16 @@ grid.dark			= {
 
 grid.marks	 = {}
 
-shim		 = nil
-missingImage = nil
+shim  = nil
+error = nil
 
 function initialize()
 	setBackgroundColor( grid.dark.backgroundColor )
 	if ( not graphics.isSupported( "canvas" ) ) then
-		shim	 = newImage( "images/shim.png" )
+		shim = newImage( "images/shim.png" )
 	end
-	missingImage = newImage( "images/missing_image.png" )
-	missingImage:setWrap( "repeat", "repeat" )
+	error = newImage( "images/error.png" )
+	error:setWrap( "repeat", "repeat" )
 end
 
 function draw( ... )

@@ -18,7 +18,7 @@ function tabbedframe:tabbedframe( parent, name, title )
 					 self.closeButton:getWidth()
 	self.minHeight = 62
 	self.tabGroup  = gui.frametabgroup( self, name .. " Frame Tab Group" )
-	self.tabGroup:setPos( font:getWidth( ( self.title ) ) +
+	self.tabGroup:setPos( font:getWidth( utf8upper( self.title ) ) +
 						  2 * 24,
 						  1 )
 	self.tabPanels = gui.frametabpanels( self, name .. " Frame Tab Panels" )
@@ -47,7 +47,7 @@ function tabbedframe:drawBackground()
 	-- Title Bar
 	graphics.setColor( self:getScheme( "frametab.backgroundColor" ) )
 	local font		 = self:getScheme( "titleFont" )
-	local titleWidth = font:getWidth( ( self.title ) ) + 2 * 24 + 1
+	local titleWidth = font:getWidth( utf8upper( self.title ) ) + 2 * 24 + 1
 	graphics.rectangle( "fill", 0, 0, titleWidth, 62 )
 
 	-- Title Bar Inner Shadow
@@ -78,7 +78,7 @@ function tabbedframe:drawTitle()
 	graphics.setFont( font )
 	local x = 24
 	local y = x - 4
-	graphics.print( ( self.title ), x, y )
+	graphics.print( utf8upper( self.title ), x, y )
 end
 
 function tabbedframe:getTabGroup()
@@ -95,7 +95,7 @@ function tabbedframe:invalidateLayout()
 	end
 
 	local font = self:getScheme( "titleFont" )
-	self.tabGroup:setPos( font:getWidth( ( self.title ) ) +
+	self.tabGroup:setPos( font:getWidth( utf8upper( self.title ) ) +
 						  2 * 24,
 						  1 )
 	self.tabPanels:setSize( self:getWidth(), self:getHeight() - 62 )

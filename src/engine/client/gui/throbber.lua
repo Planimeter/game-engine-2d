@@ -32,7 +32,7 @@ function throbber:draw()
 					   self:getHeight() / 2 )
 	graphics.setStencil()
 
-	missingImage = self:getImage() == graphics.missingImage
+	missingImage = self:getImage() == graphics.error
 	if ( missingImage ) then
 		self:drawMissingImage()
 	end

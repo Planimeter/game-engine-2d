@@ -4,11 +4,11 @@
 --
 --============================================================================--
 
-require( "engine.shared.region.tileset" )
-require( "engine.shared.region.layer" )
-
 -- These values are preserved during real-time scripting.
 local regions = region and region.regions or {}
+
+require( "engine.shared.region.tileset" )
+require( "engine.shared.region.layer" )
 
 class( "region" )
 
@@ -90,8 +90,8 @@ concommand( "region", "Loads the specified region",
 			local status, ret = pcall( require, "engine.server" )
 			if ( status ~= false ) then
 				_SERVER = true
-				engineserver = ret
-				engineserver.load( args )
+				serverengine = ret
+				serverengine.load( args )
 				hook.call( "shared", "onLoad" )
 			else
 				print( ret )

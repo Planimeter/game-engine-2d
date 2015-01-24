@@ -8,45 +8,45 @@ require( "engine.shared.axis" )
 
 class "signindialog" ( gui.frame )
 
-local margin						= 36
+local margin = 36
 
-local animation						= {
-	fadeIn							= {
-		opacity						= 1
+local animation = {
+	fadeIn = {
+		opacity = 1
 	},
 
-	fadeOut							= {
-		opacity						= 0
+	fadeOut = {
+		opacity = 0
 	},
 
-	register						= {
-		opacity						= 1,
-		x							= margin
+	register = {
+		opacity = 1,
+		x = margin
 	},
 
-	registerReset					= {
-		opacity						= 1,
-		x							= margin + 62
+	registerReset = {
+		opacity = 1,
+		x = margin + 62
 	},
 
 	slideDownConfirmPasswordTextBox = {
-		opacity						= 1,
-		y							= 167 + 46 + 9
+		opacity = 1,
+		y = 167 + 46 + 9
 	},
 
-	slideUpConfirmPasswordTextBox	= {
-		opacity						= 0,
-		y							= 167
+	slideUpConfirmPasswordTextBox = {
+		opacity = 0,
+		y = 167
 	},
 
-	slideDownEmailTextBox			= {
-		opacity						= 1,
-		y							= 167 + 2 * ( 46 + 9 )
+	slideDownEmailTextBox = {
+		opacity = 1,
+		y = 167 + 2 * ( 46 + 9 )
 	},
 
-	slideUpEmailTextBox				= {
-		opacity						= 0,
-		y							= 167
+	slideUpEmailTextBox = {
+		opacity = 0,
+		y = 167
 	}
 }
 
@@ -200,7 +200,8 @@ function signindialog:signindialog( parent, name )
 			self:resetForm()
 		end
 	end
-	self.usernameTextBox.onEnter = signInOrRegister
+	-- BUGBUG: Crash on enter when form is filled out
+	-- self.usernameTextBox.onEnter = signInOrRegister
 	self.usernameTextBox.onLostFocus = function()
 		if ( self.usernameTextBox:getText() == "" ) then
 			return

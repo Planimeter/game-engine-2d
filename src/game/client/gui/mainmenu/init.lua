@@ -98,11 +98,12 @@ function mainmenu:createButtons()
 
 	self.joinLeaveUniverse = gui.mainmenubutton( self, "Join Universe" )
 	self.joinLeaveUniverse:setDisabled( true )
-	self.joinLeaveUniverse.onClick = function( mainmenubutton )
+	self.joinLeaveUniverse.onClick = function()
 		if ( not engine.isConnectedToServer() ) then
 			if ( _DEBUG ) then
 				engine.connect( "localhost" )
 			else
+				-- TODO: Update this to use a universe browser.
 				engine.connect( "newton.andrewmcwatters.com" )
 			end
 		else

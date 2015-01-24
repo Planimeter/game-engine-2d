@@ -17,7 +17,7 @@ function localhost_enet_server:disconnect( data )
 		data = data
 	}
 	g_localhost_enet_peer = nil
-	engineserver.onDisconnect( event )
+	serverengine.onDisconnect( event )
 end
 
 function localhost_enet_server:send( data, channel, flag )
@@ -26,7 +26,7 @@ function localhost_enet_server:send( data, channel, flag )
 		type = "receive",
 		data = data
 	}
-	engineserver.onReceive( event )
+	serverengine.onReceive( event )
 end
 
 function localhost_enet_server:__tostring()

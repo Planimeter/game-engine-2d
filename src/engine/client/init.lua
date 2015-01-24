@@ -11,12 +11,14 @@ local _connectedToServer = engine						   and
 
 require( "conf" )
 require( "engine.client.graphics" )
+require( "engine.client.camera" )
 require( "engine.client.gui" )
 require( "engine.shared.hook" )
 require( "engine.shared.network.payload" )
 
 local _AXIS		  = _AXIS
 
+local camera	  = camera
 local conf		  = _CONF
 local concommand  = concommand
 local convar	  = convar
@@ -49,12 +51,14 @@ function connect( address )
 
 	require( "engine.client.network" )
 	network = _G.engine.client.network
+	_G.networkclient = network
 	network.connect( address )
 end
 
 function connectToListenServer()
 	require( "engine.client.network" )
 	network = _G.engine.client.network
+	_G.networkclient = network
 	network.connectToListenServer()
 end
 
@@ -290,6 +294,9 @@ function onConnect( event )
 		local server = event.peer
 		sendAuthTicket( server )
 	end
+
+	-- Prepare to receive entitySpawned payloads
+	require( "engine.shared.entities" )
 end
 
 local cl_payload_show_receive = convar( "cl_payload_show_receive", "0", nil, nil,
@@ -312,7 +319,17 @@ function onReceive( event )
 end
 
 local function onReceivePlayerInitialized( payload )
+	local localplayer = _G.player.getById( payload:get( "id" ) )
+	_G.localplayer = localplayer
+
 	_G.g_MainMenu:close()
+
+	camera.setPosition( localplayer:getPosition() )
+
+	if ( not ( _CLIENT and _SERVER ) ) then
+		localplayer:initialSpawn()
+	end
+
 	_G.gameclient.playerInitialized = true
 end
 
@@ -349,6 +366,7 @@ function onDisconnect( event )
 	end
 
 	unrequire( "engine.client.network" )
+	_G.networkclient = nil
 	network = nil
 end
 

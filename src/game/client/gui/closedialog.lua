@@ -17,7 +17,7 @@ function closedialog:closedialog( parent, name )
 							 "Close Dialog Label",
 							 "Are you sure you want to quit the game?" )
 	label:setPos( 36, 86 )
-	label:setWidth( 250 )
+	label:setWidth( 252 )
 
 	local buttonYes = gui.button( self, "Close Dialog Yes Button", "Yes" )
 	buttonYes:setPos( 36, 86 + label:getHeight() + 18 )

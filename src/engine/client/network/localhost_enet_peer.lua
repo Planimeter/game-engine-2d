@@ -20,7 +20,7 @@ function localhost_enet_peer:disconnect( data )
 		type = "disconnect",
 		data = data
 	}
-	engineclient.onDisconnect( event )
+	clientengine.onDisconnect( event )
 end
 
 function localhost_enet_peer:disconnect_now( data )
@@ -50,7 +50,7 @@ function localhost_enet_peer:send( data, channel, flag )
 		type = "receive",
 		data = data
 	}
-	engineclient.onReceive( event )
+	clientengine.onReceive( event )
 end
 
 function localhost_enet_peer:state()

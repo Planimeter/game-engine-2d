@@ -56,7 +56,7 @@ structs[ "entitySpawned" ] = {
 	keys = {
 		{ name = "classname",	   type = "string" },
 		{ name = "entIndex",	   type = "number" },
-		{ name = "networkVars",	   type = "networkvar" }
+		{ name = "networkVars",	   type = "typelenvalues" }
 	}
 }
 
@@ -64,6 +64,5 @@ structs[ "playerInitialized" ] = {
 	keys = {
 		{ name = "entIndex",	   type = "number" },
 		{ name = "id",			   type = "number" },
-		{ name = "position",	   type = "vector" }
 	}
 }

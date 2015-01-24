@@ -38,7 +38,7 @@ function image:draw()
 		graphics.draw( self:getImage(), self:getQuad() )
 	graphics.setStencil()
 
-	missingImage = self:getImage() == graphics.missingImage
+	missingImage = self:getImage() == graphics.error
 	if ( missingImage ) then
 		self:drawMissingImage()
 	end
@@ -80,7 +80,7 @@ function image:setImage( image )
 	elseif ( image ~= nil and filesystem.exists( image ) ) then
 		self.imageDatum = graphics.newImage( image )
 	else
-		self.imageDatum = graphics.missingImage
+		self.imageDatum = graphics.error
 	end
 
 	self:updateQuad()
@@ -99,7 +99,7 @@ end
 local w, h, sw, sh = 0, 0, 0, 0
 
 function image:updateQuad()
-	missingImage = self:getImage() == graphics.missingImage
+	missingImage = self:getImage() == graphics.error
 	w  = self:getWidth()  - ( missingImage and 1 or 0 )
 	h  = self:getHeight() - ( missingImage and 1 or 0 )
 	sw = self.imageDatum:getWidth()

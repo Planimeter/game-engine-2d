@@ -10,6 +10,7 @@ require( "common.vector" )
 local position = camera and camera.getPosition() or vector()
 
 local graphics = graphics
+local vector   = vector
 
 module( "camera" )
 
@@ -24,8 +25,11 @@ function preWorldDraw()
 	local width	   = graphics.getViewportWidth()
 	local height   = graphics.getViewportHeight()
 	local position = getPosition()
-	graphics.translate( position.x + width	/ 2,
-						position.y + height / 2 )
+	if ( not position ) then
+		position = vector.origin
+	end
+	graphics.translate( width  / 2 - position.x,
+						height / 2 - position.y )
 end
 
 function postWorldDraw()

@@ -44,20 +44,20 @@ local tostring	   = tostring
 local type		   = type
 local _G		   = _G
 
-local engineclient
-local engineserver
+local clientengine
+local serverengine
 
 if ( _CLIENT ) then
-	engineclient   = require( "engine.client" )
+	clientengine   = require( "engine.client" )
 end
 
 if ( _SERVER ) then
-	engineserver   = require( "engine.server" )
+	serverengine   = require( "engine.server" )
 end
 
 -- Export the interfaces
-_G.engineclient	   = engineclient
-_G.engineserver	   = engineserver
+_G.clientengine	   = clientengine
+_G.serverengine	   = serverengine
 
 module( "engine" )
 
@@ -67,12 +67,12 @@ local metatable = {
 			local v
 
 			if ( _CLIENT ) then
-				v = rawget( engineclient, key )
+				v = rawget( clientengine, key )
 				if ( v ~= nil ) then return v end
 			end
 
 			if ( _SERVER ) then
-				v = rawget( engineserver, key )
+				v = rawget( serverengine, key )
 				if ( v ~= nil ) then return v end
 			end
 
@@ -83,8 +83,8 @@ local metatable = {
 }
 setmetatable( _M, metatable )
 
-client = engineclient
-server = engineserver
+client = clientengine
+server = serverengine
 
 function draw()
 	if ( _CLIENT ) then

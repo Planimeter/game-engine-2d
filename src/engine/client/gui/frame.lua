@@ -121,7 +121,7 @@ function frame:drawTitle()
 	graphics.setFont( font )
 	local x = 36
 	local y = x - 4
-	graphics.print( ( self.title ), x, y )
+	graphics.print( utf8upper( self.title ), x, y )
 end
 
 function frame:getMinWidth()
@@ -182,9 +182,8 @@ end
 function frame:moveFocus()
 	local children = self:getChildren()
 	if ( children ) then
-		local shift		   = input.isKeyDown( "lshift" ) or
-							 input.isKeyDown( "rshift" )
-		local dir		   = shift and -1 or nil
+		local shiftDown	   = input.isKeyDown( "lshift", "rshift" )
+		local dir		   = shiftDown and -1 or nil
 		local focusedIndex = nil
 		for i, panel in ipairs( children ) do
 			if ( panel.focus ) then
@@ -221,8 +220,13 @@ function frame:keypressed( key, isrepeat )
 		return
 	end
 
-	if ( key == "tab" and self.focus ) then
-		self:moveFocus()
+	if ( self.focus ) then
+		local controlDown = input.isKeyDown( "lctrl", "rctrl" )
+		if ( key == "tab" ) then
+			self:moveFocus()
+		elseif ( key == "w" and controlDown ) then
+			self:close()
+		end
 	end
 
 	gui.panel.keypressed( self, key, isrepeat )
