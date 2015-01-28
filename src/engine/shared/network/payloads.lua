@@ -1,4 +1,4 @@
---========= Copyright © 2013-2014, Planimeter, All rights reserved. ==========--
+--========= Copyright © 2013-2015, Planimeter, All rights reserved. ==========--
 --
 -- Purpose: Payload Definitions
 --
@@ -64,5 +64,12 @@ structs[ "playerInitialized" ] = {
 	keys = {
 		{ name = "entIndex",	   type = "number" },
 		{ name = "id",			   type = "number" },
+	}
+}
+
+structs[ "networkVarChanged" ] = {
+	keys = {
+		{ name = "entIndex",	   type = "number" },
+		{ name = "networkVar",	   type = "typelenvalues" },
 	}
 }

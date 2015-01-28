@@ -1,4 +1,4 @@
---========= Copyright © 2013-2014, Planimeter, All rights reserved. ==========--
+--========= Copyright © 2013-2015, Planimeter, All rights reserved. ==========--
 --
 -- Purpose: Panel class
 --
@@ -424,6 +424,35 @@ function panel:moveToFront()
 		end
 
 		children[ #children + 1 ] = self
+	end
+
+	if ( self:getParent() ) then
+		self:invalidateParent()
+	end
+end
+
+function panel:moveToBack()
+	local parent   = self:getParent()
+	local children = nil
+	if ( parent ) then
+		children = parent:getChildren()
+		if ( self == children[ 1 ] ) then
+			return
+		end
+	end
+
+	if ( gui.focusedPanel ) then
+		gui.setFocusedPanel( nil, false )
+	end
+
+	if ( parent ) then
+		for i, v in ipairs( children ) do
+			if ( v == self ) then
+				table.remove( children, i )
+			end
+		end
+
+		table.insert( children, 1, self )
 	end
 
 	if ( self:getParent() ) then

@@ -1,4 +1,4 @@
---========= Copyright © 2013-2014, Planimeter, All rights reserved. ==========--
+--========= Copyright © 2013-2015, Planimeter, All rights reserved. ==========--
 --
 -- Purpose: Unified engine interface
 --
@@ -17,13 +17,14 @@ require( "engine.shared.filesystem" )
 require( "engine.shared.thread" )
 require( "engine.shared.convar" )
 require( "engine.shared.concommand" )
-if ( _CLIENT ) then
+if ( _CLIENT or _INTERACTIVE ) then
 require( "engine.client.gui" )
 end
 require( "engine.shared.region" )
 
 local _CLIENT	   = _CLIENT
 local _SERVER	   = _SERVER
+local _INTERACTIVE = _INTERACTIVE
 
 local concommand   = concommand
 local event		   = love.event
@@ -90,6 +91,10 @@ function draw()
 	if ( _CLIENT ) then
 		client.draw()
 	end
+
+	if ( _INTERACTIVE ) then
+		gui.draw()
+	end
 end
 
 if ( _SERVER ) then
@@ -130,17 +135,29 @@ function textinput( t )
 	if ( _CLIENT ) then
 		client.textinput( t )
 	end
+
+	if ( _INTERACTIVE ) then
+		gui.textinput( t )
+	end
 end
 
 function keypressed( key, isrepeat )
 	if ( _CLIENT ) then
 		client.keypressed( key, isrepeat )
 	end
+
+	if ( _INTERACTIVE ) then
+		gui.keypressed( key, isrepeat )
+	end
 end
 
 function keyreleased( key )
 	if ( _CLIENT ) then
 		client.keyreleased( key )
+	end
+
+	if ( _INTERACTIVE ) then
+		gui.keyreleased( key )
 	end
 end
 
@@ -164,6 +181,12 @@ function load( arg )
 		client.load( arg )
 	end
 
+	if ( _INTERACTIVE ) then
+		require( "engine.client.graphics" )
+		_G.graphics.initialize()
+		gui.initialize()
+	end
+
 	_G.print( "Grid Engine" )
 	local time = string.format( "%.3fs", timer.getTime() - _G._INITTIME )
 	_G.print( "All systems go in " .. time )
@@ -178,11 +201,19 @@ function mousepressed( x, y, button )
 	if ( _CLIENT ) then
 		client.mousepressed( x, y, button )
 	end
+
+	if ( _INTERACTIVE ) then
+		gui.mousepressed( x, y, button )
+	end
 end
 
 function mousereleased( x, y, button )
 	if ( _CLIENT ) then
 		client.mousereleased( x, y, button )
+	end
+
+	if ( _INTERACTIVE ) then
+		gui.mousereleased( x, y, button )
 	end
 end
 
@@ -233,6 +264,14 @@ concommand( "exit", "Exits the game", function()
 	quit()
 end )
 
+function resize( w, h )
+	if ( _INTERACTIVE ) then
+		_G.g_Console:setSize( w, h )
+		_G.framebuffer.invalidateFramebuffers()
+		gui.invalidateTree()
+	end
+end
+
 function threaderror( t, errorstr )
 	thread.handleError( t, errorstr )
 end
@@ -265,7 +304,7 @@ function update( dt )
 		accumulator = accumulator - timestep
 	end
 
-	if ( _CLIENT ) then
+	if ( _CLIENT or _INTERACTIVE ) then
 		gui.update( dt )
 	end
 
@@ -290,6 +329,7 @@ do
 	love.mousepressed	  = mousepressed
 	love.mousereleased	  = mousereleased
 	love.quit			  = quit
+	love.resize           = resize
 	love.threaderror	  = threaderror
 	love.update			  = update
 end

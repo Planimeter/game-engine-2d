@@ -1,4 +1,4 @@
---========= Copyright © 2013-2014, Planimeter, All rights reserved. ==========--
+--========= Copyright © 2013-2015, Planimeter, All rights reserved. ==========--
 --
 -- Purpose: Engine client interface
 --
@@ -79,6 +79,10 @@ function disconnect()
 	end
 
 	_G.g_MainMenu:activate()
+
+	if ( _G.entities ) then
+		_G.entities.shutdown()
+	end
 
 	if ( _G.game and _G.game.client ) then
 		 _G.game.client.shutdown()
@@ -326,7 +330,7 @@ local function onReceivePlayerInitialized( payload )
 
 	camera.setPosition( localplayer:getPosition() )
 
-	if ( not ( _CLIENT and _SERVER ) ) then
+	if ( not _G._SERVER ) then
 		localplayer:initialSpawn()
 	end
 

@@ -1,4 +1,4 @@
---========= Copyright © 2013-2014, Planimeter, All rights reserved. ==========--
+--========= Copyright © 2013-2015, Planimeter, All rights reserved. ==========--
 --
 -- Purpose: Text Box class
 --
@@ -105,7 +105,7 @@ function textbox:drawCursor()
 		local opacity = graphics.getOpacity()
 		graphics.setOpacity( opacity * abs( sin( 3 * engine.getRealTime() ) ) )
 		graphics.setColor( graphics.getColor() )
-			graphics.rectangle( "line",
+			graphics.rectangle( "fill",
 								getRelativeCursorPos( self ),
 								self:getHeight() / 2 - font:getHeight() / 2,
 								1,
@@ -306,7 +306,7 @@ local gsub = string.gsub
 
 local function doPaste( self )
 	local clipboardText = os.getClipboardText()
-	if ( not clipboardText ) then 
+	if ( not clipboardText ) then
 		return
 	end
 

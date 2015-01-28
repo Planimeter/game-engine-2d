@@ -1,10 +1,10 @@
---========= Copyright © 2013-2014, Planimeter, All rights reserved. ==========--
+--========= Copyright © 2013-2015, Planimeter, All rights reserved. ==========--
 --
 -- Purpose: Extends the os library
 --
 --============================================================================--
 
-if ( _CLIENT ) then
+if ( _CLIENT or _INTERACTIVE ) then
 local system = love.system
 local mouse	 = love.mouse
 

@@ -1,4 +1,4 @@
---========= Copyright © 2013-2014, Planimeter, All rights reserved. ==========--
+--========= Copyright © 2013-2015, Planimeter, All rights reserved. ==========--
 --
 -- Purpose:
 --
@@ -12,22 +12,29 @@ local function loadConfig( c )
     require( "engine.shared.convar" )
     convar.readConfig()
 
+    local _INTERACTIVE        = c.args[ "-dedicated" ] and c.args[ "-interactive" ]
     local r_window_width      = convar.getConfig( "r_window_width" )
     local r_window_height     = convar.getConfig( "r_window_height" )
     local r_window_fullscreen = convar.getConfig( "r_window_fullscreen" )
     local r_window_borderless = convar.getConfig( "r_window_borderless" )
     local r_window_vsync      = convar.getConfig( "r_window_vsync" )
-    if ( r_window_width ) then
+    if ( _INTERACTIVE ) then
+        c.window.width        = 661
+    elseif ( r_window_width ) then
         c.window.width        = tonumber( r_window_width )
     end
-    if ( r_window_height ) then
+    if ( _INTERACTIVE ) then
+        c.window.height       = 480
+    elseif ( r_window_height ) then
         c.window.height       = tonumber( r_window_height )
     end
     if ( r_window_fullscreen ) then
         c.window.fullscreen   = tonumber( r_window_fullscreen ) ~= nil and
                                 tonumber( r_window_fullscreen ) ~= 0
     end
-    if ( r_window_borderless ) then
+    if ( _INTERACTIVE ) then
+        -- c.window.borderless   = true
+    elseif ( r_window_borderless ) then
         c.window.borderless   = tonumber( r_window_borderless ) ~= nil and
                                 tonumber( r_window_borderless ) ~= 0
     end
@@ -43,24 +50,35 @@ function love.conf( c )
 
         c.title = "Grid Engine"
         c.author = "Planimeter"
+
+        c.args = {}
         for i, v in ipairs( arg ) do
-            if ( v == "-dedicated" ) then
+            c.args[ v ] = true
+        end
+
+        if ( c.args[ "-dedicated" ] ) then
+            c.modules.joystick = false
+            c.modules.audio = false
+            c.modules.sounds = false
+
+            if ( not c.args[ "-interactive" ] ) then
                 c.modules.keyboard = false
                 c.modules.mouse = false
-                c.modules.joystick = false
                 c.modules.graphics = false
-                c.modules.audio = false
-                c.modules.sounds = false
                 c.modules.system = false
                 c.modules.font = false
                 c.modules.window = false
-                c.console = true -- Only relevant for windows.
+            else
+                c.window.resizable = true
+                c.window.centered = false
             end
-
-            if ( v == "-debug" ) then
-                -- c.console = true -- Only relevant for windows.
-            end
+            c.console = true -- Only relevant for windows.
         end
+
+        if ( c.args[ "-debug" ] ) then
+            c.console = true -- Only relevant for windows.
+        end
+
         c.identity = "grid"
         c.apppendidentity = true
 

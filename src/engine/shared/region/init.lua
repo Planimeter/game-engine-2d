@@ -1,4 +1,4 @@
---========= Copyright © 2013-2014, Planimeter, All rights reserved. ==========--
+--========= Copyright © 2013-2015, Planimeter, All rights reserved. ==========--
 --
 -- Purpose: Region class
 --
@@ -87,13 +87,20 @@ concommand( "region", "Loads the specified region",
 		local args = engine.getArguments()
 
 		if ( _CLIENT and not _SERVER ) then
+			_SERVER = true
 			local status, ret = pcall( require, "engine.server" )
 			if ( status ~= false ) then
-				_SERVER = true
 				serverengine = ret
-				serverengine.load( args )
-				hook.call( "shared", "onLoad" )
+				if ( serverengine.load( args ) ) then
+					hook.call( "shared", "onLoad" )
+				else
+					print( "Failed to initialize server!" )
+					engine.disconnect()
+					_SERVER = nil
+					return
+				end
 			else
+				_SERVER = nil
 				print( ret )
 				return
 			end

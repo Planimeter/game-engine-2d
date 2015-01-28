@@ -1,15 +1,9 @@
---========= Copyright © 2013-2014, Planimeter, All rights reserved. ==========--
+--========= Copyright © 2013-2015, Planimeter, All rights reserved. ==========--
 --
 -- Purpose: Game server interface
 --
 --============================================================================--
 
-require( "engine.shared.entities" )
-
-local entities	= entities
-local ipairs	= ipairs
-local print		= print
-local table		= table
 local unrequire = unrequire
 local _G		= _G
 
@@ -24,18 +18,6 @@ function getSpawnPoint( player )
 	else
 		return nil
 	end
-end
-
-function initializeEntities( regionEntities )
-	local t = {}
-	for i, entityData in ipairs( regionEntities ) do
-		local entity = entities.createFromRegionData( entityData )
-		if ( entity ) then
-			entity:spawn()
-			table.insert( t, entity )
-		end
-	end
-	return t
 end
 
 function load( arg )

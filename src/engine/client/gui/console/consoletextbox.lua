@@ -1,4 +1,4 @@
---========= Copyright © 2013-2014, Planimeter, All rights reserved. ==========--
+--========= Copyright © 2013-2015, Planimeter, All rights reserved. ==========--
 --
 -- Purpose: Console Text Box class
 --
@@ -29,6 +29,10 @@ function consoletextbox:draw()
 end
 
 function consoletextbox:drawBackground()
+	if ( _INTERACTIVE ) then
+		return
+	end
+
 	local property = "textbox.backgroundColor"
 	local width	   = self:getWidth()
 	local height   = self:getHeight()

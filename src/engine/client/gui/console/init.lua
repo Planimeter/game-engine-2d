@@ -1,4 +1,4 @@
---========= Copyright © 2013-2014, Planimeter, All rights reserved. ==========--
+--========= Copyright © 2013-2015, Planimeter, All rights reserved. ==========--
 --
 -- Purpose: Console class
 --
@@ -130,7 +130,7 @@ end
 
 function console:console()
 	local name = "Console"
-	gui.frame.frame( self, g_MainMenu, name, "Console" )
+	gui.frame.frame( self, g_MainMenu or g_RootPanel, name, "Console" )
 	self.width	   = 661
 	self.minHeight = 178
 
@@ -145,25 +145,31 @@ function console:console()
 		end
 	end
 
-	self.input:setAutocomplete( autocomplete )
-	name = name .. " Autocomplete Item Group"
-	self.input.autocompleteItemGroup = gui.consoletextboxautocompleteitemgroup( self.input, name )
-	self.input.autocompleteItemGroup.keypressed = function( autocompleteItemGroup, key, isrepeat )
-		if ( key ~= "delete" ) then
-			return
-		end
-
-		for i, history in ipairs( gui.console.commandHistory ) do
-			if ( autocompleteItemGroup:getValue() == history ) then
-				table.remove( gui.console.commandHistory, i )
-				local item = autocompleteItemGroup:getSelectedItem()
-				autocompleteItemGroup:removeItem( item )
+	if ( not _INTERACTIVE ) then
+		self.input:setAutocomplete( autocomplete )
+		name = name .. " Autocomplete Item Group"
+		self.input.autocompleteItemGroup = gui.consoletextboxautocompleteitemgroup( self.input, name )
+		self.input.autocompleteItemGroup.keypressed = function( autocompleteItemGroup, key, isrepeat )
+			if ( key ~= "delete" ) then
 				return
+			end
+
+			for i, history in ipairs( gui.console.commandHistory ) do
+				if ( autocompleteItemGroup:getValue() == history ) then
+					table.remove( gui.console.commandHistory, i )
+					local item = autocompleteItemGroup:getSelectedItem()
+					autocompleteItemGroup:removeItem( item )
+					return
+				end
 			end
 		end
 	end
 
 	self:invalidateLayout()
+
+	if ( _INTERACTIVE ) then
+		self:doModal()
+	end
 end
 
 function console:activate()
@@ -171,12 +177,24 @@ function console:activate()
 	gui.frame.activate( self )
 end
 
+function console:drawBackground()
+	if ( _INTERACTIVE ) then
+		return
+	end
+
+	gui.frame.drawBackground( self )
+end
+
 function console:invalidateLayout()
 	if ( not self:isResizing() ) then
 		local parent = self:getParent()
 		local scale	 = parent:getHeight() / 1080
 		local margin = 36 * scale
-		self:setPos( parent:getWidth() - self:getWidth() - margin, margin )
+		if ( not _INTERACTIVE ) then
+			self:setPos( parent:getWidth() - self:getWidth() - margin, margin )
+		else
+			self:setPos( 0, 0 )
+		end
 	end
 
 	self.output:setPos( 36, 87 )

@@ -1,4 +1,4 @@
---========= Copyright © 2013-2014, Planimeter, All rights reserved. ==========--
+--========= Copyright © 2013-2015, Planimeter, All rights reserved. ==========--
 --
 -- Purpose: Region Layer class
 --
@@ -155,7 +155,8 @@ function regionlayer:parse()
 		self:setData( table.copy( data[ "data" ] ) )
 	elseif ( type == "objectgroup" ) then
 		if ( _SERVER ) then
-			local entities = gameserver.initializeEntities( data[ "objects" ] )
+			require( "engine.shared.entities" )
+			local entities = entities.initialize( data[ "objects" ] )
 			self:getRegion():setEntities( entities )
 		end
 	end

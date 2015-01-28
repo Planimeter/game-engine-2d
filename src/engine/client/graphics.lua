@@ -1,4 +1,4 @@
---========= Copyright © 2013-2014, Planimeter, All rights reserved. ==========--
+--========= Copyright © 2013-2015, Planimeter, All rights reserved. ==========--
 --
 -- Purpose: Graphics interface
 --
@@ -6,6 +6,8 @@
 
 require( "common.color" )
 require( "engine.client.framebuffer" )
+
+local _INTERACTIVE          = _INTERACTIVE
 
 local class					= class
 local color					= color
@@ -358,6 +360,12 @@ function push()
 end
 
 function rectangle( mode, x, y, width, height )
+	-- HACKHACK: There's something wrong with line drawing in interactive mode!!
+	if ( _INTERACTIVE ) then
+		graphics.rectangle( mode, x, y, width, height )
+		return
+	end
+
 	if ( mode == "line" ) then
 		line( x,			   y,
 			  x + width - 0.5, y,

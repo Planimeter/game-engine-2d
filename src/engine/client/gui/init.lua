@@ -1,4 +1,4 @@
---========= Copyright © 2013-2014, Planimeter, All rights reserved. ==========--
+--========= Copyright © 2013-2015, Planimeter, All rights reserved. ==========--
 --
 -- Purpose: GUI interface
 --
@@ -64,10 +64,14 @@ local metatable = {
 setmetatable( _M, metatable )
 
 function initialize()
-	rootPanel	   = rootpanel()
+	rootPanel      = rootpanel()
 	_G.g_RootPanel = rootPanel
-	_G.g_MainMenu  = mainmenu()
-	_G.g_Console   = console()
+
+	if ( not _G._DEDICATED ) then
+		_G.g_MainMenu = mainmenu()
+	end
+
+	_G.g_Console = console()
 	if ( _G._DEBUG or
 		hasvalue( _G.engine.getArguments(), "-console" ) ) then
 		_G.g_Console:activate()

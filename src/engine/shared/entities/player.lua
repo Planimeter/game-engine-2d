@@ -1,11 +1,11 @@
---========= Copyright © 2013-2014, Planimeter, All rights reserved. ==========--
+--========= Copyright © 2013-2015, Planimeter, All rights reserved. ==========--
 --
 -- Purpose: Player class
 --
 --============================================================================--
 
 -- These values are preserved during real-time scripting.
-local players	   = player and player.players		or {}
+local players      = player and player.players      or {}
 local lastPlayerId = player and player.lastPlayerId or 0
 
 require( "engine.shared.entities" )
@@ -13,12 +13,16 @@ require( "engine.shared.entities.entity" )
 
 class "player" ( "entity" )
 
-player.players		= players
+player.players      = players
 player.lastPlayerId = lastPlayerId
+
+if ( _CLIENT ) then
+	player.sprite = graphics.newImage( "images/player.png" )
+end
 
 function player.initialize( peer )
 	local player = player()
-	player.peer	 = peer
+	player.peer  = peer
 
 	if ( _AXIS and _SERVER ) then
 		player.authenticated = false
@@ -67,14 +71,18 @@ function player:player()
 		player.lastPlayerId = self:getNetworkVar( "id" )
 	end
 
-	table.insert( players, self )
+	if ( _CLIENT ) then
+		self:setSprite( player.sprite )
+	end
+
+	table.insert( player.players, self )
 end
 
 if ( _AXIS ) then
 	if ( _SERVER ) then
 		function player:createInitialSave( region )
 			local spawnPoint = gameserver.getSpawnPoint( self )
-			local position	 = spawnPoint:getPosition()
+			local position   = spawnPoint:getPosition()
 			local save = {
 				region = region,
 				position = {
@@ -89,9 +97,6 @@ if ( _AXIS ) then
 	function player:getAccount()
 		return self.account
 	end
-end
-
-function player:draw()
 end
 
 function player:getName()
@@ -217,8 +222,8 @@ end
 
 function player:update( dt )
 	if ( self.think and
-		 self.nextThink and
-		 self.nextThink <= engine.getRealTime() ) then
+	     self.nextThink and
+	     self.nextThink <= engine.getRealTime() ) then
 		self.nextThink = nil
 		self:think()
 	end

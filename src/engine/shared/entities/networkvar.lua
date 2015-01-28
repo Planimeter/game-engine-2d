@@ -1,4 +1,4 @@
---========= Copyright © 2013-2014, Planimeter, All rights reserved. ==========--
+--========= Copyright © 2013-2015, Planimeter, All rights reserved. ==========--
 --
 -- Purpose: Network Variable class
 --
@@ -37,5 +37,5 @@ function networkvar:setValue( value )
 end
 
 function networkvar:__tostring()
-	return "networkvar: " .. self.name .. " = \"" .. self.value .. "\""
+	return "networkvar: " .. self.name .. " = \"" .. tostring( self.value ) .. "\""
 end

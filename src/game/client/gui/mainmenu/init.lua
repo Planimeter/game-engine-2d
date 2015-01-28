@@ -1,4 +1,4 @@
---========= Copyright © 2013-2014, Planimeter, All rights reserved. ==========--
+--========= Copyright © 2013-2015, Planimeter, All rights reserved. ==========--
 --
 -- Purpose: Main Menu class
 --
@@ -54,6 +54,7 @@ function mainmenu:activate()
 	end
 
 	self:setVisible( true )
+	hook.call( "client", "onMainMenuActivate" )
 end
 
 function mainmenu:close()
@@ -75,6 +76,8 @@ function mainmenu:close()
 
 		self.closing = nil
 	end )
+
+	hook.call( "client", "onMainMenuClose" )
 end
 
 function mainmenu:createButtons()

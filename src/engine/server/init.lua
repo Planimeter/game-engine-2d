@@ -1,4 +1,4 @@
---========= Copyright © 2013-2014, Planimeter, All rights reserved. ==========--
+--========= Copyright © 2013-2015, Planimeter, All rights reserved. ==========--
 --
 -- Purpose: Engine server interface
 --
@@ -50,14 +50,16 @@ end
 function load( arg )
 	local initialized = network.initializeServer()
 	if ( not initialized ) then
-		print( "Failed to initialize server!" )
-		return
+		-- print( "Failed to initialize server!" )
+		return false
 	end
 
 	require( "game" )
 
 	_G.gameserver = require( "game.server" )
 	_G.gameserver.load( arg )
+
+	return true
 end
 
 function onConnect( event )

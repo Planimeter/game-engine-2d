@@ -1,4 +1,4 @@
---========= Copyright © 2013-2014, Planimeter, All rights reserved. ==========--
+--========= Copyright © 2013-2015, Planimeter, All rights reserved. ==========--
 --
 -- Purpose: Extends the base library
 --
@@ -19,7 +19,7 @@ local rawget	   = rawget
 function print( ... )
 	_print( ... )
 
-	if ( _CLIENT and g_Console ) then
+	if ( ( _CLIENT or _INTERACTIVE ) and g_Console ) then
 		g_Console.print( ... )
 	end
 end
@@ -102,6 +102,22 @@ function typerror( narg, tname, value )
 		   "' (" .. tname .. " expected, " ..
 		   "got " .. type( value ) .. ")", 3 )
 end
+
+concommand( "lua_dofile", "Loads and runs the given file",
+	function( self, player, command, argString, argTable )
+		if ( argTable[ 1 ] == nil ) then
+			print( "lua_dofile <filename>" )
+			return
+		end
+
+		local f, err = loadfile( argString )
+		if ( f ) then
+			f()
+		else
+			print( err )
+		end
+	end
+)
 
 concommand( "lua_dostring", "Loads and runs the given string",
 	function( self, player, command, argString, argTable )

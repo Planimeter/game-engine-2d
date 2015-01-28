@@ -1,4 +1,4 @@
---========= Copyright © 2013-2014, Planimeter, All rights reserved. ==========--
+--========= Copyright © 2013-2015, Planimeter, All rights reserved. ==========--
 --
 -- Purpose: Entity class
 --
@@ -15,6 +15,12 @@ class( "entity" )
 
 entity.entities		= entities
 entity.lastEntIndex = lastEntIndex
+
+function entity.create( classname )
+	local classes = _G.entities.getClassMap()
+	local entity  = classes[ classname ]()
+	return entity
+end
 
 function entity.drawAll()
 	local cam = camera.getPosition()
@@ -58,6 +64,18 @@ function entity.getAll()
 	return table.shallowcopy( entity.entities )
 end
 
+function entity.getByEntIndex( entIndex )
+	for _, v in ipairs( entity.entities ) do
+		if ( v.entIndex == entIndex ) then
+			return v
+		end
+	end
+end
+
+function entity.removeAll()
+	entity.entities = {}
+end
+
 function entity:entity()
 	self.entIndex = entity.lastEntIndex + 1
 
@@ -67,8 +85,9 @@ function entity:entity()
 
 	self:networkString( "name",		nil )
 	self:networkVector( "position", vector() )
+	self:networkNumber( "scale",	1 )
 
-	table.insert( entities, self )
+	table.insert( entity.entities, self )
 end
 
 function entity:getClassname()
@@ -81,6 +100,7 @@ if ( _CLIENT ) then
 	end
 
 	function entity:draw()
+		graphics.scale( self:getScale() )
 		graphics.draw( self:getSprite() )
 	end
 end
@@ -187,12 +207,22 @@ function entity:getNetworkVarTypeLenValues()
 end
 
 function entity:onNetworkVarChanged( networkvar )
+	if ( _SERVER ) then
+		local payload = payload( "networkVarChanged" )
+		payload:set( "entIndex", self.entIndex )
+		local struct = self:getNetworkVarsStruct()
+		local networkVar = typelenvalues( nil, struct )
+		networkVar:set( networkvar:getName(), networkvar:getValue() )
+		payload:set( "networkVar", networkVar )
+		networkserver.broadcast( payload:serialize() )
+	end
 end
 
 function entity:remove()
-	for i, v in ipairs( entities ) do
+	for i, v in pairs( entity.entities ) do
 		if ( v == self ) then
-			table.remove( entities, i )
+			table.remove( entity.entities, i )
+			return
 		end
 	end
 end
