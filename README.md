@@ -10,34 +10,20 @@ by hand for your projects or game jams.
 Features
 ========
 
-* Build system for games and dedicated servers
+* Build system
 * Common convenience classes
 * Client, server, shared engine codebase abstraction layer
-* GUI
-* In-game console
-* Moddable options menu
-* ENet-based networking with high-performance localhost network backdoor
-* Persistent framebuffers
+* Effortless networking
+* Elegant GUI system
 * Entity system
-* Network variables
-* Player system
-* Efficient UDP payload abstraction
+* In-game console
 * [Tiled](http://www.mapeditor.org/ "Tiled")-based region system
-* [LuaSec](https://github.com/brunoos/luasec "LuaSec") support
-* Threaded HTTP/HTTPS requests
+* Threaded [LuaSec](https://github.com/brunoos/luasec "LuaSec") support
 * Lua 5.1.5 base library extensions
-* Console commands
-* Console variables
 * Real-time scripting
-* Hook system
-* Math extensions
-* Table extensions
-* Threaded tasks
-* Moddable main menu
 * JSON decoding and encoding via [JSON4Lua](http://json.luaforge.net/ "JSON4Lua")
 * MD5 sums via [md5.lua](https://github.com/kikito/md5.lua "md5.lua")
 * UTF-8 aware string functions via [utf8.lua](http://www.curse.com/addons/wow/utf8 "utf8.lua")
-* GUI scheme system
 * Classes via [lclass](https://github.com/andrewmcwatters/lclass "lclass")
 
 Requirements
