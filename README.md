@@ -10,13 +10,12 @@ by hand for your projects or game jams.
 Features
 ========
 
-* Build system
+* Classes via [lclass](https://github.com/andrewmcwatters/lclass "lclass")
+* Client-server model
 * Common convenience classes
-* Client, server, shared engine codebase abstraction layer
 * Effortless networking
 * Elegant GUI system
 * Entity system
-* In-game console
 * [Tiled](http://www.mapeditor.org/ "Tiled")-based region system
 * Threaded [LuaSec](https://github.com/brunoos/luasec "LuaSec") support
 * Lua 5.1.5 base library extensions
@@ -24,7 +23,6 @@ Features
 * JSON decoding and encoding via [JSON4Lua](http://json.luaforge.net/ "JSON4Lua")
 * MD5 sums via [md5.lua](https://github.com/kikito/md5.lua "md5.lua")
 * UTF-8 aware string functions via [utf8.lua](http://www.curse.com/addons/wow/utf8 "utf8.lua")
-* Classes via [lclass](https://github.com/andrewmcwatters/lclass "lclass")
 
 Requirements
 ============
