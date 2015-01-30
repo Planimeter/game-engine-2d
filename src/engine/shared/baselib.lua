@@ -112,7 +112,10 @@ concommand( "lua_dofile", "Loads and runs the given file",
 
 		local f, err = loadfile( argString )
 		if ( f ) then
-			f()
+			local success, err = pcall( f )
+			if ( not success ) then
+				print( err )
+			end
 		else
 			print( err )
 		end
@@ -128,7 +131,10 @@ concommand( "lua_dostring", "Loads and runs the given string",
 
 		local f, err = loadstring( argString )
 		if ( f ) then
-			f()
+			local success, err = pcall( f )
+			if ( not success ) then
+				print( err )
+			end
 		else
 			print( err )
 		end

@@ -11,14 +11,12 @@ local _connectedToServer = engine						   and
 
 require( "conf" )
 require( "engine.client.graphics" )
-require( "engine.client.camera" )
 require( "engine.client.gui" )
 require( "engine.shared.hook" )
 require( "engine.shared.network.payload" )
 
 local _AXIS		  = _AXIS
 
-local camera	  = camera
 local conf		  = _CONF
 local concommand  = concommand
 local convar	  = convar
@@ -246,11 +244,20 @@ function keypressed( key, isrepeat )
 		end
 	end
 
-	gui.keypressed( key, isrepeat )
+	if ( gui.keypressed( key, isrepeat ) ) then
+		return
+	end
+
+	require( "engine.client.bind" )
+	_G.bind.keypressed( key, isrepeat )
 end
 
 function keyreleased( key )
-	gui.keyreleased( key )
+	if ( gui.keyreleased( key ) ) then
+		return
+	end
+
+	_G.bind.keyreleased( key )
 end
 
 function load( arg )
@@ -265,11 +272,20 @@ function load( arg )
 end
 
 function mousepressed( x, y, button )
-	gui.mousepressed( x, y, button )
+	if ( gui.mousepressed( x, y, button ) ) then
+		return
+	end
+
+	require( "engine.client.bind" )
+	_G.bind.mousepressed( x, y, button )
 end
 
 function mousereleased( x, y, button )
-	gui.mousereleased( x, y, button )
+	if ( gui.mousereleased( x, y, button ) ) then
+		return
+	end
+
+	_G.bind.mousereleased( x, y, button )
 end
 
 local sendAuthTicket = nil
@@ -328,7 +344,8 @@ local function onReceivePlayerInitialized( payload )
 
 	_G.g_MainMenu:close()
 
-	camera.setPosition( localplayer:getPosition() )
+	require( "engine.client.camera" )
+	_G.camera.setPosition( localplayer:getPosition() )
 
 	if ( not _G._SERVER ) then
 		localplayer:initialSpawn()

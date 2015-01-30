@@ -253,7 +253,6 @@ function typelenvalues:deserialize()
 					bytesToNumber( sub( bytes, 8, 16 ) ) --y
 				)
 			elseif ( key.type == "typelenvalues" ) then
-				require( "engine.shared.typelenvalues" )
 				local tlvs = typelenvalues()
 				tlvs.data  = bytes
 				self.data[ key.name ] = tlvs

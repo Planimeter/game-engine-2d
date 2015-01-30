@@ -5,6 +5,7 @@
 --============================================================================--
 
 require( "engine.client.gui.optionsmenu.videooptionspanel" )
+require( "engine.client.gui.optionsmenu.keyboardoptionspanel" )
 
 class "optionsmenu" ( gui.tabbedframe )
 
@@ -17,8 +18,8 @@ function optionsmenu:optionsmenu( parent )
 	local group = gui.commandbuttongroup( self, groupName )
 
 	local buttonName  = nil
-	buttonName		  = name .. " OK Button"
-	self.okButton	  = gui.commandbutton( group, buttonName, "OK" )
+	buttonName        = name .. " OK Button"
+	self.okButton     = gui.commandbutton( group, buttonName, "OK" )
 	self.okButton.onClick = function( commandbutton )
 		local panels = self:getTabPanels():getChildren()
 		for _, panel in ipairs( panels ) do
@@ -27,7 +28,7 @@ function optionsmenu:optionsmenu( parent )
 		convar.saveConfig()
 		self:close()
 	end
-	buttonName		  = name .. " Cancel Button"
+	buttonName        = name .. " Cancel Button"
 	self.cancelButton = gui.commandbutton( group, buttonName, "Cancel" )
 	self.cancelButton.onClick = function( commandbutton )
 		local panels = self:getTabPanels():getChildren()
@@ -36,7 +37,7 @@ function optionsmenu:optionsmenu( parent )
 		end
 		self:close()
 	end
-	buttonName		  = name .. " Apply Button"
+	buttonName        = name .. " Apply Button"
 	self.applyButton  = gui.commandbutton( group, buttonName, "Apply" )
 	self.applyButton.onClick = function( commandbutton )
 		local panels = self:getTabPanels():getChildren()
@@ -46,6 +47,7 @@ function optionsmenu:optionsmenu( parent )
 		convar.saveConfig()
 	end
 
+	self:addTab( "Keyboard", gui.keyboardoptionspanel() )
 	self:addTab( "Video", gui.videooptionspanel() )
 end
 

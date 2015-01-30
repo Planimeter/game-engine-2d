@@ -1,12 +1,17 @@
 return {
   version = "1.1",
   luaversion = "5.1",
+  tiledversion = "0.11.0",
   orientation = "orthogonal",
   width = 100,
   height = 100,
   tilewidth = 32,
   tileheight = 32,
-  properties = {},
+  nextobjectid = 2,
+  backgroundcolor = { 31, 35, 36 },
+  properties = {
+    ["regiontitle"] = "Welcome to the quaint village of"
+  },
   tilesets = {
     {
       name = "World",
@@ -18,7 +23,12 @@ return {
       image = "../images/tilesets/world.png",
       imagewidth = 1920,
       imageheight = 1080,
+      tileoffset = {
+        x = 0,
+        y = 0
+      },
       properties = {},
+      terrains = {},
       tiles = {}
     }
   },
@@ -1057,6 +1067,7 @@ return {
       properties = {},
       objects = {
         {
+          id = 1,
           name = "Allorova World Gate",
           type = "info_worldgate_spawn",
           shape = "rectangle",
@@ -1064,6 +1075,7 @@ return {
           y = 1440,
           width = 0,
           height = 0,
+          rotation = 0,
           gid = 194,
           visible = true,
           properties = {}

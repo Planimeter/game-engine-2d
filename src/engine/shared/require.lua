@@ -34,6 +34,7 @@ function require( modname )
 			name	= modname,
 			modtime = filesystem.getLastModified( filename )
 		} )
+		-- print( "Loading " .. modname .. "..." )
 	else
 		error( ret, 2 )
 	end

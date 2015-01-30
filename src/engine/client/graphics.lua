@@ -18,6 +18,7 @@ local image					= love.image
 local ipairs				= ipairs
 local math					= math
 local os					= os
+local string                = string
 local table					= table
 local unpack				= unpack
 local window				= love.window
@@ -347,7 +348,18 @@ function pop()
 	graphics.pop()
 end
 
-function print( text, x, y, r, sx, sy, ox, oy, kx, ky )
+function print( text, x, y, r, sx, sy, ox, oy, kx, ky, tracking )
+	if ( tracking ) then
+		local font = graphics.getFont()
+		local char
+		for i = 1, string.len( text ) do
+			char = string.sub( text, i, i )
+			graphics.print( char, x, y, r, sx, sy, ox, oy, kx, ky )
+			x = x + font:getWidth( char ) + tracking
+		end
+		return
+	end
+
 	graphics.print( text, x, y, r, sx, sy, ox, oy, kx, ky )
 end
 
@@ -405,6 +417,10 @@ end
 
 function setFont( font )
 	graphics.setFont( font )
+end
+
+function setLineWidth( width )
+	graphics.setLineWidth( width )
 end
 
 function setMode( width, height, flags )

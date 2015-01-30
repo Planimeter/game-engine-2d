@@ -12,7 +12,9 @@ local function loadConfig( c )
     require( "engine.shared.convar" )
     convar.readConfig()
 
-    local _INTERACTIVE        = c.args[ "-dedicated" ] and c.args[ "-interactive" ]
+    local _INTERACTIVE        = c.args[ "-dedicated" ] and
+                                c.args[ "-interactive" ]
+
     local r_window_width      = convar.getConfig( "r_window_width" )
     local r_window_height     = convar.getConfig( "r_window_height" )
     local r_window_fullscreen = convar.getConfig( "r_window_fullscreen" )

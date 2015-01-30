@@ -108,6 +108,11 @@ local function signin( self )
 	end )
 end
 
+local function rememberMe()
+end
+
+hook.set( "client", rememberMe, "onAxisSignin", "rememberMe" )
+
 local function register( self )
 	local username			= self.usernameTextBox:getText()
 	local password			= self.passwordTextBox:getPassword()		or ""

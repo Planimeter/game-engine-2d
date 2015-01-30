@@ -5,8 +5,8 @@
 --============================================================================--
 
 -- These values are preserved during real-time scripting.
-local engineArgs	 = engine and engine.getArguments() or nil
-local engineRealTime = engine and engine.getRealTime()	or nil
+local engineArgs     = engine and engine.getArguments() or nil
+local engineRealTime = engine and engine.getRealTime()  or nil
 
 require( "engine.shared.baselib" )
 require( "engine.shared.tablib" )
@@ -22,28 +22,27 @@ require( "engine.client.gui" )
 end
 require( "engine.shared.region" )
 
-local _CLIENT	   = _CLIENT
-local _SERVER	   = _SERVER
+local _CLIENT      = _CLIENT
+local _SERVER      = _SERVER
 local _INTERACTIVE = _INTERACTIVE
 
 local concommand   = concommand
-local event		   = love.event
+local event        = love.event
 local filesystem   = filesystem
-local gui		   = gui
-local ipairs	   = ipairs
-local love		   = love
-local math		   = math
-local os		   = os
-local rawget	   = rawget
-local region	   = region
-local require	   = require
+local gui          = gui
+local ipairs       = ipairs
+local love         = love
+local math         = math
+local os           = os
+local rawget       = rawget
+local require      = require
 local setmetatable = setmetatable
-local string	   = string
-local thread	   = thread
-local timer		   = love.timer
-local tostring	   = tostring
-local type		   = type
-local _G		   = _G
+local string       = string
+local thread       = thread
+local timer	       = love.timer
+local tostring     = tostring
+local type         = type
+local _G           = _G
 
 local clientengine
 local serverengine
@@ -57,8 +56,8 @@ if ( _SERVER ) then
 end
 
 -- Export the interfaces
-_G.clientengine	   = clientengine
-_G.serverengine	   = serverengine
+_G.clientengine    = clientengine
+_G.serverengine    = serverengine
 
 module( "engine" )
 
@@ -164,7 +163,7 @@ end
 function load( arg )
 	math.randomseed( os.time() )
 
-	_arg	  = arg
+	_arg      = arg
 	_realtime = 0
 
 	for i, v in ipairs( arg ) do
@@ -276,9 +275,9 @@ function threaderror( t, errorstr )
 	thread.handleError( t, errorstr )
 end
 
-local timestep	  = 1/33
+local timestep    = 1/33
 local accumulator = 0
-local frameTime	  = 0
+local frameTime   = 0
 
 function update( dt )
 	if ( _G._DEBUG ) then
@@ -287,9 +286,9 @@ function update( dt )
 		end
 	end
 
-	_realtime	= _realtime + dt
+	_realtime   = _realtime + dt
 
-	frameTime	= dt
+	frameTime   = dt
 	accumulator = accumulator + frameTime
 
 	while ( accumulator >= timestep ) do
@@ -313,23 +312,23 @@ function update( dt )
 end
 
 do
-	love.draw			  = draw
+	love.draw             = draw
 
 	if ( errhand ) then
-		love.errhand	  = errhand
+		love.errhand      = errhand
 	end
 
-	love.focus			  = focus
+	love.focus            = focus
 	love.joystickpressed  = joystickpressed
 	love.joystickreleased = joystickreleased
-	love.textinput		  = textinput
-	love.keypressed		  = keypressed
-	love.keyreleased	  = keyreleased
-	love.load			  = load
-	love.mousepressed	  = mousepressed
-	love.mousereleased	  = mousereleased
-	love.quit			  = quit
+	love.textinput        = textinput
+	love.keypressed       = keypressed
+	love.keyreleased      = keyreleased
+	love.load             = load
+	love.mousepressed     = mousepressed
+	love.mousereleased    = mousereleased
+	love.quit             = quit
 	love.resize           = resize
-	love.threaderror	  = threaderror
-	love.update			  = update
+	love.threaderror      = threaderror
+	love.update           = update
 end

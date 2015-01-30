@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" width="100" height="100" tilewidth="32" tileheight="32" backgroundcolor="#1f2324">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" backgroundcolor="#1f2324" nextobjectid="2">
+ <properties>
+  <property name="regiontitle" value="Welcome to the quaint village of"/>
+ </properties>
  <tileset firstgid="1" name="World" tilewidth="32" tileheight="32">
   <image source="../images/tilesets/world.png" width="1920" height="1080"/>
  </tileset>
@@ -48,7 +51,7 @@
    eJztnFlOBDEMRMN2AZbzcAOWa7Fci+VWBCE0CHWm7cSOy46flD+Ekky5qnrUmlKSxAeXdV3VdV3XjfFeklLu6rqv66GuR+O9JKU81fVc10tdr8Z7SUp5q+u9ro+6Po33kpRyelLKWV3ndV2cWO8m+eY2P4dEgEjdMMJZInXDCGeJ1A0jnEWyG1r7RYSeK9kNrf0iSs/d6oY9Wkfwi6g9t0frEfwClR6te/AL64zrpVfr6H5BnXu0z82D1nugzr11N9kCXes9UOceoZtsgTC3knugzv2sbsI9G8LcSu+BMvez/Jp7NoS5tdrDDL/mng3hmQJhD1pwz4bQsxD2oEXP2STntjebI3a9XyzPNqsfIPRCD8zKZoRe6IFZ2YzQCz0wks0cD4rcyaTpzS+OB0XuZC1mZybXgyJ3si1mZ2Z60HFmZ2Z0Dxr1Gwu97nmQ5+eOUb9B1Kvn5w4Jv0HLTM/PHVS/8eQBnjOf6jeePADRQzlQ/MabB6B5qDSePSAi3j0gIn89wFO+r4CnfF8Bb/lOwfPMR8x3zzPvId+5evc+8+gdn6v3iDOP5MFcvXuYeS5IHtyjd/SZ54LkwRH1zqXXgyk+1+OF0fTOpVeTFJ9D8kJP9GiS4nNIXhgdis+N9lGk7ocOxedG8zn9jgfF537/xutvRyAi4Rv52xH7UO9Zwjei/naEJNR7bt3ljHfXvTyPSHgIVbOtu8x31w9IeAhVs627zHfXD0h0D45mt+5ytbw9htRdjGg2ugdxQLmLyB7UopXdK94FAvm9ARZRvzcY6eyW3zVG7TEjc2/pGQjZraHHkbm39gzr7NbQ48jce/MMaT1r6HFk7hE8g4O0nrX0ODL31p7BQVrP3vSIRkvPIz7mSY9otPScz5Z2bOlZuyfmOyE8tHtizh8P7Vy2fk7ziGYue3tOi072Yh4aefv/f2YvPrB33xp5mxneZu9uNPI2M7zN3t1o5C1qhiM8C+3djUbeomY4go9S7kYjbxEzHMVHEe/GAlQfXRVJH0XIoghIeQVCFiUHULIo+WH1LELza9ROP4uWX1t+Tiv31pZfZ67a0PLrzFUbWn69eq5asuXXq+cqIivnapLM4gswwzQe
   </data>
  </layer>
- <objectgroup name="Spawn Points" width="100" height="100">
-  <object name="Allorova World Gate" type="info_worldgate_spawn" gid="194" x="1664" y="1440"/>
+ <objectgroup name="Spawn Points">
+  <object id="1" name="Allorova World Gate" type="info_worldgate_spawn" gid="194" x="1664" y="1440"/>
  </objectgroup>
 </map>
