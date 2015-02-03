@@ -8,20 +8,20 @@
 local _entities = entities and entities.entities or {}
 local _classes  = entities and entities.classes  or {}
 
-local _CLIENT	= _CLIENT
-local _SERVER	= _SERVER
+local _CLIENT   = _CLIENT
+local _SERVER   = _SERVER
 
-local getfenv	= getfenv
-local ipairs	= ipairs
-local pairs		= pairs
-local payload	= payload
-local pcall		= pcall
-local print		= print
-local require	= require
-local string	= string
+local getfenv   = getfenv
+local ipairs    = ipairs
+local pairs     = pairs
+local payload   = payload
+local pcall     = pcall
+local print     = print
+local require   = require
+local string    = string
 local table     = table
-local unrequire	= unrequire
-local _G		= _G
+local unrequire = unrequire
+local _G        = _G
 
 module( "entities" )
 
@@ -108,10 +108,10 @@ if ( _CLIENT ) then
 			return
 		end
 
-		local entity	  = entities[ classname ]()
-		entity.entIndex	  = payload:get( "entIndex" )
+		local entity      = entities[ classname ]()
+		entity.entIndex   = payload:get( "entIndex" )
 
-		local struct	  = entity:getNetworkVarsStruct()
+		local struct      = entity:getNetworkVarsStruct()
 		local networkVars = payload:get( "networkVars" )
 		networkVars:setStruct( struct )
 		networkVars:deserialize()
@@ -135,7 +135,7 @@ if ( _CLIENT ) then
 		require( "engine.shared.entities.entity" )
 		local entity = _G.entity.getByEntIndex( entIndex )
 		if ( entity ) then
-			local struct	 = entity:getNetworkVarsStruct()
+			local struct     = entity:getNetworkVarsStruct()
 			local networkVar = payload:get( "networkVar" )
 			networkVar:setStruct( struct )
 			networkVar:deserialize()

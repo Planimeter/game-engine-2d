@@ -8,13 +8,13 @@ class "scrollbar" ( gui.panel )
 
 function scrollbar:scrollbar( parent, name )
 	gui.panel.panel( self, parent, name )
-	self.width		 = 4
-	self.height		 = parent:getHeight()
-	self.disabled	 = false
-	self.min		 = 0
-	self.max		 = 0
+	self.width       = 4
+	self.height      = parent:getHeight()
+	self.disabled    = false
+	self.min         = 0
+	self.max         = 0
 	self.rangeWindow = 0
-	self.value		 = 0
+	self.value       = 0
 
 	self:setScheme( "Default" )
 	self:setUseFullscreenFramebuffer( true )
@@ -25,20 +25,21 @@ function scrollbar:draw()
 		return
 	end
 
+	local length = self:getThumbLength()
+	if ( length == self:getHeight() ) then
+		return
+	end
+
 	local property = "scrollbar.backgroundColor"
-	local width	   = self:getWidth()
-	local x		   = 0
+	local width    = self:getWidth()
+	local x        = 0
 
 	if ( self:isDisabled() ) then
 		property = "scrollbar.disabled.backgroundColor"
 	end
 
 	graphics.setColor( self:getScheme( property ) )
-	graphics.rectangle( "fill",
-						x,
-						self:getThumbY(),
-						width,
-						self:getThumbLength() )
+	graphics.rectangle( "fill", x, self:getThumbY(), width, length )
 
 	gui.panel.draw( self )
 end
@@ -61,13 +62,13 @@ end
 
 function scrollbar:getThumbLength()
 	local range = self:getMax() - self:getMin()
-	local size	= self:getRangeWindow() / range
+	local size  = self:getRangeWindow() / range
 	return size * self:getHeight()
 end
 
 function scrollbar:getThumbY()
-	local min	  = self:getMin()
-	local range	  = self:getMax() - min
+	local min     = self:getMin()
+	local range   = self:getMax() - min
 	local percent = ( self:getValue() + min ) / range
 	return percent * self:getHeight()
 end
@@ -155,16 +156,16 @@ function scrollbar:setDisabled( disabled )
 end
 
 local minRange, maxRange = 0, 0
-local range				 = 0
-local newRange			 = 0
+local range              = 0
+local newRange           = 0
 
 local function updateRange( self, min, max )
 	minRange, maxRange = self:getRange()
-	range			   = maxRange - minRange
-	newRange		   = max	  - min
+	range              = maxRange - minRange
+	newRange           = max      - min
 	if ( range ~= 0 ) then
-		self.value	   = ( self:getValue() + self:getMin() ) / range *
-						 newRange + self:getMin()
+		self.value     = ( self:getValue() + self:getMin() ) / range *
+		                 newRange + self:getMin()
 		if ( self.value > self:getMax() - self:getRangeWindow() ) then
 			self.value = self:getMax() - self:getRangeWindow()
 		end
@@ -188,13 +189,13 @@ end
 
 function scrollbar:setRangeWindow( rangeWindow )
 	self.rangeWindow = rangeWindow
-	local rangeSize	 = self:getMax() - self:getMin()
+	local rangeSize  = self:getMax() - self:getMin()
 	if ( rangeWindow > rangeSize ) then
 		self.rangeWindow = rangeSize
 	end
 end
 
-local oldValue	 = 0
+local oldValue   = 0
 local deltaValue = 0
 
 function scrollbar:setValue( value )
@@ -218,9 +219,9 @@ function scrollbar:setValue( value )
 	return 0
 end
 
-local mouseX, mouseY	 = 0, 0
-local getMousePosition	 = input.getMousePosition
-local deltaX, deltaY	 = 0, 0
+local mouseX, mouseY     = 0, 0
+local getMousePosition   = input.getMousePosition
+local deltaX, deltaY     = 0, 0
 
 function scrollbar:update( dt )
 	gui.panel.update( self, dt )
@@ -236,18 +237,18 @@ function scrollbar:update( dt )
 	mouseX, mouseY = getMousePosition()
 	localX, localY = self:screenToLocal( mouseX, mouseY )
 	deltaX, deltaY = localX - self.grabbedX,
-					 localY - self.grabbedY
+	                 localY - self.grabbedY
 
 	if ( deltaX == 0 and deltaY == 0 ) then
 		return
 	end
 
 	minRange, maxRange = self:getRange()
-	range			   = maxRange - minRange
-	deltaValue		   = ( deltaY / self:getHeight() ) * range
-	deltaValue		   = self:setValue( self:getValue() + deltaValue )
-	self.grabbedX	   = localX
-	self.grabbedY	   = localY + ( deltaValue / range ) * self:getHeight()
+	range              = maxRange - minRange
+	deltaValue         = ( deltaY / self:getHeight() ) * range
+	deltaValue         = self:setValue( self:getValue() + deltaValue )
+	self.grabbedX      = localX
+	self.grabbedY      = localY + ( deltaValue / range ) * self:getHeight()
 end
 
 gui.register( scrollbar, "scrollbar" )

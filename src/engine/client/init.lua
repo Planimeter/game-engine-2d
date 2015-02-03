@@ -5,37 +5,39 @@
 --============================================================================--
 
 -- These values are preserved during real-time scripting.
-local _connectedToServer = engine						   and
-						   engine.client				   and
-						   engine.client.connectedToServer or  false
+local _connectedToServer = engine                          and
+                           engine.client                   and
+                           engine.client.connectedToServer or  false
 
 require( "conf" )
+require( "engine.client.bind" )
 require( "engine.client.graphics" )
 require( "engine.client.gui" )
 require( "engine.shared.hook" )
 require( "engine.shared.network.payload" )
 
-local _AXIS		  = _AXIS
+local _AXIS       = _AXIS
 
-local conf		  = _CONF
+local bind        = bind
+local conf        = _CONF
 local concommand  = concommand
-local convar	  = convar
+local convar      = convar
 local filesystem  = filesystem
 local framebuffer = framebuffer
-local graphics	  = graphics
-local gui		  = gui
-local hook		  = hook
-local payload	  = payload
-local print		  = print
-local require	  = require
-local scheme	  = scheme
-local string	  = string
-local table		  = table
-local tostring	  = tostring
-local love		  = love
-local timer		  = love.timer
-local unrequire	  = unrequire
-local _G		  = _G
+local graphics    = graphics
+local gui         = gui
+local hook        = hook
+local payload     = payload
+local print       = print
+local require     = require
+local scheme      = scheme
+local string      = string
+local table       = table
+local tostring    = tostring
+local love        = love
+local timer       = love.timer
+local unrequire   = unrequire
+local _G          = _G
 
 module( "engine.client" )
 
@@ -108,17 +110,17 @@ function download( filename )
 end
 
 local perf_draw_frame_rate = convar( "perf_draw_frame_rate", "0", nil, nil,
-									 "Draws the frame rate" )
+                                     "Draws the frame rate" )
 
 local function drawFrameRate()
-	local font	 = scheme.getProperty( "Default", "font" )
+	local font   = scheme.getProperty( "Default", "font" )
 	graphics.setFont( font )
-	local time	 = getFPS() .. " FPS / " ..
-				   string.format( "%.3f", 1000 * getAverageFrameTime() ) .. " ms"
+	local time   = getFPS() .. " FPS / " ..
+	               string.format( "%.3f", 1000 * getAverageFrameTime() ) .. " ms"
 	local height = graphics.getViewportHeight()
 	local margin = 96 * ( height / 1080 )
-	local x		 = graphics.getViewportWidth() - font:getWidth( time ) - margin
-	local y		 = height					   - font:getHeight()	   - margin + 1
+	local x      = graphics.getViewportWidth() - font:getWidth( time ) - margin
+	local y      = height                      - font:getHeight()      - margin + 1
 	graphics.setColor( scheme.getProperty( "Default", "mainmenubutton.dark.textDropShadowColor" ) )
 	graphics.print( time, x, y )
 	graphics.setColor( scheme.getProperty( "Default", "mainmenubutton.dark.textColor" ) )
@@ -191,8 +193,8 @@ end
 
 function isInGame()
 	return isConnectedToServer() and
-		   _G.gameclient		 and
-		   _G.gameclient.playerInitialized
+	       _G.gameclient         and
+	       _G.gameclient.playerInitialized
 end
 
 if ( _AXIS ) then
@@ -244,12 +246,16 @@ function keypressed( key, isrepeat )
 		end
 	end
 
+	require( "engine.client.input" )
+	if ( _G.input.isKeyTrapped( key ) ) then
+		return
+	end
+
 	if ( gui.keypressed( key, isrepeat ) ) then
 		return
 	end
 
-	require( "engine.client.bind" )
-	_G.bind.keypressed( key, isrepeat )
+	bind.keypressed( key, isrepeat )
 end
 
 function keyreleased( key )
@@ -257,7 +263,7 @@ function keyreleased( key )
 		return
 	end
 
-	_G.bind.keyreleased( key )
+	bind.keyreleased( key )
 end
 
 function load( arg )
@@ -269,15 +275,22 @@ function load( arg )
 
 	graphics.initialize()
 	gui.initialize()
+
+	-- TODO: Move to config system!!
+	bind.readBinds()
 end
 
 function mousepressed( x, y, button )
+	require( "engine.client.input" )
+	if ( _G.input.isKeyTrapped( button ) ) then
+		return
+	end
+
 	if ( gui.mousepressed( x, y, button ) ) then
 		return
 	end
 
-	require( "engine.client.bind" )
-	_G.bind.mousepressed( x, y, button )
+	bind.mousepressed( x, y, button )
 end
 
 function mousereleased( x, y, button )
@@ -285,7 +298,7 @@ function mousereleased( x, y, button )
 		return
 	end
 
-	_G.bind.mousereleased( x, y, button )
+	bind.mousereleased( x, y, button )
 end
 
 local sendAuthTicket = nil
@@ -320,7 +333,7 @@ function onConnect( event )
 end
 
 local cl_payload_show_receive = convar( "cl_payload_show_receive", "0", nil, nil,
-										"Prints payloads received from server" )
+                                        "Prints payloads received from server" )
 
 if ( _G._DEBUG ) then
 	cl_payload_show_receive:setValue( "1" )

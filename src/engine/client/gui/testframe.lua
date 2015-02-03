@@ -78,7 +78,7 @@ function testframe:createTestPanels()
 	y = y + button:getHeight() + 9
 	label:setPos( x, y )
 	local labelHeight = label:getHeight()
-	
+
 	panelName = "Drop-Down List"
 	local dropdownlist = gui.dropdownlist( panel, getDebugName() )
 	y = y + labelHeight + 9

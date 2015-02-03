@@ -6,14 +6,14 @@
 
 if ( _CLIENT or _INTERACTIVE ) then
 local system = love.system
-local mouse	 = love.mouse
+local mouse  = love.mouse
 
 function os.getClipboardText()
 	return system.getClipboardText()
 end
 
-local cursor		= nil
-local cursors		= {}
+local cursor        = nil
+local cursors       = {}
 local systemCursors = {
 	"sizens",
 	"sizenesw",
@@ -49,5 +49,9 @@ function os.setCursor( ctype )
 
 	mouse.setCursor( cursors[ ctype ] )
 	cursor = ctype
+end
+
+function os.setCursorVisible( visible )
+	mouse.setVisible( visible )
 end
 end

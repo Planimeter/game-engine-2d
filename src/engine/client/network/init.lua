@@ -5,20 +5,20 @@
 --============================================================================--
 
 -- These values are preserved during real-time scripting.
-local network	   = engine	 and engine.client		and engine.client.network
-local _host		   = network and network.host		or nil
-local _server	   = network and network.server		or nil
+local network      = engine  and engine.client       and engine.client.network
+local _host        = network and network.host        or nil
+local _server      = network and network.server      or nil
 local _accumulator = network and network.accumulator or 0
 
 require( "enet" )
 
 local collectgarbage = collectgarbage
-local enet			 = enet
-local string		 = string
-local pcall			 = pcall
-local print			 = print
-local require		 = require
-local _G			 = _G
+local enet           = enet
+local string         = string
+local pcall          = pcall
+local print          = print
+local require        = require
+local _G             = _G
 
 module( "engine.client.network" )
 
@@ -88,7 +88,7 @@ function disconnect()
 	_G.engine.client.onDisconnect()
 end
 
-timestep	= 1/20
+timestep    = 1/20
 accumulator = _accumulator
 
 function update( dt )

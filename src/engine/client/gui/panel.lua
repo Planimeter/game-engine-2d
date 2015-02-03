@@ -345,8 +345,12 @@ function panel:keypressed( key, isrepeat )
 	end
 
 	if ( self:getChildren() ) then
+		local filtered
 		for i, v in ipairs( self:getChildren() ) do
-			v:keypressed( key, isrepeat )
+			filtered = v:keypressed( key, isrepeat )
+			if ( filtered ~= nil ) then
+				return filtered
+			end
 		end
 	end
 end

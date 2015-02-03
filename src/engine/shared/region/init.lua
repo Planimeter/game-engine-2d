@@ -205,11 +205,11 @@ function region:loadLayers( layers )
 	self.layers = {}
 
 	for _, layerData in ipairs( layers ) do
-		local layer	  = regionlayer( layerData )
+		local layer   = regionlayer( layerData )
 		layer:setRegion( self )
 		layer:parse()
 
-		local gid	  = layer:getHighestTileGid()
+		local gid     = layer:getHighestTileGid()
 		local tileset = nil
 		for _, t in ipairs( self:getTilesets() ) do
 			if ( t:getFirstGid() <= gid ) then

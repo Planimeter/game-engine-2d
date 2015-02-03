@@ -25,10 +25,11 @@ function concommand.getConcommand( name )
 	return concommand.concommands[ name ]
 end
 
-function concommand:concommand( name, helpString, callback )
-	self.name		= name
+function concommand:concommand( name, helpString, callback, flags )
+	self.name       = name
 	self.helpString = helpString
-	self.callback	= callback
+	self.callback   = callback
+	self.flags      = flags
 	concommand.concommands[ name ] = self
 end
 
@@ -37,6 +38,10 @@ end
 
 function concommand:getCallback()
 	return self.callback
+end
+
+function concommand:getFlags()
+	return self.flags
 end
 
 function concommand:getHelpString()
@@ -53,6 +58,10 @@ end
 
 function concommand:setCallback( callback )
 	self.callback = callback
+end
+
+function concommand:setFlags( flags )
+	self.flags = flags
 end
 
 function concommand:setHelpString( helpString )

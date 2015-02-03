@@ -1,6 +1,6 @@
 --========= Copyright © 2013-2015, Planimeter, All rights reserved. ==========--
 --
--- Purpose: info_worldgate_spawn
+-- Purpose: vaplayer
 --
 --============================================================================--
 

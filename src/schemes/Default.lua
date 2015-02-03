@@ -229,6 +229,15 @@ default.textbox				= {
 	}
 }
 
+default.bindlistpanel		= {
+	backgroundColor			= color(  35,  35,	36, 0.66 * 255 ),
+	outlineColor			= color( 104, 106, 107, 0.66 * 255 )
+}
+
+default.bindlistheader		= {
+	borderColor				= color(  15,  15,	15,		   255 ),
+}
+
 default.mainmenuFont		= graphics.newFont( "fonts/SourceSansPro-Regular.otf", 24 )
 default.titleFont			= graphics.newFont( "fonts/SourceSansPro-Bold.otf", 18 )
 default.font				= graphics.newFont( "fonts/SourceSansPro-Regular.otf", 14 )

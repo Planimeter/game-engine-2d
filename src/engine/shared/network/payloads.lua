@@ -73,3 +73,9 @@ structs[ "networkVarChanged" ] = {
 		{ name = "networkVar",	   type = "typelenvalues" },
 	}
 }
+
+structs[ "concommand" ] = {
+	keys = {
+		{ name = "command",		   type = "string" },
+	}
+}

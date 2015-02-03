@@ -7,21 +7,21 @@
 require( "engine.client.input" )
 require( "engine.client.gui.scheme" )
 
-local getfenv	   = getfenv
-local input		   = input
-local ipairs	   = ipairs
-local math		   = math
-local pcall		   = pcall
-local print		   = print
-local rawget	   = rawget
-local require	   = require
+local getfenv      = getfenv
+local input        = input
+local ipairs       = ipairs
+local math         = math
+local pcall        = pcall
+local print        = print
+local rawget       = rawget
+local require      = require
 local setmetatable = setmetatable
-local string	   = string
-local table		   = table
-local type		   = type
-local _G		   = _G
+local string       = string
+local table        = table
+local type         = type
+local _G           = _G
 
-local rootPanel	   = g_RootPanel or nil
+local rootPanel    = g_RootPanel or nil
 
 module( "gui" )
 
@@ -51,7 +51,7 @@ local metatable = {
 				if ( status == true ) then
 					break
 				elseif ( status == false and
-						 find( err, "module '" .. library .. "' not found:" ) ~= 1 ) then
+				         find( err, "module '" .. library .. "' not found:" ) ~= 1 ) then
 					print( err )
 				end
 			end
@@ -102,19 +102,19 @@ function textinput( text )
 end
 
 function keypressed( key, isrepeat )
-	rootPanel:keypressed( key, isrepeat )
+	return rootPanel:keypressed( key, isrepeat )
 end
 
 function keyreleased( key )
-	rootPanel:keyreleased( key )
+	return rootPanel:keyreleased( key )
 end
 
 function mousepressed( x, y, button )
-	rootPanel:mousepressed( x, y, button )
+	return rootPanel:mousepressed( x, y, button )
 end
 
 function mousereleased( x, y, button )
-	rootPanel:mousereleased( x, y, button )
+	return rootPanel:mousereleased( x, y, button )
 end
 
 function register( class, name )
@@ -156,15 +156,17 @@ function setFocusedPanel( panel, focus )
 end
 
 function update( dt )
-	updateMouseOver()
+	if ( not input.getKeyTrap() ) then
+		updateMouseOver()
+	end
 
 	rootPanel:update( dt )
 end
 
-local mx, my		   = 0, 0
-local panel			   = nil
+local mx, my           = 0, 0
+local panel            = nil
 local getMousePosition = input.getMousePosition
-local oldPanel		   = nil
+local oldPanel         = nil
 
 function updateMouseOver()
 	mx, my = getMousePosition()

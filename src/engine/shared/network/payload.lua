@@ -12,7 +12,7 @@ require( "engine.shared.typelenvalues" )
 class "payload" ( "typelenvalues" )
 
 payload.handlers = _handlers
-local handlers	 = payload.handlers
+local handlers   = payload.handlers
 
 -- Generate ids for packet structures
 do

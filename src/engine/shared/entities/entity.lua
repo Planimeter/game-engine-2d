@@ -5,7 +5,7 @@
 --============================================================================--
 
 -- These values are preserved during real-time scripting.
-local entities	   = entity and entity.entities		or {}
+local entities     = entity and entity.entities     or {}
 local lastEntIndex = entity and entity.lastEntIndex or 0
 
 require( "common.vector" )
@@ -13,7 +13,7 @@ require( "engine.shared.entities.networkvar" )
 
 class( "entity" )
 
-entity.entities		= entities
+entity.entities     = entities
 entity.lastEntIndex = lastEntIndex
 
 function entity.create( classname )
@@ -83,9 +83,9 @@ function entity:entity()
 		entity.lastEntIndex = self.entIndex
 	end
 
-	self:networkString( "name",		nil )
+	self:networkString( "name",     nil )
 	self:networkVector( "position", vector() )
-	self:networkNumber( "scale",	1 )
+	self:networkNumber( "scale",    1 )
 
 	table.insert( entity.entities, self )
 end
@@ -113,8 +113,8 @@ function entity:networkVar( name, initialValue )
 	self.networkVars[ name ] = networkvar
 
 	local metatable = getmetatable( self )
-	local getter	= "get" .. string.capitalize( name )
-	local setter	= "set" .. string.capitalize( name )
+	local getter    = "get" .. string.capitalize( name )
+	local setter    = "set" .. string.capitalize( name )
 	if ( not metatable[ getter ] ) then
 		metatable[ getter ] = function( self )
 			return self:getNetworkVar( name )
@@ -143,7 +143,7 @@ do
 			local mt = getmetatable( self )
 			mt.networkVarKeys = mt.networkVarKeys or {}
 
-			local keys		= mt.networkVarKeys
+			local keys      = mt.networkVarKeys
 			local keyExists = false
 			for i, key in ipairs( keys ) do
 				if ( key.name == name ) then
@@ -198,7 +198,7 @@ function entity:getNetworkVarsStruct()
 end
 
 function entity:getNetworkVarTypeLenValues()
-	local struct	  = self:getNetworkVarsStruct()
+	local struct      = self:getNetworkVarsStruct()
 	local networkVars = typelenvalues( nil, struct )
 	for k, v in pairs( self.networkVars ) do
 		networkVars:set( k, v:getValue() )

@@ -8,6 +8,9 @@
 local _binds = bind and bind.getBinds() or {}
 
 local concommand = concommand
+local filesystem = filesystem
+local pairs      = pairs
+local print      = print
 local string     = string
 local _G         = _G
 
@@ -23,22 +26,32 @@ function getBind( key )
 	return binds[ key ]
 end
 
+function getKeyForBind( concommand )
+	for key, bind in pairs( binds ) do
+		if ( bind == concommand ) then
+			return key
+		end
+	end
+end
+
 function setBind( key, concommand )
 	binds[ key ] = concommand
 end
 
 function readBinds()
-	local configs = "cfg/binds.cfg"
+	local config = "cfg/binds.cfg"
 	if ( not filesystem.exists( config ) ) then
 		config = "cfg/binds_default.cfg"
-		if ( not filesystem.exists( config ) ) then
+		if ( filesystem.exists( config ) ) then
+			filesystem.write( "cfg/binds.cfg", filesystem.read( config ) )
+		else
 			return
 		end
 	end
 
 	for line in filesystem.lines( config ) do
 		for k, v in string.gmatch( line, "(.+)%s(.+)" ) do
-			binds[ k ] = v
+			binds[ string.trim( k ) ] = string.trim( v )
 		end
 	end
 end
@@ -61,7 +74,10 @@ function saveBinds()
 end
 
 function keypressed( key, isrepeat )
-	concommand.dispatch( _G.localplayer, getBind( key ) )
+	local bind = getBind( key )
+	if ( bind and not concommand.dispatch( _G.localplayer, bind ) ) then
+		print( "'" .. bind .. "' is not recognized as a command." )
+	end
 end
 
 function keyreleased( key )
@@ -73,7 +89,9 @@ function keyreleased( key )
 	local isButtonCommand = string.sub( bind, 1, 1 ) == "+"
 	if ( isButtonCommand ) then
 		bind = string.gsub( bind, "%+", "-" )
-		concommand.dispatch( _G.localplayer, bind )
+		if ( not concommand.dispatch( _G.localplayer, bind ) ) then
+			print( "'" .. bind .. "' is not recognized as a command." )
+		end
 	end
 end
 

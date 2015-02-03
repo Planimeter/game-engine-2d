@@ -8,7 +8,7 @@ class "scrollablepanel" ( gui.panel )
 
 function scrollablepanel:scrollablepanel( parent, name )
 	gui.panel.panel( self, parent, name )
-	self.panel	   = gui.panel( self, self:getName() .. " Inner Panel" )
+	self.panel     = gui.panel( self, self:getName() .. " Inner Panel" )
 	self.scrollbar = gui.scrollbar( self, self:getName() .. " Scrollbar" )
 	self.scrollbar.onValueChanged = function( _, oldValue, newValue )
 		self.panel:setY( -newValue )
@@ -27,6 +27,11 @@ end
 
 function scrollablepanel:getScrollbar()
 	return self.scrollbar
+end
+
+function scrollablepanel:invalidateLayout()
+	self:setSize( self:getSize() )
+	gui.panel.invalidateLayout( self )
 end
 
 local function getParentFrame( self )
@@ -69,7 +74,8 @@ function scrollablepanel:mousepressed( x, y, button )
 		return
 	end
 
-	if ( self:getInnerPanel().mouseover ) then
+	local panel = self:getInnerPanel()
+	if ( panel.mouseover or panel:isChildMousedOver() ) then
 		local scrollbar = self:getScrollbar()
 		if ( scrollbar and parentFrameHasFocus( self ) ) then
 			local font = self:getScheme( "font" )
