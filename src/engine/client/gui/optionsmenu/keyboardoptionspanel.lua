@@ -25,12 +25,12 @@ function keyboardoptionspanel:keyboardoptionspanel()
 	local buttonName       = name .. " Use Defaults Button"
 	self.useDefaultsButton = gui.commandbutton( group, buttonName, "Use Defaults" )
 	self.useDefaultsButton.onClick = function( commandbutton )
-		print( "IMPLEMENT ME: Default bindings." )
+		print( "TODO: Default bindings." )
 	end
 	buttonName                  = name .. " Advanced Button"
 	self.advancedButton         = gui.commandbutton( group, buttonName, "Advanced" )
 	self.advancedButton.onClick = function( commandbutton )
-		print( "IMPLEMENT ME: Advanced Modal." )
+		print( "TODO: Advanced modal." )
 	end
 end
 

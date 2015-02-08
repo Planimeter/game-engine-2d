@@ -207,6 +207,13 @@ end
 gui.register( console, "console" )
 
 concommand( "clear", "Clears the console", function()
+	if ( _WINDOWS ) then
+		-- Andrew; This breaks the LOVE console. :(
+		-- os.execute( "cls" )
+	else
+		os.execute( "clear" )
+	end
+
 	if ( g_Console ) then
 		g_Console.output:setText( "" )
 	end

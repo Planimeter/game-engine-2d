@@ -5,19 +5,15 @@
 --============================================================================--
 
 local unrequire = unrequire
-local _G		= _G
+local _G        = _G
 
 module( "game.server" )
 
 function getSpawnPoint( player )
-	local class		  = "info_worldgate_spawn"
-	local region	  = player:getRegion()
+	local class       = "info_worldgate_spawn"
+	local region      = player:getRegion()
 	local spawnPoints = _G.entity.findByClassname( class, region )
-	if ( spawnPoints ) then
-		return spawnPoints[ 1 ]
-	else
-		return nil
-	end
+	return spawnPoints and spawnPoints[ 1 ] or nil
 end
 
 function load( arg )

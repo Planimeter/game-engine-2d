@@ -43,16 +43,22 @@ function entity.findByClassname( classname, region )
 	local t = {}
 	if ( region ) then
 		region = _G.region.getByName( region )
-		for i, entity in ipairs( region:getEntities() ) do
-			if ( classname == entity:getClassname() ) then
-				table.insert( t, entity )
+		local entities = region:getEntities()
+		if ( entities ) then
+			for i, entity in ipairs( region:getEntities() ) do
+				if ( classname == entity:getClassname() ) then
+					table.insert( t, entity )
+				end
 			end
 		end
 	else
 		for i, region in ipairs( _G.region.getAll() ) do
-			for j, entity in ipairs( region:getEntities() ) do
-				if ( classname == entity:getClassname() ) then
-					table.insert( t, entity )
+			local entities = region:getEntities()
+			if ( entities ) then
+				for j, entity in ipairs( entities ) do
+					if ( classname == entity:getClassname() ) then
+						table.insert( t, entity )
+					end
 				end
 			end
 		end
@@ -210,10 +216,12 @@ function entity:onNetworkVarChanged( networkvar )
 	if ( _SERVER ) then
 		local payload = payload( "networkVarChanged" )
 		payload:set( "entIndex", self.entIndex )
+
 		local struct = self:getNetworkVarsStruct()
 		local networkVar = typelenvalues( nil, struct )
 		networkVar:set( networkvar:getName(), networkvar:getValue() )
 		payload:set( "networkVar", networkVar )
+
 		networkserver.broadcast( payload:serialize() )
 	end
 end

@@ -230,7 +230,7 @@ function player:update( dt )
 end
 
 function player:__tostring()
-	return "player: " .. self:getName()
+	return "player: " .. ( self:getName() or "Unnamed" )
 end
 
 -- Preserve the player interface

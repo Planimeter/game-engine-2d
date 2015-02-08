@@ -5,13 +5,14 @@
 --============================================================================--
 
 local filesystem = love.filesystem
-local pairs		 = pairs
--- local print	 = print
+local pairs      = pairs
+-- local print   = print
 -- BUGBUG: Caching require causes filesystem changes to fail to be detected
 -- more than once.
 -- local require = require
-local string	 = string
-local table		 = table
+local string     = string
+local table      = table
+-- local hook    = hook
 
 -- BUGBUG: We force package.seeall here to allow constant access to
 -- package.watched; storing the watched key causes access issues and we never
@@ -69,9 +70,11 @@ function update( dt )
 			if ( status == false ) then
 				print( err )
 				table.insert( package.watched, {
-					name	= library.name,
+					name    = library.name,
 					modtime = filesystem.getLastModified( filename )
 				} )
+			else
+				hook.call( "shared", "onReload", library.name )
 			end
 		end
 	end

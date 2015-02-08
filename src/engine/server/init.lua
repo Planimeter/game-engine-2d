@@ -72,6 +72,11 @@ function onConnect( event )
 	-- TODO: Initialize specific player class here.
 
 	if ( not _AXIS ) then
+		local spawnpoint = _G.gameserver.getSpawnPoint( player )
+		if ( spawnpoint ) then
+			player:setPosition( spawnpoint:getPosition() )
+		end
+
 		sendServerInfo( player )
 	end
 end
@@ -242,8 +247,11 @@ if ( _AXIS ) then
 				-- FIXME; Decode twice since we get back escaped save data.
 				save = _G.json.decode( r )
 				save = _G.json.decode( save )
+
+				-- TODO: Move region before player initialization.
 				_G.region.load( save.region )
 			elseif ( c == 404 ) then
+				-- TODO: Move region before player initialization.
 				local region = _G.game.getStartingRegion()
 				_G.region.load( region )
 

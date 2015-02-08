@@ -7,6 +7,7 @@
 -- These values are preserved during real-time scripting.
 local regions = region and region.regions or {}
 
+require( "engine.shared.hook" )
 require( "engine.shared.region.tileset" )
 require( "engine.shared.region.layer" )
 
@@ -44,6 +45,18 @@ function region.load( name )
 	local region = region( name )
 	table.insert( region.regions, region )
 end
+
+function region.reload( library )
+	if ( string.sub( library, 1, 8 ) ~= "regions." ) then
+		return
+	end
+
+	local name = string.gsub( library, "regions.", "" )
+	region.unload( name )
+	region.load( name )
+end
+
+hook.set( "shared", region.reload, "onReload", "reloadRegion" )
 
 function region.unload( name )
 	unrequire( "regions." .. name )

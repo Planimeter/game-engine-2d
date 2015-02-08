@@ -4,54 +4,64 @@
 --
 --============================================================================--
 
-if ( _CLIENT or _INTERACTIVE ) then
 local system = love.system
 local mouse  = love.mouse
 
-function os.getClipboardText()
-	return system.getClipboardText()
-end
-
-local cursor        = nil
-local cursors       = {}
-local systemCursors = {
-	"sizens",
-	"sizenesw",
-	"sizewe",
-	"sizenwse",
-	"sizens",
-	"sizenesw",
-	"sizewe",
-	"sizenwse",
-	"ibeam"
-}
-
-do
-	for _, v in pairs( systemCursors ) do
-		cursors[ v ] = mouse.getSystemCursor( v )
+if ( _CLIENT or _INTERACTIVE ) then
+	function os.getClipboardText()
+		return system.getClipboardText()
 	end
 end
 
-function os.setCursor( ctype )
-	if ( ctype == nil ) then
-		mouse.setCursor()
-		cursor = nil
-		return
-	end
-
-	if ( ctype == cursor ) then
-		return
-	end
-
-	if ( not cursors[ ctype ] ) then
-		cursors[ ctype ] = mouse.newCursor( ctype )
-	end
-
-	mouse.setCursor( cursors[ ctype ] )
-	cursor = ctype
+function os.getOS()
+	return system.getOS()
 end
 
-function os.setCursorVisible( visible )
-	mouse.setVisible( visible )
-end
+_WINDOWS = os.getOS() == "Windows"
+_OSX     = os.getOS() == "OS X"
+_LINUX   = os.getOS() == "Linux"
+
+if ( _CLIENT or _INTERACTIVE ) then
+	local cursor        = nil
+	local cursors       = {}
+	local systemCursors = {
+		"sizens",
+		"sizenesw",
+		"sizewe",
+		"sizenwse",
+		"sizens",
+		"sizenesw",
+		"sizewe",
+		"sizenwse",
+		"ibeam"
+	}
+
+	do
+		for _, v in pairs( systemCursors ) do
+			cursors[ v ] = mouse.getSystemCursor( v )
+		end
+	end
+
+	function os.setCursor( ctype )
+		if ( ctype == nil ) then
+			mouse.setCursor()
+			cursor = nil
+			return
+		end
+
+		if ( ctype == cursor ) then
+			return
+		end
+
+		if ( not cursors[ ctype ] ) then
+			cursors[ ctype ] = mouse.newCursor( ctype )
+		end
+
+		mouse.setCursor( cursors[ ctype ] )
+		cursor = ctype
+	end
+
+	function os.setCursorVisible( visible )
+		mouse.setVisible( visible )
+	end
 end
