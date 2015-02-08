@@ -72,6 +72,10 @@ function onConnect( event )
 	-- TODO: Initialize specific player class here.
 
 	if ( not _AXIS ) then
+		-- TODO: Move region before player initialization.
+		local region = _G.game.getStartingRegion()
+		_G.region.load( region )
+
 		local spawnpoint = _G.gameserver.getSpawnPoint( player )
 		if ( spawnpoint ) then
 			player:setPosition( spawnpoint:getPosition() )
