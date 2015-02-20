@@ -4,9 +4,12 @@
 --
 --============================================================================--
 
+-- These values are preserved during real-time scripting.
+local schemes = scheme and scheme.schemes or {}
+
 class( "scheme" )
 
-scheme.schemes = scheme.schemes or {}
+scheme.schemes = schemes
 
 local properties = {}
 
@@ -22,11 +25,11 @@ function scheme.getProperty( name, property )
 
 	property = property .. "."
 
-	local value	= scheme.schemes[ name ]
-	local type	= type( value )
+	local value = scheme.schemes[ name ]
+	local type  = type( value )
 	if ( type ~= "scheme" ) then
 		error( "attempt to index scheme '" .. name .. "' " ..
-			   "(a " .. type .. " value)", 3 )
+		       "(a " .. type .. " value)", 3 )
 	end
 
 	for key in string.gmatch( property, "(.-)%." ) do
@@ -35,7 +38,7 @@ function scheme.getProperty( name, property )
 			properties[ name ][ property ] = value
 		else
 			error( "attempt to index property '" .. property .. "' " ..
-				   "(a nil value)", 3 )
+			       "(a nil value)", 3 )
 		end
 	end
 

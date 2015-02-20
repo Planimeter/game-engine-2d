@@ -80,7 +80,9 @@ if ( _SERVER ) then
 		local entity = entities[ type ]()
 		entity:setName( entityData.name )
 		require( "common.vector" )
-		entity:setPosition( _G.vector( entityData.x, entityData.y ) )
+		local x = entityData.x
+		local y = entityData.y + entityData.height
+		entity:setPosition( _G.vector( x, y ) )
 		return entity
 	end
 end

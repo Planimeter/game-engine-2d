@@ -13,22 +13,22 @@ class "mainmenu" ( gui.panel )
 
 function mainmenu:mainmenu()
 	gui.panel.panel( self, g_RootPanel, "Main Menu" )
-	self.width		  = graphics.getViewportWidth()
-	self.height		  = graphics.getViewportHeight()
+	self.width       = graphics.getViewportWidth()
+	self.height      = graphics.getViewportHeight()
 	self:setScheme( "Default" )
 	self:setUseFullscreenFramebuffer( true )
 
-	self.logo		  = self:getScheme( "mainmenu.logo" )
-	self.logoSmall	  = self:getScheme( "mainmenu.logoSmall" )
+	self.logo        = self:getScheme( "mainmenu.logo" )
+	self.logoSmall   = self:getScheme( "mainmenu.logoSmall" )
 
-	self.closeButton  = gui.mainmenuclosebutton( self )
-	local margin	  = 96 * ( self.height / 1080 )
+	self.closeButton = gui.mainmenuclosebutton( self )
+	local margin     = 96 * ( self.height / 1080 )
 	self.closeButton:setPos( self.width - 32 - margin, margin )
 	self.closeButton.onClick = function()
 		self.closeDialog:activate()
 	end
 
-	self.closeDialog  = gui.closedialog( self )
+	self.closeDialog = gui.closedialog( self )
 	self.closeDialog:moveToCenter()
 
 	self:createButtons()
@@ -48,13 +48,18 @@ function mainmenu:activate()
 		self:setOpacity( 0 )
 		self:animate( {
 			opacity = 1,
-			-- y	= 0
-			scale	= 1
+			-- y    = 0
+			scale   = 1
 		}, MAINMENU_ANIM_TIME, "easeOutQuint" )
 	end
 
 	self:setVisible( true )
-	hook.call( "client", "onMainMenuActivate" )
+
+	if ( game ) then
+		game.call( "client", "onMainMenuActivate" )
+	else
+		hook.call( "client", "onMainMenuActivate" )
+	end
 end
 
 function mainmenu:close()
@@ -68,8 +73,8 @@ function mainmenu:close()
 
 	self:animate( {
 		opacity = 0,
-		-- y	= graphics.getViewportHeight()
-		scale	= 0
+		-- y    = graphics.getViewportHeight()
+		scale   = 0
 	}, MAINMENU_ANIM_TIME, "easeOutQuint", function()
 		self:setVisible( false )
 		self:setOpacity( 1 )
@@ -77,7 +82,7 @@ function mainmenu:close()
 		self.closing = nil
 	end )
 
-	hook.call( "client", "onMainMenuClose" )
+	game.call( "client", "onMainMenuClose" )
 end
 
 function mainmenu:createButtons()
@@ -146,10 +151,15 @@ end, "onAxisSignin", "mainmenu.onAxisSignin" )
 
 hook.set( "client", function()
 	g_MainMenu.joinLeaveUniverse:setText( "Leave Universe" )
+	g_MainMenu.joinLeaveUniverse:setDisabled( false )
 end, "onConnect", "updateJoinLeaveUniverseButton" )
 
 hook.set( "client", function()
 	g_MainMenu.joinLeaveUniverse:setText( "Join Universe" )
+
+	if ( not _AXIS ) then
+		g_MainMenu.joinLeaveUniverse:setDisabled( true )
+	end
 end, "onDisconnect", "updateJoinLeaveUniverseButton" )
 
 function mainmenu:enableUniverseConnections()
@@ -161,9 +171,9 @@ end
 if ( _AXIS ) then
 	function mainmenu:initAxisProfile()
 		self.axisProfile = gui.axisprofile( self )
-		local height	 = graphics.getViewportHeight()
-		local margin	 = 96 * ( height / 1080 )
-		local y			 = height - self.axisProfile:getHeight() - margin
+		local height     = graphics.getViewportHeight()
+		local margin     = 96 * ( height / 1080 )
+		local y          = height - self.axisProfile:getHeight() - margin
 		self.axisProfile:setPos( margin, y )
 		self.axisProfile:activate()
 	end
@@ -172,9 +182,9 @@ end
 function mainmenu:invalidateLayout()
 	self:setSize( graphics.getViewportWidth(), graphics.getViewportHeight() )
 
-	local scale	 = self:getHeight() / 1080
+	local scale  = self:getHeight() / 1080
 	local margin = 96 * scale
-	local y		 = margin
+	local y      = margin
 	self.closeButton:setPos( self:getWidth() - 32 - margin, y )
 
 	self.closeDialog:moveToCenter()
@@ -201,12 +211,12 @@ function mainmenu:invalidateLayout()
 end
 
 function mainmenu:invalidateButtons()
-	local logo		= self.logo
-	local height	= self:getHeight()
-	local scale		= height / 1080
-	local marginPhi	= height - height / math.phi
-	local marginX	= math.round( 96 * scale )
-	local marginY	= math.round( marginX * ( 2 / 3 ) )
+	local logo      = self.logo
+	local height    = self:getHeight()
+	local scale     = height / 1080
+	local marginPhi = height - height / math.phi
+	local marginX   = math.round( 96 * scale )
+	local marginY   = math.round( marginX * ( 2 / 3 ) )
 
 	if ( height <= 720 ) then
 		logo = self.logoSmall
@@ -230,11 +240,11 @@ function mainmenu:draw()
 end
 
 function mainmenu:drawLogo()
-	local logo		= self.logo
-	local height	= self:getHeight()
-	local scale		= height / 1080
-	local marginX	= math.round( 96 * scale )
-	local marginPhi	= math.round( height - height / math.phi )
+	local logo      = self.logo
+	local height    = self:getHeight()
+	local scale     = height / 1080
+	local marginX   = math.round( 96 * scale )
+	local marginPhi = math.round( height - height / math.phi )
 
 	if ( height <= 720 ) then
 		logo  = self.logoSmall
@@ -242,7 +252,7 @@ function mainmenu:drawLogo()
 	end
 
 	graphics.setColor( color.white )
-	graphics.draw( logo, marginX, marginPhi, 0, scale, scale )
+	graphics.draw( logo:getDrawable(), marginX, marginPhi, 0, scale, scale )
 end
 
 function mainmenu:keypressed( key, isrepeat )

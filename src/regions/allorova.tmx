@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" backgroundcolor="#1f2324" nextobjectid="2">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" backgroundcolor="#1f2324" nextobjectid="205">
  <properties>
   <property name="regiontitle" value="Welcome to the quaint village of"/>
  </properties>
@@ -31,27 +31,46 @@
    eJztzqEBADAIwDAEZvx/MAaxDxAkprYRAAAAAAAAAAAAAAAAAAAAAADk9K1e8KvtAQAAAAAAAAAAAAAAAAAAAAAAAAAA4KwGVtQAGA==
   </data>
  </layer>
- <layer name="Trees" width="100" height="100">
-  <data encoding="base64" compression="zlib">
-   eJzt12FOhDAQBlC4gd6HI+i99F56L1EhljK0JVm3RN9LmiVLf5CZfB0YBgAAAAAAAAAAAAAAgL/tYV6PvR/in0t78DSv547PwrYHL/N6HeSkp7UHn97m9T7ISU9rD76M3z9pj3KyczthLcefy2m53vQoIzu3E9VyGoON0X+LUnY4p7WWeY/SXJWyw17pfF9reXYGbHJVyA57xfN9bNgz7PuV5irNjtlel59Jac2m4P0pqmner6Mzymyvy2sX1SzdE93fzZmDM8psb5DVLqzZWL6f9zR8Bwv2sZfXLqpZuies6XK/Oh/M9vNqNQvuT41z/yg3HKvVbCpkwXzopzb3+T3NWXAe3UVrFsyH+5CFa5GF/jYzQ+27S2eGLPTnW+JafEtcjDPqUswMAAAAAAAAAAAAAAAAAAAAAD4APrI5IQ==
-  </data>
- </layer>
- <layer name="Trees Nearer" width="100" height="100">
-  <data encoding="base64" compression="zlib">
-   eJzt2MFNxDAUBNClA+iHEqAv6Av6IqeArFXkOMaeld+TfNib5bUy43+7AQAAAAAAAAAAwP963tbL7E2we9vW++xNsPvY1ufsTbD72tb37E3w62n2BvjrdfH/Q5/Jos9k0Wey6DNhFs/PNDV9RuZnkflZZH4WmR9G5kdZfYbxyMouppu163F2ZRfTzdr1OLuyi+lm7XqcXdnFdLN2Xc6uzH5doN2dszubKWUXK3/L93r3em3vPJbv1/TOY/l+Te88lu8X9c5j+X5J71nJ6rMXfSaLPlNvxN3VZ+qNuLv6TL0hd3fx/Dzj6O72+pat3mdOOTgrOTze0d2Vw1nkcBjf/ShyGGAcs8ws3lBZvKGyeEOF0dmjeEMBAAA8BvPYLOaxWcxjs5jHhjH/i2IeCwAAAAAA1PoBhYYuaw==
-  </data>
- </layer>
- <layer name="Trees Farther" width="100" height="100">
-  <data encoding="base64" compression="zlib">
-   eJzt18ENwjAMBdCyAezDCLAX7AV7kXNlyRYYKOQ9KafmEP24trIsAAAAAAAAAAAAAAAAALH9WIdvH+JPZFlWsj6NdW470dyyLCtZX8a6tp1oblmWlaxvY93bTjSPqPdkWZay3r1wqImFvSfLcvU9utOj+3hK1HuyLNffze4+HX3e7G7U0FfM7j4tfd6s2JToTr3Pt8WM71et8WifGd+vWuPRPjO+X7XGw31mfLtqjUf7vM/foJqp7D+iWuP+BQAAAAAAAAAAAAAAAAAAAAAAAOCXPACbBhyR
-  </data>
- </layer>
- <layer name="Outer Trees" width="100" height="100">
+ <objectgroup name="Trees">
+  <object id="153" type="prop_tree" x="1664" y="992" width="64" height="192"/>
+  <object id="169" type="prop_tree" x="1568" y="1024" width="64" height="192"/>
+  <object id="170" type="prop_tree" x="1728" y="1056" width="64" height="192"/>
+  <object id="171" type="prop_tree" x="1952" y="1120" width="64" height="192"/>
+  <object id="173" type="prop_tree" x="1408" y="1152" width="64" height="192"/>
+  <object id="175" type="prop_tree" x="1856" y="1216" width="64" height="192"/>
+  <object id="176" type="prop_tree" x="1184" y="1248" width="64" height="192"/>
+  <object id="177" type="prop_tree" x="1472" y="1248" width="64" height="192"/>
+  <object id="178" type="prop_tree" x="1728" y="1280" width="64" height="192"/>
+  <object id="179" type="prop_tree" x="2048" y="1280" width="64" height="192"/>
+  <object id="180" type="prop_tree" x="1312" y="1312" width="64" height="192"/>
+  <object id="181" type="prop_tree" x="1568" y="1312" width="64" height="192"/>
+  <object id="182" type="prop_tree" x="1792" y="1408" width="64" height="192"/>
+  <object id="183" type="prop_tree" x="1632" y="1472" width="64" height="192"/>
+  <object id="184" type="prop_tree" x="1472" y="1536" width="64" height="192"/>
+  <object id="185" type="prop_tree" x="1376" y="1664" width="64" height="192"/>
+  <object id="188" type="prop_tree" x="1920" y="1056" width="64" height="192"/>
+  <object id="189" type="prop_tree" x="1376" y="1088" width="64" height="192"/>
+  <object id="190" type="prop_tree" x="1632" y="1088" width="64" height="192"/>
+  <object id="191" type="prop_tree" x="1216" y="1184" width="64" height="192"/>
+  <object id="192" type="prop_tree" x="1760" y="1216" width="64" height="192"/>
+  <object id="193" type="prop_tree" x="1920" y="1376" width="64" height="192"/>
+  <object id="194" type="prop_tree" x="1440" y="1440" width="64" height="192"/>
+  <object id="195" type="prop_tree" x="1760" y="1440" width="64" height="192"/>
+  <object id="196" type="prop_tree" x="1248" y="960" width="64" height="192"/>
+  <object id="197" type="prop_tree" x="1536" y="1120" width="64" height="192"/>
+  <object id="199" type="prop_tree" x="1888" y="1312" width="64" height="192"/>
+  <object id="200" type="prop_tree" x="2016" y="1312" width="64" height="192"/>
+  <object id="201" type="prop_tree" x="1344" y="1344" width="64" height="192"/>
+  <object id="202" type="prop_tree" x="1504" y="1472" width="64" height="192"/>
+  <object id="203" type="prop_tree" x="2144" y="1472" width="64" height="192"/>
+  <object id="204" type="prop_tree" x="992" y="1664" width="64" height="192"/>
+ </objectgroup>
+ <layer name="Outer Trees" width="100" height="100" visible="0">
   <data encoding="base64" compression="zlib">
    eJztnFlOBDEMRMN2AZbzcAOWa7Fci+VWBCE0CHWm7cSOy46flD+Ekky5qnrUmlKSxAeXdV3VdV3XjfFeklLu6rqv66GuR+O9JKU81fVc10tdr8Z7SUp5q+u9ro+6Po33kpRyelLKWV3ndV2cWO8m+eY2P4dEgEjdMMJZInXDCGeJ1A0jnEWyG1r7RYSeK9kNrf0iSs/d6oY9Wkfwi6g9t0frEfwClR6te/AL64zrpVfr6H5BnXu0z82D1nugzr11N9kCXes9UOceoZtsgTC3knugzv2sbsI9G8LcSu+BMvez/Jp7NoS5tdrDDL/mng3hmQJhD1pwz4bQsxD2oEXP2STntjebI3a9XyzPNqsfIPRCD8zKZoRe6IFZ2YzQCz0wks0cD4rcyaTpzS+OB0XuZC1mZybXgyJ3si1mZ2Z60HFmZ2Z0Dxr1Gwu97nmQ5+eOUb9B1Kvn5w4Jv0HLTM/PHVS/8eQBnjOf6jeePADRQzlQ/MabB6B5qDSePSAi3j0gIn89wFO+r4CnfF8Bb/lOwfPMR8x3zzPvId+5evc+8+gdn6v3iDOP5MFcvXuYeS5IHtyjd/SZ54LkwRH1zqXXgyk+1+OF0fTOpVeTFJ9D8kJP9GiS4nNIXhgdis+N9lGk7ocOxedG8zn9jgfF537/xutvRyAi4Rv52xH7UO9Zwjei/naEJNR7bt3ljHfXvTyPSHgIVbOtu8x31w9IeAhVs627zHfXD0h0D45mt+5ytbw9htRdjGg2ugdxQLmLyB7UopXdK94FAvm9ARZRvzcY6eyW3zVG7TEjc2/pGQjZraHHkbm39gzr7NbQ48jce/MMaT1r6HFk7hE8g4O0nrX0ODL31p7BQVrP3vSIRkvPIz7mSY9otPScz5Z2bOlZuyfmOyE8tHtizh8P7Vy2fk7ziGYue3tOi072Yh4aefv/f2YvPrB33xp5mxneZu9uNPI2M7zN3t1o5C1qhiM8C+3djUbeomY4go9S7kYjbxEzHMVHEe/GAlQfXRVJH0XIoghIeQVCFiUHULIo+WH1LELza9ROP4uWX1t+Tiv31pZfZ67a0PLrzFUbWn69eq5asuXXq+cqIivnapLM4gswwzQe
   </data>
  </layer>
  <objectgroup name="Spawn Points">
-  <object id="1" name="Allorova World Gate" type="info_worldgate_spawn" gid="194" x="1664" y="1440"/>
+  <object id="148" name="Allorova World Gate" type="info_worldgate_spawn" x="1664" y="1344" width="32" height="96"/>
  </objectgroup>
 </map>

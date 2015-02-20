@@ -34,7 +34,7 @@ function closebutton:draw()
 
 	local x = round( self:getWidth()  / 2 - self.icon:getWidth()  / 2 + 4 )
 	local y = round( self:getHeight() / 2 - self.icon:getHeight() / 2 )
-	graphics.draw( self.icon, x, y )
+	graphics.draw( self.icon:getDrawable(), x, y )
 
 	gui.panel.draw( self )
 end

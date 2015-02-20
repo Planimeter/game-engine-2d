@@ -216,6 +216,7 @@ function quit()
 	end
 
 	unrequire( "game" )
+	_G.game = nil
 
 	network.shutdownServer()
 

@@ -22,20 +22,19 @@ function entity.create( classname )
 	return entity
 end
 
-function entity.drawAll()
-	local cam = camera.getPosition()
-	local x   = graphics.getViewportWidth()  / 2 + cam.x
-	local y   = graphics.getViewportHeight() / 2 + cam.y
-
-	-- TODO: Only draw entities in PVS.
-	for _, v in ipairs( entity.entities ) do
-		graphics.push()
-			local position = v:getPosition()
-			local sprite   = v:getSprite()
-			graphics.translate( x - position.x,
-			                    y - position.y - sprite:getHeight() )
-			v:draw()
-		graphics.pop()
+if ( _CLIENT ) then
+	function entity.drawAll()
+		-- TODO: Only draw entities in viewport.
+		for _, v in ipairs( entity.entities ) do
+			graphics.push()
+				local position = v:getPosition()
+				local x,  y    = position.x, position.y
+				local sprite   = v:getSprite()
+				local height   = sprite:getHeight()
+				graphics.translate( camera.worldToScreen( x, y - height ) )
+				v:draw()
+			graphics.pop()
+		end
 	end
 end
 
@@ -107,7 +106,7 @@ if ( _CLIENT ) then
 
 	function entity:draw()
 		graphics.scale( self:getScale() )
-		graphics.draw( self:getSprite() )
+		graphics.draw( self:getSprite():getDrawable() )
 	end
 end
 
@@ -188,7 +187,7 @@ function entity:getNetworkVarsStruct()
 		local struct = {
 			keys = {}
 		}
-		local class	 = getmetatable( self )
+		local class = getmetatable( self )
 		while ( class.__base ) do
 			local keys = class.networkVarKeys
 			if ( keys ) then

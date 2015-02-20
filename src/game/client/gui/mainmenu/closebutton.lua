@@ -8,9 +8,9 @@ class "mainmenuclosebutton" ( gui.closebutton )
 
 function mainmenuclosebutton:mainmenuclosebutton( parent )
 	gui.closebutton.closebutton( self, parent, "Main Menu Close Button" )
-	self.width	= 32
+	self.width  = 32
 	self.height = self.width + 1
-	self.icon	= self:getScheme( "mainmenuclosebutton.icon" )
+	self.icon   = self:getScheme( "mainmenuclosebutton.icon" )
 end
 
 function mainmenuclosebutton:draw()
@@ -18,7 +18,7 @@ function mainmenuclosebutton:draw()
 		return
 	end
 
-	local iconColor			  = "mainmenuclosebutton.dark.iconColor"
+	local iconColor           = "mainmenuclosebutton.dark.iconColor"
 	local iconDropShadowColor = "mainmenuclosebutton.dark.iconDropShadowColor"
 
 	if ( self.mousedown and self.mouseover ) then
@@ -27,12 +27,12 @@ function mainmenuclosebutton:draw()
 		iconColor = "mainmenuclosebutton.dark.mouseover.iconColor"
 	end
 
-	local x =   self:getWidth()		   / 2 - self.icon:getWidth()  / 2
+	local x =   self:getWidth()        / 2 - self.icon:getWidth()  / 2
 	local y = ( self:getHeight() - 1 ) / 2 - self.icon:getHeight() / 2
 	graphics.setColor( self:getScheme( iconDropShadowColor ) )
-	graphics.draw( self.icon, x, y + 1 )
+	graphics.draw( self.icon:getDrawable(), x, y + 1 )
 	graphics.setColor( self:getScheme( iconColor ) )
-	graphics.draw( self.icon, x, y )
+	graphics.draw( self.icon:getDrawable(), x, y )
 
 	gui.panel.draw( self )
 end

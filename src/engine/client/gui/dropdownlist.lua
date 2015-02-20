@@ -8,9 +8,9 @@ class "dropdownlist" ( gui.button )
 
 function dropdownlist:dropdownlist( parent, name )
 	gui.button.button( self, parent, name )
-	self.icon		   = self:getScheme( "dropdownlist.icon" )
+	self.icon          = self:getScheme( "dropdownlist.icon" )
 	self.listItemGroup = gui.dropdownlistitemgroup( self, name .. " Item Group" )
-	self.active		   = false
+	self.active        = false
 end
 
 function dropdownlist:addItem( item )
@@ -33,7 +33,7 @@ end
 
 function dropdownlist:drawBackground()
 	local property = "button.backgroundColor"
-	local width	   = self:getWidth()
+	local width    = self:getWidth()
 	local height   = self:getHeight()
 
 	if ( self:isDisabled() ) then
@@ -59,7 +59,7 @@ end
 
 function dropdownlist:drawForeground()
 	local property = "button.outlineColor"
-	local width	   = self:getWidth()
+	local width    = self:getWidth()
 	local height   = self:getHeight()
 
 	if ( self:isDisabled() ) then
@@ -90,7 +90,7 @@ function dropdownlist:drawIcon()
 
 	local x = self:getWidth() - self.icon:getWidth() - 18
 	local y = self:getHeight() / 2 - self.icon:getHeight() / 2
-	graphics.draw( self.icon, x, y )
+	graphics.draw( self.icon:getDrawable(), x, y )
 end
 
 function dropdownlist:drawText()
@@ -106,8 +106,8 @@ function dropdownlist:drawText()
 	graphics.setFont( font )
 	local item = self:getListItemGroup():getSelectedItem()
 	local text = item and item:getText() or ""
-	local x	   = 18
-	local y	   = self:getHeight() / 2 - font:getHeight() / 2 - 2
+	local x    = 18
+	local y    = self:getHeight() / 2 - font:getHeight() / 2 - 2
 	graphics.print( text, x, y )
 end
 

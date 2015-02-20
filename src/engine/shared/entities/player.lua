@@ -143,7 +143,7 @@ function player:initialSpawn()
 		self:send( payload )
 	end
 
-	hook.call( "shared", "onPlayerInitialSpawn", self )
+	game.call( "shared", "onPlayerInitialSpawn", self )
 end
 
 if ( _AXIS ) then
@@ -164,18 +164,18 @@ if ( _SERVER ) then
 
 	function player:onAuthenticated()
 		require( "engine.shared.hook" )
-		hook.call( "server", "onPlayerAuthenticated", self )
+		game.call( "server", "onPlayerAuthenticated", self )
 	end
 end
 
 function player:onConnect()
 	require( "engine.shared.hook" )
-	hook.call( "shared", "onPlayerConnect", self )
+	game.call( "shared", "onPlayerConnect", self )
 end
 
 function player:onDisconnect()
 	require( "engine.shared.hook" )
-	hook.call( "shared", "onPlayerDisconnect", self )
+	game.call( "shared", "onPlayerDisconnect", self )
 
 	for i, player in ipairs( players ) do
 		if ( player == self ) then

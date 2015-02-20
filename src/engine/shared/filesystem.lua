@@ -74,7 +74,7 @@ function update( dt )
 					modtime = filesystem.getLastModified( filename )
 				} )
 			else
-				hook.call( "shared", "onReload", library.name )
+				game.call( "shared", "onReload", library.name )
 			end
 		end
 	end

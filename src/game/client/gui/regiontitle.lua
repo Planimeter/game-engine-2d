@@ -12,10 +12,12 @@ function regiontitle:regiontitle( parent, name )
 	self.height = 72
 	self:setPos( 0, graphics.getViewportHeight() / 2 - self.height / 2 )
 
-	self.titleFont  = graphics.newFont( "fonts/Mark Simonson - Proxima Nova Bold.otf", 18 )
-	self.regionFont = graphics.newFont( "fonts/Old English LET.TTF", 48 )
+	local titleFont  = "fonts/Mark Simonson - Proxima Nova Bold.otf"
+	self.titleFont   = graphics.newFont( titleFont, 18 )
+	local regionFont =
+	self.regionFont  = graphics.newFont( regionFont, 48 )
 
-	-- IMPLEMENT ME: localplayer:getRegion()
+	-- TODO: localplayer:getRegion()
 	local region = region.getAll()[ 1 ]
 	local title  = region:getProperties()[ "regiontitle" ]
 	self:setTitle( title )
@@ -37,7 +39,7 @@ function regiontitle:draw()
 	local y = self:getHeight() - self.regionFont:getHeight() + 10
 	graphics.printf( string.capitalize( self:getRegionName() ),
 	                 0,
-					 y,
+	                 y,
 	                 graphics.getViewportWidth(),
 	                 "center" )
 
@@ -45,8 +47,10 @@ function regiontitle:draw()
 end
 
 function regiontitle:drawLines()
-	local titleWidth  = self.titleFont:getWidth( string.upper( self:getTitle() ) )
-	local regionWidth = self.regionFont:getWidth( string.capitalize( self:getRegionName() ) )
+	local title       = string.upper( self:getTitle() )
+	local titleWidth  = self.titleFont:getWidth( title )
+	local region      = string.capitalize( self:getRegionName() )
+	local regionWidth = self.regionFont:getWidth( region )
 	local padding     = 14
 	local x1          = self:getWidth() / 2 - titleWidth / 2
 	local y           = self:getHeight() - padding

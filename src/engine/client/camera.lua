@@ -20,16 +20,21 @@ function getPosition()
 	return _position
 end
 
+local width  = 0
+local height = 0
+local pos    = vector.origin
+
+function getTranslation()
+	width  = graphics.getViewportWidth()
+	height = graphics.getViewportHeight()
+	pos    = getPosition()
+	if ( not pos ) then pos = vector.origin end
+	return width / 2 - pos.x, height / 2 - pos.y
+end
+
 function preWorldDraw()
 	graphics.push()
-	local width	   = graphics.getViewportWidth()
-	local height   = graphics.getViewportHeight()
-	local position = getPosition()
-	if ( not position ) then
-		position = vector.origin
-	end
-	graphics.translate( width  / 2 - position.x,
-						height / 2 - position.y )
+	graphics.translate( getTranslation() )
 end
 
 function postWorldDraw()
@@ -38,4 +43,11 @@ end
 
 function setPosition( position )
 	_position = position
+end
+
+local xp, yp = 0, 0
+
+function worldToScreen( x, y )
+	xp, yp = getTranslation()
+	return xp + x, yp + y
 end

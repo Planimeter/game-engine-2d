@@ -321,7 +321,7 @@ function onConnect( event )
 	connectedToServer = true
 	print( "Connected to server!" )
 
-	hook.call( "client", "onConnect", tostring( event.peer ) )
+	_G.game.call( "client", "onConnect", tostring( event.peer ) )
 
 	if ( _AXIS ) then
 		local server = event.peer
@@ -392,7 +392,7 @@ payload.setHandler( onReceiveServerInfo, "serverInfo" )
 function onDisconnect( event )
 	if ( connectedToServer ) then
 		connectedToServer = false
-		hook.call( "client", "onDisconnect" )
+		_G.game.call( "client", "onDisconnect" )
 
 		print( "Disconnected from server." )
 	else
@@ -405,7 +405,7 @@ function onDisconnect( event )
 end
 
 function reload()
-	framebuffer.invalidateFramebuffers()
+	_G.framebuffer.invalidateFramebuffers()
 	gui.invalidateTree()
 end
 

@@ -35,10 +35,20 @@ function load( arg )
 	createDefaultPanels()
 end
 
--- hook.set( "shared", function()
--- 	local regiontitle = gui.regiontitle( _G.g_Viewport )
--- 	regiontitle:activate()
--- end, "onPlayerInitialSpawn", "fadeInRegionTitle" )
+function onAxisSignin()
+end
+
+function onConnect()
+end
+
+function onDisconnect()
+end
+
+function onMainMenuActivate()
+end
+
+function onMainMenuClose()
+end
 
 function quit()
 	_G.g_Viewport:remove()

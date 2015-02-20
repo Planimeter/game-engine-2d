@@ -52,6 +52,8 @@ function region.reload( library )
 	end
 
 	local name = string.gsub( library, "regions.", "" )
+	local r    = region.getByName( name )
+	r:cleanUp()
 	region.unload( name )
 	region.load( name )
 end
@@ -105,7 +107,7 @@ concommand( "region", "Loads the specified region",
 			if ( status ~= false ) then
 				serverengine = ret
 				if ( serverengine.load( args ) ) then
-					hook.call( "shared", "onLoad" )
+					game.call( "shared", "onLoad" )
 				else
 					print( "Failed to initialize server!" )
 					engine.disconnect()
@@ -147,6 +149,13 @@ function region:draw()
 		end
 	end
 end
+end
+
+function region:cleanUp()
+	local entities = self:getEntities()
+	for _, entity in pairs( entities ) do
+		entity:remove()
+	end
 end
 
 function region:getEntities()
