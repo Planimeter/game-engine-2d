@@ -29,9 +29,9 @@ function call( universe, event, ... )
 	for name, func in pairs( eventHooks ) do
 		values = { pcall( func, ... ) }
 		if ( values[ 1 ] ) then
-			if ( select( "#", unpack( values ) ) > 1 ) then
+			if ( #values > 1 ) then
 				table.remove( values, 1 )
-				return values
+				return unpack( values )
 			end
 		else
 			print( "[hook \"" .. name .. "\" (" .. event .. ")]: " .. values[ 2 ] )

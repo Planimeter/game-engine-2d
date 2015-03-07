@@ -89,6 +89,9 @@ function disconnect()
 		 _G.game.client = nil
 	end
 
+	unrequire( "game" )
+	_G.game = nil
+
 	if ( _G.engine.server ) then
 		 _G.engine.server.shutdown()
 		 _G.engine.server = nil
@@ -117,13 +120,16 @@ local function drawFrameRate()
 	graphics.setFont( font )
 	local time   = getFPS() .. " FPS / " ..
 	               string.format( "%.3f", 1000 * getAverageFrameTime() ) .. " ms"
+	local width  = graphics.getViewportWidth()
 	local height = graphics.getViewportHeight()
 	local margin = 96 * ( height / 1080 )
-	local x      = graphics.getViewportWidth() - font:getWidth( time ) - margin
-	local y      = height                      - font:getHeight()      - margin + 1
-	graphics.setColor( scheme.getProperty( "Default", "mainmenubutton.dark.textDropShadowColor" ) )
+	local x      = width  - font:getWidth( time ) - margin
+	local y      = height - font:getHeight()      - margin + 1
+	local shadow = scheme.getProperty( "Default", "mainmenubutton.dark.textDropShadowColor" )
+	graphics.setColor( shadow )
 	graphics.print( time, x, y )
-	graphics.setColor( scheme.getProperty( "Default", "mainmenubutton.dark.textColor" ) )
+	local color  = scheme.getProperty( "Default", "mainmenubutton.dark.textColor" )
+	graphics.setColor( color )
 	graphics.print( time, x, y - 1 )
 end
 
@@ -321,7 +327,11 @@ function onConnect( event )
 	connectedToServer = true
 	print( "Connected to server!" )
 
-	_G.game.call( "client", "onConnect", tostring( event.peer ) )
+	if ( _G.game ) then
+		_G.game.call( "client", "onConnect", tostring( event.peer ) )
+	else
+		hook.call( "client", "onConnect", tostring( event.peer ) )
+	end
 
 	if ( _AXIS ) then
 		local server = event.peer
@@ -336,7 +346,7 @@ local cl_payload_show_receive = convar( "cl_payload_show_receive", "0", nil, nil
                                         "Prints payloads received from server" )
 
 if ( _G._DEBUG ) then
-	cl_payload_show_receive:setValue( "1" )
+	-- cl_payload_show_receive:setValue( "1" )
 end
 
 function onReceive( event )
@@ -379,6 +389,8 @@ local function onReceiveServerInfo( payload )
 		local args = _G.engine.getArguments()
 
 		_G.region.load( regionName )
+
+		require( "game" )
 
 		_G.gameclient = require( "game.client" )
 		_G.gameclient.load( args )

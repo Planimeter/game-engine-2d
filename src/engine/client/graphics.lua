@@ -6,20 +6,20 @@
 
 require( "common.color" )
 
-local _INTERACTIVE          = _INTERACTIVE
+local _INTERACTIVE = _INTERACTIVE
 
-local class                 = class
-local color                 = color
-local graphics              = love.graphics
-local ipairs                = ipairs
-local math                  = math
-local os                    = os
-local require               = require
-local string                = string
-local table                 = table
-local unpack                = unpack
-local window                = love.window
-local _G                    = _G
+local class    = class
+local color    = color
+local graphics = love.graphics
+local ipairs   = ipairs
+local math     = math
+local os       = os
+local require  = require
+local string   = string
+local table    = table
+local unpack   = unpack
+local window   = love.window
+local _G       = _G
 
 local r_window_width      = convar( "r_window_width", 800, 800, nil,
                                     "Sets the width of the window on load" )
@@ -36,9 +36,9 @@ module( "graphics" )
 
 class( "grid" )
 
-grid.framebuffer    = grid.framebuffer or nil
+grid.framebuffer = grid.framebuffer or nil
 
-grid.default        = {
+grid.default = {
 	backgroundColor = color( 240, 246, 247,                      255 ),
 	lines32x32Color	= color(   0,   0,   0, 0.42 * 0.42 * 0.07 * 255 ),
 	lines64x64Color	= color(   0,   0,   0, 0.42 * 0.42 * 0.07 * 255 ),
@@ -46,7 +46,7 @@ grid.default        = {
 	marks64x64Color = color(   0,   0,   0, 0.42 * 0.27 * 0.66 * 255 )
 }
 
-grid.dark           = {
+grid.dark = {
 	backgroundColor = color(  31,  35,  36,                      255 ),
 	lines32x32Color = color( 255, 255, 255, 0.42 * 0.42 * 0.07 * 255 ),
 	lines64x64Color = color( 255, 255, 255, 0.42 * 0.42 * 0.07 * 255 ),

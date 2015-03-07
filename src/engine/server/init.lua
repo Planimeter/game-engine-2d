@@ -129,7 +129,7 @@ local sv_payload_show_receive = convar( "sv_payload_show_receive", "0", nil, nil
 										"Prints payloads received from clients" )
 
 if ( _G._DEBUG ) then
-	sv_payload_show_receive:setValue( "1" )
+	-- sv_payload_show_receive:setValue( "1" )
 end
 
 function onReceive( event )

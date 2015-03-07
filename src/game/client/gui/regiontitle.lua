@@ -14,7 +14,7 @@ function regiontitle:regiontitle( parent, name )
 
 	local titleFont  = "fonts/Mark Simonson - Proxima Nova Bold.otf"
 	self.titleFont   = graphics.newFont( titleFont, 18 )
-	local regionFont =
+	local regionFont = "fonts/Old English LET.TTF"
 	self.regionFont  = graphics.newFont( regionFont, 48 )
 
 	-- TODO: localplayer:getRegion()

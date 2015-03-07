@@ -6,14 +6,15 @@
 
 require( "table" )
 
-local ipairs	   = ipairs
-local pairs		   = pairs
+local ipairs       = ipairs
+local pairs        = pairs
 local setmetatable = setmetatable
-local type		   = type
+local type         = type
 local getmetatable = getmetatable
-local typeof	   = typeof
-local print		   = print
-local math		   = math
+local typeof       = typeof
+local print        = print
+local tostring     = tostring
+local math         = math
 
 function table.append( a, b )
 	for _, v in ipairs( b ) do
@@ -38,7 +39,7 @@ function table.copy( t, recursive )
 		if ( type( v ) ~= "table" ) then
 			copy[ i ] = v
 		else
-			recursive	   = recursive or {}
+			recursive      = recursive or {}
 			recursive[ t ] = copy
 			if ( recursive[ v ] ) then
 				copy[ i ] = recursive[ v ]
@@ -61,7 +62,7 @@ end
 function table.count( t, value )
 	local count = 0
 	for _, v in pairs( t ) do
-		if ( typeof( v,		"table" ) and
+		if ( typeof( v,     "table" ) and
 			 typeof( value, "table" ) ) then
 			if ( table.equal( v, value ) ) then
 				count = count + 1
@@ -79,7 +80,7 @@ function table.equal( a, b )
 	end
 
 	for k, v in pairs( a ) do
-		if ( typeof( v,		 "table" ) and
+		if ( typeof( v,      "table" ) and
 			 typeof( b[ k ], "table" ) and
 			 not table.equal( v, b[ k ] ) ) then
 			return false
@@ -89,7 +90,7 @@ function table.equal( a, b )
 	end
 
 	for k, v in pairs( b ) do
-		if ( typeof( v,		 "table" ) and
+		if ( typeof( v,      "table" ) and
 			 typeof( a[ k ], "table" ) and
 			 not table.equal( v, a[ k ] ) ) then
 			return false
@@ -130,6 +131,12 @@ function table.len( t )
 	return c
 end
 
+function table.merge( a, b )
+	for k, v in pairs( b ) do
+		a[ k ] = v
+	end
+end
+
 function table.print( t, i )
 	if ( t == nil ) then
 		print( nil )
@@ -148,7 +155,7 @@ function table.print( t, i )
 			print( indent .. k )
 			table.print( v, i + 1 )
 		else
-			print( indent .. k, v )
+			print( indent .. tostring( k ), v )
 		end
 	end
 end
@@ -159,9 +166,9 @@ function table.raise( t )
 		sub, key = string.match( k, "(.-)%.(.+)" )
 		if ( sub and key ) then
 			sub = tonumber( sub ) or sub
-			t[ sub ]		= t[ sub ] or {}
+			t[ sub ]        = t[ sub ] or {}
 			t[ sub ][ key ] = v
-			t[ k ]			= nil
+			t[ k ]          = nil
 			table.raise( t[ sub ] )
 			table.raise( t )
 		end

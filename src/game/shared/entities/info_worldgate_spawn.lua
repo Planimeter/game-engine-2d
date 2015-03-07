@@ -12,4 +12,7 @@ function info_worldgate_spawn:info_worldgate_spawn()
 	entity.entity( self )
 end
 
+function info_worldgate_spawn:draw()
+end
+
 entities.linkToClassname( info_worldgate_spawn, "info_worldgate_spawn" )

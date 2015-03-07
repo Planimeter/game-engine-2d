@@ -1,19 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" backgroundcolor="#1f2324" nextobjectid="205">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" backgroundcolor="#1f2324" nextobjectid="216">
  <properties>
   <property name="regiontitle" value="Welcome to the quaint village of"/>
  </properties>
  <tileset firstgid="1" name="World" tilewidth="32" tileheight="32">
   <image source="../images/tilesets/world.png" width="1920" height="1080"/>
  </tileset>
- <layer name="Dirt" width="100" height="100">
+ <layer name="Grass" width="100" height="100">
   <data encoding="base64" compression="zlib">
    eJztwwEJAAAMBKH7/qUHy6Hgqqmqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqv8AX0MnEQ==
   </data>
  </layer>
- <layer name="Grass" width="100" height="100">
+ <layer name="Dirt" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt2EeO1FAUBVBjj0lNXhJRNGFGN93AVkgSaULOSwJEhgkr4Vr2VxkLidm3RJ8jXVUYlXyr3vuupgEAAAAAAAAAAAAAAAAAAAAAAAAAYAmv2qZ5nbxJ3rZLf5qd51I75NeuptnK47fke/Ij+amP6koXfV7k+ct2+I1cTa7po5pHudaPk41kM7k89lL6KDOLOkofT5NnyfOxj6+zmUUdpY8nk99ImVtXzKtFlE4+Jvu7pvmUx8/m1WLe53p/GLs4nawlBzrzagnHc91PJCeTU2MfZV59aYc9cjjvHUmOdkt/2v/f9VzjG8nN5FZyu/vzrHUor88l55ML+qjmXbuaW/OzlrlV3+589/cke7thj6x1q5llXtU33SP9Djkz9nGwG2aWeVXXfI+UnX42z9eT+8kDfVT1sF3di5Q+7qSDu7pYxHSn9130c2q6O47ppIrpLt/Xrc6667Oz7kV9VDG/Jyxn3X5O3bM7FlE62W6H/690sZy/3aP7LxEAAAAAAAAAAAAA+JffPKxgfQ==
+  </data>
+ </layer>
+ <layer name="Barren Grass" width="100" height="100">
   <data encoding="base64" compression="zlib">
    eJzt2NlS1FAQxvFzeB+3iMsrubC4XKKi+CoqzuBy44aovJKKoOCF3ZXTlU7gDJOBSgrz/1V9RRhgajidPktCAAAAAAAAAAAAAAAAAAAAAAAAADA0K5IHkoeSJ5I1ydNeP9FwaS1+SXYlr2IIX+TrV8k3yXaPn2uItBZzKXuS3yl/JPuSA8nf3j7d/+99ygfJR8knyWYo63FZemM+ltePJKuSx+71K5KrkmuS6yk4me+SH5Kfkp1QzVPjWPWJ5rNkK5Rzl64pvj6sL9M5F+v3vr+XlV+zL8prl2K9L0axqovNXTZvLcnry5I7kruSe5L7kZpMckPG56bkVizv+SKWY6/Xdt/r9V6o94KN9Vw4HPt9rZNfX3StP+j0vztbfF/ofa+1WMyM8SzRmlkfzac+sflM92LNXhyy5vq8kGph6/Ss2W18b2uK9pL1lJ/D/Dw2VM31WWP1WIz1dWDaOizEqsc23ftpDfS9NmJVGz/faV30/PJa8kbydoB18b2ha7TmZVqbR26OsbpMqoONsf691aCI9e+XUi3s/bZCfd7iDHn0eaKI9XvXny0m9YWN+bqrq/6sWROthdWEvXCd31fdduOm46j7oo00jxy3Vtj4+mv/O1afceO9/VmFHqk8l7F54eoxOqYGPoXrIX+dq4f1BL2Rl3sO0ja+B3xsrlp2PeF7w9by7W7+3TNBz+jnJRdidQYvGvulk+yBrR9sPrOvtufl+eNhuWdUbeavafZhrBft5Hpl1jo0n2nRC+3kzu2z1CL3zB3traT488Sk+PO27ZWHfOY+Tbk5y89buWfpOD3NOozi0fPVmB7oRO7MbvPVauAM16V3ob6e29qh5w/2qt3LnUHYt/YnN2exb+3Hs1g9Y1xP6zb7KAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAEPwD+vAHjg==
+  </data>
+ </layer>
+ <objectgroup name="Torches">
+  <object id="205" type="prop_torch" x="1568" y="1760" width="32" height="32"/>
+  <object id="206" type="prop_torch" x="1792" y="1728" width="32" height="32"/>
+  <object id="209" type="prop_torch" x="1824" y="1888" width="32" height="32"/>
+  <object id="211" type="prop_torch" x="1568" y="1952" width="32" height="32"/>
+  <object id="212" type="prop_torch" x="1664" y="2112" width="32" height="32"/>
+  <object id="213" type="prop_torch" x="1888" y="2144" width="32" height="32"/>
+  <object id="214" type="prop_torch" x="1792" y="2304" width="32" height="32"/>
+  <object id="215" type="prop_torch" x="1600" y="2304" width="32" height="32"/>
+ </objectgroup>
+ <layer name="Barren Grass-Dirt Transition" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt1TcOAjEURVFrqAkVYVuEDQBbIlTAlggVsBjedFPTGIlzpNtb/rJ/KQAAAAAAAAAAAAAAAAAAAAAAAMA3dk0p+3Roap+E1jVzuKV7GvdKmaRpmvVqn+w/9XPvgzRM87RIy7Qyj2ra97FOm7T1b1XR3RvHdErndDGPKrp745Ge6ZXe5lFFd2+M7AoAAAAAAAAAAAAAAAAAAAAAAH7AB1/JErM=
   </data>
  </layer>
  <layer name="Detail Grass" width="100" height="100">
@@ -65,9 +85,9 @@
   <object id="203" type="prop_tree" x="2144" y="1472" width="64" height="192"/>
   <object id="204" type="prop_tree" x="992" y="1664" width="64" height="192"/>
  </objectgroup>
- <layer name="Outer Trees" width="100" height="100" visible="0">
+ <layer name="Outer Trees" width="100" height="100">
   <data encoding="base64" compression="zlib">
-   eJztnFlOBDEMRMN2AZbzcAOWa7Fci+VWBCE0CHWm7cSOy46flD+Ekky5qnrUmlKSxAeXdV3VdV3XjfFeklLu6rqv66GuR+O9JKU81fVc10tdr8Z7SUp5q+u9ro+6Po33kpRyelLKWV3ndV2cWO8m+eY2P4dEgEjdMMJZInXDCGeJ1A0jnEWyG1r7RYSeK9kNrf0iSs/d6oY9Wkfwi6g9t0frEfwClR6te/AL64zrpVfr6H5BnXu0z82D1nugzr11N9kCXes9UOceoZtsgTC3knugzv2sbsI9G8LcSu+BMvez/Jp7NoS5tdrDDL/mng3hmQJhD1pwz4bQsxD2oEXP2STntjebI3a9XyzPNqsfIPRCD8zKZoRe6IFZ2YzQCz0wks0cD4rcyaTpzS+OB0XuZC1mZybXgyJ3si1mZ2Z60HFmZ2Z0Dxr1Gwu97nmQ5+eOUb9B1Kvn5w4Jv0HLTM/PHVS/8eQBnjOf6jeePADRQzlQ/MabB6B5qDSePSAi3j0gIn89wFO+r4CnfF8Bb/lOwfPMR8x3zzPvId+5evc+8+gdn6v3iDOP5MFcvXuYeS5IHtyjd/SZ54LkwRH1zqXXgyk+1+OF0fTOpVeTFJ9D8kJP9GiS4nNIXhgdis+N9lGk7ocOxedG8zn9jgfF537/xutvRyAi4Rv52xH7UO9Zwjei/naEJNR7bt3ljHfXvTyPSHgIVbOtu8x31w9IeAhVs627zHfXD0h0D45mt+5ytbw9htRdjGg2ugdxQLmLyB7UopXdK94FAvm9ARZRvzcY6eyW3zVG7TEjc2/pGQjZraHHkbm39gzr7NbQ48jce/MMaT1r6HFk7hE8g4O0nrX0ODL31p7BQVrP3vSIRkvPIz7mSY9otPScz5Z2bOlZuyfmOyE8tHtizh8P7Vy2fk7ziGYue3tOi072Yh4aefv/f2YvPrB33xp5mxneZu9uNPI2M7zN3t1o5C1qhiM8C+3djUbeomY4go9S7kYjbxEzHMVHEe/GAlQfXRVJH0XIoghIeQVCFiUHULIo+WH1LELza9ROP4uWX1t+Tiv31pZfZ67a0PLrzFUbWn69eq5asuXXq+cqIivnapLM4gswwzQe
+   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
   </data>
  </layer>
  <objectgroup name="Spawn Points">

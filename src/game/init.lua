@@ -4,11 +4,13 @@
 --
 --============================================================================--
 
-_VADVENTURE = true
+_VADVENTURE   = true
 
-local error = error
-local hook  = hook
-local _G    = _G
+local _CLIENT = _CLIENT
+
+local error   = error
+local hook    = hook
+local _G      = _G
 
 module( "game" )
 
@@ -26,16 +28,12 @@ function call( universe, event, ... )
 		interface = _G.game
 	end
 
-	if ( not interface[ event ] ) then
-		error( "attempt to call " .. universe .. " game method '" .. event .. "' " ..
-		       "(a nil value)", 2 )
+	local values = { hook.call( universe, event, ... ) }
+	if ( #values > 0 ) then
+		return unpack( values )
 	end
 
-	if ( not interface[ event ]( ... ) ) then
-		return
-	end
-
-	hook.call( universe, event, ... )
+	return interface[ event ]( ... )
 end
 
 function getStartingRegion()
@@ -52,10 +50,9 @@ function onPlayerDisconnect()
 end
 
 function onPlayerInitialSpawn()
-	-- if ( _CLIENT ) then
-	-- 	local regiontitle = gui.regiontitle( _G.g_Viewport )
-	-- 	regiontitle:activate()
-	-- end
+	if ( _CLIENT ) then
+		_G.gameclient.createDefaultPanels()
+	end
 end
 
 function onReload()

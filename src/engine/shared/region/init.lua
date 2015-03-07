@@ -15,9 +15,14 @@ class( "region" )
 
 region.regions = regions
 
-function region.drawWorld()
-	for _, region in ipairs( region.regions ) do
-		region:draw()
+if ( _CLIENT ) then
+	function region.drawWorld()
+		graphics.push()
+			graphics.translate( camera.getTranslation() )
+			for _, region in ipairs( region.regions ) do
+				region:draw()
+			end
+		graphics.pop()
 	end
 end
 
@@ -32,6 +37,19 @@ end
 function region.getByName( name )
 	for _, region in ipairs( region.regions ) do
 		if ( name == region:getName() ) then
+			return region
+		end
+	end
+end
+
+function region.getAtPosition( position )
+	for _, region in ipairs( region.regions ) do
+		local px, py = position.x, position.y
+		-- TODO: Multiregion support.
+		local x,  y  = 0, 0
+		local width  = region:getWidth()  * region:getTileWidth()
+		local height = region:getHeight() * region:getTileHeight()
+		if ( math.pointInRectangle( px, py, x, y, width, height ) ) then
 			return region
 		end
 	end
@@ -127,6 +145,14 @@ concommand( "region", "Loads the specified region",
 	end
 )
 
+function region.snapToGrid( x, y )
+	local region = region.getAtPosition( vector( x, y ) )
+	local w, h   = region:getTileSize()
+	x = x - x % w
+	y = y - y % h
+	return x, y
+end
+
 function region:region( name )
 	self.name = name
 	self.data = require( "regions." .. name )
@@ -204,6 +230,11 @@ end
 
 function region:getHeight()
 	return self.height
+end
+
+function region:isTileWalkableAtPosition()
+	-- TODO: Implement me.
+	return true
 end
 
 function region:loadTilesets( tilesets )
@@ -289,6 +320,10 @@ end
 
 function region:setTileHeight( tileHeight )
 	self.tileHeight = tileHeight
+end
+
+function region:getTileSize()
+	return self:getTileWidth(), self:getTileHeight()
 end
 
 function region:setWidth( width )

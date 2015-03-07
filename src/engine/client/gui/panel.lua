@@ -7,7 +7,7 @@
 require( "common.color" )
 
 local gui_draw_bounds = convar( "gui_draw_bounds", "0", nil, nil,
-								"Draws the bounds of panels for debugging" )
+                                "Draws the bounds of panels for debugging" )
 
 class( "panel" )
 
@@ -15,25 +15,21 @@ panel.maskedPanel = panel.maskedPanel or nil
 
 function panel.drawMask()
 	local self = gui.panel.maskedPanel
-	graphics.rectangle( "fill",
-						0,
-						0,
-						self:getWidth(),
-						self:getHeight() )
+	graphics.rectangle( "fill", 0, 0, self:getWidth(), self:getHeight() )
 end
 
 function panel:panel( parent, name )
-	self.x				   = 0
-	self.y				   = 0
-	self.width			   = 0
-	self.height			   = 0
-	self.name			   = name or ""
+	self.x                 = 0
+	self.y                 = 0
+	self.width             = 0
+	self.height            = 0
+	self.name              = name or ""
 	self:setParent( parent or g_RootPanel )
-	self.zOrder			   = -1
-	self.visible		   = true
+	self.zOrder            = -1
+	self.visible           = true
 	self.markedForDeletion = false
-	self.scale			   = 1
-	self.opacity		   = 1
+	self.scale             = 1
+	self.opacity           = 1
 end
 
 local cos = math.cos
@@ -60,21 +56,21 @@ function panel:animate( properties, duration, easing, complete )
 
 	local step
 
-	local options	= duration
+	local options = duration
 	if ( type( options ) == "table" ) then
-		duration	= options.duration
-		easing		= options.easing
-		step		= options.step
-		complete	= options.complete
+		duration = options.duration
+		easing   = options.easing
+		step     = options.step
+		complete = options.complete
 	end
 
 	local animation = {
-		startTime	= nil,
-		tweens		= {},
-		duration	= duration or 0.4,
-		easing		= easing   or "swing",
-		step		= step,
-		complete	= complete
+		startTime = nil,
+		tweens    = {},
+		duration  = duration or 0.4,
+		easing    = easing or "swing",
+		step      = step,
+		complete  = complete
 	}
 
 	for member, value in pairs( properties ) do
@@ -88,7 +84,7 @@ end
 
 function panel:createFramebuffer()
 	if ( self.needsRedraw or self.framebuffer == nil ) then
-		local width	 = self:getWidth()
+		local width  = self:getWidth()
 		local height = self:getHeight()
 		if ( width == 0 or height == 0 ) then
 			width  = nil
@@ -96,14 +92,14 @@ function panel:createFramebuffer()
 			if ( not self:shouldSuppressFramebufferWarnings() ) then
 				local panel = tostring( self )
 				print( "Attempt to create framebuffer for " .. panel ..
-					   " with a size of 0!" )
+				       " with a size of 0!" )
 			end
 		end
 		self.framebuffer = self.framebuffer or
-						 ( self:shouldUseFullscreenFramebuffer() and
-						   graphics.newFullscreenFramebuffer()
-						   or
-						   graphics.newFramebuffer( width, height ) )
+		                 ( self:shouldUseFullscreenFramebuffer() and
+		                   graphics.newFullscreenFramebuffer()
+		                   or
+		                   graphics.newFramebuffer( width, height ) )
 		if ( self.framebuffer:shouldAutoRedraw() ) then
 			self.framebuffer:setAutoRedraw( false )
 		end
@@ -132,18 +128,18 @@ function panel:draw()
 
 	if ( self:getChildren() ) then
 		for i, v in ipairs( self:getChildren() ) do
-			local scale	 = v:getScale()
-			local width	 = v:getWidth()
+			local scale  = v:getScale()
+			local width  = v:getWidth()
 			local height = v:getHeight()
 			graphics.push()
 				graphics.translate( v:getX(), v:getY() )
 				graphics.scale( scale )
-				graphics.translate( ( width	 / scale ) / 2 -
-									  width	 / 2,
-									( height / scale ) / 2 -
-									  height / 2 )
+				graphics.translate( ( width  / scale ) / 2 -
+				                      width  / 2,
+				                    ( height / scale ) / 2 -
+				                      height / 2 )
 				local opacity = opacityStack[ #opacityStack ]
-				opacity		  = opacity * v:getOpacity()
+				opacity       = opacity * v:getOpacity()
 				graphics.setOpacity( opacity )
 				table.insert( opacityStack, opacity )
 					if ( v:isVisible() ) then
@@ -232,11 +228,11 @@ function panel:getPos()
 	return self:getX(), self:getY()
 end
 
-local sx, sy		   = 0, 0
-local w,  h			   = 0, 0
+local sx, sy           = 0, 0
+local w,  h            = 0, 0
 local pointInRectangle = math.pointInRectangle
-local children		   = nil
-local topChild		   = nil
+local children         = nil
+local topChild         = nil
 
 function panel:getTopMostChildAtPos( x, y )
 	if ( not self:isVisible() ) then
@@ -244,7 +240,7 @@ function panel:getTopMostChildAtPos( x, y )
 	end
 
 	sx, sy = self:localToScreen( self:getX(), self:getY() )
-	w,	h  = self:getWidth(), self:getHeight()
+	w,  h  = self:getWidth(), self:getHeight()
 	if ( not pointInRectangle( x, y, sx, sy, w, h ) ) then
 		return nil
 	end
@@ -368,11 +364,11 @@ function panel:keyreleased( key )
 end
 
 local posX, posY = 0, 0
-local parent	 = nil
+local parent     = nil
 
 function panel:localToScreen( x, y )
 	posX, posY = x, y
-	parent	   = self:getParent()
+	parent     = self:getParent()
 	while ( parent ~= nil ) do
 		posX = posX + parent:getX()
 		posY = posY + parent:getY()
@@ -506,7 +502,7 @@ local root = nil
 
 function panel:screenToLocal( x, y )
 	posX, posY = 0, 0
-	root	   = self
+	root       = self
 	while ( root:getParent() ~= nil ) do
 		posX = posX + root:getX()
 		posY = posY + root:getY()
@@ -611,7 +607,7 @@ end
 
 function panel:setZOrder()
 	gui.zIteration = gui.zIteration + 1
-	self.zOrder	   = gui.zIteration
+	self.zOrder    = gui.zIteration
 end
 
 function panel:shouldUseFullscreenFramebuffer()
@@ -654,15 +650,15 @@ function panel:update( dt )
 end
 
 local startTime  = 0
-local duration	 = 0
+local duration   = 0
 local remaining  = 0
-local max		 = math.max
-local percent	 = 0
+local max        = math.max
+local percent    = 0
 local startValue = 0
-local endValue	 = 0
-local eased		 = 0
-local complete	 = nil
-local len		 = table.len
+local endValue   = 0
+local eased      = 0
+local complete   = nil
+local len        = table.len
 
 function panel:updateAnimations( dt )
 	for _, animation in ipairs( self.animations ) do
@@ -670,20 +666,18 @@ function panel:updateAnimations( dt )
 			animation.startTime = engine.getRealTime()
 		end
 
-		startTime	  = animation.startTime
-		duration	  = animation.duration
-		remaining	  = max( 0, startTime + duration - engine.getRealTime() )
-		percent		  = 1 - ( remaining / duration or 0 )
+		startTime     = animation.startTime
+		duration      = animation.duration
+		remaining     = max( 0, startTime + duration - engine.getRealTime() )
+		percent       = 1 - ( remaining / duration or 0 )
 		animation.pos = percent
 
 		for member, tween in pairs( animation.tweens ) do
-			startValue	   = tween.startValue
-			endValue	   = tween.endValue
-			eased		   = easing[ animation.easing ]( percent,
-														 duration * percent,
-														 0,
-														 1,
-														 duration )
+			startValue = tween.startValue
+			endValue   = tween.endValue
+			eased      = easing[ animation.easing ](
+				percent, duration * percent, 0, 1, duration
+			)
 			self[ member ] = ( endValue - startValue ) * eased + startValue
 
 			if ( animation.step ) then
@@ -691,7 +685,6 @@ function panel:updateAnimations( dt )
 			end
 
 			self:invalidate()
-
 		end
 
 		if ( percent == 1 ) then

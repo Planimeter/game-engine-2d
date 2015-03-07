@@ -13,8 +13,8 @@ end
 if ( _CLIENT ) then
 	function regionlayer:createSpriteBatch()
 		if ( self.spritebatch == nil ) then
-			local image		 = self:getTileset():getImage():getDrawable()
-			local count		 = self:getWidth() * self:getHeight()
+			local image      = self:getTileset():getImage():getDrawable()
+			local count      = self:getWidth() * self:getHeight()
 			self.spritebatch = graphics.newSpriteBatch( image, count )
 		end
 	end
@@ -95,34 +95,34 @@ if ( _CLIENT ) then
 		local spritebatch = self:getSpriteBatch()
 		spritebatch:bind()
 
-		local tileset	  = self:getTileset()
-		local tileWidth	  = tileset:getTileWidth()
+		local tileset     = self:getTileset()
+		local tileWidth   = tileset:getTileWidth()
 		local tileHeight  = tileset:getTileHeight()
-		local image		  = tileset:getImage()
+		local image       = tileset:getImage()
 		local imageWidth  = image:getWidth()
 		local imageHeight = image:getHeight()
-		local quad		  = graphics.newQuad( 0,		  0,
-											  tileWidth,  tileHeight,
-											  imageWidth, imageHeight )
+		local quad        = graphics.newQuad( 0,          0,
+		                                      tileWidth,  tileHeight,
+		                                      imageWidth, imageHeight )
 
-		local tileX	 = 0
-		local tileY	 = 0
-		local floor	 = math.floor
-		local x		 = 0
-		local y		 = 0
-		local width	 = self:getWidth()
+		local tileX  = 0
+		local tileY  = 0
+		local floor  = math.floor
+		local x      = 0
+		local y      = 0
+		local width  = self:getWidth()
 		local height = self:getHeight()
 		for xy, gid in ipairs( self:getData() ) do
 			if ( gid ~= 0 ) then
-				tileX =		   ( gid - 1 ) * tileWidth % imageWidth
+				tileX =        ( gid - 1 ) * tileWidth % imageWidth
 				tileY = floor( ( gid - 1 ) * tileWidth / imageWidth ) * tileHeight
 				quad:setViewport( tileX, tileY, tileWidth, tileHeight )
 
-				x =		 ( ( xy - 1 ) % width  ) * tileWidth
+				x =      ( ( xy - 1 ) % width  ) * tileWidth
 				y = floor( ( xy - 1 ) / height ) * tileHeight
 				spritebatch:add( quad,
-								 self:getX() + x,
-								 self:getY() + y )
+				                 self:getX() + x,
+				                 self:getY() + y )
 			end
 		end
 

@@ -23,15 +23,38 @@ function entity.create( classname )
 end
 
 if ( _CLIENT ) then
+	local clear       = table.clear
+	local append      = table.append
+	local renderables = {}
+
+	local shallowcopy = function( from, to )
+		for k, v in pairs( from ) do to[ k ] = v end
+	end
+
+	local depthSort = function( t )
+		table.sort( t, function( a, b )
+			return a:getPosition().y < b:getPosition().y
+		end )
+	end
+
 	function entity.drawAll()
-		-- TODO: Only draw entities in viewport.
-		for _, v in ipairs( entity.entities ) do
+		clear( renderables )
+		shallowcopy( entity.entities, renderables )
+		append( renderables, camera.getWorldContexts() )
+		depthSort( renderables )
+
+		-- TODO: Only draw renderables in viewport.
+		for _, v in ipairs( renderables ) do
 			graphics.push()
 				local position = v:getPosition()
-				local x,  y    = position.x, position.y
-				local sprite   = v:getSprite()
-				local height   = sprite:getHeight()
-				graphics.translate( camera.worldToScreen( x, y - height ) )
+				local x, y = position.x, position.y
+				if ( typeof( v, "entity" ) ) then
+					local sprite = v:getSprite()
+					local height = sprite:getHeight()
+					y = y - height
+				end
+				graphics.translate( camera.worldToScreen( x, y ) )
+				graphics.setColor( color.white )
 				v:draw()
 			graphics.pop()
 		end

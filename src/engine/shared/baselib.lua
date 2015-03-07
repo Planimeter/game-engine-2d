@@ -24,47 +24,6 @@ function print( ... )
 	end
 end
 
--- UNDONE: Andrew; We might come back and use these for something eventually.
--- If you need an explicit conversion to a boolean, I strongly encourage you to
--- find a solution on a case-by-case basis.
--- local t = nil
-
--- function toboolean( v )
--- 	t = rawtype( v )
--- 	if ( t == "nil" ) then
--- 		return false
--- 	elseif ( t == "boolean" ) then
--- 		return v
--- 	elseif ( t == "number" ) then
--- 		return v ~= 0
--- 	elseif ( t == "string" ) then
--- 		if ( v == "nil" ) then
--- 			return false
--- 		elseif ( v == "false" ) then
--- 			return false
--- 		elseif ( v == "true" ) then
--- 			return true
--- 		elseif ( tonumber( v ) ) then
--- 			return tonumber( v ) ~= 0
--- 		else
--- 			return true
--- 		end
--- 	elseif ( t == "table" or
--- 			 t == "function" or
--- 			 t == "userdata" or
--- 			 t == "thread"	 or
--- 			 t == "proto"	 or
--- 			 t == "upval" ) then
--- 		return true
--- 	end
--- 	assert( false )
--- end
-
--- -- Thanks, Foxtrot200!
--- function toboolean( v )
--- 	return v and ( v ~= "nil" and v ~= "false" and tonumber( v ) ~= 0 )
--- end
-
 function type( object )
 	local mt = getmetatable( object )
 	if ( mt ~= nil and rawget( mt, "__type" ) ~= nil ) then

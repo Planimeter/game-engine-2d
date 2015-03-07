@@ -6,16 +6,31 @@
 
 class "hudmoveindicator" ( gui.panel )
 
-function hudmoveindicator:hudmoveindicator( parent, name )
-	gui.panel.panel( self, parent, name )
+function hudmoveindicator:hudmoveindicator( parent )
+	gui.panel.panel( self, parent, "HUD Move Indicator" )
 
 	self.width  = graphics.getViewportWidth()
 	self.height = graphics.getViewportHeight()
 end
 
 function hudmoveindicator:draw()
-	-- local x, y = input.getMousePosition()
-	-- graphics.rectangle( "line", x - 16, y - 16, 32, 32 )
+	local x, y = camera.screenToWorld( input.getMousePosition() )
+	x, y       = region.snapToGrid( x, y )
+	camera.drawToWorld( x, y, function()
+		if ( not g_Viewport:isVisible() ) then
+			return
+		end
+
+		local opacity = graphics.getOpacity()
+		graphics.setOpacity( g_Viewport:getOpacity() )
+			graphics.setColor( color.red )
+			graphics.rectangle( "line", 0, 0, 32, 32 )
+			graphics.setColor( color.white )
+			local font = scheme.getProperty( "Console", "font" )
+			graphics.setFont( font )
+			graphics.print( "(" .. x .. ", " .. y .. ")", 0, 32 )
+		graphics.setOpacity( opacity )
+	end )
 end
 
 function hudmoveindicator:invalidateLayout()
@@ -25,8 +40,33 @@ function hudmoveindicator:invalidateLayout()
 	gui.panel.invalidateLayout( self )
 end
 
+function hudmoveindicator:mousepressed( x, y, button )
+	if ( not self:isVisible() ) then
+		return
+	end
+
+	if ( self.mouseover and button == "r" ) then
+		local player = localplayer
+		x, y = camera.screenToWorld( x, y )
+		self:visualizePath( localplayer:getPosition(), vector( x, y ) )
+	end
+end
+
 function hudmoveindicator:update( dt )
 	self:invalidate()
+end
+
+function hudmoveindicator:visualizePath( from, to )
+	require( "engine.shared.path" )
+	local path = path.getPath( from, to )
+	if ( not path ) then
+		return
+	end
+
+	while ( path.parent ) do
+		debugoverlay.rectangle( path.x, path.y, 32, 32, color.red, 0.6 )
+		path = path.parent
+	end
 end
 
 gui.register( hudmoveindicator, "hudmoveindicator" )
