@@ -16,6 +16,7 @@ Features
 * Effortless networking
 * Elegant GUI system
 * Entity system
+* Pathfinding
 * [Tiled](http://www.mapeditor.org/ "Tiled")-based region system
 * Threaded [LuaSec](https://github.com/brunoos/luasec "LuaSec") support
 * Lua 5.1.5 base library extensions
