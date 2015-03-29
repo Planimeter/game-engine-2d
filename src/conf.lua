@@ -67,7 +67,6 @@ function love.conf( c )
                 c.modules.keyboard = false
                 c.modules.mouse = false
                 c.modules.graphics = false
-                c.modules.system = false
                 c.modules.font = false
                 c.modules.window = false
             else

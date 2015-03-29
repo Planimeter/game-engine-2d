@@ -54,3 +54,7 @@ end
 function payload:setPeer( peer )
 	self.peer = peer
 end
+
+function payload:getPlayer()
+	return player.getByPeer( self.peer )
+end

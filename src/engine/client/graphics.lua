@@ -187,10 +187,7 @@ function updateGrid()
 			twinkleAlpha = math.max( alpha, ( maxAlpha - decay ) * 255 )
 			if ( gridMark.twinkling ) then
 				markColor.a    = twinkleAlpha
-				gridMark.color = color( markColor.r,
-				                        markColor.g,
-				                        markColor.b,
-				                        markColor.a )
+				gridMark.color = color.copy( markColor )
 				if ( twinkleAlpha == alpha ) then
 					gridMark.twinkling = false
 				end

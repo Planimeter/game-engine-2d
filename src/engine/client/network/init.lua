@@ -18,6 +18,7 @@ local string         = string
 local pcall          = pcall
 local print          = print
 local require        = require
+local type           = type
 local _G             = _G
 
 module( "engine.client.network" )
@@ -67,7 +68,7 @@ function connectToListenServer()
 end
 
 function disconnect()
-	if ( not _G.engine.client.isConnectedToServer() ) then
+	if ( not _G.engine.client.isConnected() ) then
 		return
 	end
 
@@ -86,6 +87,13 @@ function disconnect()
 	collectgarbage()
 
 	_G.engine.client.onDisconnect()
+end
+
+function sendToServer( data, channel, flag )
+	if ( type( data ) == "payload" ) then
+		data = data:serialize()
+	end
+	server:send( data, channel, flag )
 end
 
 timestep    = 1/20

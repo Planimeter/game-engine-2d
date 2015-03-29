@@ -20,6 +20,7 @@ function prop_tree:prop_tree()
 end
 
 if ( _CLIENT ) then
+	-- TODO: Integrate with gui.hudmoveindicator?
 	function prop_tree:getActions()
 		return {
 			["Chop Down"] = self.chopDown,

@@ -4,30 +4,26 @@
 --
 --============================================================================--
 
-class "image" ( gui.panel )
+class "imagepanel" ( gui.panel )
 
-image.maskedImage = image.maskedImage or nil
+imagepanel.maskedImage = imagepanel.maskedImage or nil
 
-function image.drawMask()
+function imagepanel.drawMask()
 	local self = gui.image.maskedImage
-	graphics.rectangle( "fill",
-						0,
-						0,
-						self:getWidth(),
-						self:getHeight() )
+	graphics.rectangle( "fill", 0, 0, self:getWidth(), self:getHeight() )
 end
 
-function image:image( parent, name, image )
+function imagepanel:imagepanel( parent, name, image )
 	gui.panel.panel( self, parent, name )
-	self.color		= color( 255, 255, 255, 255 )
+	self.color      = color( 255, 255, 255, 255 )
 	self.imageDatum = nil
-	self.imageQuad	= nil
+	self.imageQuad  = nil
 	self:setImage( image )
 end
 
 local missingImage = false
 
-function image:draw()
+function imagepanel:draw()
 	if ( not self:isVisible() ) then
 		return
 	end
@@ -46,36 +42,36 @@ end
 
 local opacity = 1
 
-function image:drawMissingImage()
+function imagepanel:drawMissingImage()
 	opacity = graphics.getOpacity()
 	graphics.setOpacity( 0.42 )
 		graphics.setColor( color.red )
-		local width	 = self:getWidth()
+		local width  = self:getWidth()
 		local height = self:getHeight()
 		graphics.line( width - 1, -0.5,
-					   width - 1, height - 1,
-					   0,		  height - 1 )
+		               width - 1, height - 1,
+		               0,         height - 1 )
 	graphics.setOpacity( opacity )
 end
 
-function image:getColor()
+function imagepanel:getColor()
 	return self.color
 end
 
-function image:getQuad()
+function imagepanel:getQuad()
 	return self.imageQuad
 end
 
-function image:getImage()
-	return self.imageDatum
+function imagepanel:getImage()
+	return self.imageDatum:getDrawable()
 end
 
-function image:setColor( color )
+function imagepanel:setColor( color )
 	self.color = color
 end
 
-function image:setImage( image )
-	if ( type( image ) == "Image" ) then
+function imagepanel:setImage( image )
+	if ( type( image ) == "image" ) then
 		self.imageDatum = image
 	elseif ( image ~= nil and filesystem.exists( image ) ) then
 		self.imageDatum = graphics.newImage( image )
@@ -86,19 +82,19 @@ function image:setImage( image )
 	self:updateQuad()
 end
 
-function image:setWidth( width )
+function imagepanel:setWidth( width )
 	gui.panel.setWidth( self, width )
 	self:updateQuad()
 end
 
-function image:setHeight( height )
+function imagepanel:setHeight( height )
 	gui.panel.setHeight( self, height )
 	self:updateQuad()
 end
 
 local w, h, sw, sh = 0, 0, 0, 0
 
-function image:updateQuad()
+function imagepanel:updateQuad()
 	missingImage = self:getImage() == graphics.error
 	w  = self:getWidth()  - ( missingImage and 1 or 0 )
 	h  = self:getHeight() - ( missingImage and 1 or 0 )
@@ -111,4 +107,4 @@ function image:updateQuad()
 	end
 end
 
-gui.register( image, "image" )
+gui.register( imagepanel, "image", "imagepanel" )

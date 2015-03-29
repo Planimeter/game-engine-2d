@@ -117,9 +117,9 @@ function mousereleased( x, y, button )
 	return rootPanel:mousereleased( x, y, button )
 end
 
-function register( class, name )
+function register( class, name, classname )
 	_M[ name ] = class
-	getfenv( 2 )[ name ] = nil
+	getfenv( 2 )[ classname or name ] = nil
 end
 
 function setFocusedPanel( panel, focus )

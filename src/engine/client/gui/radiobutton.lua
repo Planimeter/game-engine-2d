@@ -42,7 +42,7 @@ function radiobutton:drawForeground()
 	end
 
 	graphics.setColor( self:getScheme( property ) )
-	graphics.draw( self.foreground, x, y )
+	graphics.draw( self.foreground:getDrawable(), x, y )
 end
 
 function radiobutton:drawLabel()
@@ -72,7 +72,7 @@ function radiobutton:drawSelectionDot()
 
 	local x = 24 / 2 - self.icon:getWidth()  / 2
 	local y = 24 / 2 - self.icon:getHeight() / 2
-	graphics.draw( self.icon, x, y )
+	graphics.draw( self.icon:getDrawable(), x, y )
 end
 
 function radiobutton:getGroup()

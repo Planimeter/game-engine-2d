@@ -51,7 +51,6 @@ structs[ "clientInfo" ] = {
 	}
 }
 
-
 structs[ "entitySpawned" ] = {
 	keys = {
 		{ name = "classname",	   type = "string" },
@@ -70,12 +69,24 @@ structs[ "playerInitialized" ] = {
 structs[ "networkVarChanged" ] = {
 	keys = {
 		{ name = "entIndex",	   type = "number" },
-		{ name = "networkVar",	   type = "typelenvalues" },
+		{ name = "networkVars",	   type = "typelenvalues" },
 	}
 }
 
 structs[ "concommand" ] = {
 	keys = {
 		{ name = "command",		   type = "string" },
+	}
+}
+
+structs[ "playerMove" ] = {
+	keys = {
+		{ name = "position",	   type = "vector" },
+	}
+}
+
+structs[ "entityRemoved" ] = {
+	keys = {
+		{ name = "entIndex",	   type = "number" },
 	}
 }

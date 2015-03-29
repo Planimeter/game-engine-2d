@@ -55,7 +55,7 @@ function mainmenu:activate()
 
 	self:setVisible( true )
 
-	if ( game ) then
+	if ( game and game.client ) then
 		game.call( "client", "onMainMenuActivate" )
 	else
 		hook.call( "client", "onMainMenuActivate" )
@@ -107,7 +107,7 @@ function mainmenu:createButtons()
 	self.joinLeaveUniverse = gui.mainmenubutton( self, "Join Universe" )
 	self.joinLeaveUniverse:setDisabled( true )
 	self.joinLeaveUniverse.onClick = function()
-		if ( not engine.isConnectedToServer() ) then
+		if ( not engine.isConnected() ) then
 			if ( _DEBUG ) then
 				engine.connect( "localhost" )
 			else

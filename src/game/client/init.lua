@@ -39,12 +39,6 @@ end
 function onAxisSignin()
 end
 
-function onConnect()
-end
-
-function onDisconnect()
-end
-
 function onMainMenuActivate()
 end
 

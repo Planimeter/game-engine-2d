@@ -8,9 +8,6 @@
 local _entities = entities and entities.entities or {}
 local _classes  = entities and entities.classes  or {}
 
-local _CLIENT   = _CLIENT
-local _SERVER   = _SERVER
-
 local getfenv   = getfenv
 local ipairs    = ipairs
 local pairs     = pairs
@@ -67,24 +64,22 @@ function requireEntity( classname )
 	end
 end
 
-if ( _SERVER ) then
-	function createFromRegionData( entityData )
-		local type = entityData.type
-		requireEntity( type )
+function createFromRegionData( entityData )
+	local type = entityData.type
+	requireEntity( type )
 
-		if ( not entities[ type ] ) then
-			print( "Attempted to create unknown entity type " .. type .. "!" )
-			return nil
-		end
-
-		local entity = entities[ type ]()
-		entity:setName( entityData.name )
-		require( "common.vector" )
-		local x = entityData.x
-		local y = entityData.y + entityData.height
-		entity:setPosition( _G.vector( x, y ) )
-		return entity
+	if ( not entities[ type ] ) then
+		print( "Attempted to create unknown entity type " .. type .. "!" )
+		return nil
 	end
+
+	local entity = entities[ type ]()
+	entity:setName( entityData.name )
+	require( "common.vector" )
+	local x = entityData.x
+	local y = entityData.y + entityData.height
+	entity:setPosition( _G.vector( x, y ) )
+	return entity
 end
 
 function getClassMap()
@@ -96,9 +91,9 @@ function linkToClassname( class, classname )
 	getfenv( 2 )[ classname ] = nil
 end
 
-if ( _CLIENT ) then
+if ( _G._CLIENT ) then
 	local function onEntitySpawned( payload )
-		if ( _SERVER ) then
+		if ( _G._SERVER ) then
 			return
 		end
 
@@ -110,26 +105,16 @@ if ( _CLIENT ) then
 			return
 		end
 
-		local entity      = entities[ classname ]()
-		entity.entIndex   = payload:get( "entIndex" )
-
-		local struct      = entity:getNetworkVarsStruct()
-		local networkVars = payload:get( "networkVars" )
-		networkVars:setStruct( struct )
-		networkVars:deserialize()
-		for k, v in pairs( networkVars:getData() ) do
-			entity[ "set" .. string.capitalize( k ) ]( entity, v )
-		end
-
-		if ( not _SERVER ) then
-			entity:spawn()
-		end
+		local entity    = entities[ classname ]()
+		entity.entIndex = payload:get( "entIndex" )
+		entity:updateNetworkVars( payload )
+		entity:spawn()
 	end
 
 	payload.setHandler( onEntitySpawned, "entitySpawned" )
 
 	local function onNetworkVarChanged( payload )
-		if ( _SERVER ) then
+		if ( _G._SERVER ) then
 			return
 		end
 
@@ -137,13 +122,7 @@ if ( _CLIENT ) then
 		require( "engine.shared.entities.entity" )
 		local entity = _G.entity.getByEntIndex( entIndex )
 		if ( entity ) then
-			local struct     = entity:getNetworkVarsStruct()
-			local networkVar = payload:get( "networkVar" )
-			networkVar:setStruct( struct )
-			networkVar:deserialize()
-			for k, v in pairs( networkVar:getData() ) do
-				entity[ "set" .. string.capitalize( k ) ]( entity, v )
-			end
+			entity:updateNetworkVars( payload )
 		end
 	end
 

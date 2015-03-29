@@ -51,12 +51,29 @@ if ( _CLIENT ) then
 				if ( typeof( v, "entity" ) ) then
 					local sprite = v:getSprite()
 					local height = sprite:getHeight()
-					y = y - height
+					local region = region.getAtPosition( position )
+					y = y - height + region:getTileHeight()
 				end
 				graphics.translate( camera.worldToScreen( x, y ) )
 				graphics.setColor( color.white )
 				v:draw()
 			graphics.pop()
+		end
+	end
+end
+
+function entity.createNetworkVarHelpers( class, name )
+	local getter = "get" .. string.capitalize( name )
+	local setter = "set" .. string.capitalize( name )
+	if ( not class[ getter ] ) then
+		class[ getter ] = function( self )
+			return self:getNetworkVar( name )
+		end
+	end
+
+	if ( not class[ setter ] ) then
+		class[ setter ] = function( self, value )
+			self:setNetworkVar( name, value )
 		end
 	end
 end
@@ -93,7 +110,7 @@ function entity.getAll()
 end
 
 function entity.getByEntIndex( entIndex )
-	for _, v in ipairs( entity.entities ) do
+	for _, v in pairs( entity.entities ) do
 		if ( v.entIndex == entIndex ) then
 			return v
 		end
@@ -128,8 +145,9 @@ if ( _CLIENT ) then
 	end
 
 	function entity:draw()
+		local sprite = self:getSprite()
 		graphics.scale( self:getScale() )
-		graphics.draw( self:getSprite():getDrawable() )
+		graphics.draw( sprite:getDrawable() )
 	end
 end
 
@@ -140,20 +158,8 @@ function entity:networkVar( name, initialValue )
 	networkvar:setValue( initialValue )
 	self.networkVars[ name ] = networkvar
 
-	local metatable = getmetatable( self )
-	local getter    = "get" .. string.capitalize( name )
-	local setter    = "set" .. string.capitalize( name )
-	if ( not metatable[ getter ] ) then
-		metatable[ getter ] = function( self )
-			return self:getNetworkVar( name )
-		end
-	end
-
-	if ( not metatable[ setter ] ) then
-		metatable[ setter ] = function( self, value )
-			self:setNetworkVar( name, value )
-		end
-	end
+	local class = getmetatable( self )
+	entity.createNetworkVarHelpers( class, name )
 end
 
 -- Generate the entity:networkType() methods
@@ -242,9 +248,9 @@ function entity:onNetworkVarChanged( networkvar )
 		local struct = self:getNetworkVarsStruct()
 		local networkVar = typelenvalues( nil, struct )
 		networkVar:set( networkvar:getName(), networkvar:getValue() )
-		payload:set( "networkVar", networkVar )
+		payload:set( "networkVars", networkVar )
 
-		networkserver.broadcast( payload:serialize() )
+		networkserver.broadcast( payload )
 	end
 end
 
@@ -252,9 +258,26 @@ function entity:remove()
 	for i, v in pairs( entity.entities ) do
 		if ( v == self ) then
 			table.remove( entity.entities, i )
-			return
 		end
 	end
+
+	if ( _SERVER and not _CLIENT ) then
+		local payload = payload( "entityRemoved" )
+		payload:set( "entIndex", self.entIndex )
+		networkserver.broadcast( payload )
+	end
+end
+
+if ( _CLIENT ) then
+	local function onEntityRemoved( payload )
+		local entIndex = payload:get( "entIndex" )
+		local entity   = entity.getByEntIndex( entIndex )
+		if ( entity ) then
+			entity:remove()
+		end
+	end
+
+	payload.setHandler( onEntityRemoved, "entityRemoved" )
 end
 
 if ( _CLIENT ) then
@@ -264,19 +287,23 @@ if ( _CLIENT ) then
 end
 
 function entity:spawn()
-	if ( self.spawned ) then
-		return
-	else
-		self.spawned = true
-	end
-
-	if ( _SERVER ) then
+	if ( _SERVER and not _CLIENT ) then
 		-- TODO: Send entityCreated payload only to players who can see me.
 		local payload = payload( "entitySpawned" )
 		payload:set( "classname", self:getClassname() )
 		payload:set( "entIndex", self.entIndex )
 		payload:set( "networkVars", self:getNetworkVarTypeLenValues() )
-		networkserver.broadcast( payload:serialize() )
+		networkserver.broadcast( payload )
+	end
+end
+
+function entity:updateNetworkVars( payload )
+	local struct      = self:getNetworkVarsStruct()
+	local networkVars = payload:get( "networkVars" )
+	networkVars:setStruct( struct )
+	networkVars:deserialize()
+	for k, v in pairs( networkVars:getData() ) do
+		self[ "set" .. string.capitalize( k ) ]( self, v )
 	end
 end
 

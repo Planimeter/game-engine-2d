@@ -12,7 +12,7 @@ axisprofile.fragShader = graphics.newShader( "shaders/alphablend.frag" )
 function axisprofile:axisprofile( parent )
 	gui.panel.panel( self, parent, "Axis Profile" )
 	self.height = 44
-	self.width	= graphics.getViewportWidth() - 2 * 36
+	self.width  = graphics.getViewportWidth() - 2 * 36
 
 	self:setScheme( "Default" )
 
@@ -20,7 +20,7 @@ function axisprofile:axisprofile( parent )
 	local x = 22 - self.throbber:getWidth()  / 2
 	local y = 22 - self.throbber:getHeight() / 2
 	self.throbber:setPos( x, y )
-	local textColor		= self:getScheme( "mainmenubutton.dark.textColor" )
+	local textColor     = self:getScheme( "mainmenubutton.dark.textColor" )
 	local throbberColor = color( textColor.r, textColor.g, textColor.b, 0.27 * 255 )
 	self.throbber:setColor( throbberColor )
 end
@@ -40,7 +40,7 @@ function axisprofile:activate()
 	self:setOpacity( 0 )
 	self:animate( {
 		opacity = 1,
-		y		= y
+		y       = y
 	} )
 end
 
@@ -62,8 +62,9 @@ function axisprofile:draw()
 		return
 	end
 
-	gui.axisprofile.fragShader:send( "mask", gui.axisprofile.background )
-	graphics.setShader( gui.axisprofile.fragShader )
+	local fragShader = gui.axisprofile.fragShader
+	fragShader:send( "mask", gui.axisprofile.background:getDrawable() )
+	graphics.setShader( fragShader )
 		self:drawAvatar()
 	graphics.setShader()
 
@@ -86,7 +87,7 @@ function axisprofile:drawAvatar()
 	local opacity = graphics.getOpacity()
 	graphics.setOpacity( 0.14 )
 	graphics.setColor( self:getScheme( "mainmenubutton.dark.textColor" ) )
-	graphics.draw( gui.axisprofile.background )
+	graphics.draw( gui.axisprofile.background:getDrawable() )
 	graphics.setOpacity( opacity )
 	graphics.setColor( self:getScheme( "mainmenubutton.dark.textColor" ) )
 
@@ -94,7 +95,7 @@ function axisprofile:drawAvatar()
 		local font = self:getScheme( "titleFont" )
 		graphics.setFont( font )
 		local x = 22 - font:getWidth( "?" ) / 2
-		local y = 22 - font:getHeight()		/ 2
+		local y = 22 - font:getHeight()     / 2
 		graphics.setOpacity( 0.27 )
 		graphics.setColor( self:getScheme( "mainmenubutton.dark.textColor" ) )
 		graphics.print( "?", x, y )
@@ -103,13 +104,13 @@ function axisprofile:drawAvatar()
 	end
 
 	if ( self.avatar ) then
-		graphics.draw( self.avatar )
+		graphics.draw( self.avatar:getDrawable() )
 	end
 end
 
 function axisprofile:onAvatarDownloaded()
 	local account = axis.getCurrentUser()
-	self.avatar	  = account:getAvatarImage()
+	self.avatar   = account:getAvatarImage()
 end
 
 gui.register( axisprofile, "axisprofile" )
@@ -120,7 +121,7 @@ if ( g_MainMenu and g_MainMenu.axisProfile ) then
 	g_MainMenu.axisProfile = gui.axisprofile( g_MainMenu )
 	local height = graphics.getViewportHeight()
 	local margin = 96 * ( height / 1080 )
-	local y		 = height - g_MainMenu.axisProfile:getHeight() - margin
+	local y      = height - g_MainMenu.axisProfile:getHeight() - margin
 	g_MainMenu.axisProfile:setPos( margin, y )
 	g_MainMenu.axisProfile:activate()
 end

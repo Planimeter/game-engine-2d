@@ -33,6 +33,15 @@ function call( universe, event, ... )
 		return unpack( values )
 	end
 
+	-- TODO: Remove me.
+	if ( not interface ) then
+		error( "attempt to index universe \"" .. universe .. "\" (a nil value)", 2 )
+	end
+
+	if ( not interface[ event ] ) then
+		error( "attempt to call callback \"" .. event .. "\" (a nil value)", 2 )
+	end
+
 	return interface[ event ]( ... )
 end
 
@@ -43,10 +52,10 @@ end
 function onLoad()
 end
 
-function onPlayerConnect()
+function onPlayerConnect( player )
 end
 
-function onPlayerDisconnect()
+function onPlayerDisconnect( player )
 end
 
 function onPlayerInitialSpawn()

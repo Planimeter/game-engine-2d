@@ -120,6 +120,10 @@ concommand( "region", "Loads the specified region",
 		local args = engine.getArguments()
 
 		if ( _CLIENT and not _SERVER ) then
+			if ( engine.connecting ) then
+				return
+			end
+
 			_SERVER = true
 			local status, ret = pcall( require, "engine.server" )
 			if ( status ~= false ) then
@@ -128,6 +132,8 @@ concommand( "region", "Loads the specified region",
 					game.call( "shared", "onLoad" )
 				else
 					print( "Failed to initialize server!" )
+					engine.connecting = false
+					engine.connected  = false
 					engine.disconnect()
 					_SERVER = nil
 					return
@@ -147,7 +153,11 @@ concommand( "region", "Loads the specified region",
 
 function region.snapToGrid( x, y )
 	local region = region.getAtPosition( vector( x, y ) )
-	local w, h   = region:getTileSize()
+	if ( not region ) then
+		return x, y
+	end
+
+	local w, h = region:getTileSize()
 	x = x - x % w
 	y = y - y % h
 	return x, y
@@ -161,9 +171,12 @@ function region:region( name )
 end
 
 if ( _CLIENT ) then
-function region:draw()
-	local layers = self:getLayers()
-	if ( layers ) then
+	function region:draw()
+		local layers = self:getLayers()
+		if ( not layers ) then
+			return
+		end
+
 		for _, layer in ipairs( layers ) do
 			graphics.push()
 				graphics.setOpacity( layer:getOpacity() )
@@ -174,7 +187,6 @@ function region:draw()
 			graphics.pop()
 		end
 	end
-end
 end
 
 function region:cleanUp()

@@ -101,9 +101,26 @@ local function getDistance( a, b )
 	return heuristics[ getHeuristic() ]( a, b )
 end
 
+local function reconstructPath( node )
+	local path = {}
+	while ( node.parent ) do
+		table.insert( path, 1, vector.copy( node ) )
+		node = node.parent
+	end
+	return path
+end
+
 function getPath( start, goal )
+	local region = region.getAtPosition( goal )
+	if ( not region ) then
+		return
+	end
+
 	start = snapToGrid( start )
 	goal  = snapToGrid( goal )
+	if ( start == goal ) then
+		return
+	end
 
 	require( "engine.shared.heaplib" )
 	local heap   = _G.heap
@@ -123,7 +140,7 @@ function getPath( start, goal )
 		for i = 1, #successors do
 			local successor = successors[ i ]
 			if ( successor == goal ) then
-				return successor
+				return reconstructPath( successor )
 			end
 
 			successor.g = q.g + getDistance( successor, q )

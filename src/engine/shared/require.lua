@@ -6,15 +6,15 @@
 
 require( "engine.shared.filesystem" )
 
-local error		 = error
+local error      = error
 local filesystem = filesystem
-local ipairs	 = ipairs
-local pcall		 = pcall
-local string	 = string
-local table		 = table
-local _require	 = require
+local ipairs     = ipairs
+local pcall      = pcall
+local string     = string
+local table      = table
+local _require   = require
 
-package.watched	 = {}
+package.watched  = package.watched or {}
 
 function require( modname )
 	for i, v in ipairs( package.watched ) do
@@ -31,7 +31,7 @@ function require( modname )
 		end
 
 		table.insert( package.watched, {
-			name	= modname,
+			name    = modname,
 			modtime = filesystem.getLastModified( filename )
 		} )
 		-- print( "Loading " .. modname .. "..." )

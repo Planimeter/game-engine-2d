@@ -8,6 +8,11 @@
 local players      = player and player.players      or {}
 local lastPlayerId = player and player.lastPlayerId or 0
 
+require( "engine.shared.entities.networkvar" )
+
+-- Prevent class from losing networkvar definitions.
+networkvar.save( player )
+
 require( "engine.shared.entities" )
 require( "engine.shared.entities.entity" )
 
@@ -66,6 +71,7 @@ function player:player()
 	entity.entity( self )
 
 	self:networkNumber( "id", player.lastPlayerId + 1 )
+	self:networkNumber( "moveSpeed", 2 )
 
 	if ( _SERVER ) then
 		player.lastPlayerId = self:getNetworkVar( "id" )
@@ -161,7 +167,69 @@ if ( _SERVER ) then
 		self.peer:send( payload:serialize() )
 		self.peer:disconnect_later()
 	end
+end
 
+function player:move()
+	-- Get direction to move
+	local start     = self:getPosition()
+	local next      = self.path[ 1 ]
+	local direction = ( next - start )
+	direction:normalizeInPlace()
+
+	-- Apply move speed to directional vector
+	direction = direction * self:getMoveSpeed()
+
+	-- Snap to pixel grid
+	direction.x = math.round( direction.x )
+	direction.y = math.round( direction.y )
+
+	-- Where we'll move to
+	local newPosition = start + direction
+
+	-- Ensure we're not passing the next tile by comparing the
+	-- distance traveled to the distance to the next tile
+	if ( direction:length() >= ( next - start ):length() ) then
+		newPosition = next
+		table.remove( self.path, 1 )
+	end
+
+	-- Move
+	self:setPosition( newPosition )
+
+	-- We've reached our goal
+	if ( #self.path == 0 ) then
+		self.path = nil
+	end
+end
+
+function player:moveTo( position )
+	if ( position == self:getPosition() ) then
+		return
+	end
+
+	if ( _CLIENT and not _SERVER ) then
+		local payload = payload( "playerMove" )
+		payload:set( "position", position )
+		networkclient.sendToServer( payload )
+	end
+
+	if ( _SERVER ) then
+		require( "engine.shared.path" )
+		self.path = path.getPath( self:getPosition(), position )
+	end
+end
+
+if ( _SERVER ) then
+	local function onPlayerMove( payload )
+		local player   = payload:getPlayer()
+		local position = payload:get( "position" )
+		player:moveTo( position )
+	end
+
+	payload.setHandler( onPlayerMove, "playerMove" )
+end
+
+if ( _SERVER ) then
 	function player:onAuthenticated()
 		require( "engine.shared.hook" )
 		game.call( "server", "onPlayerAuthenticated", self )
@@ -224,8 +292,12 @@ function player:update( dt )
 	if ( self.think and
 	     self.nextThink and
 	     self.nextThink <= engine.getRealTime() ) then
-		self.nextThink = nil
-		self:think()
+		 self.nextThink = nil
+		 self:think()
+	end
+
+	if ( self.path ) then
+		self:move()
 	end
 end
 
@@ -237,3 +309,6 @@ end
 local class = player
 entities.linkToClassname( player, "player" )
 _G.player = class
+
+-- Restore networkvar definitions.
+networkvar.restore( player )

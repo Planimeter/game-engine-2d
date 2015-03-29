@@ -46,9 +46,10 @@ function hudmoveindicator:mousepressed( x, y, button )
 	end
 
 	if ( self.mouseover and button == "r" ) then
-		local player = localplayer
-		x, y = camera.screenToWorld( x, y )
-		self:visualizePath( localplayer:getPosition(), vector( x, y ) )
+		local player   = localplayer
+		local position = vector( camera.screenToWorld( x, y ) )
+		player:moveTo( position )
+		self:visualizePath( localplayer:getPosition(), position )
 	end
 end
 
@@ -63,9 +64,8 @@ function hudmoveindicator:visualizePath( from, to )
 		return
 	end
 
-	while ( path.parent ) do
-		debugoverlay.rectangle( path.x, path.y, 32, 32, color.red, 0.6 )
-		path = path.parent
+	for i, node in ipairs( path ) do
+		debugoverlay.rectangle( node.x, node.y, 32, 32, color.red, 0.6 )
 	end
 end
 

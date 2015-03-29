@@ -242,6 +242,11 @@ if ( _AXIS ) then
 		local username 	= account:getUsername()
 		local appSecret = _G.game.appSecret
 		_G.axis.getSavedGame( username, appSecret, nil, function( r, c, h, s )
+			-- Server shutdown before operation completed.
+			if ( not _G.game ) then
+				return
+			end
+
 			local payload = payload( "serverInfo" )
 
 			require( "public.json" )

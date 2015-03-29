@@ -7,8 +7,9 @@
 require( "common.vector" )
 
 -- These values are preserved during real-time scripting.
-local position = camera and camera.getPosition()      or vector()
 local contexts = camera and camera.getWorldContexts() or {}
+local entity   = camera and camera.getEntity()
+local position = camera and camera.getPosition() or vector()
 
 local class    = class
 local graphics = graphics
@@ -49,9 +50,24 @@ function drawToWorld( x, y, func )
 	table.insert( _contexts, context )
 end
 
+local _entity = entity
+
+function setParentEntity( entity )
+	_entity = entity
+end
+
+function getParentEntity()
+	return _entity
+end
+
 local _position = position
 
 function getPosition()
+	local entity = getParentEntity()
+	if ( entity ) then
+		return entity:getPosition()
+	end
+
 	return _position
 end
 

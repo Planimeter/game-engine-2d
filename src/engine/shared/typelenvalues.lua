@@ -7,14 +7,14 @@
 class( "typelenvalues" )
 
 local reverse = string.reverse
-local byte	  = string.byte
-local floor	  = math.floor
-local ldexp	  = math.ldexp
+local byte    = string.byte
+local floor   = math.floor
+local ldexp   = math.ldexp
 
 function typelenvalues.bytesToNumber( bytes )
 	bytes = reverse( bytes )
 
-	local sign	   = 1
+	local sign     = 1
 	local mantissa = byte( bytes, 7 ) % 16
 	for i = 6, 1, -1 do
 		mantissa = mantissa * 256 + byte( bytes, i )
@@ -24,8 +24,8 @@ function typelenvalues.bytesToNumber( bytes )
 		sign = -1
 	end
 
-	local exponent =	  ( byte( bytes, 8 ) % 128 ) * 16 +
-					 floor( byte( bytes, 7 )		 / 16 )
+	local exponent = ( byte( bytes, 8 ) % 128 ) * 16 +
+	            floor( byte( bytes, 7 )         / 16 )
 	if ( exponent == 0 ) then
 		return 0
 	end
@@ -61,19 +61,19 @@ function typelenvalues.numberToBytes( number )
 		exponent = exponent + 1022
 	end
 
-	local v	   = ""
+	local v    = ""
 	local byte = 0
-	number	   = mantissa
+	number     = mantissa
 	for i = 1, 6 do
 		number, byte = getByte( number )
-		v			 = v .. byte
+		v = v .. byte
 	end
 
 	number, byte = getByte( exponent * 16 + number )
-	v			 = v .. byte
+	v = v .. byte
 
 	number, byte = getByte( sign * 128 + number )
-	v			 = v .. byte
+	v = v .. byte
 	return reverse( v )
 end
 
@@ -85,7 +85,7 @@ function typelenvalues.generateIds( definitions )
 	local id = 1
 	for k, v in pairs( definitions ) do
 		v.id = id
-		id	 = id + 1
+		id   = id + 1
 	end
 end
 
@@ -130,13 +130,17 @@ function typelenvalues:getStructName()
 end
 
 local insert = table.insert
-local len	 = string.len
+local len    = string.len
 local concat = table.concat
 
 function typelenvalues:serialize()
 	local struct = self:getStruct()
-	local id	 = struct.id
-	local keys	 = struct.keys
+	if ( not struct ) then
+		return ""
+	end
+
+	local id   = struct.id
+	local keys = struct.keys
 
 	local data = {}
 
@@ -174,7 +178,7 @@ function typelenvalues:serialize()
 				insert( data, value:serialize() )
 			else
 				print( "Can't serialize " .. key.type .. " for " ..
-					   self:getStructName() .. "!" )
+				       self:getStructName() .. "!" )
 			end
 		end
 	end
@@ -183,7 +187,7 @@ function typelenvalues:serialize()
 end
 
 local ipairs = ipairs
-local sub	 = string.sub
+local sub    = string.sub
 
 function typelenvalues:deserialize()
 	local data = self:getData()
@@ -205,16 +209,16 @@ function typelenvalues:deserialize()
 		return
 	end
 
-	local keys	= self.struct.keys
-	local id	= -1
-	local key	= nil
-	local size	= -1
+	local keys  = self.struct.keys
+	local id    = -1
+	local key   = nil
+	local size  = -1
 	local bytes = nil
 	while ( index < len( data ) ) do
 		-- Get key id
-		id	  = byte( data, index )
+		id    = byte( data, index )
 		index = index + 1
-		key	  = nil
+		key   = nil
 		for i, v in ipairs( keys ) do
 			if ( id == i ) then
 				key = v

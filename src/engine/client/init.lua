@@ -5,9 +5,9 @@
 --============================================================================--
 
 -- These values are preserved during real-time scripting.
-local _connectedToServer = engine                          and
-                           engine.client                   and
-                           engine.client.connectedToServer or  false
+local _connected = engine                  and
+                   engine.client           and
+                   engine.client.connected or  false
 
 require( "conf" )
 require( "engine.client.bind" )
@@ -53,6 +53,7 @@ function connect( address )
 	network = _G.engine.client.network
 	_G.networkclient = network
 	network.connect( address )
+	connecting = true
 end
 
 function connectToListenServer()
@@ -60,6 +61,7 @@ function connectToListenServer()
 	network = _G.engine.client.network
 	_G.networkclient = network
 	network.connectToListenServer()
+	connecting = true
 end
 
 concommand( "connect", "Connects to a server",
@@ -74,27 +76,46 @@ concommand( "connect", "Connects to a server",
 )
 
 function disconnect()
+	-- Check if connected
+	if ( not isConnected() ) then
+		return
+	end
+
+	-- Disconnect from server
 	if ( network ) then
 		network.disconnect()
 	end
 
+	connecting = false
+	connected  = false
+
+	-- Activate main menu
 	_G.g_MainMenu:activate()
 
-	if ( _G.entities ) then
-		_G.entities.shutdown()
+	-- Retrieve subsystems
+	local entities = _G.entities
+	local game     = _G.game
+	local engine   = _G.engine
+
+	-- Shutdown entities
+	if ( entities ) then
+		entities.shutdown()
 	end
 
-	if ( _G.game and _G.game.client ) then
-		 _G.game.client.shutdown()
-		 _G.game.client = nil
+	-- Shutdown client game interface
+	if ( game ) then
+		if ( game.client ) then
+			 game.client.shutdown()
+			 game.client = nil
+		end
 	end
 
-	unrequire( "game" )
-	_G.game = nil
-
-	if ( _G.engine.server ) then
-		 _G.engine.server.shutdown()
-		 _G.engine.server = nil
+	-- Shutdown server engine interface
+	if ( engine ) then
+		if ( engine.server ) then
+			 engine.server.shutdown()
+			 engine.server = nil
+		end
 
 		if ( _G._SERVER ) then
 			 _G._SERVER = nil
@@ -109,7 +130,7 @@ end )
 function download( filename )
 	local payload = payload( "download" )
 	payload:set( "filename", filename )
-	network.server:send( payload:serialize() )
+	network.sendToServer( payload )
 end
 
 local perf_draw_frame_rate = convar( "perf_draw_frame_rate", "0", nil, nil,
@@ -191,15 +212,15 @@ function hasFocus()
 	end
 end
 
-connectedToServer = _connectedToServer
+connected = _connected
 
-function isConnectedToServer()
-	return connectedToServer or _G.engine.server ~= nil
+function isConnected()
+	return connected or _G.engine.server ~= nil
 end
 
 function isInGame()
-	return isConnectedToServer() and
-	       _G.gameclient         and
+	return isConnected() and
+	       _G.gameclient and
 	       _G.gameclient.playerInitialized
 end
 
@@ -226,7 +247,7 @@ end
 function keypressed( key, isrepeat )
 	-- TODO: Move to bind system!!
 	local mainmenu = _G.g_MainMenu
-	if ( key == "escape" and mainmenu and isConnectedToServer() ) then
+	if ( key == "escape" and mainmenu and isConnected() ) then
 		if ( mainmenu:isVisible() ) then
 			mainmenu:close()
 		else
@@ -324,14 +345,11 @@ if ( _AXIS ) then
 end
 
 function onConnect( event )
-	connectedToServer = true
+	connecting = false
+	connected  = true
 	print( "Connected to server!" )
 
-	if ( _G.game ) then
-		_G.game.call( "client", "onConnect", tostring( event.peer ) )
-	else
-		hook.call( "client", "onConnect", tostring( event.peer ) )
-	end
+	hook.call( "client", "onConnect", tostring( event.peer ) )
 
 	if ( _AXIS ) then
 		local server = event.peer
@@ -368,7 +386,7 @@ local function onReceivePlayerInitialized( payload )
 	_G.g_MainMenu:close()
 
 	require( "engine.client.camera" )
-	_G.camera.setPosition( localplayer:getPosition() )
+	_G.camera.setParentEntity( localplayer )
 
 	if ( not _G._SERVER ) then
 		localplayer:initialSpawn()
@@ -402,12 +420,13 @@ end
 payload.setHandler( onReceiveServerInfo, "serverInfo" )
 
 function onDisconnect( event )
-	if ( connectedToServer ) then
-		connectedToServer = false
-		_G.game.call( "client", "onDisconnect" )
+	if ( connected ) then
+		connected = false
+		hook.call( "client", "onDisconnect" )
 
 		print( "Disconnected from server." )
 	else
+		connecting = false
 		print( "Failed to connect to server!" )
 	end
 
@@ -425,7 +444,7 @@ function sendClientInfo()
 	local payload = payload( "clientInfo" )
 	payload:set( "viewportWidth",  graphics.getViewportWidth() )
 	payload:set( "viewportHeight", graphics.getViewportHeight() )
-	network.server:send( payload:serialize() )
+	network.sendToServer( payload )
 end
 
 function quit()
