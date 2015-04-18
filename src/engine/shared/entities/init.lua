@@ -74,11 +74,11 @@ function createFromRegionData( entityData )
 	end
 
 	local entity = entities[ type ]()
-	entity:setName( entityData.name )
+	entity:setNetworkVar( "name", entityData.name )
 	require( "common.vector" )
 	local x = entityData.x
 	local y = entityData.y + entityData.height
-	entity:setPosition( _G.vector( x, y ) )
+	entity:setNetworkVar( "position", _G.vector( x, y ) )
 	return entity
 end
 

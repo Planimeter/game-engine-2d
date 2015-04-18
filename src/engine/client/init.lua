@@ -218,6 +218,10 @@ function isConnected()
 	return connected or _G.engine.server ~= nil
 end
 
+function isDisconnecting()
+	return disconnecting
+end
+
 function isInGame()
 	return isConnected() and
 	       _G.gameclient and
@@ -421,7 +425,10 @@ payload.setHandler( onReceiveServerInfo, "serverInfo" )
 
 function onDisconnect( event )
 	if ( connected ) then
-		connected = false
+		disconnecting = true
+		disconnect()
+		connected     = false
+		disconnecting = false
 		hook.call( "client", "onDisconnect" )
 
 		print( "Disconnected from server." )

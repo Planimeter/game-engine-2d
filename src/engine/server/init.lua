@@ -78,7 +78,8 @@ function onConnect( event )
 
 		local spawnpoint = _G.gameserver.getSpawnPoint( player )
 		if ( spawnpoint ) then
-			player:setPosition( spawnpoint:getPosition() )
+			local position = spawnpoint:getNetworkVar( "position" )
+			player:setNetworkVar( "position", position )
 		end
 
 		sendServerInfo( player )
@@ -185,7 +186,7 @@ if ( _AXIS ) then
 				local account = player:getAccount()
 				if ( account ) then
 					local username = account:getUsername()
-					player:setName( username )
+					player:setNetworkVar( "name", username )
 					print( "Player " .. username .. " has joined the game." )
 					player:onAuthenticated()
 					sendServerInfo( player )
@@ -233,7 +234,7 @@ if ( _AXIS ) then
 		require( "common.vector" )
 		local x = save.position.x
 		local y = save.position.y
-		player:setPosition( _G.vector( x, y ) )
+		player:setNetworkVar( "position", _G.vector( x, y ) )
 	end
 
 	function sendSavedGame( player )

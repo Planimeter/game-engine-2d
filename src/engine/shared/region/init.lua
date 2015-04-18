@@ -70,7 +70,7 @@ function region.reload( library )
 	end
 
 	local name = string.gsub( library, "regions.", "" )
-	local r    = region.getByName( name )
+	local r = region.getByName( name )
 	r:cleanUp()
 	region.unload( name )
 	region.load( name )
@@ -244,7 +244,7 @@ function region:getHeight()
 	return self.height
 end
 
-function region:isTileWalkableAtPosition()
+function region:isTileWalkableAtPosition( position )
 	-- TODO: Implement me.
 	return true
 end
@@ -270,11 +270,11 @@ function region:loadLayers( layers )
 	self.layers = {}
 
 	for _, layerData in ipairs( layers ) do
-		local layer   = regionlayer( layerData )
+		local layer = regionlayer( layerData )
 		layer:setRegion( self )
 		layer:parse()
 
-		local gid     = layer:getHighestTileGid()
+		local gid = layer:getHighestTileGid()
 		local tileset = nil
 		for _, t in ipairs( self:getTilesets() ) do
 			if ( t:getFirstGid() <= gid ) then

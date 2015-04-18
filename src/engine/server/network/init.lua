@@ -103,13 +103,13 @@ function update( dt )
 		return
 	end
 
-	accumulator = accumulator + dt
+	-- accumulator = accumulator + dt
 
-	while ( accumulator >= timestep ) do
+	-- while ( accumulator >= timestep ) do
 		pollEvents()
 
-		accumulator = accumulator - timestep
-	end
+		-- accumulator = accumulator - timestep
+	-- end
 end
 
 peer = _peer

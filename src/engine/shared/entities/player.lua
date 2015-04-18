@@ -8,11 +8,6 @@
 local players      = player and player.players      or {}
 local lastPlayerId = player and player.lastPlayerId or 0
 
-require( "engine.shared.entities.networkvar" )
-
--- Prevent class from losing networkvar definitions.
-networkvar.save( player )
-
 require( "engine.shared.entities" )
 require( "engine.shared.entities.entity" )
 
@@ -47,7 +42,7 @@ end
 
 function player.getById( id )
 	for _, player in ipairs( players ) do
-		if ( player:getId() == id ) then
+		if ( player:getNetworkVar( "id" ) == id ) then
 			return player
 		end
 	end
@@ -69,6 +64,13 @@ end
 
 function player:player()
 	entity.entity( self )
+
+	local tileSize = game.tileSize
+	self:setLocalPosition( vector( 0, tileSize ) )
+
+	local min = vector()
+	local max = vector( tileSize, -tileSize )
+	self:setCollisionBounds( min, max )
 
 	self:networkNumber( "id", player.lastPlayerId + 1 )
 	self:networkNumber( "moveSpeed", 2 )
@@ -145,7 +147,7 @@ function player:initialSpawn()
 
 		local payload = payload( "playerInitialized" )
 		payload:set( "entIndex", self.entIndex )
-		payload:set( "id", self:getId() )
+		payload:set( "id", self:getNetworkVar( "id" ) )
 		self:send( payload )
 	end
 
@@ -177,7 +179,7 @@ function player:move()
 	direction:normalizeInPlace()
 
 	-- Apply move speed to directional vector
-	direction = direction * self:getMoveSpeed()
+	direction = direction * self:getNetworkVar( "moveSpeed" )
 
 	-- Snap to pixel grid
 	direction.x = math.round( direction.x )
@@ -194,7 +196,7 @@ function player:move()
 	end
 
 	-- Move
-	self:setPosition( newPosition )
+	self:setNetworkVar( "position", newPosition )
 
 	-- We've reached our goal
 	if ( #self.path == 0 ) then
@@ -288,6 +290,11 @@ function player:setViewportSize( viewportWidth, viewportHeight )
 	self:setViewportHeight( viewportHeight )
 end
 
+function player:spawn()
+	entity.spawn( self )
+	game.call( "shared", "onPlayerSpawn", self )
+end
+
 function player:update( dt )
 	if ( self.think and
 	     self.nextThink and
@@ -309,6 +316,3 @@ end
 local class = player
 entities.linkToClassname( player, "player" )
 _G.player = class
-
--- Restore networkvar definitions.
-networkvar.restore( player )

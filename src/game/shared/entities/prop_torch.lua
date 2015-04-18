@@ -11,7 +11,7 @@ class "prop_torch" ( "entity" )
 function prop_torch:prop_torch()
 	entity.entity( self )
 
-	self:setName( "Torch" )
+	self:setNetworkVar( "name", "Torch" )
 
 	if ( _CLIENT ) then
 		local sprite = graphics.newImage( "images/entities/prop_torch.png" )

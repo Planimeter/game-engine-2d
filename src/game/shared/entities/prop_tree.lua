@@ -11,7 +11,7 @@ class "prop_tree" ( "entity" )
 function prop_tree:prop_tree()
 	entity.entity( self )
 
-	self:setName( "Tree" )
+	self:setNetworkVar( "name", "Tree" )
 
 	if ( _CLIENT ) then
 		local sprite = graphics.newImage( "images/entities/prop_tree/1.png" )

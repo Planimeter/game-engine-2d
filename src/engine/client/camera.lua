@@ -65,7 +65,7 @@ local _position = position
 function getPosition()
 	local entity = getParentEntity()
 	if ( entity ) then
-		return entity:getPosition()
+		return entity:getNetworkVar( "position" )
 	end
 
 	return _position

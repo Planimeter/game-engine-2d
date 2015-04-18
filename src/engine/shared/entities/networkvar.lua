@@ -6,31 +6,6 @@
 
 class( "networkvar" )
 
-local networkVarKeys = {}
-
-function networkvar.save( class )
-	if ( not class ) then
-		return
-	end
-
-	networkVarKeys[ class.__type ] = class.networkVarKeys
-end
-
-function networkvar.restore( class )
-	local keys = networkVarKeys[ class.__type ]
-	if ( not keys ) then
-		return
-	end
-
-	class.networkVarKeys = keys
-
-	for i, key in ipairs( keys ) do
-		entity.createNetworkVarHelpers( class, key.name )
-	end
-
-	networkVarKeys[ class.__type ] = nil
-end
-
 function networkvar:networkvar( entity, name )
 	self.entity = entity
 	self.name   = name

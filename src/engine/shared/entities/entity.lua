@@ -33,7 +33,18 @@ if ( _CLIENT ) then
 
 	local depthSort = function( t )
 		table.sort( t, function( a, b )
-			return a:getPosition().y < b:getPosition().y
+			local ay = a:getPosition().y
+			local al = a.getLocalPosition and a:getLocalPosition()
+			if ( al ) then
+				ay = ay + al.y
+			end
+
+			local by = b:getPosition().y
+			local bl = b.getLocalPosition and b:getLocalPosition()
+			if ( bl ) then
+				by = by + bl.y
+			end
+			return ay < by
 		end )
 	end
 
@@ -47,33 +58,25 @@ if ( _CLIENT ) then
 		for _, v in ipairs( renderables ) do
 			graphics.push()
 				local position = v:getPosition()
-				local x, y = position.x, position.y
+				local x = position.x
+				local y = position.y
+
 				if ( typeof( v, "entity" ) ) then
 					local sprite = v:getSprite()
 					local height = sprite:getHeight()
-					local region = region.getAtPosition( position )
-					y = y - height + region:getTileHeight()
+					y = y - height
+
+					local localPosition = v:getLocalPosition()
+					if ( localPosition ) then
+						x = x + localPosition.x
+						y = y + localPosition.y
+					end
 				end
+
 				graphics.translate( camera.worldToScreen( x, y ) )
 				graphics.setColor( color.white )
 				v:draw()
 			graphics.pop()
-		end
-	end
-end
-
-function entity.createNetworkVarHelpers( class, name )
-	local getter = "get" .. string.capitalize( name )
-	local setter = "set" .. string.capitalize( name )
-	if ( not class[ getter ] ) then
-		class[ getter ] = function( self )
-			return self:getNetworkVar( name )
-		end
-	end
-
-	if ( not class[ setter ] ) then
-		class[ setter ] = function( self, value )
-			self:setNetworkVar( name, value )
 		end
 	end
 end
@@ -130,13 +133,26 @@ function entity:entity()
 
 	self:networkString( "name",     nil )
 	self:networkVector( "position", vector() )
-	self:networkNumber( "scale",    1 )
 
 	table.insert( entity.entities, self )
 end
 
 function entity:getClassname()
 	return self.__type
+end
+
+function entity:getCollisionBounds()
+	return self.boundsMin, self.boundsMax
+end
+
+if ( _CLIENT ) then
+	function entity:getLocalPosition()
+		return self.localPosition
+	end
+end
+
+function entity:getPosition()
+	return self:getNetworkVar( "position" )
 end
 
 if ( _CLIENT ) then
@@ -146,7 +162,6 @@ if ( _CLIENT ) then
 
 	function entity:draw()
 		local sprite = self:getSprite()
-		graphics.scale( self:getScale() )
 		graphics.draw( sprite:getDrawable() )
 	end
 end
@@ -157,9 +172,6 @@ function entity:networkVar( name, initialValue )
 	local networkvar = networkvar( self, name )
 	networkvar:setValue( initialValue )
 	self.networkVars[ name ] = networkvar
-
-	local class = getmetatable( self )
-	entity.createNetworkVarHelpers( class, name )
 end
 
 -- Generate the entity:networkType() methods
@@ -174,10 +186,10 @@ do
 	for _, type in ipairs( networkableTypes ) do
 		entity[ "network" .. string.capitalize( type ) ] =
 		function( self, name, initialValue )
-			local mt = getmetatable( self )
-			mt.networkVarKeys = mt.networkVarKeys or {}
+			local mt   = getmetatable( self )
+			local keys = rawget( mt, "networkVarKeys" ) or {}
+			rawset( mt, "networkVarKeys", keys )
 
-			local keys      = mt.networkVarKeys
 			local keyExists = false
 			for i, key in ipairs( keys ) do
 				if ( key.name == name ) then
@@ -217,14 +229,14 @@ function entity:getNetworkVarsStruct()
 			keys = {}
 		}
 		local class = getmetatable( self )
-		while ( class.__base ) do
-			local keys = class.networkVarKeys
+		while ( getbaseclass( class ) ) do
+			local keys = rawget( class, "networkVarKeys" )
 			if ( keys ) then
 				for i, key in ipairs( keys ) do
 					table.insert( struct.keys, key )
 				end
 			end
-			class = class.__base
+			class = getbaseclass( class )
 		end
 		self.networkVarsStruct = struct
 	end
@@ -280,6 +292,21 @@ if ( _CLIENT ) then
 	payload.setHandler( onEntityRemoved, "entityRemoved" )
 end
 
+function entity:setCollisionBounds( min, max )
+	self.boundsMin = min
+	self.boundsMax = max
+end
+
+if ( _CLIENT ) then
+	function entity:setLocalPosition( position )
+		self.localPosition = position
+	end
+end
+
+function entity:setPosition( position )
+	self:setNetworkVar( "position", position )
+end
+
 if ( _CLIENT ) then
 	function entity:setSprite( sprite )
 		self.sprite = sprite
@@ -303,7 +330,7 @@ function entity:updateNetworkVars( payload )
 	networkVars:setStruct( struct )
 	networkVars:deserialize()
 	for k, v in pairs( networkVars:getData() ) do
-		self[ "set" .. string.capitalize( k ) ]( self, v )
+		self:setNetworkVar( k, v )
 	end
 end
 

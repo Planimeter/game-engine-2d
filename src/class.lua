@@ -66,6 +66,19 @@ end
 local classes = {}
 
 -------------------------------------------------------------------------------
+-- getbaseclass()
+-- Purpose: Get a base class
+-- Input: class - The class metatable
+-- Output: class
+-------------------------------------------------------------------------------
+local function getbaseclass( class )
+	local name = class.__base
+	return classes[ name ]
+end
+
+_G.getbaseclass = getbaseclass
+
+-------------------------------------------------------------------------------
 -- class()
 -- Purpose: Creates a new class
 -- Input: name - Name of new class
@@ -101,10 +114,10 @@ function class( name )
 		-- Set our base class to the class definition in the function
 		-- environment we called from
 		if ( type( base ) == "string" ) then
-			classes[ name ].__base = getfenv( 2 )[ base ]
+			classes[ name ].__base = getfenv( 2 )[ base ].__type
 		else
 			-- Otherwise set the base class directly
-			classes[ name ].__base = base
+			classes[ name ].__base = base.__type
 		end
 		-- Overwrite our existing __index value with a metamethod which checks
 		-- our members, metatable, and base class, in that order, a la behavior
@@ -116,7 +129,7 @@ function class( name )
 				if ( v ~= nil ) then return v end
 				v = rawget( classes[ name ], key )
 				if ( v ~= nil ) then return v end
-				h = rawget( classes[ name ].__base, "__index" )
+				h = rawget( getbaseclass( classes[ name ] ), "__index" )
 				if ( h == nil ) then return nil end
 			end
 			if ( type( h ) == "function" ) then

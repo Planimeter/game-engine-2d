@@ -4,16 +4,46 @@
 --
 --============================================================================--
 
-_VADVENTURE   = true
+_VADVENTURE        = true
 
-local _CLIENT = _CLIENT
+local _CLIENT      = _CLIENT
+local _SERVER      = _SERVER
 
-local error   = error
-local hook    = hook
-local _G      = _G
+local error        = error
+local hook         = hook
+local rawget       = rawget
+local setmetatable = setmetatable
+local type         = type
+local _G           = _G
 
 module( "game" )
 
+local metatable = {
+	__index = function( table, key )
+		if ( type( table ) == "table" ) then
+			local v
+
+			local gameclient = _G.gameclient
+			local gameserver = _G.gameserver
+
+			if ( _CLIENT and gameclient ) then
+				v = rawget( gameclient, key )
+				if ( v ~= nil ) then return v end
+			end
+
+			if ( _SERVER and gameserver ) then
+				v = rawget( gameserver, key )
+				if ( v ~= nil ) then return v end
+			end
+
+			v = rawget( table, key )
+			if ( v ~= nil ) then return v end
+		end
+	end
+}
+setmetatable( _M, metatable )
+
+tileSize  = 32
 appSecret = ""
 
 function conf( c )
@@ -33,15 +63,6 @@ function call( universe, event, ... )
 		return unpack( values )
 	end
 
-	-- TODO: Remove me.
-	if ( not interface ) then
-		error( "attempt to index universe \"" .. universe .. "\" (a nil value)", 2 )
-	end
-
-	if ( not interface[ event ] ) then
-		error( "attempt to call callback \"" .. event .. "\" (a nil value)", 2 )
-	end
-
 	return interface[ event ]( ... )
 end
 
@@ -58,10 +79,13 @@ end
 function onPlayerDisconnect( player )
 end
 
-function onPlayerInitialSpawn()
+function onPlayerInitialSpawn( player )
 	if ( _CLIENT ) then
 		_G.gameclient.createDefaultPanels()
 	end
+end
+
+function onPlayerSpawn( player )
 end
 
 function onReload()

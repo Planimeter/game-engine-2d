@@ -10,6 +10,11 @@ class "info_worldgate_spawn" ( "entity" )
 
 function info_worldgate_spawn:info_worldgate_spawn()
 	entity.entity( self )
+
+	local tileSize = game.tileSize
+	local min      = vector()
+	local max      = vector( tileSize, -tileSize )
+	self:setCollisionBounds( min, max )
 end
 
 function info_worldgate_spawn:draw()

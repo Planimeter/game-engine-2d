@@ -41,13 +41,13 @@ function typeof( object, class )
 	end
 
 	if ( rawtype( object ) == "table" and object.__base ) then
-		base = object.__base
+		base = getbaseclass( object )
 		while ( base ~= nil ) do
 			if ( base.__type == class ) then
 				return true
 			end
 
-			base = base.__base
+			base = getbaseclass( base )
 		end
 	end
 

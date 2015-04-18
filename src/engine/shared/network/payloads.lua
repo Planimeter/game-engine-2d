@@ -66,6 +66,19 @@ structs[ "playerInitialized" ] = {
 	}
 }
 
+structs[ "entityRemoved" ] = {
+	keys = {
+		{ name = "entIndex",	   type = "number" },
+	}
+}
+
+structs[ "chat" ] = {
+	keys = {
+		{ name = "entIndex",	   type = "number" },
+		{ name = "message",		   type = "string" },
+	}
+}
+
 structs[ "networkVarChanged" ] = {
 	keys = {
 		{ name = "entIndex",	   type = "number" },
@@ -82,11 +95,5 @@ structs[ "concommand" ] = {
 structs[ "playerMove" ] = {
 	keys = {
 		{ name = "position",	   type = "vector" },
-	}
-}
-
-structs[ "entityRemoved" ] = {
-	keys = {
-		{ name = "entIndex",	   type = "number" },
 	}
 }
