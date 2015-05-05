@@ -55,7 +55,7 @@ function scrollablepanel:keypressed( key, isrepeat )
 		gui.frame.moveFocus( self.panel )
 	end
 
-	gui.panel.keypressed( self, key, isrepeat )
+	return gui.panel.keypressed( self, key, isrepeat )
 end
 
 local function parentFrameHasFocus( self )

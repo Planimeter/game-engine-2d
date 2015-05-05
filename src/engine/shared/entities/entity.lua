@@ -314,7 +314,7 @@ if ( _CLIENT ) then
 end
 
 function entity:spawn()
-	if ( _SERVER and not _CLIENT ) then
+	if ( _SERVER ) then
 		-- TODO: Send entityCreated payload only to players who can see me.
 		local payload = payload( "entitySpawned" )
 		payload:set( "classname", self:getClassname() )

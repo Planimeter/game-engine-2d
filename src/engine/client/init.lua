@@ -146,9 +146,6 @@ local function drawFrameRate()
 	local margin = 96 * ( height / 1080 )
 	local x      = width  - font:getWidth( time ) - margin
 	local y      = height - font:getHeight()      - margin + 1
-	local shadow = scheme.getProperty( "Default", "mainmenubutton.dark.textDropShadowColor" )
-	graphics.setColor( shadow )
-	graphics.print( time, x, y )
 	local color  = scheme.getProperty( "Default", "mainmenubutton.dark.textColor" )
 	graphics.setColor( color )
 	graphics.print( time, x, y - 1 )
@@ -458,11 +455,11 @@ function quit()
 end
 
 function update( dt )
-	if ( network ) then
-		network.update( dt )
+	if ( _G.gameclient ) then
+		_G.gameclient.update( dt )
 	end
 
-	if ( not isInGame() ) then
-		graphics.updateGrid()
+	if ( network ) then
+		network.update( dt )
 	end
 end

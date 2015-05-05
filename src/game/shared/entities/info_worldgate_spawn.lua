@@ -5,6 +5,7 @@
 --============================================================================--
 
 require( "engine.shared.entities.entity" )
+require( "game" )
 
 class "info_worldgate_spawn" ( "entity" )
 

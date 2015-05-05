@@ -136,7 +136,6 @@ default.mainmenubutton		= {
 
 	dark					= {
 		textColor			= color( 213, 218, 219,		   255 ),
-		textDropShadowColor	= color(   0,	0,	 0, 0.27 * 255 ),
 
 		mouseover			= {
 			textColor		= color( 163, 126,	71,		   255 )
@@ -169,7 +168,6 @@ default.mainmenuclosebutton = {
 
 	dark					= {
 		iconColor			= color( 213, 218, 219,		   255 ),
-		iconDropShadowColor = color(   0,	0,	 0, 0.27 * 255 ),
 
 		mouseover			= {
 			iconColor		= color( 163, 126,	71,		   255 )

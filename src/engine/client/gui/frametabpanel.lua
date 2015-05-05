@@ -47,7 +47,7 @@ function frametabpanel:keypressed( key, isrepeat )
 		gui.frame.moveFocus( self )
 	end
 
-	gui.panel.keypressed( self, key, isrepeat )
+	return gui.panel.keypressed( self, key, isrepeat )
 end
 
 gui.register( frametabpanel, "frametabpanel" )

@@ -580,6 +580,16 @@ function textbox:keypressed( key, isrepeat )
 			doPaste( self )
 		end
 	end
+
+	return true
+end
+
+function textbox:keyreleased( key )
+	if ( not self:isVisible() or not self.focus or not self:isEditable() ) then
+		return
+	end
+
+	return true
 end
 
 local posX, posY = 0, 0
@@ -799,6 +809,7 @@ function textbox:textinput( text )
 	end
 
 	self:insertText( text )
+	return true
 end
 
 local function updateCursor( self )

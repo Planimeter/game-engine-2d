@@ -18,9 +18,7 @@ function mainmenuclosebutton:draw()
 		return
 	end
 
-	local iconColor           = "mainmenuclosebutton.dark.iconColor"
-	local iconDropShadowColor = "mainmenuclosebutton.dark.iconDropShadowColor"
-
+	local iconColor = "mainmenuclosebutton.dark.iconColor"
 	if ( self.mousedown and self.mouseover ) then
 		iconColor = "mainmenuclosebutton.dark.mousedown.iconColor"
 	elseif ( self.mousedown or self.mouseover ) then
@@ -29,8 +27,6 @@ function mainmenuclosebutton:draw()
 
 	local x =   self:getWidth()        / 2 - self.icon:getWidth()  / 2
 	local y = ( self:getHeight() - 1 ) / 2 - self.icon:getHeight() / 2
-	graphics.setColor( self:getScheme( iconDropShadowColor ) )
-	graphics.draw( self.icon:getDrawable(), x, y + 1 )
 	graphics.setColor( self:getScheme( iconColor ) )
 	graphics.draw( self.icon:getDrawable(), x, y )
 

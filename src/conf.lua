@@ -58,6 +58,8 @@ function love.conf( c )
             c.args[ v ] = true
         end
 
+        c.window.highdpi = true
+
         if ( c.args[ "-dedicated" ] ) then
             c.modules.joystick = false
             c.modules.audio = false

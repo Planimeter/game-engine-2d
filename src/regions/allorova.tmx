@@ -85,11 +85,6 @@
   <object id="203" type="prop_tree" x="2144" y="1472" width="64" height="192"/>
   <object id="204" type="prop_tree" x="992" y="1664" width="64" height="192"/>
  </objectgroup>
- <layer name="Outer Trees" width="100" height="100">
-  <data encoding="base64" compression="zlib">
-   eJztnFFOHTEMRUNLN1DoethBW7ZFYVst7KpB6IkKTTpxYsfXNz5SflGSZ5/rGaEpJUli8LWum7pu6/rmvJeklO91/ajrZ133zntJSnmo61ddj3U9Oe8lKeV3XX/qeq7rxXkvSSmfrkr5XNd1XV+uvHeTvHKXv0OiANNsyHAWptmQ4SxMsyHDWTRnQ29fMMy5mrOhty9Y5tyj2XCk1hF8wTrnjtQ6gy9QGan1CL7wzrhRRmsd3Re9fY/2u0Wo9RF6+957NjkCvdZH6O17hNnkCIS+1dxDb9+vmk2kZ0PoW+099PT9Kl9Lz4bQt157WOFr6dkQnikQ9mCF9GwIcxbCHqwYOZtm345mM+Osd8HzbKvmA4S5MAKrshlhLozAqmxGmAsjMJPNEgcxz2TajOaXxEHMM1mL1ZkpdRDzTHbE6sxMB/2f1ZnJ7qBZ33jU65mDIj93zPoGsV4jP3do+AYtMyM/d/T6JpIDImd+r28iOQDRoRJ6fBPNAWgO1SayAxiJ7gBG/nVApHzfgUj5vgPR8r2HyD3PmO+Rez5CvkvrPXrPo8/40npn7HkkB0vrPULPS0Fy8Ei9o/e8FCQHM9a7FA0Htzw34kK2epdiWZNILoyEVU0iuTCZdyHS7MfArAvTd/pcXBj12xGIaHgjvx1xTu89a3iD9dsRmvTes4Y3WL8dcUHDIb33rOEN9lrXcEjvPWvdZZRaH0HDIZJ7Zr5LDbRmj7xnHdh9jEwru7O2fcj3BliwvjeYmdk93zWyvjeY6XtPZyBkt0U9zvS9tzO8s9uiHmf6PpoztOvZoh5n+h7BGRK069mqHmf63tsZErTrOVo9otGq5xmPRapHNFr1nM+WfhzVs/WcmP8TIsN6Tsz+k2Gdy97PaRGxzOVoz2ns5FwswyJvP/7NnIvfObtvi7zNDG9zdjcWeZsZ3ubsbizyFjXDEZ6Fzu7GIm9RMxzBoz13Y5G3iBmO4lHEu/EA1aO7oulRhCxiQMsVCFmUvIOSRckbu2cRmq9RZ/pVtHzt+TvtPLe2fJ256kPL15mrPrR8vXuuenLk691zFZGdczVJVvEX2r4l3w==
-  </data>
- </layer>
  <objectgroup name="Spawn Points">
   <object id="148" name="Allorova World Gate" type="info_worldgate_spawn" x="1664" y="1344" width="32" height="96"/>
  </objectgroup>

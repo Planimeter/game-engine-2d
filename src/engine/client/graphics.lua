@@ -42,16 +42,12 @@ grid.default = {
 	backgroundColor = color( 240, 246, 247,                      255 ),
 	lines32x32Color	= color(   0,   0,   0, 0.42 * 0.42 * 0.07 * 255 ),
 	lines64x64Color	= color(   0,   0,   0, 0.42 * 0.42 * 0.07 * 255 ),
-	marks32x32Color = color(   0,   0,   0, 0.42 * 0.66 * 0.07 * 255 ),
-	marks64x64Color = color(   0,   0,   0, 0.42 * 0.27 * 0.66 * 255 )
 }
 
 grid.dark = {
 	backgroundColor = color(  31,  35,  36,                      255 ),
 	lines32x32Color = color( 255, 255, 255, 0.42 * 0.42 * 0.07 * 255 ),
 	lines64x64Color = color( 255, 255, 255, 0.42 * 0.42 * 0.07 * 255 ),
-	marks32x32Color = color( 255, 255, 255, 0.42 * 0.66 * 0.07 * 255 ),
-	marks64x64Color = color( 255, 255, 255, 0.42 * 0.27 * 0.66 * 255 )
 }
 
 grid.marks = {}
@@ -109,26 +105,6 @@ function drawGrid()
 				      64 * i,
 				      graphics.getWidth(), 64 * i )
 			end
-
-			-- Grid Marks (32x32)
-			setColor( grid.dark.marks32x32Color )
-			for x = 0, graphics.getWidth() / 32 do
-				for y = 0, graphics.getHeight() / 32 do
-					line( 32 * x,     32 * y - 2.5, 32 * x,     32 * y + 2.5 )
-					line( 32 * x - 2, 32 * y,       32 * x,     32 * y )
-					line( 32 * x + 1, 32 * y,       32 * x + 3, 32 * y )
-				end
-			end
-
-			-- Grid Marks (64x64)
-			-- setColor( grid.dark.marks64x64Color )
-			-- for x = 0, graphics.getWidth() / 64 do
-			-- 	for y = 0, graphics.getHeight() / 64 do
-			-- 		line( 64 * x,     64 * y - 2.5, 64 * x,     64 * y + 2.5 )
-			-- 		line( 64 * x - 2, 64 * y,       64 * x,     64 * y )
-			-- 		line( 64 * x + 1, 64 * y,       64 * x + 3, 64 * y )
-			-- 	end
-			-- end
 		end )
 	end
 
@@ -136,69 +112,6 @@ function drawGrid()
 	graphics.setBlendMode( "premultiplied" )
 		draw( grid.framebuffer:getDrawable() )
 	graphics.setBlendMode( "alpha" )
-
-	-- Grid Marks (64x64)
-	-- setColor( grid.dark.marks64x64Color )
-	for x = 0, graphics.getWidth() / 64 do
-		grid.marks[ x ] = grid.marks[ x ] or {}
-		for y = 0, graphics.getHeight() / 64 do
-			if ( not grid.marks[ x ][ y ] ) then
-				grid.marks[ x ][ y ] = {
-					twinkling	= false,
-					lastTwinkle = _G.engine.getRealTime()
-				}
-			end
-
-			setColor( grid.marks[ x ][ y ].color or grid.dark.marks64x64Color )
-			line( 64 * x,     64 * y - 2.5, 64 * x,     64 * y + 2.5 )
-			line( 64 * x - 2, 64 * y,       64 * x,     64 * y )
-			line( 64 * x + 1, 64 * y,       64 * x + 3, 64 * y )
-		end
-	end
-end
-
-local markColor    = nil
-local alpha        = 0
-local gridMark     = nil
-local lifetime     = 0
-local maxAlpha     = 0
-local decay        = 0
-local twinkleAlpha = 0
-local random       = math.random
-
-function updateGrid()
-	local realTime = _G.engine.getRealTime()
-	for x = 0, graphics.getWidth() / 64 do
-		grid.marks[ x ] = grid.marks[ x ] or {}
-		for y = 0, graphics.getHeight() / 64 do
-			if ( not grid.marks[ x ][ y ] ) then
-				grid.marks[ x ][ y ] = {
-					twinkling   = false,
-					lastTwinkle = realTime
-				}
-			end
-
-			markColor    = grid.dark.marks64x64Color
-			alpha        = markColor.a
-			gridMark     = grid.marks[ x ][ y ]
-			lifetime     = realTime - gridMark.lastTwinkle
-			maxAlpha     = 0.27
-			decay        = math.clamp( lifetime * 0.27, 0, maxAlpha ) / 1
-			twinkleAlpha = math.max( alpha, ( maxAlpha - decay ) * 255 )
-			if ( gridMark.twinkling ) then
-				markColor.a    = twinkleAlpha
-				gridMark.color = color.copy( markColor )
-				if ( twinkleAlpha == alpha ) then
-					gridMark.twinkling = false
-				end
-				markColor.a = alpha
-			elseif ( random( 0, graphics.getWidth()	 / 64 ) == x and
-			         random( 0, graphics.getHeight() / 64 ) == y ) then
-				gridMark.twinkling	 = true
-				gridMark.lastTwinkle = realTime
-			end
-		end
-	end
 end
 
 local gcd = math.gcd
@@ -269,6 +182,10 @@ local _opacity = 1
 
 function getOpacity()
 	return _opacity
+end
+
+function getShader()
+	return graphics.getShader()
 end
 
 local _stencilFunction = nil

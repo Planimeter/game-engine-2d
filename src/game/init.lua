@@ -18,31 +18,6 @@ local _G           = _G
 
 module( "game" )
 
-local metatable = {
-	__index = function( table, key )
-		if ( type( table ) == "table" ) then
-			local v
-
-			local gameclient = _G.gameclient
-			local gameserver = _G.gameserver
-
-			if ( _CLIENT and gameclient ) then
-				v = rawget( gameclient, key )
-				if ( v ~= nil ) then return v end
-			end
-
-			if ( _SERVER and gameserver ) then
-				v = rawget( gameserver, key )
-				if ( v ~= nil ) then return v end
-			end
-
-			v = rawget( table, key )
-			if ( v ~= nil ) then return v end
-		end
-	end
-}
-setmetatable( _M, metatable )
-
 tileSize  = 32
 appSecret = ""
 

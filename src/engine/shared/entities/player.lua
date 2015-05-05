@@ -66,7 +66,9 @@ function player:player()
 	entity.entity( self )
 
 	local tileSize = game.tileSize
-	self:setLocalPosition( vector( 0, tileSize ) )
+	if ( _CLIENT ) then
+		self:setLocalPosition( vector( 0, tileSize ) )
+	end
 
 	local min = vector()
 	local max = vector( tileSize, -tileSize )
@@ -217,7 +219,7 @@ function player:moveTo( position )
 
 	if ( _SERVER ) then
 		require( "engine.shared.path" )
-		self.path = path.getPath( self:getPosition(), position )
+		self.nextPath = path.getPath( self:getPosition(), position )
 	end
 end
 
@@ -301,6 +303,11 @@ function player:update( dt )
 	     self.nextThink <= engine.getRealTime() ) then
 		 self.nextThink = nil
 		 self:think()
+	end
+
+	if ( self.nextPath ) then
+		self.path = self.nextPath
+		self.nextPath = nil
 	end
 
 	if ( self.path ) then

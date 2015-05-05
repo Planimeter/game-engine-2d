@@ -211,7 +211,7 @@ function frame:moveFocus()
 		local focusedChild = focusedIndex and children[ focusedIndex ]
 		if ( focusedChild ) then
 			gui.setFocusedPanel( focusedChild, true )
-		end	
+		end
 	end
 end
 
@@ -229,7 +229,7 @@ function frame:keypressed( key, isrepeat )
 		end
 	end
 
-	gui.panel.keypressed( self, key, isrepeat )
+	return gui.panel.keypressed( self, key, isrepeat )
 end
 
 local localX, localY   = 0, 0

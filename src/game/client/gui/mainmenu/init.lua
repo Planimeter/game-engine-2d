@@ -264,7 +264,7 @@ function mainmenu:keypressed( key, isrepeat )
 		gui.frame.moveFocus( self )
 	end
 
-	gui.panel.keypressed( self, key, isrepeat )
+	return gui.panel.keypressed( self, key, isrepeat )
 end
 
 function mainmenu:mousepressed( x, y, button )

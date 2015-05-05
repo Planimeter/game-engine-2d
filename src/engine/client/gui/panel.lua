@@ -311,39 +311,15 @@ function panel:isVisible()
 	return self.visible
 end
 
-function panel:joystickpressed( joystick, button )
-	if ( not self:isVisible() ) then
-		return
-	end
-
-	if ( self:getChildren() ) then
-		for i, v in ipairs( self:getChildren() ) do
-			v:joystickpressed( joystick, button )
-		end
-	end
-end
-
-function panel:joystickreleased( joystick, button )
-	if ( not self:isVisible() ) then
-		return
-	end
-
-	if ( self:getChildren() ) then
-		for i, v in ipairs( self:getChildren() ) do
-			v:joystickreleased( joystick, button )
-		end
-	end
-end
-
-function panel:keypressed( key, isrepeat )
+local function cascadeInputToChildren( self, func, ... )
 	if ( not self:isVisible() ) then
 		return
 	end
 
 	if ( self:getChildren() ) then
 		local filtered
-		for i, v in ipairs( self:getChildren() ) do
-			filtered = v:keypressed( key, isrepeat )
+		for i, child in ipairs( self:getChildren() ) do
+			filtered = child[func]( child, ... )
 			if ( filtered ~= nil ) then
 				return filtered
 			end
@@ -351,16 +327,24 @@ function panel:keypressed( key, isrepeat )
 	end
 end
 
-function panel:keyreleased( key )
-	if ( not self:isVisible() ) then
-		return
-	end
+function panel:joystickpressed( joystick, button )
+	return cascadeInputToChildren( self, "joystickpressed", joystick, button )
+end
 
-	if ( self:getChildren() ) then
-		for i, v in ipairs( self:getChildren() ) do
-			v:keyreleased( key )
-		end
-	end
+function panel:joystickreleased( joystick, button )
+	return cascadeInputToChildren( self, "joystickreleased", joystick, button )
+end
+
+function panel:keypressed( key, isrepeat )
+	return cascadeInputToChildren( self, "keypressed", key, isrepeat )
+end
+
+function panel:keyreleased( key )
+	return cascadeInputToChildren( self, "keyreleased", key )
+end
+
+function panel:textinput( text )
+	return cascadeInputToChildren( self, "textinput", text )
 end
 
 local posX, posY = 0, 0
@@ -616,18 +600,6 @@ end
 
 function panel:shouldSuppressFramebufferWarnings()
 	return self.suppressFramebufferWarnings
-end
-
-function panel:textinput( text )
-	if ( not self:isVisible() ) then
-		return
-	end
-
-	if ( self:getChildren() ) then
-		for i, v in ipairs( self:getChildren() ) do
-			v:textinput( text )
-		end
-	end
 end
 
 function panel:update( dt )
