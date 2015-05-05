@@ -39,3 +39,8 @@ Windows 32-bit
 
 Microsoft Visual C++ 2008 Redistributable Package (x86)  
 http://www.microsoft.com/en-us/download/details.aspx?id=29
+
+Contributing
+============
+
+Issues are responded to in less than 24 hours. In most cases, [@andrewmcwatters,](https://github.com/andrewmcwatters) or another Planimeter engineer will get back to you within the hour.
