@@ -174,6 +174,17 @@ hook.set( "client", function()
 	end
 end, "onDisconnect", "updateJoinLeaveUniverseButton" )
 
+
+
+hook.set( "client", function()
+	g_MainMenu.joinLocalHost:setText( "Disconnect" )
+end, "onConnect", "updateJoinLeaveUniverseButton" )
+
+hook.set( "client", function()
+	g_MainMenu.joinLocalHost:setText( "Connect to Localhost" )
+end, "onDisconnect", "updateJoinLeaveUniverseButton" )
+
+
 function mainmenu:enableUniverseConnections()
 	if ( self.joinLeaveUniverse ) then
 		self.joinLeaveUniverse:setDisabled( false )
