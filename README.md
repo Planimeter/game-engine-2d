@@ -7,7 +7,7 @@ by hand for your projects or game jams.
 
 *Built by Planimeter*
 
-[Tutorials and API Documentation](http://www.andrewmcwatters.com/grid/)
+[Tutorials and API Documentation](http://www.andrewmcwatters.com/grid/)  
 [Tutorials and API Documentation Source](https://github.com/Planimeter/grid)
 
 Features
