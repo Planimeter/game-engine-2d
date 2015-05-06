@@ -5,7 +5,10 @@ subsequently, QuakeWorld. It's a small, but powerful engine that provides a
 significant amount of subsystems to you that you would otherwise need to write
 by hand for your projects or game jams.
 
-*Built by Planimeter*
+*Built by [Planimeter](http://www.andrewmcwatters.com/planimeter/)*
+
+[Tutorials and API Documentation](http://www.andrewmcwatters.com/grid/)  
+[Tutorials and API Documentation Source](https://github.com/Planimeter/grid)
 
 Features
 ========
@@ -50,8 +53,8 @@ Contributors
 
 Grid is built by Planimeter volunteer contributors, and contributors like you. Here are the lovely folks who have powered the project. GitHub doesn't show all of the contributors behind its metrics, so we extend our thanks here in alphabetical order by last name for every addition and deletion.
 
-Ryan Kingstone (@ryan-kingstone)  
+Ryan Kingstone ([@ryan-kingstone](https://github.com/ryan-kingstone))  
 Matthias Moninger  
-Matthew Nichols (@Polkm)  
+Matthew Nichols ([@Polkm](https://github.com/Polkm))  
 Lachlan Temple  
 Kamil Zmich
