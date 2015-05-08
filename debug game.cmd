@@ -3,7 +3,11 @@ GOTO :START
 
 --======== Copyright 2013-2014, Planimeter, All rights reserved. ========--
 --
+<<<<<<< HEAD
 -- Purpose: Selecting the correct Löve-version.
+=======
+-- Purpose: Detecting which version of LÃ¶ve to use, and then launch the correct version.
+>>>>>>> origin/master
 --
 --=======================================================================--
 
