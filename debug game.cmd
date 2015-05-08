@@ -3,7 +3,7 @@ GOTO :START
 
 --======== Copyright 2013-2014, Planimeter, All rights reserved. ========--
 --
--- Purpose:
+-- Purpose: Selecting the correct Löve-version.
 --
 --=======================================================================--
 
