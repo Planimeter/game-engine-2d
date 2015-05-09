@@ -8,8 +8,6 @@
 local players      = player and player.players      or {}
 local lastPlayerId = player and player.lastPlayerId or 0
 
-local nameTable = {"Andrew", "James", "Ryan", "Brian", "Adam"}
-
 require( "engine.shared.entities" )
 require( "engine.shared.entities.entity" )
 
@@ -35,20 +33,11 @@ function player.initialize( peer )
 		end
 		player.nextThink = engine.getRealTime() + 4 * engine.network.timestep
 	end
-
-	if( _DEBUG and _SERVER and not _AXIS ) then
-		player:setNetworkVar( "name", table.irandom( nameTable ) )
-		print("Player name set: " .. player:getNetworkVar( "name" ) )
-	end 
 	return player
 end
 
 function player.getAll()
 	return table.shallowcopy( players )
-end
-
-function player.countPlayers()
-	return table.count( players )
 end
 
 function player.getById( id )
@@ -86,7 +75,7 @@ function player:player()
 	self:setCollisionBounds( min, max )
 
 	self:networkNumber( "id", player.lastPlayerId + 1 )
-	self:networkNumber( "moveSpeed", 4 )
+	self:networkNumber( "moveSpeed", 2 )
 
 	if ( _SERVER ) then
 		player.lastPlayerId = self:getNetworkVar( "id" )
@@ -126,10 +115,6 @@ function player:getName()
 	end
 
 	return self:getNetworkVar( "name" )
-end
-
-function player:getPosition()
-	return self:getNetworkVar( "position" )
 end
 
 function player:getRegion()
@@ -257,6 +242,20 @@ end
 
 function player:onConnect()
 	require( "engine.shared.hook" )
+
+	if ( _SERVER ) then
+		local entities = entity.getAll()
+		for i, v in ipairs( entities ) do
+			if ( v ~= self ) then
+				local payload = payload( "entitySpawned" )
+				payload:set( "classname", v:getClassname() )
+				payload:set( "entIndex", v.entIndex )
+				payload:set( "networkVars", v:getNetworkVarTypeLenValues() )
+				self:send( payload )
+			end
+		end
+	end
+
 	game.call( "shared", "onPlayerConnect", self )
 end
 

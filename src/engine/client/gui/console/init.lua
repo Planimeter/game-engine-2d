@@ -206,6 +206,23 @@ end
 
 gui.register( console, "console" )
 
+
+local developerconsole = convar( "dev_developer_console", 0, 1, nil,
+						"Determines whether the developer console is enabled or not." )
+
+concommand( "console", "Toggles the developer console.", function()
+	if(not g_Console:isVisible()) then
+			g_Console = gui.console()
+			g_Console:activate()
+			g_Console:moveToCenter()
+			print("Console opening!")
+		else
+			g_Console:close()
+			print("Console closing!")
+	end
+end )
+
+
 concommand( "clear", "Clears the console", function()
 	if ( _WINDOWS ) then
 		-- Andrew; This breaks the LOVE console. :(
