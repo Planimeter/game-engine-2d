@@ -59,19 +59,10 @@ function table.shallowcopy( t )
 	return copy
 end
 
-function table.count( t, value )
-	local count = 0
-	for _, v in pairs( t ) do
-		if ( typeof( v,     "table" ) and
-			 typeof( value, "table" ) ) then
-			if ( table.equal( v, value ) ) then
-				count = count + 1
-			end
-		elseif ( v == value ) then
-			count = count + 1
-		end
-	end
-	return count
+function table.count( t )
+	local i = 0
+	for k in pairs( t ) do i = i + 1 end
+	return i
 end
 
 function table.equal( a, b )
