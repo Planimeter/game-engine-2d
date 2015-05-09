@@ -8,6 +8,9 @@ if ( _CLIENT ) then
 require( "engine.client.debugoverlay" )
 end
 
+require( "engine.shared.path.node" )
+require( "engine.shared.heaplib" )
+
 local math         = math
 local region       = region
 local require      = require
@@ -40,7 +43,6 @@ local function getSuccessors( q, closed )
 	local x, y = q.x, q.y
 	local w, h = region:getTileSize()
 
-	require( "engine.shared.path.node" )
 	local node = _G.node
 	local directions = {
 		[ 1 ] = node( x, y - h, q ), -- North
@@ -122,12 +124,10 @@ function getPath( start, goal )
 		return
 	end
 
-	require( "engine.shared.heaplib" )
 	local heap   = _G.heap
 	local open   = heap()
 	local closed = {}
 
-	require( "engine.shared.path.node" )
 	local node = _G.node
 	start      = node( start.x, start.y )
 	heap.insert( open, start )

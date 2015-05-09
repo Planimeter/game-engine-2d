@@ -12,9 +12,9 @@ function regiontitle:regiontitle( parent, name )
 	self.height = 72
 	self:setPos( 0, graphics.getViewportHeight() / 2 - self.height / 2 )
 
-	local titleFont  = "fonts/Mark Simonson - Proxima Nova Bold.otf"
+	local titleFont  = "fonts/SourceSansPro-Bold.otf"
 	self.titleFont   = graphics.newFont( titleFont, 18 )
-	local regionFont = "fonts/Old English LET.TTF"
+	local regionFont = "fonts/SourceSansPro-Regular.otf"
 	self.regionFont  = graphics.newFont( regionFont, 48 )
 
 	-- TODO: localplayer:getRegion()

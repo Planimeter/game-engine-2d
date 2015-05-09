@@ -28,7 +28,7 @@ function hudmoveindicator:draw()
 			graphics.setColor( color.white )
 			local font = scheme.getProperty( "Console", "font" )
 			graphics.setFont( font )
-			graphics.print( "(" .. x .. ", " .. y .. ")", 0, 32 )
+			graphics.print( "(" .. x / 32 .. ", " .. y / 32 .. ")", 0, 32 )
 		graphics.setOpacity( opacity )
 	end )
 end
