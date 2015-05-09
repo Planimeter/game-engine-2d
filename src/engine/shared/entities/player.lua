@@ -242,6 +242,20 @@ end
 
 function player:onConnect()
 	require( "engine.shared.hook" )
+
+	if ( _SERVER ) then
+		local entities = entity.getAll()
+		for i, v in ipairs( entities ) do
+			if ( v ~= self ) then
+				local payload = payload( "entitySpawned" )
+				payload:set( "classname", v:getClassname() )
+				payload:set( "entIndex", v.entIndex )
+				payload:set( "networkVars", v:getNetworkVarTypeLenValues() )
+				self:send( payload )
+			end
+		end
+	end
+
 	game.call( "shared", "onPlayerConnect", self )
 end
 
