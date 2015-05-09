@@ -120,18 +120,6 @@ function mainmenu:createButtons()
 	end
 	table.insert( self.buttons, self.joinLeaveUniverse )
 
-	if ( _DEBUG ) then
-		self.joinLocalHost = gui.mainmenubutton( self, "Connect to Localhost" )
-		self.joinLocalHost.onClick = function()
-			if ( not engine.isConnected() ) then
-				engine.connect( "localhost" )
-			else
-				engine.disconnect()
-			end
-		end
-		table.insert( self.buttons, self.joinLocalHost )
-	end
-
 	local blankButton = gui.mainmenubutton( self )
 	table.insert( self.buttons, blankButton )
 
@@ -173,17 +161,6 @@ hook.set( "client", function()
 		g_MainMenu.joinLeaveUniverse:setDisabled( true )
 	end
 end, "onDisconnect", "updateJoinLeaveUniverseButton" )
-
-
-
-hook.set( "client", function()
-	g_MainMenu.joinLocalHost:setText( "Disconnect" )
-end, "onConnect", "updateJoinLeaveUniverseButton" )
-
-hook.set( "client", function()
-	g_MainMenu.joinLocalHost:setText( "Connect to Localhost" )
-end, "onDisconnect", "updateJoinLeaveUniverseButton" )
-
 
 function mainmenu:enableUniverseConnections()
 	if ( self.joinLeaveUniverse ) then

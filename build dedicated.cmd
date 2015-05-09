@@ -46,5 +46,5 @@ GOTO BUILD
 :BUILD
 XCOPY * ..\..\..\..\%RELEASEDIR% /S /Y
 CD ..\..\..\..\src
-..\bin\x86\win32\7za.exe a -tzip -mx9 ..\%RELEASEDIR%\dedicated.love common engine\server engine\shared engine\init.lua game\server game\shared game\init.lua public regions class.lua conf.lua main.lua
+..\bin\x86\win32\7za.exe a -tzip -mx9 ..\%RELEASEDIR%\dedicated.love cfg common engine\server engine\shared engine\init.lua game\server game\shared game\init.lua public regions class.lua conf.lua main.lua
 CD ..
