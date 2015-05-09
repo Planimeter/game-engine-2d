@@ -47,6 +47,7 @@ function player.getAll()
 	return table.shallowcopy( players )
 end
 
+function player.countPlayers()
 	return table.count( players )
 end
 
