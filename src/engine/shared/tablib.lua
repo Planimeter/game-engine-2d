@@ -181,15 +181,6 @@ function table.irandom( t )
 	return t[ random( #t ) ]
 end
 
-function table.random( t )
-	local rk = math.random( 1, table.Count( t ) )
-	local i = 1
-	for k, v in pairs( t ) do 
-		if ( i == rk ) then return v, k end
-		i = i + 1 
-	end
-end
-
 function table.unique( t )
 	local copy = {}
 	for _, v in ipairs( t ) do
