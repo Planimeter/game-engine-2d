@@ -8,7 +8,7 @@
 
 echo "Launching Grid Engine 64-bit (Linux/OSX) in debug . . ."
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
-	love src --debug 
+	love src/ -debug 
 elif [[ "$OSTYPE" == "darwin"* ]]; then
 	bin/x64/macosx-x64/love.app/Contents/MacOS/love src/ -debug
 fi
