@@ -7,7 +7,6 @@
 require( "game.client.gui.mainmenu.closebutton" )
 require( "game.client.gui.mainmenu.button" )
 require( "game.client.gui.mainmenu.axisprofile" )
-require( "game.client.gui.closedialog" )
 
 class "mainmenu" ( gui.panel )
 
@@ -87,23 +86,6 @@ end
 
 function mainmenu:createButtons()
 	self.buttons = {}
--- if ( _DEBUG ) then
--- 	local testFrame = gui.mainmenubutton( self, "Test Frame" )
--- 	testFrame.onClick = function()
--- 		if ( not self.testFrame ) then
--- 			self.testFrame = gui.testframe( self )
--- 			self.testFrame:activate()
--- 			self.testFrame:moveToCenter()
--- 		else
--- 			self.testFrame:activate()
--- 		end
--- 	end
--- 	table.insert( self.buttons, testFrame )
-
--- 	local blankButton = gui.mainmenubutton( self )
--- 	table.insert( self.buttons, blankButton )
--- end
-
 	self.joinLeaveUniverse = gui.mainmenubutton( self, "Join Universe" )
 	self.joinLeaveUniverse:setDisabled( true )
 	self.joinLeaveUniverse.onClick = function()
@@ -134,6 +116,18 @@ function mainmenu:createButtons()
 		end
 	end
 	table.insert( self.buttons, options )
+
+	local exit = gui.mainmenubutton( self, "Exit" )
+	exit.onClick = function()
+		if ( not self.closedialog ) then
+			self.closedialog = gui.closedialog( self )
+			self.closedialog:activate()
+			self.closedialog:moveToCenter()
+		else
+			self.closedialog:activate()
+		end
+	end
+	table.insert( self.buttons, exit )
 
 	self:invalidateButtons()
 end

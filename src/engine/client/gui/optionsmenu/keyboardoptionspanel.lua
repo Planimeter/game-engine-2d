@@ -30,7 +30,13 @@ function keyboardoptionspanel:keyboardoptionspanel()
 	buttonName                  = name .. " Advanced Button"
 	self.advancedButton         = gui.commandbutton( group, buttonName, "Advanced" )
 	self.advancedButton.onClick = function( commandbutton )
-		print( "TODO: Advanced modal." )
+		if ( not self.advancedOptions ) then
+			self.advancedOptions = gui.advancedoptions( nil )
+			self.advancedOptions:activate()
+			self.advancedOptions:moveToCenter()
+		else
+			self.advancedOptions:activate()
+		end
 	end
 end
 

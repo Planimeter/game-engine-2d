@@ -2,9 +2,7 @@
 GOTO :START
 
 --======== Copyright 2013-2014, Planimeter, All rights reserved. ========--
---
--- Purpose:
---
+-- Purpose: Detecting which version of Löve2D to use, and then launch the correct version.
 --=======================================================================--
 
 :START
