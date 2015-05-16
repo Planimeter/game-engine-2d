@@ -1,6 +1,6 @@
 #!/bin/sh
 
-##======== Copyright 2013-2014, Planimeter, All rights reserved. ========##
+##======== Copyright 2013-2015, Planimeter, All rights reserved. ========##
 ##
 ## Purpose:
 ##
