@@ -12,6 +12,7 @@ local filesystem = filesystem
 local pairs      = pairs
 local print      = print
 local string     = string
+local table      = table
 local _G         = _G
 
 module( "bind" )

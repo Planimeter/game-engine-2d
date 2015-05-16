@@ -477,9 +477,12 @@ end
 
 function panel:removeChildren()
 	local children = self:getChildren()
-	for i = #children, 1, -1 do
-		children[ i ]:remove()
+	if ( children ) then
+		for i = #children, 1, -1 do
+			children[ i ]:remove()
+		end
 	end
+	self:invalidate()
 end
 
 local root = nil

@@ -45,12 +45,15 @@ function keyboardoptionspanel:activate()
 end
 
 function keyboardoptionspanel:onOK()
+	self.bindList:saveBinds()
 end
 
 function keyboardoptionspanel:onCancel()
+	local innerPanel = self.bindList:getInnerPanel()
+	innerPanel:removeChildren()
+	self.bindList:readBinds()
 end
 
-function keyboardoptionspanel:onApply()
-end
+keyboardoptionspanel.onApply = keyboardoptionspanel.onOK
 
 gui.register( keyboardoptionspanel, "keyboardoptionspanel" )

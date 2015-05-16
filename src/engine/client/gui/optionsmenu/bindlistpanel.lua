@@ -11,6 +11,7 @@ class "bindlistpanel" ( gui.scrollablepanel )
 
 function bindlistpanel:bindlistpanel( parent, name )
 	gui.scrollablepanel.scrollablepanel( self, parent, name )
+	self.changedBinds = {}
 end
 
 function bindlistpanel:draw()
@@ -73,8 +74,11 @@ function bindlistpanel:addBinding( text, key, concommand )
 	self:setInnerHeight( getLastY( panel ) )
 end
 
-function bindlistpanel:onBindChange( item, key, concommand )
-	print( key, concommand )
+function bindlistpanel:onBindChange( item, key, oldKey, concommand )
+	self.changedBinds[ concommand ] = {
+		key    = key,
+		oldKey = oldKey
+	}
 end
 
 function bindlistpanel:readBinds()
@@ -101,6 +105,15 @@ function bindlistpanel:readBinds()
 			end
 		end
 	end
+end
+
+function bindlistpanel:saveBinds()
+	for concommand, keys in pairs( self.changedBinds ) do
+		bind.setBind( keys.oldKey, nil )
+		bind.setBind( keys.key, concommand )
+	end
+
+	bind.saveBinds()
 end
 
 gui.register( bindlistpanel, "bindlistpanel" )

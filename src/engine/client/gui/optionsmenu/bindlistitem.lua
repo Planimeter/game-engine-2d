@@ -95,10 +95,11 @@ function bindlistitem:setConcommand( concommand )
 end
 
 function bindlistitem:setKey( key )
-	self.key = key
+	local oldKey = self.key
+	self.key     = key
 
 	local panel = self:getParent()
-	panel:getParent():onBindChange( item, key, self:getConcommand() )
+	panel:getParent():onBindChange( item, key, oldKey, self:getConcommand() )
 	self:invalidate()
 end
 
