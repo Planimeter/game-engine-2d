@@ -256,24 +256,6 @@ function keypressed( key, isrepeat )
 		end
 	end
 
-	-- TODO: Move to bind system!!
-	local console = _G.g_Console
-	if ( key == "`" and console ) then
-		if ( not mainmenu:isVisible() and console:isVisible() ) then
-			mainmenu:activate()
-			return
-		end
-
-		if ( console:isVisible() ) then
-			console:close()
-		else
-			if ( not mainmenu:isVisible() ) then
-				mainmenu:activate()
-			end
-			console:activate()
-		end
-	end
-
 	require( "engine.client.input" )
 	if ( _G.input.isKeyTrapped( key ) ) then
 		return
@@ -297,12 +279,13 @@ end
 function load( arg )
 	_conf = conf
 
-	if ( _G._DEBUG ) then
-		perf_draw_frame_rate:setValue( "1" )
-	end
-
 	graphics.initialize()
 	gui.initialize()
+
+	if ( _G._DEBUG ) then
+		convar.getConvar( "perf_draw_frame_rate" ):setValue( "1" )
+		convar.getConvar( "con_enable" ):setValue( "1" )
+	end
 
 	-- TODO: Move to config system!!
 	bind.readBinds()

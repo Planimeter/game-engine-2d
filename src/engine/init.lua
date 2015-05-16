@@ -28,12 +28,12 @@ local _INTERACTIVE = _INTERACTIVE
 
 local concommand   = concommand
 local event        = love.event
-local filesystem   = filesystem
 local gui          = gui
 local ipairs       = ipairs
 local love         = love
 local math         = math
 local os           = os
+local package      = package
 local rawget       = rawget
 local require      = require
 local setmetatable = setmetatable
@@ -282,7 +282,7 @@ local frameTime   = 0
 function update( dt )
 	if ( _G._DEBUG ) then
 		if ( _G._DEDICATED or not client.hasFocus() ) then
-			filesystem.update( dt )
+			package.update( dt )
 		end
 	end
 

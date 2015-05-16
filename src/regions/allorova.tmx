@@ -21,16 +21,6 @@
    eJzt2NlS1FAQxvFzeB+3iMsrubC4XKKi+CoqzuBy44aovJKKoOCF3ZXTlU7gDJOBSgrz/1V9RRhgajidPktCAAAAAAAAAAAAAAAAAAAAAAAAADA0K5IHkoeSJ5I1ydNeP9FwaS1+SXYlr2IIX+TrV8k3yXaPn2uItBZzKXuS3yl/JPuSA8nf3j7d/+99ygfJR8knyWYo63FZemM+ltePJKuSx+71K5KrkmuS6yk4me+SH5Kfkp1QzVPjWPWJ5rNkK5Rzl64pvj6sL9M5F+v3vr+XlV+zL8prl2K9L0axqovNXTZvLcnry5I7kruSe5L7kZpMckPG56bkVizv+SKWY6/Xdt/r9V6o94KN9Vw4HPt9rZNfX3StP+j0vztbfF/ofa+1WMyM8SzRmlkfzac+sflM92LNXhyy5vq8kGph6/Ss2W18b2uK9pL1lJ/D/Dw2VM31WWP1WIz1dWDaOizEqsc23ftpDfS9NmJVGz/faV30/PJa8kbydoB18b2ha7TmZVqbR26OsbpMqoONsf691aCI9e+XUi3s/bZCfd7iDHn0eaKI9XvXny0m9YWN+bqrq/6sWROthdWEvXCd31fdduOm46j7oo00jxy3Vtj4+mv/O1afceO9/VmFHqk8l7F54eoxOqYGPoXrIX+dq4f1BL2Rl3sO0ja+B3xsrlp2PeF7w9by7W7+3TNBz+jnJRdidQYvGvulk+yBrR9sPrOvtufl+eNhuWdUbeavafZhrBft5Hpl1jo0n2nRC+3kzu2z1CL3zB3traT488Sk+PO27ZWHfOY+Tbk5y89buWfpOD3NOozi0fPVmB7oRO7MbvPVauAM16V3ob6e29qh5w/2qt3LnUHYt/YnN2exb+3Hs1g9Y1xP6zb7KAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAEPwD+vAHjg==
   </data>
  </layer>
- <objectgroup name="Torches">
-  <object id="205" type="prop_torch" x="1568" y="1760" width="32" height="32"/>
-  <object id="206" type="prop_torch" x="1792" y="1728" width="32" height="32"/>
-  <object id="209" type="prop_torch" x="1824" y="1888" width="32" height="32"/>
-  <object id="211" type="prop_torch" x="1568" y="1952" width="32" height="32"/>
-  <object id="212" type="prop_torch" x="1664" y="2112" width="32" height="32"/>
-  <object id="213" type="prop_torch" x="1888" y="2144" width="32" height="32"/>
-  <object id="214" type="prop_torch" x="1792" y="2304" width="32" height="32"/>
-  <object id="215" type="prop_torch" x="1600" y="2304" width="32" height="32"/>
- </objectgroup>
  <layer name="Barren Grass-Dirt Transition" width="100" height="100">
   <data encoding="base64" compression="zlib">
    eJzt1TcOAjEURVFrqAkVYVuEDQBbIlTAlggVsBjedFPTGIlzpNtb/rJ/KQAAAAAAAAAAAAAAAAAAAAAAAMA3dk0p+3Roap+E1jVzuKV7GvdKmaRpmvVqn+w/9XPvgzRM87RIy7Qyj2ra97FOm7T1b1XR3RvHdErndDGPKrp745Ge6ZXe5lFFd2+M7AoAAAAAAAAAAAAAAAAAAAAAAH7AB1/JErM=

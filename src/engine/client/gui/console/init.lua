@@ -206,6 +206,34 @@ end
 
 gui.register( console, "console" )
 
+local con_enable = convar( "con_enable", "0", nil, nil,
+                           "Allows the console to be activated.")
+
+concommand( "toggleconsole", "Show/hide the console.", function()
+	local mainmenu = _G.g_MainMenu
+	local console  = _G.g_Console
+	if ( not mainmenu:isVisible() and
+	         console:isVisible()  and
+	         con_enable:getBoolean() ) then
+		mainmenu:activate()
+		return
+	end
+
+	if ( console:isVisible() ) then
+		console:close()
+	else
+		if ( not con_enable:getBoolean() ) then
+			return
+		end
+
+		if ( not mainmenu:isVisible() ) then
+			mainmenu:activate()
+		end
+
+		console:activate()
+	end
+end )
+
 concommand( "clear", "Clears the console", function()
 	if ( _WINDOWS ) then
 		-- Andrew; This breaks the LOVE console. :(
