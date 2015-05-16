@@ -81,7 +81,7 @@ function bindlistpanel:onBindChange( item, key, oldKey, concommand )
 	}
 end
 
-function bindlistpanel:readBinds()
+function bindlistpanel:readBinds( binds )
 	if ( not filesystem.exists( "cfg/binds.lst" ) ) then
 		return
 	end
@@ -99,8 +99,14 @@ function bindlistpanel:readBinds()
 				self:addHeader( line )
 			elseif ( string.find( line, "[^=]" ) ) then
 				local name, concommand = string.match( line, "\"(.+)\"%s(.+)" )
-				concommand             = string.trim( concommand )
-				local key              = bind.getKeyForBind( concommand )
+				concommand = string.trim( concommand )
+
+				local key
+				if ( binds ) then
+					key = table.hasvalue( binds, concommand )
+				else
+					key = bind.getKeyForBind( concommand )
+				end
 				self:addBinding( name, key or '', concommand )
 			end
 		end
@@ -108,12 +114,31 @@ function bindlistpanel:readBinds()
 end
 
 function bindlistpanel:saveBinds()
+	local i = 0
 	for concommand, keys in pairs( self.changedBinds ) do
+		i = i + 1
 		bind.setBind( keys.oldKey, nil )
 		bind.setBind( keys.key, concommand )
 	end
 
-	bind.saveBinds()
+	if ( i >= 1 ) then
+		bind.saveBinds()
+		self.changedBinds = {}
+	end
+end
+
+function bindlistpanel:useDefaults()
+	local defaultBinds = bind.readDefaultBinds()
+	for key, concommand in pairs( defaultBinds ) do
+		self.changedBinds[ concommand ] = {
+			key    = key,
+			oldKey = bind.getKeyForBind( concommand )
+		}
+	end
+
+	local innerPanel = self:getInnerPanel()
+	innerPanel:removeChildren()
+	self:readBinds( defaultBinds )
 end
 
 gui.register( bindlistpanel, "bindlistpanel" )

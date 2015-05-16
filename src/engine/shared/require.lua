@@ -8,7 +8,6 @@ require( "engine.shared.filesystem" )
 
 local error      = error
 local filesystem = filesystem
-local hook       = hook
 local ipairs     = ipairs
 local pairs      = pairs
 local pcall      = pcall

@@ -26,7 +26,7 @@ function keyboardoptionspanel:keyboardoptionspanel()
 	local buttonName       = name .. " Use Defaults Button"
 	self.useDefaultsButton = gui.commandbutton( group, buttonName, "Use Defaults" )
 	self.useDefaultsButton.onClick = function( commandbutton )
-		print( "TODO: Default bindings." )
+		self.bindList:useDefaults()
 	end
 	buttonName                  = name .. " Advanced Button"
 	self.advancedButton         = gui.commandbutton( group, buttonName, "Advanced" )

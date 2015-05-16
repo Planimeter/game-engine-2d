@@ -57,6 +57,21 @@ function readBinds()
 	end
 end
 
+function readDefaultBinds()
+	local config = "cfg/binds_default.cfg"
+	if ( not filesystem.exists( config ) ) then
+		return
+	end
+
+	local binds  = {}
+	for line in filesystem.lines( config ) do
+		for k, v in string.gmatch( line, "(.+)%s(.+)" ) do
+			binds[ string.trim( k ) ] = string.trim( v )
+		end
+	end
+	return binds
+end
+
 function saveBinds()
 	local config = {}
 	for k, v in pairs( binds ) do
