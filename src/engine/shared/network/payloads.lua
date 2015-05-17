@@ -62,7 +62,7 @@ structs[ "entitySpawned" ] = {
 structs[ "playerInitialized" ] = {
 	keys = {
 		{ name = "entIndex",	   type = "number" },
-		{ name = "id",			   type = "number" },
+		{ name = "id",			   type = "number" }
 	}
 }
 
@@ -75,20 +75,21 @@ structs[ "entityRemoved" ] = {
 structs[ "chat" ] = {
 	keys = {
 		{ name = "entIndex",	   type = "number" },
-		{ name = "message",		   type = "string" },
+		{ name = "message",		   type = "string" }
 	}
 }
 
 structs[ "networkVarChanged" ] = {
 	keys = {
 		{ name = "entIndex",	   type = "number" },
-		{ name = "networkVars",	   type = "typelenvalues" },
+		{ name = "networkVars",	   type = "typelenvalues" }
 	}
 }
 
 structs[ "concommand" ] = {
 	keys = {
-		{ name = "command",		   type = "string" },
+		{ name = "name",		   type = "string" },
+		{ name = "argString",	   type = "string" }
 	}
 }
 

@@ -22,8 +22,8 @@ function console.print( ... )
 end
 
 local function parseArgs( s )
-	local t		 = {}
-	local i		 = 1
+	local t      = {}
+	local i      = 1
 	local length = string.utf8len( s )
 	while ( i <= length ) do
 		if ( string.utf8sub( s, i, i ) == "\"" ) then
@@ -69,29 +69,29 @@ local function doCommand( self, input )
 		return
 	end
 
-	local _, endPos	= string.find( input, command, 1, true )
+	local _, endPos = string.find( input, command, 1, true )
 	local argString = string.trim( string.utf8sub( input, endPos + 1 ) )
-	local argTable	= parseArgs( argString )
+	local argTable  = parseArgs( argString )
 	if ( concommand.getConcommand( command ) ) then
 		concommand.dispatch( nil, command, argString, argTable )
 	elseif ( convar.getConvar( command ) ) then
 		if ( argString ~= "" ) then
-			if ( string.utf8sub( argString, 1, 1 )	 == "\"" and
-				 string.utf8sub( argString, -1, -1 ) == "\"" ) then
+			if ( string.utf8sub( argString, 1, 1 )   == "\"" and
+			     string.utf8sub( argString, -1, -1 ) == "\"" ) then
 				argString = string.utf8sub( argString, 2, -2 )
 			end
 			convar.setConvar( command, argString )
 		else
-			local convar	 = convar.getConvar( command )
+			local convar     = convar.getConvar( command )
 			local helpString = convar:getHelpString()
-			local default	 = convar:getDefault()
+			local default    = convar:getDefault()
 			print( convar:getName() .. " = \"" .. convar:getValue() .. "\" " ..
-				 ( default	  ~= nil and "(Default: \"" .. default .. "\")\n" or "" ) ..
-				 ( helpString ~= nil and helpString							  or "" ) )
+			     ( default    ~= nil and "(Default: \"" .. default .. "\")\n" or "" ) ..
+			     ( helpString ~= nil and helpString                           or "" ) )
 		end
 	else
 		print( "'" .. command .. "' is not recognized as a console command " ..
-			   "or variable." )
+		       "or variable." )
 	end
 end
 
@@ -131,11 +131,11 @@ end
 function console:console()
 	local name = "Console"
 	gui.frame.frame( self, g_MainMenu or g_RootPanel, name, "Console" )
-	self.width	   = 661
+	self.width     = 661
 	self.minHeight = 178
 
 	self.output = gui.consoletextbox( self, name .. " Output Text Box", "" )
-	self.input	= gui.textbox( self, name .. " Input Text Box",	 "" )
+	self.input  = gui.textbox( self, name .. " Input Text Box", "" )
 	self.input.onEnter = function( textbox, text )
 		doCommand( self, text )
 
@@ -188,7 +188,7 @@ end
 function console:invalidateLayout()
 	if ( not self:isResizing() ) then
 		local parent = self:getParent()
-		local scale	 = parent:getHeight() / 1080
+		local scale  = parent:getHeight() / 1080
 		local margin = 36 * scale
 		if ( not _INTERACTIVE ) then
 			self:setPos( parent:getWidth() - self:getWidth() - margin, margin )
@@ -210,8 +210,8 @@ local con_enable = convar( "con_enable", "0", nil, nil,
                            "Allows the console to be activated.")
 
 concommand( "toggleconsole", "Show/hide the console.", function()
-	local mainmenu = _G.g_MainMenu
-	local console  = _G.g_Console
+	local mainmenu = g_MainMenu
+	local console  = g_Console
 	if ( not mainmenu:isVisible() and
 	         console:isVisible()  and
 	         con_enable:getBoolean() ) then
@@ -262,12 +262,12 @@ concommand( "help", "Prints help info for the console command or variable",
 		end
 
 		local command = concommand.getConcommand( name ) or
-						convar.getConvar( name )
+		                convar.getConvar( name )
 		if ( command ) then
 			print( command:getHelpString() )
 		else
 			print( "'" .. name .. "' is not a valid console command or " ..
-				   "variable." )
+			       "variable." )
 		end
 	end
 )

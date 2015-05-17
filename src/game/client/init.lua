@@ -18,10 +18,16 @@ local _G        = _G
 module( "game.client" )
 
 function createDefaultPanels()
+	-- Initialize region title
+	-- local hudregiontitle = gui.hudregiontitle( _G.g_Viewport )
+	-- hudregiontitle:activate()
+
+	-- Initialize move indicator
 	local hudmoveindicator = gui.hudmoveindicator( _G.g_Viewport )
 
-	-- local regiontitle = gui.regiontitle( _G.g_Viewport )
-	-- regiontitle:activate()
+	-- Initialize chat
+	-- local hudchat = gui.hudchat( _G.g_Viewport )
+	-- _G.g_HudChat = hudchat
 end
 
 function draw()

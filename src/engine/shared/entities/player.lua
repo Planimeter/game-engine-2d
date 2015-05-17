@@ -272,6 +272,12 @@ function player:onDisconnect()
 	end
 end
 
+concommand( "say", "Display player message",
+	function( self, player, command, argString, argTable )
+		game.call( "shared", "onPlayerChat", player, argString )
+	end, { "network" }
+)
+
 function player:send( data, channel, flag )
 	if ( type( data ) == "payload" ) then
 		data = data:serialize()

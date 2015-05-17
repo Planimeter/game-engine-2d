@@ -15,6 +15,16 @@ function concommand.dispatch( player, name, argString, argTable )
 	local concommand = concommand.getConcommand( name )
 	if ( concommand ) then
 		concommand:callback( player, name, argString, argTable )
+
+		local flags     = concommand:getFlags()
+		local networked = table.hasvalue( flags, "network" )
+		if ( _CLIENT and networked ) then
+			local payload = payload( "concommand" )
+			payload:set( "name", name )
+			payload:set( "argString", argString )
+			networkclient.sendToServer( payload )
+		end
+
 		return true
 	else
 		return false
@@ -29,7 +39,7 @@ function concommand:concommand( name, helpString, callback, flags )
 	self.name       = name
 	self.helpString = helpString
 	self.callback   = callback
-	self.flags      = flags
+	self.flags      = flags or {}
 	concommand.concommands[ name ] = self
 end
 

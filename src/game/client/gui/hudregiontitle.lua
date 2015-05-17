@@ -1,12 +1,12 @@
 --========= Copyright © 2013-2015, Planimeter, All rights reserved. ==========--
 --
--- Purpose: Region Title class
+-- Purpose: Region Title HUD
 --
 --============================================================================--
 
-class "regiontitle" ( gui.panel )
+class "hudregiontitle" ( gui.panel )
 
-function regiontitle:regiontitle( parent, name )
+function hudregiontitle:hudregiontitle( parent, name )
 	gui.panel.panel( self, parent, name )
 	self.width  = graphics.getViewportWidth()
 	self.height = 72
@@ -24,10 +24,10 @@ function regiontitle:regiontitle( parent, name )
 	self:setRegionName( region:getName() )
 end
 
-function regiontitle:activate()
+function hudregiontitle:activate()
 end
 
-function regiontitle:draw()
+function hudregiontitle:draw()
 	graphics.setFont( self.titleFont )
 	graphics.printf( string.upper( self:getTitle() ),
 	                 0,
@@ -46,7 +46,7 @@ function regiontitle:draw()
 	self:drawLines()
 end
 
-function regiontitle:drawLines()
+function hudregiontitle:drawLines()
 	local title       = string.upper( self:getTitle() )
 	local titleWidth  = self.titleFont:getWidth( title )
 	local region      = string.capitalize( self:getRegionName() )
@@ -60,27 +60,27 @@ function regiontitle:drawLines()
 	graphics.rectangle( "fill", x2, y, width, 2 )
 end
 
-function regiontitle:getRegionName()
+function hudregiontitle:getRegionName()
 	return self.regionName
 end
 
-function regiontitle:getTitle()
+function hudregiontitle:getTitle()
 	return self.title
 end
 
-function regiontitle:invalidateLayout()
+function hudregiontitle:invalidateLayout()
 	self:setWidth( graphics.getViewportWidth() )
 	self:setPos( 0, graphics.getViewportHeight() - 72 )
 
 	gui.panel.invalidateLayout( self )
 end
 
-function regiontitle:setTitle( title )
+function hudregiontitle:setTitle( title )
 	self.title = title
 end
 
-function regiontitle:setRegionName( regionName )
+function hudregiontitle:setRegionName( regionName )
 	self.regionName = regionName
 end
 
-gui.register( regiontitle, "regiontitle" )
+gui.register( hudregiontitle, "hudregiontitle" )

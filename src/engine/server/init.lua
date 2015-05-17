@@ -7,31 +7,32 @@
 require( "engine.server.network" )
 require( "engine.shared.network.payload" )
 
-local _AXIS		   = _AXIS
+local _AXIS        = _AXIS
 
-local convar	   = convar
-local debug		   = debug
+local concommand   = concommand
+local convar       = convar
+local debug        = debug
 local getmetatable = getmetatable
 local filesystem   = filesystem
-local network	   = engine.server.network
+local network      = engine.server.network
 _G.networkserver   = network
-local love		   = love
-local payload	   = payload
-local print		   = print
-local region	   = region
-local require	   = require
+local love         = love
+local payload      = payload
+local print        = print
+local region       = region
+local require      = require
 local setmetatable = setmetatable
-local string	   = string
-local table		   = table
-local tostring	   = tostring
-local unrequire	   = unrequire
-local _G		   = _G
+local string       = string
+local table        = table
+local tostring     = tostring
+local unrequire    = unrequire
+local _G           = _G
 
 module( "engine.server" )
 
 local function error_printer(msg, layer)
 	print((debug.traceback("Error: " ..
-		  tostring(msg), 1+(layer or 1)):gsub("\n[^\n]+$", "")))
+	       tostring(msg), 1+(layer or 1)):gsub("\n[^\n]+$", "")))
 end
 
 function errhand(msg)
@@ -102,7 +103,7 @@ local function onDownloadRequest( payload )
 	print( tostring( peer ) .. " requested \"" .. filename .. "\"..." )
 
 	if ( string.find( filename, "/..", 1, true ) or
-		 string.ispathabsolute( filename ) ) then
+	     string.ispathabsolute( filename ) ) then
 		print( "Access denied to " .. tostring( peer ) .. "!" )
 		return
 	end
@@ -114,10 +115,10 @@ local function onDownloadRequest( payload )
 
 	local directory = string.match( filename, "(.-)/" )
 	if ( not directory or
-		 not table.hasvalue( directoryWhitelist, directory ) ) then
+	     not table.hasvalue( directoryWhitelist, directory ) ) then
 		print( tostring( peer ) ..
-			   " requested file outside of directory whitelist (" ..
-			   directory .. ")!" )
+		       " requested file outside of directory whitelist (" ..
+		       directory .. ")!" )
 		return
 	end
 
@@ -127,7 +128,7 @@ end
 payload.setHandler( onDownloadRequest, "download" )
 
 local sv_payload_show_receive = convar( "sv_payload_show_receive", "0", nil, nil,
-										"Prints payloads received from clients" )
+                                        "Prints payloads received from clients" )
 
 if ( _G._DEBUG ) then
 	-- sv_payload_show_receive:setValue( "1" )
@@ -139,7 +140,7 @@ function onReceive( event )
 
 	if ( sv_payload_show_receive:getBoolean() ) then
 		print( "Received payload \"" .. payload:getStructName() .. "\" from " ..
-			   tostring( payload:getPeer() ) .. ":" )
+		       tostring( payload:getPeer() ) .. ":" )
 		table.print( payload:getData(), 1 )
 	end
 
@@ -167,7 +168,7 @@ end
 
 if ( _AXIS ) then
 	local function onPlayerAuthenticateHandler( payload )
-		local player = _G.player.getByPeer( payload:getPeer() )
+		local player = payload:getPlayer()
 		local ticket = payload:get( "ticket" )
 		onPlayerAuthenticate( player, ticket )
 	end
@@ -201,7 +202,7 @@ if ( _AXIS ) then
 end
 
 local function onReceiveClientInfo( payload )
-	local player		 = _G.player.getByPeer( payload:getPeer() )
+	local player         = payload:getPlayer()
 	local viewportWidth	 = payload:get( "viewportWidth" )
 	local viewportHeight = payload:get( "viewportHeight" )
 	player:setViewportSize( viewportWidth, viewportHeight )
@@ -209,6 +210,19 @@ local function onReceiveClientInfo( payload )
 end
 
 payload.setHandler( onReceiveClientInfo, "clientInfo" )
+
+local function onReceiveConcommand( payload )
+	local player    = payload:getPlayer()
+	local name      = payload:get( "name" )
+	local argString = payload:get( "argString" )
+	if ( player == _G.localplayer ) then
+		return
+	end
+
+	concommand.dispatch( player, name, argString, argTable )
+end
+
+payload.setHandler( onReceiveConcommand, "concommand" )
 
 function quit()
 	if ( _G.game and _G.game.server ) then

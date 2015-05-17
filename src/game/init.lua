@@ -48,6 +48,9 @@ end
 function onLoad()
 end
 
+function onPlayerChat( player, message )
+end
+
 function onPlayerConnect( player )
 end
 
