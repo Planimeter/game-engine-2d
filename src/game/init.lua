@@ -45,9 +45,6 @@ function getStartingRegion()
 	return "allorova"
 end
 
-function onLoad()
-end
-
 function onPlayerChat( player, message )
 end
 

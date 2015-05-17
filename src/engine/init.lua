@@ -191,9 +191,6 @@ function load( arg )
 	_G.print( "All systems go in " .. time )
 
 	_G._INITTIME = nil
-
-	require( "engine.shared.hook" )
-	_G.hook.call( "shared", "onLoad" )
 end
 
 function mousepressed( x, y, button )

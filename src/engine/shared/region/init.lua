@@ -129,7 +129,7 @@ concommand( "region", "Loads the specified region",
 			if ( status ~= false ) then
 				serverengine = ret
 				if ( serverengine.load( args ) ) then
-					game.call( "shared", "onLoad" )
+					networkserver.onNetworkInitializedServer()
 				else
 					print( "Failed to initialize server!" )
 					engine.connecting = false

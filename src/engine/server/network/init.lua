@@ -57,7 +57,7 @@ function initializeServer()
 	return true
 end
 
-local function networkInitializedServer()
+function onNetworkInitializedServer()
 	if ( _M.host ) then
 		local host_ip          = host_ip:getValue()
 		local host_port        = host_port:getNumber()
@@ -69,12 +69,7 @@ local function networkInitializedServer()
 	else
 		print( "Failed to initialize server!" )
 	end
-
-	hook.remove( "shared", "onLoad", "networkInitializedServer" )
 end
-
-hook.set( "shared",  networkInitializedServer,
-          "onLoad", "networkInitializedServer" )
 
 function shutdownServer()
 	if ( not _M.host ) then
