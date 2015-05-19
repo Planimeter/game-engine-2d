@@ -61,7 +61,6 @@ end
 
 local function doCommand( self, input )
 	self.input:setText( "" )
-	input = string.trim( input )
 	print( "] " .. input )
 
 	local command = string.match( input, "^([^%s]+)" )
@@ -137,10 +136,11 @@ function console:console()
 	self.output = gui.consoletextbox( self, name .. " Output Text Box", "" )
 	self.input  = gui.textbox( self, name .. " Input Text Box", "" )
 	self.input.onEnter = function( textbox, text )
+		text = string.trim( text )
 		doCommand( self, text )
 
 		local commandHistory = gui.console.commandHistory
-		if ( not table.hasvalue( commandHistory, text ) ) then
+		if ( not table.hasvalue( commandHistory, text ) and text ~= '' ) then
 			table.insert( commandHistory, text )
 		end
 	end
