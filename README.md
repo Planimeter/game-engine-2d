@@ -57,5 +57,5 @@ Ryan Kingstone ([@ryan-kingstone](https://github.com/ryan-kingstone))
 Matthias Moninger  
 Matthew Nichols ([@Polkm](https://github.com/Polkm))  
 Lachlan Temple  
-Manolis Vrondakis ([@vrondakis](https://github.com/vrondakis)  
+Manolis Vrondakis ([@vrondakis](https://github.com/vrondakis))  
 Kamil Zmich
