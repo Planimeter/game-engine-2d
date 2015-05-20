@@ -175,6 +175,7 @@ end
 function console:activate()
 	self:invalidate()
 	gui.frame.activate( self )
+	gui.setFocusedPanel( self.input, true )
 end
 
 function console:drawBackground()
