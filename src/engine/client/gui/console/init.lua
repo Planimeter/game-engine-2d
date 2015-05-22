@@ -105,7 +105,8 @@ local function autocomplete( text )
 	local suggestions = {}
 
 	for command in pairs( concommand.concommands ) do
-		if ( ( string.find( command, text, 1, true ) == 1 ) and ( not table.hasvalue( gui.console.commandHistory, command ) ) ) then
+		if ( string.find( command, text, 1, true ) == 1 and
+		     not table.hasvalue( gui.console.commandHistory, command ) ) then
 			table.insert( suggestions, command .. " " )
 		end
 	end
@@ -140,7 +141,7 @@ function console:console()
 		doCommand( self, text )
 
 		local commandHistory = gui.console.commandHistory
-		if ( not table.hasvalue( commandHistory, text ) and text ~= '' ) then
+		if ( not table.hasvalue( commandHistory, text ) and text ~= "" ) then
 			table.insert( commandHistory, text )
 		end
 	end

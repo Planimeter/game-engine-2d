@@ -97,6 +97,11 @@ if ( _G._CLIENT ) then
 			return
 		end
 
+		-- TODO: Remove me.
+		if ( not _G.game ) then
+			return
+		end
+
 		local classname = payload:get( "classname" )
 		requireEntity( classname )
 

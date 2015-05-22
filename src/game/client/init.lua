@@ -22,6 +22,8 @@ function createDefaultPanels()
 	-- local hudregiontitle = gui.hudregiontitle( _G.g_Viewport )
 	-- hudregiontitle:activate()
 
+	local hudnametags = gui.hudnametags( _G.g_Viewport )
+
 	-- Initialize move indicator
 	local hudmoveindicator = gui.hudmoveindicator( _G.g_Viewport )
 

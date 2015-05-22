@@ -166,10 +166,14 @@ local function signInOrRegister( self )
 	end
 end
 
+
+local axis_remember_password = convar( "axis_remember_password", "0", nil,
+                                       nil, "Save Axis credentials." )
+
 function signindialog:signindialog( parent, name )
 	gui.frame.frame( self, parent, "Sign In Dialog", "" )
 	self.width = 288
-	self.height = 249
+	self.height = 282
 	self.register = false
 
 	self:doModal()
@@ -246,6 +250,16 @@ function signindialog:signindialog( parent, name )
 	self.emailTextBox.onEnter = signInOrRegister
 	self.emailTextBox:setPos( margin, y )
 	self.emailTextBox:setVisible( false )
+
+	y = y + self.emailTextBox:getHeight() + 9
+	self.rememberCheckbox = gui.checkbox( self, "Remember Password Checkbox",
+	                                            "Remember Password" )
+	self.rememberCheckbox:setChecked( axis_remember_password:getBoolean() )
+	self.rememberCheckbox:setPos( margin, y )
+	self.rememberCheckbox.onCheckedChanged = function( checkbox, checked )
+		convar.setConvar( "axis_remember_password", checked and "1" or "0" )
+		convar.saveConfig()
+	end
 end
 
 local function expand( self )
@@ -270,11 +284,13 @@ local function showRegistrationTextBoxes( self )
 	self.emailTextBox:setOpacity( 0 )
 	self.emailTextBox:animate( animation.slideDownEmailTextBox )
 	self.emailTextBox:setVisible( true )
+	self.rememberCheckbox:setVisible( false )
+
 	expand( self )
 end
 
 local function collapse( self )
-	self:animate( { height = 249 } )
+	self:animate( { height = 282 } )
 end
 
 local function hideRegistrationTextBoxes( self )
@@ -305,6 +321,9 @@ local function hideRegistrationTextBoxes( self )
 			self.emailTextBox:setText( "" )
 		end
 	)
+
+	self.rememberCheckbox:setVisible( true )
+
 	collapse( self )
 end
 
