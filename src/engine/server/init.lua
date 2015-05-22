@@ -13,6 +13,7 @@ local concommand   = concommand
 local convar       = convar
 local debug        = debug
 local getmetatable = getmetatable
+local ipairs       = ipairs
 local filesystem   = filesystem
 local network      = engine.server.network
 _G.networkserver   = network
@@ -201,11 +202,27 @@ if ( _AXIS ) then
 	end
 end
 
+local function sendEntities( player )
+	local entities = _G.entity.getAll()
+	for i, v in ipairs( entities ) do
+		if ( v ~= player ) then
+			local payload = payload( "entitySpawned" )
+			payload:set( "classname", v:getClassname() )
+			payload:set( "entIndex", v.entIndex )
+			payload:set( "networkVars", v:getNetworkVarTypeLenValues() )
+			player:send( payload )
+		end
+	end
+end
+
 local function onReceiveClientInfo( payload )
 	local player         = payload:getPlayer()
 	local viewportWidth	 = payload:get( "viewportWidth" )
 	local viewportHeight = payload:get( "viewportHeight" )
 	player:setViewportSize( viewportWidth, viewportHeight )
+
+	sendEntities( player )
+
 	player:initialSpawn()
 end
 

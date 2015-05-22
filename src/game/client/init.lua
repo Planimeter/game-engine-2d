@@ -5,7 +5,6 @@
 --============================================================================--
 
 require( "engine.client.camera" )
--- require( "shaders.gaussianblur" )
 
 local camera    = camera
 local gui       = gui
@@ -18,18 +17,8 @@ local _G        = _G
 module( "game.client" )
 
 function createDefaultPanels()
-	-- Initialize region title
-	-- local hudregiontitle = gui.hudregiontitle( _G.g_Viewport )
-	-- hudregiontitle:activate()
-
-	local hudnametags = gui.hudnametags( _G.g_Viewport )
-
 	-- Initialize move indicator
 	local hudmoveindicator = gui.hudmoveindicator( _G.g_Viewport )
-
-	-- Initialize chat
-	-- local hudchat = gui.hudchat( _G.g_Viewport )
-	-- _G.g_HudChat = hudchat
 end
 
 function draw()
@@ -37,26 +26,11 @@ function draw()
 		return
 	end
 
-	-- if ( not blur ) then
-	-- 	blur = shader.getShader( "gaussianblur" )
-	-- 	blurSigma = 0
-	-- end
-	--
-	-- if ( blurSigma > 0 ) then
-	-- 	blur:draw( function()
-	-- 		region.drawWorld()
-	-- 		_G.entity.drawAll()
-	-- 	end )
-	-- else
-		region.drawWorld()
-		_G.entity.drawAll()
-	-- end
+	region.drawWorld()
+	_G.entity.drawAll()
 end
 
 function load( arg )
-	-- blur = shader.getShader( "gaussianblur" )
-	-- blurSigma = 0
-
 	_G.g_Viewport = gui.viewport( _G.g_RootPanel )
 	_G.g_DebugOverlay = gui.debugoverlaypanel( _G.g_Viewport )
 end
@@ -65,11 +39,9 @@ function onAxisSignin()
 end
 
 function onMainMenuActivate()
-	-- drawBlur = true
 end
 
 function onMainMenuClose()
-	-- drawBlur = false
 end
 
 function quit()
@@ -85,17 +57,4 @@ end
 shutdown = quit
 
 function update( dt )
-	-- if ( drawBlur and blurSigma <= 18 ) then
-	-- 	blurSigma = blurSigma + 3
-	-- 	if ( blurSigma > 18 ) then
-	-- 		blurSigma = 18
-	-- 	end
-	-- 	blur:set( "sigma", blurSigma )
-	-- elseif ( blurSigma > 0 ) then
-	-- 	blurSigma = blurSigma - 3
-	-- 	if ( blurSigma < 0 ) then
-	-- 		blurSigma = 0
-	-- 	end
-	-- 	blur:set( "sigma", blurSigma )
-	-- end
 end
