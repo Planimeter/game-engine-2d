@@ -1,4 +1,6 @@
-![Grid](/src/images/gui/logo.png?raw=true "Grid") [![Join the chat at https://gitter.im/Planimeter/grid-sdk](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Planimeter/grid-sdk?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+![Grid](/src/images/gui/logo.png?raw=true "Grid")  
+
+[![Join the chat at https://gitter.im/Planimeter/grid-sdk](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Planimeter/grid-sdk?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 The Grid engine is a 2D game engine built on LÖVE. It's inspired by Source, and
 subsequently, QuakeWorld. It's a small, but powerful engine that provides a
