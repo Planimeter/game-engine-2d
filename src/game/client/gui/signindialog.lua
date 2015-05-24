@@ -64,6 +64,9 @@ local function enableTextBoxes( self )
 	self.emailTextBox:setDisabled( false )
 end
 
+local _username = ""
+local _password = ""
+
 local function signin( self )
 	local username = self.usernameTextBox:getText()
 	local password = self.passwordTextBox:getPassword()
@@ -91,6 +94,8 @@ local function signin( self )
 			self:setLabel( "Welcome, " .. account:getUsername() )
 			self:close()
 
+			_username = username
+			_password = password
 			hook.call( "client", "onAxisSignin" )
 
 			return
@@ -108,16 +113,30 @@ local function signin( self )
 	end )
 end
 
-local function rememberMe()
+local axis_remember_password = convar( "axis_remember_password", "0", nil,
+                                       nil, "Remember Axis password." )
+
+local function rememberPassword()
+	if ( not axis_remember_password:getBoolean() ) then
+		return
+	end
+
+	local profile = _username .. "\r\n" ..
+	                _password .. "\r\n"
+	if ( filesystem.write( ".profile", profile ) ) then
+		print( "Saved password." )
+	else
+		print( "Failed to save password!" )
+	end
 end
 
-hook.set( "client", rememberMe, "onAxisSignin", "rememberMe" )
+hook.set( "client", rememberPassword, "onAxisSignin", "rememberPassword" )
 
 local function register( self )
-	local username			= self.usernameTextBox:getText()
-	local password			= self.passwordTextBox:getPassword()		or ""
+	local username          = self.usernameTextBox:getText()
+	local password          = self.passwordTextBox:getPassword()        or ""
 	local confirmedPassword = self.confirmPasswordTextBox:getPassword() or ""
-	local email				= self.emailTextBox:getText()
+	local email             = self.emailTextBox:getText()
 	if ( password == "" ) then
 		self:setLabel( "Please enter a password" )
 		return
@@ -166,9 +185,18 @@ local function signInOrRegister( self )
 	end
 end
 
+local function readPassword( self )
+	if ( not filesystem.exists( ".profile" ) ) then
+		return
+	end
 
-local axis_remember_password = convar( "axis_remember_password", "0", nil,
-                                       nil, "Save Axis credentials." )
+	local profile  = string.split( filesystem.read( ".profile" ) , "\r\n" )
+	local username = profile[ 1 ]
+	local password = profile[ 2 ]
+	self.usernameTextBox:setText( username )
+	self.passwordTextBox:setText( password )
+	self.usernameTextBox:onLostFocus()
+end
 
 function signindialog:signindialog( parent, name )
 	gui.frame.frame( self, parent, "Sign In Dialog", "" )
@@ -240,8 +268,8 @@ function signindialog:signindialog( parent, name )
 	self.passwordTextBox:setPos( margin, y )
 
 	self.confirmPasswordTextBox = gui.passwordtextbox( self,
-													   "Confirm Password Text Box",
-													   "Confirm Password" )
+	                                                   "Confirm Password Text Box",
+	                                                   "Confirm Password" )
 	self.confirmPasswordTextBox.onEnter = signInOrRegister
 	self.confirmPasswordTextBox:setPos( margin, y )
 	self.confirmPasswordTextBox:setVisible( false )
@@ -259,7 +287,15 @@ function signindialog:signindialog( parent, name )
 	self.rememberCheckbox.onCheckedChanged = function( checkbox, checked )
 		convar.setConvar( "axis_remember_password", checked and "1" or "0" )
 		convar.saveConfig()
+
+		if ( not checked ) then
+			if ( filesystem.remove( ".profile" ) ) then
+				print( "Removed Axis password." )
+			end
+		end
 	end
+
+	readPassword( self )
 end
 
 local function expand( self )
@@ -284,7 +320,11 @@ local function showRegistrationTextBoxes( self )
 	self.emailTextBox:setOpacity( 0 )
 	self.emailTextBox:animate( animation.slideDownEmailTextBox )
 	self.emailTextBox:setVisible( true )
-	self.rememberCheckbox:setVisible( false )
+
+	self.rememberCheckbox:animate( animation.fadeOut, nil, nil, function()
+		self.rememberCheckbox:setVisible( false )
+		self.rememberCheckbox:setOpacity( 0 )
+	end )
 
 	expand( self )
 end
@@ -322,6 +362,8 @@ local function hideRegistrationTextBoxes( self )
 		end
 	)
 
+	self.rememberCheckbox:setOpacity( 0 )
+	self.rememberCheckbox:animate( animation.fadeIn )
 	self.rememberCheckbox:setVisible( true )
 
 	collapse( self )

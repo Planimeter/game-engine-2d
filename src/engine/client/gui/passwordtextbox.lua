@@ -100,7 +100,11 @@ function passwordtextbox:setMultiline( multiline )
 end
 
 function passwordtextbox:setText( text )
-	gui.textbox.setText( self, text )
+	local buffer = {}
+	for i = 1, string.utf8len( text ) do
+		table.insert( buffer, "•" )
+	end
+	gui.textbox.setText( self, table.concat( buffer ) )
 	self.password = text
 end
 
