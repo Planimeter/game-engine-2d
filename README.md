@@ -13,6 +13,8 @@ by hand for your projects or game jams.
 Features
 ========
 
+[![Join the chat at https://gitter.im/Planimeter/grid-sdk](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Planimeter/grid-sdk?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 * Classes via [lclass](https://github.com/andrewmcwatters/lclass "lclass")
 * Client-server model
 * Common convenience classes
