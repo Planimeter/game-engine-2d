@@ -157,7 +157,9 @@ function regionlayer:parse()
 		if ( _SERVER ) then
 			require( "engine.shared.entities" )
 			local entities = entities.initialize( data[ "objects" ] )
-			self:getRegion():setEntities( entities )
+			for _, entity in ipairs( entities ) do
+				self:getRegion():addEntity( entity )
+			end
 		end
 	end
 

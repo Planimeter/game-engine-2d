@@ -164,10 +164,15 @@ function region.snapToGrid( x, y )
 end
 
 function region:region( name )
-	self.name = name
-	self.data = require( "regions." .. name )
+	self.name     = name
+	self.data     = require( "regions." .. name )
+	self.entities = {}
 
 	self:parse()
+end
+
+function region:addEntity( entity )
+	table.insert( self.entities, entity )
 end
 
 if ( _CLIENT ) then
@@ -304,10 +309,6 @@ function region:parse()
 	self:loadLayers( data[ "layers" ] )
 
 	self.data = nil
-end
-
-function region:setEntities( entities )
-	self.entities = entities
 end
 
 function region:setFormatVersion( formatVersion )

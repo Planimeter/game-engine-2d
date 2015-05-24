@@ -10,7 +10,7 @@ local _G        = _G
 module( "game.server" )
 
 function getSpawnPoint( player )
-	local class       = "info_worldgate_spawn"
+	local class       = "prop_worldgate_spawn"
 	local region      = player:getRegion()
 	local spawnPoints = _G.entity.findByClassname( class, region )
 	return spawnPoints and spawnPoints[ 1 ] or nil

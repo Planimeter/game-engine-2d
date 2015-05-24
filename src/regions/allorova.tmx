@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" backgroundcolor="#1f2324" nextobjectid="216">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" backgroundcolor="#1f2324" nextobjectid="222">
  <properties>
   <property name="regiontitle" value="Welcome to the quaint village of"/>
  </properties>
@@ -29,16 +29,6 @@
  <layer name="Detail Grass" width="100" height="100">
   <data encoding="base64" compression="zlib">
    eJzt2ItOwjAUANAmivLwp+Sh/v8XuYbdWEsREMYInJM0bmtDmra3tzUlAAAAAAAAAAAAAAAAAIDbNu/KYuxOPLh1Vzb93+eufHblq6ifjNGpBzXpy0v1PeLk6eo9uj+rtF3rx8rzkeMiYiI/f6TdOOF/pl2ZpZ81/pa245rfyzgo137dPiW55FIiH+Q13pqbPCeve+rKmBAj56vHuJybGNtl2u5py0bdsb+9qeqeL9P9u9Ma/zpft/am+J61cvi+vN46C/Bbax/K4xZjWs/XX/tXdsrZgF2H8kes6XIOVqkdW2W7EDHH6VpjnN8jh0R9LeeD96pdKf/WfJgu371WjMS3XMocUMdO65nztGJk1n+LHB4xUsdEPJdzeep9k7ZyTMu5ad37yraL5C4yhNa+tU6785HbleNvHobR2rdS/x6cm66rzM/+dzu+nJ9jz8rEw7jiXDU91JBBxb0i8ofz6rhij3J3uA0RFwAAAAAAAAAAAAAAAAAAAAA8tm+kaCJ/
-  </data>
- </layer>
- <layer name="World Gate" width="100" height="100">
-  <data encoding="base64" compression="zlib">
-   eJztzsERQFAQBcGfAOJCXIgLiXm1Oai9dFfNfcYAAAAAAAAAAAAAAAAAAAAA+M+U5rR0j1DWtKW9e4RypDNd3SOUOz3p7R4BAAAAAAAAAAAAAAAAAAAAAAAAAACg3Qc+AwTh
-  </data>
- </layer>
- <layer name="World Gate Detail" width="100" height="100">
-  <data encoding="base64" compression="zlib">
-   eJztzqEBADAIwDAEZvx/MAaxDxAkprYRAAAAAAAAAAAAAAAAAAAAAADk9K1e8KvtAQAAAAAAAAAAAAAAAAAAAAAAAAAA4KwGVtQAGA==
   </data>
  </layer>
  <objectgroup name="Trees">
@@ -74,8 +64,15 @@
   <object id="202" type="prop_tree" x="1504" y="1472" width="64" height="192"/>
   <object id="203" type="prop_tree" x="2144" y="1472" width="64" height="192"/>
   <object id="204" type="prop_tree" x="992" y="1664" width="64" height="192"/>
+  <object id="221" type="prop_chest" x="1760" y="1440" width="32" height="32"/>
  </objectgroup>
  <objectgroup name="Spawn Points">
-  <object id="148" name="Allorova World Gate" type="info_worldgate_spawn" x="1664" y="1344" width="32" height="96"/>
+  <object id="148" name="Allorova World Gate" type="prop_worldgate_spawn" x="1664" y="1344" width="32" height="96"/>
  </objectgroup>
+ <layer name="World Gate Detail" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJztzqEBADAIwDAEZvx/MAaxDxAkprYRAAAAAAAAAAAAAAAAAAAAAADk9K1e8KvtAQAAAAAAAAAAAAAAAAAAAAAAAAAA4KwGVtQAGA==
+  </data>
+ </layer>
+ <objectgroup name="Miscellaneous Prop"/>
 </map>

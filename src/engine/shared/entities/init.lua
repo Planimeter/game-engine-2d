@@ -137,7 +137,10 @@ end
 function shutdown()
 	_G.entity.removeAll()
 	_G.entity.lastEntIndex = 0
-	_G.player.lastPlayerId = 0
+
+	if ( _G.player ) then
+		_G.player.lastPlayerId = 0
+	end
 
 	for classname, module in pairs( classes ) do
 		unrequire( module )

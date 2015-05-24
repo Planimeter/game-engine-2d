@@ -92,7 +92,8 @@ if ( _AXIS ) then
 	if ( _SERVER ) then
 		function player:createInitialSave( region )
 			local spawnPoint = gameserver.getSpawnPoint( self )
-			local position   = spawnPoint:getPosition()
+			local position = spawnPoint:getPosition()
+			position = position + vector( 0, -_G.game.tileSize )
 			local save = {
 				region = region,
 				position = {
@@ -260,6 +261,15 @@ end
 
 concommand( "say", "Display player message",
 	function( self, player, command, argString, argTable )
+		-- process chat
+		if( _SERVER ) then
+			local payload = payload( "chat" )
+			payload:set( "entIndex", player.entIndex )
+			payload:set( "message", argString )
+
+			networkserver.broadcast( payload )
+		end
+
 		game.call( "shared", "onPlayerChat", player, argString )
 	end, { "network" }
 )
