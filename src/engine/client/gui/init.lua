@@ -124,7 +124,7 @@ function register( class, name, classname )
 end
 
 function scale( n )
-	return n * ( _G.graphics.getViewportWidth() / 1920 )
+	return n * ( _G.graphics.getViewportHeight() / 1080 )
 end
 
 function setFocusedPanel( panel, focus )

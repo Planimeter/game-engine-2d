@@ -190,8 +190,7 @@ end
 function console:invalidateLayout()
 	if ( not self:isResizing() ) then
 		local parent = self:getParent()
-		local scale  = parent:getHeight() / 1080
-		local margin = 36 * scale
+		local margin = gui.scale( 36 )
 		if ( not _INTERACTIVE ) then
 			self:setPos( parent:getWidth() - self:getWidth() - margin, margin )
 		else

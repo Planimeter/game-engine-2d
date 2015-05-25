@@ -22,7 +22,7 @@ function mainmenu:mainmenu()
 	self.logoSmall   = self:getScheme( "mainmenu.logoSmall" )
 
 	self.closeButton = gui.mainmenuclosebutton( self )
-	local margin     = 96 * ( self.height / 1080 )
+	local margin     = gui.scale( 96 )
 	self.closeButton:setPos( self.width - 32 - margin, margin )
 	self.closeButton.onClick = function()
 		self.closeDialog:activate()
@@ -172,7 +172,7 @@ if ( _AXIS ) then
 	function mainmenu:initAxisProfile()
 		self.axisProfile = gui.axisprofile( self )
 		local height     = graphics.getViewportHeight()
-		local margin     = 96 * ( height / 1080 )
+		local margin     = gui.scale( 96 )
 		local y          = height - self.axisProfile:getHeight() - margin
 		self.axisProfile:setPos( margin, y )
 		self.axisProfile:activate()
@@ -182,8 +182,7 @@ end
 function mainmenu:invalidateLayout()
 	self:setSize( graphics.getViewportWidth(), graphics.getViewportHeight() )
 
-	local scale  = self:getHeight() / 1080
-	local margin = 96 * scale
+	local margin = gui.scale( 96 )
 	local y      = margin
 	self.closeButton:setPos( self:getWidth() - 32 - margin, y )
 
@@ -213,9 +212,8 @@ end
 function mainmenu:invalidateButtons()
 	local logo      = self.logo
 	local height    = self:getHeight()
-	local scale     = height / 1080
 	local marginPhi = height - height / math.phi
-	local marginX   = math.round( 96 * scale )
+	local marginX   = math.round( gui.scale( 96 ) )
 	local marginY   = math.round( marginX * ( 2 / 3 ) )
 
 	if ( height <= 720 ) then
@@ -243,7 +241,7 @@ function mainmenu:drawLogo()
 	local logo      = self.logo
 	local height    = self:getHeight()
 	local scale     = height / 1080
-	local marginX   = math.round( 96 * scale )
+	local marginX   = math.round( gui.scale( 96 ) )
 	local marginPhi = math.round( height - height / math.phi )
 
 	if ( height <= 720 ) then

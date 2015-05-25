@@ -60,8 +60,7 @@ end
 
 function hudchat:invalidateLayout()
 	local parent = self:getParent()
-	local scale  = parent:getHeight() / 1080
-	self:setPos( 0, 494 * scale )
+	self:setPos( 0, gui.scale( 494 ) )
 
 	self.output:setPos( 36, 36 )
 	self.output:setWidth( self:getWidth() - 2 * 36 )
