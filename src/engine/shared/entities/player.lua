@@ -264,7 +264,7 @@ concommand( "say", "Display player message",
 		-- process chat
 		if( _SERVER ) then
 			local payload = payload( "chat" )
-			payload:set( "entIndex", player.entIndex )
+			payload:set( "entIndex", player and player.entIndex or 0 )
 			payload:set( "message", argString )
 
 			networkserver.broadcast( payload )

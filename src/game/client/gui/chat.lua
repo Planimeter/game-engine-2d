@@ -16,6 +16,7 @@ function onChatReceived( payload )
 	--require( "engine.shared.entities.entity" )
 
 	local ply = entity.getByEntIndex( entIndex )
+	local name = ply and ply:getName() or 'Unknown'
 
 	sendChat( ply:getName() .. ": " .. message )
 end
