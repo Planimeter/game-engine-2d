@@ -280,6 +280,10 @@ function update( dt )
 	if ( _G._DEBUG ) then
 		if ( _G._DEDICATED or not client.hasFocus() ) then
 			package.update( dt )
+
+			if ( _CLIENT ) then
+				_G.image.update( dt )
+			end
 		end
 	end
 
