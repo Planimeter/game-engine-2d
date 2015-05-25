@@ -81,7 +81,7 @@ function onConnect( event )
 		local spawnpoint = _G.gameserver.getSpawnPoint( player )
 		if ( spawnpoint ) then
 			local position = spawnpoint:getNetworkVar( "position" )
-			position = position + vector( 0, -_G.game.tileSize )
+			position = position + _G.vector( 0, -_G.game.tileSize )
 			player:setNetworkVar( "position", position )
 		end
 
