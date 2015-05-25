@@ -18,7 +18,7 @@ function onChatReceived( payload )
 	local ply = entity.getByEntIndex( entIndex )
 	local name = ply and ply:getName() or 'Unknown'
 
-	sendChat( ply:getName() .. ": " .. message )
+	sendChat( name .. ": " .. message )
 end
 
 payload.setHandler( onChatReceived, "chat" )
