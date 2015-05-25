@@ -1,17 +1,16 @@
 ![Grid](/src/images/gui/logo.png?raw=true "Grid")  
 
-[![Join the chat at https://gitter.im/Planimeter/grid-sdk](https://img.shields.io/badge/gitter-join%20chat-brightgreen.svg)](https://gitter.im/Planimeter/grid-sdk?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![GitHub issues](https://img.shields.io/github/issues/Planimeter/grid-sdk.svg)](https://github.com/Planimeter/grid-sdk/issues)
 [![GitHub forks](https://img.shields.io/github/forks/Planimeter/grid-sdk.svg)](https://github.com/Planimeter/grid-sdk/network)
 [![GitHub stars](https://img.shields.io/github/stars/Planimeter/grid-sdk.svg)](https://github.com/Planimeter/grid-sdk/stargazers)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/Planimeter/grid-sdk/master/LICENSE)
+[![Join the chat at https://gitter.im/Planimeter/grid-sdk](https://img.shields.io/badge/gitter-join%20chat-brightgreen.svg)](https://gitter.im/Planimeter/grid-sdk?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Development Supercollective, Excellence by Design.](https://img.shields.io/badge/Made%20with%20L%C3%96VE%20by-Planimeter-red.svg)](http://www.andrewmcwatters.com/planimeter/)
 
 The Grid engine is a 2D game engine built on LÖVE. It's inspired by Source, and
 subsequently, QuakeWorld. It's a small, but powerful engine that provides a
 significant amount of subsystems to you that you would otherwise need to write
 by hand for your projects or game jams.
-
-*Built by [Planimeter](http://www.andrewmcwatters.com/planimeter/)*
 
 [Tutorials and API Documentation](http://www.andrewmcwatters.com/grid/)  
 [Tutorials and API Documentation Source](https://github.com/Planimeter/grid)
