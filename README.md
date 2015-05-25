@@ -1,4 +1,4 @@
-![Grid](/src/images/gui/logo.png?raw=true "Grid")  
+# ![Grid](/src/images/gui/logo.png?raw=true "Grid")  
 
 [![GitHub issues](https://img.shields.io/github/issues/Planimeter/grid-sdk.svg)](https://github.com/Planimeter/grid-sdk/issues)
 [![GitHub forks](https://img.shields.io/github/forks/Planimeter/grid-sdk.svg)](https://github.com/Planimeter/grid-sdk/network)
