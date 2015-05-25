@@ -200,7 +200,7 @@ function console:invalidateLayout()
 	end
 
 	self.output:setPos( 36, 87 )
-	self.input:setWidth( self:getWidth() - 2 * 36 )
+	self.output:setWidth( self:getWidth() - 2 * 36 )
 	self.input:setPos( 36, self:getHeight() - self.input:getHeight() - 36 )
 	self.input:setWidth( self:getWidth() - 2 * 36 )
 	gui.frame.invalidateLayout( self )

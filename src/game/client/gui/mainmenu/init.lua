@@ -41,15 +41,15 @@ function mainmenu:mainmenu()
 	end
 end
 
-local MAINMENU_ANIM_TIME = 0.6
+local MAINMENU_ANIM_TIME = 0.2
 
 function mainmenu:activate()
 	if ( not self:isVisible() ) then
 		self:setOpacity( 0 )
 		self:animate( {
-			opacity = 1,
-			-- y    = 0
-			scale   = 1
+			opacity  = 1
+			-- y     = 0
+			-- scale = 1
 		}, MAINMENU_ANIM_TIME, "easeOutQuint" )
 	end
 
@@ -72,9 +72,9 @@ function mainmenu:close()
 	self.closing = true
 
 	self:animate( {
-		opacity = 0,
-		-- y    = graphics.getViewportHeight()
-		scale   = 0
+		opacity  = 0
+		-- y     = graphics.getViewportHeight()
+		-- scale = 0
 	}, MAINMENU_ANIM_TIME, "easeOutQuint", function()
 		self:setVisible( false )
 		self:setOpacity( 1 )

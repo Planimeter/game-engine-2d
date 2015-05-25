@@ -195,6 +195,8 @@ local function readPassword( self )
 	local password = profile[ 2 ]
 	self.usernameTextBox:setText( username )
 	self.passwordTextBox:setText( password )
+
+	-- Andrew; Force dialog to update.
 	self.usernameTextBox:onLostFocus()
 end
 

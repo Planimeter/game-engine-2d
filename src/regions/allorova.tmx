@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" backgroundcolor="#1f2324" nextobjectid="222">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" backgroundcolor="#1f2324" nextobjectid="268">
  <properties>
   <property name="regiontitle" value="Welcome to the quaint village of"/>
  </properties>
@@ -18,7 +18,7 @@
  </layer>
  <layer name="Barren Grass" width="100" height="100">
   <data encoding="base64" compression="zlib">
-   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
+   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
   </data>
  </layer>
  <layer name="Barren Grass-Dirt Transition" width="100" height="100">
@@ -28,7 +28,7 @@
  </layer>
  <layer name="Detail Grass" width="100" height="100">
   <data encoding="base64" compression="zlib">
-   eJzt2ItOwjAUANAmivLwp+Sh/v8XuYbdWEsREMYInJM0bmtDmra3tzUlAAAAAAAAAAAAAAAAAIDbNu/KYuxOPLh1Vzb93+eufHblq6ifjNGpBzXpy0v1PeLk6eo9uj+rtF3rx8rzkeMiYiI/f6TdOOF/pl2ZpZ81/pa245rfyzgo137dPiW55FIiH+Q13pqbPCeve+rKmBAj56vHuJybGNtl2u5py0bdsb+9qeqeL9P9u9Ma/zpft/am+J61cvi+vN46C/Bbax/K4xZjWs/XX/tXdsrZgF2H8kes6XIOVqkdW2W7EDHH6VpjnN8jh0R9LeeD96pdKf/WfJgu371WjMS3XMocUMdO65nztGJk1n+LHB4xUsdEPJdzeep9k7ZyTMu5ad37yraL5C4yhNa+tU6785HbleNvHobR2rdS/x6cm66rzM/+dzu+nJ9jz8rEw7jiXDU91JBBxb0i8ofz6rhij3J3uA0RFwAAAAAAAAAAAAAAAAAAAAA8tm+kaCJ/
+   eJztmglu4zAMRQk03edSad3l/icaCxMifxjKS60sdt8DhFheZJsUNzlmAAAAAAAAAAAAAAAAAAAAAAAAAAAAy3np22vf/lz7QTbIsx3lW+O+bw99ezyc/9m3r759y/Xo6Dxk+lF9fNhRH530VUfQjif7Xydlvu/79ta398px1RcsI9pDmfMq3+/QV334ftWXGb5rDtm81n1F5i7fmg24jyrnqT79F981HZWVy1j3lTn+eDim+11HU+I/zENlGu3A/c7eTud/QeN5a8459i2j7723PH91/WT+yKytnUzRw5Z1lcWNLJ9V/x/lcQn5ZPreol48Fqjcp8SGS8QOr2nK785O58W9bSt/U5k+hL7PvSj3Vu8/Nrfv7Wi7it//7tDfUv6mMnmzafZfiy9TKLlBN+P5ij52dpT1zqbJP6tT10KUqfZVzv6OmQ1N9d+ZnL4PfbWDO9nO5Do0B/Tcz3DPW0fftcg0i+NOZ6fxfa596BiZbrK634+pTdRs5GXg2K1T3jfmurrOka1D1XLfKUQZZ/r1+0ffOSZbHzs7fzfx+a5NtAGXT/RJ73KNvm9WhwyRyT/G65rPfz78qh+zgX2WjL1GshgxxFIb8bUwl2nU15D/KszJDW6VIRl2Nl0fP8lh3Eb0mto6pY//brlt6XmO29xaibmS92s6qfn/uXaictXtMp7HEB8/UuLBPpynfNk6cqkhYiyJ+miZw6s9ZDamPlNjQLSdbHuL6BqF2syrneqotr44hNpDLYf2+5odbSTahG+rLufWm7dMlHumj6FrlqxjxRou5nC1c+P3rjXW42PMrfuG6vupZH6rS8Z5Cs8Va4211oJDxBiv+7VFP7VkrTebA3boO2vOm5aS6STO4bjWsnROanyu1Xi/mey/JjqHW3//0G8uW4wDS8jqDP9VObVc1/a8KsaIjC1+F8wYqwGjnGp+fw5eV/g4Y/nqWtbOL4XWzS18lo/htQO+6h+1eNFZ7r9q12ZrHEO4XThbzFlbEvW05m+hW2QsZvCfxcugfkq3a7X1XL9V47fkUi3oLLeXlvpwyKtyhtZT8FOXp5aHRc5hI/AzxvJjOB8ub19LqdWL5MaXQWN69r0kHmsF8f1ILXZnvgl/dV3mfueFNozJNNNL61oRplOrFeH64J9uF3QDAAAAAAAAAAAAAAAAAAAAAAAAAABb5C+rp3Zw
   </data>
  </layer>
  <objectgroup name="Trees">
@@ -65,6 +65,52 @@
   <object id="203" type="prop_tree" x="2144" y="1472" width="64" height="192"/>
   <object id="204" type="prop_tree" x="992" y="1664" width="64" height="192"/>
   <object id="221" type="prop_chest" x="1760" y="1440" width="32" height="32"/>
+  <object id="222" type="prop_tree" x="352" y="992" width="64" height="192"/>
+  <object id="223" type="prop_tree" x="384" y="1056" width="64" height="192"/>
+  <object id="224" type="prop_tree" x="768" y="960" width="64" height="192"/>
+  <object id="225" type="prop_tree" x="768" y="1376" width="64" height="192"/>
+  <object id="226" type="prop_tree" x="576" y="1216" width="64" height="192"/>
+  <object id="227" type="prop_tree" x="480" y="896" width="64" height="192"/>
+  <object id="228" type="prop_tree" x="864" y="864" width="64" height="192"/>
+  <object id="229" type="prop_tree" x="576" y="896" width="64" height="192"/>
+  <object id="230" type="prop_tree" x="416" y="1248" width="64" height="192"/>
+  <object id="231" type="prop_tree" x="480" y="1344" width="64" height="192"/>
+  <object id="232" type="prop_tree" x="160" y="1312" width="64" height="192"/>
+  <object id="233" type="prop_tree" x="96" y="1664" width="64" height="192"/>
+  <object id="234" type="prop_tree" x="192" y="1504" width="64" height="192"/>
+  <object id="235" type="prop_tree" x="512" y="1504" width="64" height="192"/>
+  <object id="236" type="prop_tree" x="640" y="1344" width="64" height="192"/>
+  <object id="237" type="prop_tree" x="896" y="1376" width="64" height="192"/>
+  <object id="238" type="prop_tree" x="800" y="1472" width="64" height="192"/>
+  <object id="239" type="prop_tree" x="672" y="1568" width="64" height="192"/>
+  <object id="240" type="prop_tree" x="768" y="1664" width="64" height="192"/>
+  <object id="241" type="prop_tree" x="928" y="1600" width="64" height="192"/>
+  <object id="242" type="prop_tree" x="640" y="1728" width="64" height="192"/>
+  <object id="243" type="prop_tree" x="608" y="1600" width="64" height="192"/>
+  <object id="244" type="prop_tree" x="896" y="1792" width="64" height="192"/>
+  <object id="245" type="prop_tree" x="800" y="1024" width="64" height="192"/>
+  <object id="246" type="prop_tree" x="512" y="960" width="64" height="192"/>
+  <object id="247" type="prop_tree" x="672" y="960" width="64" height="192"/>
+  <object id="248" type="prop_tree" x="608" y="1120" width="64" height="192"/>
+  <object id="249" type="prop_tree" x="704" y="1120" width="64" height="192"/>
+  <object id="250" type="prop_tree" x="480" y="1056" width="64" height="192"/>
+  <object id="251" type="prop_tree" x="1024" y="928" width="64" height="192"/>
+  <object id="252" type="prop_tree" x="928" y="992" width="64" height="192"/>
+  <object id="253" type="prop_tree" x="832" y="1120" width="64" height="192"/>
+  <object id="254" type="prop_tree" x="640" y="736" width="64" height="192"/>
+  <object id="255" type="prop_tree" x="768" y="704" width="64" height="192"/>
+  <object id="256" type="prop_tree" x="992" y="704" width="64" height="192"/>
+  <object id="257" type="prop_tree" x="1024" y="1504" width="64" height="192"/>
+  <object id="258" type="prop_tree" x="992" y="1920" width="64" height="192"/>
+  <object id="259" type="prop_tree" x="800" y="1920" width="64" height="192"/>
+  <object id="260" type="prop_tree" x="960" y="2016" width="64" height="192"/>
+  <object id="261" type="prop_tree" x="1216" y="1920" width="64" height="192"/>
+  <object id="262" type="prop_tree" x="1184" y="2016" width="64" height="192"/>
+  <object id="263" type="prop_tree" x="1120" y="2208" width="64" height="192"/>
+  <object id="264" type="prop_tree" x="1088" y="2048" width="64" height="192"/>
+  <object id="265" type="prop_tree" x="832" y="2176" width="64" height="192"/>
+  <object id="266" type="prop_tree" x="576" y="1920" width="64" height="192"/>
+  <object id="267" type="prop_tree" x="544" y="1984" width="64" height="192"/>
  </objectgroup>
  <objectgroup name="Spawn Points">
   <object id="148" name="Allorova World Gate" type="prop_worldgate_spawn" x="1664" y="1344" width="32" height="96"/>

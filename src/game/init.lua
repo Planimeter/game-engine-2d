@@ -46,6 +46,7 @@ function getStartingRegion()
 end
 
 function onPlayerChat( player, message )
+	return true
 end
 
 function onPlayerConnect( player )

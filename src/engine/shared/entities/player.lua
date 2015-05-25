@@ -261,16 +261,17 @@ end
 
 concommand( "say", "Display player message",
 	function( self, player, command, argString, argTable )
-		-- process chat
+		if ( not game.call( "shared", "onPlayerChat", player, argString ) ) then
+			return
+		end
+
 		if( _SERVER ) then
 			local payload = payload( "chat" )
-			payload:set( "entIndex", player and player.entIndex or 0 )
+			payload:set( "entIndex", player.entIndex )
 			payload:set( "message", argString )
 
 			networkserver.broadcast( payload )
 		end
-
-		game.call( "shared", "onPlayerChat", player, argString )
 	end, { "network" }
 )
 
