@@ -41,7 +41,7 @@ end
 function onAxisSignin()
 end
 
-function onImageReload( filename )
+function onReloadImage( filename )
 end
 
 function onMainMenuActivate()

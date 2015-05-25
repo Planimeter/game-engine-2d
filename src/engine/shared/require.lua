@@ -40,10 +40,10 @@ function package.update( dt )
 				package.watched[ modname ] = filesystem.getLastModified( filename )
 			else
 				if ( game ) then
-					game.call( "shared", "onScriptReload", modname )
+					game.call( "shared", "onReloadScript", modname )
 				else
 					require( "engine.shared.hook" )
-					hook.call( "shared", "onScriptReload", modname )
+					hook.call( "shared", "onReloadScript", modname )
 				end
 			end
 		end

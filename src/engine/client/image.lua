@@ -30,10 +30,10 @@ function image.update( dt )
 				i.image = ret
 
 				if ( game ) then
-					game.call( "client", "onImageReload", filename )
+					game.call( "client", "onReloadImage", filename )
 				else
 					require( "engine.shared.hook" )
-					hook.call( "client", "onImageReload", filename )
+					hook.call( "client", "onReloadImage", filename )
 				end
 			end
 		end

@@ -64,7 +64,7 @@ end
 function onPlayerSpawn( player )
 end
 
-function onScriptReload( modname )
+function onReloadScript( modname )
 end
 
 function usesAxisSavedGames()
