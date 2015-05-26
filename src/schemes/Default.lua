@@ -240,11 +240,11 @@ default.bindlistheader      = {
     borderColor             = color(  15,  15,  15,        255 ),
 }
 
-default.mainmenuFont        = graphics.newFont( "fonts/SourceSansPro-Regular.otf", 24 )
-default.titleFont           = graphics.newFont( "fonts/SourceSansPro-Bold.otf", 18 )
-default.font                = graphics.newFont( "fonts/SourceSansPro-Regular.otf", 14 )
+default.mainmenuFont        = graphics.newFont( "fonts/Mark Simonson - Proxima Nova Regular.otf", 24 )
+default.titleFont           = graphics.newFont( "fonts/Mark Simonson - Proxima Nova Bold.otf", 18 )
+default.font                = graphics.newFont( "fonts/Mark Simonson - Proxima Nova Regular.otf", 14 )
 default.consoleFont         = graphics.newFont( "fonts/SourceCodePro-Light.otf", 12 )
 
 if ( _AXIS ) then
-default.axisUsernameFont    = graphics.newFont( "fonts/SourceSansPro-Light.otf", 18 )
+default.axisUsernameFont    = graphics.newFont( "fonts/Mark Simonson - Proxima Nova Light.otf", 18 )
 end

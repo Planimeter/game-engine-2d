@@ -115,7 +115,7 @@ function player:getName()
 		return self.account:getUsername()
 	end
 
-	return self:getNetworkVar( "name" )
+	return entity.getName( self ) or "Unnamed"
 end
 
 function player:getRegion()
@@ -333,7 +333,7 @@ function player:update( dt )
 end
 
 function player:__tostring()
-	return "player: " .. ( self:getName() or "Unnamed" )
+	return "player: " .. self:getName()
 end
 
 -- Preserve the player interface

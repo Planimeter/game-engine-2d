@@ -151,6 +151,10 @@ if ( _CLIENT ) then
 	end
 end
 
+function entity:getName()
+	return self:getNetworkVar( "name" )
+end
+
 function entity:getPosition()
 	return self:getNetworkVar( "position" )
 end
@@ -301,6 +305,10 @@ if ( _CLIENT ) then
 	function entity:setLocalPosition( position )
 		self.localPosition = position
 	end
+end
+
+function entity:setName( name )
+	self:setNetworkVar( "name", name )
 end
 
 function entity:setPosition( position )
