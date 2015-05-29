@@ -12,6 +12,11 @@ subsequently, QuakeWorld. It's a small, but powerful engine that provides a
 significant amount of subsystems to you that you would otherwise need to write
 by hand for your projects or game jams.
 
+Create a Project
+================
+
+[Getting Started](http://www.andrewmcwatters.com/grid/tutorials/Getting_Started)
+
 [Tutorials and API Documentation](http://www.andrewmcwatters.com/grid/)  
 [Tutorials and API Documentation Source](https://github.com/Planimeter/grid)
 
