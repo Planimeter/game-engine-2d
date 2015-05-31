@@ -8,18 +8,20 @@ require( "common.color" )
 
 local _INTERACTIVE = _INTERACTIVE
 
-local class    = class
-local color    = color
-local graphics = love.graphics
-local ipairs   = ipairs
-local math     = math
-local os       = os
-local require  = require
-local string   = string
-local table    = table
-local unpack   = unpack
-local window   = love.window
-local _G       = _G
+local class      = class
+local color      = color
+local concommand = concommand
+local filesystem = filesystem
+local graphics   = love.graphics
+local ipairs     = ipairs
+local math       = math
+local os         = os
+local require    = require
+local string     = string
+local table      = table
+local unpack     = unpack
+local window     = love.window
+local _G         = _G
 
 local r_window_width      = convar( "r_window_width", 800, 800, nil,
                                     "Sets the width of the window on load" )
@@ -56,10 +58,16 @@ shim  = nil
 error = nil
 
 function initialize()
+	-- Set defaults
 	setBackgroundColor( grid.dark.backgroundColor )
+	graphics.setLineStyle( "rough" )
+
+	-- Set shim
 	if ( not graphics.isSupported( "canvas" ) ) then
 		shim = newImage( "images/shim.png" )
 	end
+
+	-- Set error
 	error = newImage( "images/error.png" )
 	error:setWrap( "repeat", "repeat" )
 end
@@ -282,12 +290,6 @@ function push()
 end
 
 function rectangle( mode, x, y, width, height )
-	-- HACKHACK: There's something wrong with line drawing in interactive mode!!
-	if ( _INTERACTIVE ) then
-		graphics.rectangle( mode, x, y, width, height )
-		return
-	end
-
 	if ( mode == "line" ) then
 		line( x,               y,
 		      x + width - 0.5, y,
@@ -302,6 +304,14 @@ end
 function scale( sx, sy )
 	graphics.scale( sx, sy )
 end
+
+concommand( "screenshot", "Take a screenshot.", function()
+	filesystem.createDirectory( "screenshots" )
+	local screenshot = graphics.newScreenshot( true )
+	local filename   = os.time() .. ".png"
+	screenshot:encode( "screenshots/" .. filename )
+	_G.print( "Wrote 'screenshots/" .. filename .. "'" )
+end )
 
 local tempColor = color()
 

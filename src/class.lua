@@ -44,7 +44,18 @@ local eventnames = {
 -------------------------------------------------------------------------------
 local function metamethod( class, eventname )
 	return function( ... )
-		local event = class.__base[ eventname ]
+		local event = nil
+		local base = nil
+		if ( class.__base ) then
+			base = getbaseclass( class )
+			while ( base ~= nil ) do
+				if ( base[ eventname ] ) then
+					event = base[ eventname ]
+					break
+				end
+				base = getbaseclass( base )
+			end
+		end
 		local type = type( event )
 		if ( type ~= "function" ) then
 			error( "attempt to call metamethod '" .. eventname .. "' " ..
