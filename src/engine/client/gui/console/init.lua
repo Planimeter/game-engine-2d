@@ -72,7 +72,7 @@ local function doCommand( self, input )
 	local argString = string.trim( string.utf8sub( input, endPos + 1 ) )
 	local argTable  = parseArgs( argString )
 	if ( concommand.getConcommand( command ) ) then
-		concommand.dispatch( nil, command, argString, argTable )
+		concommand.dispatch( localplayer, command, argString, argTable )
 	elseif ( convar.getConvar( command ) ) then
 		if ( argString ~= "" ) then
 			if ( string.utf8sub( argString, 1, 1 )   == "\"" and

@@ -6,17 +6,6 @@
 
 class "hudchat" ( gui.frame )
 
-function sendChat( ... )
-	local args = { ... }
-	for i = 1, select( "#", ... ) do
-		args[ i ] = tostring( args[ i ] )
-	end
-
-	if ( _CLIENT ) then
-		_G.g_Chat.output:insertText( table.concat( args, "\t" ) .. "\n" )
-	end
-end
-
 function hudchat:hudchat( parent )
 	local name = "Chat"
 	gui.frame.frame( self, parent, "Chat" )
@@ -83,8 +72,13 @@ end )
 function onChatReceived( payload )
 	local entIndex = payload:get( "entIndex" )
 	local message  = payload:get( "message" )
-	local entity   = entity.getByEntIndex( entIndex )
-	sendChat( entity:getName() .. ": " .. message )
+	require( "engine.client.chat" )
+	if ( entIndex > 0 ) then
+		local entity = entity.getByEntIndex( entIndex )
+		chat.addText( entity:getName() .. ": " .. message )
+	else
+		chat.addText( "SERVER: " .. message )
+	end
 end
 
 payload.setHandler( onChatReceived, "chat" )
