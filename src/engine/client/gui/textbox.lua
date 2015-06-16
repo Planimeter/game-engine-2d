@@ -126,6 +126,7 @@ function textbox:drawSelection()
 		local font = self:getScheme( "font" )
 		if ( wCache[1] ~= self.selectSize ) then
 			wCache[3] = getTextX( self ) + font:getWidth( utf8sub( self.text, 1, self.selectIndex - 1 ) )
+			self.cursorPos = ( ( self.selectIndex + self.selectSize ) -1 )
 
 			if ( self.selectSize < abs( self.selectSize - 1 ) ) then
 				self.selectText = utf8sub ( self.text, self.selectSize + self.selectIndex, self.selectIndex - 1 )
@@ -157,7 +158,8 @@ function textbox:updateSelection()
 		local font = self:getScheme ( "font" )
 
 		if ( x <= 0 ) then
-			self.selectSize = -clamp(self.selectIndex, -1, utf8len( self.text ))
+			if( self.selectIndex==1 ) then self.selectSize = 0 return end
+			self.selectSize = -clamp(self.selectIndex, 0, utf8len( self.text ))
 		elseif( x >= getTextWidth ( self ) ) then
 			self.selectSize = clamp( abs( utf8len( self.text ) - self.selectIndex+1 ), 0, utf8len( self.text ))
 
@@ -812,7 +814,8 @@ function textbox:onClick( x, y )
 		local font = self:getScheme( "font" )
 		if ( x <= 0 ) then
 			self.cursorPos = 0
-			self.selectIndex = 0
+			self.selectIndex = 1
+			self.selectSize = 0
 		elseif ( x >= getTextWidth( self ) ) then
 			local pos = utf8len( self.text )
 			self.selectIndex = pos+1
