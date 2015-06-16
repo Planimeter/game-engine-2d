@@ -54,26 +54,35 @@ if ( _CLIENT ) then
 		append( renderables, camera.getWorldContexts() )
 		depthSort( renderables )
 
+		for _, v in ipairs( renderables ) do
+			graphics.push()
+				local x, y = v:getDrawPosition()
+				graphics.translate( camera.worldToScreen( x, y ) )
+
+				-- Draw shadow
+				local isEntity = typeof( v, "entity" )
+				if ( isEntity ) then
+					graphics.push()
+						graphics.setOpacity( 0.14 )
+						graphics.setColor( color.black )
+
+						local sprite = v:getSprite()
+						local height = sprite:getHeight()
+						graphics.translate( -height, 0 )
+							v:drawShadow()
+						graphics.setOpacity( 1 )
+					graphics.pop()
+				end
+			graphics.pop()
+		end
+
 		-- TODO: Only draw renderables in viewport.
 		for _, v in ipairs( renderables ) do
 			graphics.push()
-				local position = v:getPosition()
-				local x = position.x
-				local y = position.y
-
-				if ( typeof( v, "entity" ) ) then
-					local sprite = v:getSprite()
-					local height = sprite:getHeight()
-					y = y - height
-
-					local localPosition = v:getLocalPosition()
-					if ( localPosition ) then
-						x = x + localPosition.x
-						y = y + localPosition.y
-					end
-				end
-
+				local x, y = v:getDrawPosition()
 				graphics.translate( camera.worldToScreen( x, y ) )
+
+				-- Draw entity
 				graphics.setColor( color.white )
 				v:draw()
 			graphics.pop()
@@ -146,6 +155,24 @@ function entity:getCollisionBounds()
 end
 
 if ( _CLIENT ) then
+	function entity:getDrawPosition()
+		local position = self:getPosition()
+		local x = position.x
+		local y = position.y
+
+		local sprite = self:getSprite()
+		local height = sprite:getHeight()
+		y = y - height
+
+		local localPosition = self:getLocalPosition()
+		if ( localPosition ) then
+			x = x + localPosition.x
+			y = y + localPosition.y
+		end
+
+		return x, y
+	end
+
 	function entity:getLocalPosition()
 		return self.localPosition
 	end
@@ -167,6 +194,12 @@ if ( _CLIENT ) then
 	function entity:draw()
 		local sprite = self:getSprite()
 		graphics.draw( sprite:getDrawable() )
+	end
+
+	function entity:drawShadow()
+		local sprite = self:getSprite()
+		local scale  = 1
+		graphics.draw( sprite:getDrawable(), 0, 0, 0, 1, scale, 0, 0, scale )
 	end
 end
 
