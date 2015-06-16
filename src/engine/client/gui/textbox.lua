@@ -151,7 +151,7 @@ local utf8len = string.utf8len
 
 
 function textbox:updateSelection()
-	if( self.selectIndex ~= -1 ) then 
+	if( self.selectIndex ~= -1) then 
 		local mouseX, mouseY = getMousePosition()
 		x,y = self:screenToLocal( mouseX, mouseY )
 		x = x - getTextX(self)
@@ -648,8 +648,7 @@ function textbox:keypressed( key, isrepeat )
 		end
 	elseif ( key == "right" ) then
 		if ( not controlDown ) then
-			if ( shiftDown ) then		
-			_G.print(self.selectSize)		
+			if ( shiftDown ) then			
 				if ( ( self.selectIndex ) == 0 ) then	
 					self.selectIndex = self.cursorPos+1
 					self.selectSize = 1
