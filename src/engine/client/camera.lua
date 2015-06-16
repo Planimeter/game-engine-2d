@@ -8,7 +8,7 @@ require( "common.vector" )
 
 -- These values are preserved during real-time scripting.
 local contexts = camera and camera.getWorldContexts() or {}
-local entity   = camera and camera.getEntity()
+local entity   = camera and camera.getParentEntity()
 local position = camera and camera.getPosition() or vector()
 
 local class    = class
@@ -26,6 +26,11 @@ class( "context" )
 function context:context( x, y, func )
 	self.position  = vector( x, y )
 	self._drawFunc = func
+end
+
+function context:getDrawPosition()
+	local position = self.position
+	return position.x, position.y
 end
 
 function context:getPosition()

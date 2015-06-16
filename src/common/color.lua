@@ -33,3 +33,4 @@ end
 
 color.red   = color( 255,   0,   0, 255 )
 color.white = color( 255, 255, 255, 255 )
+color.black = color(   0,   0,   0, 255 )

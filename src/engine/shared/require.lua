@@ -6,50 +6,44 @@
 
 require( "engine.shared.filesystem" )
 
-local error      = error
-local filesystem = filesystem
-local ipairs     = ipairs
-local pairs      = pairs
-local pcall      = pcall
--- local print   = print
-local string     = string
-local table      = table
-local _require   = require
+local error        = error
+local filesystem   = filesystem
+local ipairs       = ipairs
+local pairs        = pairs
+local pcall        = pcall
+-- local print     = print
+local string       = string
+local table        = table
+local _require     = require
 
-package.watched  = package.watched or {}
+package.watched    = package.watched or {}
 
-local library  = nil
-local filename = nil
-local modtime  = nil
-local errormsg = nil
+local filename     = nil
+local lastModified = nil
+local errormsg     = nil
 
 function package.update( dt )
-	for i = #package.watched, 1, -1 do
-		library	 = package.watched[ i ]
-		filename = string.gsub( library.name, "%.", "/" ) .. ".lua"
-
+	for modname, modtime in pairs( package.watched ) do
+		filename = string.gsub( modname, "%.", "/" ) .. ".lua"
 		if ( not filesystem.exists( filename ) ) then
-			filename = string.gsub( library.name, "%.", "/" ) .. "/init.lua"
+			filename = string.gsub( modname, "%.", "/" ) .. "/init.lua"
 		end
 
-		modtime, errormsg = filesystem.getLastModified( filename )
-		if ( errormsg == nil and modtime ~= library.modtime ) then
-			package.loaded[ library.name ] = nil
-			table.remove( package.watched, i )
-			print( "Reloading " .. library.name .. "..." )
-			local status, err = pcall( require, library.name )
+		lastModified, errormsg = filesystem.getLastModified( filename )
+		if ( errormsg == nil and lastModified ~= modtime ) then
+			package.loaded[ modname ]  = nil
+			package.watched[ modname ] = nil
+			print( "Reloading " .. modname .. "..." )
+			local status, err = pcall( require, modname )
 			if ( status == false ) then
 				print( err )
-				table.insert( package.watched, {
-					name    = library.name,
-					modtime = filesystem.getLastModified( filename )
-				} )
+				package.watched[ modname ] = filesystem.getLastModified( filename )
 			else
 				if ( game ) then
-					game.call( "shared", "onReload", library.name )
+					game.call( "shared", "onReloadScript", modname )
 				else
 					require( "engine.shared.hook" )
-					hook.call( "shared", "onReload", library.name )
+					hook.call( "shared", "onReloadScript", modname )
 				end
 			end
 		end
@@ -57,10 +51,8 @@ function package.update( dt )
 end
 
 function require( modname )
-	for i, v in ipairs( package.watched ) do
-		if ( v.name == modname ) then
-			return _require( modname )
-		end
+	if ( package.watched[ modname ] ) then
+		return _require( modname )
 	end
 
 	local status, ret = pcall( _require, modname )
@@ -70,10 +62,7 @@ function require( modname )
 			filename = string.gsub( modname, "%.", "/" ) .. "/init.lua"
 		end
 
-		table.insert( package.watched, {
-			name    = modname,
-			modtime = filesystem.getLastModified( filename )
-		} )
+		package.watched[ modname ] = filesystem.getLastModified( filename )
 		-- print( "Loading " .. modname .. "..." )
 	else
 		error( ret, 2 )
@@ -83,12 +72,11 @@ function require( modname )
 end
 
 function unrequire( modname )
-	for i = #package.watched, 1, -1 do
-		local t = package.watched[ i ]
-		if ( t.name == modname ) then
-			package.loaded[ t.name ] = nil
-			table.remove( package.watched, i )
-			print( "Unloading " .. t.name .. "..." )
-		end
+	if ( not package.watched[ modname ] ) then
+		return
 	end
+
+	package.loaded[ modname ]  = nil
+	package.watched[ modname ] = nil
+	print( "Unloading " .. modname .. "..." )
 end

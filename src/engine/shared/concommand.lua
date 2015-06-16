@@ -70,17 +70,19 @@ local function parseArgs( s )
 	return t
 end
 
-function concommand.run( name )
-	local command = string.match( name, "^([^%s]+)" )
-	if ( not command ) then
-		return
-	end
+if ( _CLIENT ) then
+	function concommand.run( name )
+		local command = string.match( name, "^([^%s]+)" )
+		if ( not command ) then
+			return
+		end
 
-	local _, endPos = string.find( name, command, 1, true )
-	local argString = string.trim( string.utf8sub( name, endPos + 1 ) )
-	local argTable  = parseArgs( argString )
-	if ( concommand.getConcommand( command ) ) then
-		concommand.dispatch( nil, command, argString, argTable )
+		local _, endPos = string.find( name, command, 1, true )
+		local argString = string.trim( string.utf8sub( name, endPos + 1 ) )
+		local argTable  = parseArgs( argString )
+		if ( concommand.getConcommand( command ) ) then
+			concommand.dispatch( localplayer, command, argString, argTable )
+		end
 	end
 end
 

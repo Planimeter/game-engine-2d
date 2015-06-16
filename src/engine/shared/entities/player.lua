@@ -115,7 +115,7 @@ function player:getName()
 		return self.account:getUsername()
 	end
 
-	return self:getNetworkVar( "name" )
+	return entity.getName( self ) or "Unnamed"
 end
 
 function player:getRegion()
@@ -261,7 +261,10 @@ end
 
 concommand( "say", "Display player message",
 	function( self, player, command, argString, argTable )
-		-- process chat
+		if ( not game.call( "shared", "onPlayerChat", player, argString ) ) then
+			return
+		end
+
 		if( _SERVER ) then
 			local payload = payload( "chat" )
 			payload:set( "entIndex", player and player.entIndex or 0 )
@@ -269,8 +272,6 @@ concommand( "say", "Display player message",
 
 			networkserver.broadcast( payload )
 		end
-
-		game.call( "shared", "onPlayerChat", player, argString )
 	end, { "network" }
 )
 
@@ -332,7 +333,7 @@ function player:update( dt )
 end
 
 function player:__tostring()
-	return "player: " .. ( self:getName() or "Unnamed" )
+	return "player: " .. self:getName()
 end
 
 -- Preserve the player interface

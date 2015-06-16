@@ -72,7 +72,7 @@ local function doCommand( self, input )
 	local argString = string.trim( string.utf8sub( input, endPos + 1 ) )
 	local argTable  = parseArgs( argString )
 	if ( concommand.getConcommand( command ) ) then
-		concommand.dispatch( nil, command, argString, argTable )
+		concommand.dispatch( localplayer, command, argString, argTable )
 	elseif ( convar.getConvar( command ) ) then
 		if ( argString ~= "" ) then
 			if ( string.utf8sub( argString, 1, 1 )   == "\"" and
@@ -190,8 +190,7 @@ end
 function console:invalidateLayout()
 	if ( not self:isResizing() ) then
 		local parent = self:getParent()
-		local scale  = parent:getHeight() / 1080
-		local margin = 36 * scale
+		local margin = gui.scale( 36 )
 		if ( not _INTERACTIVE ) then
 			self:setPos( parent:getWidth() - self:getWidth() - margin, margin )
 		else
@@ -200,7 +199,7 @@ function console:invalidateLayout()
 	end
 
 	self.output:setPos( 36, 87 )
-	self.input:setWidth( self:getWidth() - 2 * 36 )
+	self.output:setWidth( self:getWidth() - 2 * 36 )
 	self.input:setPos( 36, self:getHeight() - self.input:getHeight() - 36 )
 	self.input:setWidth( self:getWidth() - 2 * 36 )
 	gui.frame.invalidateLayout( self )

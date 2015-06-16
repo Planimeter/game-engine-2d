@@ -121,7 +121,7 @@ if ( g_MainMenu and g_MainMenu.axisProfile ) then
 	g_MainMenu.axisProfile = nil
 	g_MainMenu.axisProfile = gui.axisprofile( g_MainMenu )
 	local height = graphics.getViewportHeight()
-	local margin = 96 * ( height / 1080 )
+	local margin = gui.scale( 96 )
 	local y      = height - g_MainMenu.axisProfile:getHeight() - margin
 	g_MainMenu.axisProfile:setPos( margin, y )
 	g_MainMenu.axisProfile:activate()

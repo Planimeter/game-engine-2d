@@ -8,6 +8,7 @@ require( "engine.client.input" )
 require( "engine.client.gui.scheme" )
 
 local getfenv      = getfenv
+local graphics     = graphics
 local input        = input
 local ipairs       = ipairs
 local math         = math
@@ -120,6 +121,10 @@ end
 function register( class, name, classname )
 	_M[ name ] = class
 	getfenv( 2 )[ classname or name ] = nil
+end
+
+function scale( n )
+	return n * ( _G.graphics.getViewportHeight() / 1080 )
 end
 
 function setFocusedPanel( panel, focus )

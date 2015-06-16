@@ -20,8 +20,8 @@ function createDefaultPanels()
 	-- Initialize move indicator
 	local hudmoveindicator = gui.hudmoveindicator( _G.g_Viewport )
 
-	local chat = gui.chat( _G.g_Viewport )
-	_G.g_Chat = chat
+	local chat = gui.hudchat( _G.g_Viewport )
+	_G.g_Chat  = chat
 end
 
 function draw()
@@ -39,6 +39,9 @@ function load( arg )
 end
 
 function onAxisSignin()
+end
+
+function onReloadImage( filename )
 end
 
 function onMainMenuActivate()

@@ -143,7 +143,7 @@ local function drawFrameRate()
 	               string.format( "%.3f", 1000 * getAverageFrameTime() ) .. " ms"
 	local width  = graphics.getViewportWidth()
 	local height = graphics.getViewportHeight()
-	local margin = 96 * ( height / 1080 )
+	local margin = gui.scale( 96 )
 	local x      = width  - font:getWidth( time ) - margin
 	local y      = height - font:getHeight()      - margin + 1
 	local color  = scheme.getProperty( "Default", "mainmenubutton.dark.textColor" )

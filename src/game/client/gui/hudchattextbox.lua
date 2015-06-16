@@ -1,12 +1,12 @@
 --========= Copyright © 2013-2015, Planimeter, All rights reserved. ==========--
 --
--- Purpose: Chat Text Box class
+-- Purpose: Chat Textbox HUD
 --
 --============================================================================--
 
-class "chatbox" ( gui.textbox )
+class "hudchattextbox" ( gui.textbox )
 
-function chatbox:chatbox( parent, name )
+function hudchattextbox:hudchattextbox( parent, name )
 	gui.textbox.textbox( self, parent, name, "" )
 
 	self:setEditable( false )
@@ -14,35 +14,35 @@ function chatbox:chatbox( parent, name )
 	self:setScheme( "Chat" )
 end
 
-function chatbox:draw()
-	if ( not self:isVisible() or self:getHeight() == 1 ) then
+function hudchattextbox:draw()
+	if ( not self:isVisible() ) then
 		return
 	end
 
-	--self:drawBackground()
-	self:drawForeground()
+	self:drawBackground()
 	self:drawText()
 	self:drawCursor()
 
 	gui.panel.draw( self )
 
+	self:drawForeground()
 end
 
-function chatbox:drawBackground()
+function hudchattextbox:drawBackground()
 	local property = "textbox.backgroundColor"
 	local width	   = self:getWidth()
 	local height   = self:getHeight()
 
-	graphics.setColor( color(  15,  10,	 10, 10 ) )
+	graphics.setColor( self:getScheme( property ) )
 	graphics.rectangle( "fill", 0, 0, width, height )
 end
 
-function chatbox:invalidateLayout()
+function hudchattextbox:invalidateLayout()
 	local parent = self:getParent()
-	self:setWidth( parent:getWidth() - 2 * 16 )
-	self:setHeight( parent:getHeight() - 65)
+	self:setWidth( parent:getWidth() - 2 * 36 )
+	self:setHeight( parent:getHeight() - 46 - 9 - 2 * 36 )
 
 	gui.panel.invalidateLayout( self )
 end
 
-gui.register( chatbox, "chatbox" )
+gui.register( hudchattextbox, "hudchattextbox" )

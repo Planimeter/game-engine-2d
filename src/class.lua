@@ -39,12 +39,23 @@ local eventnames = {
 -- metamethod()
 -- Purpose: Creates a filler metamethod for metamethod inheritance
 -- Input: class - The class metatable
---		  eventname - The event name
+--        eventname - The event name
 -- Output: function
 -------------------------------------------------------------------------------
 local function metamethod( class, eventname )
 	return function( ... )
-		local event = class.__base[ eventname ]
+		local event = nil
+		local base = nil
+		if ( class.__base ) then
+			base = getbaseclass( class )
+			while ( base ~= nil ) do
+				if ( base[ eventname ] ) then
+					event = base[ eventname ]
+					break
+				end
+				base = getbaseclass( base )
+			end
+		end
 		local type = type( event )
 		if ( type ~= "function" ) then
 			error( "attempt to call metamethod '" .. eventname .. "' " ..

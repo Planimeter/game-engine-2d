@@ -10,6 +10,7 @@ local _CLIENT      = _CLIENT
 local _SERVER      = _SERVER
 
 local error        = error
+local gui          = gui
 local hook         = hook
 local rawget       = rawget
 local setmetatable = setmetatable
@@ -46,6 +47,12 @@ function getStartingRegion()
 end
 
 function onPlayerChat( player, message )
+	if ( _CLIENT and not speechBubbles ) then
+		speechBubbles = gui.hudspeechballoons( _G.g_Viewport )
+		speechBubbles:moveToBack()
+	end
+
+	return true
 end
 
 function onPlayerConnect( player )
@@ -63,7 +70,7 @@ end
 function onPlayerSpawn( player )
 end
 
-function onReload()
+function onReloadScript( modname )
 end
 
 function usesAxisSavedGames()
