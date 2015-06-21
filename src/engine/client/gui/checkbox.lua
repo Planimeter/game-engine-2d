@@ -56,6 +56,7 @@ function checkbox:drawForeground()
 	end
 
 	graphics.setColor( self:getScheme( property ) )
+	graphics.setLineWidth( 1 )
 	graphics.rectangle( "line", 0, 0, 24, 24 )
 end
 

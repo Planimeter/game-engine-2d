@@ -207,8 +207,18 @@ function player:move()
 	end
 end
 
+local snapToGrid = region.snapToGrid
+
 function player:moveTo( position )
-	if ( position == self:getPosition() ) then
+	local from   = self:getPosition()
+	local to     = position
+	local fromX  = from.x
+	local fromY  = from.y
+	local toX    = to.x
+	local toY    = to.y
+	fromX, fromY = snapToGrid( fromX, fromY )
+	toX, toY     = snapToGrid( toX, toY )
+	if ( fromX == toX and fromY == toY ) then
 		return
 	end
 

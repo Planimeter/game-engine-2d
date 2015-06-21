@@ -65,6 +65,7 @@ function dropdownlist:drawForeground()
 	if ( self:isDisabled() ) then
 		property = "button.disabled.outlineColor"
 		graphics.setColor( self:getScheme( property ) )
+		graphics.setLineWidth( 1 )
 		graphics.rectangle( "line", 0, 0, width, height )
 		return
 	end
@@ -76,6 +77,7 @@ function dropdownlist:drawForeground()
 	end
 
 	graphics.setColor( self:getScheme( property ) )
+	graphics.setLineWidth( 1 )
 	graphics.rectangle( "line", 0, 0, width, height )
 end
 

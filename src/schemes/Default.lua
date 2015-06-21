@@ -80,19 +80,19 @@ default.dropdownlistitem    = {
 
     mouseover               = {
         backgroundColor     = color( 163, 126,  71, 0.97 * 255 ),
-        textColor           = color(  35,  35,  36,       255 )
+        textColor           = color(  35,  35,  36,        255 )
     },
 
     selected                = {
         backgroundColor     = color( 163, 126,  71, 0.97 * 255 ),
-        textColor           = color(  35,  35,  36,       255 )
+        textColor           = color(  35,  35,  36,        255 )
     }
 }
 
 default.frame               = {
     backgroundColor         = color(  67,  68,  69, 0.97 * 255 ),
     outlineColor            = color( 240, 246, 247, 0.07 * 255 ),
-    titleTextColor          = color( 213, 218, 219,       255 ),
+    titleTextColor          = color( 213, 218, 219,        255 ),
 
     defocus                 = {
         titleTextColor      = color( 213, 218, 219, 0.24 * 255 )
@@ -116,8 +116,14 @@ default.hudchat             = {
     backgroundColor         = color(  31,  35,  36, 0.27 * 255 ),
 }
 
+default.hudspeechballoons   = {
+    backgroundColor         = color(  35,  35,  36, 0.66 * 255 ),
+    outlineColor            = color(  35,  35,  36, 0.86 * 255 ),
+    textColor               = color( 168, 155, 123,        255 )
+}
+
 default.label               = {
-    textColor               = color( 163, 167, 168,       255 )
+    textColor               = color( 163, 167, 168,        255 )
 }
 
 default.mainmenu            = {
@@ -127,10 +133,10 @@ default.mainmenu            = {
 
 default.mainmenubutton      = {
     default                 = {
-        textColor           = color( 104, 106, 107,       255 ),
+        textColor           = color( 104, 106, 107,        255 ),
 
         mouseover           = {
-            textColor       = color( 163, 126,  71,       255 )
+            textColor       = color( 163, 126,  71,        255 )
         },
 
         mousedown           = {
@@ -139,10 +145,10 @@ default.mainmenubutton      = {
     },
 
     dark                    = {
-        textColor           = color( 213, 218, 219,       255 ),
+        textColor           = color( 213, 218, 219,        255 ),
 
         mouseover           = {
-            textColor       = color( 163, 126,  71,       255 )
+            textColor       = color( 163, 126,  71,        255 )
         },
 
         mousedown           = {
@@ -150,7 +156,7 @@ default.mainmenubutton      = {
         },
 
         disabled            = {
-            textColor       = color(  67,  68,  69,       255 )
+            textColor       = color(  67,  68,  69,        255 )
         }
     }
 }
@@ -159,10 +165,10 @@ default.mainmenuclosebutton = {
     icon                    = graphics.newImage( "images/gui/close_large.png" ),
 
     default                 = {
-        iconColor           = color( 104, 106, 107,       255 ),
+        iconColor           = color( 104, 106, 107,        255 ),
 
         mouseover           = {
-            iconColor       = color( 163, 126,  71,       255 )
+            iconColor       = color( 163, 126,  71,        255 )
         },
 
         mousedown           = {
@@ -171,10 +177,10 @@ default.mainmenuclosebutton = {
     },
 
     dark                    = {
-        iconColor           = color( 213, 218, 219,       255 ),
+        iconColor           = color( 213, 218, 219,        255 ),
 
         mouseover           = {
-            iconColor       = color( 163, 126,  71,       255 )
+            iconColor       = color( 163, 126,  71,        255 )
         },
 
         mousedown           = {
@@ -199,8 +205,8 @@ default.radiobutton         = {
     },
 
     disabled                = {
-        iconColor           = color( 104, 106, 107,       255 ),
-        textColor           = color( 104, 106, 107,       255 )
+        iconColor           = color( 104, 106, 107,        255 ),
+        textColor           = color( 104, 106, 107,        255 )
     }
 }
 
@@ -244,6 +250,7 @@ default.mainmenuFont        = graphics.newFont( "fonts/SourceSansPro-Regular.otf
 default.titleFont           = graphics.newFont( "fonts/SourceSansPro-Bold.otf", 18 )
 default.font                = graphics.newFont( "fonts/SourceSansPro-Regular.otf", 14 )
 default.consoleFont         = graphics.newFont( "fonts/SourceCodePro-Light.otf", 12 )
+default.chatFont            = graphics.newFont( "fonts/SourceCodePro-Light.otf", 14 )
 
 if ( _AXIS ) then
 default.axisUsernameFont    = graphics.newFont( "fonts/SourceSansPro-Light.otf", 18 )

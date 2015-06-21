@@ -80,38 +80,41 @@ function drawGrid()
 	if ( grid.framebuffer == nil ) then
 		grid.framebuffer = newFullscreenFramebuffer()
 		grid.framebuffer:renderTo( function()
-			setBackgroundColor( grid.dark.backgroundColor )
 			graphics.setLineWidth( 1 )
 			graphics.setLineStyle( "rough" )
 			graphics.setBlendMode( "alpha" )
 
+			local x = graphics.getWidth()  % 32 / 2
+			local y = graphics.getHeight() % 32 / 2
+
 			-- Grid Lines (32x32)
 			setColor( grid.dark.lines32x32Color )
 			for i = 0, graphics.getWidth() / 32 do
-				line( 32 * i,
-				      0,
-				      32 * i,
+				line( 32 * i + x,
+				     -32,
+				      32 * i + x,
 				      graphics.getHeight() )
 			end
 			for i = 0, graphics.getHeight() / 32 do
-				line( 0,
-				      32 * i,
+				line(-32,
+				      32 * i + y,
 				      graphics.getWidth(),
-				      32 * i )
+				      32 * i + y )
 			end
 
 			-- Grid Lines (64x64)
 			setColor( grid.dark.lines64x64Color )
 			for i = 0, graphics.getWidth() / 64 do
-				line( 64 * i,
-				      0,
-				      64 * i,
+				line( 64 * i + x,
+				     -64,
+				      64 * i + x,
 				      graphics.getHeight() )
 			end
 			for i = 0, graphics.getHeight() / 64 do
-				line( 0,
-				      64 * i,
-				      graphics.getWidth(), 64 * i )
+				line(-64,
+				      64 * i + y,
+				      graphics.getWidth(),
+				      64 * i + y )
 			end
 		end )
 	end
@@ -289,13 +292,35 @@ function push()
 	graphics.push()
 end
 
+local x1         = 0
+local y1         = 0
+local x2         = 0
+local y2         = 0
+local x3         = 0
+local y3         = 0
+local x4         = 0
+local y4         = 0
+local x5         = 0
+local y5         = 0
+local _lineWidth = 1
+
 function rectangle( mode, x, y, width, height )
 	if ( mode == "line" ) then
-		line( x,               y,
-		      x + width - 0.5, y,
-		      x + width - 0.5, y + height - 1,
-		      x,               y + height - 1,
-		      x + 0.5,         y + 0.5 )
+		x1 = x          - 0.5
+		y1 = y                + _lineWidth / 2
+		x2 = x + width  - 0.5 - _lineWidth / 2
+		y2 = y                + _lineWidth / 2
+		x3 = x + width  - 0.5 - _lineWidth / 2
+		y3 = y + height - 0.5 - _lineWidth / 2
+		x4 = x          - 0.5 + _lineWidth / 2
+		y4 = y + height - 0.5 - _lineWidth / 2
+		x5 = x          - 0.5 + _lineWidth / 2
+		y5 = y          - 0.5 + _lineWidth
+		line( x1, y1,
+		      x2, y2,
+		      x3, y3,
+		      x4, y4,
+		      x5, y5 )
 	else
 		graphics.rectangle( mode, x, y, width, height )
 	end
@@ -340,6 +365,7 @@ function setFont( font )
 end
 
 function setLineWidth( width )
+	_lineWidth = width
 	graphics.setLineWidth( width )
 end
 

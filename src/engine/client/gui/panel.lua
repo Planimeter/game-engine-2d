@@ -161,6 +161,7 @@ end
 
 function panel:drawBounds()
 	graphics.setColor( color.red )
+	graphics.setLineWidth( 1 )
 	graphics.rectangle( "line", 0, 0, self:getWidth(), self:getHeight() )
 end
 
@@ -448,6 +449,14 @@ function panel:onMouseLeave()
 end
 
 function panel:onRemove()
+end
+
+function panel:preDrawWorld()
+	if ( self:getChildren() ) then
+		for i, v in ipairs( self:getChildren() ) do
+			v:preDrawWorld()
+		end
+	end
 end
 
 function panel:remove()

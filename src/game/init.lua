@@ -43,15 +43,10 @@ function call( universe, event, ... )
 end
 
 function getStartingRegion()
-	return "allorova"
+	return "teffeld"
 end
 
 function onPlayerChat( player, message )
-	if ( _CLIENT and not speechBubbles ) then
-		speechBubbles = gui.hudspeechballoons( _G.g_Viewport )
-		speechBubbles:moveToBack()
-	end
-
 	return true
 end
 

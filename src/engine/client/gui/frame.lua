@@ -106,6 +106,7 @@ end
 
 function frame:drawForeground()
 	graphics.setColor( self:getScheme( "frame.outlineColor" ) )
+	graphics.setLineWidth( 1 )
 	graphics.rectangle( "line", 0, 0, self:getWidth(), self:getHeight() )
 end
 

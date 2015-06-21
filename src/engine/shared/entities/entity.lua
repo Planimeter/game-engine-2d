@@ -48,32 +48,37 @@ if ( _CLIENT ) then
 		end )
 	end
 
+	local r_draw_shadows = convar( "r_draw_shadows", "1", nil, nil,
+	                            "Draws entity shadows" )
+
 	function entity.drawAll()
 		clear( renderables )
 		shallowcopy( entity.entities, renderables )
 		append( renderables, camera.getWorldContexts() )
 		depthSort( renderables )
 
-		for _, v in ipairs( renderables ) do
-			graphics.push()
-				local x, y = v:getDrawPosition()
-				graphics.translate( camera.worldToScreen( x, y ) )
+		if ( r_draw_shadows:getBoolean() ) then
+			for _, v in ipairs( renderables ) do
+				graphics.push()
+					local x, y = v:getDrawPosition()
+					graphics.translate( camera.worldToScreen( x, y ) )
 
-				-- Draw shadow
-				local isEntity = typeof( v, "entity" )
-				if ( isEntity ) then
-					graphics.push()
-						graphics.setOpacity( 0.14 )
-						graphics.setColor( color.black )
+					-- Draw shadow
+					local isEntity = typeof( v, "entity" )
+					if ( isEntity ) then
+						graphics.push()
+							graphics.setOpacity( 0.14 )
+							graphics.setColor( color.black )
 
-						local sprite = v:getSprite()
-						local height = sprite:getHeight()
-						graphics.translate( -height, 0 )
-							v:drawShadow()
-						graphics.setOpacity( 1 )
-					graphics.pop()
-				end
-			graphics.pop()
+							local sprite = v:getSprite()
+							local height = sprite:getHeight()
+							graphics.translate( -height, 0 )
+								v:drawShadow()
+							graphics.setOpacity( 1 )
+						graphics.pop()
+					end
+				graphics.pop()
+			end
 		end
 
 		-- TODO: Only draw renderables in viewport.

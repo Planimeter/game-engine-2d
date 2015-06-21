@@ -151,9 +151,16 @@ local function drawFrameRate()
 	graphics.print( time, x, y - 1 )
 end
 
+local r_draw_grid = convar( "r_draw_grid", "0", nil, nil,
+                            "Draws a grid overlay" )
+
 function draw()
 	if ( isInGame() ) then
-		 _G.gameclient.draw()
+		_G.gameclient.draw()
+
+		if ( r_draw_grid:getBoolean() ) then
+			graphics.drawGrid()
+		end
 	else
 		graphics.drawGrid()
 	end

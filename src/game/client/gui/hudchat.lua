@@ -21,6 +21,7 @@ function hudchat:hudchat( parent )
 
 		concommand.run( "say " .. text )
 		self.input:setText( "" )
+		self:close()
 	end
 
 	self:invalidateLayout()
@@ -30,6 +31,12 @@ end
 function hudchat:activate()
 	self:invalidate()
 	gui.frame.activate( self )
+	gui.setFocusedPanel( self.input, true )
+end
+
+function hudchat:close()
+	gui.frame.close( self )
+	gui.setFocusedPanel( self.input, false )
 end
 
 function hudchat:draw()

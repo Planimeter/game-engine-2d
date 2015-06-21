@@ -15,17 +15,18 @@ function debugoverlaypanel:debugoverlaypanel( parent )
 	self.overlays = {}
 end
 
-function debugoverlaypanel:draw()
+function debugoverlaypanel:preDrawWorld()
 	for _, overlay in ipairs( self.overlays ) do
 		if ( overlay.type == "rectangle" ) then
 			camera.drawToWorld( overlay.x, overlay.y, function()
 				graphics.setColor( overlay.color )
+				graphics.setLineWidth( 1 )
 				graphics.rectangle( "line", 0, 0, overlay.width, overlay.height )
 			end )
 		end
 	end
 
-	gui.panel.draw( self )
+	gui.panel.preDrawWorld( self )
 end
 
 function debugoverlaypanel:invalidateLayout()

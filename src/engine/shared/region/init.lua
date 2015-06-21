@@ -76,7 +76,26 @@ function region.reload( library )
 	region.load( name )
 end
 
-hook.set( "shared", region.reload, "onReload", "reloadRegion" )
+hook.set( "shared", region.reload, "onReloadScript", "reloadRegion" )
+
+if ( _CLIENT ) then
+	function region.reloadSpriteBatches( filename )
+		if ( not string.find( filename, "images/tilesets/" ) ) then
+			return
+		end
+
+		for _, region in ipairs( region.regions ) do
+			for _, regionlayer in ipairs( region:getLayers() ) do
+				if ( regionlayer:getType() == "tilelayer" ) then
+					regionlayer:createSpriteBatch()
+				end
+			end
+		end
+	end
+
+	hook.set( "client",  region.reloadSpriteBatches,
+	          "onReloadImage", "reloadSpriteBatches")
+end
 
 function region.unload( name )
 	unrequire( "regions." .. name )

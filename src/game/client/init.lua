@@ -17,6 +17,9 @@ local _G        = _G
 module( "game.client" )
 
 function createDefaultPanels()
+	-- Initialize speech balloons
+	local hudspeechballoons = gui.hudspeechballoons( _G.g_Viewport )
+
 	-- Initialize move indicator
 	local hudmoveindicator = gui.hudmoveindicator( _G.g_Viewport )
 
@@ -29,7 +32,13 @@ function draw()
 		return
 	end
 
+	-- Draw panels to worldspace
+	gui.preDrawWorld()
+
+	-- Draw regions
 	region.drawWorld()
+
+	-- Draw entities
 	_G.entity.drawAll()
 end
 

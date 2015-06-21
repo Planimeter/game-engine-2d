@@ -118,6 +118,10 @@ function mousereleased( x, y, button )
 	return rootPanel:mousereleased( x, y, button )
 end
 
+function preDrawWorld()
+	rootPanel:preDrawWorld()
+end
+
 function register( class, name, classname )
 	_M[ name ] = class
 	getfenv( 2 )[ classname or name ] = nil
