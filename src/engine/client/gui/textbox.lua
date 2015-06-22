@@ -141,7 +141,7 @@ function textbox:drawSelection()
 			wCache[1] = self.selectSize
 		end
 
-		graphics.setColor( self:getScheme ( "textbox.selectionColor " ) )
+		graphics.setColor( self:getScheme ( "textbox.selectionColor" ) )
 		graphics.rectangle( "fill", wCache[3], self:getHeight() / 2 - font:getHeight() / 2 - 2, wCache[2], font:getHeight() + 2 )
 	end
 end
