@@ -261,10 +261,7 @@ end
 
 concommand( "say", "Display player message",
 	function( self, player, command, argString, argTable )
-		if ( not game.call( "shared", "onPlayerChat", player, argString ) ) then
-			return
-		end
-
+		
 		if( _SERVER ) then
 			local payload = payload( "chat" )
 			payload:set( "entIndex", player and player.entIndex or 0 )
