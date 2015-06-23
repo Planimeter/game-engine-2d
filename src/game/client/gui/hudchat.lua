@@ -83,6 +83,9 @@ function onChatReceived( payload )
 	if ( entIndex > 0 ) then
 		local entity = entity.getByEntIndex( entIndex )
 		chat.addText( entity:getName() .. ": " .. message )
+		if ( not game.call( "shared", "onPlayerChat", entity, message ) ) then
+			return
+		end
 	else
 		chat.addText( "SERVER: " .. message )
 	end
