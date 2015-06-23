@@ -12,11 +12,9 @@ end
 
 if ( _CLIENT ) then
 	function regionlayer:createSpriteBatch()
-		if ( self.spritebatch == nil ) then
-			local image      = self:getTileset():getImage():getDrawable()
-			local count      = self:getWidth() * self:getHeight()
-			self.spritebatch = graphics.newSpriteBatch( image, count )
-		end
+		local image      = self:getTileset():getImage():getDrawable()
+		local count      = self:getWidth() * self:getHeight()
+		self.spritebatch = graphics.newSpriteBatch( image, count )
 	end
 
 	function regionlayer:draw()

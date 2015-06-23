@@ -79,7 +79,7 @@ end
 hook.set( "shared", region.reload, "onReloadScript", "reloadRegion" )
 
 if ( _CLIENT ) then
-	function region.reloadSpriteBatches( filename )
+	function region.reloadTiles( filename )
 		if ( not string.find( filename, "images/tilesets/" ) ) then
 			return
 		end
@@ -87,14 +87,13 @@ if ( _CLIENT ) then
 		for _, region in ipairs( region.regions ) do
 			for _, regionlayer in ipairs( region:getLayers() ) do
 				if ( regionlayer:getType() == "tilelayer" ) then
-					regionlayer:createSpriteBatch()
+					regionlayer:initializeTiles()
 				end
 			end
 		end
 	end
 
-	hook.set( "client",  region.reloadSpriteBatches,
-	          "onReloadImage", "reloadSpriteBatches")
+	hook.set( "client",  region.reloadTiles, "onReloadImage", "reloadTiles")
 end
 
 function region.unload( name )
