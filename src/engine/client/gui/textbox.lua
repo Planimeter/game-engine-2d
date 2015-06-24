@@ -142,7 +142,11 @@ function textbox:drawSelection()
 		end
 
 		graphics.setColor( self:getScheme ( "textbox.selectionColor" ) )
-		graphics.rectangle( "fill", wCache[3], self:getHeight() / 2 - font:getHeight() / 2 - 2, wCache[2], font:getHeight() + 2 )
+		graphics.rectangle( "fill",
+		                    wCache[3],
+		                    self:getHeight() / 2 - font:getHeight() / 2,
+		                    wCache[2],
+		                    font:getHeight() )
 	end
 end
 
@@ -151,7 +155,7 @@ local utf8len = string.utf8len
 
 
 function textbox:updateSelection()
-	if( self.selectIndex ~= -1) then 
+	if( self.selectIndex ~= -1) then
 		local mouseX, mouseY = getMousePosition()
 		x,y = self:screenToLocal( mouseX, mouseY )
 		x = x - getTextX(self)
@@ -626,8 +630,8 @@ function textbox:keypressed( key, isrepeat )
 		self.cursorPos	  = 0
 	elseif ( key == "left" ) then
 		if ( not controlDown ) then
-			if ( shiftDown ) then		
-				if ( ( self.selectIndex ) == 0 ) then	
+			if ( shiftDown ) then
+				if ( ( self.selectIndex ) == 0 ) then
 					self.selectIndex = self.cursorPos+1
 					self.selectSize = -1
 				else
@@ -649,8 +653,8 @@ function textbox:keypressed( key, isrepeat )
 		end
 	elseif ( key == "right" ) then
 		if ( not controlDown ) then
-			if ( shiftDown ) then			
-				if ( ( self.selectIndex ) == 0 ) then	
+			if ( shiftDown ) then
+				if ( ( self.selectIndex ) == 0 ) then
 					self.selectIndex = self.cursorPos+1
 					self.selectSize = 1
 				else
@@ -958,7 +962,7 @@ function textbox:textinput( text )
 end
 
 local function updateCursor( self )
-	
+
 	if( self.mousedown ) then
 		self:updateSelection()
 	end

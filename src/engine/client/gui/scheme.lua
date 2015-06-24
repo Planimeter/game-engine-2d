@@ -23,8 +23,6 @@ function scheme.getProperty( name, property )
 		return cachedProperty
 	end
 
-	property = property .. "."
-
 	local value = scheme.schemes[ name ]
 	local type  = type( value )
 	if ( type ~= "scheme" ) then
@@ -32,7 +30,7 @@ function scheme.getProperty( name, property )
 		       "(a " .. type .. " value)", 3 )
 	end
 
-	for key in string.gmatch( property, "(.-)%." ) do
+	for key in string.gmatch( property .. ".", "(.-)%." ) do
 		if ( value and value[ key ] ) then
 			value = value[ key ]
 			properties[ name ][ property ] = value

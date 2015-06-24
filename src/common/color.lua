@@ -11,6 +11,14 @@ function color.copy( c )
 end
 
 function color:color( r, g, b, a )
+	if ( type( r ) == "color" ) then
+		self.r = r.r or 0
+		self.g = r.g or 0
+		self.b = r.b or 0
+		self.a = g   or r.a or 0
+		return
+	end
+
 	self.r = r or 0
 	self.g = g or 0
 	self.b = b or 0
