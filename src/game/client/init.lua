@@ -59,6 +59,10 @@ end
 function onMainMenuClose()
 end
 
+function onPlayerChat( player, message )
+	return true
+end
+
 function quit()
 	_G.g_DebugOverlay:remove()
 	_G.g_DebugOverlay = nil

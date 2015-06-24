@@ -25,6 +25,10 @@ end
 function onPlayerConnect( player )
 end
 
+function onPlayerSay( player, message )
+	return true
+end
+
 function quit()
 	unrequire( "game.server" )
 	_G.gameserver = nil
