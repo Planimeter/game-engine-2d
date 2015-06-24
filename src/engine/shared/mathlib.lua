@@ -26,6 +26,10 @@ function math.remap( n, inMin, inMax, outMin, outMax )
 	return ( n / ( inMax - inMin ) ) * ( outMax - outMin ) + outMin
 end
 
+function math.lerp( f, t, dt )
+	return ( f + ( t - f ) * dt )	
+end
+
 local floor = math.floor
 
 function math.round( n )
