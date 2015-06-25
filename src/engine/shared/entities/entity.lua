@@ -380,6 +380,10 @@ function entity:updateNetworkVars( payload )
 	end
 end
 
+function entity:update( dt )
+
+end
+
 function entity:__tostring()
 	return "entity: " .. self.__type
 end

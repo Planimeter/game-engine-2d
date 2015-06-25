@@ -25,6 +25,7 @@ local require      = require
 local setmetatable = setmetatable
 local string       = string
 local table        = table
+local pairs        = pairs
 local tostring     = tostring
 local unrequire    = unrequire
 local _G           = _G
@@ -328,8 +329,11 @@ end
 shutdown = quit
 
 function update( dt )
-	require( "engine.shared.entities.player" )
-	_G.player.updatePlayers( dt )
+	if( _G.entity ) then
+		for k,v in pairs( _G.entity.getAll() ) do
+			v:update( dt )
+		end
+	end
 
 	network.update( dt )
 end
