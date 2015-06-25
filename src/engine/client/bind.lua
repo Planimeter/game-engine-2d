@@ -36,7 +36,9 @@ function getKeyForBind( concommand )
 end
 
 function setBind( key, concommand )
-	binds[ key ] = concommand
+	if ( key ) then
+		binds[ key ] = concommand
+	end
 end
 
 function readBinds()
