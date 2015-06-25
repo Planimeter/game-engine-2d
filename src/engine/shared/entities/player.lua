@@ -56,12 +56,6 @@ function player.getByPeer( peer )
 	end
 end
 
-function player.updatePlayers( dt )
-	for i, player in ipairs( players ) do
-		player:update( dt )
-	end
-end
-
 function player:player()
 	entity.entity( self )
 
