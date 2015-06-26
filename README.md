@@ -64,8 +64,8 @@ Contributors
 Grid is built by Planimeter volunteer contributors, and contributors like you. Here are the lovely folks who have powered the project. GitHub doesn't show all of the contributors behind its metrics, so we extend our thanks here in alphabetical order by last name for every addition and deletion.
 
 Ryan Kingstone ([@ryan-kingstone](https://github.com/ryan-kingstone))  
-Matthias Moninger  
+Matthias Moninger  ([@ZehM4tt](https://github.com/ZehM4tt))  
 Matthew Nichols ([@Polkm](https://github.com/Polkm))  
-Lachlan Temple  
+Lachlan Temple ([@ltmp](https://github.com/ltmp))  
 Manolis Vrondakis ([@vrondakis](https://github.com/vrondakis))  
 Kamil Zmich
