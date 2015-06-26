@@ -38,7 +38,6 @@ local love        = love
 local timer       = love.timer
 local unrequire   = unrequire
 local _G          = _G
-local pairs       = pairs
 
 module( "engine.client" )
 
@@ -448,13 +447,6 @@ end
 function update( dt )
 	if ( _G.gameclient ) then
 		_G.gameclient.update( dt )
-	end
-
-	if( isInGame() ) then
-		local entities = _G.entity.getAll()
-		for _,v in pairs( entities ) do
-			v:update( dt )
-		end
 	end
 
 	if ( network ) then

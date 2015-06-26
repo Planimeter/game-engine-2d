@@ -381,7 +381,6 @@ function entity:updateNetworkVars( payload )
 end
 
 function entity:update( dt )
-
 end
 
 function entity:__tostring()

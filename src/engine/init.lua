@@ -293,6 +293,15 @@ function update( dt )
 	accumulator = accumulator + frameTime
 
 	while ( accumulator >= timestep ) do
+		-- Shared engine updates
+		if ( _G.entity ) then
+			local entities = _G.entity.getAll()
+			for _, v in ipairs( entities ) do
+				v:update( timestep )
+			end
+		end
+
+		-- Universe-specific updates
 		if ( _G._SERVER ) then
 			server.update( timestep )
 		end
