@@ -1,30 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="34">
- <tileset firstgid="1" name="World" tilewidth="32" tileheight="32">
-  <image source="../images/tilesets/world.png" width="32" height="32"/>
- </tileset>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="9">
+ <tileset firstgid="1" source="World.tsx"/>
  <layer name="Grass" width="100" height="100">
   <data encoding="base64" compression="zlib">
    eJztwwEJAAAMBKH7/qUHy6Hgqqmqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqv8AX0MnEQ==
   </data>
  </layer>
  <objectgroup name="Spawn Points">
-  <object id="7" name="Teffeld World Gate" type="prop_worldgate_spawn" x="2400" y="2400" width="32" height="96"/>
- </objectgroup>
- <objectgroup name="Trees">
-  <object id="32" type="prop_tree" x="2560" y="2176" width="64" height="192"/>
-  <object id="27" type="prop_tree" x="2432" y="2400" width="64" height="192"/>
-  <object id="26" type="prop_tree" x="2528" y="2368" width="64" height="192"/>
-  <object id="25" type="prop_tree" x="2560" y="2336" width="64" height="192"/>
-  <object id="24" type="prop_tree" x="2496" y="2304" width="64" height="192"/>
-  <object id="33" type="prop_tree" x="2464" y="2496" width="64" height="192"/>
-  <object id="30" type="prop_tree" x="2144" y="2464" width="64" height="192"/>
-  <object id="14" type="prop_tree" x="2176" y="2336" width="64" height="192"/>
-  <object id="31" type="prop_tree" x="2176" y="2240" width="64" height="192"/>
-  <object id="23" type="prop_tree" x="2304" y="2400" width="64" height="192"/>
-  <object id="21" type="prop_tree" x="2240" y="2368" width="64" height="192"/>
-  <object id="29" type="prop_tree" x="2080" y="2336" width="64" height="192"/>
-  <object id="22" type="prop_tree" x="2272" y="2304" width="64" height="192"/>
-  <object id="28" type="prop_tree" x="2368" y="2240" width="64" height="192"/>
+  <object id="7" type="prop_worldgate_spawn" x="1600" y="1504" width="32" height="96"/>
  </objectgroup>
 </map>
