@@ -68,4 +68,4 @@ Matthias Moninger  ([@ZehM4tt](https://github.com/ZehM4tt))
 Matthew Nichols ([@Polkm](https://github.com/Polkm))  
 Lachlan Temple ([@ltmp](https://github.com/ltmp))  
 Manolis Vrondakis ([@vrondakis](https://github.com/vrondakis))  
-Kamil Zmich
+Kamil Zmich ([@KamilKZ](https://github.com/KamilKZ))
