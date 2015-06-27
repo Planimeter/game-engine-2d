@@ -42,10 +42,6 @@ function textbox:textbox( parent, name, placeholder )
 	self.editable		= true
 	self.multiline		= false
 
-	self.selectIndex = 0
-	self.selectSize = 0
-	self.selectText = ""
-
 	self:setScheme( "Default" )
 	self:setUseFullscreenFramebuffer( true )
 end
@@ -57,7 +53,6 @@ function textbox:draw()
 
 	self:drawText()
 	self:drawCursor()
-	self:drawSelection()
 
 	gui.panel.draw( self )
 
@@ -79,8 +74,6 @@ local function getTextY( self )
 end
 
 local utf8sub = string.utf8sub
-local abs, clamp = math.abs, math.clamp
-
 
 local function getRelativeCursorPos( self )
 	local font = self:getScheme( "font" )
@@ -99,93 +92,8 @@ local function getRelativeCursorPos( self )
 	end
 end
 
-local function getTextWidth( self )
-	local font = self:getScheme( "font" )
-	return font:getWidth( self.text )
-end
-
-local function getTextHeight( self )
-	local font		   = self:getScheme( "font" )
-	local width, lines = font:getWrap( self.text, getInnerWidth( self ) )
-	return lines * font:getHeight()
-end
-
-local function isTextOverflowing( self )
-	return getTextWidth( self ) > getInnerWidth( self )
-end
-
-
 local abs = math.abs
 local sin = math.sin
-
-local wCache = {0,0,0}
-local sCache = {0,0,0}
-
-function textbox:drawSelection()
-	if( ( ( self.selectIndex or 0 ) > 0 ) and ( abs( self.selectSize or 0 ) > 0 ) ) then
-		local font = self:getScheme( "font" )
-		if ( wCache[1] ~= self.selectSize ) then
-			wCache[3] = getTextX( self ) + font:getWidth( utf8sub( self.text, 1, self.selectIndex - 1 ) )
-			self.cursorPos = ( ( self.selectIndex + self.selectSize ) -1 )
-
-			if ( self.selectSize < abs( self.selectSize - 1 ) ) then
-				self.selectText = utf8sub ( self.text, self.selectSize + self.selectIndex, self.selectIndex - 1 )
-				wCache[2] = -font:getWidth( self.selectText )
-				sCache = { self.selectSize + self.selectIndex - 1, self.selectIndex, self.selectSize-1}
-			else
-				self.selectText = utf8sub ( self.text, self.selectIndex, self.selectSize + self.selectIndex - 1 )
-				wCache[2] = font:getWidth( self.selectText )
-				sCache = { self.selectIndex - 1, self.selectSize + self.selectIndex, -1 }
-			end
-
-			wCache[1] = self.selectSize
-		end
-
-		graphics.setColor( self:getScheme ( "textbox.selectionColor" ) )
-		graphics.rectangle( "fill",
-		                    wCache[3],
-		                    self:getHeight() / 2 - font:getHeight() / 2,
-		                    wCache[2],
-		                    font:getHeight() )
-	end
-end
-
-local getMousePosition = input.getMousePosition
-local utf8len = string.utf8len
-
-
-function textbox:updateSelection()
-	if( self.selectIndex ~= -1) then
-		local mouseX, mouseY = getMousePosition()
-		x,y = self:screenToLocal( mouseX, mouseY )
-		x = x - getTextX(self)
-		local font = self:getScheme ( "font" )
-
-		if ( x <= 0 ) then
-			if( self.selectIndex==1 ) then self.selectSize = 0 return end
-			self.selectSize = -clamp(self.selectIndex, 0, utf8len( self.text ))
-		elseif( x >= getTextWidth ( self ) ) then
-			self.selectSize = clamp( abs( utf8len( self.text ) - self.selectIndex+1 ), 0, utf8len( self.text ))
-
-		else
-			for i=0, utf8len( self.text ) do
-				local width = font:getWidth( utf8sub ( self.text, 1, i ) )
-				local startPos = i == 1 and 0 or width
-				width = font:getWidth ( utf8sub ( self.text, 1, i+1 ) )
-				local endPos = width
-				if ( x > startPos and x < endPos ) then
-					local midpoint = ( startPos + endPos ) / 2
-					if(x > midpoint) then
-						self.selectSize = -( self.selectIndex-i-2 )
-					else
-						self.selectSize = -( self.selectIndex-i-1 )
-					end
-					break
-				end
-			end
-		end
-	end
-end
 
 function textbox:drawCursor()
 	if ( not self:isEditable() ) then
@@ -260,6 +168,21 @@ function textbox:drawText()
 	graphics.setStencil()
 end
 
+local function getTextWidth( self )
+	local font = self:getScheme( "font" )
+	return font:getWidth( self.text )
+end
+
+local function getTextHeight( self )
+	local font		   = self:getScheme( "font" )
+	local width, lines = font:getWrap( self.text, getInnerWidth( self ) )
+	return lines * font:getHeight()
+end
+
+local function isTextOverflowing( self )
+	return getTextWidth( self ) > getInnerWidth( self )
+end
+
 local resetScrollOffset = false
 
 local function updateOverflow( self )
@@ -289,48 +212,8 @@ local function updateAutocomplete( self, suggestions )
 	end
 end
 
-local gsub = string.gsub
-local sub = string.sub
-
-local function doDeselectAll( self )
-	self.selectIndex = -1
-	self.selectSize = 0
-	self.selectText = ''
-end
-
-local function doRemoveSelection ( self )
-	if ( ( self.selectIndex or 0 ) > 0 ) then
-		self.cursorPos = self.selectIndex + sCache[3]
-		self.text = sub( self.text, 0, sCache[1] ) .. string.sub( self.text, sCache[2] )
-
-		doDeselectAll( self )
-	end
-end
-
-local function doSelectAll( self )
-	self.selectIndex = 1
-	self.selectSize = utf8len( self.text ) + 1
-end
-
-local function doPaste( self )
-	local clipboardText = os.getClipboardText()
-	if ( not clipboardText ) then
-		return
-	end
-
-	if ( not self:isMultiline() ) then
-		clipboardText = gsub( clipboardText, "\n", "" )
-	end
-
-	doRemoveSelection ( self )
-
-	self:insertText( clipboardText )
-end
-
 function textbox:doBackspace( count )
 	count = count or 1
-
-	doRemoveSelection( self )
 
 	-- Andrew; nextWord returns a position of 0 if no more words are found.
 	-- Since we're backspacing a word in this case, but no word is found,
@@ -380,10 +263,10 @@ function textbox:doBackspace( count )
 	self:onChange()
 end
 
+local utf8len = string.utf8len
+
 function textbox:doDelete( count )
 	count = count or 1
-
-	doRemoveSelection( self )
 
 	-- Andrew; nextWord returns a position of 0 if no more words are found.
 	-- Since we're deleting a word in this case, but no word is found,
@@ -415,12 +298,27 @@ function textbox:doDelete( count )
 end
 
 function textbox:doCut()
-	self:doCopy(self)
-	doRemoveSelection(self)
 end
 
 function textbox:doCopy()
-	love.system.setClipboardText(self.selectText)
+end
+
+local gsub = string.gsub
+
+local function doPaste( self )
+	local clipboardText = os.getClipboardText()
+	if ( not clipboardText ) then
+		return
+	end
+
+	if ( not self:isMultiline() ) then
+		clipboardText = gsub( clipboardText, "\n", "" )
+	end
+
+	self:insertText( clipboardText )
+end
+
+local function doSelectAll( self )
 end
 
 function textbox:getAutocomplete()
@@ -455,9 +353,6 @@ function textbox:insertText( text )
 	local font		= self:getScheme( "font" )
 	local sub1		= utf8sub( self.text, self.cursorPos + 1 )
 	local sub2		= utf8sub( self.text, 1, self.cursorPos )
-
-	doRemoveSelection( self )
-
 	if ( self.cursorPos == 0 ) then
 		sub2 = ""
 	end
@@ -532,9 +427,6 @@ local function shiftCursor( self, pos )
 	self.cursorPos = math.clamp( self.cursorPos + pos,
 								 0,
 								 utf8len( self.text ) )
-
-	if ( self.selectionSize == 0 ) then self.selectionIndex = 0 end
-
 	updateScrollOffset( self )
 end
 
@@ -612,9 +504,6 @@ function textbox:keypressed( key, isrepeat )
 
 	local controlDown = input.isKeyDown( "lctrl", "rctrl" )
 	local shiftDown	  = input.isKeyDown( "lshift", "rshift" )
-
-	if ( ( ( self.selectionSize or 0 ) > 0 ) and not ( shiftDown or controlDown ) ) then doRemoveSelection(self) end
-
 	if ( key == "backspace" ) then
 		self:doBackspace( controlDown and math.abs( nextWord( self, -1 ) ) or 1 )
 	elseif ( key == "delete" ) then
@@ -630,17 +519,6 @@ function textbox:keypressed( key, isrepeat )
 		self.cursorPos	  = 0
 	elseif ( key == "left" ) then
 		if ( not controlDown ) then
-			if ( shiftDown ) then
-				if ( ( self.selectIndex ) == 0 ) then
-					self.selectIndex = self.cursorPos+1
-					self.selectSize = -1
-				else
-					self.selectSize = math.clamp( self.selectSize - 1, 0 - self.selectIndex+1, self.selectIndex+self.selectSize, utf8len( self.text ) + 1 )
-				end
-			else
-				doDeselectAll( self )
-			end
-
 			shiftCursor( self, -1 )
 		else
 			local pos = nextWord( self, -1 )
@@ -653,17 +531,6 @@ function textbox:keypressed( key, isrepeat )
 		end
 	elseif ( key == "right" ) then
 		if ( not controlDown ) then
-			if ( shiftDown ) then
-				if ( ( self.selectIndex ) == 0 ) then
-					self.selectIndex = self.cursorPos+1
-					self.selectSize = 1
-				else
-					self.selectSize = math.clamp( self.selectSize + 1, 0 - self.selectIndex+1, utf8len( self.text ) - self.selectIndex + 1 )
-				end
-			else
-				doDeselectAll( self )
-			end
-
 			shiftCursor( self, 1 )
 		else
 			local pos = nextWord( self, 1 )
@@ -697,8 +564,6 @@ function textbox:keypressed( key, isrepeat )
 			end
 
 			self:onEnter( self.text )
-			doRemoveSelection( self )
-
 			if ( self:getDefocusOnEnter() ) then
 				if ( self.focus ) then
 					gui.setFocusedPanel( self, false )
@@ -758,8 +623,6 @@ function textbox:mousepressed( x, y, button )
 		return
 	end
 
-	doDeselectAll( self )
-
 	if ( self.mouseover and not self:isDisabled() ) then
 		posX, posY = self:screenToLocal( x, y )
 		if ( button == "l" ) then
@@ -788,6 +651,7 @@ function textbox:mousepressed( x, y, button )
 			gui.setFocusedPanel( self, false )
 		end
 	end
+
 	gui.panel.mousepressed( self, x, y, button )
 end
 
@@ -811,20 +675,12 @@ function textbox:onClick( x, y )
 		gui.setFocusedPanel( self, true )
 	end
 
-	doDeselectAll( self )
-	self.selectIndex = 0
-
 	if ( self:isEditable() ) then
 		local font = self:getScheme( "font" )
 		if ( x <= 0 ) then
 			self.cursorPos = 0
-			self.selectIndex = 1
-			self.selectSize = 0
 		elseif ( x >= getTextWidth( self ) ) then
-			local pos = utf8len( self.text )
-			self.selectIndex = pos+1
-			self.cursorPos = pos+1
-			self.selectSize = 0
+			self.cursorPos = utf8len( self.text )
 		else
 			for i = 1, utf8len( self.text ) do
 				local width	   = font:getWidth( utf8sub( self.text, 1, i ) )
@@ -836,9 +692,7 @@ function textbox:onClick( x, y )
 					local midpoint = ( startPos + endPos ) / 2
 					if ( x > midpoint ) then
 						self.cursorPos = i + 1
-						self.selectIndex = i + 2
 					else
-						self.selectIndex = i + 1
 						self.cursorPos = i
 					end
 
@@ -955,18 +809,11 @@ function textbox:textinput( text )
 		return
 	end
 
-	doRemoveSelection( self )
-
 	self:insertText( text )
 	return true
 end
 
 local function updateCursor( self )
-
-	if( self.mousedown ) then
-		self:updateSelection()
-	end
-
 	if ( not self.mouseover or self:isDisabled() ) then
 		return
 	end
@@ -975,12 +822,12 @@ local function updateCursor( self )
 end
 
 function textbox:update()
+	updateCursor( self )
 
 	if ( self.focus ) then
 		self:invalidate()
 	end
 
-	updateCursor( self )
 	gui.panel.update( self )
 end
 
