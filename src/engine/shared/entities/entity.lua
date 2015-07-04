@@ -135,7 +135,9 @@ function entity.getByEntIndex( entIndex )
 end
 
 function entity.removeAll()
-	entity.entities = {}
+	while ( #entity.entities > 0 ) do
+		entity.entities[ 1 ]:remove()
+	end
 end
 
 function entity:entity()
@@ -381,6 +383,12 @@ function entity:updateNetworkVars( payload )
 end
 
 function entity:update( dt )
+	if ( self.think and
+	     self.nextThink and
+	     self.nextThink <= engine.getRealTime() ) then
+		 self.nextThink = nil
+		 self:think()
+	end
 end
 
 function entity:__tostring()

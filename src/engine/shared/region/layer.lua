@@ -103,17 +103,18 @@ if ( _CLIENT ) then
 		                                      tileWidth,  tileHeight,
 		                                      imageWidth, imageHeight )
 
-		local tileX  = 0
-		local tileY  = 0
-		local floor  = math.floor
-		local x      = 0
-		local y      = 0
-		local width  = self:getWidth()
-		local height = self:getHeight()
+		local tileX    = 0
+		local tileY    = 0
+		local firstgid = tileset:getFirstGid()
+		local floor    = math.floor
+		local x        = 0
+		local y        = 0
+		local width    = self:getWidth()
+		local height   = self:getHeight()
 		for xy, gid in ipairs( self:getData() ) do
 			if ( gid ~= 0 ) then
-				tileX =        ( gid - 1 ) * tileWidth % imageWidth
-				tileY = floor( ( gid - 1 ) * tileWidth / imageWidth ) * tileHeight
+				tileX =        ( gid - firstgid ) * tileWidth % imageWidth
+				tileY = floor( ( gid - firstgid ) * tileWidth / imageWidth ) * tileHeight
 				quad:setViewport( tileX, tileY, tileWidth, tileHeight )
 
 				x =      ( ( xy - 1 ) % width  ) * tileWidth

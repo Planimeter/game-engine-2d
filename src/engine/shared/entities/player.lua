@@ -190,13 +190,18 @@ function player:move()
 	if ( direction:length() >= ( next - start ):length() ) then
 		newPosition = next
 		table.remove( self.path, 1 )
+
+		if ( self.nextPosition ) then
+			self.path = path.getPath( newPosition, self.nextPosition )
+			self.nextPosition = nil
+		end
 	end
 
 	-- Move
 	self:setNetworkVar( "position", newPosition )
 
 	-- We've reached our goal
-	if ( #self.path == 0 ) then
+	if ( self.path and #self.path == 0 ) then
 		self.path = nil
 	end
 end
@@ -224,7 +229,7 @@ function player:moveTo( position )
 
 	if ( _SERVER ) then
 		require( "engine.shared.path" )
-		self.nextPath = path.getPath( self:getPosition(), position )
+		self.nextPosition = position
 	end
 end
 
@@ -232,7 +237,7 @@ if ( _SERVER ) then
 	local function onPlayerMove( payload )
 		local player   = payload:getPlayer()
 		local position = payload:get( "position" )
-		player:moveTo( position )
+		player.nextPosition = position
 	end
 
 	payload.setHandler( onPlayerMove, "playerMove" )
@@ -319,21 +324,15 @@ function player:spawn()
 end
 
 function player:update( dt )
-	if ( self.think and
-	     self.nextThink and
-	     self.nextThink <= engine.getRealTime() ) then
-		 self.nextThink = nil
-		 self:think()
-	end
-
-	if ( self.nextPath ) then
-		self.path = self.nextPath
-		self.nextPath = nil
-	end
-
 	if ( self.path ) then
 		self:move()
+	else
+		if ( self.nextPosition ) then
+			self.path = path.getPath( self:getPosition(), self.nextPosition )
+		end
 	end
+
+	entity.update( self, dt )
 end
 
 function player:__tostring()

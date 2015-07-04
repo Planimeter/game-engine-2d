@@ -67,6 +67,11 @@ end
 function onConnect( event )
 	print( tostring( event.peer ) .. " has connected." )
 
+	if ( not _AXIS ) then
+		local region = _G.game.getStartingRegion()
+		_G.region.load( region )
+	end
+
 	require( "engine.shared.entities.player" )
 	local player = _G.player.initialize( event.peer )
 	player:onConnect()
@@ -74,10 +79,6 @@ function onConnect( event )
 	-- TODO: Initialize specific player class here.
 
 	if ( not _AXIS ) then
-		-- TODO: Move region before player initialization.
-		local region = _G.game.getStartingRegion()
-		_G.region.load( region )
-
 		local spawnpoint = _G.gameserver.getSpawnPoint( player )
 		if ( spawnpoint ) then
 			local position = spawnpoint:getNetworkVar( "position" )

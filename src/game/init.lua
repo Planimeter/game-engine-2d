@@ -43,7 +43,7 @@ function call( universe, event, ... )
 end
 
 function getStartingRegion()
-	return "teffeld"
+	return "allorova"
 end
 
 function onPlayerConnect( player )
