@@ -1,11 +1,9 @@
 # ![Grid](/src/images/gui/logo.png?raw=true "Grid")  
 
-[![GitHub issues](https://img.shields.io/github/issues/Planimeter/grid-sdk.svg)](https://github.com/Planimeter/grid-sdk/issues)
-[![GitHub forks](https://img.shields.io/github/forks/Planimeter/grid-sdk.svg)](https://github.com/Planimeter/grid-sdk/network)
-[![GitHub stars](https://img.shields.io/github/stars/Planimeter/grid-sdk.svg)](https://github.com/Planimeter/grid-sdk/stargazers)
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/Planimeter/grid-sdk/master/LICENSE)
+[![Issue Stats](http://issuestats.com/github/Planimeter/grid-sdk/badge/pr?style=flat)](http://issuestats.com/github/Planimeter/grid-sdk)
+[![Issue Stats](http://issuestats.com/github/Planimeter/grid-sdk/badge/issue?style=flat)](http://issuestats.com/github/Planimeter/grid-sdk)
 [![Join the chat at https://gitter.im/Planimeter/grid-sdk](https://img.shields.io/badge/gitter-join%20chat-brightgreen.svg)](https://gitter.im/Planimeter/grid-sdk?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Development Supercollective, Excellence by Design.](https://img.shields.io/badge/Made%20with%20L%C3%96VE%20by-Planimeter-brightgreen.svg)](http://www.andrewmcwatters.com/planimeter/)
+[![Development Supercollective, Excellence by Design.](https://img.shields.io/badge/Made%20with%20L%C3%96VE%20by-Planimeter-brightgreen.svg)](http://www.planimeter.org/)
 
 The Grid engine is a 2D game engine built on LÖVE. It's inspired by Source, and
 subsequently, QuakeWorld. It's a small, but powerful engine that provides a
@@ -15,9 +13,9 @@ by hand for your projects or game jams.
 Create a Project
 ================
 
-[Getting Started](http://www.andrewmcwatters.com/grid/tutorials/Getting_Started)
+[Getting Started](http://www.planimeter.org/grid/tutorials/Getting_Started)
 
-[Tutorials and API Documentation](http://www.andrewmcwatters.com/grid/)  
+[Tutorials and API Documentation](http://www.planimeter.org/grid/)  
 [Tutorials and API Documentation Source](https://github.com/Planimeter/grid)
 
 Features
