@@ -21,44 +21,6 @@ function console.print( ... )
 	g_Console.output:insertText( table.concat( args, "\t" ) .. "\n" )
 end
 
-local function parseArgs( s )
-	local t      = {}
-	local i      = 1
-	local length = string.utf8len( s )
-	while ( i <= length ) do
-		if ( string.utf8sub( s, i, i ) == "\"" ) then
-			local char = string.find( s, "\"", i + 1 )
-			if ( char ) then
-				table.insert( t, string.utf8sub( s, i + 1, char - 1 ) )
-				local _, endPos = string.find( s, "%s*.", char + 1 )
-				i = endPos or char + 1
-			else
-				char = string.find( s, "%s", i + 1 )
-				if ( char ) then
-					table.insert( t, string.utf8sub( s, i + 1, char - 1 ) )
-					local _, endPos = string.find( s, "%s*.", char + 1 )
-					i = endPos or char + 1
-				else
-					table.insert( t, string.utf8sub( s, i + 1 ) )
-					i = length + 1
-				end
-			end
-		else
-			local char = string.find( s, "%s", i + 1 )
-			if ( char ) then
-				table.insert( t, string.utf8sub( s, i, char - 1 ) )
-				local _, endPos = string.find( s, "%s*.", char + 1 )
-				i = endPos or char + 1
-			else
-				table.insert( t, string.utf8sub( s, i ) )
-				i = length + 1
-			end
-		end
-	end
-
-	return t
-end
-
 local function doCommand( self, input )
 	self.input:setText( "" )
 	print( "] " .. input )
@@ -70,7 +32,7 @@ local function doCommand( self, input )
 
 	local _, endPos = string.find( input, command, 1, true )
 	local argString = string.trim( string.utf8sub( input, endPos + 1 ) )
-	local argTable  = parseArgs( argString )
+	local argTable  = string.parseArgs( argString )
 	if ( concommand.getConcommand( command ) ) then
 		concommand.dispatch( localplayer, command, argString, argTable )
 	elseif ( convar.getConvar( command ) ) then

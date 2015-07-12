@@ -1,6 +1,6 @@
 //========= Copyright © 2013-2015, Planimeter, All rights reserved. ==========//
 //
-// Purpose: Debug Pixel Shader
+// Purpose: Debug pixel shader
 //
 //===========================================================================//
 

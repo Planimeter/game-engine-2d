@@ -1,6 +1,6 @@
 //========= Copyright © 2013-2015, Planimeter, All rights reserved. ==========//
 //
-// Purpose: Alpha Pixel Shader
+// Purpose: Alpha Mask pixel shader
 //
 //===========================================================================//
 

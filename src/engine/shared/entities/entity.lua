@@ -200,13 +200,42 @@ if ( _CLIENT ) then
 
 	function entity:draw()
 		local sprite = self:getSprite()
-		graphics.draw( sprite:getDrawable() )
+		if ( type( sprite ) == "sprite" ) then
+			sprite:draw()
+		else
+			graphics.draw( sprite:getDrawable() )
+		end
 	end
 
 	function entity:drawShadow()
 		local sprite = self:getSprite()
 		local scale  = 1
-		graphics.draw( sprite:getDrawable(), 0, 0, 0, 1, scale, 0, 0, scale )
+		if ( type( sprite ) == "sprite" ) then
+			graphics.draw(
+				sprite:getSpriteSheet():getDrawable(),
+				sprite:getQuad(),
+				0,
+				0,
+				0,
+				1,
+				scale,
+				0,
+				0,
+				scale
+			)
+		else
+			graphics.draw(
+				sprite:getDrawable(),
+				0,
+				0,
+				0,
+				1,
+				scale,
+				0,
+				0,
+				scale
+			)
+		end
 	end
 end
 
@@ -334,6 +363,15 @@ if ( _CLIENT ) then
 	end
 
 	payload.setHandler( onEntityRemoved, "entityRemoved" )
+
+	function entity:setAnimation( animation )
+		local sprite = self:getSprite()
+		if ( type( sprite ) ~= "sprite" ) then
+			return
+		end
+
+		sprite:setAnimation( animation )
+	end
 end
 
 function entity:setCollisionBounds( min, max )
@@ -388,6 +426,13 @@ function entity:update( dt )
 	     self.nextThink <= engine.getRealTime() ) then
 		 self.nextThink = nil
 		 self:think()
+	end
+
+	if ( _CLIENT ) then
+		local sprite = self:getSprite()
+		if ( type( sprite ) == "sprite" ) then
+			sprite:update( dt )
+		end
 	end
 end
 

@@ -31,45 +31,6 @@ function concommand.dispatch( player, name, argString, argTable )
 	end
 end
 
-
-local function parseArgs( s )
-	local t      = {}
-	local i      = 1
-	local length = string.utf8len( s )
-	while ( i <= length ) do
-		if ( string.utf8sub( s, i, i ) == "\"" ) then
-			local char = string.find( s, "\"", i + 1 )
-			if ( char ) then
-				table.insert( t, string.utf8sub( s, i + 1, char - 1 ) )
-				local _, endPos = string.find( s, "%s*.", char + 1 )
-				i = endPos or char + 1
-			else
-				char = string.find( s, "%s", i + 1 )
-				if ( char ) then
-					table.insert( t, string.utf8sub( s, i + 1, char - 1 ) )
-					local _, endPos = string.find( s, "%s*.", char + 1 )
-					i = endPos or char + 1
-				else
-					table.insert( t, string.utf8sub( s, i + 1 ) )
-					i = length + 1
-				end
-			end
-		else
-			local char = string.find( s, "%s", i + 1 )
-			if ( char ) then
-				table.insert( t, string.utf8sub( s, i, char - 1 ) )
-				local _, endPos = string.find( s, "%s*.", char + 1 )
-				i = endPos or char + 1
-			else
-				table.insert( t, string.utf8sub( s, i ) )
-				i = length + 1
-			end
-		end
-	end
-
-	return t
-end
-
 if ( _CLIENT ) then
 	function concommand.run( name )
 		local command = string.match( name, "^([^%s]+)" )
@@ -79,7 +40,7 @@ if ( _CLIENT ) then
 
 		local _, endPos = string.find( name, command, 1, true )
 		local argString = string.trim( string.utf8sub( name, endPos + 1 ) )
-		local argTable  = parseArgs( argString )
+		local argTable  = string.parseArgs( argString )
 		if ( concommand.getConcommand( command ) ) then
 			concommand.dispatch( localplayer, command, argString, argTable )
 		end

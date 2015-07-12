@@ -7,7 +7,7 @@
 class "axisprofile" ( gui.panel )
 
 axisprofile.background = graphics.newImage( "images/gui/gravatar_background.png" )
-axisprofile.fragShader = graphics.newShader( "shaders/alphablend.frag" )
+axisprofile.fragShader = graphics.newShader( "shaders/alphamask.frag" )
 
 function axisprofile:axisprofile( parent )
 	gui.panel.panel( self, parent, "Axis Profile" )

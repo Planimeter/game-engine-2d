@@ -38,6 +38,12 @@ function vector:normalizeInPlace()
 	self.y = length == 0 and 0 or self.y / length
 end
 
+local atan2 = math.atan2
+
+function vector:toAngle()
+	return atan2( self.y, self.x )
+end
+
 function vector:__add( v )
 	return vector( self.x + v.x, self.y + v.y )
 end

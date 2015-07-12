@@ -3,6 +3,8 @@
 -- lclass
 -- Author: Andrew McWatters
 -------------------------------------------------------------------------------
+require( "engine.shared.tablib" )
+
 local setmetatable = setmetatable
 local type = type
 local error = error
@@ -95,7 +97,12 @@ _G.getbaseclass = getbaseclass
 -- Input: name - Name of new class
 -------------------------------------------------------------------------------
 function class( name )
-	classes[ name ] = {}
+	if ( classes[ name ] ) then
+		table.clear( classes[ name ] )
+	else
+		classes[ name ] = {}
+	end
+
 	classes[ name ].__index = classes[ name ]
 	classes[ name ].__type = name
 	-- Create a shortcut to name()

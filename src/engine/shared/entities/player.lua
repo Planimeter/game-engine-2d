@@ -8,17 +8,13 @@
 local players      = player and player.players      or {}
 local lastPlayerId = player and player.lastPlayerId or 0
 
-require( "engine.shared.entities" )
-require( "engine.shared.entities.entity" )
+require( "engine.shared.entities.character" )
 
-class "player" ( "entity" )
+class "player" ( "character" )
 
 player.players      = players
 player.lastPlayerId = lastPlayerId
 
-if ( _CLIENT ) then
-	player.sprite = graphics.newImage( "images/player.png" )
-end
 
 function player.initialize( peer )
 	local player = player()
@@ -57,7 +53,7 @@ function player.getByPeer( peer )
 end
 
 function player:player()
-	entity.entity( self )
+	character.character( self )
 
 	local tileSize = game.tileSize
 	if ( _CLIENT ) then
@@ -69,14 +65,16 @@ function player:player()
 	self:setCollisionBounds( min, max )
 
 	self:networkNumber( "id", player.lastPlayerId + 1 )
-	self:networkNumber( "moveSpeed", 2 )
+	self:networkNumber( "moveSpeed", 1 )
 
 	if ( _SERVER ) then
 		player.lastPlayerId = self:getNetworkVar( "id" )
 	end
 
 	if ( _CLIENT ) then
-		self:setSprite( player.sprite )
+		require( "engine.client.sprite" )
+		local sprite = sprite( "images.player" )
+		self:setSprite( sprite )
 	end
 
 	table.insert( player.players, self )
@@ -168,68 +166,13 @@ if ( _SERVER ) then
 	end
 end
 
-function player:move()
-	-- Get direction to move
-	local start     = self:getPosition()
-	local next      = self.path[ 1 ]
-	local direction = ( next - start )
-	direction:normalizeInPlace()
-
-	-- Apply move speed to directional vector
-	direction = direction * self:getNetworkVar( "moveSpeed" )
-
-	-- Snap to pixel grid
-	direction.x = math.round( direction.x )
-	direction.y = math.round( direction.y )
-
-	-- Where we'll move to
-	local newPosition = start + direction
-
-	-- Ensure we're not passing the next tile by comparing the
-	-- distance traveled to the distance to the next tile
-	if ( direction:length() >= ( next - start ):length() ) then
-		newPosition = next
-		table.remove( self.path, 1 )
-
-		if ( self.nextPosition ) then
-			self.path = path.getPath( newPosition, self.nextPosition )
-			self.nextPosition = nil
-		end
-	end
-
-	-- Move
-	self:setNetworkVar( "position", newPosition )
-
-	-- We've reached our goal
-	if ( self.path and #self.path == 0 ) then
-		self.path = nil
-	end
-end
-
-local snapToGrid = region.snapToGrid
-
 function player:moveTo( position )
-	local from   = self:getPosition()
-	local to     = position
-	local fromX  = from.x
-	local fromY  = from.y
-	local toX    = to.x
-	local toY    = to.y
-	fromX, fromY = snapToGrid( fromX, fromY )
-	toX, toY     = snapToGrid( toX, toY )
-	if ( fromX == toX and fromY == toY ) then
-		return
-	end
+	character.moveTo( self, position )
 
 	if ( _CLIENT and not _SERVER ) then
 		local payload = payload( "playerMove" )
 		payload:set( "position", position )
 		networkclient.sendToServer( payload )
-	end
-
-	if ( _SERVER ) then
-		require( "engine.shared.path" )
-		self.nextPosition = position
 	end
 end
 
@@ -241,9 +184,7 @@ if ( _SERVER ) then
 	end
 
 	payload.setHandler( onPlayerMove, "playerMove" )
-end
 
-if ( _SERVER ) then
 	function player:onAuthenticated()
 		require( "engine.shared.hook" )
 		game.call( "server", "onPlayerAuthenticated", self )
@@ -321,18 +262,6 @@ end
 function player:spawn()
 	entity.spawn( self )
 	game.call( "shared", "onPlayerSpawn", self )
-end
-
-function player:update( dt )
-	if ( self.path ) then
-		self:move()
-	else
-		if ( self.nextPosition ) then
-			self.path = path.getPath( self:getPosition(), self.nextPosition )
-		end
-	end
-
-	entity.update( self, dt )
 end
 
 function player:__tostring()

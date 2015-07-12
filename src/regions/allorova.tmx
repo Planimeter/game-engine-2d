@@ -29,7 +29,7 @@
  </layer>
  <layer name="Magic Circle" width="100" height="100">
   <data encoding="base64" compression="zlib">
-   eJzt0TkKgFAQRMEZFUE0cbn/We0rGH2EKnh5Q1cBAAAAAAAAAAAAAAAAAAAAAAAAX3RXTWlOS49ew5YP1rSnwx/DnfngSnd6/AEAAAAAAAAAAAAAAAAAAAAAAAD81AuGuwCH
+   eJzt0TsKgFAMRNFEbUQbP/tfq1O4AauHcA4MaQO3CgAAAAAAAAAAAAAAAAAAAAAAAPiiu2rK5mzp0d+wvg223F2P4Y40OLMru/UAAAAAAAAAAAAAAAAAAAAAAAAAfuoBXkYAgA==
   </data>
  </layer>
  <objectgroup name="Spawn Points">
