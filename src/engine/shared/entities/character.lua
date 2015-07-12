@@ -66,10 +66,7 @@ function character:moveTo( position )
 		return
 	end
 
-	if ( _SERVER ) then
-		require( "engine.shared.path" )
-		self.nextPosition = position
-	end
+	self.nextPosition = position
 end
 
 function character:onNetworkVarChanged( networkvar )
@@ -91,9 +88,13 @@ function character:update( dt )
 		self:move()
 	else
 		if ( self.nextPosition ) then
+			require( "engine.shared.path" )
 			self.path = path.getPath( self:getPosition(), self.nextPosition )
+			self:move()
 		else
-			self:setAnimation( "idle" )
+			if ( _CLIENT ) then
+				self:setAnimation( "idle" )
+			end
 		end
 	end
 
