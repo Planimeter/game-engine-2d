@@ -21,6 +21,7 @@ Create a Project
 Features
 ========
 
+* Basic prediction
 * Classes via [lclass](https://github.com/andrewmcwatters/lclass "lclass")
 * Client-server model
 * Common convenience classes
@@ -28,6 +29,7 @@ Features
 * Elegant GUI system
 * Entity system
 * Pathfinding
+* Spritesheet animations
 * [Tiled](http://www.mapeditor.org/ "Tiled")-based region system
 * Threaded [LuaSec](https://github.com/brunoos/luasec "LuaSec") support
 * Lua 5.1.5 base library extensions
