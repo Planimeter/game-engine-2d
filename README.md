@@ -28,6 +28,7 @@ Features
 * Effortless networking
 * Elegant GUI system
 * Entity system
+* Level streaming
 * Pathfinding
 * Spritesheet animations
 * [Tiled](http://www.mapeditor.org/ "Tiled")-based region system
