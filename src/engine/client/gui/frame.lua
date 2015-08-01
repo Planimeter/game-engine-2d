@@ -534,37 +534,37 @@ function frame:update( dt )
 			deltaHeight   = self:setHeight( self:getHeight() - deltaY )
 			self:setY( self:getY() + deltaY - deltaHeight )
 			self:invalidateLayout()
-		elseif ( self.resizing = "topright" ) then
+		elseif ( self.resizing == "topright" ) then
 			deltaWidth    = self:setWidth( self:getWidth()   + deltaX )
 			self.grabbedX = localX + deltaWidth
 			deltaHeight   = self:setHeight( self:getHeight() - deltaY )
 			self:setY( self:getY() + deltaY - deltaHeight )
 			self:invalidateLayout()
-		elseif ( self.resizing = "right" ) then
+		elseif ( self.resizing == "right" ) then
 			deltaWidth    = self:setWidth( self:getWidth()   + deltaX )
 			self.grabbedX = localX + deltaWidth
 			self:invalidateLayout()
-		elseif ( self.resizing = "bottomright" ) then
+		elseif ( self.resizing == "bottomright" ) then
 			deltaWidth    = self:setWidth( self:getWidth()   + deltaX )
 			self.grabbedX = localX + deltaWidth
 			deltaHeight   = self:setHeight( self:getHeight() + deltaY )
 			self.grabbedY = localY + deltaHeight
 			self:invalidateLayout()
-		elseif ( self.resizing = "bottom" ) then
+		elseif ( self.resizing == "bottom" ) then
 			deltaHeight   = self:setHeight( self:getHeight() + deltaY )
 			self.grabbedY = localY + deltaHeight
 			self:invalidateLayout()
-		elseif ( self.resizing = "bottomleft" ) then
+		elseif ( self.resizing == "bottomleft" ) then
 			deltaWidth    = self:setWidth( self:getWidth()   - deltaX )
 			self:setX( self:getX() + deltaX - deltaWidth )
 			deltaHeight   = self:setHeight( self:getHeight() + deltaY )
 			self.grabbedY = localY + deltaHeight
 			self:invalidateLayout()
-		elseif ( self.resizing = "left" ) then
+		elseif ( self.resizing == "left" ) then
 			deltaWidth    = self:setWidth( self:getWidth()   - deltaX )
 			self:setX( self:getX() + deltaX - deltaWidth )
 			self:invalidateLayout()
-		elseif ( self.resizing = "topleft" ) then
+		elseif ( self.resizing == "topleft" ) then
 			deltaWidth    = self:setWidth( self:getWidth()   - deltaX )
 			self:setX( self:getX() + deltaX - deltaWidth )
 			deltaHeight   = self:setHeight( self:getHeight() - deltaY )
