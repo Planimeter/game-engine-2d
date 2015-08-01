@@ -59,7 +59,7 @@ typedef enum
     /* Application events */
     SDL_QUIT           = 0x100, /**< User-requested quit */
 
-    /* These application events have special meaning on iOS, see README-ios.txt for details */
+    /* These application events have special meaning on iOS, see README-ios.md for details */
     SDL_APP_TERMINATING,        /**< The application is being terminated by the OS
                                      Called on iOS in applicationWillTerminate()
                                      Called on Android in onDestroy()
@@ -260,6 +260,7 @@ typedef struct SDL_MouseWheelEvent
     Uint32 which;       /**< The mouse instance id, or SDL_TOUCH_MOUSEID */
     Sint32 x;           /**< The amount scrolled horizontally, positive to the right and negative to the left */
     Sint32 y;           /**< The amount scrolled vertically, positive away from the user and negative toward the user */
+    Uint32 direction;   /**< Set to one of the SDL_MOUSEWHEEL_* defines. When FLIPPED the values in X and Y will be opposite. Multiply by -1 to change them back */
 } SDL_MouseWheelEvent;
 
 /**
@@ -584,6 +585,9 @@ extern DECLSPEC SDL_bool SDLCALL SDL_HasEvents(Uint32 minType, Uint32 maxType);
 
 /**
  *  This function clears events from the event queue
+ *  This function only affects currently queued events. If you want to make
+ *  sure that all pending OS events are flushed, you can call SDL_PumpEvents()
+ *  on the main thread immediately before the flush call.
  */
 extern DECLSPEC void SDLCALL SDL_FlushEvent(Uint32 type);
 extern DECLSPEC void SDLCALL SDL_FlushEvents(Uint32 minType, Uint32 maxType);

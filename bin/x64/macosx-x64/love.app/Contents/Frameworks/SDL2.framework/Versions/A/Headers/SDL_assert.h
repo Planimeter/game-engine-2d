@@ -51,7 +51,7 @@ assert can have unique static variables associated with it.
 /* Don't include intrin.h here because it contains C++ code */
     extern void __cdecl __debugbreak(void);
     #define SDL_TriggerBreakpoint() __debugbreak()
-#elif (defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__)))
+#elif (!defined(__NACL__) && defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__)))
     #define SDL_TriggerBreakpoint() __asm__ __volatile__ ( "int $3\n\t" )
 #elif defined(HAVE_SIGNAL_H)
     #include <signal.h>
@@ -141,16 +141,13 @@ extern DECLSPEC SDL_assert_state SDLCALL SDL_ReportAssertion(SDL_assert_data *,
 #define SDL_enabled_assert(condition) \
     do { \
         while ( !(condition) ) { \
-            static struct SDL_assert_data assert_data = { \
+            static struct SDL_assert_data sdl_assert_data = { \
                 0, 0, #condition, 0, 0, 0, 0 \
             }; \
-            const SDL_assert_state state = SDL_ReportAssertion(&assert_data, \
-                                                               SDL_FUNCTION, \
-                                                               SDL_FILE, \
-                                                               SDL_LINE); \
-            if (state == SDL_ASSERTION_RETRY) { \
+            const SDL_assert_state sdl_assert_state = SDL_ReportAssertion(&sdl_assert_data, SDL_FUNCTION, SDL_FILE, SDL_LINE); \
+            if (sdl_assert_state == SDL_ASSERTION_RETRY) { \
                 continue; /* go again. */ \
-            } else if (state == SDL_ASSERTION_BREAK) { \
+            } else if (sdl_assert_state == SDL_ASSERTION_BREAK) { \
                 SDL_TriggerBreakpoint(); \
             } \
             break; /* not retrying. */ \

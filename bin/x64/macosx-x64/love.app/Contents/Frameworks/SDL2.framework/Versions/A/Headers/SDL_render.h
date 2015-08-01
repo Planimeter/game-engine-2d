@@ -81,8 +81,8 @@ typedef struct SDL_RendererInfo
     Uint32 flags;               /**< Supported ::SDL_RendererFlags */
     Uint32 num_texture_formats; /**< The number of available texture formats */
     Uint32 texture_formats[16]; /**< The available texture formats */
-    int max_texture_width;      /**< The maximimum texture width */
-    int max_texture_height;     /**< The maximimum texture height */
+    int max_texture_width;      /**< The maximum texture width */
+    int max_texture_height;     /**< The maximum texture height */
 } SDL_RendererInfo;
 
 /**
@@ -371,7 +371,7 @@ extern DECLSPEC int SDLCALL SDL_GetTextureBlendMode(SDL_Texture * texture,
  *  \param rect      A pointer to the rectangle of pixels to update, or NULL to
  *                   update the entire texture.
  *  \param pixels    The raw pixel data.
- *  \param pitch     The number of bytes between rows of pixel data.
+ *  \param pitch     The number of bytes in a row of pixel data, including padding between lines.
  *
  *  \return 0 on success, or -1 if the texture is not valid.
  *
@@ -552,7 +552,7 @@ extern DECLSPEC void SDLCALL SDL_RenderGetClipRect(SDL_Renderer * renderer,
                                                    SDL_Rect * rect);
 
 /**
- *  \brief Get wether clipping is enabled on the given renderer
+ *  \brief Get whether clipping is enabled on the given renderer.
  *
  *  \param renderer The renderer from which clip state should be queried.
  *
@@ -792,7 +792,7 @@ extern DECLSPEC int SDLCALL SDL_RenderCopy(SDL_Renderer * renderer,
  *  \param dstrect   A pointer to the destination rectangle, or NULL for the
  *                   entire rendering target.
  *  \param angle    An angle in degrees that indicates the rotation that will be applied to dstrect
- *  \param center   A pointer to a point indicating the point around which dstrect will be rotated (if NULL, rotation will be done aroud dstrect.w/2, dstrect.h/2)
+ *  \param center   A pointer to a point indicating the point around which dstrect will be rotated (if NULL, rotation will be done around dstrect.w/2, dstrect.h/2).
  *  \param flip     An SDL_RendererFlip value stating which flipping actions should be performed on the texture
  *
  *  \return 0 on success, or -1 on error
