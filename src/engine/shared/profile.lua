@@ -13,12 +13,12 @@ module( "profile" )
 local profiles = {}
 
 function start( name )
-    profiles[ name ] = timer.getTime()
+	profiles[ name ] = timer.getTime()
 end
 
 local format = string.format
 
 function stop( name )
-    local duration = timer.getTime() - profiles[ name ]
-    print( name .. " took " .. format( "%.3fs", duration ) )
+	local duration = timer.getTime() - profiles[ name ]
+	print( name .. " took " .. format( "%.3fs", duration ) )
 end

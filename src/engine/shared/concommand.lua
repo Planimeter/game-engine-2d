@@ -40,7 +40,7 @@ if ( _CLIENT ) then
 
 		local _, endPos = string.find( name, command, 1, true )
 		local argString = string.trim( string.utf8sub( name, endPos + 1 ) )
-		local argTable  = string.parseArgs( argString )
+		local argTable  = string.parseargs( argString )
 		if ( concommand.getConcommand( command ) ) then
 			concommand.dispatch( localplayer, command, argString, argTable )
 		end

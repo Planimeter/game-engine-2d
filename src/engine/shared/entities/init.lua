@@ -25,10 +25,10 @@ module( "entities" )
 entities = _entities
 classes  = _classes
 
-function initialize( regionEntities )
+function initialize( region, regionEntities )
 	local t = {}
 	for i, entityData in ipairs( regionEntities ) do
-		local entity = createFromRegionData( entityData )
+		local entity = createFromRegionData( region, entityData )
 		if ( entity ) then
 			entity:spawn()
 			table.insert( t, entity )
@@ -64,7 +64,7 @@ function requireEntity( classname )
 	end
 end
 
-function createFromRegionData( entityData )
+function createFromRegionData( region, entityData )
 	local type = entityData.type
 	requireEntity( type )
 
@@ -74,11 +74,29 @@ function createFromRegionData( entityData )
 	end
 
 	local entity = entities[ type ]()
-	entity:setNetworkVar( "name", entityData.name )
+	if ( entityData.name and entityData.name ~= "" ) then
+		entity:setNetworkVar( "name", entityData.name )
+	end
+
 	require( "common.vector" )
-	local x = entityData.x
-	local y = entityData.y + entityData.height
+	local x = region:getX() + entityData.x
+	local y = region:getY() + entityData.y + entityData.height
 	entity:setNetworkVar( "position", _G.vector( x, y ) )
+
+	local hasWidth = entity:hasNetworkVar( "width" )
+	if ( hasWidth ) then
+		entity:setNetworkVar( "width", entityData.width )
+	end
+
+	local hasHeight = entity:hasNetworkVar( "height" )
+	if ( hasHeight ) then
+		entity:setNetworkVar( "height", entityData.height )
+	end
+
+	if ( table.len( entityData.properties ) > 0 ) then
+		entity:setProperties( entityData.properties )
+	end
+
 	return entity
 end
 

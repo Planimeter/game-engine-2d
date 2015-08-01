@@ -206,12 +206,12 @@ end
 
 local function sendEntities( player )
 	local entities = _G.entity.getAll()
-	for i, v in ipairs( entities ) do
-		if ( v ~= player ) then
+	for _, entity in ipairs( entities ) do
+		if ( entity ~= player ) then
 			local payload = payload( "entitySpawned" )
-			payload:set( "classname", v:getClassname() )
-			payload:set( "entIndex", v.entIndex )
-			payload:set( "networkVars", v:getNetworkVarTypeLenValues() )
+			payload:set( "classname", entity:getClassname() )
+			payload:set( "entIndex", entity.entIndex )
+			payload:set( "networkVars", entity:getNetworkVarTypeLenValues() )
 			player:send( payload )
 		end
 	end

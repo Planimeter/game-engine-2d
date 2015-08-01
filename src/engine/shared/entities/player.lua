@@ -15,7 +15,6 @@ class "player" ( "character" )
 player.players      = players
 player.lastPlayerId = lastPlayerId
 
-
 function player.initialize( peer )
 	local player = player()
 	player.peer  = peer
@@ -124,6 +123,14 @@ end
 
 function player:getViewportHeight()
 	return self.viewportHeight
+end
+
+function player:getViewportBounds()
+	local width  = self:getViewportWidth()  or 0
+	local height = self:getViewportHeight() or 0
+	local min    = self:localToWorld( vector( -width / 2,  height / 2 ) )
+	local max    = self:localToWorld( vector(  width / 2, -height / 2 ) )
+	return min, max
 end
 
 function player:getViewportSize()

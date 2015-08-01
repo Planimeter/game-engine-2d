@@ -8,9 +8,9 @@ class "dropdownlistitem" ( gui.radiobutton )
 
 function dropdownlistitem:dropdownlistitem( name, text )
 	gui.radiobutton.radiobutton( self, nil, name, text )
-	self.width	= 216
+	self.width  = 216
 	self.height = 46
-	self.text	= text or "Drop-Down List Item"
+	self.text   = text or "Drop-Down List Item"
 end
 
 function dropdownlistitem:draw()
@@ -26,7 +26,7 @@ end
 
 function dropdownlistitem:drawBackground()
 	local property = "dropdownlistitem.backgroundColor"
-	local width	   = self:getWidth()
+	local width    = self:getWidth()
 	local height   = self:getHeight()
 
 	if ( self:isSelected() ) then
@@ -41,18 +41,18 @@ function dropdownlistitem:drawBackground()
 	local offset   = selected and 1 or 0
 	graphics.rectangle( "fill", offset, 0, width - offset, height )
 
-	width  = width	- 0.5
+	width  = width  - 0.5
 	height = height - 0.5
 	if ( selected ) then
 		property = "dropdownlistitem.backgroundColor"
 		graphics.setColor( self:getScheme( property ) )
-		graphics.line( 0,	  -0.5, 0,	   height )
+		graphics.line( 0,     -0.5, 0,     height )
 		graphics.line( width, -0.5, width, height )
 	end
 
 	property = "dropdownlistitem.outlineColor"
 	graphics.setColor( self:getScheme( property ) )
-	graphics.line( 0,	  -0.5, 0,	   height )
+	graphics.line( 0,     -0.5, 0,     height )
 	graphics.line( width, -0.5, width, height )
 end
 

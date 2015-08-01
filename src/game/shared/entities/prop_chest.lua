@@ -5,11 +5,17 @@
 --============================================================================--
 
 require( "engine.shared.entities.entity" )
+require( "game" )
 
 class "prop_chest" ( "entity" )
 
 function prop_chest:prop_chest()
 	entity.entity( self )
+
+	local tileSize = game.tileSize
+	local min      = vector()
+	local max      = vector( tileSize, -tileSize )
+	self:setCollisionBounds( min, max )
 
 	self:setNetworkVar( "name", "Chest" )
 
@@ -21,7 +27,7 @@ end
 
 if ( _CLIENT ) then
 	-- TODO: Integrate with gui.hudmoveindicator?
-	function prop_chest:getActions()
+	function prop_chest:getOptions()
 		return {
 			["Open"]    = self.open,
 			["Examine"] = self.examine

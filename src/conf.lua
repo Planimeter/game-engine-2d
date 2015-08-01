@@ -54,7 +54,7 @@ function love.conf( c )
         c.author = "Planimeter"
 
         c.args = {}
-        for i, v in ipairs( arg ) do
+        for _, v in ipairs( arg ) do
             c.args[ v ] = true
         end
 

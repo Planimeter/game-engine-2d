@@ -7,7 +7,7 @@
 _INITTIME = love.timer.getTime()
 
 local args = {}
-for i, v in ipairs( arg ) do
+for _, v in ipairs( arg ) do
 	args[ v ] = true
 end
 

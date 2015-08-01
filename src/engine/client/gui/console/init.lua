@@ -32,7 +32,7 @@ local function doCommand( self, input )
 
 	local _, endPos = string.find( input, command, 1, true )
 	local argString = string.trim( string.utf8sub( input, endPos + 1 ) )
-	local argTable  = string.parseArgs( argString )
+	local argTable  = string.parseargs( argString )
 	if ( concommand.getConcommand( command ) ) then
 		concommand.dispatch( localplayer, command, argString, argTable )
 	elseif ( convar.getConvar( command ) ) then

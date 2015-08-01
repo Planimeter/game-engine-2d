@@ -15,18 +15,18 @@
 --
 -- Table of Contents
 --
--- Syntax:	   ln: 23
--- Requires:   ln: 35
--- Caching:	   ln: 44
--- Classes:	   ln: 51
+-- Syntax:     ln: 25
+-- Requires:   ln: 37
+-- Caching:    ln: 44
+-- Classes:    ln: 52
 -- Interfaces: ln: 64
 --
 --
 -- Syntax
 --
 -- * All code should be 80-column wrapped
--- * All code should use tabs for indentation (equivalent to 4 spaces), and use
--- tabs for alignment until spaces are necessary to align columns
+-- * All code should use tabs for indentation (equivalent to 4 spaces), and
+--  spaces for alignment
 -- * All alignment should take place after the longest relative line's space
 -- * All parentheses should be padded with spaces
 -- * All function calls should use parentheses unless meaningful syntactic

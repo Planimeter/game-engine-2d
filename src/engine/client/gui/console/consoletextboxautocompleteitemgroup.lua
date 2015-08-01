@@ -14,8 +14,8 @@ function consoletextboxautocompleteitemgroup:invalidateLayout()
 	self:updatePos()
 
 	local itemWidth = 0
-	local font		= self:getScheme( "font" )
-	local maxWidth	= 0
+	local font      = self:getScheme( "font" )
+	local maxWidth  = 0
 	local listItems = self:getItems()
 	if ( listItems ) then
 		local y = 0

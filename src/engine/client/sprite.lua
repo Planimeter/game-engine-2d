@@ -40,6 +40,10 @@ function sprite:getAnimation()
 	return self.animation
 end
 
+function sprite:getAnimationName()
+	return self.animationName
+end
+
 function sprite:getAnimations()
 	return self.animations
 end
@@ -60,9 +64,13 @@ function sprite:getHeight()
 	return self.height
 end
 
+function sprite:onAnimationEnd( animation )
+end
+
 function sprite:setAnimation( animation )
 	local animations = self:getAnimations()
-	animation = animations[ animation ]
+	local name = animation
+	animation  = animations[ name ]
 	if ( not animation ) then
 		return
 	end
@@ -71,8 +79,9 @@ function sprite:setAnimation( animation )
 		return
 	end
 
-	self.animation = animation
-	self.frame     = animation.from
+	self.animation     = animation
+	self.animationName = name
+	self.frame         = animation.from
 
 	self:updateFrame()
 end
@@ -102,6 +111,8 @@ function sprite:update( dt )
 		self.frame   = self.frame + 1
 
 		if ( self.frame > animation.to ) then
+			local name = self:getAnimationName()
+			self:onAnimationEnd( name )
 			self.frame = animation.from
 		end
 

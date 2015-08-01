@@ -29,4 +29,16 @@ function prop_worldgate_spawn:prop_worldgate_spawn()
 	end
 end
 
+if ( _CLIENT ) then
+	-- TODO: Integrate with gui.hudmoveindicator?
+	function prop_worldgate_spawn:getOptions()
+		return {
+			["Examine"] = self.examine
+		}
+	end
+end
+
+function prop_worldgate_spawn:examine()
+end
+
 entities.linkToClassname( prop_worldgate_spawn, "prop_worldgate_spawn" )

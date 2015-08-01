@@ -119,7 +119,7 @@ function entity.findByClassname( classname, region )
 			end
 		end
 	end
-	return #t ~= 0 and t or nil
+	return #t > 0 and t or nil
 end
 
 function entity.getAll()
@@ -191,6 +191,10 @@ end
 
 function entity:getPosition()
 	return self:getNetworkVar( "position" )
+end
+
+function entity:getProperties()
+	return self.properties
 end
 
 if ( _CLIENT ) then
@@ -296,6 +300,10 @@ function entity:getNetworkVar( name )
 	return self.networkVars[ name ]:getValue()
 end
 
+function entity:hasNetworkVar( name )
+	return self.networkVars[ name ] and true or false
+end
+
 function entity:getNetworkVarsStruct()
 	if ( not self.networkVarsStruct ) then
 		local struct = {
@@ -337,6 +345,10 @@ function entity:onNetworkVarChanged( networkvar )
 
 		networkserver.broadcast( payload )
 	end
+end
+
+function entity:localToWorld( v )
+	return self:getPosition() + v
 end
 
 function entity:remove()
@@ -391,6 +403,10 @@ end
 
 function entity:setPosition( position )
 	self:setNetworkVar( "position", position )
+end
+
+function entity:setProperties( properties )
+	self.properties = properties
 end
 
 if ( _CLIENT ) then

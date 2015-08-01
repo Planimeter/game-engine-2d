@@ -4,18 +4,13 @@
 --
 --============================================================================--
 
-_VADVENTURE        = true
+_VADVENTURE   = true
 
-local _CLIENT      = _CLIENT
-local _SERVER      = _SERVER
+local _CLIENT = _CLIENT
+local _SERVER = _SERVER
 
-local error        = error
-local gui          = gui
-local hook         = hook
-local rawget       = rawget
-local setmetatable = setmetatable
-local type         = type
-local _G           = _G
+local hook    = hook
+local _G      = _G
 
 module( "game" )
 

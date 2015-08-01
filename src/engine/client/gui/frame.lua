@@ -5,28 +5,32 @@
 --============================================================================--
 
 local gui_draw_frame_focus = convar( "gui_draw_frame_focus", "0", nil, nil,
-									 "Draws bounds around the focused frame" )
+                             "Draws bounds around the focused frame" )
 
 class "frame" ( gui.panel )
 
+local utf8upper = string.utf8upper
+
 function frame:frame( parent, name, title )
 	gui.panel.panel( self, parent, name )
-	self.width		   = 640
-	self.height		   = 480
-	self.title		   = title or "Frame"
-	self.visible	   = false
+	self.width         = 640
+	self.height        = 480
+	self.title         = title or "Frame"
+	self.visible       = false
 	self.removeOnClose = false
-	self.resizable	   = true
-	self.movable	   = true
+	self.resizable     = true
+	self.movable       = true
 
-	self.closeButton   = gui.closebutton( self, name .. " Close Button" )
+	self.closeButton = gui.closebutton( self, name .. " Close Button" )
 	self.closeButton:setPos( self.width - 2 * 36 - 16, 1 )
 
 	self:setScheme( "Default" )
-	self.minWidth	   = 2 * 36 +
-						 self:getScheme( "titleFont" ):getWidth( self.title ) +
-						 self.closeButton:getWidth()
-	self.minHeight	   = 86
+
+	local font             = self:getScheme( "titleFont" )
+	local titleWidth       = font:getWidth( utf8upper( self.title ) )
+	local closeButtonWidth = self.closeButton:getWidth()
+	self.minWidth  = 2 * 36 + titleWidth + closeButtonWidth
+	self.minHeight = 86
 
 	self:setUseFullscreenFramebuffer( true )
 end
@@ -40,7 +44,7 @@ function frame:activate()
 		self:setScale( FRAME_ANIM_SCALE )
 		self:animate( {
 			opacity = 1,
-			scale	= 1
+			scale   = 1
 		}, FRAME_ANIM_TIME, "easeOutQuint" )
 	end
 
@@ -58,7 +62,7 @@ function frame:close()
 
 	self:animate( {
 		opacity = 0,
-		scale	= FRAME_ANIM_SCALE
+		scale   = FRAME_ANIM_SCALE
 	}, FRAME_ANIM_TIME, "easeOutQuint", function()
 		self:setVisible( false )
 		self:setOpacity( 1 )
@@ -110,8 +114,6 @@ function frame:drawForeground()
 	graphics.rectangle( "line", 0, 0, self:getWidth(), self:getHeight() )
 end
 
-local utf8upper = string.utf8upper
-
 function frame:drawTitle()
 	local property = "frame.titleTextColor"
 	if ( not self.focus ) then
@@ -154,14 +156,7 @@ function frame:isResizable()
 end
 
 function frame:isResizing()
-	return self.resizingTop			or
-		   self.resizingTopRight	or
-		   self.resizingRight		or
-		   self.resizingBottomRight or
-		   self.resizingBottom		or
-		   self.resizingBottomLeft	or
-		   self.resizingLeft		or
-		   self.resizingTopLeft
+	return self.resizing
 end
 
 function frame:isMovable()
@@ -183,8 +178,8 @@ end
 function frame:moveFocus()
 	local children = self:getChildren()
 	if ( children ) then
-		local shiftDown	   = input.isKeyDown( "lshift", "rshift" )
-		local dir		   = shiftDown and -1 or nil
+		local shiftDown    = input.isKeyDown( "lshift", "rshift" )
+		local dir          = shiftDown and -1 or nil
 		local focusedIndex = nil
 		for i, panel in ipairs( children ) do
 			if ( panel.focus ) then
@@ -235,7 +230,7 @@ end
 
 local localX, localY   = 0, 0
 local mouseIntersects  = false
-local pointInRectangle = math.pointInRectangle
+local pointinrectangle = math.pointinrectangle
 
 function frame:mousepressed( x, y, button )
 	if ( not self:isVisible() or self.closing ) then
@@ -263,11 +258,11 @@ function frame:mousepressed( x, y, button )
 		self.grabbedY  = localY
 
 		if ( self:isResizable() ) then
-			local width	 = self:getWidth()
+			local width  = self:getWidth()
 			local height = self:getHeight()
 
 			-- Top Resize Bounds
-			mouseIntersects	= pointInRectangle(
+			mouseIntersects = pointinrectangle(
 				localX,
 				localY,
 				8,
@@ -276,12 +271,12 @@ function frame:mousepressed( x, y, button )
 				8
 			)
 			if ( mouseIntersects ) then
-				self.resizingTop = true
+				self.resizing = "top"
 				return
 			end
 
 			-- Top-Right Resize Bounds
-			mouseIntersects	= pointInRectangle(
+			mouseIntersects = pointinrectangle(
 				localX,
 				localY,
 				width - 8,
@@ -290,12 +285,12 @@ function frame:mousepressed( x, y, button )
 				8
 			)
 			if ( mouseIntersects ) then
-				self.resizingTopRight = true
+				self.resizing = "topright"
 				return
 			end
 
 			-- Right Resize Bounds
-			mouseIntersects	= pointInRectangle(
+			mouseIntersects = pointinrectangle(
 				localX,
 				localY,
 				width  - 8,
@@ -304,12 +299,12 @@ function frame:mousepressed( x, y, button )
 				height - 16
 			)
 			if ( mouseIntersects ) then
-				self.resizingRight = true
+				self.resizing = "right"
 				return
 			end
 
 			-- Bottom-Right Resize Bounds
-			mouseIntersects	= pointInRectangle(
+			mouseIntersects = pointinrectangle(
 				localX,
 				localY,
 				width  - 8,
@@ -318,12 +313,12 @@ function frame:mousepressed( x, y, button )
 				8
 			)
 			if ( mouseIntersects ) then
-				self.resizingBottomRight = true
+				self.resizing = "bottomright"
 				return
 			end
 
 			-- Bottom Resize Bounds
-			mouseIntersects	= pointInRectangle(
+			mouseIntersects = pointinrectangle(
 				localX,
 				localY,
 				8,
@@ -332,12 +327,12 @@ function frame:mousepressed( x, y, button )
 				8
 			)
 			if ( mouseIntersects ) then
-				self.resizingBottom = true
+				self.resizing = "bottom"
 				return
 			end
 
 			-- Bottom-Left Resize Bounds
-			mouseIntersects	= pointInRectangle(
+			mouseIntersects = pointinrectangle(
 				localX,
 				localY,
 				0,
@@ -346,12 +341,12 @@ function frame:mousepressed( x, y, button )
 				8
 			)
 			if ( mouseIntersects ) then
-				self.resizingBottomLeft = true
+				self.resizing = "bottomleft"
 				return
 			end
 
 			-- Left Resize Bounds
-			mouseIntersects	= pointInRectangle(
+			mouseIntersects = pointinrectangle(
 				localX,
 				localY,
 				0,
@@ -360,12 +355,12 @@ function frame:mousepressed( x, y, button )
 				height - 16
 			)
 			if ( mouseIntersects ) then
-				self.resizingLeft = true
+				self.resizing = "left"
 				return
 			end
 
 			-- Top-Left Resize Bounds
-			mouseIntersects	= pointInRectangle(
+			mouseIntersects = pointinrectangle(
 				localX,
 				localY,
 				0,
@@ -374,13 +369,13 @@ function frame:mousepressed( x, y, button )
 				8
 			)
 			if ( mouseIntersects ) then
-				self.resizingTopLeft = true
+				self.resizing = "topleft"
 				return
 			end
 		end
 
 		-- Title Bar Resize Bounds
-		mouseIntersects	= pointInRectangle(
+		mouseIntersects = pointinrectangle(
 			localX,
 			localY,
 			0,
@@ -401,18 +396,11 @@ function frame:mousereleased( x, y, button )
 
 	gui.panel.mousereleased( self, x, y, button )
 
-	self.mousedown			 = false
-	self.grabbedX			 = nil
-	self.grabbedY			 = nil
-	self.resizingTop		 = nil
-	self.resizingTopRight	 = nil
-	self.resizingRight		 = nil
-	self.resizingBottomRight = nil
-	self.resizingBottom		 = nil
-	self.resizingBottomLeft	 = nil
-	self.resizingLeft		 = nil
-	self.resizingTopLeft	 = nil
-	self.moving				 = nil
+	self.mousedown = false
+	self.grabbedX  = nil
+	self.grabbedY  = nil
+	self.resizing  = nil
+	self.moving    = nil
 
 	if ( not self.mouseover ) then
 		self:onMouseLeave()
@@ -421,10 +409,10 @@ end
 
 function frame:moveToCenter()
 	local parent = self:getParent()
-	local width	 = parent:getWidth()
+	local width  = parent:getWidth()
 	local height = parent:getHeight()
 	self:setPos( ( width  - self:getWidth() )  / 2,
-				 ( height - self:getHeight() ) / 2 )
+	             ( height - self:getHeight() ) / 2 )
 end
 
 function frame:onLostFocus()
@@ -437,19 +425,20 @@ function frame:onMouseLeave()
 end
 
 function frame:setFocusedFrame( focus )
-	if ( gui.frame.focusedFrame ) then
-		gui.frame.focusedFrame.focus = nil
-		gui.frame.focusedFrame:onLostFocus()
-		gui.frame.focusedFrame:invalidate()
+	local focusedFrame = gui.frame.focusedFrame
+	if ( focusedFrame ) then
+		focusedFrame.focus = nil
+		focusedFrame:onLostFocus()
+		focusedFrame:invalidate()
 	end
 
 	if ( focus ) then
 		gui.frame.focusedFrame = self
-		self.focus			   = focus
+		self.focus = focus
 		self:invalidate()
 	else
 		gui.frame.focusedFrame = nil
-		self.focus			   = nil
+		self.focus = nil
 	end
 end
 
@@ -534,51 +523,51 @@ function frame:update( dt )
 
 	localX, localY = self:screenToLocal( mouseX, mouseY )
 	deltaX, deltaY = localX - self.grabbedX,
-					 localY - self.grabbedY
+	                 localY - self.grabbedY
 
 	if ( deltaX == 0 and deltaY == 0 ) then
 		return
 	end
 
 	if ( self:isResizable() ) then
-		if ( self.resizingTop ) then
-			deltaHeight		= self:setHeight( self:getHeight() - deltaY )
+		if ( self.resizing == "top" ) then
+			deltaHeight   = self:setHeight( self:getHeight() - deltaY )
 			self:setY( self:getY() + deltaY - deltaHeight )
 			self:invalidateLayout()
-		elseif ( self.resizingTopRight ) then
-			deltaWidth		= self:setWidth( self:getWidth()   + deltaX )
-			self.grabbedX	= localX + deltaWidth
-			deltaHeight		= self:setHeight( self:getHeight() - deltaY )
+		elseif ( self.resizing = "topright" ) then
+			deltaWidth    = self:setWidth( self:getWidth()   + deltaX )
+			self.grabbedX = localX + deltaWidth
+			deltaHeight   = self:setHeight( self:getHeight() - deltaY )
 			self:setY( self:getY() + deltaY - deltaHeight )
 			self:invalidateLayout()
-		elseif ( self.resizingRight ) then
-			deltaWidth		= self:setWidth( self:getWidth()   + deltaX )
-			self.grabbedX	= localX + deltaWidth
+		elseif ( self.resizing = "right" ) then
+			deltaWidth    = self:setWidth( self:getWidth()   + deltaX )
+			self.grabbedX = localX + deltaWidth
 			self:invalidateLayout()
-		elseif ( self.resizingBottomRight ) then
-			deltaWidth		= self:setWidth( self:getWidth()   + deltaX )
-			self.grabbedX	= localX + deltaWidth
-			deltaHeight		= self:setHeight( self:getHeight() + deltaY )
-			self.grabbedY	= localY + deltaHeight
+		elseif ( self.resizing = "bottomright" ) then
+			deltaWidth    = self:setWidth( self:getWidth()   + deltaX )
+			self.grabbedX = localX + deltaWidth
+			deltaHeight   = self:setHeight( self:getHeight() + deltaY )
+			self.grabbedY = localY + deltaHeight
 			self:invalidateLayout()
-		elseif ( self.resizingBottom ) then
-			deltaHeight		= self:setHeight( self:getHeight() + deltaY )
-			self.grabbedY	= localY + deltaHeight
+		elseif ( self.resizing = "bottom" ) then
+			deltaHeight   = self:setHeight( self:getHeight() + deltaY )
+			self.grabbedY = localY + deltaHeight
 			self:invalidateLayout()
-		elseif ( self.resizingBottomLeft ) then
-			deltaWidth		= self:setWidth( self:getWidth()   - deltaX )
+		elseif ( self.resizing = "bottomleft" ) then
+			deltaWidth    = self:setWidth( self:getWidth()   - deltaX )
 			self:setX( self:getX() + deltaX - deltaWidth )
-			deltaHeight		= self:setHeight( self:getHeight() + deltaY )
-			self.grabbedY	= localY + deltaHeight
+			deltaHeight   = self:setHeight( self:getHeight() + deltaY )
+			self.grabbedY = localY + deltaHeight
 			self:invalidateLayout()
-		elseif ( self.resizingLeft ) then
-			deltaWidth		= self:setWidth( self:getWidth()   - deltaX )
+		elseif ( self.resizing = "left" ) then
+			deltaWidth    = self:setWidth( self:getWidth()   - deltaX )
 			self:setX( self:getX() + deltaX - deltaWidth )
 			self:invalidateLayout()
-		elseif ( self.resizingTopLeft ) then
-			deltaWidth		= self:setWidth( self:getWidth()   - deltaX )
+		elseif ( self.resizing = "topleft" ) then
+			deltaWidth    = self:setWidth( self:getWidth()   - deltaX )
 			self:setX( self:getX() + deltaX - deltaWidth )
-			deltaHeight		= self:setHeight( self:getHeight() - deltaY )
+			deltaHeight   = self:setHeight( self:getHeight() - deltaY )
 			self:setY( self:getY() + deltaY - deltaHeight )
 			self:invalidateLayout()
 		end
@@ -598,7 +587,7 @@ function frame:updateCursor( mouseX, mouseY )
 	localX, localY = self:screenToLocal( mouseX, mouseY )
 
 	-- Top Resize Bounds
-	mouseIntersects	= pointInRectangle(
+	mouseIntersects = pointinrectangle(
 		localX,
 		localY,
 		8,
@@ -612,7 +601,7 @@ function frame:updateCursor( mouseX, mouseY )
 	end
 
 	-- Top-Right Resize Bounds
-	mouseIntersects	= pointInRectangle(
+	mouseIntersects = pointinrectangle(
 		localX,
 		localY,
 		self:getWidth() - 8,
@@ -626,10 +615,10 @@ function frame:updateCursor( mouseX, mouseY )
 	end
 
 	-- Right Resize Bounds
-	mouseIntersects	= pointInRectangle(
+	mouseIntersects = pointinrectangle(
 		localX,
 		localY,
-		self:getWidth()	 - 8,
+		self:getWidth()  - 8,
 		8,
 		8,
 		self:getHeight() - 16
@@ -640,10 +629,10 @@ function frame:updateCursor( mouseX, mouseY )
 	end
 
 	-- Bottom-Right Resize Bounds
-	mouseIntersects	= pointInRectangle(
+	mouseIntersects = pointinrectangle(
 		localX,
 		localY,
-		self:getWidth()	 - 8,
+		self:getWidth()  - 8,
 		self:getHeight() - 8,
 		8,
 		8
@@ -654,12 +643,12 @@ function frame:updateCursor( mouseX, mouseY )
 	end
 
 	-- Bottom Resize Bounds
-	mouseIntersects	= pointInRectangle(
+	mouseIntersects = pointinrectangle(
 		localX,
 		localY,
 		8,
 		self:getHeight() - 8,
-		self:getWidth()	 - 16,
+		self:getWidth()  - 16,
 		8
 	)
 	if ( mouseIntersects ) then
@@ -668,7 +657,7 @@ function frame:updateCursor( mouseX, mouseY )
 	end
 
 	-- Bottom-Left Resize Bounds
-	mouseIntersects	= pointInRectangle(
+	mouseIntersects = pointinrectangle(
 		localX,
 		localY,
 		0,
@@ -682,7 +671,7 @@ function frame:updateCursor( mouseX, mouseY )
 	end
 
 	-- Left Resize Bounds
-	mouseIntersects	= pointInRectangle(
+	mouseIntersects = pointinrectangle(
 		localX,
 		localY,
 		0,
@@ -696,7 +685,7 @@ function frame:updateCursor( mouseX, mouseY )
 	end
 
 	-- Top-Left Resize Bounds
-	mouseIntersects	= pointInRectangle(
+	mouseIntersects = pointinrectangle(
 		localX,
 		localY,
 		0,

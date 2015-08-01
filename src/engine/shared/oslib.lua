@@ -37,8 +37,8 @@ if ( _CLIENT or _INTERACTIVE ) then
 	}
 
 	do
-		for _, v in pairs( systemCursors ) do
-			cursors[ v ] = mouse.getSystemCursor( v )
+		for _, ctype in pairs( systemCursors ) do
+			cursors[ ctype ] = mouse.getSystemCursor( ctype )
 		end
 	end
 

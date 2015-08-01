@@ -19,7 +19,7 @@ function string.capitalize( s )
 	return upper( sub( s, 1, 1 ) ) .. sub( s, 2 )
 end
 
-function string.parseArgs( s )
+function string.parseargs( s )
 	local t      = {}
 	local i      = 1
 	local length = len( s )

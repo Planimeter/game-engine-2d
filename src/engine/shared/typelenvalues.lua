@@ -83,7 +83,7 @@ local pairs = pairs
 
 function typelenvalues.generateIds( definitions )
 	local id = 1
-	for k, v in pairs( definitions ) do
+	for _, v in pairs( definitions ) do
 		v.id = id
 		id   = id + 1
 	end

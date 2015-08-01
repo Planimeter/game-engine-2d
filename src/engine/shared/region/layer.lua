@@ -19,9 +19,12 @@ if ( _CLIENT ) then
 
 	function regionlayer:draw()
 		if ( self:getType() == "tilelayer" ) then
-			graphics.setOpacity( self:getOpacity() )
-			graphics.setColor( color.white )
-			graphics.draw( self:getSpriteBatch() )
+			graphics.push()
+				graphics.translate( self:getX(), self:getY() )
+				graphics.setOpacity( self:getOpacity() )
+				graphics.setColor( color.white )
+				graphics.draw( self:getSpriteBatch() )
+			graphics.pop()
 		end
 	end
 end
@@ -155,9 +158,10 @@ function regionlayer:parse()
 	elseif ( type == "objectgroup" ) then
 		if ( _SERVER ) then
 			require( "engine.shared.entities" )
-			local entities = entities.initialize( data[ "objects" ] )
+			local region   = self:getRegion()
+			local entities = entities.initialize( region, data[ "objects" ] )
 			for _, entity in ipairs( entities ) do
-				self:getRegion():addEntity( entity )
+				region:addEntity( entity )
 			end
 		end
 	end

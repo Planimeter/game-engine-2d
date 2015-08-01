@@ -166,7 +166,7 @@ function load( arg )
 	_arg      = arg
 	_realtime = 0
 
-	for i, v in ipairs( arg ) do
+	for _, v in ipairs( arg ) do
 		if ( v == "-debug" ) then
 			_G._DEBUG = true
 		end
@@ -296,8 +296,8 @@ function update( dt )
 		-- Shared engine updates
 		if ( _G.entity ) then
 			local entities = _G.entity.getAll()
-			for _, v in ipairs( entities ) do
-				v:update( timestep )
+			for _, entity in ipairs( entities ) do
+				entity:update( timestep )
 			end
 		end
 

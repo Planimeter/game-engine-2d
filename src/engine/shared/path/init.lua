@@ -8,13 +8,13 @@ if ( _CLIENT ) then
 require( "engine.client.debugoverlay" )
 end
 
-local math         = math
-local region       = region
-local require      = require
-local table        = table
-local tostring     = tostring
-local vector       = vector
-local _G           = _G
+local math     = math
+local region   = region
+local require  = require
+local table    = table
+local tostring = tostring
+local vector   = vector
+local _G       = _G
 
 module( "path" )
 

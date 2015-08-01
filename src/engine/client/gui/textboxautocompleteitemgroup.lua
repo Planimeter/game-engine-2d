@@ -12,7 +12,7 @@ function textboxautocompleteitemgroup:textboxautocompleteitemgroup( parent, name
 	-- for the drop-down list item group. The control does not necessarily have
 	-- to be a dropdownlist.
 	-- self.dropDownList = nil
-	self.textBox		 = parent
+	self.textBox         = parent
 
 	self:setSuppressFramebufferWarnings( true )
 end
@@ -52,8 +52,8 @@ function textboxautocompleteitemgroup:invalidateLayout()
 end
 
 function textboxautocompleteitemgroup:isVisible()
-	local textBox	  = self:getTextBox()
-	local children	  = self:getChildren()
+	local textBox     = self:getTextBox()
+	local children    = self:getChildren()
 	local hasChildren = children and #children > 0
 	return textBox:isVisible() and textBox.focus and hasChildren
 end
@@ -84,8 +84,7 @@ local sx, sy = 0, 0
 function textboxautocompleteitemgroup:updatePos()
 	local textBox = self:getTextBox()
 	if ( textBox ) then
-		sx, sy = textBox:localToScreen( textBox:getX(),
-										textBox:getY() )
+		sx, sy = textBox:localToScreen( textBox:getX(), textBox:getY() )
 		self:setPos( sx, sy + textBox:getHeight() )
 	end
 end

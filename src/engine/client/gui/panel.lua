@@ -83,32 +83,42 @@ function panel:animate( properties, duration, easing, complete )
 end
 
 function panel:createFramebuffer()
-	if ( self.needsRedraw or self.framebuffer == nil ) then
-		local width  = self:getWidth()
-		local height = self:getHeight()
-		if ( width == 0 or height == 0 ) then
-			width  = nil
-			height = nil
-			if ( not self:shouldSuppressFramebufferWarnings() ) then
-				local panel = tostring( self )
-				print( "Attempt to create framebuffer for " .. panel ..
-				       " with a size of 0!" )
-			end
-		end
-		self.framebuffer = self.framebuffer or
-		                 ( self:shouldUseFullscreenFramebuffer() and
-		                   graphics.newFullscreenFramebuffer()
-		                   or
-		                   graphics.newFramebuffer( width, height ) )
-		if ( self.framebuffer:shouldAutoRedraw() ) then
-			self.framebuffer:setAutoRedraw( false )
-		end
-		self.framebuffer:clear()
-		self.framebuffer:renderTo( function()
-			self:draw()
-		end )
-		self.needsRedraw = nil
+	local framebuffer = self.framebuffer
+	if ( framebuffer and not self.needsRedraw ) then
+		return
 	end
+
+	local width  = self:getWidth()
+	local height = self:getHeight()
+	if ( width == 0 or height == 0 ) then
+		width  = nil
+		height = nil
+		if ( not self:shouldSuppressFramebufferWarnings() ) then
+			local panel = tostring( self )
+			print( "Attempt to create framebuffer for " .. panel ..
+			       " with a size of 0!" )
+		end
+	end
+
+	if ( not framebuffer ) then
+		local fullscreen = self:shouldUseFullscreenFramebuffer()
+		if ( fullscreen ) then
+			self.framebuffer = graphics.newFullscreenFramebuffer()
+		else
+			self.framebuffer = graphics.newFramebuffer( width, height )
+		end
+	end
+
+	framebuffer = self.framebuffer
+	if ( framebuffer:shouldAutoRedraw() ) then
+		framebuffer:setAutoRedraw( false )
+	end
+
+	framebuffer:clear()
+	framebuffer:renderTo( function()
+		self:draw()
+	end )
+	self.needsRedraw = nil
 end
 
 local opacityStack = { 1 }
@@ -119,7 +129,7 @@ function panel:draw()
 	end
 
 	if ( self:getChildren() ) then
-		for i, v in ipairs( self:getChildren() ) do
+		for _, v in ipairs( self:getChildren() ) do
 			v:createFramebuffer()
 		end
 	end
@@ -127,19 +137,19 @@ function panel:draw()
 	self:setZOrder()
 
 	if ( self:getChildren() ) then
-		for i, v in ipairs( self:getChildren() ) do
+		for _, v in ipairs( self:getChildren() ) do
 			local scale  = v:getScale()
 			local width  = v:getWidth()
 			local height = v:getHeight()
 			graphics.push()
 				graphics.translate( v:getX(), v:getY() )
 				graphics.scale( scale )
-				graphics.translate( ( width  / scale ) / 2 -
-				                      width  / 2,
-				                    ( height / scale ) / 2 -
-				                      height / 2 )
+				graphics.translate(
+					( width  / scale ) / 2 - width  / 2,
+					( height / scale ) / 2 - height / 2
+				)
 				local opacity = opacityStack[ #opacityStack ]
-				opacity       = opacity * v:getOpacity()
+				opacity = opacity * v:getOpacity()
 				graphics.setOpacity( opacity )
 				table.insert( opacityStack, opacity )
 					if ( v:isVisible() ) then
@@ -231,7 +241,7 @@ end
 
 local sx, sy           = 0, 0
 local w,  h            = 0, 0
-local pointInRectangle = math.pointInRectangle
+local pointinrectangle = math.pointinrectangle
 local children         = nil
 local topChild         = nil
 
@@ -242,7 +252,7 @@ function panel:getTopMostChildAtPos( x, y )
 
 	sx, sy = self:localToScreen( self:getX(), self:getY() )
 	w,  h  = self:getWidth(), self:getHeight()
-	if ( not pointInRectangle( x, y, sx, sy, w, h ) ) then
+	if ( not pointinrectangle( x, y, sx, sy, w, h ) ) then
 		return nil
 	end
 
@@ -271,7 +281,7 @@ end
 
 function panel:invalidateLayout()
 	if ( self:getChildren() ) then
-		for i, v in ipairs( self:getChildren() ) do
+		for _, v in ipairs( self:getChildren() ) do
 			v:invalidateLayout()
 		end
 	end
@@ -320,7 +330,7 @@ local function cascadeInputToChildren( self, func, ... )
 	if ( self:getChildren() ) then
 		local filtered
 		for i, child in ipairs( self:getChildren() ) do
-			filtered = child[func]( child, ... )
+			filtered = child[ func ]( child, ... )
 			if ( filtered ~= nil ) then
 				return filtered
 			end
@@ -369,7 +379,7 @@ function panel:mousepressed( x, y, button )
 	end
 
 	if ( self:getChildren() ) then
-		for i, v in ipairs( self:getChildren() ) do
+		for _, v in ipairs( self:getChildren() ) do
 			v:mousepressed( x, y, button )
 		end
 	end
@@ -381,7 +391,7 @@ function panel:mousereleased( x, y, button )
 	end
 
 	if ( self:getChildren() ) then
-		for i, v in ipairs( self:getChildren() ) do
+		for _, v in ipairs( self:getChildren() ) do
 			v:mousereleased( x, y, button )
 		end
 	end
@@ -453,7 +463,7 @@ end
 
 function panel:preDrawWorld()
 	if ( self:getChildren() ) then
-		for i, v in ipairs( self:getChildren() ) do
+		for _, v in ipairs( self:getChildren() ) do
 			v:preDrawWorld()
 		end
 	end
@@ -542,7 +552,7 @@ function panel:setParent( panel )
 	end
 
 	panel.children = panel.children or {}
-	for i, v in ipairs( panel.children ) do
+	for _, v in ipairs( panel.children ) do
 		if ( v == panel ) then
 			return
 		end
@@ -627,7 +637,7 @@ function panel:update( dt )
 	end
 
 	if ( self:getChildren() ) then
-		for i, v in ipairs( self:getChildren() ) do
+		for _, v in ipairs( self:getChildren() ) do
 			v:update( dt )
 		end
 	end

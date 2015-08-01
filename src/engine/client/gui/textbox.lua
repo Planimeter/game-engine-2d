@@ -7,7 +7,7 @@
 class "textbox" ( gui.panel )
 
 textbox.maskedTextbox = textbox.maskedTextbox or nil
-textbox.canFocus	  = true
+textbox.canFocus      = true
 
 local function getInnerWidth( self )
 	return self:getWidth() - 2 * self.padding
@@ -18,29 +18,27 @@ local function getInnerHeight( self )
 end
 
 function textbox.drawMask()
-	local self = gui.textbox.maskedTextbox
-	graphics.rectangle( "fill",
-						self.padding,
-						0,
-						getInnerWidth( self ),
-						self:getHeight() )
+	local self   = gui.textbox.maskedTextbox
+	local width  = getInnerWidth( self )
+	local height = self:getHeight()
+	graphics.rectangle( "fill", self.padding, 0, width, height )
 end
 
 function textbox:textbox( parent, name, placeholder )
 	gui.panel.panel( self, parent, name )
-	self.width			= 216
-	self.height			= 46
-	self.focus			= false
+	self.width          = 216
+	self.height         = 46
+	self.focus          = false
 	self.defocusOnEnter = false
-	self.placeholder	= placeholder or "Text Box"
-	self.text			= ""
-	self.padding		= 18
-	self.cursorPos		= 0
-	self.textOverflow	= 0
-	self.scrollOffset	= 0
-	self.disabled		= false
-	self.editable		= true
-	self.multiline		= false
+	self.placeholder    = placeholder or "Text Box"
+	self.text           = ""
+	self.padding        = 18
+	self.cursorPos      = 0
+	self.textOverflow   = 0
+	self.scrollOffset   = 0
+	self.disabled       = false
+	self.editable       = true
+	self.multiline      = false
 
 	self:setScheme( "Default" )
 	self:setUseFullscreenFramebuffer( true )
@@ -66,7 +64,7 @@ end
 local function getTextY( self )
 	if ( self:isMultiline() ) then
 		return self.padding - ( self.scrollbar and self.scrollbar:getValue() or
-												   self.padding )
+		                                           self.padding )
 	else
 		local font = self:getScheme( "font" )
 		return self:getHeight() / 2 - font:getHeight() / 2 - 2
@@ -77,7 +75,7 @@ local utf8sub = string.utf8sub
 
 local function getRelativeCursorPos( self )
 	local font = self:getScheme( "font" )
-	local x	   = getTextX( self )
+	local x    = getTextX( self )
 	if ( self.cursorPos > 0 ) then
 		x = x + font:getWidth( utf8sub( self.text, 1, self.cursorPos ) )
 	end
@@ -106,17 +104,17 @@ function textbox:drawCursor()
 		graphics.setOpacity( opacity * abs( sin( 3 * engine.getRealTime() ) ) )
 		graphics.setColor( graphics.getColor() )
 			graphics.rectangle( "fill",
-								getRelativeCursorPos( self ),
-								self:getHeight() / 2 - font:getHeight() / 2,
-								1,
-								font:getHeight() )
+			                    getRelativeCursorPos( self ),
+			                    self:getHeight() / 2 - font:getHeight() / 2,
+			                    1,
+			                    font:getHeight() )
 		graphics.setOpacity( opacity )
 	end
 end
 
 function textbox:drawForeground()
 	local property = "textbox.outlineColor"
-	local width	   = self:getWidth()
+	local width    = self:getWidth()
 	local height   = self:getHeight()
 
 	if ( self:isEditable() ) then
@@ -137,12 +135,12 @@ function textbox:drawText()
 	gui.textbox.maskedTextbox = self
 	graphics.setStencil( gui.textbox.drawMask )
 		local property = "textbox.textColor"
-		local text	   = self.placeholder
+		local text     = self.placeholder
 
 		local selected = self.mousedown or self.mouseover
 		if ( self.focus or self.text ~= "" ) then
 			property = "textbox.focus.textColor"
-			text	 = self.text
+			text     = self.text
 		elseif ( selected and not self:isDisabled() ) then
 			property = "textbox.mouseover.textColor"
 		end
@@ -174,7 +172,7 @@ local function getTextWidth( self )
 end
 
 local function getTextHeight( self )
-	local font		   = self:getScheme( "font" )
+	local font         = self:getScheme( "font" )
 	local width, lines = font:getWrap( self.text, getInnerWidth( self ) )
 	return lines * font:getHeight()
 end
@@ -204,7 +202,7 @@ local function updateAutocomplete( self, suggestions )
 	end
 
 	local dropdownlistitem = nil
-	local name			   = "Autocomplete Drop-Down List Item"
+	local name             = "Autocomplete Drop-Down List Item"
 	for i, suggestion in pairs( suggestions ) do
 		dropdownlistitem = gui.dropdownlistitem( name .. " " .. i, suggestion )
 		dropdownlistitem:setValue( suggestion )
@@ -235,16 +233,16 @@ function textbox:doBackspace( count )
 			local pos, offset = getRelativeCursorPos( self )
 			if ( offset ) then
 				self.scrollOffset = self.scrollOffset -
-									getInnerWidth( self ) +
-									offset
+				                    getInnerWidth( self ) +
+				                    offset
 				if ( getTextX( self ) > 0 ) then
 					resetScrollOffset = true
 				end
 			end
 		end
 
-		local sub2	   = utf8sub( self.text, self.cursorPos + 1 )
-		self.text	   = sub1 .. sub2
+		local sub2     = utf8sub( self.text, self.cursorPos + 1 )
+		self.text      = sub1 .. sub2
 		self.cursorPos = math.max( 0, self.cursorPos - count )
 	end
 
@@ -286,7 +284,7 @@ function textbox:doDelete( count )
 	end
 	local font = self:getScheme( "font" )
 	if ( self.cursorPos ~= utf8len( self.text ) and
-		 isTextOverflowing( self ) ) then
+	     isTextOverflowing( self ) ) then
 		self.scrollOffset = self.scrollOffset + font:getWidth( text )
 	end
 
@@ -350,17 +348,17 @@ end
 
 function textbox:insertText( text )
 	local underflow = getTextWidth( self ) < getInnerWidth( self )
-	local font		= self:getScheme( "font" )
-	local sub1		= utf8sub( self.text, self.cursorPos + 1 )
-	local sub2		= utf8sub( self.text, 1, self.cursorPos )
+	local font      = self:getScheme( "font" )
+	local sub1      = utf8sub( self.text, self.cursorPos + 1 )
+	local sub2      = utf8sub( self.text, 1, self.cursorPos )
 	if ( self.cursorPos == 0 ) then
 		sub2 = ""
 	end
 
 	if ( getTextWidth( self ) + font:getWidth( text ) >
-		 getInnerWidth( self ) ) then
-		self.scrollOffset	= self.scrollOffset - font:getWidth( text )
-		local pos, overflow	= getRelativeCursorPos( self )
+	     getInnerWidth( self ) ) then
+		self.scrollOffset   = self.scrollOffset - font:getWidth( text )
+		local pos, overflow = getRelativeCursorPos( self )
 		if ( overflow ) then
 			self.scrollOffset = self.scrollOffset + overflow
 		end
@@ -373,7 +371,7 @@ function textbox:insertText( text )
 	updateOverflow( self )
 	if ( resetScrollOffset ) then
 		self.scrollOffset = 0
-		underflow		  = false
+		underflow         = false
 		resetScrollOffset = false
 	end
 	self.cursorPos = self.cursorPos + utf8len( text )
@@ -424,28 +422,27 @@ local function updateScrollOffset( self )
 end
 
 local function shiftCursor( self, pos )
-	self.cursorPos = math.clamp( self.cursorPos + pos,
-								 0,
-								 utf8len( self.text ) )
+	local length   = utf8len( self.text )
+	self.cursorPos = math.clamp( self.cursorPos + pos, 0, length )
 	updateScrollOffset( self )
 end
 
 local utf8reverse = string.utf8reverse
-local find		  = string.find
+local find        = string.find
 
 local function nextWord( self, dir )
-	local backwards	 = dir == -1
-	local startPos	 = backwards and 1				or self.cursorPos + 1
-	local endPos	 = backwards and self.cursorPos or nil
-	local sub		 = utf8sub( self.text, startPos, endPos )
+	local backwards  = dir == -1
+	local startPos   = backwards and 1              or self.cursorPos + 1
+	local endPos     = backwards and self.cursorPos or nil
+	local sub        = utf8sub( self.text, startPos, endPos )
 	if ( backwards ) then
-		sub			 = utf8reverse( sub )
+		sub          = utf8reverse( sub )
 	end
 	startPos, endPos = find( sub, "%s*." )
-	local pos		 = 0
+	local pos        = 0
 	if ( startPos == 1 ) then
-		sub			 = utf8sub( sub, endPos )
-		pos			 = endPos - 1
+		sub          = utf8sub( sub, endPos )
+		pos          = endPos - 1
 	end
 	startPos, endPos = find( sub, ".-%s" )
 	if ( backwards ) then
@@ -481,14 +478,14 @@ local function selectSuggestion( self, dir )
 		return
 	end
 
-	local backwards	 = dir == -1
+	local backwards  = dir == -1
 	local selectedId = self.autocompleteItemGroup:getSelectedId()
-	local items		 = #self.autocompleteItemGroup:getItems()
-	selectedId		 = selectedId + ( backwards and -1 or 1 )
+	local items      = #self.autocompleteItemGroup:getItems()
+	selectedId       = selectedId + ( backwards and -1 or 1 )
 	if ( backwards ) then
-		selectedId	 = math.clamp( selectedId, 0, items )
+		selectedId   = math.clamp( selectedId, 0, items )
 	else
-		selectedId	 = math.clamp( selectedId, 1, items + 1 )
+		selectedId   = math.clamp( selectedId, 1, items + 1 )
 	end
 	if ( selectedId == ( backwards and 0 or items + 1 ) ) then
 		self.autocompleteItemGroup:setSelectedId( backwards and items or 1 )
@@ -503,20 +500,20 @@ function textbox:keypressed( key, isrepeat )
 	end
 
 	local controlDown = input.isKeyDown( "lctrl", "rctrl" )
-	local shiftDown	  = input.isKeyDown( "lshift", "rshift" )
+	local shiftDown   = input.isKeyDown( "lshift", "rshift" )
 	if ( key == "backspace" ) then
 		self:doBackspace( controlDown and math.abs( nextWord( self, -1 ) ) or 1 )
 	elseif ( key == "delete" ) then
 		self:doDelete( controlDown and nextWord( self, 1 ) or 1 )
 	elseif ( key == "end" ) then
 		if ( getTextWidth( self ) + getTextX( self ) >
-			 getInnerWidth( self ) ) then
+		     getInnerWidth( self ) ) then
 			self.scrollOffset = 0
 		end
 		self.cursorPos = utf8len( self.text )
 	elseif ( key == "home" ) then
 		self.scrollOffset = -self.textOverflow
-		self.cursorPos	  = 0
+		self.cursorPos    = 0
 	elseif ( key == "left" ) then
 		if ( not controlDown ) then
 			shiftCursor( self, -1 )
@@ -526,7 +523,7 @@ function textbox:keypressed( key, isrepeat )
 				shiftCursor( self, pos )
 			else
 				self.scrollOffset = -self.textOverflow
-				self.cursorPos	  = 0
+				self.cursorPos    = 0
 			end
 		end
 	elseif ( key == "right" ) then
@@ -538,7 +535,7 @@ function textbox:keypressed( key, isrepeat )
 				shiftCursor( self, pos )
 			else
 				if ( getTextWidth( self ) + getTextX( self ) >
-					 getInnerWidth( self ) ) then
+				     getInnerWidth( self ) ) then
 					self.scrollOffset = 0
 				end
 				self.cursorPos = utf8len( self.text )
@@ -555,10 +552,10 @@ function textbox:keypressed( key, isrepeat )
 			selectSuggestion( self, -1 )
 		end
 	elseif ( key == "return"
-		  or key == "kpenter" ) then
+	      or key == "kpenter" ) then
 		if ( not self:isMultiline() ) then
 			if ( self.autocompleteItemGroup and
-				 self.autocompleteItemGroup:getSelectedItem() ) then
+			     self.autocompleteItemGroup:getSelectedItem() ) then
 				self.autocompleteItemGroup:getSelectedItem():onClick()
 				return
 			end
@@ -645,9 +642,9 @@ function textbox:mousepressed( x, y, button )
 		end
 	else
 		local mousewheelPressed = button == "wd" or button == "wu"
-		if ( self.focus			   and
-			 not mousewheelPressed and
-			 not isChildMousedOver( self ) ) then
+		if ( self.focus            and
+		     not mousewheelPressed and
+		     not isChildMousedOver( self ) ) then
 			gui.setFocusedPanel( self, false )
 		end
 	end
@@ -683,9 +680,9 @@ function textbox:onClick( x, y )
 			self.cursorPos = utf8len( self.text )
 		else
 			for i = 1, utf8len( self.text ) do
-				local width	   = font:getWidth( utf8sub( self.text, 1, i ) )
+				local width    = font:getWidth( utf8sub( self.text, 1, i ) )
 				local startPos = i == 1 and 0 or width
-				width		 = font:getWidth( utf8sub( self.text, 1, i + 1 ) )
+				width        = font:getWidth( utf8sub( self.text, 1, i + 1 ) )
 				local endPos = width
 
 				if ( x > startPos and x < endPos ) then
@@ -774,7 +771,7 @@ function textbox:setPlaceholder( placeholder )
 end
 
 function textbox:setText( text )
-	self.text	   = text
+	self.text      = text
 	self.cursorPos = utf8len( text )
 
 	local autocomplete = self:getAutocomplete()

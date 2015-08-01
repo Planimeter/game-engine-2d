@@ -5,11 +5,17 @@
 --============================================================================--
 
 require( "engine.shared.entities.entity" )
+require( "game" )
 
 class "prop_tree" ( "entity" )
 
 function prop_tree:prop_tree()
 	entity.entity( self )
+
+	local tileSize = game.tileSize
+	local min      = vector()
+	local max      = vector( 2 * tileSize, -tileSize )
+	self:setCollisionBounds( min, max )
 
 	self:setNetworkVar( "name", "Tree" )
 
@@ -21,7 +27,7 @@ end
 
 if ( _CLIENT ) then
 	-- TODO: Integrate with gui.hudmoveindicator?
-	function prop_tree:getActions()
+	function prop_tree:getOptions()
 		return {
 			["Chop Down"] = self.chopDown,
 			["Examine"]   = self.examine

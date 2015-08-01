@@ -129,6 +129,13 @@ default.hudspeechballoons   = {
     textColor               = default.colors.gold
 }
 
+default.hudmoveindicator    = {
+    textColor               = default.colors.white,
+    smallTextColor          = default.colors.gray,
+ -- indicatorColor          = color( 157, 168,  57,        255 )
+    indicatorColor          = default.colors.gold
+}
+
 default.label               = {
     textColor               = color( 163, 167, 168,        255 )
 }

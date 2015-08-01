@@ -28,9 +28,9 @@ end
 function framebuffer:framebuffer( width, height )
 	self.desiredWidth  = width
 	self.desiredHeight = height
-	self._drawFunc	   = nil
+	self._drawFunc     = nil
 	self.needsRedraw   = false
-	self.autoRedraw	   = true
+	self.autoRedraw    = true
 	table.insert( framebuffer.framebuffers, self )
 
 	self:createFramebuffer( width, height )
@@ -51,8 +51,8 @@ function framebuffer:createFramebuffer( width, height )
 		self._framebuffer = graphics.newCanvas( width, height )
 	else
 		local size = width > height and width  or
-					 height > width	and height or width
-		size	   = math.nearestPow2( size )
+		             height > width and height or width
+		size = math.nearestpow2( size )
 		self._framebuffer = graphics.newCanvas( size, size )
 	end
 end

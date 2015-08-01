@@ -20,7 +20,10 @@ if ( _CLIENT ) then
 		graphics.push()
 			graphics.translate( camera.getTranslation() )
 			for _, region in ipairs( region.regions ) do
-				region:draw()
+				graphics.push()
+					graphics.translate( region:getX(), region:getY() )
+					region:draw()
+				graphics.pop()
 			end
 		graphics.pop()
 	end
@@ -45,22 +48,21 @@ end
 function region.getAtPosition( position )
 	for _, region in ipairs( region.regions ) do
 		local px, py = position.x, position.y
-		-- TODO: Multiregion support.
-		local x,  y  = 0, 0
+		local x,  y  = region:getX(), region:getY()
 		local width  = region:getWidth()  * region:getTileWidth()
 		local height = region:getHeight() * region:getTileHeight()
-		if ( math.pointInRectangle( px, py, x, y, width, height ) ) then
+		if ( math.pointinrectangle( px, py, x, y, width, height ) ) then
 			return region
 		end
 	end
 end
 
-function region.load( name )
+function region.load( name, x, y )
 	if ( region.getByName( name ) ) then
 		return
 	end
 
-	local region = region( name )
+	local region = region( name, x, y )
 	table.insert( region.regions, region )
 end
 
@@ -101,6 +103,7 @@ function region.unload( name )
 
 	for i, region in ipairs( region.regions ) do
 		if ( name == region:getName() ) then
+			region:removeEntities()
 			table.remove( region.regions, i )
 			return
 		end
@@ -181,10 +184,13 @@ function region.snapToGrid( x, y )
 	return x, y
 end
 
-function region:region( name )
+function region:region( name, x, y )
 	self.name     = name
 	self.data     = require( "regions." .. name )
 	self.entities = {}
+
+	self.x = x or 0
+	self.y = y or 0
 
 	self:parse()
 end
@@ -201,13 +207,13 @@ if ( _CLIENT ) then
 		end
 
 		for _, layer in ipairs( layers ) do
-			graphics.push()
-				graphics.setOpacity( layer:getOpacity() )
-				if ( layer:isVisible() ) then
+			if ( layer:isVisible() ) then
+				graphics.push()
+					graphics.setOpacity( layer:getOpacity() )
 					layer:draw()
-				end
-				graphics.setOpacity( 1 )
-			graphics.pop()
+					graphics.setOpacity( 1 )
+				graphics.pop()
+			end
 		end
 	end
 end
@@ -267,8 +273,43 @@ function region:getHeight()
 	return self.height
 end
 
+function region:getX()
+	return self.x
+end
+
+function region:getY()
+	return self.y
+end
+
+local pos    = nil
+local min    = nil
+local max    = nil
+local px     = 0
+local py     = 0
+local x      = 0
+local y      = 0
+local width  = 0
+local height = 0
+local pointinrectangle = math.pointinrectangle
+
 function region:isTileWalkableAtPosition( position )
-	-- TODO: Implement me.
+	-- px = position.x
+	-- py = position.y
+	-- for _, entity in ipairs( self:getEntities() ) do
+	-- 	pos      = entity:getPosition()
+	-- 	min, max = entity:getCollisionBounds()
+	-- 	if ( min and max ) then
+	-- 		min    = pos + min
+	-- 		max    = pos + max
+	-- 		x      = min.x
+	-- 		y      = max.y
+	-- 		width  = max.x - min.x
+	-- 		height = min.y - max.y
+	-- 		if ( pointinrectangle( px, py, x, y, width, height ) ) then
+	-- 			return false
+	-- 		end
+	-- 	end
+	-- end
 	return true
 end
 
@@ -329,6 +370,15 @@ function region:parse()
 	self.data = nil
 end
 
+function region:removeEntities()
+	local entities = self:getEntities()
+	for _, entity in ipairs( entities ) do
+		entity:remove()
+	end
+
+	table.clear( entities )
+end
+
 function region:setFormatVersion( formatVersion )
 	self.formatVersion = formatVersion
 end
@@ -363,6 +413,14 @@ end
 
 function region:setHeight( height )
 	self.height = height
+end
+
+function region:setX( x )
+	self.x = x
+end
+
+function region:setY( y )
+	self.y = y
 end
 
 function region:__tostring()

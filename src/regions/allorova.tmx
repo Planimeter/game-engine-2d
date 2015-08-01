@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="81">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="150">
  <tileset firstgid="1" source="World.tsx"/>
  <tileset firstgid="257" source="Architect.tsx"/>
  <layer name="Grass 1" width="100" height="100">
@@ -24,12 +24,17 @@
  </layer>
  <layer name="Misc. Detail" width="100" height="100">
   <data encoding="base64" compression="zlib">
-   eJzt2kEOgyAQBVC37Q3a+x+0mQUbYlNronz0vZ2uCAb+DLgsAAAAAAAAAAAAAAAAAAAAAAAAwF6v0QOAELUW3t27/hnurF8PjyGjuLdfc/48ZRQ0Nd/WATAL+1UeuQ3MwLlhDmdU81F/5VB3AbORITlkSB51cRY94xhyIstaVqz9e9Lew1W5OweuqvY2vSFXpL/OU9+kegY1VZYtGSArAAD+o+bNs6WedceRR28/hj0sj54cmIH8yPEtN3yj49Tc7uknZPwx/N8DNB+v8wL7
+   eJzt2kEOgyAQBVCv0t6gvf/hmlmwITa1JspH39vpimDgz4DLAgAAAAAAAAAAAAAAAAAAAAAAAOz1Gj0ACFFr4d2965/hzvr18Bgyinv7NefPU0ZBU/NtHQCzsF/lkdvADJwb5nBGNR/1Vw51FzAbGZJDhuRRF2fRM44hJ7KsZcXavyftPVyVu3Pgqmpv0xtyRfrrPPVNqmdQU2XZkgGyAgDgP2rePFvqWXccefT2Y9jD8ujJgRnIjxzfcsM3Ok7N7Z5+QsYfw/89QPMB+LUHqw==
   </data>
  </layer>
  <layer name="Magic Circle" width="100" height="100">
   <data encoding="base64" compression="zlib">
    eJzt0TsKgFAMRNFEbUQbP/tfq1O4AauHcA4MaQO3CgAAAAAAAAAAAAAAAAAAAAAAAPiiu2rK5mzp0d+wvg223F2P4Y40OLMru/UAAAAAAAAAAAAAAAAAAAAAAAAAfuoBXkYAgA==
+  </data>
+ </layer>
+ <layer name="Water" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJztnd1ugzAMRnu77Q2293/PLaoQDJEfICHH9nck7lo19sFOmhL19RJCCCGEEEIIIYQQQgghhBBCCB98/l0fm+tr7nBCsc996ZKX/pzJv5z0527+5eYaI/MuJ23MciAnKxQHkZ1QHXh30jvvP5nP+T7x2tJ7PDvp6aKW26tEqZteLkZ5WGitEcturrgYnfcad71QnVh0ccQVPzTOuiB62HPGCw1vLvbU3JA4UxsWXSyUnJDw7mEL3UdLbXhxkcjVCIHWPuUNYoytLjzVxgLNx5n52yOkOKOspUqQfER3kTiKd8aeSfQ+tUCJudWFfMwdR6RelbDkw7uLhCUfEaDELh9vcrE/vcaSjzeU+Ft+n4kAad89+ly+5cjL00SvjT3kOSQis/MgH/+ZnQf5WMnt5z2JfKwQ8iAfK4Q1pnysEHJQ8kF9jnUEhLnjlRlDxBqhxF/zEaFGcrUxY39Ce1jcuMnP6o2EUhtHROtZR72K4iIRbT4hu0jUfHjrX/TYos3vFurf0tmhu1jpyaTfMEdiaZ6M4KN039GcRPCRsNILLIyxFxZqRD5Y8dLH15NcrJTvh6WzId4g7e8eUXJBGWNPyHFGc5Eg9wAL81pvyPddNB9H/YCCehXLh2qDE2vt7LNHqLG2nEP3SC7W2XskNRcefZD7QUQf5HjlgxVvbWwe17oWfXj0sFDzMXNOJ94joyH3aNp4nkA+WMgHi9ozZjPnzog+EjQPCzpnwFhXbSGPbRTUvlDay/HshBozdZ0xGmvfB737qK2xZjmp+ZhdvyOhna3Q/1mzfLS68Ny7Rsf7C/sSNY0=
   </data>
  </layer>
  <objectgroup name="Spawn Points">
@@ -97,5 +102,8 @@
   <object id="70" type="prop_tree" x="1952" y="1120" width="64" height="192"/>
   <object id="71" type="prop_tree" x="1728" y="1120" width="64" height="192"/>
   <object id="72" type="prop_tree" x="1024" y="1856" width="64" height="192"/>
+ </objectgroup>
+ <objectgroup name="Region Transition">
+  <object id="85" type="trigger_transition" x="0" y="3168" width="3200" height="32"/>
  </objectgroup>
 </map>

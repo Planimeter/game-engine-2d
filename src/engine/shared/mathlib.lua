@@ -8,8 +8,8 @@ require( "math" )
 
 function math.clamp( n, l, u )
 	return n < l and ( l ) or
-					 ( n > u and ( u ) or
-					 			 ( n ) )
+	                 ( n > u and ( u ) or
+	                             ( n ) )
 end
 
 function math.gcd( a, b )
@@ -27,7 +27,7 @@ function math.remap( n, inMin, inMax, outMin, outMax )
 end
 
 function math.lerp( f, t, dt )
-	return ( f + ( t - f ) * dt )	
+	return ( f + ( t - f ) * dt )
 end
 
 local floor = math.floor
@@ -40,15 +40,22 @@ local pow  = math.pow
 local ceil = math.ceil
 local log  = math.log
 
-function math.nearestPow2( n )
+function math.nearestpow2( n )
 	return pow( 2, ceil( log( n ) / log( 2 ) ) )
 end
 
 math.phi = ( 1 + math.sqrt( 5 ) ) / 2
 
-function math.pointInRectangle( px, py, x, y, width, height )
+function math.pointinrectangle( px, py, x, y, width, height )
 	return px >= x and
-		   py >= y and
-		   px < x + width and
-		   py < y + height
+	       py >= y and
+	       px <= x + width and
+	       py <= y + height
+end
+
+function math.aabbsintersect( minA, maxA, minB, maxB )
+	return minA.x <= maxB.x and
+	       maxA.x >= minB.x and
+	       maxA.y <= minB.y and
+	       minA.y >= maxB.y
 end

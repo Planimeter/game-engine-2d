@@ -49,8 +49,8 @@ local function getLastY( self )
 	local children = self:getChildren()
 	if ( children ) then
 		local y = 0
-		for _, v in ipairs( children ) do
-			y = y + v:getHeight()
+		for _, panel in ipairs( children ) do
+			y = y + panel:getHeight()
 		end
 		return y
 	end

@@ -14,6 +14,10 @@ function character:character()
 end
 
 function character:move()
+	if ( not self.path ) then
+		return
+	end
+
 	-- Get direction to move
 	local start     = self:getPosition()
 	local next      = self.path[ 1 ]
