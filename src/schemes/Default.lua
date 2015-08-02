@@ -266,6 +266,7 @@ default.titleFont           = graphics.newFont( "fonts/SourceSansPro-Bold.otf", 
 default.font                = graphics.newFont( "fonts/SourceSansPro-Regular.otf", 14 )
 default.consoleFont         = graphics.newFont( "fonts/SourceCodePro-Light.otf", 12 )
 default.chatFont            = graphics.newFont( "fonts/SourceCodePro-Light.otf", 14 )
+default.entityFont          = graphics.newFont( "fonts/SourceSansPro-Regular.otf", 24 )
 
 if ( _AXIS ) then
 default.axisUsernameFont    = graphics.newFont( "fonts/SourceSansPro-Light.otf", 18 )
