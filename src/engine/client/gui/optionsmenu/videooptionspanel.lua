@@ -17,6 +17,7 @@ function videooptionspanel:videooptionspanel()
 	local x = 36
 	local y = 36
 	label:setPos( x, y )
+	label:setFont( self:getScheme( "fontBold" ) )
 
 	name = "Aspect Ratio Drop-Down List"
 	local aspectRatios = gui.dropdownlist( self, name )
@@ -32,6 +33,7 @@ function videooptionspanel:videooptionspanel()
 	label = gui.label( self, name, name )
 	y = y + aspectRatios:getHeight() + 9
 	label:setPos( x, y )
+	label:setFont( self:getScheme( "fontBold" ) )
 
 	name = "Resolution Drop-Down List"
 	local resolutions = gui.dropdownlist( self, name )

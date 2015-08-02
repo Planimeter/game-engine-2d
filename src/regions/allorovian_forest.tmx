@@ -104,9 +104,9 @@
   <object id="72" type="prop_tree" x="1024" y="1856" width="64" height="192"/>
  </objectgroup>
  <objectgroup name="Region Transition">
-  <object id="85" type="trigger_transition" x="0" y="0" width="3200" height="32">
+  <object id="85" type="trigger_transition" x="0" y="3168" width="3200" height="32">
    <properties>
-    <property name="region" value="allorovian_forest"/>
+    <property name="region" value="allorova"/>
    </properties>
   </object>
  </objectgroup>

@@ -81,6 +81,7 @@ function framebuffer:getDrawable()
 			self.needsRedraw = false
 		end
 	else
+		graphics.setBlendMode( "alpha" )
 		self:draw()
 		self.needsRedraw = false
 
@@ -88,7 +89,7 @@ function framebuffer:getDrawable()
 			_shim = _G.graphics.shim
 		end
 
-		return _shim
+		return _shim:getDrawable()
 	end
 
 	return self._framebuffer

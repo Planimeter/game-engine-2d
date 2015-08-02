@@ -4,6 +4,10 @@
 --
 --============================================================================--
 
+-- These values are preserved during real-time scripting.
+local _shim  = graphics and graphics.shim  or nil
+local _error = graphics and graphics.error or nil
+
 require( "common.color" )
 
 local _INTERACTIVE = _INTERACTIVE
@@ -54,8 +58,8 @@ grid.dark = {
 
 grid.marks = {}
 
-shim  = nil
-error = nil
+shim  = _shim
+error = _error
 
 function initialize()
 	-- Set defaults
@@ -307,9 +311,9 @@ local _lineWidth = 1
 function rectangle( mode, x, y, width, height )
 	if ( mode == "line" ) then
 		x1 = x          - 0.5
-		y1 = y                + _lineWidth / 2
+		y1 = y          - 0.5 + _lineWidth / 2
 		x2 = x + width  - 0.5 - _lineWidth / 2
-		y2 = y                + _lineWidth / 2
+		y2 = y          - 0.5 + _lineWidth / 2
 		x3 = x + width  - 0.5 - _lineWidth / 2
 		y3 = y + height - 0.5 - _lineWidth / 2
 		x4 = x          - 0.5 + _lineWidth / 2

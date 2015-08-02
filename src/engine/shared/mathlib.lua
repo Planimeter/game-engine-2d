@@ -49,8 +49,8 @@ math.phi = ( 1 + math.sqrt( 5 ) ) / 2
 function math.pointinrectangle( px, py, x, y, width, height )
 	return px >= x and
 	       py >= y and
-	       px <= x + width and
-	       py <= y + height
+	       px < x + width and
+	       py < y + height
 end
 
 function math.aabbsintersect( minA, maxA, minB, maxB )

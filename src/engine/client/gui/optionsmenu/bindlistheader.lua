@@ -21,7 +21,7 @@ function bindlistheader:draw()
 	end
 
 	graphics.setColor( self:getScheme( "label.textColor" ) )
-	local font = self:getScheme( "font" )
+	local font = self:getScheme( "fontBold" )
 	graphics.setFont( font )
 
 	local margin = 18

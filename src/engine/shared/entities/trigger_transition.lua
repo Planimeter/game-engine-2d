@@ -13,18 +13,20 @@ function trigger_transition:trigger_transition()
 
 	self:networkNumber( "width",  0 )
 	self:networkNumber( "height", 0 )
-
-	self.color = color.red
 end
 
 function trigger_transition:draw()
 	local width  = self:getNetworkVar( "width" )
 	local height = self:getNetworkVar( "height" )
-	graphics.setColor( self.color )
+	if ( self.loaded ) then
+		graphics.setColor( color( 0, 255, 0, 255 ) )
+	else
+		graphics.setColor( color( 255, 0, 0, 255 ) )
+	end
 	graphics.rectangle( "line", 0, 0, width, height )
 end
 
-function trigger_transition:getPlayersNearRegion( region )
+function trigger_transition:getPlayersInOrNearRegion( region )
 	local t = {}
 	for _, player in ipairs( player.getAll() ) do
 		local minA, maxA = player:getViewportBounds()
@@ -67,21 +69,12 @@ function trigger_transition:loadRegion()
 end
 
 function trigger_transition:removeRegion()
-	local r = region.getAtPosition( self:getPosition() )
-	if ( r ) then
-		local players = self:getPlayersNearRegion( r )
-		local name    = r:getName()
-		if ( not players ) then
-			region.unload( name )
-		end
-	end
-
 	local properties = self:getProperties()
 	if ( properties ) then
 		local name = properties[ "region" ]
 		local r = region.getByName( name )
 		if ( r ) then
-			local players = self:getPlayersNearRegion( r )
+			local players = self:getPlayersInOrNearRegion( r )
 			if ( not players ) then
 				region.unload( name )
 			end
@@ -92,11 +85,15 @@ end
 function trigger_transition:update( dt )
 	for _, player in ipairs( player.getAll() ) do
 		if ( self:isVisibleToPlayer( player ) ) then
-			self.color = color( 0, 255, 0, 255 )
-			self:loadRegion()
+			if ( not self.loaded ) then
+				self:loadRegion()
+				self.loaded = true
+			end
 		else
-			self.color = color.red
-			self:removeRegion()
+			if ( self.loaded ) then
+				self:removeRegion()
+				self.loaded = false
+			end
 		end
 	end
 end

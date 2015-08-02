@@ -264,6 +264,7 @@ default.bindlistheader      = {
 default.mainmenuFont        = graphics.newFont( "fonts/SourceSansPro-Regular.otf", 24 )
 default.titleFont           = graphics.newFont( "fonts/SourceSansPro-Bold.otf", 18 )
 default.font                = graphics.newFont( "fonts/SourceSansPro-Regular.otf", 14 )
+default.fontBold            = graphics.newFont( "fonts/SourceSansPro-Bold.otf", 14 )
 default.consoleFont         = graphics.newFont( "fonts/SourceCodePro-Light.otf", 12 )
 default.chatFont            = graphics.newFont( "fonts/SourceCodePro-Light.otf", 14 )
 default.entityFont          = graphics.newFont( "fonts/SourceSansPro-Regular.otf", 24 )

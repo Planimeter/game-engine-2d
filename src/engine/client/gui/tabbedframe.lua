@@ -11,17 +11,24 @@ local utf8upper = string.utf8upper
 function tabbedframe:tabbedframe( parent, name, title )
 	gui.frame.frame( self, parent, name, title )
 
-	self.closeButton:setPos( self.width - 2 * 24 - 16, 1 )
-	self.closeButton:setSize( 2 * 24 + 8 - 1, 2 * 24 + 16 - 3 )
+	local padding   = 24
+	local iconWidth = 16
+	local x         = self.width - 2 * padding - iconWidth
+	local y         = 1
+	self.closeButton:setPos( x, y )
+
+	local width     = 2 * padding + iconWidth - 1 - 8
+	local height    = 2 * padding + iconWidth - 3
+	self.closeButton:setSize( width, height )
 
 	local font             = self:getScheme( "titleFont" )
 	local titleWidth       = font:getWidth( utf8upper( self.title ) )
 	local closeButtonWidth = self.closeButton:getWidth()
-	self.minWidth  = 2 * 24 + titleWidth + closeButtonWidth
+	self.minWidth  = 2 * padding + titleWidth + closeButtonWidth
 	self.minHeight = 62
 
 	self.tabGroup  = gui.frametabgroup( self, name .. " Frame Tab Group" )
-	self.tabGroup:setPos( 2 * 24 + titleWidth, 1 )
+	self.tabGroup:setPos( 2 * padding + titleWidth, 1 )
 
 	self.tabPanels = gui.frametabpanels( self, name .. " Frame Tab Panels" )
 	self.tabPanels:setY( self.minHeight )
@@ -31,11 +38,12 @@ function tabbedframe:addTab( tabName, tabPanel, default )
 	self.tabGroup:addTab( tabName, default )
 	self.tabPanels:addPanel( tabPanel, default )
 
+	local padding          = 24
 	local font             = self:getScheme( "titleFont" )
 	local titleWidth       = font:getWidth( utf8upper( self.title ) )
 	local closeButtonWidth = self.closeButton:getWidth()
 	local tabGroupWidth    = self.tabGroup:getWidth()
-	self:setMinWidth( 3 * 24 + titleWidth + tabGroupWidth + closeButtonWidth )
+	self:setMinWidth( 3 * padding + titleWidth + tabGroupWidth + closeButtonWidth + 1 + 8 )
 	tabPanel:invalidateLayout()
 end
 
@@ -49,21 +57,23 @@ function tabbedframe:drawBackground()
 
 	-- Title Bar
 	graphics.setColor( self:getScheme( "frametab.backgroundColor" ) )
+	local padding    = 24
 	local font       = self:getScheme( "titleFont" )
 	local titleWidth = font:getWidth( utf8upper( self.title ) )
-	graphics.rectangle( "fill", 0, 0, 2 * 24 + titleWidth + 1, 62 )
+	local w          = 2 * padding + titleWidth + 1
+	graphics.rectangle( "fill", 0, 0, w, 62 )
 
 	-- Title Bar Inner Shadow
 	graphics.setColor( self:getScheme( "frametab.outlineColor" ) )
-	graphics.line( 0, 62 - 1, titleWidth, 62 - 1 )
+	graphics.line( 0, 62 - 1, w, 62 - 1 )
 
 	-- Top Resize Bounds
 	graphics.setColor( self:getScheme( "frametab.backgroundColor" ) )
-	local w = titleWidth + self.tabGroup:getWidth()
+	w = 2 * padding + titleWidth + self.tabGroup:getWidth()
 	graphics.line( titleWidth, 0, w, 0 )
 
 	-- Remaining Title Bar
-	local r = self:getWidth() - titleWidth - self.tabGroup:getWidth() + 1
+	local r = self:getWidth() - w + 1
 	graphics.rectangle( "fill", w - 1, 0, r, 62 )
 
 	-- Remaining Title Bar Inner Shadow
@@ -79,8 +89,9 @@ function tabbedframe:drawTitle()
 	graphics.setColor( self:getScheme( property ) )
 	local font = self:getScheme( "titleFont" )
 	graphics.setFont( font )
-	local x = 24
-	local y = x - 4
+	local padding = 24
+	local x       = padding
+	local y       = x - 4
 	graphics.print( utf8upper( self.title ), x, y )
 end
 
@@ -93,14 +104,16 @@ function tabbedframe:getTabPanels()
 end
 
 function tabbedframe:invalidateLayout()
+	local padding   = 24
+	local iconWidth = 16
 	if ( self.closeButton ) then
-		self.closeButton:setX( self:getWidth() - 2 * 24 - 16 )
+		self.closeButton:setX( self:getWidth() - 2 * padding - iconWidth )
 	end
 
 	local font       = self:getScheme( "titleFont" )
 	local titleWidth = font:getWidth( utf8upper( self.title ) )
 
-	self.tabGroup:setPos( 2 * 24 + titleWidth, 1 )
+	self.tabGroup:setPos( 2 * padding + titleWidth, 1 )
 	self.tabPanels:setSize( self:getWidth(), self:getHeight() - 62 )
 
 	gui.panel.invalidateLayout( self )

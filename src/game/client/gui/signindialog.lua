@@ -26,7 +26,7 @@ local animation = {
 
 	registerReset = {
 		opacity = 1,
-		x = margin + 62
+		x = margin + 65
 	},
 
 	slideDownConfirmPasswordTextBox = {
@@ -224,12 +224,15 @@ function signindialog:signindialog( parent, name )
 
 	self.signinLabel = gui.label( self, "Sign in Label", "Sign in" )
 	self.signinLabel:setPos( margin, y )
+	self.signinLabel:setFont( self:getScheme( "fontBold" ) )
 
 	self.orLabel = gui.label( self, "or Label", "or" )
-	self.orLabel:setPos( margin + 46, y )
+	self.orLabel:setPos( margin + 48, y )
+	self.orLabel:setFont( self:getScheme( "fontBold" ) )
 
 	self.registerLabel = gui.label( self, "Register Label", "Register" )
-	self.registerLabel:setPos( margin + 62, y )
+	self.registerLabel:setPos( margin + 65, y )
+	self.registerLabel:setFont( self:getScheme( "fontBold" ) )
 
 	y = y + self.signinLabel:getHeight() + 9
 	self.usernameTextBox = gui.textbox( self, "Username Text Box", "Username" )

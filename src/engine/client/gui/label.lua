@@ -9,10 +9,10 @@ class "label" ( gui.panel )
 function label:label( parent, name, text )
 	gui.panel.panel( self, parent, name )
 	self:setScheme( "Default" )
-	local font	   = self:getScheme( "font" )
-	self.width	   = 216
-	self.height	   = font:getHeight()
-	self.text	   = text or "Label"
+	self.font      = self:getScheme( "font" )
+	self.width     = 216
+	self.height    = self.font:getHeight()
+	self.text      = text or "Label"
 	self.textAlign = "left"
 end
 
@@ -22,23 +22,26 @@ function label:draw()
 	end
 
 	graphics.setColor( self:getScheme( "label.textColor" ) )
-	local font = self:getScheme( "font" )
-	graphics.setFont( font )
+	graphics.setFont( self:getFont() )
 
 	local align = self.textAlign
-	local x		= 0
+	local x     = 0
 
 	if ( align == "left" ) then
 		x = 0
 	elseif ( align == "center" ) then
 		x = self:getWidth() / 2 - font:getWidth( self.text ) / 2
 	elseif ( align == "right" ) then
-		x = self:getWidth()		- font:getWidth( self.text ) + font:getWidth( " " )
+		x = self:getWidth()     - font:getWidth( self.text ) + font:getWidth( " " )
 	end
 
 	graphics.print( self.text, x, 0 )
 
 	gui.panel.draw( self )
+end
+
+function label:getFont()
+	return self.font
 end
 
 function label:getText()
@@ -47,6 +50,10 @@ end
 
 function label:getTextAlign()
 	return self.textAlign
+end
+
+function label:setFont( font )
+	self.font = font
 end
 
 function label:setText( text )

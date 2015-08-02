@@ -38,7 +38,7 @@ function call( universe, event, ... )
 end
 
 function getStartingRegion()
-	return "allorova"
+	return "allorovian_forest"
 end
 
 function onPlayerConnect( player )
