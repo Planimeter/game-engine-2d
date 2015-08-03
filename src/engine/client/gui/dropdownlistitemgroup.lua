@@ -8,7 +8,7 @@ class "dropdownlistitemgroup" ( gui.radiobuttongroup )
 
 function dropdownlistitemgroup:dropdownlistitemgroup( parent, name )
 	gui.radiobuttongroup.radiobuttongroup( self, nil, name )
-	self.width		  = parent:getWidth()
+	self.width        = parent:getWidth()
 	self.dropDownList = parent
 	self:setScheme( "Default" )
 end
@@ -33,7 +33,7 @@ function dropdownlistitemgroup:draw()
 
 	local property = "dropdownlistitem.backgroundColor"
 	local height   = self:getHeight()
-	local width	   = self:getWidth()
+	local width    = self:getWidth()
 	graphics.setColor( self:getScheme( property ) )
 	graphics.line( 0, 0, width, 0 )
 	graphics.line( 0, height - 1, width, height - 1 )
@@ -90,14 +90,14 @@ function dropdownlistitemgroup:onValueChanged( oldValue, newValue )
 	dropDownList:onValueChanged( oldValue, newValue )
 end
 
-local sx, sy = 0, 0
+local x, y = 0, 0
 
 function dropdownlistitemgroup:updatePos()
 	local dropDownList = self:getDropDownList()
 	if ( dropDownList ) then
-		sx, sy = dropDownList:localToScreen( dropDownList:getX(),
-											 dropDownList:getY() )
-		self:setPos( sx, sy + dropDownList:getHeight() )
+		x, y = dropDownList:getX(), dropDownList:getY()
+		x, x = dropDownList:localToScreen( x, y )
+		self:setPos( x, y + dropDownList:getHeight() )
 	end
 end
 

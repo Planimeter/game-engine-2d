@@ -15,17 +15,6 @@ function trigger_transition:trigger_transition()
 	self:networkNumber( "height", 0 )
 end
 
-function trigger_transition:draw()
-	local width  = self:getNetworkVar( "width" )
-	local height = self:getNetworkVar( "height" )
-	if ( self.loaded ) then
-		graphics.setColor( color( 0, 255, 0, 255 ) )
-	else
-		graphics.setColor( color( 255, 0, 0, 255 ) )
-	end
-	graphics.rectangle( "line", 0, 0, width, height )
-end
-
 function trigger_transition:getPlayersInOrNearRegion( region )
 	local t = {}
 	for _, player in ipairs( player.getAll() ) do

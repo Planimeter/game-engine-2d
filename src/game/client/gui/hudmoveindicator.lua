@@ -9,11 +9,10 @@ class "hudmoveindicator" ( gui.panel )
 function hudmoveindicator:hudmoveindicator( parent )
 	local name = "HUD Move Indicator"
 	gui.panel.panel( self, parent, name )
-	self.width = graphics.getViewportWidth()
-	self.height = graphics.getViewportHeight()
+	self.width   = graphics.getViewportWidth()
+	self.height  = graphics.getViewportHeight()
 
-	-- local options = gui.optionsitemgroup( self, name .. " Options Item Group" )
-	-- self.options = options
+	self.options = gui.optionsitemgroup( self, name .. " Options Item Group" )
 
 	self:setScheme( "Default" )
 end
@@ -121,25 +120,16 @@ function hudmoveindicator:invalidateLayout()
 	self:setWidth( graphics.getViewportWidth() )
 	self:setHeight( graphics.getViewportHeight() )
 
+	self.options:invalidateLayout()
+
 	gui.panel.invalidateLayout( self )
 end
 
-function hudmoveindicator:mousepressed( x, y, button )
-	if ( not self:isVisible() ) then
-		return
-	end
-
-	if ( self.mouseover and button == "l" ) then
-		local player   = localplayer
-		local position = vector( camera.screenToWorld( x, y ) )
-		self:createMoveIndicator( position.x, position.y )
-		player:moveTo( position )
-	end
+function hudmoveindicator:isActive()
+	return self:isVisible() and true or false
 end
 
-local mouseX, mouseY   = 0, 0
-local t                = {}
-local getMousePosition = input.getMousePosition
+local t = {}
 local pointinrectangle = math.pointinrectangle
 
 local getEntitiesAtMousePos = function( px, py )
@@ -158,6 +148,69 @@ local getEntitiesAtMousePos = function( px, py )
 	end
 	return t
 end
+
+local function onLeftClick( self, x, y )
+	local options = self.options
+	if ( options:isVisible() ) then
+		options:setVisible( false )
+	end
+
+	local player   = localplayer
+	local position = vector( camera.screenToWorld( x, y ) )
+	self:createMoveIndicator( position.x, position.y )
+	player:moveTo( position )
+end
+
+local function getOptionsFromEntities( x, y )
+	local entities = getEntitiesAtMousePos( x, y )
+	local t = {}
+	for _, entity in ipairs( entities ) do
+		local options = entity.getOptions and entity:getOptions() or nil
+		if ( options ) then
+			-- table.append( t, options )
+		end
+	end
+	return t
+end
+
+local function onRightClick( self, x, y )
+	local options = self.options
+	if ( not options:isVisible() ) then
+		options:setVisible( true )
+	end
+
+	options:setPos( x, y )
+
+	local options          = getOptionsFromEntities( x, y )
+	local dropdownlistitem = nil
+	local name             = "Option Drop-Down List Item"
+	for i, options in pairs( options ) do
+		dropdownlistitem = gui.dropdownlistitem( name .. " " .. i, options.name )
+		dropdownlistitem:setValue( options.value )
+		options:addItem( dropdownlistitem )
+	end
+end
+
+function hudmoveindicator:mousepressed( x, y, button )
+	if ( not self:isVisible() ) then
+		return
+	end
+
+	if ( not self.mouseover ) then
+		return
+	end
+
+	if ( button == "l" ) then
+		onLeftClick( self, x, y )
+	end
+
+	if ( button == "r" ) then
+		onRightClick( self, x, y )
+	end
+end
+
+local mouseX, mouseY   = 0, 0
+local getMousePosition = input.getMousePosition
 
 function hudmoveindicator:update( dt )
 	mouseX, mouseY = getMousePosition()
