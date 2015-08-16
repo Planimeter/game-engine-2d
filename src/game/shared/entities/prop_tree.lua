@@ -6,6 +6,7 @@
 
 require( "engine.shared.entities.entity" )
 require( "game" )
+require( "engine.client.chat" )
 
 class "prop_tree" ( "entity" )
 
@@ -26,19 +27,27 @@ function prop_tree:prop_tree()
 end
 
 if ( _CLIENT ) then
-	-- TODO: Integrate with gui.hudmoveindicator?
 	function prop_tree:getOptions()
 		return {
-			["Chop Down"] = self.chopDown,
-			["Examine"]   = self.examine
+			{
+				name  = "Chop Down",
+				value = self.chopDown
+			},
+			{
+				name  = "Examine",
+				value = self.examine
+			}
 		}
 	end
 end
 
 function prop_tree:chopDown()
+	chat.addText( "You'd really love to chop that tree down, but your hands " ..
+	"alone really aren't going to cut it. Literally." )
 end
 
 function prop_tree:examine()
+	chat.addText( "Looks like a tree." )
 end
 
 entities.linkToClassname( prop_tree, "prop_tree" )

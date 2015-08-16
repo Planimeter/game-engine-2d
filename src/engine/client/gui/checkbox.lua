@@ -15,10 +15,6 @@ function checkbox:checkbox( parent, name, text )
 end
 
 function checkbox:draw()
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	self:drawCheck()
 	self:drawForeground()
 	self:drawLabel()
@@ -81,10 +77,6 @@ function checkbox:isChecked()
 end
 
 function checkbox:mousereleased( x, y, button )
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	if ( ( self.mousedown and self.mouseover ) and not self:isDisabled() ) then
 		self:onClick()
 		self:setChecked( not self:isChecked() )

@@ -37,10 +37,6 @@ function hudspeechballoons:removeChatHook()
 end
 
 function hudspeechballoons:draw()
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	local font = self:getScheme( "chatFont" )
 	graphics.setFont( font )
 
@@ -86,6 +82,10 @@ function hudspeechballoons:onRemove()
 end
 
 function hudspeechballoons:update( dt )
+	if ( not self:isVisible() ) then
+		return
+	end
+
 	self:invalidate()
 end
 

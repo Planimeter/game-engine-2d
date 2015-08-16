@@ -59,10 +59,6 @@ function textboxautocompleteitemgroup:isVisible()
 end
 
 function textboxautocompleteitemgroup:mousepressed( x, y, button )
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	if ( button == "l" ) then
 		local textBox = self:getTextBox()
 		if ( textBox ~= gui.topPanel and

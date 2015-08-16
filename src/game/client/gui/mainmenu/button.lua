@@ -14,10 +14,6 @@ function mainmenubutton:mainmenubutton( parent, text )
 end
 
 function mainmenubutton:draw()
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	local textColor = "mainmenubutton.dark.textColor"
 	if ( self:isDisabled() ) then
 		textColor = "mainmenubutton.dark.disabled.textColor"

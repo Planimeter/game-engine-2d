@@ -45,10 +45,6 @@ function textbox:textbox( parent, name, placeholder )
 end
 
 function textbox:draw()
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	self:drawText()
 	self:drawCursor()
 
@@ -402,6 +398,18 @@ function textbox:invalidateLayout()
 	gui.panel.invalidateLayout( self )
 end
 
+function textbox:isChildMousedOver()
+	local panel = gui.topPanel
+	while ( panel ~= nil ) do
+		panel = panel:getParent()
+		if ( panel and panel == self.autocompleteItemGroup ) then
+			return true
+		end
+	end
+
+	return false
+end
+
 function textbox:isDisabled()
 	return self.disabled
 end
@@ -495,7 +503,7 @@ local function selectSuggestion( self, dir )
 end
 
 function textbox:keypressed( key, isrepeat )
-	if ( not self:isVisible() or not self.focus or not self:isEditable() ) then
+	if ( not self.focus or not self:isEditable() ) then
 		return
 	end
 
@@ -583,7 +591,7 @@ function textbox:keypressed( key, isrepeat )
 end
 
 function textbox:keyreleased( key )
-	if ( not self:isVisible() or not self.focus or not self:isEditable() ) then
+	if ( not self.focus or not self:isEditable() ) then
 		return
 	end
 
@@ -592,34 +600,7 @@ end
 
 local posX, posY = 0, 0
 
-local function parentFrameHasFocus( self )
-	local parent = self:getParent()
-	while ( parent ~= nil ) do
-		if ( typeof( parent, "frame" ) ) then
-			return parent.focus == true
-		end
-		parent = parent:getParent()
-	end
-	return false
-end
-
-local function isChildMousedOver( self )
-	local panel = gui.topPanel
-	while ( panel ~= nil ) do
-		panel = panel:getParent()
-		if ( panel and panel == self.autocompleteItemGroup ) then
-			return true
-		end
-	end
-
-	return false
-end
-
 function textbox:mousepressed( x, y, button )
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	if ( self.mouseover and not self:isDisabled() ) then
 		posX, posY = self:screenToLocal( x, y )
 		if ( button == "l" ) then
@@ -629,12 +610,12 @@ function textbox:mousepressed( x, y, button )
 			self.mousedown = true
 			-- TODO: Implement gui.contextmenu!!
 			-- self:openContextMenu( posX, posY )
-		elseif ( button == "wd" and parentFrameHasFocus( self ) ) then
+		elseif ( button == "wd" ) then
 			if ( self.scrollbar ) then
 				local font = self:getScheme( "font" )
 				self.scrollbar:scrollDown( 3 * font:getHeight() )
 			end
-		elseif ( button == "wu" and parentFrameHasFocus( self ) ) then
+		elseif ( button == "wu" ) then
 			if ( self.scrollbar ) then
 				local font = self:getScheme( "font" )
 				self.scrollbar:scrollUp( 3 * font:getHeight() )
@@ -644,7 +625,7 @@ function textbox:mousepressed( x, y, button )
 		local mousewheelPressed = button == "wd" or button == "wu"
 		if ( self.focus            and
 		     not mousewheelPressed and
-		     not isChildMousedOver( self ) ) then
+		     not self:isChildMousedOver() ) then
 			gui.setFocusedPanel( self, false )
 		end
 	end
@@ -653,12 +634,7 @@ function textbox:mousepressed( x, y, button )
 end
 
 function textbox:mousereleased( x, y, button )
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	self.mousedown = false
-
 	gui.panel.mousereleased( self, x, y, button )
 end
 
@@ -682,8 +658,8 @@ function textbox:onClick( x, y )
 			for i = 1, utf8len( self.text ) do
 				local width    = font:getWidth( utf8sub( self.text, 1, i ) )
 				local startPos = i == 1 and 0 or width
-				width        = font:getWidth( utf8sub( self.text, 1, i + 1 ) )
-				local endPos = width
+				width          = font:getWidth( utf8sub( self.text, 1, i + 1 ) )
+				local endPos   = width
 
 				if ( x > startPos and x < endPos ) then
 					local midpoint = ( startPos + endPos ) / 2
@@ -802,7 +778,7 @@ function textbox:setHeight( height )
 end
 
 function textbox:textinput( text )
-	if ( not self:isVisible() or not self.focus or not self:isEditable() ) then
+	if ( not self.focus or not self:isEditable() ) then
 		return
 	end
 
@@ -818,14 +794,18 @@ local function updateCursor( self )
 	os.setCursor( "ibeam" )
 end
 
-function textbox:update()
+function textbox:update( dt )
+	if ( not self:isVisible() ) then
+		return
+	end
+
 	updateCursor( self )
 
 	if ( self.focus ) then
 		self:invalidate()
 	end
 
-	gui.panel.update( self )
+	gui.panel.update( self, dt )
 end
 
 gui.register( textbox, "textbox" )

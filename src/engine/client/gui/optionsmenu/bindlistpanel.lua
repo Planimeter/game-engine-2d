@@ -15,20 +15,14 @@ function bindlistpanel:bindlistpanel( parent, name )
 end
 
 function bindlistpanel:draw()
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	self:drawBackground()
-
 	gui.panel.draw( self )
-
 	self:drawForeground()
 end
 
 function bindlistpanel:drawBackground()
 	local property = "bindlistpanel.backgroundColor"
-	local width	   = self:getWidth()
+	local width    = self:getWidth()
 	local height   = self:getHeight()
 
 	graphics.setColor( self:getScheme( property ) )
@@ -37,7 +31,7 @@ end
 
 function bindlistpanel:drawForeground()
 	local property = "bindlistpanel.outlineColor"
-	local width	   = self:getWidth()
+	local width    = self:getWidth()
 	local height   = self:getHeight()
 
 	graphics.setColor( self:getScheme( property ) )

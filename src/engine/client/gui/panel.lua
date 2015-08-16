@@ -128,43 +128,44 @@ function panel:draw()
 		return
 	end
 
-	if ( self:getChildren() ) then
-		for _, v in ipairs( self:getChildren() ) do
+	local children = self:getChildren()
+	if ( children ) then
+		for _, v in ipairs( children ) do
 			v:createFramebuffer()
 		end
 	end
 
 	self:setZOrder()
 
-	if ( self:getChildren() ) then
-		for _, v in ipairs( self:getChildren() ) do
-			local scale  = v:getScale()
-			local width  = v:getWidth()
-			local height = v:getHeight()
-			graphics.push()
-				graphics.translate( v:getX(), v:getY() )
-				graphics.scale( scale )
-				graphics.translate(
-					( width  / scale ) / 2 - width  / 2,
-					( height / scale ) / 2 - height / 2
-				)
-				local opacity = opacityStack[ #opacityStack ]
-				opacity = opacity * v:getOpacity()
-				graphics.setOpacity( opacity )
-				table.insert( opacityStack, opacity )
-					if ( v:isVisible() ) then
+	if ( children ) then
+		for _, v in ipairs( children ) do
+			if ( v:isVisible() ) then
+				local scale  = v:getScale()
+				local width  = v:getWidth()
+				local height = v:getHeight()
+				graphics.push()
+					graphics.translate( v:getX(), v:getY() )
+					graphics.scale( scale )
+					graphics.translate(
+						( width  / scale ) / 2 - width  / 2,
+						( height / scale ) / 2 - height / 2
+					)
+					local opacity = opacityStack[ #opacityStack ]
+					opacity = opacity * v:getOpacity()
+					graphics.setOpacity( opacity )
+					table.insert( opacityStack, opacity )
 						v:drawFramebuffer()
-					end
 
-					if ( gui_draw_bounds:getBoolean() ) then
-						if ( v:isVisible() and v.mouseover ) then
-							v:drawBounds()
+						if ( gui_draw_bounds:getBoolean() ) then
+							if ( v.mouseover ) then
+								v:drawBounds()
+							end
 						end
-					end
-				table.remove( opacityStack, #opacityStack )
-				graphics.setOpacity( opacityStack[ #opacityStack ] )
-				graphics.scale( 1 )
-			graphics.pop()
+					table.remove( opacityStack, #opacityStack )
+					graphics.setOpacity( opacityStack[ #opacityStack ] )
+					graphics.scale( 1 )
+				graphics.pop()
+			end
 		end
 	end
 end
@@ -280,8 +281,9 @@ function panel:invalidate()
 end
 
 function panel:invalidateLayout()
-	if ( self:getChildren() ) then
-		for _, v in ipairs( self:getChildren() ) do
+	local children = self:getChildren()
+	if ( children ) then
+		for _, v in ipairs( children ) do
 			v:invalidateLayout()
 		end
 	end
@@ -327,12 +329,15 @@ local function cascadeInputToChildren( self, func, ... )
 		return
 	end
 
-	if ( self:getChildren() ) then
+	local children = self:getChildren()
+	if ( children ) then
 		local filtered
-		for i, child in ipairs( self:getChildren() ) do
-			filtered = child[ func ]( child, ... )
-			if ( filtered ~= nil ) then
-				return filtered
+		for _, v in ipairs( children ) do
+			if ( v:isVisible() ) then
+				filtered = v[ func ]( v, ... )
+				if ( filtered ~= nil ) then
+					return filtered
+				end
 			end
 		end
 	end
@@ -378,9 +383,12 @@ function panel:mousepressed( x, y, button )
 		return
 	end
 
-	if ( self:getChildren() ) then
-		for _, v in ipairs( self:getChildren() ) do
-			v:mousepressed( x, y, button )
+	local children = self:getChildren()
+	if ( children ) then
+		for _, v in ipairs( children ) do
+			if ( v:isVisible() ) then
+				v:mousepressed( x, y, button )
+			end
 		end
 	end
 end
@@ -390,9 +398,12 @@ function panel:mousereleased( x, y, button )
 		return
 	end
 
-	if ( self:getChildren() ) then
-		for _, v in ipairs( self:getChildren() ) do
-			v:mousereleased( x, y, button )
+	local children = self:getChildren()
+	if ( children ) then
+		for _, v in ipairs( children ) do
+			if ( v:isVisible() ) then
+				v:mousereleased( x, y, button )
+			end
 		end
 	end
 end
@@ -462,8 +473,9 @@ function panel:onRemove()
 end
 
 function panel:preDrawWorld()
-	if ( self:getChildren() ) then
-		for _, v in ipairs( self:getChildren() ) do
+	local children = self:getChildren()
+	if ( children ) then
+		for _, v in ipairs( children ) do
 			v:preDrawWorld()
 		end
 	end
@@ -542,8 +554,9 @@ function panel:setOpacity( opacity )
 end
 
 function panel:setParent( panel )
-	if ( self:getParent() ) then
-		local children = self:getParent():getChildren()
+	local parent = self:getParent()
+	if ( parent ) then
+		local children = parent:getChildren()
 		for i, v in ipairs( children ) do
 			if ( v == self ) then
 				table.remove( children, i )
@@ -626,8 +639,8 @@ end
 
 function panel:update( dt )
 	if ( self.think and
-		 self.nextThink and
-		 self.nextThink <= engine.getRealTime() ) then
+	     self.nextThink and
+	     self.nextThink <= engine.getRealTime() ) then
 		self.nextThink = nil
 		self:think()
 	end
@@ -636,8 +649,9 @@ function panel:update( dt )
 		self:updateAnimations( dt )
 	end
 
-	if ( self:getChildren() ) then
-		for _, v in ipairs( self:getChildren() ) do
+	local children = self:getChildren()
+	if ( children ) then
+		for _, v in ipairs( children ) do
 			v:update( dt )
 		end
 	end

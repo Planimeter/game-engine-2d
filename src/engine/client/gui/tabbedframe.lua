@@ -124,10 +124,6 @@ local mouseIntersects  = false
 local pointinrectangle = math.pointinrectangle
 
 function tabbedframe:mousepressed( x, y, button )
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	gui.panel.mousepressed( self, x, y, button )
 
 	if ( not ( button == "wd" or button == "wu" ) ) then

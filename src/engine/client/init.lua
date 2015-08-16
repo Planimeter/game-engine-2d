@@ -253,6 +253,15 @@ function textinput( t )
 end
 
 function keypressed( key, isrepeat )
+	require( "engine.client.input" )
+	if ( _G.input.isKeyTrapped( key ) ) then
+		return
+	end
+
+	if ( gui.keypressed( key, isrepeat ) ) then
+		return
+	end
+
 	-- TODO: Move to bind system!!
 	local mainmenu = _G.g_MainMenu
 	if ( key == "escape" and mainmenu and isConnected() ) then
@@ -261,15 +270,6 @@ function keypressed( key, isrepeat )
 		else
 			mainmenu:activate()
 		end
-	end
-
-	require( "engine.client.input" )
-	if ( _G.input.isKeyTrapped( key ) ) then
-		return
-	end
-
-	if ( gui.keypressed( key, isrepeat ) ) then
-		return
 	end
 
 	bind.keypressed( key, isrepeat )

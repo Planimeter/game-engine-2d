@@ -10,19 +10,15 @@ button.canFocus = true
 
 function button:button( parent, name, text )
 	gui.panel.panel( self, parent, name )
-	self.width	  = 216
-	self.height	  = 46
-	self.text	  = text or "Button"
+	self.width    = 216
+	self.height   = 46
+	self.text     = text or "Button"
 	self.disabled = false
 
 	self:setScheme( "Default" )
 end
 
 function button:draw()
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	self:drawBackground()
 	self:drawText()
 
@@ -33,7 +29,7 @@ end
 
 function button:drawBackground()
 	local property = "button.backgroundColor"
-	local width	   = self:getWidth()
+	local width    = self:getWidth()
 	local height   = self:getHeight()
 
 	if ( self:isDisabled() ) then
@@ -59,7 +55,7 @@ end
 
 function button:drawForeground()
 	local property = "button.outlineColor"
-	local width	   = self:getWidth()
+	local width    = self:getWidth()
 	local height   = self:getHeight()
 
 	if ( self:isDisabled() ) then
@@ -93,7 +89,7 @@ function button:drawText()
 	local font = self:getScheme( "font" )
 	graphics.setFont( font )
 	local x = self:getWidth()  / 2 - font:getWidth( self:getText() ) / 2
-	local y = self:getHeight() / 2 - font:getHeight()				 / 2 - 2
+	local y = self:getHeight() / 2 - font:getHeight()                / 2 - 2
 	graphics.print( self:getText(), x, y )
 end
 
@@ -106,7 +102,7 @@ function button:isDisabled()
 end
 
 function button:keypressed( key, isrepeat )
-	if ( not self:isVisible() or not self.focus or self:isDisabled() ) then
+	if ( not self.focus or self:isDisabled() ) then
 		return
 	end
 
@@ -117,10 +113,6 @@ function button:keypressed( key, isrepeat )
 end
 
 function button:mousepressed( x, y, button )
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	if ( self.mouseover and button == "l" ) then
 		self.mousedown = true
 		self:invalidate()
@@ -128,10 +120,6 @@ function button:mousepressed( x, y, button )
 end
 
 function button:mousereleased( x, y, button )
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	if ( ( self.mousedown and self.mouseover ) and not self:isDisabled() ) then
 		self:onClick()
 	end

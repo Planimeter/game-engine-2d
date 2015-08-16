@@ -15,7 +15,7 @@ function consoletextbox:consoletextbox( parent, name )
 end
 
 function consoletextbox:draw()
-	if ( not self:isVisible() or self:getHeight() == 1 ) then
+	if ( self:getHeight() == 1 ) then
 		return
 	end
 
@@ -35,7 +35,7 @@ function consoletextbox:drawBackground()
 	end
 
 	local property = "textbox.backgroundColor"
-	local width	   = self:getWidth()
+	local width    = self:getWidth()
 	local height   = self:getHeight()
 
 	graphics.setColor( self:getScheme( property ) )

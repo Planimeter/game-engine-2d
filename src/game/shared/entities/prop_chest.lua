@@ -26,11 +26,16 @@ function prop_chest:prop_chest()
 end
 
 if ( _CLIENT ) then
-	-- TODO: Integrate with gui.hudmoveindicator?
 	function prop_chest:getOptions()
 		return {
-			["Open"]    = self.open,
-			["Examine"] = self.examine
+			{
+				name  = "Open",
+				value = self.open
+			},
+			{
+				name  = "Examine",
+				value = self.examine
+			}
 		}
 	end
 end

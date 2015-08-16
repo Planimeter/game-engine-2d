@@ -45,10 +45,6 @@ local function getParentFrame( self )
 end
 
 function scrollablepanel:keypressed( key, isrepeat )
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	local parentFrame = getParentFrame( self )
 	local parentFocus = parentFrame and parentFrame.focus
 	if ( key == "tab" and ( self.focus or parentFocus ) ) then
@@ -70,10 +66,6 @@ local function parentFrameHasFocus( self )
 end
 
 function scrollablepanel:mousepressed( x, y, button )
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	local panel = self:getInnerPanel()
 	if ( panel.mouseover or panel:isChildMousedOver() ) then
 		local scrollbar = self:getScrollbar()

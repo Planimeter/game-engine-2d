@@ -20,6 +20,11 @@ function addText( ... )
 	end
 
 	if ( _CLIENT ) then
-		_G.g_Chat.output:insertText( table.concat( args, "\t" ) .. "\n" )
+		local chat = _G.g_Chat.output
+		local text = table.concat( args, "\t" )
+		chat:insertText( text .. "\n" )
+
+		-- TODO: Set hide time based on reading-time algorithm.
+		-- chat:setHideTime( math.huge )
 	end
 end

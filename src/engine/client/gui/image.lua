@@ -24,10 +24,6 @@ end
 local missingImage = false
 
 function imagepanel:draw()
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	gui.image.maskedImage = self
 	graphics.setStencil( gui.image.drawMask )
 		graphics.setColor( self:getColor() )

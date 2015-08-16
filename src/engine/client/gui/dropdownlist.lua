@@ -18,10 +18,6 @@ function dropdownlist:addItem( item )
 end
 
 function dropdownlist:draw()
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	self:drawBackground()
 	self:drawText()
 	self:drawIcon()
@@ -148,10 +144,6 @@ function dropdownlist:isChildMousedOver()
 end
 
 function dropdownlist:mousepressed( x, y, button )
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	if ( button == "l" ) then
 		if ( self.mouseover ) then
 			self.mousedown = true
@@ -170,10 +162,6 @@ function dropdownlist:mousepressed( x, y, button )
 end
 
 function dropdownlist:mousereleased( x, y, button )
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	if ( self.mousedown ) then
 		self.mousedown = false
 		self:invalidate()

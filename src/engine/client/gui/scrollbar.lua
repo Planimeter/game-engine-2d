@@ -21,10 +21,6 @@ function scrollbar:scrollbar( parent, name )
 end
 
 function scrollbar:draw()
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	local length = self:getThumbLength()
 	if ( length == self:getHeight() ) then
 		return
@@ -90,10 +86,6 @@ end
 local localX, localY = 0, 0
 
 function scrollbar:mousepressed( x, y, button )
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	if ( self.mouseover and button == "l" ) then
 		self.mousedown = true
 	end
@@ -115,10 +107,6 @@ function scrollbar:mousepressed( x, y, button )
 end
 
 function scrollbar:mousereleased( x, y, button )
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	self.mousedown = false
 	self.grabbedX  = nil
 	self.grabbedY  = nil
@@ -219,9 +207,9 @@ function scrollbar:setValue( value )
 	return 0
 end
 
-local mouseX, mouseY     = 0, 0
-local getMousePosition   = input.getMousePosition
-local deltaX, deltaY     = 0, 0
+local mouseX, mouseY   = 0, 0
+local getMousePosition = input.getMousePosition
+local deltaX, deltaY   = 0, 0
 
 function scrollbar:update( dt )
 	gui.panel.update( self, dt )

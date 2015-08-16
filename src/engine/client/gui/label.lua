@@ -17,10 +17,6 @@ function label:label( parent, name, text )
 end
 
 function label:draw()
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	graphics.setColor( self:getScheme( "label.textColor" ) )
 	graphics.setFont( self:getFont() )
 

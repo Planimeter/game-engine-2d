@@ -13,6 +13,8 @@ function hudmoveindicator:hudmoveindicator( parent )
 	self.height  = graphics.getViewportHeight()
 
 	self.options = gui.optionsitemgroup( self, name .. " Options Item Group" )
+	self.options:setWidth( 216 )
+	self.optionsActive = false
 
 	self:setScheme( "Default" )
 end
@@ -126,7 +128,7 @@ function hudmoveindicator:invalidateLayout()
 end
 
 function hudmoveindicator:isActive()
-	return self:isVisible() and true or false
+	return self.optionsActive
 end
 
 local t = {}
@@ -150,15 +152,22 @@ local getEntitiesAtMousePos = function( px, py )
 end
 
 local function onLeftClick( self, x, y )
-	local options = self.options
-	if ( options:isVisible() ) then
-		options:setVisible( false )
-	end
+	if ( self.mouseover ) then
+		self.mousedown = true
+		self:invalidate()
+		self:setActive( false )
 
-	local player   = localplayer
-	local position = vector( camera.screenToWorld( x, y ) )
-	self:createMoveIndicator( position.x, position.y )
-	player:moveTo( position )
+		local player   = localplayer
+		local position = vector( camera.screenToWorld( x, y ) )
+		self:createMoveIndicator( position.x, position.y )
+		player:moveTo( position )
+
+		return true
+	else
+		if ( self:isActive() and not self:isChildMousedOver() ) then
+			self:setActive( false )
+		end
+	end
 end
 
 local function getOptionsFromEntities( x, y )
@@ -167,7 +176,7 @@ local function getOptionsFromEntities( x, y )
 	for _, entity in ipairs( entities ) do
 		local options = entity.getOptions and entity:getOptions() or nil
 		if ( options ) then
-			-- table.append( t, options )
+			table.append( t, options )
 		end
 	end
 	return t
@@ -175,38 +184,44 @@ end
 
 local function onRightClick( self, x, y )
 	local options = self.options
-	if ( not options:isVisible() ) then
-		options:setVisible( true )
-	end
-
+	options:removeChildren()
 	options:setPos( x, y )
+	self:setActive( true )
 
-	local options          = getOptionsFromEntities( x, y )
+	local opts             = getOptionsFromEntities( x, y )
 	local dropdownlistitem = nil
 	local name             = "Option Drop-Down List Item"
-	for i, options in pairs( options ) do
-		dropdownlistitem = gui.dropdownlistitem( name .. " " .. i, options.name )
-		dropdownlistitem:setValue( options.value )
+	for i, option in pairs( opts ) do
+		dropdownlistitem = gui.dropdownlistitem( name .. " " .. i, option.name )
+		dropdownlistitem:setValue( option.value )
 		options:addItem( dropdownlistitem )
 	end
+
+	return #opts > 0
 end
 
 function hudmoveindicator:mousepressed( x, y, button )
-	if ( not self:isVisible() ) then
-		return
+	if ( self.mouseover and button == "l" ) then
+		if ( onLeftClick( self, x, y ) ) then
+			return
+		end
 	end
 
-	if ( not self.mouseover ) then
-		return
+	if ( self.mouseover and button == "r" ) then
+		if ( onRightClick( self, x, y ) ) then
+			return
+		end
 	end
 
-	if ( button == "l" ) then
-		onLeftClick( self, x, y )
-	end
+	gui.panel.mousepressed( self, x, y, button )
+end
 
-	if ( button == "r" ) then
-		onRightClick( self, x, y )
-	end
+function hudmoveindicator:onValueChanged( oldValue, newValue )
+end
+
+function hudmoveindicator:setActive( active )
+	self.optionsActive = active
+	gui.setFocusedPanel( self, active )
 end
 
 local mouseX, mouseY   = 0, 0

@@ -14,10 +14,6 @@ function dropdownlistitem:dropdownlistitem( name, text )
 end
 
 function dropdownlistitem:draw()
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	self:drawBackground()
 	self:drawText()
 
@@ -87,10 +83,6 @@ local function getParentFrame( self )
 end
 
 function dropdownlistitem:mousepressed( x, y, button )
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	if ( self.mouseover and button == "l" ) then
 		self.mousedown = true
 	end

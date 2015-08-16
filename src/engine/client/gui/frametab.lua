@@ -8,17 +8,13 @@ class "frametab" ( gui.radiobutton )
 
 function frametab:frametab( parent, name, text )
 	gui.radiobutton.radiobutton( self, parent, name, text )
-	self.text	= text or "Frame Tab"
-	local font	= self:getScheme( "font" )
-	self.width	= font:getWidth( self.text ) + 2 * 24
+	self.text   = text or "Frame Tab"
+	local font  = self:getScheme( "font" )
+	self.width  = font:getWidth( self.text ) + 2 * 24
 	self.height = 61
 end
 
 function frametab:draw()
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	self:drawBackground()
 	self:drawText()
 
@@ -27,7 +23,7 @@ end
 
 function frametab:drawBackground()
 	local property = "frametab.backgroundColor"
-	local width	   = self:getWidth()
+	local width    = self:getWidth()
 	local height   = self:getHeight()
 
 	if ( self:isSelected() ) then
@@ -40,13 +36,13 @@ function frametab:drawBackground()
 
 	graphics.setColor( self:getScheme( property ) )
 
-	local selected	= self.mouseover or self:isSelected()
+	local selected  = self.mouseover or self:isSelected()
 	local mouseover = self.mouseover and not self:isSelected()
 	graphics.rectangle( "fill",
-						0,
-						-1,
-						width - ( selected and 1 or 0 ),
-						height + 1 - ( mouseover and 1 or 0 ) )
+	                    0,
+	                    -1,
+	                    width - ( selected and 1 or 0 ),
+	                    height + 1 - ( mouseover and 1 or 0 ) )
 
 	width = width - 0.5
 	if ( selected ) then
@@ -56,7 +52,7 @@ function frametab:drawBackground()
 
 	graphics.setColor( self:getScheme( "frametab.outlineColor" ) )
 	graphics.line( width, -0.5,
-				   width, height - 0.5 - ( self:isSelected() and 0 or 1 ) )
+	               width, height - 0.5 - ( self:isSelected() and 0 or 1 ) )
 
 	if ( not self:isSelected() ) then
 		graphics.line( 0, height - 1, width, height - 1 )
@@ -75,15 +71,11 @@ function frametab:drawText()
 	local font = self:getScheme( "font" )
 	graphics.setFont( font )
 	local x = self:getWidth()  / 2 - font:getWidth( self.text ) / 2
-	local y = self:getHeight() / 2 - font:getHeight()			/ 2
+	local y = self:getHeight() / 2 - font:getHeight()           / 2
 	graphics.print( self.text, x, y )
 end
 
 function frametab:mousepressed( x, y, button )
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	if ( self.mouseover and button == "l" ) then
 		self.mousedown = true
 
@@ -100,12 +92,7 @@ function frametab:mousepressed( x, y, button )
 end
 
 function frametab:mousereleased( x, y, button )
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	self.mousedown = false
-
 	self:invalidate()
 end
 

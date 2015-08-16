@@ -228,12 +228,7 @@ function mainmenu:invalidateButtons()
 end
 
 function mainmenu:draw()
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	self:drawLogo()
-
 	gui.panel.draw( self )
 end
 
@@ -254,7 +249,7 @@ function mainmenu:drawLogo()
 end
 
 function mainmenu:keypressed( key, isrepeat )
-	if ( not self:isVisible() or self.closing ) then
+	if ( self.closing ) then
 		return
 	end
 
@@ -266,7 +261,7 @@ function mainmenu:keypressed( key, isrepeat )
 end
 
 function mainmenu:mousepressed( x, y, button )
-	if ( not self:isVisible() or self.closing ) then
+	if ( self.closing ) then
 		return
 	end
 
@@ -274,7 +269,7 @@ function mainmenu:mousepressed( x, y, button )
 end
 
 function mainmenu:mousereleased( x, y, button )
-	if ( not self:isVisible() or self.closing ) then
+	if ( self.closing ) then
 		return
 	end
 

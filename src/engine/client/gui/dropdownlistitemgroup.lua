@@ -25,10 +25,6 @@ function dropdownlistitemgroup:addItem( item, default )
 end
 
 function dropdownlistitemgroup:draw()
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	gui.panel.draw( self )
 
 	local property = "dropdownlistitem.backgroundColor"
@@ -69,10 +65,6 @@ function dropdownlistitemgroup:isVisible()
 end
 
 function dropdownlistitemgroup:mousepressed( x, y, button )
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	if ( button == "l" ) then
 		local dropDownList = self:getDropDownList()
 		if ( dropDownList ~= gui.topPanel and
@@ -96,7 +88,7 @@ function dropdownlistitemgroup:updatePos()
 	local dropDownList = self:getDropDownList()
 	if ( dropDownList ) then
 		x, y = dropDownList:getX(), dropDownList:getY()
-		x, x = dropDownList:localToScreen( x, y )
+		x, y = dropDownList:localToScreen( x, y )
 		self:setPos( x, y + dropDownList:getHeight() )
 	end
 end

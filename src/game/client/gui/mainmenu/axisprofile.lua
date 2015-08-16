@@ -12,7 +12,7 @@ axisprofile.fragShader = graphics.newShader( "shaders/alphamask.frag" )
 function axisprofile:axisprofile( parent )
 	gui.panel.panel( self, parent, "Axis Profile" )
 	self.height = 44
-	self.width  = graphics.getViewportWidth() - 2 * 36
+	self.width  = graphics.getViewportWidth() - 2 * 32
 
 	self:setScheme( "Default" )
 
@@ -59,10 +59,6 @@ local axisGreetings = {
 local greeting = table.irandom( axisGreetings )
 
 function axisprofile:draw()
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	local fragShader = gui.axisprofile.fragShader
 	fragShader:send( "mask", gui.axisprofile.background:getDrawable() )
 	graphics.setShader( fragShader )

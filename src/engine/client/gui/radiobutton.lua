@@ -8,21 +8,17 @@ class "radiobutton" ( gui.button )
 
 function radiobutton:radiobutton( parent, name, text )
 	gui.button.button( self, parent, name, text )
-	self.height		= 24
-	self.icon		= self:getScheme( "radiobutton.icon" )
+	self.height     = 24
+	self.icon       = self:getScheme( "radiobutton.icon" )
 	self.foreground = self:getScheme( "radiobutton.foreground" )
-	self.text		= text or "Radio Button Label"
-	self.value		= nil
-	self.selected	= false
-	self.id			= -1
-	self.default	= false
+	self.text       = text or "Radio Button Label"
+	self.value      = nil
+	self.selected   = false
+	self.id         = -1
+	self.default    = false
 end
 
 function radiobutton:draw()
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	self:drawSelectionDot()
 	self:drawForeground()
 	self:drawLabel()
@@ -97,10 +93,6 @@ function radiobutton:isSelected()
 end
 
 function radiobutton:mousereleased( x, y, button )
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	if ( ( self.mousedown and self.mouseover ) and not self:isDisabled() ) then
 		local radiobuttongroup = self:getGroup()
 		if ( radiobuttongroup ) then

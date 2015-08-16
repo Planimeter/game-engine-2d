@@ -87,10 +87,6 @@ function frame:doModal()
 end
 
 function frame:draw()
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	self:drawBackground()
 
 	gui.panel.draw( self )
@@ -212,7 +208,7 @@ function frame:moveFocus()
 end
 
 function frame:keypressed( key, isrepeat )
-	if ( not self:isVisible() or self.closing ) then
+	if ( self.closing ) then
 		return
 	end
 
@@ -233,7 +229,7 @@ local mouseIntersects  = false
 local pointinrectangle = math.pointinrectangle
 
 function frame:mousepressed( x, y, button )
-	if ( not self:isVisible() or self.closing ) then
+	if ( self.closing ) then
 		return
 	end
 
@@ -390,7 +386,7 @@ function frame:mousepressed( x, y, button )
 end
 
 function frame:mousereleased( x, y, button )
-	if ( not self:isVisible() or self.closing ) then
+	if ( self.closing ) then
 		return
 	end
 

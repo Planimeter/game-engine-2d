@@ -10,18 +10,14 @@ closebutton.canFocus = false
 
 function closebutton:closebutton( parent, name )
 	gui.button.button( self, parent, name )
-	self.width	= 2 * 36 + 8  - 1
+	self.width  = 2 * 36 + 8  - 1
 	self.height = 2 * 36 + 16 - 2
-	self.icon	= self:getScheme( "closebutton.icon" )
+	self.icon   = self:getScheme( "closebutton.icon" )
 end
 
 local round = math.round
 
 function closebutton:draw()
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	local property = "closebutton.iconColor"
 
 	if ( self.mousedown and self.mouseover ) then

@@ -29,10 +29,6 @@ function frametabgroup:addItem( tab )
 end
 
 function frametabgroup:draw()
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	graphics.setColor( self:getScheme( "frametab.outlineColor" ) )
 	graphics.line( 0, -0.5, 0, self:getHeight() - 1.5 )
 

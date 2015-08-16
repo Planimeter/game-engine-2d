@@ -16,10 +16,6 @@ function bindlistheader:bindlistheader( parent, name, text )
 end
 
 function bindlistheader:draw()
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	graphics.setColor( self:getScheme( "label.textColor" ) )
 	local font = self:getScheme( "fontBold" )
 	graphics.setFont( font )

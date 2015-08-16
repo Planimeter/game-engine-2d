@@ -14,10 +14,6 @@ function mainmenuclosebutton:mainmenuclosebutton( parent )
 end
 
 function mainmenuclosebutton:draw()
-	if ( not self:isVisible() ) then
-		return
-	end
-
 	local iconColor = "mainmenuclosebutton.dark.iconColor"
 	if ( self.mousedown and self.mouseover ) then
 		iconColor = "mainmenuclosebutton.dark.mousedown.iconColor"

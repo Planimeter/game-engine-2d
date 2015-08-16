@@ -6,6 +6,7 @@
 
 require( "engine.shared.entities.entity" )
 require( "game" )
+require( "engine.client.chat" )
 
 class "prop_worldgate_spawn" ( "entity" )
 
@@ -30,15 +31,18 @@ function prop_worldgate_spawn:prop_worldgate_spawn()
 end
 
 if ( _CLIENT ) then
-	-- TODO: Integrate with gui.hudmoveindicator?
 	function prop_worldgate_spawn:getOptions()
 		return {
-			["Examine"] = self.examine
+			{
+				name  = "Examine",
+				value = self.examine
+			}
 		}
 	end
 end
 
 function prop_worldgate_spawn:examine()
+	chat.addText( "Rather tall and ominous." )
 end
 
 entities.linkToClassname( prop_worldgate_spawn, "prop_worldgate_spawn" )
