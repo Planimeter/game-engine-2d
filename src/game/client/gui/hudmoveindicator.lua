@@ -7,10 +7,11 @@
 class "hudmoveindicator" ( gui.panel )
 
 function hudmoveindicator:hudmoveindicator( parent )
-	local name = "HUD Move Indicator"
+	local name   = "HUD Move Indicator"
 	gui.panel.panel( self, parent, name )
 	self.width   = graphics.getViewportWidth()
 	self.height  = graphics.getViewportHeight()
+	self:setUseFullscreenFramebuffer( true )
 
 	self.options = gui.optionsitemgroup( self, name .. " Options Item Group" )
 	self.options:setWidth( 216 )

@@ -73,9 +73,11 @@ function region.reload( library )
 
 	local name = string.gsub( library, "regions.", "" )
 	local r = region.getByName( name )
+	local x = r:getX()
+	local y = r:getY()
 	r:cleanUp()
 	region.unload( name )
-	region.load( name )
+	region.load( name, x, y )
 end
 
 hook.set( "shared", region.reload, "onReloadScript", "reloadRegion" )

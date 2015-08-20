@@ -15,6 +15,46 @@ function trigger_transition:trigger_transition()
 	self:networkNumber( "height", 0 )
 end
 
+function trigger_transition:findRegionSpace()
+	local pos    = self:getPosition()
+	local width  = self:getNetworkVar( "width" )
+	local length = self:getNetworkVar( "height" )
+
+	-- Find region space north
+	local x = pos.x
+	local y = pos.y - game.tileSize - 1
+	local r = region.getAtPosition( vector( x, y ) )
+	if ( not r ) then
+		return x, y, "north"
+	end
+
+	-- Find region space east
+	x = pos.x + width
+	y = pos.y - length
+	r = region.getAtPosition( vector( x, y ) )
+	if ( not r and length > width ) then
+		return x, y, "east"
+	end
+
+	-- Find region space south
+	x = pos.x
+	y = pos.y
+	r = region.getAtPosition( vector( x, y ) )
+	if ( not r ) then
+		return x, y, "south"
+	end
+
+	-- Find region space west
+	x = pos.x
+	y = pos.y
+	r = region.getAtPosition( vector( x, y ) )
+	if ( not r and length > width ) then
+		return x, y, "west"
+	end
+
+	return pos.x, pos.y
+end
+
 function trigger_transition:getPlayersInOrNearRegion( region )
 	local t = {}
 	for _, player in ipairs( player.getAll() ) do
@@ -53,8 +93,15 @@ function trigger_transition:loadRegion()
 		return
 	end
 
-	local pos = self:getPosition()
-	region.load( name, pos.x, pos.y )
+	local x, y, direction = self:findRegionSpace()
+	if ( direction == "north" ) then
+		-- Find region length
+		local regionData = require( "regions." .. name )
+		local length     = regionData.height * game.tileSize
+		y = y - length + 1
+	end
+
+	region.load( name, x, y )
 end
 
 function trigger_transition:removeRegion()

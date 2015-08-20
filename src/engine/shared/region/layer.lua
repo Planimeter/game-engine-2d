@@ -12,20 +12,32 @@ end
 
 if ( _CLIENT ) then
 	function regionlayer:createSpriteBatch()
-		local image      = self:getTileset():getImage():getDrawable()
-		local count      = self:getWidth() * self:getHeight()
-		self.spritebatch = graphics.newSpriteBatch( image, count )
+		local tileset = self:getTileset()
+		if ( not tileset ) then
+			return
+		end
+
+		local image = tileset:getImage()
+		local count = self:getWidth() * self:getHeight()
+		self.spritebatch = graphics.newSpriteBatch( image:getDrawable(), count )
 	end
 
 	function regionlayer:draw()
-		if ( self:getType() == "tilelayer" ) then
-			graphics.push()
-				graphics.translate( self:getX(), self:getY() )
-				graphics.setOpacity( self:getOpacity() )
-				graphics.setColor( color.white )
-				graphics.draw( self:getSpriteBatch() )
-			graphics.pop()
+		if ( self:getType() ~= "tilelayer" ) then
+			return
 		end
+
+		local spritebatch = self:getSpriteBatch()
+		if ( not spritebatch ) then
+			return
+		end
+
+		graphics.push()
+			graphics.translate( self:getX(), self:getY() )
+			graphics.setOpacity( self:getOpacity() )
+			graphics.setColor( color.white )
+			graphics.draw( spritebatch )
+		graphics.pop()
 	end
 end
 
@@ -94,6 +106,10 @@ if ( _CLIENT ) then
 		self:createSpriteBatch()
 
 		local spritebatch = self:getSpriteBatch()
+		if ( not spritebatch ) then
+			return
+		end
+
 		spritebatch:bind()
 
 		local tileset     = self:getTileset()
