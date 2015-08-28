@@ -5,7 +5,7 @@
 [![Join the chat at https://gitter.im/Planimeter/grid-sdk](https://img.shields.io/badge/gitter-join%20chat-brightgreen.svg)](https://gitter.im/Planimeter/grid-sdk?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Development Supercollective, Excellence by Design.](https://img.shields.io/badge/Made%20with%20L%C3%96VE%20by-Planimeter-brightgreen.svg)](http://www.planimeter.org/)
 
-The Grid engine is a 2D game engine built on LÖVE.
+The Grid engine is a 2D game engine built on LÖVE.  
 Grid is designed for hobbyists who need to write less and do more.
 
 It's a small, but powerful engine that provides a significant amount of
