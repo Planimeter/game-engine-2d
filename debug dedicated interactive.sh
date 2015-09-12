@@ -1,0 +1,15 @@
+#!/bin/sh
+
+##======== Copyright 2013-2015, Planimeter, All rights reserved. ========##
+##
+## Purpose:
+##
+##=======================================================================##
+
+echo Grid Engine Dedicated Server
+echo Launching Grid Engine Dedicated Server 64-bit in debug . . .
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+	love src/ -dedicated -interactive -debug
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+	bin/x64/macosx-x64/love.app/Contents/MacOS/love src/ -dedicated -interactive -debug
+fi

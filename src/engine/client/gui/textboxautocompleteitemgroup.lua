@@ -80,7 +80,7 @@ local sx, sy = 0, 0
 function textboxautocompleteitemgroup:updatePos()
 	local textBox = self:getTextBox()
 	if ( textBox ) then
-		sx, sy = textBox:localToScreen( textBox:getX(), textBox:getY() )
+		sx, sy = textBox:localToScreen()
 		self:setPos( sx, sy + textBox:getHeight() )
 	end
 end

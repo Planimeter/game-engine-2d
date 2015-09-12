@@ -20,7 +20,10 @@ function shader.register( class, name )
 	getfenv( 2 )[ name ] = nil
 end
 
-function shader:draw( func )
+function shader:renderTo( func )
+end
+
+function shader:draw()
 end
 
 function shader:set( key, value )

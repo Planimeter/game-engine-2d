@@ -228,8 +228,25 @@ function mainmenu:invalidateButtons()
 end
 
 function mainmenu:draw()
+	if ( engine.isInGame() ) then
+		self:drawBlur()
+		self:drawBackground()
+	end
+
 	self:drawLogo()
+
 	gui.panel.draw( self )
+end
+
+function mainmenu:drawBackground()
+	graphics.setColor( self:getScheme( "mainmenu.backgroundColor" ) )
+	graphics.rectangle( "fill", 0, 0, self:getWidth(), self:getHeight() )
+end
+
+function mainmenu:drawBlur()
+	if ( gui.blurFramebuffer ) then
+		gui.blurFramebuffer:draw()
+	end
 end
 
 function mainmenu:drawLogo()
@@ -279,6 +296,11 @@ end
 function mainmenu:remove()
 	gui.panel.remove( self )
 	self.logo = nil
+end
+
+function mainmenu:update( dt )
+	self:invalidate()
+	gui.panel.update( self, dt )
 end
 
 gui.register( mainmenu, "mainmenu" )

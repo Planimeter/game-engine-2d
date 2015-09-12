@@ -76,7 +76,8 @@ function onConnect( event )
 	local player = _G.player.initialize( event.peer )
 	player:onConnect()
 
-	-- TODO: Initialize specific player class here.
+	local metatable = _G.gameserver.getPlayerClass( player )
+	setmetatable( player, metatable )
 
 	if ( not _AXIS ) then
 		local spawnpoint = _G.gameserver.getSpawnPoint( player )

@@ -183,10 +183,7 @@ function panel:drawFramebuffer()
 
 	gui.panel.maskedPanel = self
 	graphics.setStencil( gui.panel.drawMask )
-	graphics.setColor( color.white, true )
-	graphics.setBlendMode( "premultiplied" )
-		graphics.draw( self.framebuffer:getDrawable() )
-	graphics.setBlendMode( "alpha" )
+		self.framebuffer:draw()
 	graphics.setStencil()
 end
 
@@ -251,7 +248,7 @@ function panel:getTopMostChildAtPos( x, y )
 		return nil
 	end
 
-	sx, sy = self:localToScreen( self:getX(), self:getY() )
+	sx, sy = self:localToScreen()
 	w,  h  = self:getWidth(), self:getHeight()
 	if ( not pointinrectangle( x, y, sx, sy, w, h ) ) then
 		return nil
@@ -367,7 +364,7 @@ local posX, posY = 0, 0
 local parent     = nil
 
 function panel:localToScreen( x, y )
-	posX, posY = x, y
+	posX, posY = x or self:getX(), y or self:getY()
 	parent     = self:getParent()
 	while ( parent ~= nil ) do
 		posX = posX + parent:getX()

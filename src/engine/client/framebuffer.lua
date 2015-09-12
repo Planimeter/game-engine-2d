@@ -57,18 +57,11 @@ function framebuffer:createFramebuffer( width, height )
 	end
 end
 
-framebuffer.renderStack = {}
-
 function framebuffer:draw()
-	if ( graphics.isSupported( "canvas" ) ) then
-		graphics.setCanvas( self._framebuffer )
-		table.insert( framebuffer.renderStack, self._framebuffer )
-			self._drawFunc()
-		table.remove( framebuffer.renderStack, #framebuffer.renderStack )
-		graphics.setCanvas( framebuffer.renderStack[ #framebuffer.renderStack ] )
-	else
-		self._drawFunc()
-	end
+	_G.graphics.setColor( color.white, true )
+	graphics.setBlendMode( "premultiplied" )
+		graphics.draw( self:getDrawable() )
+	graphics.setBlendMode( "alpha" )
 end
 
 local _shim = nil
@@ -77,12 +70,12 @@ function framebuffer:getDrawable()
 	if ( graphics.isSupported( "canvas" ) ) then
 		if ( self.needsRedraw ) then
 			graphics.setBlendMode( "alpha" )
-			self:draw()
+			self:render()
 			self.needsRedraw = false
 		end
 	else
 		graphics.setBlendMode( "alpha" )
-		self:draw()
+		self:render()
 		self.needsRedraw = false
 
 		if ( not _shim ) then
@@ -115,9 +108,23 @@ function framebuffer:invalidate()
 	self.needsRedraw = true
 end
 
+framebuffer.renderStack = {}
+
+function framebuffer:render()
+	if ( graphics.isSupported( "canvas" ) ) then
+		graphics.setCanvas( self._framebuffer )
+		table.insert( framebuffer.renderStack, self._framebuffer )
+			self._drawFunc()
+		table.remove( framebuffer.renderStack, #framebuffer.renderStack )
+		graphics.setCanvas( framebuffer.renderStack[ #framebuffer.renderStack ] )
+	else
+		self._drawFunc()
+	end
+end
+
 function framebuffer:renderTo( func )
 	self._drawFunc = func
-	self:draw()
+	self:render()
 end
 
 function framebuffer:setAutoRedraw( autoRedraw )

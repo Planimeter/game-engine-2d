@@ -83,7 +83,11 @@ if ( _AXIS ) then
 	if ( _SERVER ) then
 		function player:createInitialSave( region )
 			local spawnPoint = gameserver.getSpawnPoint( self )
-			local position = spawnPoint:getPosition()
+			local position = vector.origin + vector( 0, _G.game.tileSize )
+			if ( spawnPoint ) then
+				position = spawnPoint:getPosition()
+			end
+
 			position = position + vector( 0, -_G.game.tileSize )
 			local save = {
 				region = region,

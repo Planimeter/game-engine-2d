@@ -6,6 +6,7 @@
 
 local _CLIENT  = _CLIENT
 
+local engine   = engine
 local select   = select
 local table    = table
 local tostring = tostring
@@ -22,9 +23,10 @@ function addText( ... )
 	if ( _CLIENT ) then
 		local chat = _G.g_Chat.output
 		local text = table.concat( args, "\t" )
+		chat:activate()
 		chat:insertText( text .. "\n" )
 
 		-- TODO: Set hide time based on reading-time algorithm.
-		-- chat:setHideTime( math.huge )
+		chat:setHideTime( engine.getRealTime() + 5 )
 	end
 end

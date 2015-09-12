@@ -63,30 +63,34 @@ function gaussianblur:gaussianblur()
 	self.shader:send("direction",{1.0,0.0})
 end
 
-function gaussianblur:draw(func)
+function gaussianblur:renderTo(func)
 	local s = graphics.getShader()
 
+	graphics.setShader(self.shader)
+
+	-- first pass (horizontal blur)
+	self.shader:send('direction', {1 / graphics.getViewportWidth(), 0})
 	-- draw scene
 	self.canvas_h:clear()
 	self.canvas_h:renderTo(func)
 
-	graphics.setShader(self.shader)
-
 	local b = graphics.getBlendMode()
 	graphics.setBlendMode('premultiplied')
 
-	-- first pass (horizontal blur)
-	self.shader:send('direction', {1 / graphics.getViewportWidth(), 0})
+	-- second pass (vertical blur)
+	self.shader:send('direction', {0, 1 / graphics.getViewportHeight()})
 	self.canvas_v:clear()
 	self.canvas_v:renderTo(function() graphics.draw(self.canvas_h:getDrawable(), 0,0) end)
 
-	-- second pass (vertical blur)
-	self.shader:send('direction', {0, 1 / graphics.getViewportHeight()})
-	graphics.draw(self.canvas_v:getDrawable(), 0,0)
+	-- graphics.draw(self.canvas_v:getDrawable(), 0,0)
 
 	-- restore blendmode, shader and canvas
 	graphics.setBlendMode(b)
 	graphics.setShader(s)
+end
+
+function gaussianblur:draw()
+	self.canvas_v:draw()
 end
 
 function gaussianblur:set(key, value)

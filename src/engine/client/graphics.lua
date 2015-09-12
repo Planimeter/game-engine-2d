@@ -123,10 +123,7 @@ function drawGrid()
 		end )
 	end
 
-	setColor( color.white )
-	graphics.setBlendMode( "premultiplied" )
-		draw( grid.framebuffer:getDrawable() )
-	graphics.setBlendMode( "alpha" )
+	grid.framebuffer:draw()
 end
 
 local gcd = math.gcd

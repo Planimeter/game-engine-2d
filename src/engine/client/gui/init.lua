@@ -6,6 +6,7 @@
 
 require( "engine.client.input" )
 require( "engine.client.gui.scheme" )
+require( "shaders.gaussianblur" )
 
 local getfenv      = getfenv
 local graphics     = graphics
@@ -17,6 +18,7 @@ local print        = print
 local rawget       = rawget
 local require      = require
 local setmetatable = setmetatable
+local shader       = shader
 local string       = string
 local table        = table
 local type         = type
@@ -43,23 +45,28 @@ local find = string.find
 
 local metatable = {
 	__index = function( t, k )
-		if ( not hasvalue( privateMembers, k ) ) then
-			local library
-			local status, err
-			for i, module in ipairs( modules ) do
-				library = module .. ".gui." .. k
-				status, err = pcall( require, library )
-				if ( status == true ) then
-					break
-				elseif ( status == false and
-				         find( err, "module '" .. library .. "' not found:" ) ~= 1 ) then
-					print( err )
-				end
+		if ( hasvalue( privateMembers, k ) ) then
+			return
+		end
+
+		local library
+		local status, err
+		local message
+		for i, module in ipairs( modules ) do
+			library = module .. ".gui." .. k
+			status, err = pcall( require, library )
+			if ( status == true ) then
+				break
 			end
 
-			local v = rawget( t, k )
-			if ( v ~= nil ) then return v end
+			message = "module '" .. library .. "' not found:"
+			if ( status == false and find( err, message ) ~= 1 ) then
+				print( err )
+			end
 		end
+
+		local v = rawget( t, k )
+		if ( v ~= nil ) then return v end
 	end
 }
 setmetatable( _M, metatable )
@@ -84,6 +91,17 @@ function invalidateTree()
 end
 
 function draw()
+	if ( viewportFramebuffer ) then
+		if ( not blurFramebuffer ) then
+			blurFramebuffer = shader.getShader( "gaussianblur" )
+			blurFramebuffer:set( "sigma", 12 )
+		end
+
+		blurFramebuffer:renderTo( function()
+			viewportFramebuffer:draw()
+		end )
+	end
+
 	zIteration = 0
 
 	rootPanel:createFramebuffer()

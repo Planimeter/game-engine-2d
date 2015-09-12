@@ -42,8 +42,7 @@ if ( _CLIENT ) then
 end
 
 function prop_tree:chopDown()
-	chat.addText( "You'd really love to chop that tree down, but your hands " ..
-	"alone really aren't going to cut it. Literally." )
+	chat.addText( "Your hands alone really aren't going to cut it." )
 end
 
 function prop_tree:examine()

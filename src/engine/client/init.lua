@@ -105,6 +105,8 @@ function disconnect()
 	-- Shutdown client game interface
 	if ( game ) then
 		if ( game.client ) then
+			 gui.viewportFramebuffer = nil
+			 gui.blurFramebuffer = nil
 			 game.client.shutdown()
 			 game.client = nil
 		end
@@ -156,7 +158,14 @@ local r_draw_grid = convar( "r_draw_grid", "0", nil, nil,
 
 function draw()
 	if ( isInGame() ) then
-		_G.gameclient.draw()
+		if ( not gui.viewportFramebuffer ) then
+			gui.viewportFramebuffer = graphics.newFullscreenFramebuffer()
+		end
+
+		local viewportFramebuffer = gui.viewportFramebuffer
+		viewportFramebuffer:clear()
+		viewportFramebuffer:renderTo( _G.gameclient.draw )
+		viewportFramebuffer:draw()
 
 		if ( r_draw_grid:getBoolean() ) then
 			graphics.drawGrid()

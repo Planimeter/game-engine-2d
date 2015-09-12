@@ -4,10 +4,18 @@
 --
 --============================================================================--
 
+local require   = require
 local unrequire = unrequire
 local _G        = _G
 
 module( "game.server" )
+
+function getPlayerClass( player )
+	require( "game.shared.entities.vaplayer" )
+	local classmap = _G.entities.getClassMap()
+	local vaplayer = classmap[ "vaplayer" ]
+	return vaplayer
+end
 
 function getSpawnPoint( player )
 	local class       = "prop_worldgate_spawn"

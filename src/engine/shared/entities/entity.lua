@@ -17,8 +17,8 @@ entity.entities     = entities
 entity.lastEntIndex = lastEntIndex
 
 function entity.create( classname )
-	local classes = _G.entities.getClassMap()
-	local entity  = classes[ classname ]()
+	local classmap = _G.entities.getClassMap()
+	local entity   = classmap[ classname ]()
 	return entity
 end
 

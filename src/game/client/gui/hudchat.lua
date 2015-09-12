@@ -19,9 +19,9 @@ function hudchat:hudchat( parent )
 			return
 		end
 
+		self:close()
 		concommand.run( "say " .. text )
 		self.input:setText( "" )
-		self:close()
 	end
 
 	self:invalidateLayout()
@@ -46,6 +46,7 @@ function hudchat:activate()
 		self.output:animate( {
 			borderOpacity = 1
 		}, CHAT_ANIM_TIME, "easeOutQuint" )
+		self.output:activate()
 	end
 
 	self:moveToFront()
@@ -75,21 +76,23 @@ function hudchat:close()
 	self.output:animate( {
 		borderOpacity = 0,
 	}, CHAT_ANIM_TIME, "easeOutQuint" )
+	-- self.output:hide()
 
 	gui.setFocusedPanel( self.input, false )
 end
 
 function hudchat:dock()
 	local parent = self:getParent()
-	local x, y   = self.output:getX(), self.output:getY()
-	x, y         = self.output:localToScreen( x, y )
+	local x, y   = self.output:localToScreen()
 	self.output:setParent( parent )
 	self.output:setPos( x, y )
 end
 
 function hudchat:draw()
+	self:drawBlur()
 	self:drawBackground()
 	gui.panel.draw( self )
+	self:drawForeground()
 end
 
 function hudchat:drawBackground()
@@ -97,9 +100,24 @@ function hudchat:drawBackground()
 	graphics.rectangle( "fill", 0, 0, self:getWidth(), self:getHeight() )
 end
 
+function hudchat:drawBlur()
+	graphics.push()
+		local x, y = self:localToScreen()
+		graphics.translate( -x, -y )
+		gui.blurFramebuffer:draw()
+	graphics.pop()
+end
+
+function hudchat:drawForeground()
+	graphics.setColor( self:getScheme( "frame.outlineColor" ) )
+	graphics.setLineWidth( 1 )
+	graphics.rectangle( "line", 0, 0, self:getWidth(), self:getHeight() )
+end
+
 function hudchat:keypressed( key, isrepeat )
 	if ( key == "escape" ) then
 		self:close()
+		self.output:hide()
 		return true
 	end
 
@@ -123,6 +141,14 @@ function hudchat:invalidateLayout()
 	gui.panel.invalidateLayout( self )
 end
 
+function hudchat:update( dt )
+	if ( self:getOpacity() > 0 ) then
+		self:invalidate()
+	end
+
+	gui.panel.update( self, dt )
+end
+
 gui.register( hudchat, "hudchat" )
 
 concommand( "chat", "Toggles the chat.", function()
@@ -131,6 +157,7 @@ concommand( "chat", "Toggles the chat.", function()
 		_G.g_Chat:activate()
 	else
 		_G.g_Chat:close()
+		_G.g_Chat.output:hide()
 	end
 end )
 

@@ -87,8 +87,7 @@ local x, y = 0, 0
 function dropdownlistitemgroup:updatePos()
 	local dropDownList = self:getDropDownList()
 	if ( dropDownList ) then
-		x, y = dropDownList:getX(), dropDownList:getY()
-		x, y = dropDownList:localToScreen( x, y )
+		x, y = dropDownList:localToScreen()
 		self:setPos( x, y + dropDownList:getHeight() )
 	end
 end

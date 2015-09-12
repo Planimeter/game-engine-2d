@@ -12,4 +12,7 @@ function vaplayer:vaplayer()
 	player.player( self )
 end
 
+function vaplayer:getInventory()
+end
+
 entities.linkToClassname( vaplayer, "vaplayer" )

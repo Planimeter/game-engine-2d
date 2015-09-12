@@ -141,6 +141,7 @@ default.label               = {
 }
 
 default.mainmenu            = {
+    backgroundColor         = color( default.colors.black, 0.27 * 255 ),
     logo                    = graphics.newImage( "images/gui/logo.png" ),
     logoSmall               = graphics.newImage( "images/gui/logo_small.png" )
 }

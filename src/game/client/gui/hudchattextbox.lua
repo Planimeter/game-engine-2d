@@ -17,6 +17,37 @@ function hudchattextbox:hudchattextbox( parent, name )
 	self.borderOpacity = 0
 end
 
+local CHAT_ANIM_TIME = 0.2
+
+function hudchattextbox:activate()
+	if ( not self:isVisible() ) then
+		self:setOpacity( 0 )
+		self:animate( {
+			opacity = 1
+		}, CHAT_ANIM_TIME, "easeOutQuint" )
+	end
+
+	self:setVisible( true )
+end
+
+function hudchattextbox:hide()
+	if ( self.hiding ) then
+		return
+	end
+
+	self.hiding = true
+
+	self:animate( {
+		opacity = 0,
+	}, CHAT_ANIM_TIME, "easeOutQuint", function()
+		self:setVisible( false )
+		self:setOpacity( 1 )
+
+		self.hiding   = nil
+		self.hideTime = nil
+	end )
+end
+
 function hudchattextbox:drawForeground()
 	local property = "textbox.outlineColor"
 	local width    = self:getWidth()
@@ -26,6 +57,10 @@ function hudchattextbox:drawForeground()
 	graphics.setColor( color )
 	graphics.setLineWidth( 1 )
 	graphics.rectangle( "line", 0, 0, width, height )
+end
+
+function hudchattextbox:getHideTime()
+	return self.hideTime
 end
 
 function hudchattextbox:getHudChat()
@@ -42,6 +77,18 @@ end
 
 function hudchattextbox:setHideTime( duration )
 	self.hideTime = duration
+end
+
+function hudchattextbox:update( dt )
+	local hudchat  = self:getHudChat()
+	local hideTime = self:getHideTime()
+	if ( hideTime and
+	     hideTime <= engine.getRealTime() and
+	     not hudchat:isVisible() ) then
+		self:hide()
+	end
+
+	gui.textbox.update( self, dt )
 end
 
 gui.register( hudchattextbox, "hudchattextbox" )

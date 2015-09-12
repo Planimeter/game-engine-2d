@@ -120,59 +120,61 @@ function region.unloadAll()
 	end
 end
 
-concommand( "region", "Loads the specified region",
-	function( _, _, _, _, argT )
-		local name = argT[ 1 ]
-		if ( name == nil ) then
-			print( "region <region name>" )
-			return
-		end
-
-		if ( not region.exists( name ) ) then
-			print( name .. " does not exist." )
-			return
-		end
-
-		engine.disconnect()
-
-		if ( _AXIS and not engine.isSignedIntoAxis() ) then
-			print( "You are not signed into Axis." )
-			return
-		end
-
-		local args = engine.getArguments()
-
-		if ( _CLIENT and not _SERVER ) then
-			if ( engine.connecting ) then
+if ( not _DEDICATED ) then
+	concommand( "region", "Loads the specified region",
+		function( _, _, _, _, argT )
+			local name = argT[ 1 ]
+			if ( name == nil ) then
+				print( "region <region name>" )
 				return
 			end
 
-			_SERVER = true
-			local status, ret = pcall( require, "engine.server" )
-			if ( status ~= false ) then
-				serverengine = ret
-				if ( serverengine.load( args ) ) then
-					networkserver.onNetworkInitializedServer()
-				else
-					print( "Failed to initialize server!" )
-					engine.connecting = false
-					engine.connected  = false
-					engine.disconnect()
-					_SERVER = nil
+			if ( not region.exists( name ) ) then
+				print( name .. " does not exist." )
+				return
+			end
+
+			engine.disconnect()
+
+			if ( _AXIS and not engine.isSignedIntoAxis() ) then
+				print( "You are not signed into Axis." )
+				return
+			end
+
+			local args = engine.getArguments()
+
+			if ( _CLIENT and not _SERVER ) then
+				if ( engine.connecting ) then
 					return
 				end
-			else
-				_SERVER = nil
-				print( ret )
-				return
+
+				_SERVER = true
+				local status, ret = pcall( require, "engine.server" )
+				if ( status ~= false ) then
+					serverengine = ret
+					if ( serverengine.load( args ) ) then
+						networkserver.onNetworkInitializedServer()
+					else
+						print( "Failed to initialize server!" )
+						engine.connecting = false
+						engine.connected  = false
+						engine.disconnect()
+						_SERVER = nil
+						return
+					end
+				else
+					_SERVER = nil
+					print( ret )
+					return
+				end
 			end
+
+			region.load( name )
+
+			engine.connectToListenServer()
 		end
-
-		region.load( name )
-
-		engine.connectToListenServer()
-	end
-)
+	)
+end
 
 function region.snapToGrid( x, y )
 	local region = region.getAtPosition( vector( x, y ) )
