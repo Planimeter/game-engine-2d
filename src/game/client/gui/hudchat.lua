@@ -101,6 +101,10 @@ function hudchat:drawBackground()
 end
 
 function hudchat:drawBlur()
+	if ( not gui.blurFramebuffer ) then
+		return
+	end
+
 	graphics.push()
 		local x, y = self:localToScreen()
 		graphics.translate( -x, -y )
@@ -127,7 +131,7 @@ end
 function hudchat:invalidateLayout()
 	self.width  = math.round( gui.scale( 720 ) )
 	self.height = math.round( gui.scale( 404 ) )
-	self:setPos( 0, gui.scale( 494 ) )
+	self:setPos( gui.scale( 96 ) - 36 - 18, gui.scale( 494 ) )
 
 	if ( self:isVisible() ) then
 		self.output:setPos( 36, 36 )

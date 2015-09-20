@@ -12,18 +12,16 @@ function npc:npc()
 	character.character( self )
 
 	local tileSize = game.tileSize
-	if ( _CLIENT ) then
-		self:setLocalPosition( vector( 0, tileSize ) )
-	end
-
-	local min = vector()
-	local max = vector( tileSize, -tileSize )
+	local min      = vector()
+	local max      = vector( tileSize, -tileSize )
 	self:setCollisionBounds( min, max )
 
-	self:networkNumber( "moveSpeed", 2 )
+	self:networkNumber( "moveSpeed", 1 )
 
 	if ( _CLIENT ) then
-		self:setSprite( player.sprite )
+		require( "engine.client.sprite" )
+		local sprite = sprite( "images.player" )
+		self:setSprite( sprite )
 	end
 end
 

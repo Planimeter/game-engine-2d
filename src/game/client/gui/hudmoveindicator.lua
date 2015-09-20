@@ -71,7 +71,7 @@ function hudmoveindicator:drawEntityName()
 	local name = self.entity:getName()
 	local margin = gui.scale( 96 )
 	graphics.print(
-		name,   -- text
+		name or "unnamed",   -- text
 		margin, -- x
 		margin, -- y
 		0,      -- r

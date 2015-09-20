@@ -117,6 +117,8 @@ function console:console()
 				return
 			end
 
+			-- BUGBUG: We never get here anymore due to the introduction of
+			-- cascadeInputToChildren.
 			for i, history in ipairs( gui.console.commandHistory ) do
 				if ( autocompleteItemGroup:getValue() == history ) then
 					table.remove( gui.console.commandHistory, i )

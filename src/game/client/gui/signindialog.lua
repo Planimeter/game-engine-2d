@@ -113,8 +113,8 @@ local function signin( self )
 	end )
 end
 
-local axis_remember_password = convar( "axis_remember_password", "0", nil,
-                                       nil, "Remember Axis password." )
+local axis_remember_password = convar( "axis_remember_password", "0", nil, nil,
+                                       "Remember Axis password." )
 
 local function rememberPassword()
 	if ( not axis_remember_password:getBoolean() ) then
@@ -242,7 +242,7 @@ function signindialog:signindialog( parent, name )
 			self:resetForm()
 		end
 	end
-	-- BUGBUG: Crash on enter when form is filled out
+	-- BUGBUG: Crash on enter when form is filled out.
 	-- self.usernameTextBox.onEnter = signInOrRegister
 	self.usernameTextBox.onLostFocus = function()
 		if ( self.usernameTextBox:getText() == "" ) then

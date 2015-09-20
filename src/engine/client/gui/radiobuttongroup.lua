@@ -9,14 +9,14 @@ class "radiobuttongroup" ( gui.panel )
 function radiobuttongroup:radiobuttongroup( parent, name )
 	gui.panel.panel( self, parent, name )
 	self.selectedId = 0
-	self.disabled	= false
+	self.disabled   = false
 
 	self:setSuppressFramebufferWarnings( true )
 end
 
 function radiobuttongroup:addItem( item )
 	self.items =  self.items or {}
-	item.id	   = #self.items + 1
+	item.id    = #self.items + 1
 	table.insert( self.items, item )
 	item.group = self
 end
@@ -66,9 +66,9 @@ end
 
 function radiobuttongroup:setSelectedId( selectedId, default )
 	local oldSelectedId = self:getSelectedId()
-	local items			= self:getItems()
-	local oldSelection	= items[ oldSelectedId ]
-	local newSelection	= items[ selectedId ]
+	local items         = self:getItems()
+	local oldSelection  = items[ oldSelectedId ]
+	local newSelection  = items[ selectedId ]
 	if ( oldSelection and oldSelectedId ~= selectedId ) then
 		oldSelection:setSelected( false )
 		newSelection:setSelected( true )

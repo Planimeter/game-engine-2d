@@ -14,7 +14,7 @@ vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords 
 	}
 
 	vec4 blendColor = texColor;
-	blendColor.rgb	= color.rgb * texColor.rgb;
-	blendColor.a	= color.a	* texColor.a * Texel( mask, texture_coords ).a;
+	blendColor.rgb  = color.rgb * texColor.rgb;
+	blendColor.a    = color.a   * texColor.a * Texel( mask, texture_coords ).a;
 	return blendColor;
 }

@@ -6,7 +6,7 @@
 
 require( "engine.shared.thread" )
 
-local table	 = table
+local table  = table
 local thread = thread
 local unpack = unpack
 

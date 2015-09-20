@@ -63,7 +63,7 @@ function table.count( t, value )
 	local count = 0
 	for _, v in pairs( t ) do
 		if ( typeof( v,     "table" ) and
-			 typeof( value, "table" ) ) then
+		     typeof( value, "table" ) ) then
 			if ( table.equal( v, value ) ) then
 				count = count + 1
 			end
@@ -81,8 +81,8 @@ function table.equal( a, b )
 
 	for k, v in pairs( a ) do
 		if ( typeof( v,      "table" ) and
-			 typeof( b[ k ], "table" ) and
-			 not table.equal( v, b[ k ] ) ) then
+		     typeof( b[ k ], "table" ) and
+		     not table.equal( v, b[ k ] ) ) then
 			return false
 		elseif ( v ~= b[ k ] ) then
 			return false
@@ -91,8 +91,8 @@ function table.equal( a, b )
 
 	for k, v in pairs( b ) do
 		if ( typeof( v,      "table" ) and
-			 typeof( a[ k ], "table" ) and
-			 not table.equal( v, a[ k ] ) ) then
+		     typeof( a[ k ], "table" ) and
+		     not table.equal( v, a[ k ] ) ) then
 			return false
 		elseif ( v ~= a[ k ] ) then
 			return false

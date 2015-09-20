@@ -55,12 +55,8 @@ function player:player()
 	character.character( self )
 
 	local tileSize = game.tileSize
-	if ( _CLIENT ) then
-		self:setLocalPosition( vector( 0, tileSize ) )
-	end
-
-	local min = vector()
-	local max = vector( tileSize, -tileSize )
+	local min      = vector()
+	local max      = vector( tileSize, -tileSize )
 	self:setCollisionBounds( min, max )
 
 	self:networkNumber( "id", player.lastPlayerId + 1 )
@@ -88,7 +84,6 @@ if ( _AXIS ) then
 				position = spawnPoint:getPosition()
 			end
 
-			position = position + vector( 0, -_G.game.tileSize )
 			local save = {
 				region = region,
 				position = {

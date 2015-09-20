@@ -8,6 +8,7 @@ require( "engine.client.input" )
 require( "engine.client.gui.scheme" )
 require( "shaders.gaussianblur" )
 
+local convar       = convar
 local getfenv      = getfenv
 local graphics     = graphics
 local input        = input
@@ -90,8 +91,21 @@ function invalidateTree()
 	rootPanel:invalidateLayout()
 end
 
+local function updateBlurFramebuffer( convar )
+	local enabled = convar:getBoolean()
+	if ( not enabled ) then
+		blurFramebuffer = nil
+	else
+		blurFramebuffer = shader.getShader( "gaussianblur" )
+		blurFramebuffer:set( "sigma", 12 )
+	end
+end
+
+local gui_draw_blur = convar( "gui_draw_blur", "1", nil, nil,
+                              "Toggles gui blur", updateBlurFramebuffer )
+
 function draw()
-	if ( viewportFramebuffer ) then
+	if ( viewportFramebuffer and gui_draw_blur:getBoolean() ) then
 		if ( not blurFramebuffer ) then
 			blurFramebuffer = shader.getShader( "gaussianblur" )
 			blurFramebuffer:set( "sigma", 12 )

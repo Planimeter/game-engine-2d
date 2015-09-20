@@ -8,8 +8,8 @@ class( "axisuser" )
 
 function axisuser:axisuser( username, email, ticket )
 	self.username = username
-	self.email	  = email
-	self.ticket	  = ticket
+	self.email    = email
+	self.ticket   = ticket
 end
 
 local URL_GRAVATAR_BASE = "https://www.gravatar.com/avatar"
@@ -27,20 +27,20 @@ function axisuser:downloadAvatar( callback )
 	require( "engine.shared.socket.http" )
 	require( "engine.shared.socket.https" )
 
-	local hash	= self:getEmailHash()
+	local hash  = self:getEmailHash()
 	local query = http.urlencode( {
 		default = 404,
-		size	= 44
+		size    = 44
 	} )
-	local url	= URL_GRAVATAR_BASE .. "/" .. hash .. "?" .. query
+	local url = URL_GRAVATAR_BASE .. "/" .. hash .. "?" .. query
 
 	local filename = getSavedAvatarFilename( self )
 	local headers
 	if ( filename ) then
 		headers = {}
-		local path		   = "downloads/avatars/" .. filename
+		local path         = "downloads/avatars/" .. filename
 		local lastModified = os.date( "%a, %d %b %Y %X GMT",
-									  filesystem.getLastModified( path ) )
+		                     filesystem.getLastModified( path ) )
 		headers[ 'If-Modified-Since' ] = lastModified
 	end
 
@@ -48,7 +48,7 @@ function axisuser:downloadAvatar( callback )
 		if ( c == 200 ) then
 			filesystem.createDirectory( "downloads/avatars" )
 			local filename = string.match( h[ 'content-disposition' ],
-										   "filename=\"(.-)\"" )
+			                               "filename=\"(.-)\"" )
 			filename = "downloads/avatars/" .. filename
 			if ( filesystem.write( filename, r ) ) then
 				print( "Got avatar for " .. hash .. "!" )
@@ -62,11 +62,11 @@ function axisuser:downloadAvatar( callback )
 		if ( callback ) then
 			callback( r, c, h, s )
 		end
-	end 
+	end
 
 	if ( headers ) then
 		local options = {
-			url		= url,
+			url     = url,
 			headers = headers
 		}
 		https.request( options, nil, _callback )

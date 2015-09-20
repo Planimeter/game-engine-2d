@@ -8,15 +8,15 @@ require( "love.filesystem" )
 require( "engine.shared.thread" )
 require( "engine.shared.tablib" )
 
-local http	   = require( "socket.http" )
-local thread   = thread
-local channel  = thread.getThreadChannel()
-local args	   = channel:pop()
+local http    = require( "socket.http" )
+local thread  = thread
+local channel = thread.getThreadChannel()
+local args    = channel:pop()
 table.raise( args )
 
 local options  = args[ 1 ]
 local trequest = false
-local t		   = {}
+local t        = {}
 if ( type( options ) == "table" ) then
 	trequest = true
 	require( "ltn12" )

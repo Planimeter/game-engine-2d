@@ -23,8 +23,13 @@ function createDefaultPanels()
 	-- Initialize move indicator
 	local hudmoveindicator = gui.hudmoveindicator( _G.g_Viewport )
 
+	-- Initialize chat
 	local chat = gui.hudchat( _G.g_Viewport )
-	_G.g_Chat  = chat
+	_G.g_Chat = chat
+
+	-- Initialize inventory
+	local inventory = gui.hudinventory( _G.g_Viewport )
+	_G.g_Inventory = inventory
 end
 
 function draw()

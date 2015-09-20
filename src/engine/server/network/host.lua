@@ -10,10 +10,10 @@ class( "host" )
 
 function host:host( bind_address, peer_count, channel_count, in_bandwidth, out_bandwidth )
 	self._host = enet.host_create( bind_address,
-								   peer_count	 or 64,
-								   channel_count or 1,
-								   in_bandwidth	 or 0,
-								   out_bandwidth or 0 )
+	                               peer_count    or 64,
+	                               channel_count or 1,
+	                               in_bandwidth  or 0,
+	                               out_bandwidth or 0 )
 end
 
 function host:isValid()
@@ -73,7 +73,7 @@ end
 
 function host:peer_count()
 	return g_localhost_enet_peer and self._host:peer_count() + 1 or
-									 self._host:peer_count()
+	                                 self._host:peer_count()
 end
 
 function host:get_peer( index )
@@ -81,7 +81,7 @@ function host:get_peer( index )
 		return g_localhost_enet_peer
 	end
 	return g_localhost_enet_peer and self._host:get_peer( index + 1 ) or
-									 self._host:get_peer( index )
+	                                 self._host:get_peer( index )
 end
 
 function host:get_socket_address()

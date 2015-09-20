@@ -4,16 +4,16 @@
 --
 --============================================================================--
 
-local pairs	 = pairs
-local pcall	 = pcall
+local pairs  = pairs
+local pcall  = pcall
 local select = select
 local unpack = unpack
-local table	 = table
-local print	 = print
+local table  = table
+local print  = print
 
 module( "hook" )
 
-local hooks	 = {}
+local hooks  = {}
 hooks.client = {}
 hooks.server = {}
 hooks.shared = {}

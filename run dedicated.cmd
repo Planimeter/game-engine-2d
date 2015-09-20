@@ -21,7 +21,7 @@ IF [%1]==[x86] (
 
 :DETECT
 ECHO Detecting architecture . . .
-IF EXIST %ProgramFiles(x86)% (
+IF EXIST "%ProgramFiles(x86)%" (
 	ECHO "64-bit detected!"
 	GOTO 64BIT
 ) ELSE (

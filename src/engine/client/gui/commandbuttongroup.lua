@@ -18,14 +18,14 @@ function commandbuttongroup:draw()
 	gui.panel.draw( self )
 
 	local property = "commandbuttongroup.outlineColor"
-	local width	   = self:getWidth()
+	local width    = self:getWidth()
 	local height   = self:getHeight()
 
 	graphics.setColor( self:getScheme( property ) )
-	graphics.line( 0,				0 + height - 1,
-				   0,				0,
-				   0 + width - 0.5, 0,
-				   0 + width - 0.5, 0 + height - 1 )
+	graphics.line( 0,               0 + height - 1,
+	               0,               0,
+	               0 + width - 0.5, 0,
+	               0 + width - 0.5, 0 + height - 1 )
 end
 
 function commandbuttongroup:invalidateLayout()
@@ -40,8 +40,8 @@ function commandbuttongroup:invalidateLayout()
 
 	local parent = self:getParent()
 	local margin = typeof( parent, "tabbedframe" ) and 24 or 36
-	self:setPos( parent:getWidth()	- self:getWidth() - margin,
-				 parent:getHeight() - self:getHeight() )
+	self:setPos( parent:getWidth()  - self:getWidth() - margin,
+	             parent:getHeight() - self:getHeight() )
 	gui.panel.invalidateLayout( self )
 end
 

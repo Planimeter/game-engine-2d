@@ -146,14 +146,15 @@ end
 local minRange, maxRange = 0, 0
 local range              = 0
 local newRange           = 0
+local percent            = 0
 
 local function updateRange( self, min, max )
 	minRange, maxRange = self:getRange()
 	range              = maxRange - minRange
-	newRange           = max      - min
 	if ( range ~= 0 ) then
-		self.value     = ( self:getValue() + self:getMin() ) / range *
-		                 newRange + self:getMin()
+		newRange   = max - min
+		percent    = ( self:getValue() + self:getMin() ) / range
+		self.value = percent * newRange + self:getMin()
 		if ( self.value > self:getMax() - self:getRangeWindow() ) then
 			self.value = self:getMax() - self:getRangeWindow()
 		end

@@ -14,7 +14,7 @@ return {
 		},
 		walknortheast = {
 			from = 64,
-			to = 64,
+			to = 67,
 		},
 		walkeast = {
 			from = 96,
@@ -22,7 +22,7 @@ return {
 		},
 		walksoutheast = {
 			from = 128,
-			to = 128,
+			to = 131,
 		},
 		walksouth = {
 			from = 160,
@@ -30,7 +30,7 @@ return {
 		},
 		walksouthwest = {
 			from = 192,
-			to = 192,
+			to = 195,
 		},
 		walkwest = {
 			from = 224,
@@ -38,7 +38,7 @@ return {
 		},
 		walknorthwest = {
 			from = 256,
-			to = 256,
+			to = 259,
 		}
 	}
 }

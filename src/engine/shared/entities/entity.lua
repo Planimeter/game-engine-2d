@@ -49,7 +49,7 @@ if ( _CLIENT ) then
 	end
 
 	local r_draw_shadows = convar( "r_draw_shadows", "1", nil, nil,
-	                            "Draws entity shadows" )
+	                               "Draws entity shadows" )
 
 	function entity.drawAll()
 		clear( renderables )
@@ -440,8 +440,8 @@ function entity:update( dt )
 	if ( self.think and
 	     self.nextThink and
 	     self.nextThink <= engine.getRealTime() ) then
-		 self.nextThink = nil
-		 self:think()
+		self.nextThink = nil
+		self:think()
 	end
 
 	if ( _CLIENT ) then

@@ -6,17 +6,17 @@
 
 require( "engine.shared.thread" )
 
-local pairs	   = pairs
+local pairs    = pairs
 local require  = require
-local table	   = table
+local table    = table
 local thread   = thread
 local tostring = tostring
-local type	   = type
+local type     = type
 local unpack   = unpack
 
 module( "http" )
 
-local url	 = require( "socket.url" )
+local url    = require( "socket.url" )
 local escape = url.escape
 
 function urlencode( t )

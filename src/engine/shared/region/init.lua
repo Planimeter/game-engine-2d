@@ -297,23 +297,23 @@ local height = 0
 local pointinrectangle = math.pointinrectangle
 
 function region:isTileWalkableAtPosition( position )
-	-- px = position.x
-	-- py = position.y
-	-- for _, entity in ipairs( self:getEntities() ) do
-	-- 	pos      = entity:getPosition()
-	-- 	min, max = entity:getCollisionBounds()
-	-- 	if ( min and max ) then
-	-- 		min    = pos + min
-	-- 		max    = pos + max
-	-- 		x      = min.x
-	-- 		y      = max.y
-	-- 		width  = max.x - min.x
-	-- 		height = min.y - max.y
-	-- 		if ( pointinrectangle( px, py, x, y, width, height ) ) then
-	-- 			return false
-	-- 		end
-	-- 	end
-	-- end
+	px = position.x
+	py = position.y - _G.game.tileSize
+	for _, entity in ipairs( self:getEntities() ) do
+		pos      = entity:getPosition()
+		min, max = entity:getCollisionBounds()
+		if ( min and max ) then
+			min    = pos + min
+			max    = pos + max
+			x      = min.x
+			y      = max.y
+			width  = max.x - min.x
+			height = min.y - max.y
+			if ( pointinrectangle( px, py, x, y, width, height ) ) then
+				return false
+			end
+		end
+	end
 	return true
 end
 

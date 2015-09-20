@@ -52,12 +52,12 @@ function commandbutton:drawForeground()
 	end
 
 	local property = "commandbutton.outlineColor"
-	local width	   = self:getWidth()
+	local width    = self:getWidth()
 	local height   = self:getHeight()
 
 	graphics.setColor( self:getScheme( property ) )
 	graphics.line( 0 + width - 0.5, 0,
-				   0 + width - 0.5, 0 + height - 1 )
+	               0 + width - 0.5, 0 + height - 1 )
 end
 
 function commandbutton:isFirstChild()

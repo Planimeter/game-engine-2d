@@ -15,6 +15,7 @@ function hudchattextbox:hudchattextbox( parent, name )
 	self:setScheme( "Chat" )
 
 	self.borderOpacity = 0
+	self:setVisible( false )
 end
 
 local CHAT_ANIM_TIME = 0.2

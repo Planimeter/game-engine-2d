@@ -120,7 +120,11 @@ default.frametab            = {
 }
 
 default.hudchat             = {
-    backgroundColor         = color( default.colors.black, 0.27 * 255 ),
+    backgroundColor         = color( default.colors.black, 0.27 * 255 )
+}
+
+default.hudinventory        = {
+    backgroundColor         = color( default.colors.black, 0.27 * 255 )
 }
 
 default.hudspeechballoons   = {

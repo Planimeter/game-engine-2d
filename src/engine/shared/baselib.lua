@@ -6,15 +6,15 @@
 
 require( "engine.shared.concommand" )
 
-rawtype			   = type
-rawprint		   = print
+rawtype            = type
+rawprint           = print
 
-local _print	   = print
-local rawtype	   = rawtype
-local tonumber	   = tonumber
-local assert	   = assert
+local _print       = print
+local rawtype      = rawtype
+local tonumber     = tonumber
+local assert       = assert
 local getmetatable = getmetatable
-local rawget	   = rawget
+local rawget       = rawget
 
 function print( ... )
 	_print( ... )
@@ -57,9 +57,9 @@ end
 function typerror( narg, tname, value )
 	local info = debug.getinfo( 2, "n" )
 	error( "bad argument #" .. narg .. " " ..
-		   "to '" .. info.name ..
-		   "' (" .. tname .. " expected, " ..
-		   "got " .. type( value ) .. ")", 3 )
+	       "to '" .. info.name ..
+	       "' (" .. tname .. " expected, " ..
+	       "got " .. type( value ) .. ")", 3 )
 end
 
 concommand( "lua_dofile", "Loads and runs the given file",

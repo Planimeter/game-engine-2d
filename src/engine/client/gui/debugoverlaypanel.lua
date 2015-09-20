@@ -42,7 +42,7 @@ function debugoverlaypanel:rectangle( x, y, width, height, c, duration )
 		y        = y,
 		width    = width,
 		height   = height,
-		color    = color( c.r, c.g, c.b, c.a ),
+		color    = c,
 		duration = duration
 	}
 	table.insert( self.overlays, overlay )

@@ -58,7 +58,7 @@ function requireEntity( classname )
 			classes[ classname ] = library
 			return
 		elseif ( status == false and
-				 find( err, "module '" .. library .. "' not found:" ) ~= 1 ) then
+		         find( err, "module '" .. library .. "' not found:" ) ~= 1 ) then
 			print( err )
 		end
 	end

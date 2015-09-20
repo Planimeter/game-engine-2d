@@ -39,18 +39,18 @@ function newThread( filename, errorHandler )
 	if ( errorHandler ) then
 		errorHandlers[ t ] = errorHandler
 	end
-	return t 
+	return t
 end
 
 local tasks = {}
 
 function newThreadedTask( filename, callback )
-	local t		  = thread.newThread( filename )
+	local t       = thread.newThread( filename )
 	local channel = thread.newChannel()
 	threadChannel:push( channel )
 	if ( callback ) then
 		tasks[ t ] = {
-			channel	 = channel,
+			channel  = channel,
 			callback = callback
 		}
 	end
@@ -58,7 +58,7 @@ function newThreadedTask( filename, callback )
 end
 
 local function dispatchCallbacks()
-	local task 
+	local task
 	for thread in pairs( tasks ) do
 		if ( not thread:isRunning() ) then
 			task = tasks[ thread ]

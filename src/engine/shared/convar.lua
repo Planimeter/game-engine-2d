@@ -63,13 +63,13 @@ function convar.saveConfig()
 end
 
 function convar:convar( name, default, min, max, helpString, onValueChange )
-	self.name			   = name
-	self.default		   = default
-	self.value			   = convar.config[ name ] or default
-	self.min			   = min
-	self.max			   = max
-	self.helpString		   = helpString
-	self.onValueChange	   = onValueChange
+	self.name              = name
+	self.default           = default
+	self.value             = convar.config[ name ] or default
+	self.min               = min
+	self.max               = max
+	self.helpString        = helpString
+	self.onValueChange     = onValueChange
 	convar.convars[ name ] = self
 end
 
@@ -131,7 +131,7 @@ function convar:setHelpString( helpString )
 	self.helpString = helpString
 end
 
-local oldValue	  = nil
+local oldValue    = nil
 local numberValue = 0
 
 function convar:setValue( value )

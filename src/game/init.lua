@@ -41,6 +41,9 @@ function getStartingRegion()
 	return "allorovian_forest"
 end
 
+function onNPCSpawn( npc )
+end
+
 function onPlayerConnect( player )
 end
 

@@ -14,8 +14,8 @@ function closedialog:closedialog( parent, name )
 	self:doModal()
 
 	local label = gui.label( self,
-							 "Close Dialog Label",
-							 "Are you sure you want to quit the game?" )
+	                         "Close Dialog Label",
+	                         "Are you sure you want to quit the game?" )
 	label:setPos( 36, 86 )
 	label:setWidth( 252 )
 
@@ -25,7 +25,7 @@ function closedialog:closedialog( parent, name )
 		engine.setRequestingShutdown( true )
 		engine.quit()
 	end
-	
+
 	local buttonNo = gui.button( self, "Close Dialog No Button", "No" )
 	buttonNo:setPos( 288, 86 + label:getHeight() + 18 )
 	buttonNo.onClick = function()

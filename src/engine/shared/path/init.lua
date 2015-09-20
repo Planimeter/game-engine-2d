@@ -30,7 +30,7 @@ end
 
 local merge = table.merge
 
-local function getSuccessors( q, closed )
+local function getSuccessors( q )
 	local successors = {}
 	local region     = region.getAtPosition( q )
 	if ( not region ) then
@@ -111,14 +111,19 @@ local function reconstructPath( node )
 end
 
 function getPath( start, goal )
+	local tileSize = _G.game.tileSize
+	start = snapToGrid( start )
+	goal  = snapToGrid( goal ) + vector( 0, tileSize )
+	if ( start == goal ) then
+		return
+	end
+
 	local region = region.getAtPosition( goal )
 	if ( not region ) then
 		return
 	end
 
-	start = snapToGrid( start )
-	goal  = snapToGrid( goal )
-	if ( start == goal ) then
+	if ( not region:isTileWalkableAtPosition( goal ) ) then
 		return
 	end
 
@@ -128,15 +133,17 @@ function getPath( start, goal )
 	local closed = {}
 
 	require( "engine.shared.path.node" )
-	local node = _G.node
-	start      = node( start.x, start.y )
+	local node    = _G.node
+	start         = node( start.x, start.y )
+	local closest = start
+	start.h       = getDistance( start, goal )
 	heap.insert( open, start )
 
 	while ( #open ~= 0 ) do
 		local q = open[ 1 ]
 		heap.remove( open, 1 )
 		closed[ tostring( q ) ] = true
-		local successors = getSuccessors( q, closed )
+		local successors = getSuccessors( q )
 		for i = 1, #successors do
 			local successor = successors[ i ]
 			if ( successor == goal ) then
@@ -147,12 +154,20 @@ function getPath( start, goal )
 			successor.h = getDistance( goal, successor )
 			successor.f = successor.g + successor.h
 
+			if ( successor.h <  closest.h or
+			   ( successor.h == closest.h and
+			     successor.g <  closest.g ) ) then
+				closest = successor
+			end
+
 			if ( not table.hasvalue( open, successor ) and
 			     not closed[ tostring( successor ) ] ) then
 				heap.insert( open, successor )
 			end
 		end
 	end
+
+	return reconstructPath( closest )
 end
 
 function setDirections( directions )

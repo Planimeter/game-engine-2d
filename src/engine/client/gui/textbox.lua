@@ -439,18 +439,18 @@ local utf8reverse = string.utf8reverse
 local find        = string.find
 
 local function nextWord( self, dir )
-	local backwards  = dir == -1
-	local startPos   = backwards and 1              or self.cursorPos + 1
-	local endPos     = backwards and self.cursorPos or nil
-	local sub        = utf8sub( self.text, startPos, endPos )
+	local backwards = dir == -1
+	local startPos  = backwards and 1              or self.cursorPos + 1
+	local endPos    = backwards and self.cursorPos or nil
+	local sub       = utf8sub( self.text, startPos, endPos )
 	if ( backwards ) then
-		sub          = utf8reverse( sub )
+		sub = utf8reverse( sub )
 	end
 	startPos, endPos = find( sub, "%s*." )
-	local pos        = 0
+	local pos = 0
 	if ( startPos == 1 ) then
-		sub          = utf8sub( sub, endPos )
-		pos          = endPos - 1
+		sub = utf8sub( sub, endPos )
+		pos = endPos - 1
 	end
 	startPos, endPos = find( sub, ".-%s" )
 	if ( backwards ) then
@@ -491,9 +491,9 @@ local function selectSuggestion( self, dir )
 	local items      = #self.autocompleteItemGroup:getItems()
 	selectedId       = selectedId + ( backwards and -1 or 1 )
 	if ( backwards ) then
-		selectedId   = math.clamp( selectedId, 0, items )
+		selectedId = math.clamp( selectedId, 0, items )
 	else
-		selectedId   = math.clamp( selectedId, 1, items + 1 )
+		selectedId = math.clamp( selectedId, 1, items + 1 )
 	end
 	if ( selectedId == ( backwards and 0 or items + 1 ) ) then
 		self.autocompleteItemGroup:setSelectedId( backwards and items or 1 )
