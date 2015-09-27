@@ -331,7 +331,7 @@ function scale( sx, sy )
 	graphics.scale( sx, sy )
 end
 
-concommand( "screenshot", "Take a screenshot.", function()
+concommand( "screenshot", "Take a screenshot", function()
 	filesystem.createDirectory( "screenshots" )
 	local screenshot = graphics.newScreenshot( true )
 	local filename   = os.time() .. ".png"

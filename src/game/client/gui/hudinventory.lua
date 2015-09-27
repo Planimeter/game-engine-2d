@@ -106,14 +106,14 @@ end
 
 gui.register( hudinventory, "hudinventory" )
 
-concommand( "+inventory", "Opens the inventory.", function()
+concommand( "+inventory", "Opens the inventory", function()
 	local visible = _G.g_Inventory:isVisible()
 	if ( not visible ) then
 		_G.g_Inventory:activate()
 	end
 end )
 
-concommand( "-inventory", "Closes the inventory.", function()
+concommand( "-inventory", "Closes the inventory", function()
 	local visible = _G.g_Inventory:isVisible()
 	if ( visible ) then
 		_G.g_Inventory:close()

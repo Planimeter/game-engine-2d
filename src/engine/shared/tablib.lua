@@ -12,7 +12,7 @@ local setmetatable = setmetatable
 local type         = type
 local getmetatable = getmetatable
 local typeof       = typeof
-local print        = print
+-- local print     = print
 local tostring     = tostring
 local math         = math
 

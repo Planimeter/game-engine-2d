@@ -172,9 +172,9 @@ end
 gui.register( console, "console" )
 
 local con_enable = convar( "con_enable", "0", nil, nil,
-                           "Allows the console to be activated.")
+                           "Allows the console to be activated" )
 
-concommand( "toggleconsole", "Show/hide the console.", function()
+concommand( "toggleconsole", "Show/hide the console", function()
 	local mainmenu = g_MainMenu
 	local console  = g_Console
 	if ( not mainmenu:isVisible() and

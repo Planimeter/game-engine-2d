@@ -241,6 +241,26 @@ function region:getFormatVersion()
 	return self.formatVersion
 end
 
+local data = {}
+local gid  = 0
+
+function region:getGidsAtPosition( position )
+	local tileSize = _G.game.tileSize
+	position       = vector.copy( position )
+	position.y     = position.y - tileSize
+
+	local x    = ( position.x / tileSize ) + 1
+	local y    = ( position.y / tileSize ) * self:getWidth()
+	local xy   = x + y
+	local gids = {}
+	for _, layer in ipairs( self:getLayers() ) do
+		data = layer:getData()
+		gid = data[ xy ]
+		table.insert( gids, gid )
+	end
+	return gids
+end
+
 function region:getLayers()
 	return self.layers
 end
@@ -285,18 +305,39 @@ function region:getY()
 	return self.y
 end
 
-local pos    = nil
-local min    = nil
-local max    = nil
-local px     = 0
-local py     = 0
-local x      = 0
-local y      = 0
-local width  = 0
-local height = 0
+local gids             = {}
+local tiles            = {}
+local hasvalue         = table.hasvalue
+local hasProperties    = false
+local properties       = {}
+local walkable         = nil
+local pos              = nil
+local min              = nil
+local max              = nil
+local px               = 0
+local py               = 0
+local x                = 0
+local y                = 0
+local width            = 0
+local height           = 0
 local pointinrectangle = math.pointinrectangle
 
 function region:isTileWalkableAtPosition( position )
+	-- Check world collisions
+	gids = self:getGidsAtPosition( position )
+	for _, tileset in ipairs( self:getTilesets() ) do
+		tiles = tileset:getTiles()
+		for _, tile in ipairs( tiles ) do
+			hasProperties = hasvalue( gids, tile.id )
+			properties    = tile.properties
+			walkable      = hasProperties and properties.walkable
+			if ( hasProperties and walkable == "false" ) then
+				return false
+			end
+		end
+	end
+
+	-- Check entity collisions
 	px = position.x
 	py = position.y - _G.game.tileSize
 	for _, entity in ipairs( self:getEntities() ) do
@@ -314,6 +355,7 @@ function region:isTileWalkableAtPosition( position )
 			end
 		end
 	end
+
 	return true
 end
 

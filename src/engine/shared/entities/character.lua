@@ -14,7 +14,7 @@ function character:character()
 end
 
 function character:move()
-	if ( not self.path ) then
+	if ( not self.path or #self.path == 0 ) then
 		return
 	end
 
@@ -55,9 +55,15 @@ function character:move()
 	end
 end
 
+local cl_predict = convar( "cl_predict", "1", nil, nil,
+                           "Perform client-side prediction" )
 local snapToGrid = region.snapToGrid
 
 function character:moveTo( position )
+	if ( _CLIENT and not cl_predict:getBoolean() ) then
+		return
+	end
+
 	local from   = self:getPosition()
 	local to     = position
 	local fromX  = from.x

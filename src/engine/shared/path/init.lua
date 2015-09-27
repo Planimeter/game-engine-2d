@@ -8,9 +8,12 @@ if ( _CLIENT ) then
 require( "engine.client.debugoverlay" )
 end
 
+local color    = color
+local convar   = convar
 local math     = math
 local region   = region
 local require  = require
+local scheme   = scheme
 local table    = table
 local tostring = tostring
 local vector   = vector
@@ -29,6 +32,22 @@ local function snapToGrid( v )
 end
 
 local merge = table.merge
+
+local r_draw_path = convar( "r_draw_path", "0", nil, nil,
+                            "Draws pathfinding" )
+
+local function drawPath( node, c )
+	local tileSize = _G.game.tileSize
+	require( "engine.client.debugoverlay" )
+	_G.debugoverlay.rectangle(
+		node.x,
+		node.y - tileSize,
+		tileSize,
+		tileSize,
+		c or color( color.white, 0.14 * 255 ),
+		6
+	)
+end
 
 local function getSuccessors( q )
 	local successors = {}
@@ -63,6 +82,11 @@ local function getSuccessors( q )
 		local position = directions[ i ]
 		if ( region:isTileWalkableAtPosition( position ) ) then
 			table.insert( successors, position )
+		else
+			if ( r_draw_path:getBoolean() ) then
+				local red = color( color.red, 0.14 * 255 )
+				drawPath( position, red )
+			end
 		end
 	end
 
@@ -139,6 +163,10 @@ function getPath( start, goal )
 	start.h       = getDistance( start, goal )
 	heap.insert( open, start )
 
+	if ( r_draw_path:getBoolean() ) then
+		drawPath( start )
+	end
+
 	while ( #open ~= 0 ) do
 		local q = open[ 1 ]
 		heap.remove( open, 1 )
@@ -146,7 +174,15 @@ function getPath( start, goal )
 		local successors = getSuccessors( q )
 		for i = 1, #successors do
 			local successor = successors[ i ]
+			if ( r_draw_path:getBoolean() ) then
+				drawPath( successor )
+			end
+
 			if ( successor == goal ) then
+				if ( r_draw_path:getBoolean() ) then
+					local gold = scheme.getProperty( "Default", "colors.gold" )
+					drawPath( successor, gold )
+				end
 				return reconstructPath( successor )
 			end
 

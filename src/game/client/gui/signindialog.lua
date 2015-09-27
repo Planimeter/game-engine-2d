@@ -114,7 +114,7 @@ local function signin( self )
 end
 
 local axis_remember_password = convar( "axis_remember_password", "0", nil, nil,
-                                       "Remember Axis password." )
+                                       "Remember Axis password" )
 
 local function rememberPassword()
 	if ( not axis_remember_password:getBoolean() ) then

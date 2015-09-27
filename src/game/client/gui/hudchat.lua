@@ -155,7 +155,7 @@ end
 
 gui.register( hudchat, "hudchat" )
 
-concommand( "chat", "Toggles the chat.", function()
+concommand( "chat", "Toggles the chat", function()
 	local visible = _G.g_Chat:isVisible()
 	if ( not visible ) then
 		_G.g_Chat:activate()

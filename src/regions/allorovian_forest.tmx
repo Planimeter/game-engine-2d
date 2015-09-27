@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="150">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="225">
  <tileset firstgid="1" source="World.tsx"/>
  <tileset firstgid="257" source="Architect.tsx"/>
  <layer name="Grass 1" width="100" height="100">
@@ -34,7 +34,7 @@
  </layer>
  <layer name="Water" width="100" height="100">
   <data encoding="base64" compression="zlib">
-   eJztnd1ugzAMRnu77Q2293/PLaoQDJEfICHH9nck7lo19sFOmhL19RJCCCGEEEIIIYQQQgghhBBCCB98/l0fm+tr7nBCsc996ZKX/pzJv5z0527+5eYaI/MuJ23MciAnKxQHkZ1QHXh30jvvP5nP+T7x2tJ7PDvp6aKW26tEqZteLkZ5WGitEcturrgYnfcad71QnVh0ccQVPzTOuiB62HPGCw1vLvbU3JA4UxsWXSyUnJDw7mEL3UdLbXhxkcjVCIHWPuUNYoytLjzVxgLNx5n52yOkOKOspUqQfER3kTiKd8aeSfQ+tUCJudWFfMwdR6RelbDkw7uLhCUfEaDELh9vcrE/vcaSjzeU+Ft+n4kAad89+ly+5cjL00SvjT3kOSQis/MgH/+ZnQf5WMnt5z2JfKwQ8iAfK4Q1pnysEHJQ8kF9jnUEhLnjlRlDxBqhxF/zEaFGcrUxY39Ce1jcuMnP6o2EUhtHROtZR72K4iIRbT4hu0jUfHjrX/TYos3vFurf0tmhu1jpyaTfMEdiaZ6M4KN039GcRPCRsNILLIyxFxZqRD5Y8dLH15NcrJTvh6WzId4g7e8eUXJBGWNPyHFGc5Eg9wAL81pvyPddNB9H/YCCehXLh2qDE2vt7LNHqLG2nEP3SC7W2XskNRcefZD7QUQf5HjlgxVvbWwe17oWfXj0sFDzMXNOJ94joyH3aNp4nkA+WMgHi9ozZjPnzog+EjQPCzpnwFhXbSGPbRTUvlDay/HshBozdZ0xGmvfB737qK2xZjmp+ZhdvyOhna3Q/1mzfLS68Ny7Rsf7C/sSNY0=
+   eJzt3NtOwzAMgOHesvEE4/3fEyaolLm2k5Ta3eb/k3oBlIHinJymWRYAAAAAAAAAAAAAAAAAAAAAAAAAAIDXdfm5Ppvreu6/U4Is8/b6UC7iEmONg1bm8vr6+53bQlwi3GMxEoc2Fqub+Dn+R4tFW+Y34/st4vHI6/O9fsRqF9Y91ud8DNxTxWhfcxW/440VV+ezNSP3vLO2PVhjrDXmjo7Z1n2y/o/G7B159bolvx4ZA+T91n23pT8HrmKkP7osej2OIOdWleNh9Ucz7SDi/6oYD1nWXn4QTY4f2X//TFb9O6Ms5FhWKQ6rXjwyEIdfbb8gZeZiVfsmycsBMsfSdv5Q2UgOnVFfvXZaiTbXl/lYhorzWouVf2WWD/3VIy8mGeP5yHpvNd6aYaTKa4ezIsvHWsesPN/tWdtI5GcTgzmR/Qf907zIMTay/b2r6HkPc6o5Mlc8ei8h89w5Xq54RDlqz+KJjU2bjx69X03LR7Hl5WpH54vsSezr9U/enpE92pjQZ22dsaZFG7F564wRZP+Ircx4sI7Vp8UiqqxoG77sfVA8l/KdkRMQD9sZOQHx8BGP55L5LJ19P31ZuWD2nq9XlbHWRyzmRMx5tffj6KfGRJSX1u5oG2Oi6i9r7PtEjufk5PNkPT46JjzzmBfZz9NG5mTMR2kjfZnv9TGu+7LX2omHL3MuKmNPn6XLiof2DJKYbGXFo/qZJaOy62t0nvPKznqPjDWUR97ZcFn1lfzwlzXHPWMfJ/Hw84yomKw5pzyLkTGkXx/lO9Ez7mWslW3bHq3z+ioaOZPvfs/ePF2r7yPnmFZ8RtXbx9yuY+2190zSiqx5lPbO/pF/h3hsWX3G6Fm5M3pn1zzrusk3iQIhZA==
   </data>
  </layer>
  <objectgroup name="Spawn Points">
@@ -96,12 +96,77 @@
   <object id="64" type="prop_tree" x="1152" y="2880" width="64" height="192"/>
   <object id="65" type="prop_tree" x="1120" y="1248" width="64" height="192"/>
   <object id="66" type="prop_tree" x="960" y="1440" width="64" height="192"/>
-  <object id="67" type="prop_tree" x="1984" y="1184" width="64" height="192"/>
+  <object id="67" type="prop_tree" x="1600" y="960" width="64" height="192"/>
   <object id="68" type="prop_tree" x="2048" y="1536" width="64" height="192"/>
   <object id="69" type="prop_tree" x="2112" y="2048" width="64" height="192"/>
-  <object id="70" type="prop_tree" x="1952" y="1120" width="64" height="192"/>
+  <object id="70" type="prop_tree" x="2304" y="608" width="64" height="192"/>
   <object id="71" type="prop_tree" x="1728" y="1120" width="64" height="192"/>
   <object id="72" type="prop_tree" x="1024" y="1856" width="64" height="192"/>
+  <object id="154" type="prop_tree" x="2144" y="1600" width="64" height="192"/>
+  <object id="155" type="prop_tree" x="2208" y="1696" width="64" height="192"/>
+  <object id="156" type="prop_tree" x="2304" y="1376" width="64" height="192"/>
+  <object id="157" type="prop_tree" x="2368" y="1504" width="64" height="192"/>
+  <object id="158" type="prop_tree" x="2368" y="1792" width="64" height="192"/>
+  <object id="159" type="prop_tree" x="2272" y="1984" width="64" height="192"/>
+  <object id="160" type="prop_tree" x="2240" y="2272" width="64" height="192"/>
+  <object id="161" type="prop_tree" x="2432" y="2176" width="64" height="192"/>
+  <object id="162" type="prop_tree" x="2272" y="2400" width="64" height="192"/>
+  <object id="163" type="prop_tree" x="2432" y="2496" width="64" height="192"/>
+  <object id="164" type="prop_tree" x="2592" y="1888" width="64" height="192"/>
+  <object id="165" type="prop_tree" x="2176" y="2592" width="64" height="192"/>
+  <object id="166" type="prop_tree" x="2272" y="2656" width="64" height="192"/>
+  <object id="167" type="prop_tree" x="2528" y="2784" width="64" height="192"/>
+  <object id="168" type="prop_tree" x="2720" y="2496" width="64" height="192"/>
+  <object id="169" type="prop_tree" x="2304" y="2784" width="64" height="192"/>
+  <object id="170" type="prop_tree" x="2400" y="3008" width="64" height="192"/>
+  <object id="171" type="prop_tree" x="2720" y="2912" width="64" height="192"/>
+  <object id="172" type="prop_tree" x="2528" y="2240" width="64" height="192"/>
+  <object id="173" type="prop_tree" x="2560" y="1440" width="64" height="192"/>
+  <object id="174" type="prop_tree" x="2592" y="1504" width="64" height="192"/>
+  <object id="175" type="prop_tree" x="2464" y="1280" width="64" height="192"/>
+  <object id="176" type="prop_tree" x="2752" y="1088" width="64" height="192"/>
+  <object id="177" type="prop_tree" x="2272" y="1088" width="64" height="192"/>
+  <object id="178" type="prop_tree" x="2304" y="992" width="64" height="192"/>
+  <object id="179" type="prop_tree" x="2464" y="960" width="64" height="192"/>
+  <object id="180" type="prop_tree" x="2080" y="832" width="64" height="192"/>
+  <object id="181" type="prop_tree" x="2112" y="896" width="64" height="192"/>
+  <object id="182" type="prop_tree" x="1888" y="800" width="64" height="192"/>
+  <object id="183" type="prop_tree" x="1984" y="1024" width="64" height="192"/>
+  <object id="184" type="prop_tree" x="1952" y="1056" width="64" height="192"/>
+  <object id="185" type="prop_tree" x="1664" y="704" width="64" height="192"/>
+  <object id="186" type="prop_tree" x="1824" y="864" width="64" height="192"/>
+  <object id="187" type="prop_tree" x="1440" y="1024" width="64" height="192"/>
+  <object id="188" type="prop_tree" x="1408" y="1088" width="64" height="192"/>
+  <object id="189" type="prop_tree" x="1472" y="736" width="64" height="192"/>
+  <object id="190" type="prop_tree" x="1280" y="800" width="64" height="192"/>
+  <object id="191" type="prop_tree" x="1248" y="992" width="64" height="192"/>
+  <object id="192" type="prop_tree" x="1088" y="928" width="64" height="192"/>
+  <object id="193" type="prop_tree" x="928" y="1088" width="64" height="192"/>
+  <object id="194" type="prop_tree" x="800" y="768" width="64" height="192"/>
+  <object id="195" type="prop_tree" x="800" y="1120" width="64" height="192"/>
+  <object id="196" type="prop_tree" x="736" y="1184" width="64" height="192"/>
+  <object id="197" type="prop_tree" x="768" y="1376" width="64" height="192"/>
+  <object id="198" type="prop_tree" x="608" y="1568" width="64" height="192"/>
+  <object id="199" type="prop_tree" x="736" y="1696" width="64" height="192"/>
+  <object id="200" type="prop_tree" x="576" y="1024" width="64" height="192"/>
+  <object id="201" type="prop_tree" x="800" y="1920" width="64" height="192"/>
+  <object id="202" type="prop_tree" x="864" y="1824" width="64" height="192"/>
+  <object id="203" type="prop_tree" x="704" y="2208" width="64" height="192"/>
+  <object id="204" type="prop_tree" x="928" y="2112" width="64" height="192"/>
+  <object id="205" type="prop_tree" x="960" y="2240" width="64" height="192"/>
+  <object id="206" type="prop_tree" x="960" y="2528" width="64" height="192"/>
+  <object id="207" type="prop_tree" x="832" y="2336" width="64" height="192"/>
+  <object id="208" type="prop_tree" x="736" y="2656" width="64" height="192"/>
+  <object id="209" type="prop_tree" x="768" y="2720" width="64" height="192"/>
+  <object id="210" type="prop_tree" x="864" y="2752" width="64" height="192"/>
+  <object id="211" type="prop_tree" x="672" y="2944" width="64" height="192"/>
+  <object id="212" type="prop_tree" x="576" y="2528" width="64" height="192"/>
+  <object id="213" type="prop_tree" x="512" y="2624" width="64" height="192"/>
+  <object id="214" type="prop_tree" x="448" y="2176" width="64" height="192"/>
+  <object id="215" type="prop_tree" x="160" y="1760" width="64" height="192"/>
+  <object id="218" type="item_apple" x="1472" y="1696" width="32" height="32"/>
+  <object id="221" type="item_apple" x="1504" y="1664" width="32" height="32"/>
+  <object id="223" type="item_apple" x="1696" y="1664" width="32" height="32"/>
  </objectgroup>
  <objectgroup name="Region Transition">
   <object id="85" type="trigger_transition" x="0" y="3168" width="3200" height="32">
