@@ -141,9 +141,10 @@ local getEntitiesAtMousePos = function( px, py )
 	for _, entity in ipairs( entities ) do
 		local x, y   = camera.worldToScreen( entity:getDrawPosition() )
 		local sprite = entity:getSprite()
+		local scale  = camera.getZoom()
 		if ( sprite and sprite ~= graphics.error ) then
-			local width  = sprite:getWidth()
-			local height = sprite:getHeight()
+			local width  = sprite:getWidth()  * scale
+			local height = sprite:getHeight() * scale
 			if ( pointinrectangle( px, py, x, y, width, height ) ) then
 				table.insert( t, entity )
 			end

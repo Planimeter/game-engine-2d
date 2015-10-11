@@ -2,6 +2,8 @@ Player
 ======
 
 "Inventory" +inventory
+"Zoom In" zoomin
+"Zoom Out" zoomout
 
 Communication
 =============

@@ -76,13 +76,10 @@ function onConnect( event )
 	local player = _G.player.initialize( event.peer )
 	player:onConnect()
 
-	local metatable = _G.gameserver.getPlayerClass( player )
-	setmetatable( player, metatable )
-
 	if ( not _AXIS ) then
 		local spawnpoint = _G.gameserver.getSpawnPoint( player )
 		if ( spawnpoint ) then
-			local position = spawnpoint:getNetworkVar( "position" )
+			local position = spawnpoint:getPosition()
 			player:setNetworkVar( "position", position )
 		end
 

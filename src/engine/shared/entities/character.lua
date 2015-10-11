@@ -13,6 +13,17 @@ function character:character()
 	entity.entity( self )
 end
 
+function character:addTask( task, name )
+	if ( not self.tasks ) then
+		self.tasks = {}
+	end
+
+	table.insert( self.tasks, {
+		task = task,
+		name = name
+	} )
+end
+
 function character:move()
 	if ( not self.path or #self.path == 0 ) then
 		return
@@ -52,6 +63,11 @@ function character:move()
 	-- We've reached our goal
 	if ( self.path and #self.path == 0 ) then
 		self.path = nil
+
+		if ( self.moveCallback ) then
+			self.moveCallback()
+			self.moveCallback = nil
+		end
 	end
 end
 
@@ -59,8 +75,8 @@ local cl_predict = convar( "cl_predict", "1", nil, nil,
                            "Perform client-side prediction" )
 local snapToGrid = region.snapToGrid
 
-function character:moveTo( position )
-	if ( _CLIENT and not cl_predict:getBoolean() ) then
+function character:moveTo( position, callback )
+	if ( _CLIENT and not _SERVER and not cl_predict:getBoolean() ) then
 		return
 	end
 
@@ -77,6 +93,16 @@ function character:moveTo( position )
 	end
 
 	self.nextPosition = position
+	self.moveCallback = callback
+end
+
+function character:nextTask()
+	local tasks = self.tasks
+	table.remove( tasks, 1 )
+
+	if ( #tasks == 0 ) then
+		self.tasks = nil
+	end
 end
 
 function character:onNetworkVarChanged( networkvar )
@@ -93,7 +119,39 @@ function character:onNetworkVarChanged( networkvar )
 	end
 end
 
+function character:removeTasks()
+	self.tasks = nil
+end
+
 function character:update( dt )
+	self:updateTasks()
+	self:updateMovement()
+
+	entity.update( self, dt )
+end
+
+function character:updateAnimation( direction )
+	local angle = math.deg( direction:toAngle() )
+	if ( angle == 90 ) then
+		self:setAnimation( "walknorth" )
+	elseif ( angle == 135 ) then
+		self:setAnimation( "walknortheast" )
+	elseif ( angle == 180 ) then
+		self:setAnimation( "walkeast" )
+	elseif ( angle == -135 ) then
+		self:setAnimation( "walksoutheast" )
+	elseif ( angle == -90 ) then
+		self:setAnimation( "walksouth" )
+	elseif ( angle == -45 ) then
+		self:setAnimation( "walksouthwest" )
+	elseif ( angle == 0 ) then
+		self:setAnimation( "walkwest" )
+	elseif ( angle == 45 ) then
+		self:setAnimation( "walknorthwest" )
+	end
+end
+
+function character:updateMovement()
 	if ( self.path ) then
 		self:move()
 	else
@@ -111,28 +169,18 @@ function character:update( dt )
 	if ( _CLIENT ) then
 		self.lastPosition = self:getPosition()
 	end
-
-	entity.update( self, dt )
 end
 
-function character:updateAnimation( direction )
-	local angle = direction:toAngle() / math.pi * 180
-	if ( angle == 90 ) then
-		self:setAnimation( "walknorth" )
-	elseif ( angle == 135 ) then
-		self:setAnimation( "walknortheast" )
-	elseif ( angle == 180 ) then
-		self:setAnimation( "walkeast" )
-	elseif ( angle == -135 ) then
-		self:setAnimation( "walksoutheast" )
-	elseif ( angle == -90 ) then
-		self:setAnimation( "walksouth" )
-	elseif ( angle == -45 ) then
-		self:setAnimation( "walksouthwest" )
-	elseif ( angle == 0 ) then
-		self:setAnimation( "walkwest" )
-	elseif ( angle == 45 ) then
-		self:setAnimation( "walknorthwest" )
+function character:updateTasks()
+	local tasks = self.tasks
+	if ( not tasks ) then
+		return
+	end
+
+	local task = tasks[ 1 ]
+	if ( task and not task.running ) then
+		task.running = true
+		task.task( self, function() self:nextTask() end )
 	end
 end
 

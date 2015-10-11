@@ -16,7 +16,7 @@ player.players      = players
 player.lastPlayerId = lastPlayerId
 
 function player.initialize( peer )
-	local player = player()
+	local player = _G.gameserver.getPlayerClass()()
 	player.peer  = peer
 
 	if ( _AXIS and _SERVER ) then
@@ -172,8 +172,8 @@ if ( _SERVER ) then
 	end
 end
 
-function player:moveTo( position )
-	character.moveTo( self, position )
+function player:moveTo( position, callback )
+	character.moveTo( self, position, callback )
 
 	if ( _CLIENT and not _SERVER ) then
 		local payload = payload( "playerMove" )

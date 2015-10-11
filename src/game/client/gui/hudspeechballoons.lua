@@ -29,36 +29,28 @@ function hudspeechballoons:addChatHook()
 		}
 	end
 
-	hook.set( "shared", addSpeechBalloon, "onPlayerChat", "addSpeechBalloon" )
+	hook.set( "client", addSpeechBalloon, "onPlayerChat", "addSpeechBalloon" )
 end
 
 function hudspeechballoons:removeChatHook()
-	hook.remove( "shared", "onPlayerChat", "addSpeechBalloon" )
+	hook.remove( "client", "onPlayerChat", "addSpeechBalloon" )
 end
 
 function hudspeechballoons:draw()
-	local font = self:getScheme( "chatFont" )
+	local font = self:getScheme( "fontBold" )
 	graphics.setFont( font )
+	graphics.setColor( self:getScheme( "hudspeechballoons.textColor" ) )
 
 	if ( self.speechBalloons ) then
 		for player, balloon in pairs( self.speechBalloons ) do
 			local x, y   = player:getDrawPosition()
 			x, y         = camera.worldToScreen( x, y )
 			local sprite = player:getSprite()
+			local scale  = camera.getZoom()
 			local width  = font:getWidth( balloon.message )
 			local height = font:getHeight()
-			x            = x + sprite:getWidth() / 2 - width / 2
+			x            = x + ( sprite:getWidth() * scale ) / 2 - width / 2
 			y            = y - font:getHeight()
-			-- graphics.setLineWidth( 2 )
-			-- graphics.setColor( self:getScheme( "hudspeechballoons.outlineColor" ) )
-			-- graphics.rectangle( "line",
-			--                     x - 8 - 2,
-			--                     y - 8 - 2 - 10 + 4 - 8,
-			--                     width  + 16 + 4,
-			--                     height + 16 + 4 )
-			-- graphics.setColor( self:getScheme( "hudspeechballoons.backgroundColor" ) )
-			-- graphics.rectangle( "fill", x - 8, y - 8 - 10 + 4 - 8, width + 16, height + 16 )
-			graphics.setColor( self:getScheme( "hudspeechballoons.textColor" ) )
 			graphics.print( balloon.message, x, y - 10 + 4 - 8 )
 		end
 	end
@@ -71,9 +63,6 @@ function hudspeechballoons:invalidateLayout()
 	self:setHeight( graphics.getViewportHeight() )
 
 	gui.panel.invalidateLayout( self )
-end
-
-function hudspeechballoons:listenToChat()
 end
 
 function hudspeechballoons:onRemove()

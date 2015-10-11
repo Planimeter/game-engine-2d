@@ -128,8 +128,6 @@ default.hudinventory        = {
 }
 
 default.hudspeechballoons   = {
-    backgroundColor         = color( default.colors.black, 0.66 * 255 ),
-    outlineColor            = color( default.colors.black, 0.86 * 255 ),
     textColor               = default.colors.gold
 }
 

@@ -98,3 +98,11 @@ structs[ "playerMove" ] = {
 		{ name = "position",       type = "vector" },
 	}
 }
+
+-- if ( _G._VADVENTURE ) then
+	structs[ "playerPickup" ] = {
+		keys = {
+			{ name = "item",       type = "number" },
+		}
+	}
+-- end

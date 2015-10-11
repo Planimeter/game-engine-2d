@@ -4,13 +4,13 @@
 --
 --============================================================================--
 
-_VADVENTURE   = true
+local _CLIENT     = _CLIENT
+local _SERVER     = _SERVER
+_VADVENTURE       = true
+local _VADVENTURE = _VADVENTURE
 
-local _CLIENT = _CLIENT
-local _SERVER = _SERVER
-
-local hook    = hook
-local _G      = _G
+local hook        = hook
+local _G          = _G
 
 module( "game" )
 
@@ -48,6 +48,11 @@ function onPlayerConnect( player )
 end
 
 function onPlayerDisconnect( player )
+end
+
+if ( _VADVENTURE ) then
+	function onPlayerGotItem( player, item, count )
+	end
 end
 
 function onPlayerInitialSpawn( player )

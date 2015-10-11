@@ -10,7 +10,7 @@ local _G        = _G
 
 module( "game.server" )
 
-function getPlayerClass( player )
+function getPlayerClass()
 	require( "game.shared.entities.vaplayer" )
 	local classmap = _G.entities.getClassMap()
 	local vaplayer = classmap[ "vaplayer" ]

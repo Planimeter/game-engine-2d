@@ -61,8 +61,8 @@ function trigger_transition:getPlayersInOrNearRegion( region )
 		local minA, maxA = player:getViewportBounds()
 
 		local x,  y  = region:getX(), region:getY()
-		local width  = region:getWidth()  * region:getTileWidth()
-		local height = region:getHeight() * region:getTileHeight()
+		local width  = region:getPixelWidth()
+		local height = region:getPixelHeight()
 		local minB   = vector( x, y + height )
 		local maxB   = vector( x + width, y )
 

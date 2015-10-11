@@ -61,7 +61,7 @@ if ( _CLIENT ) then
 			for _, v in ipairs( renderables ) do
 				graphics.push()
 					local x, y = v:getDrawPosition()
-					graphics.translate( camera.worldToScreen( x, y ) )
+					graphics.translate( x, y )
 
 					-- Draw shadow
 					local isEntity = typeof( v, "entity" )
@@ -81,16 +81,17 @@ if ( _CLIENT ) then
 			end
 		end
 
-		-- TODO: Only draw renderables in viewport.
 		for _, v in ipairs( renderables ) do
-			graphics.push()
-				local x, y = v:getDrawPosition()
-				graphics.translate( camera.worldToScreen( x, y ) )
+			if ( v:isInViewport() ) then
+				graphics.push()
+					local x, y = v:getDrawPosition()
+					graphics.translate( x, y )
 
-				-- Draw entity
-				graphics.setColor( color.white )
-				v:draw()
-			graphics.pop()
+					-- Draw entity
+					graphics.setColor( color.white )
+					v:draw()
+				graphics.pop()
+			end
 		end
 	end
 end
@@ -200,6 +201,11 @@ end
 if ( _CLIENT ) then
 	function entity:getSprite()
 		return self.sprite or graphics.error
+	end
+
+	function entity:isInViewport()
+		-- TODO: Implement me.
+		return true
 	end
 
 	function entity:draw()

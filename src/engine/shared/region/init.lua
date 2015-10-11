@@ -18,13 +18,18 @@ region.regions = regions
 if ( _CLIENT ) then
 	function region.drawWorld()
 		graphics.push()
-			graphics.translate( camera.getTranslation() )
+			local scale = camera.getZoom()
+			graphics.scale( scale )
+			local x, y = camera.getTranslation()
+			graphics.translate( x, y )
 			for _, region in ipairs( region.regions ) do
 				graphics.push()
 					graphics.translate( region:getX(), region:getY() )
 					region:draw()
 				graphics.pop()
 			end
+
+			entity.drawAll()
 		graphics.pop()
 	end
 end
@@ -49,8 +54,8 @@ function region.getAtPosition( position )
 	for _, region in ipairs( region.regions ) do
 		local px, py = position.x, position.y
 		local x,  y  = region:getX(), region:getY()
-		local width  = region:getWidth()  * region:getTileWidth()
-		local height = region:getHeight() * region:getTileHeight()
+		local width  = region:getPixelWidth()
+		local height = region:getPixelHeight()
 		if ( math.pointinrectangle( px, py, x, y, width, height ) ) then
 			return region
 		end
@@ -245,12 +250,13 @@ local data = {}
 local gid  = 0
 
 function region:getGidsAtPosition( position )
-	local tileSize = _G.game.tileSize
-	position       = vector.copy( position )
-	position.y     = position.y - tileSize
+	local tileWidth  = self:getTileWidth()
+	local tileHeight = self:getTileHeight()
+	position         = vector.copy( position )
+	position.y       = position.y - tileHeight
 
-	local x    = ( position.x / tileSize ) + 1
-	local y    = ( position.y / tileSize ) * self:getWidth()
+	local x    = ( position.x / tileWidth )  + 1
+	local y    = ( position.y / tileHeight ) * self:getWidth()
 	local xy   = x + y
 	local gids = {}
 	for _, layer in ipairs( self:getLayers() ) do
@@ -271,6 +277,14 @@ end
 
 function region:getOrientation()
 	return self.orientation
+end
+
+function region:getPixelWidth()
+	return self:getTileWidth() * self:getWidth()
+end
+
+function region:getPixelHeight()
+	return self:getTileHeight() * self:getHeight()
 end
 
 function region:getProperties()

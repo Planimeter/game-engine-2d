@@ -10,20 +10,13 @@ require( "engine.client.chat" )
 
 class "item_apple" ( "item" )
 
+item_apple.data = {
+	name  = "Apple",
+	image = "images/entities/item_apple/1.png"
+}
+
 function item_apple:item_apple()
 	item.item( self )
-
-	local tileSize = game.tileSize
-	local min      = vector()
-	local max      = vector( tileSize, -tileSize )
-	self:setCollisionBounds( min, max )
-
-	self:setNetworkVar( "name", "Apple" )
-
-	if ( _CLIENT ) then
-		local sprite = graphics.newImage( "images/entities/item_apple/1.png" )
-		self:setSprite( sprite )
-	end
 end
 
 if ( _CLIENT ) then
@@ -31,25 +24,18 @@ if ( _CLIENT ) then
 		return {
 			{
 				name  = "Pickup",
-				value = self.pickup
+				value = function() self:pickup() end
 			},
 			{
 				name  = "Examine",
-				value = self.examine
+				value = function() self:examine() end
 			}
 		}
 	end
 end
 
 function item_apple:pickup()
-	chat.addText( "You look at the apple and attempt to pick it up, but the " ..
-	              "cold reality is that your hands stay idly by your sides " ..
-	              "without explanation. You fail to grasp why the physical " ..
-	              "entanglement of your existence grants you access to move " ..
-	              "freely about this realm but simultaneously prevents you " ..
-	              "from sustaining yourself within the bounds of this " ..
-	              "prison. It is not added to you inventory. Nothing " ..
-	              "interesting happens." )
+	localplayer:pickup( self )
 end
 
 function item_apple:examine()

@@ -40,11 +40,8 @@ function draw()
 	-- Draw panels to worldspace
 	gui.preDrawWorld()
 
-	-- Draw regions
+	-- Draw world
 	region.drawWorld()
-
-	-- Draw entities
-	_G.entity.drawAll()
 end
 
 function load( arg )
