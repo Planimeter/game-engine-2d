@@ -69,7 +69,7 @@ function textboxautocompleteitemgroup:mousepressed( x, y, button )
 		end
 	end
 
-	gui.panel.mousepressed( self, x, y, button )
+	return gui.panel.mousepressed( self, x, y, button )
 end
 
 function textboxautocompleteitemgroup:onValueChanged( oldValue, newValue )

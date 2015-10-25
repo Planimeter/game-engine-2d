@@ -6,7 +6,10 @@
 
 require( "game.shared.entities.item" )
 require( "game" )
+
+if ( _CLIENT ) then
 require( "engine.client.chat" )
+end
 
 class "item_apple" ( "item" )
 

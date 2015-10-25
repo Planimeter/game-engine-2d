@@ -72,7 +72,8 @@ if ( _CLIENT ) then
 
 							local sprite = v:getSprite()
 							local height = sprite:getHeight()
-							graphics.translate( -height, 0 )
+							graphics.translate( sprite:getWidth() / 2, height )
+							graphics.scale( 1, -1 )
 								v:drawShadow()
 							graphics.setOpacity( 1 )
 						graphics.pop()
@@ -219,31 +220,25 @@ if ( _CLIENT ) then
 
 	function entity:drawShadow()
 		local sprite = self:getSprite()
-		local scale  = 1
+		local x      = 0
+		local y      = 0
+		local r      = math.rad( 0 )
+		local sx     = 1
+		local sy     = 1
+		local ox     = sprite:getWidth() / 2
+		local oy     = sprite:getHeight()
+		local kx     = -1
+		local ky     = 0
 		if ( type( sprite ) == "sprite" ) then
 			graphics.draw(
 				sprite:getSpriteSheet():getDrawable(),
 				sprite:getQuad(),
-				0,
-				0,
-				0,
-				1,
-				scale,
-				0,
-				0,
-				scale
+				x, y, r, sx, sy, ox, oy, kx, ky
 			)
 		else
 			graphics.draw(
 				sprite:getDrawable(),
-				0,
-				0,
-				0,
-				1,
-				scale,
-				0,
-				0,
-				scale
+				x, y, r, sx, sy, ox, oy, kx, ky
 			)
 		end
 	end

@@ -10,12 +10,15 @@ require( "common.vector" )
 local contexts   = camera and camera.getWorldContexts() or {}
 local entity     = camera and camera.getParentEntity()
 local position   = camera and camera.getPosition() or vector()
+local minZoom    = camera and camera.getMinZoom() or 0.5
+local maxZoom    = camera and camera.getMaxZoom() or 2
 local zoom       = camera and camera.getZoom() or 1
 
 local class      = class
 local concommand = concommand
 local graphics   = graphics
 local ipairs     = ipairs
+local math       = math
 local table      = table
 local vector     = vector
 
@@ -102,18 +105,40 @@ function getWorldContexts()
 	return _contexts
 end
 
+local _minZoom = minZoom
+
+function getMinZoom()
+	return _minZoom
+end
+
+local _maxZoom = maxZoom
+
+function getMaxZoom()
+	return _maxZoom
+end
+
 local _zoom = zoom
 
 function getZoom()
 	return _zoom
 end
 
+function setMinZoom( minZoom )
+	_minZoom = minZoom
+end
+
+function setMaxZoom( maxZoom )
+	_maxZoom = maxZoom
+end
+
 function setPosition( position )
 	_position = position
 end
 
+local clamp = math.clamp
+
 function setZoom( zoom )
-	_zoom = zoom
+	_zoom = clamp( zoom, getMinZoom(), getMaxZoom() )
 end
 
 concommand( "zoomin", "Zooms the camera in", function()

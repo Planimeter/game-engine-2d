@@ -162,7 +162,7 @@ local function onLeftClick( self, x, y )
 		local player   = localplayer
 		local position = vector( camera.screenToWorld( x, y ) )
 		self:createMoveIndicator( position.x, position.y )
-		player:moveTo( position )
+		player:moveTo( position + vector( 0, game.tileSize ) )
 
 		return true
 	else
@@ -215,7 +215,7 @@ function hudmoveindicator:mousepressed( x, y, button )
 		end
 	end
 
-	gui.panel.mousepressed( self, x, y, button )
+	return gui.panel.mousepressed( self, x, y, button )
 end
 
 function hudmoveindicator:onValueChanged( oldValue, newValue )

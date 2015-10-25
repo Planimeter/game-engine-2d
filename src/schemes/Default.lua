@@ -4,274 +4,287 @@
 --
 --============================================================================--
 
-local default               = scheme( "Default" )
+local t                       = scheme( "Default" )
 
-default.colors              = {
-    gray                    = color( 104, 106, 107,        255 ),
-    black                   = color(  31,  35,  36,        255 ),
-    white                   = color( 204, 216, 219,        255 ),
-    gold                    = color( 155, 140, 103,        255 )
+t.colors                      = {
+    gray                      = color( 104, 106, 107,         255 ),
+    black                     = color(  31,  35,  36,         255 ),
+    white                     = color( 204, 216, 219,         255 ),
+    gold                      = color( 155, 140, 103,         255 )
 }
 
-default.button              = {
-    backgroundColor         = color( default.colors.black, 0.27 * 255 ),
-    outlineColor            = color( default.colors.gray,  0.42 * 255 ),
-    textColor               = color( 163, 167, 168,        255 ),
+t.button                      = {
+    backgroundColor           = color( t.colors.black, 0.27 * 255 ),
+    outlineColor              = color( t.colors.gray,  0.42 * 255 ),
+    textColor                 = color( 163, 167, 168,         255 ),
 
-    mouseover               = {
-        backgroundColor     = color( default.colors.gold,  0.27 * 255 ),
-        outlineColor        = color( default.colors.gold,  0.42 * 255 )
+    mouseover                 = {
+        backgroundColor       = color( t.colors.gold,  0.27 * 255 ),
+        outlineColor          = color( t.colors.gold,  0.42 * 255 )
     },
 
-    mousedown               = {
-        backgroundColor     = color( default.colors.gold,  0.14 * 255 ),
-        outlineColor        = color( default.colors.gold,  0.27 * 255 )
+    mousedown                 = {
+        backgroundColor       = color( t.colors.gold,  0.14 * 255 ),
+        outlineColor          = color( t.colors.gold,  0.27 * 255 )
     },
 
-    disabled                = {
-        backgroundColor     = color( default.colors.black, 0.14 * 255 ),
-        outlineColor        = color( default.colors.black, 0.14 * 255 ),
-        textColor           = default.colors.gray
+    disabled                  = {
+        backgroundColor       = color( t.colors.black, 0.14 * 255 ),
+        outlineColor          = color( t.colors.black, 0.14 * 255 ),
+        textColor             = t.colors.gray
     }
 }
 
-default.checkbox            = {
-    icon                    = graphics.newImage( "images/gui/check.png" ),
-    iconColor               = color( 163, 167, 168,        255 ),
-    outlineColor            = color( default.colors.gray,  0.66 * 255 ),
-    textColor               = color( 163, 167, 168,        255 ),
+t.checkbox                    = {
+    icon                      = graphics.newImage( "images/gui/check.png" ),
+    iconColor                 = color( 163, 167, 168,         255 ),
+    outlineColor              = color( t.colors.gray,  0.66 * 255 ),
+    textColor                 = color( 163, 167, 168,         255 ),
 
-    mouseover               = {
-        outlineColor        = color( default.colors.gold,  0.42 * 255 )
+    mouseover                 = {
+        outlineColor          = color( t.colors.gold,  0.42 * 255 )
     },
 
-    mousedown               = {
-        outlineColor        = color( default.colors.gold,  0.27 * 255 )
+    mousedown                 = {
+        outlineColor          = color( t.colors.gold,  0.27 * 255 )
     },
 
-    disabled                = {
-        iconColor           = default.colors.gray,
-        textColor           = default.colors.gray
+    disabled                  = {
+        iconColor             = t.colors.gray,
+        textColor             = t.colors.gray
     }
 }
 
-default.closebutton         = {
-    icon                    = graphics.newImage( "images/gui/close.png" ),
-    iconColor               = default.colors.white,
+t.closebutton                 = {
+    icon                      = graphics.newImage( "images/gui/close.png" ),
+    iconColor                 = t.colors.white,
 
-    mouseover               = {
-        iconColor           = color( default.colors.gold,  255 )
+    mouseover                 = {
+        iconColor             = color( t.colors.gold,          255 )
     },
 
-    mousedown               = {
-        iconColor           = color( default.colors.gold,  0.66 * 255 )
+    mousedown                 = {
+        iconColor             = color( t.colors.gold,   0.66 * 255 )
     }
 }
 
-default.commandbutton       = {
-    backgroundColor         = color(  67,  68,  69, 0.86 * 255 ),
-    outlineColor            = color(  17,  18,  18, 0.14 * 255 )
+t.commandbutton               = {
+    backgroundColor           = color(  67,  68,  69,   0.86 * 255 ),
+    outlineColor              = color(  17,  18,  18,   0.14 * 255 )
 }
 
-default.commandbuttongroup  = {
-    outlineColor            = color(  17,  18,  18, 0.14 * 255 )
+t.commandbuttongroup          = {
+    outlineColor              = color(  17,  18,  18,   0.14 * 255 )
 }
 
-default.dropdownlist        = {
-    icon                    = graphics.newImage( "images/gui/arrow_down.png" ),
+t.dropdownlist                = {
+    icon                      = graphics.newImage( "images/gui/arrow_down.png" ),
 }
 
-default.dropdownlistitem    = {
-    backgroundColor         = color(  67,  68,  69, 0.97 * 255 ),
-    outlineColor            = color( default.colors.gold,  0.97 * 255 ),
+t.dropdownlistitem            = {
+    backgroundColor           = color(  67,  68,  69,   0.97 * 255 ),
+    outlineColor              = color( t.colors.gold,   0.97 * 255 ),
 
-    mouseover               = {
-        backgroundColor     = color( default.colors.gold,  0.97 * 255 ),
-        textColor           = color( default.colors.black, 255 )
+    mouseover                 = {
+        backgroundColor       = color( t.colors.gold,   0.97 * 255 ),
+        textColor             = color( t.colors.black,         255 )
     },
 
-    selected                = {
-        backgroundColor     = color( default.colors.gold,  0.97 * 255 ),
-        textColor           = color( default.colors.black, 255 )
+    selected                  = {
+        backgroundColor       = color( t.colors.gold,   0.97 * 255 ),
+        textColor             = color( t.colors.black,         255 )
     }
 }
 
-default.frame               = {
-    backgroundColor         = color(  67,  68,  69, 0.97 * 255 ),
-    outlineColor            = color( 240, 246, 247, 0.07 * 255 ),
-    titleTextColor          = default.colors.white,
+t.frame                       = {
+    backgroundColor           = color(  67,  68,  69,   0.97 * 255 ),
+    outlineColor              = color( 240, 246, 247,   0.07 * 255 ),
+    titleTextColor            = t.colors.white,
 
-    defocus                 = {
-        titleTextColor      = color( default.colors.white, 0.24 * 255 )
+    defocus                   = {
+        titleTextColor        = color( t.colors.white,  0.24 * 255 )
     }
 }
 
-default.frametab            = {
-    backgroundColor         = color(  59,  61,  61, 0.93 * 255 ),
-    outlineColor            = color(  17,  18,  18, 0.14 * 255 ),
+t.frametab                    = {
+    backgroundColor           = color(  59,  61,  61,   0.93 * 255 ),
+    outlineColor              = color(  17,  18,  18,   0.14 * 255 ),
 
-    mouseover               = {
-        backgroundColor     = color( default.colors.gold,  0.27 * 255 )
+    mouseover                 = {
+        backgroundColor       = color( t.colors.gold,   0.27 * 255 )
     },
 
-    selected                = {
-        backgroundColor     = default.frame.backgroundColor
+    selected                  = {
+        backgroundColor       = t.frame.backgroundColor
     }
 }
 
-default.hudchat             = {
-    backgroundColor         = color( default.colors.black, 0.27 * 255 )
+t.hudchat                     = {
+    backgroundColor           = color( t.colors.black,  0.27 * 255 )
 }
 
-default.hudinventory        = {
-    backgroundColor         = color( default.colors.black, 0.27 * 255 )
+t.hudgamemenu                 = {
+    backgroundColor           = color( t.colors.black,  0.27 * 255 )
 }
 
-default.hudspeechballoons   = {
-    textColor               = default.colors.gold
+t.hudgamemenunavigation       = {
+    backgroundColor           = color( t.colors.white,  0.07 * 255 )
 }
 
-default.hudmoveindicator    = {
-    textColor               = default.colors.white,
-    smallTextColor          = default.colors.gray,
- -- indicatorColor          = color( 157, 168,  57,        255 )
-    indicatorColor          = default.colors.gold
+t.hudgamemenunavigationbutton = {
+    borderColor               = t.colors.gold,
+    textColor                 = color( t.colors.white, 0.42 * 255 ),
+
+    mouseover                 = {
+        textColor             = color( t.colors.gold,  0.42 * 255 )
+    }
 }
 
-default.label               = {
-    textColor               = color( 163, 167, 168,        255 )
+t.hudspeechballoons           = {
+    textColor                 = t.colors.gold
 }
 
-default.mainmenu            = {
-    backgroundColor         = color( default.colors.black, 0.27 * 255 ),
-    logo                    = graphics.newImage( "images/gui/logo.png" ),
-    logoSmall               = graphics.newImage( "images/gui/logo_small.png" )
+t.hudmoveindicator            = {
+    textColor                 = t.colors.white,
+    smallTextColor            = t.colors.gray,
+ -- indicatorColor            = color( 157, 168,  57,         255 )
+    indicatorColor            = t.colors.gold
 }
 
-default.mainmenubutton      = {
-    default                 = {
-        textColor           = default.colors.gray,
+t.label                       = {
+    textColor                 = color( 163, 167, 168,         255 )
+}
 
-        mouseover           = {
-            textColor       = default.colors.gold
+t.mainmenu                    = {
+    backgroundColor           = color( t.colors.black, 0.27 * 255 ),
+    logo                      = graphics.newImage( "images/gui/logo.png" ),
+    logoSmall                 = graphics.newImage( "images/gui/logo_small.png" )
+}
+
+t.mainmenubutton              = {
+    t                         = {
+        textColor             = t.colors.gray,
+
+        mouseover             = {
+            textColor         = t.colors.gold
         },
 
-        mousedown           = {
-            textColor       = color( default.colors.gold,  0.66 * 255 )
+        mousedown             = {
+            textColor         = color( t.colors.gold,  0.66 * 255 )
         }
     },
 
-    dark                    = {
-        textColor           = default.colors.white,
+    dark                      = {
+        textColor             = t.colors.white,
 
-        mouseover           = {
-            textColor       = default.colors.gold
+        mouseover             = {
+            textColor         = t.colors.gold
         },
 
-        mousedown           = {
-            textColor       = color( default.colors.gold,  0.66 * 255 )
+        mousedown             = {
+            textColor         = color( t.colors.gold,  0.66 * 255 )
         },
 
-        disabled            = {
-            textColor       = color(  67,  68,  69,        255 )
-        }
-    }
-}
-
-default.mainmenuclosebutton = {
-    icon                    = graphics.newImage( "images/gui/close_large.png" ),
-
-    default                 = {
-        iconColor           = default.colors.gray,
-
-        mouseover           = {
-            iconColor       = default.colors.gold
-        },
-
-        mousedown           = {
-            iconColor       = color( default.colors.gold,  0.66 * 255 )
-        }
-    },
-
-    dark                    = {
-        iconColor           = default.colors.white,
-
-        mouseover           = {
-            iconColor       = default.colors.gold
-        },
-
-        mousedown           = {
-            iconColor       = color( default.colors.gold,  0.66 * 255 )
+        disabled              = {
+            textColor         = color(  67,  68,  69,         255 )
         }
     }
 }
 
-default.radiobutton         = {
-    foreground              = graphics.newImage( "images/gui/radiobutton_foreground.png" ),
-    icon                    = graphics.newImage( "images/gui/selection_dot.png" ),
-    iconColor               = color( 163, 167, 168,        255 ),
-    outlineColor            = color( default.colors.gray,  0.86 * 255 ),
-    textColor               = color( 163, 167, 168,        255 ),
+t.mainmenuclosebutton         = {
+    icon                      = graphics.newImage( "images/gui/close_large.png" ),
 
-    mouseover               = {
-        outlineColor        = color( default.colors.gold,  0.42 * 255 )
+    t                         = {
+        iconColor             = t.colors.gray,
+
+        mouseover             = {
+            iconColor         = t.colors.gold
+        },
+
+        mousedown             = {
+            iconColor         = color( t.colors.gold,  0.66 * 255 )
+        }
     },
 
-    mousedown               = {
-        outlineColor        = color( default.colors.gold,  0.27 * 255 )
-    },
+    dark                      = {
+        iconColor             = t.colors.white,
 
-    disabled                = {
-        iconColor           = default.colors.gray,
-        textColor           = default.colors.gray
+        mouseover             = {
+            iconColor         = t.colors.gold
+        },
+
+        mousedown             = {
+            iconColor         = color( t.colors.gold,  0.66 * 255 )
+        }
     }
 }
 
-default.scrollbar           = {
-    backgroundColor         = color( default.colors.gold,  0.86 * 255 ),
+t.radiobutton                 = {
+    foreground                = graphics.newImage( "images/gui/radiobutton_foreground.png" ),
+    icon                      = graphics.newImage( "images/gui/selection_dot.png" ),
+    iconColor                 = color( 163, 167, 168,         255 ),
+    outlineColor              = color( t.colors.gray,  0.86 * 255 ),
+    textColor                 = color( 163, 167, 168,         255 ),
 
-    disabled                = {
-        backgroundColor     = color( default.colors.black, 0.14 * 255 )
+    mouseover                 = {
+        outlineColor          = color( t.colors.gold,  0.42 * 255 )
+    },
+
+    mousedown                 = {
+        outlineColor          = color( t.colors.gold,  0.27 * 255 )
+    },
+
+    disabled                  = {
+        iconColor             = t.colors.gray,
+        textColor             = t.colors.gray
     }
 }
 
-default.textbox             = {
-    outlineColor            = color( default.colors.gray,  0.66 * 255 ),
-    textColor               = default.colors.gray,
-    selectionColor          = color( default.colors.gold,  0.42 * 255 ),
+t.scrollbar                   = {
+    backgroundColor           = color( t.colors.gold,  0.86 * 255 ),
 
-    mouseover               = {
-        outlineColor        = color( default.colors.gold,  0.42 * 255 ),
-        textColor           = color( 163, 167, 168,        255 )
-    },
-
-    focus                   = {
-        outlineColor        = color( default.colors.gold,  0.27 * 255 ),
-        textColor           = color( 163, 167, 168,        255 )
-    },
-
-    disabled                = {
-        textColor           = default.colors.gray
+    disabled                  = {
+        backgroundColor       = color( t.colors.black, 0.14 * 255 )
     }
 }
 
-default.bindlistpanel       = {
-    backgroundColor         = color( default.colors.black, 0.66 * 255 ),
-    outlineColor            = color( default.colors.gray,  0.66 * 255 )
+t.textbox                     = {
+    outlineColor              = color( t.colors.gray,  0.66 * 255 ),
+    textColor                 = t.colors.gray,
+    selectionColor            = color( t.colors.gold,  0.42 * 255 ),
+
+    mouseover                 = {
+        outlineColor          = color( t.colors.gold,  0.42 * 255 ),
+        textColor             = color( 163, 167, 168,         255 )
+    },
+
+    focus                     = {
+        outlineColor          = color( t.colors.gold,  0.27 * 255 ),
+        textColor             = color( 163, 167, 168,         255 )
+    },
+
+    disabled                  = {
+        textColor             = t.colors.gray
+    }
 }
 
-default.bindlistheader      = {
-    borderColor             = color(  15,  15,  15,        255 ),
+t.bindlistpanel               = {
+    backgroundColor           = color( t.colors.black, 0.66 * 255 ),
+    outlineColor              = color( t.colors.gray,  0.66 * 255 )
 }
 
-default.mainmenuFont        = graphics.newFont( "fonts/SourceSansPro-Regular.otf", 24 )
-default.titleFont           = graphics.newFont( "fonts/SourceSansPro-Bold.otf", 18 )
-default.font                = graphics.newFont( "fonts/SourceSansPro-Regular.otf", 14 )
-default.fontBold            = graphics.newFont( "fonts/SourceSansPro-Bold.otf", 14 )
-default.consoleFont         = graphics.newFont( "fonts/SourceCodePro-Light.otf", 12 )
-default.chatFont            = graphics.newFont( "fonts/SourceCodePro-Light.otf", 14 )
-default.entityFont          = graphics.newFont( "fonts/SourceSansPro-Regular.otf", 24 )
+t.bindlistheader              = {
+    borderColor               = color(  15,  15,  15,         255 ),
+}
+
+t.mainmenuFont                = graphics.newFont( "fonts/SourceSansPro-Regular.otf", 24 )
+t.titleFont                   = graphics.newFont( "fonts/SourceSansPro-Bold.otf", 18 )
+t.font                        = graphics.newFont( "fonts/SourceSansPro-Regular.otf", 14 )
+t.fontBold                    = graphics.newFont( "fonts/SourceSansPro-Bold.otf", 14 )
+t.consoleFont                 = graphics.newFont( "fonts/SourceCodePro-Light.otf", 12 )
+t.chatFont                    = graphics.newFont( "fonts/SourceCodePro-Light.otf", 14 )
+t.entityFont                  = graphics.newFont( "fonts/SourceSansPro-Regular.otf", 24 )
 
 if ( _AXIS ) then
-default.axisUsernameFont    = graphics.newFont( "fonts/SourceSansPro-Light.otf", 18 )
+t.axisUsernameFont            = graphics.newFont( "fonts/SourceSansPro-Light.otf", 18 )
 end

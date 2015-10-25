@@ -1044,19 +1044,6 @@ return {
           properties = {}
         },
         {
-          id = 20,
-          name = "",
-          type = "prop_tree",
-          shape = "rectangle",
-          x = 1376,
-          y = 1344,
-          width = 64,
-          height = 192,
-          rotation = 0,
-          visible = true,
-          properties = {}
-        },
-        {
           id = 21,
           name = "",
           type = "prop_tree",

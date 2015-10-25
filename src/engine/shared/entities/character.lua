@@ -158,6 +158,7 @@ function character:updateMovement()
 		if ( self.nextPosition ) then
 			require( "engine.shared.path" )
 			self.path = path.getPath( self:getPosition(), self.nextPosition )
+			self.nextPosition = nil
 			self:move()
 		else
 			if ( _CLIENT ) then

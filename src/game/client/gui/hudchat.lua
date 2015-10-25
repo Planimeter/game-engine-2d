@@ -146,7 +146,7 @@ function hudchat:invalidateLayout()
 end
 
 function hudchat:update( dt )
-	if ( self:getOpacity() > 0 ) then
+	if ( gui.blurFramebuffer and self:isVisible() ) then
 		self:invalidate()
 	end
 

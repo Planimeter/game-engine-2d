@@ -376,18 +376,7 @@ function panel:localToScreen( x, y )
 end
 
 function panel:mousepressed( x, y, button )
-	if ( not self:isVisible() ) then
-		return
-	end
-
-	local children = self:getChildren()
-	if ( children ) then
-		for _, v in ipairs( children ) do
-			if ( v:isVisible() ) then
-				v:mousepressed( x, y, button )
-			end
-		end
-	end
+	return cascadeInputToChildren( self, "mousepressed", x, y, button )
 end
 
 function panel:mousereleased( x, y, button )

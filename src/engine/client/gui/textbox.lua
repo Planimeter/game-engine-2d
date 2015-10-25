@@ -614,11 +614,13 @@ function textbox:mousepressed( x, y, button )
 			if ( self.scrollbar ) then
 				local font = self:getScheme( "font" )
 				self.scrollbar:scrollDown( 3 * font:getHeight() )
+				return true
 			end
 		elseif ( button == "wu" ) then
 			if ( self.scrollbar ) then
 				local font = self:getScheme( "font" )
 				self.scrollbar:scrollUp( 3 * font:getHeight() )
+				return true
 			end
 		end
 	else
@@ -630,7 +632,7 @@ function textbox:mousepressed( x, y, button )
 		end
 	end
 
-	gui.panel.mousepressed( self, x, y, button )
+	return gui.panel.mousepressed( self, x, y, button )
 end
 
 function textbox:mousereleased( x, y, button )

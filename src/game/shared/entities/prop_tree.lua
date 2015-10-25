@@ -6,7 +6,10 @@
 
 require( "engine.shared.entities.entity" )
 require( "game" )
+
+if ( _CLIENT ) then
 require( "engine.client.chat" )
+end
 
 class "prop_tree" ( "entity" )
 

@@ -137,7 +137,7 @@ end
 function getPath( start, goal )
 	local tileSize = _G.game.tileSize
 	start = snapToGrid( start )
-	goal  = snapToGrid( goal ) + vector( 0, tileSize )
+	goal  = snapToGrid( goal )
 	if ( start == goal ) then
 		return
 	end

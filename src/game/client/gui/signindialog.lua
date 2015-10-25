@@ -196,7 +196,7 @@ local function readPassword( self )
 	self.usernameTextBox:setText( username )
 	self.passwordTextBox:setText( password )
 
-	-- Andrew; Force dialog to update.
+	-- Force dialog to update
 	self.usernameTextBox:onLostFocus()
 end
 

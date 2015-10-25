@@ -77,6 +77,11 @@ function image:getWidth()
 	return image:getWidth()
 end
 
+function image:setFilter( min, mag, anisotropy )
+	local image = self:getDrawable()
+	image:setFilter( min, mag, anisotropy )
+end
+
 function image:setFilename( filename )
 	self.filename = filename
 end

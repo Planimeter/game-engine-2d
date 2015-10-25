@@ -20,6 +20,8 @@ function mainmenu:mainmenu()
 
 	self.logo        = self:getScheme( "mainmenu.logo" )
 	self.logoSmall   = self:getScheme( "mainmenu.logoSmall" )
+	self.logo:setFilter( "linear", "linear" )
+	self.logoSmall:setFilter( "linear", "linear" )
 
 	self.closeButton = gui.mainmenuclosebutton( self )
 	local margin     = gui.scale( 96 )
@@ -283,6 +285,8 @@ function mainmenu:mousepressed( x, y, button )
 	end
 
 	gui.panel.mousepressed( self, x, y, button )
+
+	return true
 end
 
 function mainmenu:mousereleased( x, y, button )
@@ -299,7 +303,10 @@ function mainmenu:remove()
 end
 
 function mainmenu:update( dt )
-	self:invalidate()
+	if ( gui.blurFramebuffer and self:isVisible() ) then
+		self:invalidate()
+	end
+
 	gui.panel.update( self, dt )
 end
 

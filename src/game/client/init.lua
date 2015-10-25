@@ -27,9 +27,9 @@ function createDefaultPanels()
 	local chat = gui.hudchat( _G.g_Viewport )
 	_G.g_Chat = chat
 
-	-- Initialize inventory
-	local inventory = gui.hudinventory( _G.g_Viewport )
-	_G.g_Inventory = inventory
+	-- Initialize game menu
+	local gamemenu = gui.hudgamemenu( _G.g_Viewport )
+	_G.g_GameMenu = gamemenu
 end
 
 function draw()
