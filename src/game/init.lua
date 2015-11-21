@@ -14,8 +14,9 @@ local _G          = _G
 
 module( "game" )
 
-tileSize  = 32
-appSecret = ""
+appSecret     = ""
+tileSize      = 32
+initialRegion = "test"
 
 function conf( c )
 	c.title  = "Vertex Adventure"
@@ -35,10 +36,6 @@ function call( universe, event, ... )
 	end
 
 	return interface[ event ]( ... )
-end
-
-function getStartingRegion()
-	return "allorovian_forest"
 end
 
 function onNPCSpawn( npc )

@@ -89,6 +89,7 @@ function character:moveTo( position, callback )
 	fromX, fromY = snapToGrid( fromX, fromY )
 	toX, toY     = snapToGrid( toX, toY )
 	if ( fromX == toX and fromY == toY ) then
+		self.moveCallback = callback
 		return
 	end
 
@@ -163,6 +164,11 @@ function character:updateMovement()
 		else
 			if ( _CLIENT ) then
 				self:setAnimation( "idle" )
+			end
+
+			if ( self.moveCallback ) then
+				self.moveCallback()
+				self.moveCallback = nil
 			end
 		end
 	end

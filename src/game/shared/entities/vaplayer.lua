@@ -19,7 +19,8 @@ function vaplayer:getInventory()
 end
 
 function vaplayer:give( item, count )
-	self.inventory[ item ] = ( self.inventory[ item ] or 0 ) + ( count or 1 )
+	count = count or 1
+	self.inventory[ item ] = ( self.inventory[ item ] or 0 ) + count
 	game.call( "shared", "onPlayerGotItem", self, item, count )
 end
 

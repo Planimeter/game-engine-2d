@@ -174,7 +174,7 @@ if ( not _DEDICATED ) then
 				end
 			end
 
-			region.load( name )
+			_G.game.initialRegion = name
 
 			engine.connectToListenServer()
 		end

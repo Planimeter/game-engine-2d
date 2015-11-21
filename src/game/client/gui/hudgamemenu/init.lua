@@ -16,7 +16,7 @@ class "hudgamemenu" ( gui.panel )
 
 function hudgamemenu:hudgamemenu( parent )
 	gui.panel.panel( self, parent, "Game Menu" )
-	self.width  = 384
+	self.width  = 384 -- - 31
 	self.height = 480
 
 	self:invalidateLayout()
@@ -31,21 +31,21 @@ function hudgamemenu:hudgamemenu( parent )
 	self.inventory = gui.hudgamemenuinventory( self )
 	self.inventory:moveToBack()
 
-	self.prayer = gui.hudgamemenuprayer( self )
-	self.prayer:moveToBack()
-	self.prayer:setVisible( false )
-
-	self.spells = gui.hudgamemenuspells( self )
-	self.spells:moveToBack()
-	self.spells:setVisible( false )
-
-	self.stats = gui.hudgamemenustats( self )
-	self.stats:moveToBack()
-	self.stats:setVisible( false )
-
-	self.quests = gui.hudgamemenuquests( self )
-	self.quests:moveToBack()
-	self.quests:setVisible( false )
+	-- self.prayer = gui.hudgamemenuprayer( self )
+	-- self.prayer:moveToBack()
+	-- self.prayer:setVisible( false )
+	--
+	-- self.spells = gui.hudgamemenuspells( self )
+	-- self.spells:moveToBack()
+	-- self.spells:setVisible( false )
+	--
+	-- self.stats = gui.hudgamemenustats( self )
+	-- self.stats:moveToBack()
+	-- self.stats:setVisible( false )
+	--
+	-- self.quests = gui.hudgamemenuquests( self )
+	-- self.quests:moveToBack()
+	-- self.quests:setVisible( false )
 end
 
 local GAMEMENU_ANIM_TIME = 0.2

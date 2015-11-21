@@ -68,7 +68,7 @@ function onConnect( event )
 	print( tostring( event.peer ) .. " has connected." )
 
 	if ( not _AXIS ) then
-		local region = _G.game.getStartingRegion()
+		local region = _G.game.initialRegion
 		_G.region.load( region )
 	end
 
@@ -293,7 +293,7 @@ if ( _AXIS ) then
 				_G.region.load( save.region )
 			elseif ( c == 404 ) then
 				-- TODO: Move region before player initialization.
-				local region = _G.game.getStartingRegion()
+				local region = _G.game.initialRegion
 				_G.region.load( region )
 
 				save = player:createInitialSave( region )
@@ -314,12 +314,12 @@ function sendServerInfo( player )
 	if ( _AXIS ) then
 		if ( _G.game.usesAxisSavedGames() ) then
 			sendSavedGame( player )
+			return
 		end
-		return
 	end
 
 	local payload = payload( "serverInfo" )
-	payload:set( "region", _G.game.getStartingRegion() )
+	payload:set( "region", _G.game.initialRegion )
 	player:send( payload )
 end
 

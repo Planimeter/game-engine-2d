@@ -284,6 +284,7 @@ t.fontBold                    = graphics.newFont( "fonts/SourceSansPro-Bold.otf"
 t.consoleFont                 = graphics.newFont( "fonts/SourceCodePro-Light.otf", 12 )
 t.chatFont                    = graphics.newFont( "fonts/SourceCodePro-Light.otf", 14 )
 t.entityFont                  = graphics.newFont( "fonts/SourceSansPro-Regular.otf", 24 )
+t.itemCountFont               = graphics.newFont( "fonts/SourceSansPro-Regular.otf", 12 )
 
 if ( _AXIS ) then
 t.axisUsernameFont            = graphics.newFont( "fonts/SourceSansPro-Light.otf", 18 )

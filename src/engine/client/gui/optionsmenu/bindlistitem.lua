@@ -13,8 +13,7 @@ bindlistitem.trappedItem = trappedItem
 
 function bindlistitem:bindlistitem( parent, name, text, key, concommand )
 	gui.button.button( self, parent, name, text )
-
-	self.width      = parent: getWidth()
+	self.width      = parent:getWidth()
 	self.height     = 30
 	self.key        = key
 	self.concommand = concommand

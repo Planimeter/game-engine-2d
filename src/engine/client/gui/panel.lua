@@ -163,7 +163,6 @@ function panel:draw()
 						end
 					table.remove( opacityStack, #opacityStack )
 					graphics.setOpacity( opacityStack[ #opacityStack ] )
-					graphics.scale( 1 )
 				graphics.pop()
 			end
 		end

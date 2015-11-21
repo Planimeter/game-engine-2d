@@ -12,14 +12,18 @@ function hudgamemenunavigation:hudgamemenunavigation( parent )
 
 	self.tabs = {
 		"Inventory",
-		"Prayer",
-		"Spells",
-		"Stats",
-		"Quests"
+		-- "Prayer",
+		-- "Spells",
+		-- "Stats",
+		-- "Quests"
 	}
 
 	for _, name in ipairs( self.tabs ) do
 		local item = gui.hudgamemenunavigationbutton( self, name )
+		if ( name ~= "Inventory" ) then
+			item:setDisabled( true )
+		end
+
 		self:addItem( item )
 	end
 end

@@ -8,11 +8,11 @@ class "bindlistheader" ( gui.panel )
 
 function bindlistheader:bindlistheader( parent, name, text )
 	gui.panel.panel( self, parent, name )
-	self:setScheme( "Default" )
-
 	self.width  = parent:getWidth()
 	self.height = 46
 	self.text   = text or "Bind List Header"
+
+	self:setScheme( "Default" )
 end
 
 function bindlistheader:draw()
