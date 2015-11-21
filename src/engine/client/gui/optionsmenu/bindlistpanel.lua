@@ -112,8 +112,13 @@ function bindlistpanel:saveBinds()
 	local i = 0
 	for concommand, keys in pairs( self.changedBinds ) do
 		i = i + 1
-		bind.setBind( keys.oldKey, nil )
-		bind.setBind( keys.key, concommand )
+		if ( keys.oldKey ) then
+			bind.setBind( keys.oldKey, nil )
+		end
+
+		if ( keys.key ) then
+			bind.setBind( keys.key, concommand )
+		end
 	end
 
 	if ( i >= 1 ) then
