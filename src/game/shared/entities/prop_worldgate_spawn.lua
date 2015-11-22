@@ -48,4 +48,14 @@ function prop_worldgate_spawn:examine()
 	chat.addText( "Rather tall and ominous." )
 end
 
+function prop_worldgate_spawn:update( dt )
+	local position = self:getPosition()
+	local players  = player.getAll()
+	for _, player in ipairs( players ) do
+		if ( player:getPosition() == position ) then
+			player:moveTo( position + vector( 0, game.tileSize ) )
+		end
+	end
+end
+
 entities.linkToClassname( prop_worldgate_spawn, "prop_worldgate_spawn" )

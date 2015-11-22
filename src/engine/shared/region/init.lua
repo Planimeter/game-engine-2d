@@ -342,7 +342,7 @@ function region:isTileWalkableAtPosition( position )
 	for _, tileset in ipairs( self:getTilesets() ) do
 		tiles = tileset:getTiles()
 		for _, tile in ipairs( tiles ) do
-			hasProperties = hasvalue( gids, tile.id )
+			hasProperties = hasvalue( gids, tile.id + 1 )
 			properties    = tile.properties
 			walkable      = hasProperties and properties.walkable
 			if ( hasProperties and walkable == "false" ) then
