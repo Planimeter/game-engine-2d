@@ -363,10 +363,6 @@ end
 local cl_payload_show_receive = convar( "cl_payload_show_receive", "0", nil, nil,
                                         "Prints payloads received from server" )
 
-if ( _G._DEBUG ) then
-	-- cl_payload_show_receive:setValue( "1" )
-end
-
 function onReceive( event )
 	local payload = payload.initializeFromData( event.data )
 	payload:setPeer( event.peer )

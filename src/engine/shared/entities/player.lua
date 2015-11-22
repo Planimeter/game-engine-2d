@@ -18,16 +18,6 @@ player.lastPlayerId = lastPlayerId
 function player.initialize( peer )
 	local player = _G.gameserver.getPlayerClass()()
 	player.peer  = peer
-
-	if ( _AXIS and _SERVER ) then
-		player.authenticated = false
-		player.think = function( self )
-			if ( not self:isAuthenticated() ) then
-				self:kick( "Axis authentication failed!" )
-			end
-		end
-		player.nextThink = engine.getRealTime() + 4 * engine.network.timestep
-	end
 	return player
 end
 
@@ -77,7 +67,7 @@ end
 
 if ( _AXIS ) then
 	if ( _SERVER ) then
-		function player:createInitialSave( region )
+		function player:createInitialSave()
 			local spawnPoint = gameserver.getSpawnPoint( self )
 			local position = vector.origin + vector( 0, _G.game.tileSize )
 			if ( spawnPoint ) then
@@ -85,7 +75,7 @@ if ( _AXIS ) then
 			end
 
 			local save = {
-				region = region,
+				region = _G.game.initialRegion,
 				position = {
 					x = position.x,
 					y = position.y
@@ -163,8 +153,6 @@ end
 
 if ( _SERVER ) then
 	function player:kick( message )
-		require( "engine.shared.network.payload" )
-
 		local payload = payload( "kick" )
 		payload:set( "message", message )
 		self.peer:send( payload:serialize() )

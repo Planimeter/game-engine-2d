@@ -21,37 +21,12 @@ URL_WEBAPI_BASE = "http://api.andrewmcwatters.com/axis"
 
 function authenticate( ticket, callback )
 	local url = URL_WEBAPI_BASE .. "/authenticate"
-
 	require( "engine.shared.socket.http" )
 	require( "engine.shared.socket.https" )
-
 	local body = _G.http.urlencode( {
 		ticket = ticket
 	} )
-
-	local _callback = function( r, c, h, s )
-		if ( _G._SERVER and c == 200 ) then
-			require( "public.json" )
-			require( "engine.shared.axis.axisuser" )
-
-			local account  = _G.json.decode( r )
-			local username = account.username
-			local email    = account.email
-			local ticket   = account.ticket
-			local user     = _G.axisuser( username, email, ticket )
-			local players  = _G.player.getAll()
-			for _, player in ipairs( players ) do
-				if ( player.ticket == ticket ) then
-					player.ticket  = nil
-					player.account = user
-				end
-			end
-		end
-
-		callback( r, c, h, s )
-	end
-
-	_G.https.request( url, body, _callback )
+	_G.https.request( url, body, callback )
 end
 
 function createAccount( username, password, email, callback )

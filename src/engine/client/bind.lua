@@ -39,6 +39,23 @@ function setBind( key, concommand )
 	binds[ key ] = concommand
 end
 
+concommand( "bind", "Binds a key",
+	function( _, _, _, _, argT )
+		local key        = argT[ 1 ]
+		local concommand = argT[ 2 ]
+		if ( key == nil ) then
+			print( "bind <key> <console command>" )
+			return
+		end
+
+		if ( concommand ) then
+			setBind( key, concommand )
+		else
+			print( getBind( key ) )
+		end
+	end
+)
+
 function readBinds()
 	local config = "cfg/binds.cfg"
 	if ( not filesystem.exists( config ) ) then

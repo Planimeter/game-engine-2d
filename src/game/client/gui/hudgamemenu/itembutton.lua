@@ -45,6 +45,16 @@ function itembutton:drawIcon()
 end
 
 function itembutton:drawCount()
+	local item = self:getItemClass()
+	if ( not item ) then
+		return
+	end
+
+	local itemdata = item.data
+	if ( not itemdata or not itemdata.stackable ) then
+		return
+	end
+
 	local property = "button.textColor"
 
 	if ( self:isDisabled() ) then
