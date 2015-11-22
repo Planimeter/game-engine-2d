@@ -96,6 +96,7 @@ function onPostConnect( event )
 	local player = _G.player.initialize( event.peer )
 
 	if ( _AXIS ) then
+		player:setAuthenticated( true )
 		getAccount( player, event.peer )
 	end
 
