@@ -40,5 +40,6 @@ return {
 			from = 256,
 			to = 259,
 		}
-	}
+	},
+	events = {}
 }
