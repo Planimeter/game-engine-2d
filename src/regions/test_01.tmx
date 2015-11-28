@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="81">
+ <tileset firstgid="1" source="World.tsx"/>
+ <tileset firstgid="257" source="Architect.tsx"/>
+ <layer name="Grass 1" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJztwwEJAAAMBKH7/qUHy6Hgqqmqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqv8AX0MnEQ==
+  </data>
+ </layer>
+ <layer name="Grass 1 Detail" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   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
+  </data>
+ </layer>
+ <layer name="Grass 2" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJztnFtSFEEQRSvcAWsQV4D6r47wrQL6qwPoN87gAnysQPdr3ei60UnR84DpLkI8JyKjh+4GncrJvFmV1ZMSAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAATMmj+/4P/Kf8zvZnzfXH2fazPdnxHrg7B9meZnuWbS/bcbHDcu75ivtfD1yD2xPH/1XqfGBbpG6cT8rPOp5lW5Z7j8O1ebmmc6fZ3mf7UP4N8t9mXmR7mbpxnaVu3N+lftztE/tIY3xRjvG8fLAox3m553O2L+3eyj9NnY9iTMgPF+W1YkBjrPE/LucOy2vfE++9yvat4ft4CNTxEPPSeerGWtc0voqVeepjY6/8zqK8/po6f8hHP7L9zPar3Vt5MLzJ9jZ1463PtHwQY2SZ+tiwLviafuc09dphH8knRy3fxAPiY7ZPqdddmXXauUgxIF85dhw/zlnxvGMNn9wN60eso2apr21Pqmuy6Bv7JPoMDb8bUT88vvKBPvsaY4+vc1E0a7bunSd0fEwuU6fHzjkaW43zMvWaYE3R0XWU/ee89D11Wk6+Ggdriedynk/E2st+uUirx33Tugtsh7TEaxyOGc/vopacpb6+HdIJ/DEOjo+jNBwr82LH5ZxyGrlpWhQXca0pakvUc2t8vTYFuxPXx6XJQ3XqKr+onvK8Bb+Mw6Z8X9fFV+W11xQ9ZyF3tSGuqbj34fjw3IM5YHtiznKtNSuvZeSs9njOp7hwnLBO0p46Z9XrJ6p98UdbHBvqbVjbbZ6jsIbVFq8HO06kG+6R0ANpz9A8ZF7OSc/d+2VvSRucs2L/I+pJrLPwy3TU61nS7lk5Kjbcv0XX22L90LjXaydo+XR4TcvrWnW963pKflGOWrWnRH+H+eFu1LnJR+9xsIav84O4LL9D3tqdoflf7BNuW9dK/+lN7UbtC+mEtME92lnqfeQ5CGtX0zLUH5R/vMdhUX72Hl/qqTa49xFrqWWirroPhvKW13OtJYflNft1p6f2h3se0hH3oVTv4otpGHrOLOqI5uHLdL0neF6MGmp8PPZDOhD3+UpPrOPWetZzp0FzuPhZjznLPQ/5QzHhdSv6te2IceGYsG5Ix+UTP5ewbc3L87c32TQm6/qzOrdLP5D9pDfZNCax76Q85D0LcV8JfcB21Hvg7IOzcp5nBNtif3gt13t70O5x2d/inpir/Jygn/dknWo83I9Y19OOeUox4ecL/LzHUFxI+9GQu7FNP8LxcZr6Z3LiM/91jBwkYmYqYp2rWlY1lPseJ+lmTaX7V8Ub84zxUN66SNd7ULf5PhJ6tbszNAe0fnh917XVNnur6NXuTqytPOeL32Hi5wbZY9WWOlb83TH4Yhq2qVHjM8/+3gb5hT2646Nexzafb6/vxu9/Y24+Lutq1Ei9l125y3qiIzHSjlo/dPSckBhpR4yJuK8n9jwe0vNpfwH1J/7G
+  </data>
+ </layer>
+ <layer name="Grass 2 Detail" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt3O1KxDAQheHgJfTzxvV+7UAPnI3dRbTJBH0fKHFrfywZZ9KkqaUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaOkt+wsAwDdMxzEfx3J+Xl5ci3a2s53ONuKwHsdu10x2Po7Zrt+rFj9T//1HP08X5xa7VjmkGM7Nvt3/pH7ezmOt2jBbq9yI3012De4RfRt1ZjnbugZ57VJLfbqfxgON316Twn7+brbPitVaHnMGv6O+VV8qN7weKWeCapnioXpFLO7hcZjKY64E1SbPD+/7eszH/dT/ygnliO6vPAbvx/Fx/rwX4tNS1CHVKuWNzqM/HyO8XhGP9q7G481a1apSHucjaGd9cj7i4PdQz65DXxpLVvtMnuTyMYQ5Rz7lx1a+3vsih6/zsm41Bj37KIXxPZPWq+o1LOTROpfWUVjfHUMdD+Tw5+abnUN/9TPz+jkh+qprE3mRS8+qtFZCPHJoPu73UuyRy7U9+fkK91xt+V4s5PG9iF6viEsOXxfRGjvPPXL5HDxic7W3F30oJ5QXpZAfmdTvGke0x4r8GEO9vx1tfGc+4fvhmF+09Soe2qfo70yF+r0ptKf+9v2igfzIodpUr18hD+uGY9CcYyqMEyPwZxy+vwd9+f5cYjAGf7eWuXg+n/+RI2PwfT3cY+XhXf8xaey4+p8y6Id96+PSOokwjuSi/8dT5wjy+Ho740ku38vAOnsuvWvu+xn+0v3uJ9MJGM4=
+  </data>
+ </layer>
+ <layer name="Misc. Detail" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt2kEOgyAQBVCv0WV7hN7/cM0s2BCbWhPlo+/tdEUw8GfAZQEAAAAAAAAAAAAAAAAAAAAAAAD2eoweAISotfDu3vXPcGf9engOGcW9/Zrz1ymjoKn5tg6AWdiv8shtYAbODXM4o5qP+iuHuguYjQzJIUPyqIuz6BnHkBNZ1rJi7d+T9h6uyt05cFW1t+kNuSL9dZ76JtUzqKmybMkAWQEA8B81b54t9aw7jjx6+zHsYXn05MAM5EeOb7nhGx2n5nZPPyHjj+H/HqD5ABhqBtM=
+  </data>
+ </layer>
+ <layer name="Magic Circle" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt0TsKgFAMRNFEbUQbP/tfq1O4AauHcA4MaQO3CgAAAAAAAAAAAAAAAAAAAAAAAPiiu2rK5mzp0d+wvg223F2P4Y40OLMru/UAAAAAAAAAAAAAAAAAAAAAAAAAfuoBXkYAgA==
+  </data>
+ </layer>
+ <objectgroup name="Spawn Points">
+  <object id="7" name="Test World Gate" type="prop_worldgate_spawn" x="1600" y="1504" width="32" height="96"/>
+ </objectgroup>
+ <objectgroup name="Forestation">
+  <object id="9" type="prop_tree" x="1504" y="1408" width="64" height="192"/>
+  <object id="12" type="prop_tree" x="1632" y="1312" width="64" height="192"/>
+  <object id="13" type="prop_tree" x="1696" y="1376" width="64" height="192"/>
+  <object id="14" type="prop_tree" x="1472" y="1344" width="64" height="192"/>
+  <object id="15" type="prop_tree" x="1536" y="1280" width="64" height="192"/>
+  <object id="16" type="prop_tree" x="1728" y="1408" width="64" height="192"/>
+  <object id="17" type="prop_tree" x="1760" y="1344" width="64" height="192"/>
+  <object id="18" type="prop_tree" x="1248" y="1376" width="64" height="192"/>
+  <object id="19" type="prop_tree" x="1376" y="1344" width="64" height="192"/>
+  <object id="20" type="prop_tree" x="1376" y="1344" width="64" height="192"/>
+  <object id="21" type="prop_tree" x="1344" y="1440" width="64" height="192"/>
+  <object id="22" type="prop_tree" x="1408" y="1472" width="64" height="192"/>
+  <object id="23" type="prop_tree" x="1280" y="1472" width="64" height="192"/>
+  <object id="24" type="prop_tree" x="1344" y="1536" width="64" height="192"/>
+  <object id="25" type="prop_tree" x="1664" y="1472" width="64" height="192"/>
+  <object id="26" type="prop_tree" x="1760" y="1472" width="64" height="192"/>
+  <object id="27" type="prop_tree" x="1440" y="1504" width="64" height="192"/>
+  <object id="29" type="prop_tree" x="1696" y="1696" width="64" height="192"/>
+  <object id="30" type="prop_tree" x="1344" y="1728" width="64" height="192"/>
+  <object id="31" type="prop_tree" x="1408" y="1888" width="64" height="192"/>
+  <object id="32" type="prop_tree" x="1376" y="1792" width="64" height="192"/>
+  <object id="33" type="prop_tree" x="1728" y="1728" width="64" height="192"/>
+  <object id="34" type="prop_tree" x="1792" y="1856" width="64" height="192"/>
+  <object id="35" type="prop_tree" x="1920" y="1760" width="64" height="192"/>
+  <object id="36" type="prop_tree" x="1952" y="1984" width="64" height="192"/>
+  <object id="37" type="prop_tree" x="1888" y="1888" width="64" height="192"/>
+  <object id="38" type="prop_tree" x="1504" y="1984" width="64" height="192"/>
+  <object id="39" type="prop_tree" x="1408" y="2144" width="64" height="192"/>
+  <object id="40" type="prop_tree" x="1344" y="2016" width="64" height="192"/>
+  <object id="41" type="prop_tree" x="1376" y="2048" width="64" height="192"/>
+  <object id="42" type="prop_tree" x="1888" y="2080" width="64" height="192"/>
+  <object id="43" type="prop_tree" x="1824" y="2144" width="64" height="192"/>
+  <object id="44" type="prop_tree" x="1920" y="2208" width="64" height="192"/>
+  <object id="45" type="prop_tree" x="1856" y="2272" width="64" height="192"/>
+  <object id="46" type="prop_tree" x="1248" y="1920" width="64" height="192"/>
+  <object id="47" type="prop_tree" x="1248" y="2208" width="64" height="192"/>
+  <object id="48" type="prop_tree" x="1760" y="1568" width="64" height="192"/>
+  <object id="49" type="prop_tree" x="1152" y="1664" width="64" height="192"/>
+  <object id="50" type="prop_tree" x="1248" y="1600" width="64" height="192"/>
+  <object id="51" type="prop_tree" x="1344" y="2304" width="64" height="192"/>
+  <object id="52" type="prop_tree" x="1280" y="2368" width="64" height="192"/>
+  <object id="53" type="prop_tree" x="1248" y="2560" width="64" height="192"/>
+  <object id="54" type="prop_tree" x="1184" y="2624" width="64" height="192"/>
+  <object id="55" type="prop_tree" x="1216" y="2720" width="64" height="192"/>
+  <object id="56" type="prop_tree" x="1984" y="2432" width="64" height="192"/>
+  <object id="57" type="prop_tree" x="1088" y="2400" width="64" height="192"/>
+  <object id="58" type="prop_tree" x="1824" y="2528" width="64" height="192"/>
+  <object id="59" type="prop_tree" x="1856" y="2592" width="64" height="192"/>
+  <object id="60" type="prop_tree" x="1760" y="2784" width="64" height="192"/>
+  <object id="61" type="prop_tree" x="1984" y="2816" width="64" height="192"/>
+  <object id="62" type="prop_tree" x="1792" y="2880" width="64" height="192"/>
+  <object id="63" type="prop_tree" x="1024" y="2912" width="64" height="192"/>
+  <object id="64" type="prop_tree" x="1152" y="2880" width="64" height="192"/>
+  <object id="65" type="prop_tree" x="1120" y="1248" width="64" height="192"/>
+  <object id="66" type="prop_tree" x="960" y="1440" width="64" height="192"/>
+  <object id="67" type="prop_tree" x="1984" y="1184" width="64" height="192"/>
+  <object id="68" type="prop_tree" x="2048" y="1536" width="64" height="192"/>
+  <object id="69" type="prop_tree" x="2112" y="2048" width="64" height="192"/>
+  <object id="70" type="prop_tree" x="1952" y="1120" width="64" height="192"/>
+  <object id="71" type="prop_tree" x="1728" y="1120" width="64" height="192"/>
+  <object id="72" type="prop_tree" x="1024" y="1856" width="64" height="192"/>
+ </objectgroup>
+</map>
