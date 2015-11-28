@@ -17,8 +17,15 @@ entity.entities     = entities
 entity.lastEntIndex = lastEntIndex
 
 function entity.create( classname )
+	_G.entities.requireEntity( classname )
+
 	local classmap = _G.entities.getClassMap()
-	local entity   = classmap[ classname ]()
+	if ( not classmap[ classname ] ) then
+		print( "Attempted to create unknown entity type " .. classname .. "!" )
+		return
+	end
+
+	local entity = classmap[ classname ]()
 	return entity
 end
 
@@ -286,7 +293,7 @@ do
 end
 
 function entity:setNetworkVar( name, value )
-	if ( self.networkVars[ name ] == nil ) then
+	if ( not self.networkVars or self.networkVars[ name ] == nil ) then
 		error( "attempt to set nonexistent networkvar '" .. name .. "'", 2 )
 	end
 
