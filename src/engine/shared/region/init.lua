@@ -146,37 +146,33 @@ if ( not _DEDICATED ) then
 				return
 			end
 
-			local args = engine.getArguments()
-
-			if ( _CLIENT and not _SERVER ) then
-				if ( engine.connecting ) then
-					return
-				end
-
-				_SERVER = true
-				local status, ret = pcall( require, "engine.server" )
-				if ( status ~= false ) then
-					serverengine = ret
-					if ( serverengine.load( args ) ) then
-						networkserver.onNetworkInitializedServer()
-					else
-						print( "Failed to initialize server!" )
-						engine.connecting = false
-						engine.connected  = false
-						engine.disconnect()
-						_SERVER = nil
-						return
-					end
-				else
-					_SERVER = nil
-					print( ret )
-					return
-				end
+			if ( not engine.initializeServer() ) then
+				return
 			end
 
 			_G.game.initialRegion = name
 
 			engine.connectToListenServer()
+		end,
+
+		nil,
+
+		function( argS )
+			local autocomplete = {}
+			local files = filesystem.getDirectoryItems( "regions" )
+			for _, v in ipairs( files ) do
+				if ( string.fileextension( v ) == "lua" ) then
+					local name  = string.gsub( v, ".lua", "" )
+					local cmd   = "region " .. name
+					if ( string.find( cmd, "region " .. argS, 1, true ) ) then
+						table.insert( autocomplete, cmd )
+					end
+				end
+			end
+
+			table.sort( autocomplete )
+
+			return autocomplete
 		end
 	)
 end

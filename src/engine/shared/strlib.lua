@@ -8,8 +8,10 @@ require( "string" )
 require( "public.utf8data" )
 require( "public.utf8" )
 
+local string = string
 local sub    = string.utf8sub
 local upper  = string.utf8upper
+local match  = string.match
 local len    = string.utf8len
 local find   = string.find
 local gmatch = string.gmatch
@@ -17,6 +19,10 @@ local gsub   = string.gsub
 
 function string.capitalize( s )
 	return upper( sub( s, 1, 1 ) ) .. sub( s, 2 )
+end
+
+function string.fileextension( s )
+	return match( s, "%.([^%.]+)$" )
 end
 
 function string.parseargs( s )

@@ -51,15 +51,20 @@ function concommand.getConcommand( name )
 	return concommand.concommands[ name ]
 end
 
-function concommand:concommand( name, helpString, callback, flags )
-	self.name       = name
-	self.helpString = helpString
-	self.callback   = callback
-	self.flags      = flags or {}
+function concommand:concommand( name, helpString, callback, flags, autocomplete )
+	self.name         = name
+	self.helpString   = helpString
+	self.callback     = callback
+	self.flags        = flags or {}
+	self.autocomplete = autocomplete
 	concommand.concommands[ name ] = self
 end
 
 function concommand:callback( player, command, argString, argTable )
+end
+
+function concommand:getAutocomplete()
+	return self.autocomplete
 end
 
 function concommand:getCallback()
@@ -80,6 +85,10 @@ end
 
 function concommand:remove()
 	concommand.concommands[ self:getName() ] = nil
+end
+
+function concommand:setAutocomplete( autocomplete )
+	self.autocomplete = autocomplete
 end
 
 function concommand:setCallback( callback )

@@ -7,10 +7,10 @@
 local t                       = scheme( "Default" )
 
 t.colors                      = {
-    gray                      = color( 104, 106, 107,         255 ),
     black                     = color(  31,  35,  36,         255 ),
-    white                     = color( 204, 216, 219,         255 ),
-    gold                      = color( 155, 140, 103,         255 )
+    gray                      = color( 104, 106, 107,         255 ),
+    gold                      = color( 155, 140, 103,         255 ),
+    white                     = color( 204, 216, 219,         255 )
 }
 
 t.button                      = {

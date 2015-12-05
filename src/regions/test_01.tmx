@@ -24,7 +24,7 @@
  </layer>
  <layer name="Misc. Detail" width="100" height="100">
   <data encoding="base64" compression="zlib">
-   eJzt2kEOgyAQBVCv0WV7hN7/cM0s2BCbWhPlo+/tdEUw8GfAZQEAAAAAAAAAAAAAAAAAAAAAAAD2eoweAISotfDu3vXPcGf9engOGcW9/Zrz1ymjoKn5tg6AWdiv8shtYAbODXM4o5qP+iuHuguYjQzJIUPyqIuz6BnHkBNZ1rJi7d+T9h6uyt05cFW1t+kNuSL9dZ76JtUzqKmybMkAWQEA8B81b54t9aw7jjx6+zHsYXn05MAM5EeOb7nhGx2n5nZPPyHjj+H/HqD5ABhqBtM=
+   eJzt2kEOgyAQBVCv0t6gvf/hmlmwITa1JspH39vpimDgz4DLAgAAAAAAAAAAAAAAAAAAAAAAAOz1Gj0ACFFr4d2965/hzvr18Bgyinv7NefPU0ZBU/NtHQCzsF/lkdvADJwb5nBGNR/1Vw51FzAbGZJDhuRRF2fRM44hJ7KsZcXavyftPVyVu3Pgqmpv0xtyRfrrPPVNqmdQU2XZkgGyAgDgP2rePFvqWXccefT2Y9jD8ujJgRnIjxzfcsM3Ok7N7Z5+QsYfw/89QPMB+LUHqw==
   </data>
  </layer>
  <layer name="Magic Circle" width="100" height="100">
@@ -45,7 +45,6 @@
   <object id="17" type="prop_tree" x="1760" y="1344" width="64" height="192"/>
   <object id="18" type="prop_tree" x="1248" y="1376" width="64" height="192"/>
   <object id="19" type="prop_tree" x="1376" y="1344" width="64" height="192"/>
-  <object id="20" type="prop_tree" x="1376" y="1344" width="64" height="192"/>
   <object id="21" type="prop_tree" x="1344" y="1440" width="64" height="192"/>
   <object id="22" type="prop_tree" x="1408" y="1472" width="64" height="192"/>
   <object id="23" type="prop_tree" x="1280" y="1472" width="64" height="192"/>

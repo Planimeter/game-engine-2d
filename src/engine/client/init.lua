@@ -28,6 +28,7 @@ local graphics    = graphics
 local gui         = gui
 local hook        = hook
 local payload     = payload
+local pcall       = pcall
 local print       = print
 local require     = require
 local scheme      = scheme
@@ -223,6 +224,40 @@ function hasFocus()
 	else
 		return true
 	end
+end
+
+function initializeServer()
+	local args = _G.engine.getArguments()
+
+	if ( _G._SERVER ) then
+		return false
+	end
+
+	if ( connecting ) then
+		return false
+	end
+
+	_G._SERVER = true
+	local status, ret = pcall( require, "engine.server" )
+	if ( status ~= false ) then
+		_G.serverengine = ret
+		if ( _G.serverengine.load( args ) ) then
+			_G.networkserver.onNetworkInitializedServer()
+		else
+			print( "Failed to initialize server!" )
+			connecting = false
+			connected  = false
+			disconnect()
+			_G._SERVER = nil
+			return false
+		end
+	else
+		_G._SERVER = nil
+		print( ret )
+		return false
+	end
+
+	return true
 end
 
 connected = _connected

@@ -9,11 +9,12 @@ require( "table" )
 local ipairs       = ipairs
 local pairs        = pairs
 local setmetatable = setmetatable
-local type         = type
 local getmetatable = getmetatable
+local type         = type
 local typeof       = typeof
 -- local print     = print
 local tostring     = tostring
+local string       = string
 local math         = math
 
 function table.append( a, b )
@@ -137,6 +138,12 @@ function table.merge( a, b )
 	end
 end
 
+function table.prepend( a, b )
+	for i = #b, 1, -1 do
+		table.insert( a, 1, b[ i ] )
+	end
+end
+
 function table.print( t, i )
 	if ( t == nil ) then
 		print( nil )
@@ -160,10 +167,12 @@ function table.print( t, i )
 	end
 end
 
+local match = string.match
+
 function table.raise( t )
 	local sub, key
 	for k, v in pairs( t ) do
-		sub, key = string.match( k, "(.-)%.(.+)" )
+		sub, key = match( k, "(.-)%.(.+)" )
 		if ( sub and key ) then
 			sub = tonumber( sub ) or sub
 			t[ sub ]        = t[ sub ] or {}
