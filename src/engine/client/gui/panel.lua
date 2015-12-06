@@ -329,8 +329,7 @@ local function cascadeInputToChildren( self, func, ... )
 	if ( children ) then
 		local v
 		local filtered
-		for i = #children, 1, -1 do
-			v = children[ i ]
+		for _, v in ipairs( children ) do
 			if ( v:isVisible() ) then
 				filtered = v[ func ]( v, ... )
 				if ( filtered ~= nil ) then

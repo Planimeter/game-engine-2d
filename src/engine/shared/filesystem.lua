@@ -24,8 +24,16 @@ function getLastModified( filename )
 	return filesystem.getLastModified( filename )
 end
 
+function isDirectory( filename )
+	return filesystem.isDirectory( filename )
+end
+
 function lines( filename )
 	return filesystem.lines( filename )
+end
+
+function mount( archive, mountpoint, appendToPath )
+	return filesystem.mount( archive, mountpoint, appendToPath )
 end
 
 function read( name, size )

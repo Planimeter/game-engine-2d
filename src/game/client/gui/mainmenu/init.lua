@@ -284,9 +284,7 @@ function mainmenu:mousepressed( x, y, button )
 		return
 	end
 
-	gui.panel.mousepressed( self, x, y, button )
-
-	return true
+	return gui.panel.mousepressed( self, x, y, button )
 end
 
 function mainmenu:mousereleased( x, y, button )

@@ -21,11 +21,13 @@ if ( _CLIENT or _INTERACTIVE ) then
 require( "engine.client.gui" )
 end
 require( "engine.shared.region" )
+require( "engine.shared.addon" )
 
 local _CLIENT      = _CLIENT
 local _SERVER      = _SERVER
 local _INTERACTIVE = _INTERACTIVE
 
+local addon        = addon
 local concommand   = concommand
 local event        = love.event
 local gui          = gui
@@ -191,6 +193,8 @@ function load( arg )
 	_G.print( "All systems go in " .. time )
 
 	_G._INITTIME = nil
+
+	addon.initialize()
 end
 
 function mousepressed( x, y, button )

@@ -352,6 +352,10 @@ function mousepressed( x, y, button )
 		return
 	end
 
+	if ( _G.g_MainMenu:isVisible() ) then
+		return
+	end
+
 	bind.mousepressed( x, y, button )
 end
 
