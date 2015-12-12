@@ -16,7 +16,7 @@ module( "game" )
 
 appSecret     = ""
 tileSize      = 32
-initialRegion = "test"
+initialRegion = "test_01"
 
 function conf( c )
 	c.title  = "Vertex Adventure"

@@ -71,6 +71,7 @@ function imagepanel:setImage( image )
 		self.imageDatum = image
 	elseif ( image ~= nil and filesystem.exists( image ) ) then
 		self.imageDatum = graphics.newImage( image )
+		self.imageDatum:setFilter( "linear", "linear" )
 	else
 		self.imageDatum = graphics.error
 	end

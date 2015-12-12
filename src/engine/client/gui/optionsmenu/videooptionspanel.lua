@@ -247,6 +247,7 @@ function videooptionspanel:updateAspectRatios()
 		{ x = 16,  y = 9 },
 	 -- { x = 683, y = 384 },
 		{ x = 16,  y = 10 },
+		{ x = 21,  y = 9 }
 	}
 	local dropdownlistitem = nil
 	local name = "Aspect Ratio Drop-Down List Item"
