@@ -88,18 +88,20 @@ local function autocomplete( text )
 	end
 
 	local name = string.match( text, "^([^%s]+)" )
-	local shouldAutocomplete = string.find( text, name .. " ", 1, true )
-	if ( shouldAutocomplete ) then
-		local command = concommand.getConcommand( name )
-		if ( command ) then
-			local _, endPos = string.find( text, name, 1, true )
-			local argString = string.trim( string.utf8sub( text, endPos + 1 ) )
-			local argTable  = string.parseargs( argString )
-			local autocomplete = command:getAutocomplete( argString, argTable )
-			if ( autocomplete ) then
-				local t = autocomplete( argString, argTable )
-				if ( t ) then
-					table.prepend( suggestions, t )
+	if ( name ) then
+		local shouldAutocomplete = string.find( text, name .. " ", 1, true )
+		if ( shouldAutocomplete ) then
+			local command = concommand.getConcommand( name )
+			if ( command ) then
+				local _, endPos = string.find( text, name, 1, true )
+				local argString = string.trim( string.utf8sub( text, endPos + 1 ) )
+				local argTable  = string.parseargs( argString )
+				local autocomplete = command:getAutocomplete( argString, argTable )
+				if ( autocomplete ) then
+					local t = autocomplete( argString, argTable )
+					if ( t ) then
+						table.prepend( suggestions, t )
+					end
 				end
 			end
 		end
