@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2014 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2015 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -143,7 +143,7 @@ extern DECLSPEC void SDLCALL SDL_UnregisterApp(void);
  *
  *  \param mainFunction The SDL app's C-style main().
  *  \param reserved Reserved for future use; should be NULL
- *  \ret 0 on success, -1 on failure.  On failure, use SDL_GetError to retrieve more
+ *  \return 0 on success, -1 on failure.  On failure, use SDL_GetError to retrieve more
  *      information on the failure.
  */
 extern DECLSPEC int SDLCALL SDL_WinRTRunApp(int (*mainFunction)(int, char **), void * reserved);

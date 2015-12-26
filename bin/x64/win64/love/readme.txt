@@ -1,4 +1,6 @@
-LÖVE is an *awesome* framework you can use to make 2D games in Lua. It's free, open-source, and works on Windows, Mac OS X and Linux.
+LÖVE is an *awesome* framework you can use to make 2D games in Lua. It's free, open-source, and works on Windows, Mac OS X, Linux, Android, and iOS.
+
+[![Build Status: Windows](https://ci.appveyor.com/api/projects/status/u1a69u5o5ej1pus4?svg=true)](https://ci.appveyor.com/project/AlexSzpakowski/love)
 
 Documentation
 -------------
@@ -22,7 +24,16 @@ Run `platform/unix/automagic` from the repository root, then run ./configure and
 ###Mac OS X
 Download the required frameworks from [here][dependencies] and place them in `/Library/Frameworks/`.
 
-Then use the Xcode project found at `platform/macosx/love.xcodeproj`.
+Then use the Xcode project found at `platform/xcode/love.xcodeproj` to build the `love-macosx` target.
+
+###iOS
+Download the required libraries from [here][dependencies-ios] and place the `include` and `libraries` folders
+into the `platform/xcode/ios` folder.
+
+Then use the Xcode project found at `platform/xcode/love.xcodeproj` to build the `love-ios` target.
+
+###Android
+Visit the [Android build repository][android-repository] for build instructions.
 
 Repository information
 ----------------------
@@ -34,6 +45,12 @@ not our development target (which would be the next revision - version numbers a
 We tag all our releases (since we started using mercurial), and have binary downloads available for them.
 
 Experimental changes are developed in the separate [love-experiments][love-experiments] repository.
+
+Contributing
+------------
+
+The best places to contribute are through the Bitbucket issue tracker and the official IRC channel.
+For code contributions, pull requests and patches are welcome. Be sure to read the [source code style guide][codestyle].
 
 Builds
 ------
@@ -51,24 +68,27 @@ Dependencies
 ------------
 
 - SDL2
-- OpenGL
+- OpenGL 2.1+ / OpenGL ES 2+
 - OpenAL
 - Lua / LuaJIT / LLVM-lua
-- DevIL with MNG and TIFF
 - FreeType
 - PhysicsFS
 - ModPlug
 - mpg123
 - Vorbisfile
+- Theora
 
 [site]: http://love2d.org
 [wiki]: http://love2d.org/wiki
 [forums]: http://love2d.org/forums
 [irc]: irc://irc.oftc.net/love
 [dependencies]: http://love2d.org/sdk
+[dependencies-ios]: https://dl.dropboxusercontent.com/u/4214717/love-ios-libraries-0.10.zip
 [megasource]: https://bitbucket.org/rude/megasource
 [builds]: http://love2d.org/builds
 [stableppa]: https://launchpad.net/~bartbes/+archive/love-stable
 [unstableppa]: https://launchpad.net/~bartbes/+archive/love-unstable
-[aur]: http://aur.archlinux.org/packages.php?ID=35279
+[aur]: http://aur.archlinux.org/packages/love-hg
 [love-experiments]: https://bitbucket.org/bartbes/love-experiments
+[codestyle]: https://love2d.org/wiki/Code_Style
+[android-repository]: https://bitbucket.org/MartinFelis/love-android-sdl2

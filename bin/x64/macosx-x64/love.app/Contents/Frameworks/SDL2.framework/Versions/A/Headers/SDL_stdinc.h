@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2014 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2015 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -173,6 +173,8 @@ typedef uint64_t Uint64;
 #define SDL_PRIs64 PRIs64
 #elif defined(__WIN32__)
 #define SDL_PRIs64 "I64d"
+#elif defined(__LINUX__) && defined(__LP64__)
+#define SDL_PRIs64 "ld"
 #else
 #define SDL_PRIs64 "lld"
 #endif
@@ -182,6 +184,8 @@ typedef uint64_t Uint64;
 #define SDL_PRIu64 PRIu64
 #elif defined(__WIN32__)
 #define SDL_PRIu64 "I64u"
+#elif defined(__LINUX__) && defined(__LP64__)
+#define SDL_PRIu64 "lu"
 #else
 #define SDL_PRIu64 "llu"
 #endif
@@ -191,6 +195,8 @@ typedef uint64_t Uint64;
 #define SDL_PRIx64 PRIx64
 #elif defined(__WIN32__)
 #define SDL_PRIx64 "I64x"
+#elif defined(__LINUX__) && defined(__LP64__)
+#define SDL_PRIx64 "lx"
 #else
 #define SDL_PRIx64 "llx"
 #endif
@@ -200,6 +206,8 @@ typedef uint64_t Uint64;
 #define SDL_PRIX64 PRIX64
 #elif defined(__WIN32__)
 #define SDL_PRIX64 "I64X"
+#elif defined(__LINUX__) && defined(__LP64__)
+#define SDL_PRIX64 "lX"
 #else
 #define SDL_PRIX64 "llX"
 #endif
@@ -218,7 +226,7 @@ typedef uint64_t Uint64;
 #define SDL_PRINTF_VARARG_FUNC( fmtargnumber )
 #define SDL_SCANF_VARARG_FUNC( fmtargnumber )
 #else
-#if _MSC_VER >= 1600 /* VS 2010 and above */
+#if defined(_MSC_VER) && (_MSC_VER >= 1600) /* VS 2010 and above */
 #include <sal.h>
 
 #define SDL_IN_BYTECAP(x) _In_bytecount_(x)
