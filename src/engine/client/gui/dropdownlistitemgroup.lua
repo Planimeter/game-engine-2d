@@ -64,8 +64,8 @@ function dropdownlistitemgroup:isVisible()
 	return dropDownList:isVisible() and dropDownList:isActive()
 end
 
-function dropdownlistitemgroup:mousepressed( x, y, button )
-	if ( button == "l" ) then
+function dropdownlistitemgroup:mousepressed( x, y, button, istouch )
+	if ( button == 1 ) then
 		local dropDownList = self:getDropDownList()
 		if ( dropDownList ~= gui.topPanel and
 		   ( not ( self.mouseover or self:isChildMousedOver() ) ) ) then
@@ -73,7 +73,7 @@ function dropdownlistitemgroup:mousepressed( x, y, button )
 		end
 	end
 
-	return gui.panel.mousepressed( self, x, y, button )
+	return gui.panel.mousepressed( self, x, y, button, istouch )
 end
 
 function dropdownlistitemgroup:onValueChanged( oldValue, newValue )

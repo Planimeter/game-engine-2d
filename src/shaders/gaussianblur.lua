@@ -75,7 +75,7 @@ function gaussianblur:renderTo(func)
 	self.canvas_h:renderTo(func)
 
 	local b = graphics.getBlendMode()
-	graphics.setBlendMode('premultiplied')
+	graphics.setBlendMode('alpha', 'premultiplied')
 
 	-- second pass (vertical blur)
 	self.shader:send('direction', {0, 1 / graphics.getViewportHeight()})

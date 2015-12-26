@@ -11,11 +11,44 @@ class "vaplayer" ( "player" )
 function vaplayer:vaplayer()
 	player.player( self )
 
+	-- TODO: Make this affected by skill level.
+	self:networkNumber( "health", 100 )
+
+	self.stats   = {
+		health   = 0,
+		prayer   = 0,
+		attack   = 0,
+		defense  = 0,
+		range    = 0,
+		magic    = 0,
+		fishing  = 0,
+		cooking  = 0,
+		mining   = 0,
+		smithing = 0
+	}
+
 	self.inventory = {}
+end
+
+function vaplayer:addExperience( stat, xp )
+	self.stats[ stat ] = self.stats[ stat ] + xp
+	game.call( "shared", "onPlayerGainedExperience", self, stat, xp )
+end
+
+function vaplayer:getExperience( stat )
+	return self.stats[ stat ] or -1
 end
 
 function vaplayer:getInventory()
 	return self.inventory
+end
+
+function vaplayer:getLevel( stat )
+	if ( stat ) then
+		return self.stats[ stat ] or -1
+	end
+
+	return -1
 end
 
 function vaplayer:give( item, count )
@@ -32,9 +65,12 @@ end
 
 local function pickup( item )
 	return function( vaplayer, next )
-		local classname = item:getClassname()
-		item:remove()
-		vaplayer:give( classname )
+		if ( _SERVER ) then
+			local classname = item:getClassname()
+			item:remove()
+			vaplayer:give( classname )
+		end
+
 		next()
 	end
 end

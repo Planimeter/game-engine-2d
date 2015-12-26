@@ -123,25 +123,23 @@ local localX, localY   = 0, 0
 local mouseIntersects  = false
 local pointinrectangle = math.pointinrectangle
 
-function tabbedframe:mousepressed( x, y, button )
-	if ( gui.panel.mousepressed( self, x, y, button ) ) then
+function tabbedframe:mousepressed( x, y, button, istouch )
+	if ( gui.panel.mousepressed( self, x, y, button, istouch ) ) then
 		return true
 	end
 
-	if ( not ( button == "wd" or button == "wu" ) ) then
-		if ( self.mouseover or self:isChildMousedOver() ) then
-			self.mousedown = self.mouseover
+	if ( self.mouseover or self:isChildMousedOver() ) then
+		self.mousedown = self.mouseover
 
-			if ( not self:isTopMostChild() ) then
-				self:moveToFront()
-				self:setFocusedFrame( true )
-			end
-		else
-			self:setFocusedFrame( false )
+		if ( not self:isTopMostChild() ) then
+			self:moveToFront()
+			self:setFocusedFrame( true )
 		end
+	else
+		self:setFocusedFrame( false )
 	end
 
-	if ( self.mousedown and button == "l" ) then
+	if ( self.mousedown and button == 1 ) then
 		localX, localY = self:screenToLocal( x, y )
 		self.grabbedX  = localX
 		self.grabbedY  = localY

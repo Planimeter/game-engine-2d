@@ -82,8 +82,8 @@ local function getParentFrame( self )
 	end
 end
 
-function dropdownlistitem:mousepressed( x, y, button )
-	if ( self.mouseover and button == "l" ) then
+function dropdownlistitem:mousepressed( x, y, button, istouch )
+	if ( self.mouseover and button == 1 ) then
 		self.mousedown = true
 	end
 

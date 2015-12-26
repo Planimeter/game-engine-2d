@@ -16,7 +16,8 @@ local missingImage = false
 
 function throbber:draw()
 	gui.image.maskedImage = self
-	graphics.setStencil( gui.image.drawMask )
+	graphics.stencil( gui.image.drawMask )
+	graphics.setStencilTest( "greater", 0 )
 		graphics.setColor( self:getColor() )
 		graphics.draw( self:getImage(),
 		               self:getWidth()  / 2,
@@ -26,7 +27,7 @@ function throbber:draw()
 		               1,
 		               self:getWidth()  / 2,
 		               self:getHeight() / 2 )
-	graphics.setStencil()
+	graphics.setStencilTest()
 
 	missingImage = self:getImage() == graphics.error
 	if ( missingImage ) then

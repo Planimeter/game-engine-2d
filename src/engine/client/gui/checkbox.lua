@@ -76,7 +76,7 @@ function checkbox:isChecked()
 	return self.checked
 end
 
-function checkbox:mousereleased( x, y, button )
+function checkbox:mousereleased( x, y, button, istouch )
 	if ( ( self.mousedown and self.mouseover ) and not self:isDisabled() ) then
 		self:onClick()
 		self:setChecked( not self:isChecked() )

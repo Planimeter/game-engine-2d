@@ -130,24 +130,20 @@ function joystickreleased( joystick, button )
 	rootPanel:joystickreleased( joystick, button )
 end
 
-function textinput( text )
-	rootPanel:textinput( text )
+function keypressed( key, scancode, isrepeat )
+	return rootPanel:keypressed( key, scancode, isrepeat )
 end
 
-function keypressed( key, isrepeat )
-	return rootPanel:keypressed( key, isrepeat )
+function keyreleased( key, scancode )
+	return rootPanel:keyreleased( key, scancode )
 end
 
-function keyreleased( key )
-	return rootPanel:keyreleased( key )
+function mousepressed( x, y, button, istouch )
+	return rootPanel:mousepressed( x, y, button, istouch )
 end
 
-function mousepressed( x, y, button )
-	return rootPanel:mousepressed( x, y, button )
-end
-
-function mousereleased( x, y, button )
-	return rootPanel:mousereleased( x, y, button )
+function mousereleased( x, y, button, istouch )
+	return rootPanel:mousereleased( x, y, button, istouch )
 end
 
 function preDrawWorld()
@@ -196,6 +192,14 @@ function setFocusedPanel( panel, focus )
 	end
 end
 
+function textinput( text )
+	rootPanel:textinput( text )
+end
+
+function textedited( text, start, length )
+	rootPanel:textedited( text, start, length )
+end
+
 function update( dt )
 	if ( not input.getKeyTrap() ) then
 		updateMouseOver()
@@ -227,4 +231,8 @@ function updateMouseOver()
 			topPanel:invalidate()
 		end
 	end
+end
+
+function wheelmoved( x, y )
+	return rootPanel:wheelmoved( x, y )
 end

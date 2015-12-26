@@ -5,7 +5,6 @@
 --============================================================================--
 
 -- These values are preserved during real-time scripting.
-local _shim  = graphics and graphics.shim  or nil
 local _error = graphics and graphics.error or nil
 
 require( "common.color" )
@@ -58,18 +57,12 @@ grid.dark = {
 
 grid.marks = {}
 
-shim  = _shim
 error = _error
 
 function initialize()
 	-- Set defaults
 	setBackgroundColor( grid.dark.backgroundColor )
 	graphics.setLineStyle( "rough" )
-
-	-- Set shim
-	if ( not graphics.isSupported( "canvas" ) ) then
-		shim = newImage( "images/shim.png" )
-	end
 
 	-- Set error
 	error = newImage( "images/error.png" )
@@ -200,12 +193,6 @@ function getShader()
 	return graphics.getShader()
 end
 
-local _stencilFunction = nil
-
-function getStencil()
-	return _stencilFunction
-end
-
 function getViewportAspectRatio()
 	w = graphics.getWidth()
 	h = graphics.getHeight()
@@ -245,10 +232,6 @@ function newQuad( x, y, width, height, sw, sh )
 end
 
 function newShader( ... )
-	if ( not graphics.isSupported( "shader" ) ) then
-		return nil
-	end
-
 	return graphics.newShader( ... )
 end
 
@@ -270,7 +253,17 @@ function pop()
 	graphics.pop()
 end
 
+local floor = math.floor
+
 function print( text, x, y, r, sx, sy, ox, oy, kx, ky, tracking )
+	if ( x ) then
+		x = floor( x )
+	end
+
+	if ( y ) then
+		y = floor( y )
+	end
+
 	if ( tracking ) then
 		local font = graphics.getFont()
 		local char
@@ -286,6 +279,14 @@ function print( text, x, y, r, sx, sy, ox, oy, kx, ky, tracking )
 end
 
 function printf( text, x, y, limit, align, r, sx, sy, ox, oy, kx, ky )
+	if ( x ) then
+		x = floor( x )
+	end
+
+	if ( y ) then
+		y = floor( y )
+	end
+
 	graphics.printf( text, x, y, limit, align, r, sx, sy, ox, oy, kx, ky )
 end
 
@@ -383,16 +384,15 @@ function setOpacity( opacity )
 end
 
 function setShader( shader )
-	if ( not graphics.isSupported( "shader" ) ) then
-		return
-	end
-
 	graphics.setShader( shader )
 end
 
-function setStencil( stencilFunction )
-	_stencilFunction = stencilFunction
-	graphics.setStencil( stencilFunction )
+function setStencilTest( comparemode, comparevalue )
+	return graphics.setStencilTest( comparemode, comparevalue )
+end
+
+function stencil( stencilfunction, action, value, keepvalues )
+	graphics.stencil( stencilfunction, action, value, keepvalues )
 end
 
 function translate( dx, dy )

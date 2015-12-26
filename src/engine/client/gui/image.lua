@@ -25,10 +25,11 @@ local missingImage = false
 
 function imagepanel:draw()
 	gui.image.maskedImage = self
-	graphics.setStencil( gui.image.drawMask )
+	graphics.stencil( gui.image.drawMask )
+	graphics.setStencilTest( "greater", 0 )
 		graphics.setColor( self:getColor() )
 		graphics.draw( self:getImage(), self:getQuad() )
-	graphics.setStencil()
+	graphics.setStencilTest()
 
 	missingImage = self:getImage() == graphics.error
 	if ( missingImage ) then

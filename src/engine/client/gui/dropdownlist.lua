@@ -143,8 +143,8 @@ function dropdownlist:isChildMousedOver()
 	return false
 end
 
-function dropdownlist:mousepressed( x, y, button )
-	if ( button == "l" ) then
+function dropdownlist:mousepressed( x, y, button, istouch )
+	if ( button == 1 ) then
 		if ( self.mouseover ) then
 			self.mousedown = true
 			self:invalidate()
@@ -161,7 +161,7 @@ function dropdownlist:mousepressed( x, y, button )
 	end
 end
 
-function dropdownlist:mousereleased( x, y, button )
+function dropdownlist:mousereleased( x, y, button, istouch )
 	if ( self.mousedown ) then
 		self.mousedown = false
 		self:invalidate()

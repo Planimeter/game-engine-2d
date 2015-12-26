@@ -92,7 +92,7 @@ function radiobutton:isSelected()
 	return self.selected
 end
 
-function radiobutton:mousereleased( x, y, button )
+function radiobutton:mousereleased( x, y, button, istouch )
 	if ( ( self.mousedown and self.mouseover ) and not self:isDisabled() ) then
 		local radiobuttongroup = self:getGroup()
 		if ( radiobuttongroup ) then

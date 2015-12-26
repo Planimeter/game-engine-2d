@@ -181,9 +181,10 @@ function panel:drawFramebuffer()
 	end
 
 	gui.panel.maskedPanel = self
-	graphics.setStencil( gui.panel.drawMask )
+	graphics.stencil( gui.panel.drawMask )
+	graphics.setStencilTest( "greater", 0 )
 		self.framebuffer:draw()
-	graphics.setStencil()
+	graphics.setStencilTest()
 end
 
 function panel:getChildren()
@@ -348,16 +349,12 @@ function panel:joystickreleased( joystick, button )
 	return cascadeInputToChildren( self, "joystickreleased", joystick, button )
 end
 
-function panel:keypressed( key, isrepeat )
-	return cascadeInputToChildren( self, "keypressed", key, isrepeat )
+function panel:keypressed( key, scancode, isrepeat )
+	return cascadeInputToChildren( self, "keypressed", key, scancode, isrepeat )
 end
 
-function panel:keyreleased( key )
-	return cascadeInputToChildren( self, "keyreleased", key )
-end
-
-function panel:textinput( text )
-	return cascadeInputToChildren( self, "textinput", text )
+function panel:keyreleased( key, scancode )
+	return cascadeInputToChildren( self, "keyreleased", key, scancode )
 end
 
 local posX, posY = 0, 0
@@ -375,11 +372,11 @@ function panel:localToScreen( x, y )
 	return posX, posY
 end
 
-function panel:mousepressed( x, y, button )
+function panel:mousepressed( x, y, button, istouch )
 	return cascadeInputToChildren( self, "mousepressed", x, y, button )
 end
 
-function panel:mousereleased( x, y, button )
+function panel:mousereleased( x, y, button, istouch )
 	if ( not self:isVisible() ) then
 		return
 	end
@@ -388,7 +385,7 @@ function panel:mousereleased( x, y, button )
 	if ( children ) then
 		for _, v in ipairs( children ) do
 			if ( v:isVisible() ) then
-				v:mousereleased( x, y, button )
+				v:mousereleased( x, y, button, istouch )
 			end
 		end
 	end
@@ -574,6 +571,7 @@ end
 
 function panel:setVisible( visible )
 	self.visible = visible
+	self:invalidate()
 end
 
 function panel:setWidth( width )
@@ -621,6 +619,14 @@ end
 
 function panel:shouldSuppressFramebufferWarnings()
 	return self.suppressFramebufferWarnings
+end
+
+function panel:textinput( text )
+	return cascadeInputToChildren( self, "textinput", text )
+end
+
+function panel:textedited( text, start, length )
+	return cascadeInputToChildren( self, "textedited", text, start, length )
 end
 
 function panel:update( dt )
@@ -699,6 +705,10 @@ function panel:updateAnimations( dt )
 	if ( len( self.animations ) == 0 ) then
 		self.animations = nil
 	end
+end
+
+function panel:wheelmoved( x, y )
+	return cascadeInputToChildren( self, "wheelmoved", x, y )
 end
 
 function panel:__tostring()

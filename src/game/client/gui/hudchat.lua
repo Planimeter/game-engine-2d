@@ -118,14 +118,14 @@ function hudchat:drawForeground()
 	graphics.rectangle( "line", 0, 0, self:getWidth(), self:getHeight() )
 end
 
-function hudchat:keypressed( key, isrepeat )
+function hudchat:keypressed( key, scancode, isrepeat )
 	if ( key == "escape" ) then
 		self:close()
 		self.output:hide()
 		return true
 	end
 
-	return gui.panel.keypressed( self, key, isrepeat )
+	return gui.panel.keypressed( self, key, scancode, isrepeat )
 end
 
 function hudchat:invalidateLayout()

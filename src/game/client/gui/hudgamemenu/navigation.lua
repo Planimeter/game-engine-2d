@@ -14,16 +14,12 @@ function hudgamemenunavigation:hudgamemenunavigation( parent )
 		"Inventory",
 		-- "Prayer",
 		-- "Spells",
-		-- "Stats",
+		"Stats",
 		-- "Quests"
 	}
 
 	for _, name in ipairs( self.tabs ) do
 		local item = gui.hudgamemenunavigationbutton( self, name )
-		if ( name ~= "Inventory" ) then
-			item:setDisabled( true )
-		end
-
 		self:addItem( item )
 	end
 end
@@ -57,6 +53,7 @@ function hudgamemenunavigation:invalidateLayout()
 			x = x + listItem:getWidth() + 18
 		end
 	end
+	gui.panel.invalidateLayout( self )
 end
 
 function hudgamemenunavigation:onValueChanged( oldValue, newValue )
@@ -67,7 +64,9 @@ function hudgamemenunavigation:onValueChanged( oldValue, newValue )
 	end
 
 	if ( newValue ) then
-		parent[ string.lower( newValue ) ]:setVisible( true )
+		local panel = parent[ string.lower( newValue ) ]
+		panel:setVisible( true )
+		panel:invalidateLayout()
 	end
 end
 

@@ -88,6 +88,9 @@ setmetatable( _M, metatable )
 client = clientengine
 server = serverengine
 
+function directorydropped( path )
+end
+
 function draw()
 	if ( _CLIENT ) then
 		client.draw()
@@ -100,6 +103,9 @@ end
 
 if ( _SERVER ) then
 	errhand = server.errhand
+end
+
+function filedropped( file )
 end
 
 function focus( f )
@@ -132,33 +138,23 @@ function joystickreleased( joystick, button )
 	end
 end
 
-function textinput( t )
+function keypressed( key, scancode, isrepeat )
 	if ( _CLIENT ) then
-		client.textinput( t )
+		client.keypressed( key, scancode, isrepeat )
 	end
 
 	if ( _INTERACTIVE ) then
-		gui.textinput( t )
+		gui.keypressed( key, scancode, isrepeat )
 	end
 end
 
-function keypressed( key, isrepeat )
+function keyreleased( key, scancode )
 	if ( _CLIENT ) then
-		client.keypressed( key, isrepeat )
+		client.keyreleased( key, scancode )
 	end
 
 	if ( _INTERACTIVE ) then
-		gui.keypressed( key, isrepeat )
-	end
-end
-
-function keyreleased( key )
-	if ( _CLIENT ) then
-		client.keyreleased( key )
-	end
-
-	if ( _INTERACTIVE ) then
-		gui.keyreleased( key )
+		gui.keyreleased( key, scancode )
 	end
 end
 
@@ -197,23 +193,26 @@ function load( arg )
 	addon.initialize()
 end
 
-function mousepressed( x, y, button )
+function lowmemory()
+end
+
+function mousepressed( x, y, button, istouch )
 	if ( _CLIENT ) then
-		client.mousepressed( x, y, button )
+		client.mousepressed( x, y, button, istouch )
 	end
 
 	if ( _INTERACTIVE ) then
-		gui.mousepressed( x, y, button )
+		gui.mousepressed( x, y, button, istouch )
 	end
 end
 
-function mousereleased( x, y, button )
+function mousereleased( x, y, button, istouch )
 	if ( _CLIENT ) then
-		client.mousereleased( x, y, button )
+		client.mousereleased( x, y, button, istouch )
 	end
 
 	if ( _INTERACTIVE ) then
-		gui.mousereleased( x, y, button )
+		gui.mousereleased( x, y, button, istouch )
 	end
 end
 
@@ -272,8 +271,58 @@ function resize( w, h )
 	end
 end
 
+function textedited( text, start, length )
+	if ( _CLIENT ) then
+		client.textedited( text, start, length )
+	end
+
+	if ( _INTERACTIVE ) then
+		gui.textedited( text, start, length )
+	end
+end
+
+function textinput( t )
+	if ( _CLIENT ) then
+		client.textinput( t )
+	end
+
+	if ( _INTERACTIVE ) then
+		gui.textinput( t )
+	end
+end
+
 function threaderror( t, errorstr )
 	thread.handleError( t, errorstr )
+end
+
+function touchmoved( id, x, y, pressure )
+	if ( _CLIENT ) then
+		client.touchmoved( id, x, y, pressure )
+	end
+
+	if ( _INTERACTIVE ) then
+		gui.touchmoved( id, x, y, pressure )
+	end
+end
+
+function touchpressed( id, x, y, pressure )
+	if ( _CLIENT ) then
+		client.touchpressed( id, x, y, pressure )
+	end
+
+	if ( _INTERACTIVE ) then
+		gui.touchpressed( id, x, y, pressure )
+	end
+end
+
+function touchreleased( id, x, y, pressure )
+	if ( _CLIENT ) then
+		client.touchreleased( id, x, y, pressure )
+	end
+
+	if ( _INTERACTIVE ) then
+		gui.touchreleased( id, x, y, pressure )
+	end
 end
 
 local timestep    = 1/33
@@ -325,24 +374,52 @@ function update( dt )
 	processChannels()
 end
 
+function wheelmoved( x, y )
+	if ( _CLIENT ) then
+		client.wheelmoved( x, y )
+	end
+
+	if ( _INTERACTIVE ) then
+		gui.wheelmoved( x, y )
+	end
+end
+
 do
+	love.directorydropped = directorydropped
 	love.draw             = draw
 
 	if ( errhand ) then
 		love.errhand      = errhand
 	end
 
+	love.filedropped      = filedropped
 	love.focus            = focus
+	love.gamepadaxis      = gamepadaxis
+	love.gamepadpressed   = gamepadpressed
+	love.gamepadreleased  = gamepadreleased
+	love.joystickadded    = joystickadded
+	love.joystickaxis     = joystickaxis
+	love.joystickhat      = joystickhat
 	love.joystickpressed  = joystickpressed
 	love.joystickreleased = joystickreleased
-	love.textinput        = textinput
+	love.joystickremoved  = joystickremoved
 	love.keypressed       = keypressed
 	love.keyreleased      = keyreleased
 	love.load             = load
+	love.lowmemory        = lowmemory
+	love.mousefocus       = mousefocus
+	love.mousemoved       = mousemoved
 	love.mousepressed     = mousepressed
 	love.mousereleased    = mousereleased
 	love.quit             = quit
 	love.resize           = resize
+	love.textinput        = textinput
+	love.textedited       = textedited
 	love.threaderror      = threaderror
+	love.touchmoved       = touchmoved
+	love.touchpressed     = touchpressed
+	love.touchreleased    = touchreleased
 	love.update           = update
+	love.visible          = visible
+	love.wheelmoved       = wheelmoved
 end

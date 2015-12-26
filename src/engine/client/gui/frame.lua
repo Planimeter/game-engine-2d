@@ -77,6 +77,7 @@ function frame:close()
 end
 
 function frame:doModal()
+	self.modal = true
 	self:setResizable( false )
 	self:setMovable( false )
 
@@ -207,7 +208,7 @@ function frame:moveFocus()
 	end
 end
 
-function frame:keypressed( key, isrepeat )
+function frame:keypressed( key, scancode, isrepeat )
 	if ( self.closing ) then
 		return
 	end
@@ -217,40 +218,40 @@ function frame:keypressed( key, isrepeat )
 		if ( key == "tab" ) then
 			self:moveFocus()
 		elseif ( key == "w" and controlDown ) then
-			self:close()
+			if ( not self.modal ) then
+				self:close()
+			end
 		end
 	end
 
-	return gui.panel.keypressed( self, key, isrepeat )
+	return gui.panel.keypressed( self, key, scancode, isrepeat )
 end
 
 local localX, localY   = 0, 0
 local mouseIntersects  = false
 local pointinrectangle = math.pointinrectangle
 
-function frame:mousepressed( x, y, button )
+function frame:mousepressed( x, y, button, istouch )
 	if ( self.closing ) then
 		return
 	end
 
-	if ( gui.panel.mousepressed( self, x, y, button ) ) then
+	if ( gui.panel.mousepressed( self, x, y, button, istouch ) ) then
 		return true
 	end
 
-	if ( not ( button == "wd" or button == "wu" ) ) then
-		if ( self.mouseover or self:isChildMousedOver() ) then
-			self.mousedown = self.mouseover
+	if ( self.mouseover or self:isChildMousedOver() ) then
+		self.mousedown = self.mouseover
 
-			if ( not self:isTopMostChild() ) then
-				self:moveToFront()
-				self:setFocusedFrame( true )
-			end
-		else
-			self:setFocusedFrame( false )
+		if ( not self:isTopMostChild() ) then
+			self:moveToFront()
+			self:setFocusedFrame( true )
 		end
+	else
+		self:setFocusedFrame( false )
 	end
 
-	if ( self.mousedown and button == "l" ) then
+	if ( self.mousedown and button == 1 ) then
 		localX, localY = self:screenToLocal( x, y )
 		self.grabbedX  = localX
 		self.grabbedY  = localY
@@ -387,12 +388,12 @@ function frame:mousepressed( x, y, button )
 	end
 end
 
-function frame:mousereleased( x, y, button )
+function frame:mousereleased( x, y, button, istouch )
 	if ( self.closing ) then
 		return
 	end
 
-	gui.panel.mousereleased( self, x, y, button )
+	gui.panel.mousereleased( self, x, y, button, istouch )
 
 	self.mousedown = false
 	self.grabbedX  = nil

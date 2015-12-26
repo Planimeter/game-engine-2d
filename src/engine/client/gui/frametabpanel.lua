@@ -31,14 +31,14 @@ local function getParentFrame( self )
 	end
 end
 
-function frametabpanel:keypressed( key, isrepeat )
+function frametabpanel:keypressed( key, scancode, isrepeat )
 	local parentFrame = getParentFrame( self )
 	local parentFocus = parentFrame and parentFrame.focus
 	if ( key == "tab" and ( self.focus or parentFocus ) ) then
 		gui.frame.moveFocus( self )
 	end
 
-	return gui.panel.keypressed( self, key, isrepeat )
+	return gui.panel.keypressed( self, key, scancode, isrepeat )
 end
 
 gui.register( frametabpanel, "frametabpanel" )

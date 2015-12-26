@@ -129,7 +129,8 @@ end
 
 function textbox:drawText()
 	gui.textbox.maskedTextbox = self
-	graphics.setStencil( gui.textbox.drawMask )
+	graphics.stencil( gui.textbox.drawMask )
+	graphics.setStencilTest( "greater", 0 )
 		local property = "textbox.textColor"
 		local text     = self.placeholder
 
@@ -159,7 +160,7 @@ function textbox:drawText()
 		else
 			graphics.printf( text, x, y, self:getWidth() - 2 * self.padding )
 		end
-	graphics.setStencil()
+	graphics.setStencilTest()
 end
 
 local function getTextWidth( self )
@@ -170,7 +171,7 @@ end
 local function getTextHeight( self )
 	local font         = self:getScheme( "font" )
 	local width, lines = font:getWrap( self.text, getInnerWidth( self ) )
-	return lines * font:getHeight()
+	return #lines * font:getHeight()
 end
 
 local function isTextOverflowing( self )
@@ -502,7 +503,7 @@ local function selectSuggestion( self, dir )
 	end
 end
 
-function textbox:keypressed( key, isrepeat )
+function textbox:keypressed( key, scancode, isrepeat )
 	if ( not self.focus or not self:isEditable() ) then
 		return
 	end
@@ -590,7 +591,7 @@ function textbox:keypressed( key, isrepeat )
 	return true
 end
 
-function textbox:keyreleased( key )
+function textbox:keyreleased( key, scancode )
 	if ( not self.focus or not self:isEditable() ) then
 		return
 	end
@@ -600,44 +601,29 @@ end
 
 local posX, posY = 0, 0
 
-function textbox:mousepressed( x, y, button )
+function textbox:mousepressed( x, y, button, istouch )
 	if ( self.mouseover and not self:isDisabled() ) then
 		posX, posY = self:screenToLocal( x, y )
-		if ( button == "l" ) then
+		if ( button == 1 ) then
 			self.mousedown = true
 			self:onClick( posX, posY )
-		elseif ( button == "r" ) then
+		elseif ( button == 2 ) then
 			self.mousedown = true
 			-- TODO: Implement gui.contextmenu!!
 			-- self:openContextMenu( posX, posY )
-		elseif ( button == "wd" ) then
-			if ( self.scrollbar ) then
-				local font = self:getScheme( "font" )
-				self.scrollbar:scrollDown( 3 * font:getHeight() )
-				return true
-			end
-		elseif ( button == "wu" ) then
-			if ( self.scrollbar ) then
-				local font = self:getScheme( "font" )
-				self.scrollbar:scrollUp( 3 * font:getHeight() )
-				return true
-			end
 		end
 	else
-		local mousewheelPressed = button == "wd" or button == "wu"
-		if ( self.focus            and
-		     not mousewheelPressed and
-		     not self:isChildMousedOver() ) then
+		if ( self.focus and not self:isChildMousedOver() ) then
 			gui.setFocusedPanel( self, false )
 		end
 	end
 
-	return gui.panel.mousepressed( self, x, y, button )
+	return gui.panel.mousepressed( self, x, y, button, istouch )
 end
 
-function textbox:mousereleased( x, y, button )
+function textbox:mousereleased( x, y, button, istouch )
 	self.mousedown = false
-	gui.panel.mousereleased( self, x, y, button )
+	gui.panel.mousereleased( self, x, y, button, istouch )
 end
 
 function textbox:onChange( text )
@@ -808,6 +794,26 @@ function textbox:update( dt )
 	end
 
 	gui.panel.update( self, dt )
+end
+
+function textbox:wheelmoved( x, y )
+	if ( self.mouseover and not self:isDisabled() ) then
+		if ( y < 0 ) then
+			if ( self.scrollbar ) then
+				local font = self:getScheme( "font" )
+				self.scrollbar:scrollDown( 3 * font:getHeight() )
+				return true
+			end
+		elseif ( y > 0 ) then
+			if ( self.scrollbar ) then
+				local font = self:getScheme( "font" )
+				self.scrollbar:scrollUp( 3 * font:getHeight() )
+				return true
+			end
+		end
+	end
+
+	return gui.panel.wheelmoved( self, x, y )
 end
 
 gui.register( textbox, "textbox" )

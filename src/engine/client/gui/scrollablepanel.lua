@@ -44,35 +44,14 @@ local function getParentFrame( self )
 	end
 end
 
-function scrollablepanel:keypressed( key, isrepeat )
+function scrollablepanel:keypressed( key, scancode, isrepeat )
 	local parentFrame = getParentFrame( self )
 	local parentFocus = parentFrame and parentFrame.focus
 	if ( key == "tab" and ( self.focus or parentFocus ) ) then
 		gui.frame.moveFocus( self.panel )
 	end
 
-	return gui.panel.keypressed( self, key, isrepeat )
-end
-
-function scrollablepanel:mousepressed( x, y, button )
-	local panel = self:getInnerPanel()
-	if ( panel.mouseover or panel:isChildMousedOver() ) then
-		local scrollbar = self:getScrollbar()
-		if ( scrollbar ) then
-			local font = self:getScheme( "font" )
-			if ( button == "wd" ) then
-				gui.setFocusedPanel( nil, false )
-				scrollbar:scrollDown( 3 * font:getHeight() )
-				return true
-			elseif ( button == "wu" ) then
-				gui.setFocusedPanel( nil, false )
-				scrollbar:scrollUp( 3 * font:getHeight() )
-				return true
-			end
-		end
-	end
-
-	return gui.panel.mousepressed( self, x, y, button )
+	return gui.panel.keypressed( self, key, scancode, isrepeat )
 end
 
 function scrollablepanel:setWidth( width )
@@ -89,6 +68,27 @@ function scrollablepanel:setInnerHeight( innerHeight )
 	self.innerHeight = innerHeight
 	self.panel:setHeight( innerHeight )
 	self.scrollbar:setRange( 0, innerHeight )
+end
+
+function scrollablepanel:wheelmoved( x, y )
+	local panel = self:getInnerPanel()
+	if ( panel.mouseover or panel:isChildMousedOver() ) then
+		local scrollbar = self:getScrollbar()
+		if ( scrollbar ) then
+			local font = self:getScheme( "font" )
+			if ( y < 0 ) then
+				gui.setFocusedPanel( nil, false )
+				scrollbar:scrollDown( 3 * font:getHeight() )
+				return true
+			elseif ( y > 0 ) then
+				gui.setFocusedPanel( nil, false )
+				scrollbar:scrollUp( 3 * font:getHeight() )
+				return true
+			end
+		end
+	end
+
+	return gui.panel.wheelmoved( self, x, y )
 end
 
 gui.register( scrollablepanel, "scrollablepanel" )

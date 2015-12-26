@@ -58,8 +58,8 @@ function textboxautocompleteitemgroup:isVisible()
 	return textBox:isVisible() and textBox.focus and hasChildren
 end
 
-function textboxautocompleteitemgroup:mousepressed( x, y, button )
-	if ( button == "l" ) then
+function textboxautocompleteitemgroup:mousepressed( x, y, button, istouch )
+	if ( button == 1 ) then
 		local textBox = self:getTextBox()
 		if ( textBox ~= gui.topPanel and
 		   ( not ( self.mouseover or self:isChildMousedOver() ) ) ) then
@@ -69,7 +69,7 @@ function textboxautocompleteitemgroup:mousepressed( x, y, button )
 		end
 	end
 
-	return gui.panel.mousepressed( self, x, y, button )
+	return gui.panel.mousepressed( self, x, y, button, istouch )
 end
 
 function textboxautocompleteitemgroup:onValueChanged( oldValue, newValue )

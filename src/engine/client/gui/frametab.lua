@@ -75,8 +75,8 @@ function frametab:drawText()
 	graphics.print( self.text, x, y )
 end
 
-function frametab:mousepressed( x, y, button )
-	if ( self.mouseover and button == "l" ) then
+function frametab:mousepressed( x, y, button, istouch )
+	if ( self.mouseover and button == 1 ) then
 		self.mousedown = true
 
 		if ( not self:isDisabled() ) then
@@ -91,7 +91,7 @@ function frametab:mousepressed( x, y, button )
 	self:invalidate()
 end
 
-function frametab:mousereleased( x, y, button )
+function frametab:mousereleased( x, y, button, istouch )
 	self.mousedown = false
 	self:invalidate()
 end

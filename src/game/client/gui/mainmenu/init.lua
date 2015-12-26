@@ -267,7 +267,7 @@ function mainmenu:drawLogo()
 	graphics.draw( logo:getDrawable(), marginX, marginPhi, 0, scale, scale )
 end
 
-function mainmenu:keypressed( key, isrepeat )
+function mainmenu:keypressed( key, scancode, isrepeat )
 	if ( self.closing ) then
 		return
 	end
@@ -276,23 +276,23 @@ function mainmenu:keypressed( key, isrepeat )
 		gui.frame.moveFocus( self )
 	end
 
-	return gui.panel.keypressed( self, key, isrepeat )
+	return gui.panel.keypressed( self, key, scancode, isrepeat )
 end
 
-function mainmenu:mousepressed( x, y, button )
+function mainmenu:mousepressed( x, y, button, istouch )
 	if ( self.closing ) then
 		return
 	end
 
-	return gui.panel.mousepressed( self, x, y, button )
+	return gui.panel.mousepressed( self, x, y, button, istouch )
 end
 
-function mainmenu:mousereleased( x, y, button )
+function mainmenu:mousereleased( x, y, button, istouch )
 	if ( self.closing ) then
 		return
 	end
 
-	gui.panel.mousereleased( self, x, y, button )
+	gui.panel.mousereleased( self, x, y, button, istouch )
 end
 
 function mainmenu:remove()

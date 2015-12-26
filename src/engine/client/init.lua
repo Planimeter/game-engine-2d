@@ -292,17 +292,13 @@ function joystickreleased( joystick, button )
 	gui.joystickreleased( joystick, button )
 end
 
-function textinput( t )
-	gui.textinput( t )
-end
-
-function keypressed( key, isrepeat )
+function keypressed( key, scancode, isrepeat )
 	require( "engine.client.input" )
 	if ( _G.input.isKeyTrapped( key ) ) then
 		return
 	end
 
-	if ( gui.keypressed( key, isrepeat ) ) then
+	if ( gui.keypressed( key, scancode, isrepeat ) ) then
 		return
 	end
 
@@ -316,15 +312,15 @@ function keypressed( key, isrepeat )
 		end
 	end
 
-	bind.keypressed( key, isrepeat )
+	bind.keypressed( key, scancode, isrepeat )
 end
 
-function keyreleased( key )
-	if ( gui.keyreleased( key ) ) then
+function keyreleased( key, scancode )
+	if ( gui.keyreleased( key, scancode ) ) then
 		return
 	end
 
-	bind.keyreleased( key )
+	bind.keyreleased( key, scancode )
 end
 
 function load( arg )
@@ -342,13 +338,13 @@ function load( arg )
 	bind.readBinds()
 end
 
-function mousepressed( x, y, button )
+function mousepressed( x, y, button, istouch )
 	require( "engine.client.input" )
 	if ( _G.input.isKeyTrapped( button ) ) then
 		return
 	end
 
-	if ( gui.mousepressed( x, y, button ) ) then
+	if ( gui.mousepressed( x, y, button, istouch ) ) then
 		return
 	end
 
@@ -356,15 +352,15 @@ function mousepressed( x, y, button )
 		return
 	end
 
-	bind.mousepressed( x, y, button )
+	bind.mousepressed( x, y, button, istouch )
 end
 
-function mousereleased( x, y, button )
-	if ( gui.mousereleased( x, y, button ) ) then
+function mousereleased( x, y, button, istouch )
+	if ( gui.mousereleased( x, y, button, istouch ) ) then
 		return
 	end
 
-	bind.mousereleased( x, y, button )
+	bind.mousereleased( x, y, button, istouch )
 end
 
 local sendAuthTicket = nil
@@ -486,6 +482,14 @@ function sendClientInfo()
 	network.sendToServer( payload )
 end
 
+function textinput( t )
+	gui.textinput( t )
+end
+
+function textedited( text, start, length )
+	gui.textedited( text, start, length )
+end
+
 function quit()
 end
 
@@ -497,4 +501,33 @@ function update( dt )
 	if ( network ) then
 		network.update( dt )
 	end
+end
+
+local mx, my = 0, 0
+local button = nil
+
+function wheelmoved( x, y )
+	require( "engine.client.input" )
+	mx, my = _G.input.getMousePosition()
+	button = nil
+	if ( y < 0 ) then
+		button = "wd"
+	elseif ( y > 0 ) then
+		button = "wu"
+	end
+
+	require( "engine.client.input" )
+	if ( _G.input.isKeyTrapped( button ) ) then
+		return
+	end
+
+	if ( gui.wheelmoved( x, y ) ) then
+		return
+	end
+
+	if ( _G.g_MainMenu:isVisible() ) then
+		return
+	end
+
+	bind.mousepressed( mx, my, button, false )
 end

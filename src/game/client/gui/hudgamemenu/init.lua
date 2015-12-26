@@ -1,16 +1,8 @@
-		--========= Copyright © 2013-2015, Planimeter, All rights reserved. ==========--
+--========= Copyright © 2013-2015, Planimeter, All rights reserved. ==========--
 --
 -- Purpose: Game Menu HUD
 --
 --============================================================================--
-
-require( "game.client.gui.hudgamemenu.navigation" )
-require( "game.client.gui.hudgamemenu.navigationbutton" )
-require( "game.client.gui.hudgamemenu.inventory" )
-require( "game.client.gui.hudgamemenu.prayer" )
-require( "game.client.gui.hudgamemenu.spells" )
-require( "game.client.gui.hudgamemenu.stats" )
-require( "game.client.gui.hudgamemenu.quests" )
 
 class "hudgamemenu" ( gui.panel )
 
@@ -23,29 +15,36 @@ function hudgamemenu:hudgamemenu( parent )
 	self:setScheme( "Default" )
 	self:setVisible( false )
 
+	require( "game.client.gui.hudgamemenu.navigation" )
+	require( "game.client.gui.hudgamemenu.navigationbutton" )
 	self.navigation = gui.hudgamemenunavigation( self )
 	self.navigation:setPos( 36, 86 )
 	self.navigation:setWidth( self.width - 2 * 36 )
 	self.navigation:setHeight( 31 )
 
+	require( "game.client.gui.hudgamemenu.inventory" )
 	self.inventory = gui.hudgamemenuinventory( self )
 	self.inventory:moveToBack()
 
-	-- self.prayer = gui.hudgamemenuprayer( self )
-	-- self.prayer:moveToBack()
-	-- self.prayer:setVisible( false )
-	--
-	-- self.spells = gui.hudgamemenuspells( self )
-	-- self.spells:moveToBack()
-	-- self.spells:setVisible( false )
-	--
-	-- self.stats = gui.hudgamemenustats( self )
-	-- self.stats:moveToBack()
-	-- self.stats:setVisible( false )
-	--
-	-- self.quests = gui.hudgamemenuquests( self )
-	-- self.quests:moveToBack()
-	-- self.quests:setVisible( false )
+	require( "game.client.gui.hudgamemenu.prayer" )
+	self.prayer = gui.hudgamemenuprayer( self )
+	self.prayer:moveToBack()
+	self.prayer:setVisible( false )
+
+	require( "game.client.gui.hudgamemenu.spells" )
+	self.spells = gui.hudgamemenuspells( self )
+	self.spells:moveToBack()
+	self.spells:setVisible( false )
+
+	require( "game.client.gui.hudgamemenu.stats" )
+	self.stats = gui.hudgamemenustats( self )
+	self.stats:moveToBack()
+	self.stats:setVisible( false )
+
+	require( "game.client.gui.hudgamemenu.quests" )
+	self.quests = gui.hudgamemenuquests( self )
+	self.quests:moveToBack()
+	self.quests:setVisible( false )
 end
 
 local GAMEMENU_ANIM_TIME = 0.2

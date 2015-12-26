@@ -55,6 +55,7 @@ end
 
 function hudmoveindicator:draw()
 	self:drawEntityName()
+	self:drawEntityInfo()
 
 	gui.panel.draw( self )
 end
@@ -83,21 +84,32 @@ function hudmoveindicator:drawEntityName()
 		0,      -- ky
 		2       -- tracking
 	)
+end
 
-	if ( not self.entity.getOptions ) then
+function hudmoveindicator:drawEntityInfo()
+	if ( not self.entity ) then
 		return
 	end
 
-	property = "hudmoveindicator.smallTextColor"
+	local property = "hudmoveindicator.smallTextColor"
 	graphics.setColor( self:getScheme( property ) )
-
+	local font = self:getScheme( "entityFont" )
+	local margin = gui.scale( 96 )
 	local lineHeight = font:getHeight()
 	font = self:getScheme( "font" )
 	graphics.setFont( font )
 
-	local n      = table.len( self.entity:getOptions() )
-	local plural = n > 1 and "s" or ""
-	graphics.print( n  .. " Option" .. plural, margin, margin + lineHeight )
+	if ( self.entity.getLevel ) then
+		local l = self.entity:getLevel()
+		graphics.print( "Level " .. l, margin, margin + lineHeight )
+		lineHeight = lineHeight + font:getHeight()
+	end
+
+	if ( self.entity.getOptions ) then
+		local n = table.len( self.entity:getOptions() )
+		local plural = n > 1 and "s" or ""
+		graphics.print( n  .. " Option" .. plural, margin, margin + lineHeight )
+	end
 end
 
 function hudmoveindicator:drawMoveIndicators()
@@ -202,20 +214,20 @@ local function onRightClick( self, x, y )
 	return #opts > 0
 end
 
-function hudmoveindicator:mousepressed( x, y, button )
-	if ( self.mouseover and button == "l" ) then
+function hudmoveindicator:mousepressed( x, y, button, istouch )
+	if ( self.mouseover and button == 1 ) then
 		if ( onLeftClick( self, x, y ) ) then
 			return
 		end
 	end
 
-	if ( self.mouseover and button == "r" ) then
+	if ( self.mouseover and button == 2 ) then
 		if ( onRightClick( self, x, y ) ) then
 			return
 		end
 	end
 
-	return gui.panel.mousepressed( self, x, y, button )
+	return gui.panel.mousepressed( self, x, y, button, istouch )
 end
 
 function hudmoveindicator:onValueChanged( oldValue, newValue )

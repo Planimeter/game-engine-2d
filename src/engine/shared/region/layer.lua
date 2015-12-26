@@ -110,8 +110,6 @@ if ( _CLIENT ) then
 			return
 		end
 
-		spritebatch:bind()
-
 		local tileset     = self:getTileset()
 		local tileWidth   = tileset:getTileWidth()
 		local tileHeight  = tileset:getTileHeight()
@@ -143,8 +141,6 @@ if ( _CLIENT ) then
 				                 self:getY() + y )
 			end
 		end
-
-		spritebatch:unbind()
 	end
 end
 

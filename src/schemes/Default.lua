@@ -60,21 +60,21 @@ t.closebutton                 = {
     iconColor                 = t.colors.white,
 
     mouseover                 = {
-        iconColor             = color( t.colors.gold,          255 )
+        iconColor             = color( t.colors.gold,         255 )
     },
 
     mousedown                 = {
-        iconColor             = color( t.colors.gold,   0.66 * 255 )
+        iconColor             = color( t.colors.gold,  0.66 * 255 )
     }
 }
 
 t.commandbutton               = {
-    backgroundColor           = color(  67,  68,  69,   0.86 * 255 ),
-    outlineColor              = color(  17,  18,  18,   0.14 * 255 )
+    backgroundColor           = color(  67,  68,  69,  0.86 * 255 ),
+    outlineColor              = color(  17,  18,  18,  0.14 * 255 )
 }
 
 t.commandbuttongroup          = {
-    outlineColor              = color(  17,  18,  18,   0.14 * 255 )
+    outlineColor              = color(  17,  18,  18,  0.14 * 255 )
 }
 
 t.dropdownlist                = {
@@ -82,36 +82,36 @@ t.dropdownlist                = {
 }
 
 t.dropdownlistitem            = {
-    backgroundColor           = color(  67,  68,  69,   0.97 * 255 ),
-    outlineColor              = color( t.colors.gold,   0.97 * 255 ),
+    backgroundColor           = color(  67,  68,  69,  0.97 * 255 ),
+    outlineColor              = color( t.colors.gold,  0.97 * 255 ),
 
     mouseover                 = {
-        backgroundColor       = color( t.colors.gold,   0.97 * 255 ),
-        textColor             = color( t.colors.black,         255 )
+        backgroundColor       = color( t.colors.gold,  0.97 * 255 ),
+        textColor             = color( t.colors.black,        255 )
     },
 
     selected                  = {
-        backgroundColor       = color( t.colors.gold,   0.97 * 255 ),
-        textColor             = color( t.colors.black,         255 )
+        backgroundColor       = color( t.colors.gold,  0.97 * 255 ),
+        textColor             = color( t.colors.black,        255 )
     }
 }
 
 t.frame                       = {
-    backgroundColor           = color(  67,  68,  69,   0.97 * 255 ),
-    outlineColor              = color( 240, 246, 247,   0.07 * 255 ),
+    backgroundColor           = color(  67,  68,  69,  0.97 * 255 ),
+    outlineColor              = color( 240, 246, 247,  0.07 * 255 ),
     titleTextColor            = t.colors.white,
 
     defocus                   = {
-        titleTextColor        = color( t.colors.white,  0.24 * 255 )
+        titleTextColor        = color( t.colors.white, 0.24 * 255 )
     }
 }
 
 t.frametab                    = {
-    backgroundColor           = color(  59,  61,  61,   0.93 * 255 ),
-    outlineColor              = color(  17,  18,  18,   0.14 * 255 ),
+    backgroundColor           = color(  59,  61,  61,  0.93 * 255 ),
+    outlineColor              = color(  17,  18,  18,  0.14 * 255 ),
 
     mouseover                 = {
-        backgroundColor       = color( t.colors.gold,   0.27 * 255 )
+        backgroundColor       = color( t.colors.gold,  0.27 * 255 )
     },
 
     selected                  = {
@@ -120,15 +120,15 @@ t.frametab                    = {
 }
 
 t.hudchat                     = {
-    backgroundColor           = color( t.colors.black,  0.27 * 255 )
+    backgroundColor           = color( t.colors.black, 0.27 * 255 )
 }
 
 t.hudgamemenu                 = {
-    backgroundColor           = color( t.colors.black,  0.27 * 255 )
+    backgroundColor           = color( t.colors.black, 0.27 * 255 )
 }
 
 t.hudgamemenunavigation       = {
-    backgroundColor           = color( t.colors.white,  0.07 * 255 )
+    backgroundColor           = color( t.colors.white, 0.07 * 255 )
 }
 
 t.hudgamemenunavigationbutton = {
@@ -219,6 +219,11 @@ t.mainmenuclosebutton         = {
     }
 }
 
+t.progressbar                 = {
+    backgroundColor           = color( t.colors.white, 0.07 * 255 ),
+    foregroundColor           = t.colors.gold
+}
+
 t.radiobutton                 = {
     foreground                = graphics.newImage( "images/gui/radiobutton_foreground.png" ),
     icon                      = graphics.newImage( "images/gui/selection_dot.png" ),
@@ -281,6 +286,7 @@ t.mainmenuFont                = graphics.newFont( "fonts/SourceSansPro-Regular.o
 t.titleFont                   = graphics.newFont( "fonts/SourceSansPro-Bold.otf", 18 )
 t.font                        = graphics.newFont( "fonts/SourceSansPro-Regular.otf", 14 )
 t.fontBold                    = graphics.newFont( "fonts/SourceSansPro-Bold.otf", 14 )
+t.fontSmall                   = graphics.newFont( "fonts/SourceSansPro-Regular.otf", 12 )
 t.consoleFont                 = graphics.newFont( "fonts/SourceCodePro-Light.otf", 12 )
 t.chatFont                    = graphics.newFont( "fonts/SourceCodePro-Light.otf", 14 )
 t.entityFont                  = graphics.newFont( "fonts/SourceSansPro-Regular.otf", 24 )

@@ -106,14 +106,14 @@ function saveBinds()
 	end
 end
 
-function keypressed( key, isrepeat )
+function keypressed( key, scancode, isrepeat )
 	local bind = getBind( key )
 	if ( bind and not concommand.dispatch( _G.localplayer, bind ) ) then
 		print( "'" .. bind .. "' is not recognized as a command." )
 	end
 end
 
-function keyreleased( key )
+function keyreleased( key, scancode )
 	local bind = getBind( key )
 	if ( not bind ) then
 		return
@@ -128,10 +128,10 @@ function keyreleased( key )
 	end
 end
 
-function mousepressed( x, y, button )
-	keypressed( button, false )
+function mousepressed( x, y, button, istouch )
+	keypressed( button, nil, false )
 end
 
-function mousereleased( x, y, button )
+function mousereleased( x, y, button, istouch )
 	keyreleased( button )
 end

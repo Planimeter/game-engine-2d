@@ -38,51 +38,28 @@ end
 
 function framebuffer:clear()
 	if ( self._framebuffer ) then
-		self._framebuffer:clear()
+		graphics.setCanvas( self._framebuffer )
+			graphics.clear()
+		graphics.setCanvas()
 	end
 end
 
 function framebuffer:createFramebuffer( width, height )
-	if ( not graphics.isSupported( "canvas" ) ) then
-		return
-	end
-
-	if ( graphics.isSupported( "npot" ) ) then
-		self._framebuffer = graphics.newCanvas( width, height )
-	else
-		local size = width > height and width  or
-		             height > width and height or width
-		size = math.nearestpow2( size )
-		self._framebuffer = graphics.newCanvas( size, size )
-	end
+	self._framebuffer = graphics.newCanvas( width, height )
 end
 
 function framebuffer:draw()
 	_G.graphics.setColor( color.white, true )
-	graphics.setBlendMode( "premultiplied" )
+	graphics.setBlendMode( "alpha", "premultiplied" )
 		graphics.draw( self:getDrawable() )
-	graphics.setBlendMode( "alpha" )
+	graphics.setBlendMode( "alpha", "alphamultiply" )
 end
 
-local _shim = nil
-
 function framebuffer:getDrawable()
-	if ( graphics.isSupported( "canvas" ) ) then
-		if ( self.needsRedraw ) then
-			graphics.setBlendMode( "alpha" )
-			self:render()
-			self.needsRedraw = false
-		end
-	else
+	if ( self.needsRedraw ) then
 		graphics.setBlendMode( "alpha" )
 		self:render()
 		self.needsRedraw = false
-
-		if ( not _shim ) then
-			_shim = _G.graphics.shim
-		end
-
-		return _shim:getDrawable()
 	end
 
 	return self._framebuffer
@@ -111,15 +88,11 @@ end
 framebuffer.renderStack = {}
 
 function framebuffer:render()
-	if ( graphics.isSupported( "canvas" ) ) then
-		graphics.setCanvas( self._framebuffer )
-		table.insert( framebuffer.renderStack, self._framebuffer )
-			self._drawFunc()
-		table.remove( framebuffer.renderStack, #framebuffer.renderStack )
-		graphics.setCanvas( framebuffer.renderStack[ #framebuffer.renderStack ] )
-	else
+	graphics.setCanvas( self._framebuffer )
+	table.insert( framebuffer.renderStack, self._framebuffer )
 		self._drawFunc()
-	end
+	table.remove( framebuffer.renderStack, #framebuffer.renderStack )
+	graphics.setCanvas( framebuffer.renderStack[ #framebuffer.renderStack ] )
 end
 
 function framebuffer:renderTo( func )

@@ -85,12 +85,12 @@ end
 
 local localX, localY = 0, 0
 
-function scrollbar:mousepressed( x, y, button )
-	if ( self.mouseover and button == "l" ) then
+function scrollbar:mousepressed( x, y, button, istouch )
+	if ( self.mouseover and button == 1 ) then
 		self.mousedown = true
 	end
 
-	if ( self.mousedown and button == "l" ) then
+	if ( self.mousedown and button == 1 ) then
 		localX, localY = self:screenToLocal( x, y )
 
 		if ( localY < self:getThumbY() ) then
@@ -106,7 +106,7 @@ function scrollbar:mousepressed( x, y, button )
 	end
 end
 
-function scrollbar:mousereleased( x, y, button )
+function scrollbar:mousereleased( x, y, button, istouch )
 	self.mousedown = false
 	self.grabbedX  = nil
 	self.grabbedY  = nil

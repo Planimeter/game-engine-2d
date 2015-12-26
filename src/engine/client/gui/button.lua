@@ -101,7 +101,7 @@ function button:isDisabled()
 	return self.disabled
 end
 
-function button:keypressed( key, isrepeat )
+function button:keypressed( key, scancode, isrepeat )
 	if ( not self.focus or self:isDisabled() ) then
 		return
 	end
@@ -112,14 +112,14 @@ function button:keypressed( key, isrepeat )
 	end
 end
 
-function button:mousepressed( x, y, button )
-	if ( self.mouseover and button == "l" ) then
+function button:mousepressed( x, y, button, istouch )
+	if ( self.mouseover and button == 1 ) then
 		self.mousedown = true
 		self:invalidate()
 	end
 end
 
-function button:mousereleased( x, y, button )
+function button:mousereleased( x, y, button, istouch )
 	if ( ( self.mousedown and self.mouseover ) and not self:isDisabled() ) then
 		self:onClick()
 	end
