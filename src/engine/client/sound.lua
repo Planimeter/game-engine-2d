@@ -41,11 +41,40 @@ function sound.update( dt )
 end
 
 function sound:sound( filename )
-	self.filename = filename
+	local status, ret = pcall( require, filename )
+	if ( status == false ) then
+		self.filename = filename
+	else
+		local data    = ret
+		self.filename = data[ "sound" ]
+		self.volume   = data[ "volume" ]
+	end
 end
 
 function sound:getFilename()
 	return self.filename
+end
+
+function sound:getVolume()
+	if ( self.volume ) then
+		return self.volume
+	end
+
+	local filename = self:getFilename()
+	if ( sounds[ filename ] ) then
+		return sounds[ filename ]:getVolume()
+	end
+
+	return 1.0
+end
+
+function sound:setVolume( volume )
+	self.volume = volume
+
+	local filename = self:getFilename()
+	if ( sounds[ filename ] ) then
+		sounds[ filename ].sound:setVolume( volume )
+	end
 end
 
 function sound:play()
@@ -60,6 +89,9 @@ function sound:play()
 			sound   = sound,
 			modtime = filesystem.getLastModified( filename )
 		}
+
+		local volume = self:getVolume()
+		self:setVolume( volume )
 	end
 
 	audio.play( sounds[ filename ].sound )

@@ -183,9 +183,9 @@ end
 if ( _CLIENT ) then
 	function player:onAnimationEvent( event )
 		if ( event == "leftfootstep" ) then
-			self:emitSound( "sounds/footsteps/grassleft.wav" )
+			self:emitSound( "sounds.footsteps.grassleft" )
 		elseif ( event == "rightfootstep" ) then
-			self:emitSound( "sounds/footsteps/grassright.wav" )
+			self:emitSound( "sounds.footsteps.grassright" )
 		end
 	end
 end

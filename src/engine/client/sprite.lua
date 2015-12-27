@@ -7,26 +7,14 @@
 class( "sprite" )
 
 function sprite:sprite( spriteSheet )
-	self.data        = require( spriteSheet )
-	local image      = graphics.newImage( self.data[ "image" ] )
+	local data       = require( spriteSheet )
+	local image      = graphics.newImage( data[ "image" ] )
 	self.spriteSheet = image
-	self.width       = self.data[ "width" ]
-	self.height      = self.data[ "height" ]
-	self.frametime   = self.data[ "frametime" ]
-	self.animations  = self.data[ "animations" ] or {}
-	self.events      = self.data[ "events" ] or {}
-
-	self.data = nil
-
-	-- TODO: Lazy initialize this before drawing to avoid loading the image.
-	self.quad = graphics.newQuad(
-		0,
-		0,
-		self.width,
-		self.height,
-		image:getWidth(),
-		image:getHeight()
-	)
+	self.width       = data[ "width" ]
+	self.height      = data[ "height" ]
+	self.frametime   = data[ "frametime" ]
+	self.animations  = data[ "animations" ] or {}
+	self.events      = data[ "events" ] or {}
 
 	self.curtime = 0
 	self.frame   = 0
@@ -54,6 +42,18 @@ function sprite:getEvents()
 end
 
 function sprite:getQuad()
+	if ( not self.quad ) then
+		local image = self:getSpriteSheet()
+		self.quad = graphics.newQuad(
+			0,
+			0,
+			self:getWidth(),
+			self:getHeight(),
+			image:getWidth(),
+			image:getHeight()
+		)
+	end
+
 	return self.quad
 end
 

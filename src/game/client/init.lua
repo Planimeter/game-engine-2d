@@ -55,6 +55,9 @@ end
 function onReloadImage( filename )
 end
 
+function onReloadSound( filename )
+end
+
 function onMainMenuActivate()
 end
 
