@@ -14,6 +14,7 @@ function sprite:sprite( spriteSheet )
 	self.height      = self.data[ "height" ]
 	self.frametime   = self.data[ "frametime" ]
 	self.animations  = self.data[ "animations" ] or {}
+	self.events      = self.data[ "events" ] or {}
 
 	self.data = nil
 
@@ -48,6 +49,10 @@ function sprite:getAnimations()
 	return self.animations
 end
 
+function sprite:getEvents()
+	return self.events
+end
+
 function sprite:getQuad()
 	return self.quad
 end
@@ -65,6 +70,9 @@ function sprite:getHeight()
 end
 
 function sprite:onAnimationEnd( animation )
+end
+
+function sprite:onAnimationEvent( event )
 end
 
 function sprite:setAnimation( animation )
@@ -132,6 +140,12 @@ function sprite:updateFrame()
 	local x            =        frame * spriteWidth % imageWidth
 	local y            = floor( frame * spriteWidth / imageWidth ) * spriteHeight
 	quad:setViewport( x, y, spriteWidth, spriteHeight )
+
+	local events = self:getEvents()
+	local event  = events[ frame ]
+	if ( event ) then
+		self:onAnimationEvent( event )
+	end
 end
 
 function sprite:__tostring()

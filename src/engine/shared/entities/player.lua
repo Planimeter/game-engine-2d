@@ -178,7 +178,19 @@ if ( _SERVER ) then
 	end
 
 	payload.setHandler( onPlayerMove, "playerMove" )
+end
 
+if ( _CLIENT ) then
+	function player:onAnimationEvent( event )
+		if ( event == "leftfootstep" ) then
+			self:emitSound( "sounds/footsteps/grassleft.wav" )
+		elseif ( event == "rightfootstep" ) then
+			self:emitSound( "sounds/footsteps/grassright.wav" )
+		end
+	end
+end
+
+if ( _SERVER ) then
 	function player:onAuthenticated()
 		require( "engine.shared.hook" )
 		game.call( "server", "onPlayerAuthenticated", self )

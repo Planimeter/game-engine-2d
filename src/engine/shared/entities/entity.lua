@@ -251,6 +251,12 @@ if ( _CLIENT ) then
 	end
 end
 
+function entity:emitSound( filename )
+	require( "engine.client.sound" )
+	local sound = sound( filename )
+	sound:play()
+end
+
 function entity:networkVar( name, initialValue )
 	self.networkVars = self.networkVars or {}
 
@@ -359,6 +365,14 @@ function entity:localToWorld( v )
 	return self:getPosition() + v
 end
 
+if ( _CLIENT ) then
+	function entity:onAnimationEnd( animation )
+	end
+
+	function entity:onAnimationEvent( event )
+	end
+end
+
 function entity:remove()
 	for i, v in pairs( entity.entities ) do
 		if ( v == self ) then
@@ -419,6 +433,16 @@ end
 
 if ( _CLIENT ) then
 	function entity:setSprite( sprite )
+		if ( type( sprite ) == "sprite" ) then
+			sprite.onAnimationEnd = function( _, animation )
+				self:onAnimationEnd( animation )
+			end
+
+			sprite.onAnimationEvent = function( _, event )
+				self:onAnimationEvent( event )
+			end
+		end
+
 		self.sprite = sprite
 	end
 end

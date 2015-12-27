@@ -41,5 +41,30 @@ return {
 			to = 259,
 		}
 	},
-	events = {}
+	events = {
+		-- walknorth
+		[ 33 ] = "rightfootstep",
+		[ 35 ] = "leftfootstep",
+		-- walknortheast
+		[ 65 ] = "rightfootstep",
+		[ 67 ] = "leftfootstep",
+		-- walkeast
+		[ 96 ] = "rightfootstep",
+		[ 98 ] = "leftfootstep",
+		-- walksoutheast
+		[ 129 ] = "leftfootstep",
+		[ 131 ] = "rightfootstep",
+		-- walksouth
+		[ 161 ] = "rightfootstep",
+		[ 163 ] = "leftfootstep",
+		-- walksouthwest
+		[ 193 ] = "rightfootstep",
+		[ 195 ] = "leftfootstep",
+		-- walkwest
+		[ 224 ] = "leftfootstep",
+		[ 226 ] = "rightfootstep",
+		-- walknorthwest
+		[ 257 ] = "leftfootstep",
+		[ 259 ] = "rightfootstep"
+	}
 }

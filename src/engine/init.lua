@@ -335,7 +335,13 @@ function update( dt )
 			package.update( dt )
 
 			if ( _CLIENT ) then
-				_G.image.update( dt )
+				if ( _G.image ) then
+					_G.image.update( dt )
+				end
+
+				if ( _G.sound ) then
+					_G.sound.update( dt )
+				end
 			end
 		end
 	end
