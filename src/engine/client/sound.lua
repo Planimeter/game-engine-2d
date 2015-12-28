@@ -11,6 +11,16 @@ local audio = love.audio
 
 class( "sound" )
 
+function sound.reload( library )
+	if ( string.sub( library, 1, 7 ) ~= "sounds." ) then
+		return
+	end
+
+	-- TODO: Reload soundscript.
+end
+
+hook.set( "shared", sound.reload, "onReloadScript", "reloadSound" )
+
 sound.sounds = sounds
 
 local modtime  = nil
@@ -45,10 +55,13 @@ function sound:sound( filename )
 	if ( status == false ) then
 		self.filename = filename
 	else
-		local data    = ret
-		self.filename = data[ "sound" ]
-		self.volume   = data[ "volume" ]
+		self.data     = ret
+		self.filename = self.data[ "sound" ]
 	end
+end
+
+function sound:getData()
+	return self.data
 end
 
 function sound:getFilename()
@@ -56,21 +69,13 @@ function sound:getFilename()
 end
 
 function sound:getVolume()
-	if ( self.volume ) then
-		return self.volume
-	end
-
 	local filename = self:getFilename()
 	if ( sounds[ filename ] ) then
-		return sounds[ filename ]:getVolume()
+		return sounds[ filename ].sound:getVolume()
 	end
-
-	return 1.0
 end
 
 function sound:setVolume( volume )
-	self.volume = volume
-
 	local filename = self:getFilename()
 	if ( sounds[ filename ] ) then
 		sounds[ filename ].sound:setVolume( volume )
@@ -90,11 +95,22 @@ function sound:play()
 			modtime = filesystem.getLastModified( filename )
 		}
 
-		local volume = self:getVolume()
-		self:setVolume( volume )
+		local data = self:getData()
+		if ( data ) then
+			local volume = data[ "volume" ]
+			if ( volume ) then
+				self:setVolume( volume )
+			end
+		end
 	end
 
-	audio.play( sounds[ filename ].sound )
+	local sound = sounds[ filename ].sound
+	if ( sound:isPlaying() ) then
+		sound = sound:clone()
+		sound:rewind()
+	end
+
+	audio.play( sound )
 end
 
 function sound:__tostring()

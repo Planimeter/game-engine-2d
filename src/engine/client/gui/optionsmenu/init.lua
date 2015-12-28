@@ -4,9 +4,6 @@
 --
 --============================================================================--
 
-require( "engine.client.gui.optionsmenu.videooptionspanel" )
-require( "engine.client.gui.optionsmenu.keyboardoptionspanel" )
-
 class "optionsmenu" ( gui.tabbedframe )
 
 function optionsmenu:optionsmenu( parent )
@@ -47,8 +44,14 @@ function optionsmenu:optionsmenu( parent )
 		convar.saveConfig()
 	end
 
+	require( "engine.client.gui.optionsmenu.keyboardoptionspanel" )
 	self:addTab( "Keyboard", gui.keyboardoptionspanel() )
+
+	require( "engine.client.gui.optionsmenu.videooptionspanel" )
 	self:addTab( "Video", gui.videooptionspanel() )
+
+	require( "engine.client.gui.optionsmenu.audiooptionspanel" )
+	self:addTab( "Audio", gui.audiooptionspanel() )
 end
 
 function optionsmenu:activate()
