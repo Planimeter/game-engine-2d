@@ -1,7 +1,7 @@
 @ECHO OFF
 GOTO :START
 
---======== Copyright 2013-2015, Planimeter, All rights reserved. ========--
+--======== Copyright 2013-2016, Planimeter, All rights reserved. ========--
 --
 -- Purpose:
 --

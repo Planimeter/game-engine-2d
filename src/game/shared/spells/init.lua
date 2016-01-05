@@ -1,15 +1,16 @@
 --========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
 --
--- Purpose: Inbetweening interface
+-- Purpose: spell
 --
 --============================================================================--
 
-module( "tween" )
+class "spell"
 
-function to( t, duration, properties )
-	-- TODO: Implement me.
+function spell:spell()
 end
 
-function update( dt )
-	-- TODO: Implement me.
+function spell:draw()
+end
+
+function spell:update( dt )
 end
