@@ -15,7 +15,7 @@ projects or game jams.
 Create a Project
 ================
 
-[API Documentation](http://www.planimeter.org/grid/)  
+[API Documentation](http://www.planimeter.org/grid/api/Home)  
 [API Documentation Source](https://github.com/Planimeter/grid)
 
 [Features](http://www.planimeter.org/grid/features/GUI)
