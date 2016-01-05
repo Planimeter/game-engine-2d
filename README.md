@@ -15,10 +15,8 @@ projects or game jams.
 Create a Project
 ================
 
-[Getting Started](http://www.planimeter.org/grid/tutorials/Getting_Started)
-
-[Tutorials and API Documentation](http://www.planimeter.org/grid/)  
-[Tutorials and API Documentation Source](https://github.com/Planimeter/grid)
+[API Documentation](http://www.planimeter.org/grid/)  
+[API Documentation Source](https://github.com/Planimeter/grid)
 
 [Features](http://www.planimeter.org/grid/features/GUI)
 ==========
