@@ -16,6 +16,7 @@ local color      = color
 local concommand = concommand
 local filesystem = filesystem
 local graphics   = love.graphics
+local image      = love.image
 local ipairs     = ipairs
 local math       = math
 local os         = os
@@ -62,6 +63,7 @@ error = _error
 function initialize()
 	-- Set defaults
 	setBackgroundColor( grid.dark.backgroundColor )
+	graphics.setDefaultFilter( "nearest", "nearest" )
 	graphics.setLineStyle( "rough" )
 
 	-- Set error
@@ -225,6 +227,10 @@ end
 function newImage( filename )
 	require( "engine.client.image" )
 	return _G.image( filename )
+end
+
+function newImageData( ... )
+	return image.newImageData( ... )
 end
 
 function newQuad( x, y, width, height, sw, sh )

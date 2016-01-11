@@ -101,7 +101,7 @@ function itembutton:setItem( item )
 		local name = item.data.name
 		self.name  = name
 		self.text  = name
-		self.icon  = image( item.data.image )
+		self.icon  = graphics.newImage( item.data.image )
 	end
 end
 

@@ -36,6 +36,10 @@ function mount( archive, mountpoint, appendToPath )
 	return filesystem.mount( archive, mountpoint, appendToPath )
 end
 
+function newFileData( ... )
+	return filesystem.newFileData( ... )
+end
+
 function read( name, size )
 	return filesystem.read( name, size )
 end

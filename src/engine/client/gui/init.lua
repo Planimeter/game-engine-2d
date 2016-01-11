@@ -122,6 +122,10 @@ function draw()
 	rootPanel:drawFramebuffer()
 end
 
+function filedropped( file )
+	rootPanel:filedropped( file )
+end
+
 function joystickpressed( joystick, button )
 	rootPanel:joystickpressed( joystick, button )
 end

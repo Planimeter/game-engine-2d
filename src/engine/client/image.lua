@@ -28,7 +28,6 @@ function image.update( dt )
 				print( ret )
 			else
 				i.image = ret
-				i.image:setFilter( "nearest", "nearest" )
 
 				if ( game ) then
 					game.call( "client", "onReloadImage", filename )
@@ -48,12 +47,15 @@ end
 function image:getDrawable()
 	local filename = self:getFilename()
 	if ( not filename ) then
-		return _G.graphics.error:getDrawable()
+		if ( self._image ) then
+			return self._image
+		else
+			return _G.graphics.error:getDrawable()
+		end
 	end
 
 	if ( not images[ filename ] ) then
 		local image = graphics.newImage( filename )
-		image:setFilter( "nearest", "nearest" )
 		images[ filename ] = {
 			image   = image,
 			modtime = filesystem.getLastModified( filename )
@@ -75,6 +77,22 @@ end
 function image:getWidth()
 	local image = self:getDrawable()
 	return image:getWidth()
+end
+
+function image:getImageData()
+	if ( self._image ) then
+		return nil
+	end
+
+	return self._image:getData()
+end
+
+function image:setImageData( imageData )
+	if ( self._image ) then
+		self._image:setImageData( imageData )
+	else
+		self._image = graphics.newImage( imageData )
+	end
 end
 
 function image:setFilter( min, mag, anisotropy )

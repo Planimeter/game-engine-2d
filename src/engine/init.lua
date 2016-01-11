@@ -106,6 +106,9 @@ if ( _SERVER ) then
 end
 
 function filedropped( file )
+	if ( _CLIENT ) then
+		gui.filedropped( file )
+	end
 end
 
 function focus( f )

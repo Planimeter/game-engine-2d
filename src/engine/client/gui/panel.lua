@@ -187,6 +187,30 @@ function panel:drawFramebuffer()
 	graphics.setStencilTest()
 end
 
+local function cascadeInputToChildren( self, func, ... )
+	if ( not self:isVisible() ) then
+		return
+	end
+
+	local children = self:getChildren()
+	if ( children ) then
+		local v
+		local filtered
+		for _, v in ipairs( children ) do
+			if ( v:isVisible() ) then
+				filtered = v[ func ]( v, ... )
+				if ( filtered ~= nil ) then
+					return filtered
+				end
+			end
+		end
+	end
+end
+
+function panel:filedropped( file )
+	return cascadeInputToChildren( self, "filedropped", file )
+end
+
 function panel:getChildren()
 	return self.children
 end
@@ -319,26 +343,6 @@ end
 
 function panel:isVisible()
 	return self.visible
-end
-
-local function cascadeInputToChildren( self, func, ... )
-	if ( not self:isVisible() ) then
-		return
-	end
-
-	local children = self:getChildren()
-	if ( children ) then
-		local v
-		local filtered
-		for _, v in ipairs( children ) do
-			if ( v:isVisible() ) then
-				filtered = v[ func ]( v, ... )
-				if ( filtered ~= nil ) then
-					return filtered
-				end
-			end
-		end
-	end
 end
 
 function panel:joystickpressed( joystick, button )

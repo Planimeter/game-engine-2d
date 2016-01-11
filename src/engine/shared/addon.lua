@@ -8,8 +8,9 @@ local filesystem = filesystem
 local string     = string
 local table      = table
 local ipairs     = ipairs
-local require    = require
 local print      = print
+local require    = require
+local hook       = hook
 
 module( "addon" )
 
@@ -45,6 +46,8 @@ function mount( addon )
 	if ( filesystem.mount( "addons/" .. addon, "" ) ) then
 		table.insert( addons, addon )
 		print( "Mounted \"" .. addon .. "\"!" )
+		require( "addons." .. addon )
+		hook.call( "shared", "onAddonMounted", addon )
 		return true
 	end
 
@@ -60,6 +63,8 @@ function unmount( addon )
 	end
 
 	if ( filesystem.unmount( "addons/" .. addon ) ) then
+		hook.call( "shared", "onAddonUnmounted", addon )
+		unrequire( "addons." .. addon )
 		print( "Unmounted \"" .. addon .. "\"!" )
 		return true
 	end
