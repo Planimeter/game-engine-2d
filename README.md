@@ -18,8 +18,8 @@ Create a Project
 [API Documentation](http://www.planimeter.org/grid/api/Home)  
 [API Documentation Source](https://github.com/Planimeter/grid)
 
-[Features](http://www.planimeter.org/grid/features/GUI)
-==========
+Features
+========
 
 * Basic prediction
 * Classes via [lclass](https://github.com/andrewmcwatters/lclass "lclass")
