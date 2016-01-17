@@ -83,6 +83,7 @@ function testframe:createTestPanels()
 	local dropdownlist = gui.dropdownlist( panel, getDebugName() )
 	y = y + labelHeight + 9
 	dropdownlist:setPos( x, y )
+	local dropdownlistHeight = dropdownlist:getHeight()
 
 	panelName = "Drop-Down List Item"
 	local dropdownlistitem = nil
@@ -93,6 +94,11 @@ function testframe:createTestPanels()
 	dropdownlist:addItem( dropdownlistitem )
 	-- dropdownlistitem = gui.dropdownlistitem( item .. " 3", panelName .. " 3" )
 	-- dropdownlist:addItem( dropdownlistitem )
+
+	panelName = "Slider"
+	local slider = gui.slider( panel, getDebugName() )
+	y = y + dropdownlistHeight + 18
+	slider:setPos( x, y )
 
 	panelName = "Checkbox"
 	local checkbox = gui.checkbox( panel, getDebugName() )

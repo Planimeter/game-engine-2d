@@ -253,6 +253,16 @@ t.scrollbar                   = {
     }
 }
 
+t.slider                      = {
+    backgroundColor           = color( t.colors.gray,  0.66 * 255 ),
+    fontColor                 = color( t.colors.gray,  0.66 * 255 ),
+
+    disabled                  = {
+        backgroundColor       = color( t.colors.black, 0.14 * 255 ),
+        fontColor             = color( t.colors.black, 0.14 * 255 )
+    }
+}
+
 t.textbox                     = {
     outlineColor              = color( t.colors.gray,  0.66 * 255 ),
     textColor                 = t.colors.gray,

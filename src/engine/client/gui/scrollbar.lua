@@ -35,7 +35,7 @@ function scrollbar:draw()
 	end
 
 	graphics.setColor( self:getScheme( property ) )
-	graphics.rectangle( "fill", x, self:getThumbY(), width, length )
+	graphics.rectangle( "fill", x, self:getThumbPos(), width, length )
 
 	gui.panel.draw( self )
 end
@@ -62,7 +62,7 @@ function scrollbar:getThumbLength()
 	return size * self:getHeight()
 end
 
-function scrollbar:getThumbY()
+function scrollbar:getThumbPos()
 	local min     = self:getMin()
 	local range   = self:getMax() - min
 	local percent = ( self:getValue() + min ) / range
@@ -93,10 +93,10 @@ function scrollbar:mousepressed( x, y, button, istouch )
 	if ( self.mousedown and button == 1 ) then
 		localX, localY = self:screenToLocal( x, y )
 
-		if ( localY < self:getThumbY() ) then
+		if ( localY < self:getThumbPos() ) then
 			self:pageUp()
 			return
-		elseif ( localY > self:getThumbY() + self:getThumbLength() ) then
+		elseif ( localY > self:getThumbPos() + self:getThumbLength() ) then
 			self:pageDown()
 			return
 		end

@@ -79,12 +79,17 @@ function image:getWidth()
 	return image:getWidth()
 end
 
-function image:getImageData()
-	if ( self._image ) then
+function image:getData()
+	if ( not self._image ) then
 		return nil
 	end
 
 	return self._image:getData()
+end
+
+function image:refresh()
+	local image = self:getDrawable()
+	return image:refresh()
 end
 
 function image:setImageData( imageData )

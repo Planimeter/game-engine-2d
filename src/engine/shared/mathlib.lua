@@ -44,6 +44,8 @@ function math.nearestpow2( n )
 	return pow( 2, ceil( log( n ) / log( 2 ) ) )
 end
 
+math.noise = love.math.noise
+
 math.phi = ( 1 + math.sqrt( 5 ) ) / 2
 
 function math.pointinrectangle( px, py, x, y, width, height )
