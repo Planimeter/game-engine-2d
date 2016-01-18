@@ -13,7 +13,7 @@ function hudgamemenunavigation:hudgamemenunavigation( parent )
 	self.tabs = {
 		"Inventory",
 		-- "Prayer",
-		-- "Spells",
+		"Spells",
 		"Stats",
 		-- "Quests"
 	}
