@@ -214,7 +214,7 @@ function frame:keypressed( key, scancode, isrepeat )
 	end
 
 	if ( self.focus ) then
-		local controlDown = input.isKeyDown( "lctrl", "rctrl" )
+		local controlDown = input.isKeyDown( "lctrl", "rctrl", "lgui", "rgui" )
 		if ( key == "tab" ) then
 			self:moveFocus()
 		elseif ( key == "w" and controlDown ) then

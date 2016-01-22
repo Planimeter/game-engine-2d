@@ -61,27 +61,27 @@ structs[ "entitySpawned" ] = {
 
 structs[ "playerInitialized" ] = {
     keys = {
-        { name = "entIndex",       type = "number" },
+        { name = "player",         type = "entity" },
         { name = "id",             type = "number" }
     }
 }
 
 structs[ "entityRemoved" ] = {
     keys = {
-        { name = "entIndex",       type = "number" },
+        { name = "entity",         type = "entity" },
     }
 }
 
 structs[ "chat" ] = {
     keys = {
-        { name = "entIndex",       type = "number" },
+        { name = "entity",         type = "entity" },
         { name = "message",        type = "string" }
     }
 }
 
 structs[ "networkVarChanged" ] = {
     keys = {
-        { name = "entIndex",       type = "number" },
+        { name = "entity",         type = "entity" },
         { name = "networkVars",    type = "typelenvalues" }
     }
 }
@@ -102,7 +102,15 @@ structs[ "playerMove" ] = {
 -- if ( _G._VADVENTURE ) then
     structs[ "playerPickup" ] = {
         keys = {
-            { name = "item",       type = "number" },
+            { name = "item",       type = "entity" },
+        }
+    }
+
+    structs[ "playerCast" ] = {
+        keys = {
+            { name = "spell",      type = "string" },
+            { name = "target",     type = "entity" },
+            { name = "position",   type = "vector" }
         }
     }
 -- end

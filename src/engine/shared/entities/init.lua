@@ -141,9 +141,7 @@ if ( _G._CLIENT ) then
 			return
 		end
 
-		local entIndex = payload:get( "entIndex" )
-		require( "engine.shared.entities.entity" )
-		local entity = _G.entity.getByEntIndex( entIndex )
+		local entity = payload:get( "entity" )
 		if ( entity ) then
 			entity:updateNetworkVars( payload )
 		end

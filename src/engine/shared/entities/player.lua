@@ -137,7 +137,7 @@ function player:initialSpawn()
 		self:spawn()
 
 		local payload = payload( "playerInitialized" )
-		payload:set( "entIndex", self.entIndex )
+		payload:set( "player", self )
 		payload:set( "id", self:getNetworkVar( "id" ) )
 		self:send( payload )
 	end
@@ -223,7 +223,7 @@ concommand( "say", "Display player message",
 			end
 
 			local payload = payload( "chat" )
-			payload:set( "entIndex", player and player.entIndex or 0 )
+			payload:set( "entity", player or nil )
 			payload:set( "message", argString )
 
 			networkserver.broadcast( payload )

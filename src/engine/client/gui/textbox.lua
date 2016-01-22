@@ -508,7 +508,7 @@ function textbox:keypressed( key, scancode, isrepeat )
 		return
 	end
 
-	local controlDown = input.isKeyDown( "lctrl", "rctrl" )
+	local controlDown = input.isKeyDown( "lctrl", "rctrl", "lgui", "rgui" )
 	local shiftDown   = input.isKeyDown( "lshift", "rshift" )
 	if ( key == "backspace" ) then
 		self:doBackspace( controlDown and math.abs( nextWord( self, -1 ) ) or 1 )

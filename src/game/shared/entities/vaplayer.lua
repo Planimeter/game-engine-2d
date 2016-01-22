@@ -46,7 +46,7 @@ function vaplayer:cast( spellName, target, position )
 	if ( _CLIENT and not _SERVER ) then
 		local payload = payload( "playerCast" )
 		payload:set( "spell", spell )
-		payload:set( "target", target.entIndex )
+		payload:set( "target", target )
 		payload:set( "position", position )
 		networkclient.sendToServer( payload )
 	end
@@ -54,10 +54,11 @@ end
 
 if ( _SERVER ) then
 	local function onPlayerCast( payload )
-		local player = payload:getPlayer()
-		local spell  = payload:get( "spell" )
-		local target = entity.getByEntIndex( payload:get( "target" ) )
-		player:cast( spell, target )
+		local player   = payload:getPlayer()
+		local spell    = payload:get( "spell" )
+		local target   = payload:get( "target" )
+		local position = payload:get( "position" )
+		player:cast( spell, target, position )
 	end
 
 	payload.setHandler( onPlayerCast, "playerCast" )
@@ -112,7 +113,7 @@ function vaplayer:pickup( item )
 
 	if ( _CLIENT and not _SERVER ) then
 		local payload = payload( "playerPickup" )
-		payload:set( "item", item.entIndex )
+		payload:set( "item", item )
 		networkclient.sendToServer( payload )
 	end
 end
@@ -120,7 +121,7 @@ end
 if ( _SERVER ) then
 	local function onPlayerPickup( payload )
 		local player = payload:getPlayer()
-		local item   = entity.getByEntIndex( payload:get( "item" ) )
+		local item   = payload:get( "item" )
 		player:pickup( item )
 	end
 

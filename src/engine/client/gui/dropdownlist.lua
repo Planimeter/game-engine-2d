@@ -68,7 +68,7 @@ function dropdownlist:drawForeground()
 
 	if ( ( self.mousedown and self.mouseover ) or self:isActive() ) then
 		property = "button.mousedown.outlineColor"
-	elseif ( self.mousedown or self.mouseover ) then
+	elseif ( self.mousedown or self.mouseover or self.focus ) then
 		property = "button.mouseover.outlineColor"
 	end
 
@@ -141,6 +141,19 @@ function dropdownlist:isChildMousedOver()
 	end
 
 	return false
+end
+
+function dropdownlist:keypressed( key, scancode, isrepeat )
+	if ( not self.focus or self:isDisabled() ) then
+		return
+	end
+
+	if ( key == "return"
+	  or key == "kpenter"
+	  or key == "space" ) then
+		self:setActive( not self:isActive() )
+		self:onClick()
+	end
 end
 
 function dropdownlist:mousepressed( x, y, button, istouch )

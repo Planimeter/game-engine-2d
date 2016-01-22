@@ -52,7 +52,7 @@ local axisGreetings = {
 	"Howdy,",
 	"Kumusta,",
 	"Sup,",
-	"Privet, ",
+	"Privet,",
 	"Welcome,"
 }
 

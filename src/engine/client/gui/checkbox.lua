@@ -46,7 +46,7 @@ function checkbox:drawForeground()
 	if ( not self:isDisabled() ) then
 		if ( self.mousedown and self.mouseover ) then
 			property = "checkbox.mousedown.outlineColor"
-		elseif ( self.mousedown or self.mouseover ) then
+		elseif ( self.mousedown or self.mouseover or self.focus ) then
 			property = "checkbox.mouseover.outlineColor"
 		end
 	end
@@ -74,6 +74,19 @@ end
 
 function checkbox:isChecked()
 	return self.checked
+end
+
+function checkbox:keypressed( key, scancode, isrepeat )
+	if ( not self.focus or self:isDisabled() ) then
+		return
+	end
+
+	if ( key == "return"
+	  or key == "kpenter"
+	  or key == "space" ) then
+		self:onClick()
+		self:setChecked( not self:isChecked() )
+	end
 end
 
 function checkbox:mousereleased( x, y, button, istouch )

@@ -350,7 +350,7 @@ end
 function entity:onNetworkVarChanged( networkvar )
 	if ( _SERVER ) then
 		local payload = payload( "networkVarChanged" )
-		payload:set( "entIndex", self.entIndex )
+		payload:set( "entity", self )
 
 		local struct = self:getNetworkVarsStruct()
 		local networkVar = typelenvalues( nil, struct )
@@ -382,15 +382,14 @@ function entity:remove()
 
 	if ( _SERVER and not _CLIENT ) then
 		local payload = payload( "entityRemoved" )
-		payload:set( "entIndex", self.entIndex )
+		payload:set( "entity", self )
 		networkserver.broadcast( payload )
 	end
 end
 
 if ( _CLIENT ) then
 	local function onEntityRemoved( payload )
-		local entIndex = payload:get( "entIndex" )
-		local entity   = entity.getByEntIndex( entIndex )
+		local entity = payload:get( "entity" )
 		if ( entity ) then
 			entity:remove()
 		end

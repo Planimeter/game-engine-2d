@@ -176,6 +176,8 @@ function typelenvalues:serialize()
 				insert( data, numberToBytes( value.y ) )
 			elseif ( key.type == "typelenvalues" ) then
 				insert( data, value:serialize() )
+			elseif ( key.type == "entity" ) then
+				insert( data, numberToBytes( value and value.entIndex or 0 ) )
 			else
 				print( "Can't serialize " .. key.type .. " for " ..
 				       self:getStructName() .. "!" )
@@ -240,6 +242,8 @@ function typelenvalues:deserialize()
 			elseif ( key.type == "typelenvalues" ) then
 				size  = bytesToNumber( sub( data, index, index + 7 ) )
 				index = index + 8
+			elseif ( key.type == "entity" ) then
+				size = 8
 			end
 
 			-- Get data
@@ -260,6 +264,10 @@ function typelenvalues:deserialize()
 				local tlvs = typelenvalues()
 				tlvs.data  = bytes
 				self.data[ key.name ] = tlvs
+			elseif ( key.type == "entity" ) then
+				local entIndex = bytesToNumber( bytes )
+				require( "engine.shared.entities.entity" )
+				self.data[ key.name ] = entity.getByEntIndex( entIndex )
 			end
 			index = index + size
 		else

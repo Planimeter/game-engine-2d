@@ -107,7 +107,8 @@ function button:keypressed( key, scancode, isrepeat )
 	end
 
 	if ( key == "return"
-	  or key == "kpenter" ) then
+	  or key == "kpenter"
+	  or key == "space" ) then
 		self:onClick()
 	end
 end
