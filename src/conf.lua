@@ -12,37 +12,51 @@ local function loadConfig( c )
     require( "engine.shared.convar" )
     convar.readConfig()
 
-    local _INTERACTIVE        = c.args[ "-dedicated" ] and
-                                c.args[ "-interactive" ]
+    local _INTERACTIVE = c.args[ "-dedicated" ] and
+                         c.args[ "-interactive" ]
 
-    local r_window_width      = convar.getConfig( "r_window_width" )
-    local r_window_height     = convar.getConfig( "r_window_height" )
+    local r_window_width = convar.getConfig( "r_window_width" )
+    local r_window_height = convar.getConfig( "r_window_height" )
     local r_window_fullscreen = convar.getConfig( "r_window_fullscreen" )
     local r_window_borderless = convar.getConfig( "r_window_borderless" )
-    local r_window_vsync      = convar.getConfig( "r_window_vsync" )
+    local r_window_vsync = convar.getConfig( "r_window_vsync" )
     if ( _INTERACTIVE ) then
-        c.window.width        = 661
+        c.window.width = 661
     elseif ( r_window_width ) then
-        c.window.width        = tonumber( r_window_width )
+        c.window.width = tonumber( r_window_width )
     end
     if ( _INTERACTIVE ) then
-        c.window.height       = 480
+        c.window.height = 480
     elseif ( r_window_height ) then
-        c.window.height       = tonumber( r_window_height )
+        c.window.height = tonumber( r_window_height )
     end
     if ( r_window_fullscreen ) then
-        c.window.fullscreen   = tonumber( r_window_fullscreen ) ~= nil and
-                                tonumber( r_window_fullscreen ) ~= 0
+        c.window.fullscreen = tonumber( r_window_fullscreen ) ~= nil and
+                              tonumber( r_window_fullscreen ) ~= 0
     end
     if ( _INTERACTIVE ) then
-        -- c.window.borderless   = true
+        -- c.window.borderless = true
     elseif ( r_window_borderless ) then
-        c.window.borderless   = tonumber( r_window_borderless ) ~= nil and
-                                tonumber( r_window_borderless ) ~= 0
+        c.window.borderless = tonumber( r_window_borderless ) ~= nil and
+                              tonumber( r_window_borderless ) ~= 0
     end
     if ( r_window_vsync ) then
-        c.window.vsync        = tonumber( r_window_vsync ) ~= nil and
-                                tonumber( r_window_vsync ) ~= 0
+        c.window.vsync = tonumber( r_window_vsync ) ~= nil and
+                         tonumber( r_window_vsync ) ~= 0
+    end
+
+    c.sound = c.sound or {}
+    c.sound.volume = 1
+    c.sound.desktop = true
+
+    local snd_volume = convar.getConfig( "snd_volume" )
+    local snd_desktop = convar.getConfig( "snd_desktop" )
+    if ( snd_volume ) then
+        c.sound.volume = tonumber( snd_volume )
+    end
+    if ( snd_desktop ) then
+        c.sound.desktop = tonumber( snd_desktop ) ~= nil and
+                          tonumber( snd_desktop ) ~= 0
     end
 
     _CONF = c

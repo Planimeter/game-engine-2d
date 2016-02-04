@@ -4,12 +4,25 @@
 --
 --============================================================================--
 
+require( "engine.shared.hook" )
+
 -- These values are preserved during real-time scripting.
 local sounds = sound and sound.sounds or {}
 
 local audio = love.audio
 
 class( "sound" )
+
+local function updateVolume( convar )
+	local volume = convar:getNumber()
+	sound.setVolume( volume )
+end
+
+local snd_volume  = convar( "snd_volume", 1, 0, 1,
+                            "Sets the master volume",
+                            updateVolume )
+local snd_desktop = convar( "snd_desktop", "1", nil, nil,
+                            "Toggles playing sound from the desktop" )
 
 function sound.reload( library )
 	if ( string.sub( library, 1, 7 ) ~= "sounds." ) then
@@ -76,6 +89,11 @@ function sound:getVolume()
 end
 
 function sound:setVolume( volume )
+	if ( type( self ) == "number" ) then
+		audio.setVolume( self ) -- volume
+		return
+	end
+
 	local filename = self:getFilename()
 	if ( sounds[ filename ] ) then
 		sounds[ filename ].sound:setVolume( volume )

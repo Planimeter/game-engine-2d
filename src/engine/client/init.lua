@@ -5,14 +5,18 @@
 --============================================================================--
 
 -- These values are preserved during real-time scripting.
-local _connected = engine                  and
-                   engine.client           and
-                   engine.client.connected or  false
+local _connected = engine                   and
+                   engine.client            and
+                   engine.client.connected  or  false
+local f          = engine                   and
+                   engine.client            and
+                   engine.client.hasFocus() or  true
 
 require( "conf" )
 require( "engine.client.bind" )
 require( "engine.client.graphics" )
 require( "engine.client.gui" )
+require( "engine.client.sound" )
 require( "engine.shared.hook" )
 require( "engine.shared.network.payload" )
 
@@ -32,6 +36,7 @@ local pcall       = pcall
 local print       = print
 local require     = require
 local scheme      = scheme
+local sound       = sound
 local string      = string
 local table       = table
 local tostring    = tostring
@@ -182,10 +187,25 @@ function draw()
 	end
 end
 
-local _focus = nil
+local _focus = f
+
+local updateDesktopSound = function( f )
+	local snd_desktop = convar.getConvar( "snd_desktop" )
+	if ( snd_desktop:getBoolean() ) then
+		return
+	end
+
+	if ( not f ) then
+		sound.setVolume( 0 )
+	else
+		local snd_volume = convar.getConvar( "snd_volume" )
+		sound.setVolume( snd_volume:getNumber() )
+	end
+end
 
 function focus( f )
 	_focus = f
+	updateDesktopSound( f )
 end
 
 local _getAverageDelta = timer.getAverageDelta
@@ -328,6 +348,8 @@ function load( arg )
 
 	graphics.initialize()
 	gui.initialize()
+
+	sound.setVolume( conf.sound.volume )
 
 	if ( _G._DEBUG ) then
 		convar.getConvar( "perf_draw_frame_rate" ):setValue( "1" )
