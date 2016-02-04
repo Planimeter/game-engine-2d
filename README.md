@@ -18,6 +18,11 @@ Create a Project
 [API Documentation](http://www.planimeter.org/grid/api/Home)  
 [API Documentation Source](https://github.com/Planimeter/grid)
 
+Blog Articles
+=============
+
+[Create a Project with Grid](http://www.andrewmcwatters.com/blog/create-a-project-with-grid/)
+
 Features
 ========
 
