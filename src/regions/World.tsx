@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset name="World" tilewidth="32" tileheight="32">
- <image source="../images/tilesets/world.png" width="512" height="512"/>
+<tileset name="World" tilewidth="16" tileheight="16">
+ <image source="../images/tilesets/world.png" width="256" height="256"/>
  <tile id="8">
   <properties>
    <property name="walkable" value="false"/>

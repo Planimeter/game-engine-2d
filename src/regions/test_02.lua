@@ -1,12 +1,13 @@
 return {
   version = "1.1",
   luaversion = "5.1",
-  tiledversion = "0.12.3",
+  tiledversion = "0.15.0",
   orientation = "orthogonal",
+  renderorder = "right-down",
   width = 100,
   height = 100,
-  tilewidth = 32,
-  tileheight = 32,
+  tilewidth = 16,
+  tileheight = 16,
   nextobjectid = 225,
   properties = {},
   tilesets = {
@@ -14,19 +15,20 @@ return {
       name = "World",
       firstgid = 1,
       filename = "World.tsx",
-      tilewidth = 32,
-      tileheight = 32,
+      tilewidth = 16,
+      tileheight = 16,
       spacing = 0,
       margin = 0,
       image = "../images/tilesets/world.png",
-      imagewidth = 512,
-      imageheight = 512,
+      imagewidth = 256,
+      imageheight = 256,
       tileoffset = {
         x = 0,
         y = 0
       },
       properties = {},
       terrains = {},
+      tilecount = 256,
       tiles = {
         {
           id = 8,
@@ -82,37 +84,40 @@ return {
       name = "Architect",
       firstgid = 257,
       filename = "Architect.tsx",
-      tilewidth = 32,
-      tileheight = 32,
+      tilewidth = 16,
+      tileheight = 16,
       spacing = 0,
       margin = 0,
       image = "../images/tilesets/architect.png",
-      imagewidth = 256,
-      imageheight = 256,
+      imagewidth = 128,
+      imageheight = 128,
       tileoffset = {
         x = 0,
         y = 0
       },
       properties = {},
       terrains = {},
+      tilecount = 64,
       tiles = {}
     },
     {
       name = "Developer",
       firstgid = 321,
-      tilewidth = 32,
-      tileheight = 32,
+      filename = "Developer.tsx",
+      tilewidth = 16,
+      tileheight = 16,
       spacing = 0,
       margin = 0,
       image = "../images/tilesets/developer.png",
-      imagewidth = 64,
-      imageheight = 64,
+      imagewidth = 32,
+      imageheight = 32,
       tileoffset = {
         x = 0,
         y = 0
       },
       properties = {},
       terrains = {},
+      tilecount = 4,
       tiles = {}
     }
   },
@@ -126,6 +131,8 @@ return {
       height = 100,
       visible = true,
       opacity = 1,
+      offsetx = 0,
+      offsety = 0,
       properties = {},
       encoding = "lua",
       data = {
@@ -240,6 +247,8 @@ return {
       height = 100,
       visible = true,
       opacity = 1,
+      offsetx = 0,
+      offsety = 0,
       properties = {},
       encoding = "lua",
       data = {
@@ -354,6 +363,8 @@ return {
       height = 100,
       visible = true,
       opacity = 1,
+      offsetx = 0,
+      offsety = 0,
       properties = {},
       encoding = "lua",
       data = {
@@ -468,6 +479,8 @@ return {
       height = 100,
       visible = true,
       opacity = 1,
+      offsetx = 0,
+      offsety = 0,
       properties = {},
       encoding = "lua",
       data = {
@@ -582,6 +595,8 @@ return {
       height = 100,
       visible = true,
       opacity = 1,
+      offsetx = 0,
+      offsety = 0,
       properties = {},
       encoding = "lua",
       data = {
@@ -692,6 +707,8 @@ return {
       name = "Spawn Points",
       visible = true,
       opacity = 1,
+      offsetx = 0,
+      offsety = 0,
       properties = {},
       objects = {
         {
@@ -699,10 +716,10 @@ return {
           name = "Test World Gate",
           type = "prop_worldgate_spawn",
           shape = "rectangle",
-          x = 1600,
-          y = 1504,
-          width = 32,
-          height = 96,
+          x = 800,
+          y = 752,
+          width = 16,
+          height = 48,
           rotation = 0,
           visible = true,
           properties = {}

@@ -1,7 +1,7 @@
 return {
 	image = "images/player.png",
-	width = 32,
-	height = 64,
+	width = 16,
+	height = 32,
 	frametime = 0.2,
 	animations = {
 		idle = {

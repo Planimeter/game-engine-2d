@@ -11,8 +11,18 @@ class "spell"
 
 spell.spells = spells
 
+spell.name = "Unknown Spell"
+
+function spell.getSpell( name )
+	return spell.spells[ name ]
+end
+
 function spell.invoke()
-	return
+end
+
+function spell.register( class, name )
+	spell.spells[ name ] = class
+	getfenv( 2 )[ name ] = nil
 end
 
 function spell:spell()

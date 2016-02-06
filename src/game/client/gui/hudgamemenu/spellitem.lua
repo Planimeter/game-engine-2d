@@ -1,25 +1,25 @@
 --========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
 --
--- Purpose: Bind List Item class
+-- Purpose: Spell Item class
 --
 --============================================================================--
 
--- These values are preserved during real-time scripting.
-local trappedItem = gui.bindlistitem and gui.bindlistitem.trappedItem or nil
+class "spellitem" ( gui.button )
 
-class "bindlistitem" ( gui.button )
+spellitem.trappedItem = trappedItem
 
-bindlistitem.trappedItem = trappedItem
+function spellitem:spellitem( parent, name, spellName )
+	require( "game.shared.spells." .. spellName )
 
-function bindlistitem:bindlistitem( parent, name, text, key, concommand )
+	local spell = spell.getSpell( spellName )
+	local text  = spell.name
 	gui.button.button( self, parent, name, text )
-	self.width      = parent:getWidth()
-	self.height     = 30
-	self.key        = key
-	self.concommand = concommand
+	self.width  = parent:getWidth()
+	self.height = 30
+	self.spell  = spell
 end
 
-function bindlistitem:drawBackground()
+function spellitem:drawBackground()
 	local property = "button.backgroundColor"
 	local width    = self:getWidth()
 	local height   = self:getHeight()
@@ -42,10 +42,10 @@ function bindlistitem:drawBackground()
 	end
 end
 
-function bindlistitem:drawForeground()
+function spellitem:drawForeground()
 end
 
-function bindlistitem:drawText()
+function spellitem:drawText()
 	local property = "button.textColor"
 
 	if ( self:isDisabled() ) then
@@ -67,39 +67,22 @@ function bindlistitem:drawText()
 	graphics.print( key, x, y )
 end
 
-function bindlistitem:getConcommand()
-	return self.concommand
+function spellitem:getSpell()
+	return self.spell
 end
 
-function bindlistitem:getKey()
-	return self.key
-end
-
-function bindlistitem.keyTrap( key )
-	local self = gui.bindlistitem.trappedItem
-	gui.bindlistitem.trappedItem = nil
+function spellitem.keyTrap( key )
+	local self = gui.spellitem.trappedItem
+	gui.spellitem.trappedItem = nil
 	self:setKey( key )
 	os.setCursorVisible( true )
 	return true
 end
 
-function bindlistitem:onClick()
-	gui.bindlistitem.trappedItem = self
+function spellitem:onClick()
+	gui.spellitem.trappedItem = self
 	os.setCursorVisible( false )
 	input.setKeyTrap( self.keyTrap )
 end
 
-function bindlistitem:setConcommand( concommand )
-	self.concommand = concommand
-end
-
-function bindlistitem:setKey( key )
-	local oldKey = self.key
-	self.key     = key
-
-	local panel = self:getParent()
-	panel:getParent():onBindChange( item, key, oldKey, self:getConcommand() )
-	self:invalidate()
-end
-
-gui.register( bindlistitem, "bindlistitem" )
+gui.register( spellitem, "spellitem" )

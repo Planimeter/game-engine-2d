@@ -15,7 +15,7 @@ local _G          = _G
 module( "game" )
 
 appSecret     = ""
-tileSize      = 32
+tileSize      = 16
 initialRegion = "test_01"
 
 function conf( c )

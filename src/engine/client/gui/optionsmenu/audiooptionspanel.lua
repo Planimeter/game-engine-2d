@@ -75,8 +75,12 @@ end
 
 function audiooptionspanel:updateSound()
 	local options = self.options
-	convar.setConvar( "snd_volume",  options.masterVolume )
-	convar.setConvar( "snd_desktop", options.desktopSound and 1 or 0 )
+	if ( options.masterVolume ) then
+		convar.setConvar( "snd_volume",  options.masterVolume )
+	end
+	if ( options.desktopSound ) then
+		convar.setConvar( "snd_desktop", options.desktopSound and 1 or 0 )
+	end
 end
 
 gui.register( audiooptionspanel, "audiooptionspanel" )

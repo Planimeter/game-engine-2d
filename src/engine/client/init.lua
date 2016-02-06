@@ -440,7 +440,7 @@ local function onReceivePlayerInitialized( payload )
 
 	require( "engine.client.camera" )
 	_G.camera.setParentEntity( localplayer )
-	_G.camera.setZoom( 1 )
+	_G.camera.setZoom( 2 )
 
 	if ( not _G._SERVER ) then
 		localplayer:initialSpawn()

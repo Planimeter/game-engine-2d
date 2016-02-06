@@ -10,8 +10,8 @@ require( "common.vector" )
 local contexts   = camera and camera.getWorldContexts() or {}
 local entity     = camera and camera.getParentEntity()
 local position   = camera and camera.getPosition() or vector()
-local minZoom    = camera and camera.getMinZoom() or 0.5
-local maxZoom    = camera and camera.getMaxZoom() or 2
+local minZoom    = camera and camera.getMinZoom() or 1
+local maxZoom    = camera and camera.getMaxZoom() or 4
 local zoom       = camera and camera.getZoom() or 1
 
 local class      = class
