@@ -37,7 +37,7 @@ end
 
 function vaplayer:cast( spellName, target, position )
 	require( "game.shared.spells" )
-	local spell = spell.invoke( spellName )
+	local spell = spell.getSpell( spellName )
 	spell:setCaster( self )
 	spell:setTarget( target )
 	spell:setPosition( position )

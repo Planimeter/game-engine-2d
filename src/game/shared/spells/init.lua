@@ -17,9 +17,6 @@ function spell.getSpell( name )
 	return spell.spells[ name ]
 end
 
-function spell.invoke()
-end
-
 function spell.register( class, name )
 	spell.spells[ name ] = class
 	getfenv( 2 )[ name ] = nil
@@ -29,6 +26,30 @@ function spell:spell()
 end
 
 function spell:draw()
+end
+
+function spell:getCaster()
+	return self.caster
+end
+
+function spell:getTarget()
+	return self.target
+end
+
+function spell:getPosition()
+	return self.position
+end
+
+function spell:setCaster( caster )
+	self.caster = caster
+end
+
+function spell:setTarget( target )
+	self.target = target
+end
+
+function spell:setPosition( position )
+	self.position = position
 end
 
 function spell:update( dt )
