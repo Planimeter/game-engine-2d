@@ -104,7 +104,7 @@ function onPostConnect( event )
 
 	-- Set spawn point
 	local spawnPoint = _G.gameserver.getSpawnPoint( player )
-	local position = vector.origin + vector( 0, _G.game.tileSize )
+	local position = _G.vector.origin + vector( 0, _G.game.tileSize )
 	if ( spawnPoint ) then
 		position = spawnPoint:getPosition()
 	end
