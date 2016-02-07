@@ -103,11 +103,12 @@ function onPostConnect( event )
 	player:onConnect()
 
 	-- Set spawn point
-	local spawnpoint = _G.gameserver.getSpawnPoint( player )
-	if ( spawnpoint ) then
-		local position = spawnpoint:getPosition()
-		player:setNetworkVar( "position", position )
+	local spawnPoint = _G.gameserver.getSpawnPoint( player )
+	local position = vector.origin + vector( 0, _G.game.tileSize )
+	if ( spawnPoint ) then
+		position = spawnPoint:getPosition()
 	end
+	player:setNetworkVar( "position", position )
 
 	-- Send server info
 	if ( _AXIS ) then
