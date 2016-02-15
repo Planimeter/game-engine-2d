@@ -6,11 +6,11 @@
 [![Development Supercollective, Excellence by Design.](https://img.shields.io/badge/Made%20with%20L%C3%96VE%20by-Planimeter-brightgreen.svg)](http://www.planimeter.org/)
 
 The Grid engine is a 2D game engine built on LÖVE.  
-Grid is designed for hobbyists who need to write less and do more.
+Grid makes powerful concepts from 3D game engines accessible in a 2D game
+environment.
 
-It's a small, but powerful engine that provides a significant amount of
-subsystems to you that you would otherwise need to write by hand for your
-projects or game jams.
+It's a lightweight and fast engine, and it provides many abstractions that you
+would otherwise need to write by hand for your projects or game jams.
 
 Create a Project
 ================
@@ -26,6 +26,7 @@ Blog Articles
 Features
 ========
 
+* Animation events
 * Basic prediction
 * Classes via [lclass](https://github.com/andrewmcwatters/lclass "lclass")
 * Client-server model
@@ -34,7 +35,9 @@ Features
 * Elegant GUI system
 * Entity system
 * Level streaming
+* Live reloadable assets
 * Pathfinding
+* Soundscripts
 * Spritesheet animations
 * [Tiled](http://www.mapeditor.org/ "Tiled")-based region system
 * Threaded [LuaSec](https://github.com/brunoos/luasec "LuaSec") support
