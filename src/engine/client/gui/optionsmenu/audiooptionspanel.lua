@@ -22,7 +22,7 @@ function audiooptionspanel:audiooptionspanel()
 	name = "Master Volume Slider"
 	local masterVolume = gui.slider( self, name )
 	self.masterVolume = masterVolume
-	options.masterVolume = c.sound.desktop
+	options.masterVolume = c.sound.volume
 	masterVolume:setMax( 1 )
 	masterVolume:setValue( c.sound.volume )
 	masterVolume.onValueChanged = function( slider, oldValue, newValue )
