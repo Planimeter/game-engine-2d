@@ -46,7 +46,7 @@ function player.getInOrNearRegion( region )
 	for _, player in ipairs( players ) do
 		local minA, maxA = player:getViewportBounds()
 
-		local x,  y  = region:getX(), region:getY()
+		local x, y   = region:getX(), region:getY()
 		local width  = region:getPixelWidth()
 		local height = region:getPixelHeight()
 		local minB   = vector( x, y + height )
