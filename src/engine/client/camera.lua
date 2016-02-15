@@ -10,6 +10,7 @@ require( "common.vector" )
 local contexts   = camera and camera.getWorldContexts() or {}
 local entity     = camera and camera.getParentEntity()
 local position   = camera and camera.getPosition() or vector()
+local worldIndex = camera and camera.getWorldIndex() or 1
 local minZoom    = camera and camera.getMinZoom() or 1
 local maxZoom    = camera and camera.getMaxZoom() or 4
 local zoom       = camera and camera.getZoom() or 1
@@ -29,8 +30,10 @@ local _contexts = contexts
 class( "context" )
 
 function context:context( x, y, func )
-	self.position  = vector( x, y )
-	self._drawFunc = func
+	self.position   = vector( x, y )
+	-- TODO: Add worldIndex to constructor.
+	self.worldIndex = 1
+	self._drawFunc  = func
 end
 
 function context:draw()
@@ -45,6 +48,10 @@ end
 
 function context:getPosition()
 	return self.position
+end
+
+function context:getWorldIndex()
+	return self.worldIndex
 end
 
 function context:isInViewport()
@@ -103,6 +110,17 @@ end
 
 function getWorldContexts()
 	return _contexts
+end
+
+local _worldIndex = worldIndex
+
+function getWorldIndex()
+	local entity = getParentEntity()
+	if ( entity ) then
+		return entity:getWorldIndex()
+	end
+
+	return _worldIndex
 end
 
 local _minZoom = minZoom

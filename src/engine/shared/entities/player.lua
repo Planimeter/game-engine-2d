@@ -41,6 +41,24 @@ function player.getByPeer( peer )
 	end
 end
 
+function player.getInOrNearRegion( region )
+	local t = {}
+	for _, player in ipairs( players ) do
+		local minA, maxA = player:getViewportBounds()
+
+		local x,  y  = region:getX(), region:getY()
+		local width  = region:getPixelWidth()
+		local height = region:getPixelHeight()
+		local minB   = vector( x, y + height )
+		local maxB   = vector( x + width, y )
+
+		if ( math.aabbsintersect( minA, maxA, minB, maxB ) ) then
+			table.insert( t, player )
+		end
+	end
+	return #t > 0 and t or nil
+end
+
 function player:player()
 	character.character( self )
 

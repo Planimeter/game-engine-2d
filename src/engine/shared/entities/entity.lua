@@ -64,33 +64,36 @@ if ( _CLIENT ) then
 		append( renderables, camera.getWorldContexts() )
 		depthSort( renderables )
 
+		local worldIndex = camera.getWorldIndex()
 		if ( r_draw_shadows:getBoolean() ) then
 			for _, v in ipairs( renderables ) do
-				graphics.push()
-					local x, y = v:getDrawPosition()
-					graphics.translate( x, y )
+				if ( worldIndex == v:getWorldIndex() ) then
+					graphics.push()
+						local x, y = v:getDrawPosition()
+						graphics.translate( x, y )
 
-					-- Draw shadow
-					local isEntity = typeof( v, "entity" )
-					if ( isEntity ) then
-						graphics.push()
-							graphics.setOpacity( 0.14 )
-							graphics.setColor( color.black )
+						-- Draw shadow
+						local isEntity = typeof( v, "entity" )
+						if ( isEntity ) then
+							graphics.push()
+								graphics.setOpacity( 0.14 )
+								graphics.setColor( color.black )
 
-							local sprite = v:getSprite()
-							local height = sprite:getHeight()
-							graphics.translate( sprite:getWidth() / 2, height )
-							graphics.scale( 1, -1 )
-								v:drawShadow()
-							graphics.setOpacity( 1 )
-						graphics.pop()
-					end
-				graphics.pop()
+								local sprite = v:getSprite()
+								local height = sprite:getHeight()
+								graphics.translate( sprite:getWidth() / 2, height )
+								graphics.scale( 1, -1 )
+									v:drawShadow()
+								graphics.setOpacity( 1 )
+							graphics.pop()
+						end
+					graphics.pop()
+				end
 			end
 		end
 
 		for _, v in ipairs( renderables ) do
-			if ( v:isInViewport() ) then
+			if ( worldIndex == v:getWorldIndex() and v:isInViewport() ) then
 				graphics.push()
 					local x, y = v:getDrawPosition()
 					graphics.translate( x, y )
@@ -156,8 +159,9 @@ function entity:entity()
 		entity.lastEntIndex = self.entIndex
 	end
 
-	self:networkString( "name",     nil )
-	self:networkVector( "position", vector() )
+	self:networkString( "name",       nil )
+	self:networkVector( "position",   vector() )
+	self:networkNumber( "worldIndex", 1 )
 
 	table.insert( entity.entities, self )
 end
@@ -210,7 +214,13 @@ if ( _CLIENT ) then
 	function entity:getSprite()
 		return self.sprite or graphics.error
 	end
+end
 
+function entity:getWorldIndex()
+	return self:getNetworkVar( "worldIndex" )
+end
+
+if ( _CLIENT ) then
 	function entity:isInViewport()
 		-- TODO: Implement me.
 		return true

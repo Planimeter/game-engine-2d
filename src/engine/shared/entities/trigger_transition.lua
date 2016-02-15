@@ -4,15 +4,12 @@
 --
 --============================================================================--
 
-require( "engine.shared.entities.entity" )
+require( "engine.shared.entities.trigger" )
 
-class "trigger_transition" ( "entity" )
+class "trigger_transition" ( "trigger" )
 
 function trigger_transition:trigger_transition()
-	entity.entity( self )
-
-	self:networkNumber( "width",  0 )
-	self:networkNumber( "height", 0 )
+	trigger.trigger( self )
 end
 
 function trigger_transition:findRegionSpace()
@@ -55,33 +52,6 @@ function trigger_transition:findRegionSpace()
 	return pos.x, pos.y
 end
 
-function trigger_transition:getPlayersInOrNearRegion( region )
-	local t = {}
-	for _, player in ipairs( player.getAll() ) do
-		local minA, maxA = player:getViewportBounds()
-
-		local x,  y  = region:getX(), region:getY()
-		local width  = region:getPixelWidth()
-		local height = region:getPixelHeight()
-		local minB   = vector( x, y + height )
-		local maxB   = vector( x + width, y )
-
-		if ( math.aabbsintersect( minA, maxA, minB, maxB ) ) then
-			table.insert( t, player )
-		end
-	end
-	return #t > 0 and t or nil
-end
-
-function trigger_transition:isVisibleToPlayer( player )
-	local minA, maxA = player:getViewportBounds()
-	local width      = self:getNetworkVar( "width" )
-	local height     = self:getNetworkVar( "height" )
-	local minB       = self:localToWorld( vector() )
-	local maxB       = self:localToWorld( vector( width, -height ) )
-	return math.aabbsintersect( minA, maxA, minB, maxB )
-end
-
 function trigger_transition:loadRegion()
 	local properties = self:getProperties()
 	if ( not properties ) then
@@ -110,7 +80,7 @@ function trigger_transition:removeRegion()
 		local name = properties[ "region" ]
 		local r = region.getByName( name )
 		if ( r ) then
-			local players = self:getPlayersInOrNearRegion( r )
+			local players = player.getInOrNearRegion( r )
 			if ( not players ) then
 				region.unload( name )
 			end

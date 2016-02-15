@@ -22,11 +22,14 @@ if ( _CLIENT ) then
 			graphics.scale( scale )
 			local x, y = camera.getTranslation()
 			graphics.translate( x, y )
+			local worldIndex = camera.getWorldIndex()
 			for _, region in ipairs( region.regions ) do
-				graphics.push()
-					graphics.translate( region:getX(), region:getY() )
-					region:draw()
-				graphics.pop()
+				if ( worldIndex == region:getWorldIndex() ) then
+					graphics.push()
+						graphics.translate( region:getX(), region:getY() )
+						region:draw()
+					graphics.pop()
+				end
 			end
 
 			entity.drawAll()
@@ -36,6 +39,17 @@ end
 
 function region.exists( name )
 	return filesystem.exists( "regions/" .. name .. ".lua" )
+end
+
+function region.findNextWorldIndex()
+	local worldIndex = 1
+	for _, region in ipairs( region.regions ) do
+		if ( worldIndex == region:getWorldIndex() ) then
+			worldIndex = worldIndex + 1
+		end
+	end
+
+	return worldIndex
 end
 
 function region.getAll()
@@ -50,7 +64,8 @@ function region.getByName( name )
 	end
 end
 
-function region.getAtPosition( position )
+function region.getAtPosition( position, worldIndex )
+	worldIndex = worldIndex or 1
 	for _, region in ipairs( region.regions ) do
 		local px, py = position.x, position.y
 		local x,  y  = region:getX(), region:getY()
@@ -62,12 +77,12 @@ function region.getAtPosition( position )
 	end
 end
 
-function region.load( name, x, y )
+function region.load( name, x, y, worldIndex )
 	if ( region.getByName( name ) ) then
 		return
 	end
 
-	local region = region( name, x, y )
+	local region = region( name, x, y, worldIndex )
 	table.insert( region.regions, region )
 end
 
@@ -80,9 +95,10 @@ function region.reload( library )
 	local r = region.getByName( name )
 	local x = r:getX()
 	local y = r:getY()
+	local worldIndex = r:getWorldIndex()
 	r:cleanUp()
 	region.unload( name )
-	region.load( name, x, y )
+	region.load( name, x, y, worldIndex )
 end
 
 hook.set( "shared", region.reload, "onReloadScript", "reloadRegion" )
@@ -189,13 +205,14 @@ function region.snapToGrid( x, y )
 	return x, y
 end
 
-function region:region( name, x, y )
+function region:region( name, x, y, worldIndex )
 	self.name     = name
 	self.data     = require( "regions." .. name )
 	self.entities = {}
 
 	self.x = x or 0
 	self.y = y or 0
+	self.worldIndex = worldIndex or 1
 
 	self:parse()
 end
@@ -305,6 +322,10 @@ end
 
 function region:getHeight()
 	return self.height
+end
+
+function region:getWorldIndex()
+	return self.worldIndex
 end
 
 function region:getX()
@@ -469,6 +490,10 @@ end
 
 function region:setHeight( height )
 	self.height = height
+end
+
+function region:setWorldIndex( worldIndex )
+	self.worldIndex = worldIndex
 end
 
 function region:setX( x )
