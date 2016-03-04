@@ -21,8 +21,9 @@ Create a Project
 Blog Articles
 =============
 
-[Create a Project with Grid](http://www.andrewmcwatters.com/blog/create-a-project-with-grid/)  
-[Create an Entity in Grid](http://www.andrewmcwatters.com/blog/create-an-entity-in-grid/)
+[Create a Project](http://www.andrewmcwatters.com/blog/create-a-project-with-grid/)  
+[Create an Entity](http://www.andrewmcwatters.com/blog/create-an-entity-in-grid/)
+[Using Network Variables](http://www.andrewmcwatters.com/blog/using-network-variables-in-grid/)
 
 Features
 ========
