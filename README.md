@@ -22,6 +22,7 @@ Blog Articles
 =============
 
 [Create a Project with Grid](http://www.andrewmcwatters.com/blog/create-a-project-with-grid/)
+[Create an Entity in Grid](http://www.andrewmcwatters.com/blog/create-an-entity-in-grid/)
 
 Features
 ========
