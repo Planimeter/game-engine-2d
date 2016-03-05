@@ -166,11 +166,10 @@ concommand( "chat", "Toggles the chat", function()
 end )
 
 function onChatReceived( payload )
-	local entIndex = payload:get( "entIndex" )
-	local message  = payload:get( "message" )
+	local entity  = payload:get( "entity" )
+	local message = payload:get( "message" )
 	require( "engine.client.chat" )
-	if ( entIndex > 0 ) then
-		local entity = entity.getByEntIndex( entIndex )
+	if ( entity ) then
 		if ( not game.call( "client", "onPlayerChat", entity, message ) ) then
 			return
 		end

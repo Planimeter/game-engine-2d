@@ -16,7 +16,7 @@ function npc:npc()
 	local max      = vector( tileSize, -tileSize )
 	self:setCollisionBounds( min, max )
 
-	self:networkNumber( "moveSpeed", 1 )
+	self:networkNumber( "moveSpeed", 0.5 )
 
 	if ( _CLIENT ) then
 		require( "engine.client.sprite" )

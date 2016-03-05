@@ -68,7 +68,7 @@ function player:player()
 	self:setCollisionBounds( min, max )
 
 	self:networkNumber( "id", player.lastPlayerId + 1 )
-	self:networkNumber( "moveSpeed", 1 )
+	self:networkNumber( "moveSpeed", 0.5 )
 
 	if ( _SERVER ) then
 		player.lastPlayerId = self:getNetworkVar( "id" )
