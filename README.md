@@ -31,6 +31,7 @@ Blog Articles
 Features
 ========
 
+* Addon system
 * Animation events
 * Basic prediction
 * Classes via [lclass](https://github.com/andrewmcwatters/lclass "lclass")
