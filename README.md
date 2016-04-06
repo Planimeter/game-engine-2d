@@ -18,12 +18,15 @@ Create a Project
 [API Documentation](http://www.planimeter.org/grid/api/Home)  
 [API Documentation Source](https://github.com/Planimeter/grid)
 
+<!--
+FIXME: http://www.andrewmcwatters.com/blog is down due to Node upgrade.
 Blog Articles
 =============
 
 [Create a Project](http://www.andrewmcwatters.com/blog/create-a-project-with-grid/)  
 [Create an Entity](http://www.andrewmcwatters.com/blog/create-an-entity-in-grid/)  
 [Using Network Variables](http://www.andrewmcwatters.com/blog/using-network-variables-in-grid/)
+-->
 
 Features
 ========
