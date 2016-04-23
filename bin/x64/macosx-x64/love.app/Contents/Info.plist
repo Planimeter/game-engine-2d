@@ -10,7 +10,7 @@
 	<array>
 		<dict>
 			<key>CFBundleTypeIconFile</key>
-			<string>lovedocument</string>
+			<string>GameIcon</string>
 			<key>CFBundleTypeName</key>
 			<string>LÖVE Project</string>
 			<key>CFBundleTypeRole</key>
@@ -50,7 +50,7 @@
 	<key>CFBundleExecutable</key>
 	<string>love</string>
 	<key>CFBundleIconFile</key>
-	<string>love.icns</string>
+	<string>OS X AppIcon</string>
 	<key>CFBundleIdentifier</key>
 	<string>org.love2d.love</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -60,7 +60,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.10.0</string>
+	<string>0.10.1</string>
 	<key>CFBundleSignature</key>
 	<string>LoVe</string>
 	<key>CFBundleSupportedPlatforms</key>
@@ -86,7 +86,7 @@
 	<key>NSHighResolutionCapable</key>
 	<true/>
 	<key>NSHumanReadableCopyright</key>
-	<string>© 2006-2015 LÖVE Development Team</string>
+	<string>© 2006-2016 LÖVE Development Team</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>UTExportedTypeDeclarations</key>
@@ -99,7 +99,7 @@
 			<key>UTTypeDescription</key>
 			<string>LÖVE Project</string>
 			<key>UTTypeIconFile</key>
-			<string>lovedocument</string>
+			<string>GameIcon</string>
 			<key>UTTypeIdentifier</key>
 			<string>org.love2d.love-game</string>
 			<key>UTTypeReferenceURL</key>
