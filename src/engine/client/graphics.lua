@@ -143,6 +143,15 @@ end
 local r, g, b, a = 0, 0, 0, 0
 local _color     = color( r, g, b, a )
 
+function getBackgroundColor()
+	r, g, b, a = graphics.getBackgroundColor()
+	_color.r = r
+	_color.g = g
+	_color.b = b
+	_color.a = a
+	return _color
+end
+
 function getBlendMode()
 	return graphics.getBlendMode()
 end

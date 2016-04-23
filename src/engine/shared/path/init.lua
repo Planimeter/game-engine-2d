@@ -135,7 +135,6 @@ local function reconstructPath( node )
 end
 
 function getPath( start, goal )
-	local tileSize = _G.game.tileSize
 	start = snapToGrid( start )
 	goal  = snapToGrid( goal )
 	if ( start == goal ) then

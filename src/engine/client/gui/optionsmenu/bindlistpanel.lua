@@ -121,10 +121,10 @@ function bindlistpanel:saveBinds()
 		end
 	end
 
-	if ( i >= 1 ) then
+	-- if ( i >= 1 ) then
 		bind.saveBinds()
 		self.changedBinds = {}
-	end
+	-- end
 end
 
 function bindlistpanel:useDefaults()

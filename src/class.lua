@@ -40,8 +40,8 @@ local eventnames = {
 -------------------------------------------------------------------------------
 -- metamethod()
 -- Purpose: Creates a filler metamethod for metamethod inheritance
--- Input: class - The class metatable
---        eventname - The event name
+-- Input: class - Class metatable
+--        eventname - Event name
 -- Output: function
 -------------------------------------------------------------------------------
 local function metamethod( class, eventname )
@@ -81,7 +81,7 @@ local classes = {}
 -------------------------------------------------------------------------------
 -- getbaseclass()
 -- Purpose: Get a base class
--- Input: class - The class metatable
+-- Input: class - Class metatable
 -- Output: class
 -------------------------------------------------------------------------------
 local function getbaseclass( class )

@@ -28,7 +28,7 @@ if ( not _SERVER ) then
 	_CLIENT = true
 end
 
-_AXIS = false
+_AXIS = love.system.getOS() ~= "OS X"
 
 require( "class" )
 require( "engine.shared.require" )

@@ -30,6 +30,11 @@ function createDefaultPanels()
 	-- Initialize game menu
 	local gamemenu = gui.hudgamemenu( _G.g_Viewport )
 	_G.g_GameMenu = gamemenu
+
+	-- Initialize dialogue
+	-- local dialogue = gui.huddialogue( _G.g_Viewport )
+	-- _G.g_Dialogue = dialogue
+	-- dialogue:activate()
 end
 
 function draw()
@@ -81,4 +86,5 @@ end
 shutdown = quit
 
 function update( dt )
+	camera.update( dt )
 end

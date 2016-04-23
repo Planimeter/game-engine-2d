@@ -14,9 +14,18 @@ concommand.concommands = concommands
 function concommand.dispatch( player, name, argString, argTable )
 	local concommand = concommand.getConcommand( name )
 	if ( concommand ) then
-		concommand:callback( player, name, argString, argTable )
+		local flags = concommand:getFlags()
+		if ( _CLIENT ) then
+			local game = table.hasvalue( flags, "game" )
+			if ( game and not engine.isInGame() ) then
+				return true
+			end
 
-		local flags     = concommand:getFlags()
+			concommand:callback( player, name, argString, argTable )
+		else
+			concommand:callback( player, name, argString, argTable )
+		end
+
 		local networked = table.hasvalue( flags, "network" )
 		if ( _CLIENT and networked ) then
 			local payload = payload( "concommand" )

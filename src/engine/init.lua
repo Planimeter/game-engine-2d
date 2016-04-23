@@ -29,13 +29,14 @@ local _INTERACTIVE = _INTERACTIVE
 
 local addon        = addon
 local concommand   = concommand
+local convar       = convar
 local event        = love.event
+local filesystem   = filesystem
 local gui          = gui
 local ipairs       = ipairs
 local love         = love
 local math         = math
 local os           = os
-local package      = package
 local rawget       = rawget
 local require      = require
 local setmetatable = setmetatable
@@ -111,7 +112,15 @@ function filedropped( file )
 	end
 end
 
+local fs_update = convar( "fs_update", _G._DEBUG and 2 or 0, 0, 2,
+                          "Used to change filesystem update behavior" )
+
 function focus( f )
+	-- Update on focus when fs_update is "2".
+	if ( _G._DEBUG and f and fs_update:getNumber() == 2 ) then
+		filesystem.update( -1 )
+	end
+
 	if ( _CLIENT ) then
 		client.focus( f )
 	end
@@ -334,18 +343,10 @@ local frameTime   = 0
 
 function update( dt )
 	if ( _G._DEBUG ) then
-		if ( _G._DEDICATED or not client.hasFocus() ) then
-			package.update( dt )
-
-			if ( _CLIENT ) then
-				if ( _G.image ) then
-					_G.image.update( dt )
-				end
-
-				if ( _G.sound ) then
-					_G.sound.update( dt )
-				end
-			end
+		local shouldUpdate = not client.hasFocus()
+		                     and fs_update:getNumber() == 1
+		if ( _G._DEDICATED or shouldUpdate ) then
+			filesystem.update( dt )
 		end
 	end
 

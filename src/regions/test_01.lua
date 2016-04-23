@@ -55,18 +55,6 @@ return {
           }
         },
         {
-          id = 12,
-          properties = {
-            ["walkable"] = "false"
-          }
-        },
-        {
-          id = 13,
-          properties = {
-            ["walkable"] = "false"
-          }
-        },
-        {
           id = 25,
           properties = {
             ["walkable"] = "false"

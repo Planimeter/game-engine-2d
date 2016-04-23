@@ -110,16 +110,14 @@ if ( _CLIENT ) then
 			return
 		end
 
-		local tileset     = self:getTileset()
-		local tileWidth   = tileset:getTileWidth()
-		local tileHeight  = tileset:getTileHeight()
-		local image       = tileset:getImage()
-		local imageWidth  = image:getWidth()
-		local imageHeight = image:getHeight()
-		local quad        = graphics.newQuad( 0,          0,
-		                                      tileWidth,  tileHeight,
-		                                      imageWidth, imageHeight )
-
+		local tileset  = self:getTileset()
+		local tileW    = tileset:getTileWidth()
+		local tileH    = tileset:getTileHeight()
+		local image    = tileset:getImage()
+		local imgW     = image:getWidth()
+		local imgH     = image:getHeight()
+		local quad     = graphics.newQuad( 0, 0, tileW, tileH, imgW, imgH )
+		local id       = 0
 		local tileX    = 0
 		local tileY    = 0
 		local firstgid = tileset:getFirstGid()
@@ -130,15 +128,14 @@ if ( _CLIENT ) then
 		local height   = self:getHeight()
 		for xy, gid in ipairs( self:getData() ) do
 			if ( gid ~= 0 ) then
-				tileX =        ( gid - firstgid ) * tileWidth % imageWidth
-				tileY = floor( ( gid - firstgid ) * tileWidth / imageWidth ) * tileHeight
-				quad:setViewport( tileX, tileY, tileWidth, tileHeight )
+				id    = gid - firstgid
+				tileX =      ( id * tileW % imgW )
+				tileY = floor( id * tileW / imgW ) * tileH
+				quad:setViewport( tileX, tileY, tileW, tileH )
 
-				x =      ( ( xy - 1 ) % width  ) * tileWidth
-				y = floor( ( xy - 1 ) / height ) * tileHeight
-				spritebatch:add( quad,
-				                 self:getX() + x,
-				                 self:getY() + y )
+				x =      ( ( xy - 1 ) % width ) * tileW
+				y = floor( ( xy - 1 ) / width ) * tileH
+				spritebatch:add( quad, self:getX() + x, self:getY() + y )
 			end
 		end
 	end
@@ -168,6 +165,10 @@ function regionlayer:parse()
 	if ( type == "tilelayer" ) then
 		self:setData( table.copy( data[ "data" ] ) )
 	elseif ( type == "objectgroup" ) then
+		if ( not self:isVisible() ) then
+			return
+		end
+
 		if ( _SERVER ) then
 			require( "engine.shared.entities" )
 			local region   = self:getRegion()

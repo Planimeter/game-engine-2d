@@ -4,7 +4,11 @@
 --
 --============================================================================--
 
+local _CLIENT    = _CLIENT
+
 local filesystem = love.filesystem
+local package    = package
+local _G         = _G
 
 module( "filesystem" )
 
@@ -46,6 +50,22 @@ end
 
 function remove( name )
 	return filesystem.remove( name )
+end
+
+function update( dt )
+	package.update( dt )
+
+	if ( not _CLIENT ) then
+		return
+	end
+
+	if ( _G.image ) then
+		_G.image.update( dt )
+	end
+
+	if ( _G.sound ) then
+		_G.sound.update( dt )
+	end
 end
 
 function write( name, data, size )

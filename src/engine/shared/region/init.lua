@@ -17,6 +17,11 @@ region.regions = regions
 
 if ( _CLIENT ) then
 	function region.drawWorld()
+		local color  = graphics.getBackgroundColor()
+		local width  = graphics.getViewportWidth()
+		local height = graphics.getViewportHeight()
+		graphics.setColor( color )
+		graphics.rectangle( "fill", 0, 0, width, height )
 		graphics.push()
 			local scale = camera.getZoom()
 			graphics.scale( scale )
@@ -304,6 +309,17 @@ function region:getProperties()
 	return self.properties
 end
 
+function region:getTileset( layer )
+	local gid = layer:getHighestTileGid()
+	local tileset = nil
+	for _, t in ipairs( self:getTilesets() ) do
+		if ( t:getFirstGid() <= gid ) then
+			tileset = t
+		end
+	end
+	return tileset
+end
+
 function region:getTilesets()
 	return self.tilesets
 end
@@ -337,6 +353,7 @@ function region:getY()
 end
 
 local gids             = {}
+local firstGid         = 0
 local tiles            = {}
 local hasvalue         = table.hasvalue
 local hasProperties    = false
@@ -357,9 +374,10 @@ function region:isTileWalkableAtPosition( position )
 	-- Check world collisions
 	gids = self:getGidsAtPosition( position )
 	for _, tileset in ipairs( self:getTilesets() ) do
-		tiles = tileset:getTiles()
+		firstGid = tileset:getFirstGid()
+		tiles    = tileset:getTiles()
 		for _, tile in ipairs( tiles ) do
-			hasProperties = hasvalue( gids, tile.id + 1 )
+			hasProperties = hasvalue( gids, tile.id + firstGid )
 			properties    = tile.properties
 			walkable      = hasProperties and properties.walkable
 			if ( hasProperties and walkable == "false" ) then
@@ -385,6 +403,15 @@ function region:isTileWalkableAtPosition( position )
 				return false
 			end
 		end
+	end
+
+	-- Check world bounds
+	x      = self:getX()
+	y      = self:getY()
+	width  = self:getPixelWidth()
+	height = self:getPixelHeight()
+	if ( not pointinrectangle( px, py, x, y, width, height ) ) then
+		return false
 	end
 
 	return true
@@ -415,13 +442,7 @@ function region:loadLayers( layers )
 		layer:setRegion( self )
 		layer:parse()
 
-		local gid = layer:getHighestTileGid()
-		local tileset = nil
-		for _, t in ipairs( self:getTilesets() ) do
-			if ( t:getFirstGid() <= gid ) then
-				tileset = t
-			end
-		end
+		local tileset = self:getTileset( layer )
 		layer:setTileset( tileset )
 		table.insert( self.layers, layer )
 	end

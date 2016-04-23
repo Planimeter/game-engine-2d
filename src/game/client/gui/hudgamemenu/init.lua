@@ -143,14 +143,14 @@ concommand( "+gamemenu", "Opens the gamemenu", function()
 	if ( not visible ) then
 		_G.g_GameMenu:activate()
 	end
-end )
+end, { "game" } )
 
 concommand( "-gamemenu", "Closes the gamemenu", function()
 	local visible = _G.g_GameMenu:isVisible()
 	if ( visible ) then
 		_G.g_GameMenu:close()
 	end
-end )
+end, { "game" } )
 
 if ( g_GameMenu ) then
 	local visible = g_GameMenu:isVisible()

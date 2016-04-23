@@ -113,4 +113,12 @@ structs[ "playerMove" ] = {
             { name = "position",   type = "vector" }
         }
     }
+
+    structs[ "dialogue" ] = {
+        keys = {
+            { name = "entity",     type = "entity" },
+            { name = "type",       type = "string" },
+            { name = "message",    type = "string" }
+        }
+    }
 -- end

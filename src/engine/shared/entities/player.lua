@@ -186,6 +186,13 @@ function player:moveTo( position, callback )
 		payload:set( "position", position )
 		networkclient.sendToServer( payload )
 	end
+
+	if ( _CLIENT ) then
+		require( "engine.client.camera" )
+		if ( camera.getParentEntity() == self ) then
+			camera.resetZoom()
+		end
+	end
 end
 
 if ( _SERVER ) then

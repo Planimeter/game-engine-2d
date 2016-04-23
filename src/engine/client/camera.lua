@@ -74,10 +74,6 @@ end
 
 local _entity = entity
 
-function setParentEntity( entity )
-	_entity = entity
-end
-
 function getParentEntity()
 	return _entity
 end
@@ -141,33 +137,8 @@ function getZoom()
 	return _zoom
 end
 
-function setMinZoom( minZoom )
-	_minZoom = minZoom
+function resetZoom()
 end
-
-function setMaxZoom( maxZoom )
-	_maxZoom = maxZoom
-end
-
-function setPosition( position )
-	_position = position
-end
-
-local clamp = math.clamp
-
-function setZoom( zoom )
-	_zoom = clamp( zoom, getMinZoom(), getMaxZoom() )
-end
-
-concommand( "zoomin", "Zooms the camera in", function()
-	local scale = getZoom()
-	setZoom( scale * 2 )
-end )
-
-concommand( "zoomout", "Zooms the camera out", function()
-	local scale = getZoom()
-	setZoom( scale / 2 )
-end )
 
 function screenToWorld( x, y )
 	pos    = getPosition()
@@ -187,4 +158,39 @@ function worldToScreen( x, y )
 	if ( not pos ) then pos = vector.origin end
 	return pos.x * -scale + ( width  / 2 ) + x * scale,
 	       pos.y * -scale + ( height / 2 ) + y * scale
+end
+
+function setParentEntity( entity )
+	_entity = entity
+end
+
+function setPosition( position )
+	_position = position
+end
+
+function setMinZoom( minZoom )
+	_minZoom = minZoom
+end
+
+function setMaxZoom( maxZoom )
+	_maxZoom = maxZoom
+end
+
+local clamp = math.clamp
+
+function setZoom( zoom )
+	_zoom = clamp( zoom, getMinZoom(), getMaxZoom() )
+end
+
+concommand( "zoomin", "Zooms the camera in", function()
+	local scale = getZoom()
+	setZoom( scale * 2 )
+end )
+
+concommand( "zoomout", "Zooms the camera out", function()
+	local scale = getZoom()
+	setZoom( scale / 2 )
+end )
+
+function update( dt )
 end
