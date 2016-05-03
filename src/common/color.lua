@@ -25,11 +25,11 @@ function color:color( r, g, b, a )
 	self.a = a or 0
 end
 
-function color:__eq( c )
-	return self.r == c.r and
-	       self.g == c.g and
-	       self.b == c.b and
-	       self.a == c.a
+function color.__eq( a, b )
+	return a.r == b.r and
+	       a.g == b.g and
+	       a.b == b.b and
+	       a.a == b.a
 end
 
 function color:__tostring()

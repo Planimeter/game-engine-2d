@@ -55,8 +55,11 @@ if ( _CLIENT ) then
 		end )
 	end
 
-	local r_draw_shadows = convar( "r_draw_shadows", "1", nil, nil,
-	                               "Draws entity shadows" )
+	local r_draw_bounding_boxes = convar( "r_draw_bounding_boxes", "0", nil, nil,
+	                                      "Draws entity bounding boxes" )
+
+	local r_draw_shadows        = convar( "r_draw_shadows", "1", nil, nil,
+	                                      "Draws entity shadows" )
 
 	function entity.drawAll()
 		clear( renderables )
@@ -64,41 +67,74 @@ if ( _CLIENT ) then
 		append( renderables, camera.getWorldContexts() )
 		depthSort( renderables )
 
+		-- Draw bounding boxes
 		local worldIndex = camera.getWorldIndex()
+		if ( r_draw_bounding_boxes:getBoolean() ) then
+			for _, v in ipairs( renderables ) do
+				local isEntity = typeof( v, "entity" )
+				if ( worldIndex == v:getWorldIndex() and isEntity ) then
+					local body = v:getBody()
+					if ( body ) then
+						local fixtures = body:getFixtureList()
+						for _, fixture in ipairs( fixtures ) do
+							local shape = fixture:getShape()
+							local topLeftX,     topLeftY,
+							      bottomRightX, bottomRightY =
+							      body:getWorldPoints(
+							      	shape:computeAABB( 0, 0, 0 )
+							      )
+							local width  = bottomRightX - topLeftX
+							local height = topLeftY - bottomRightY
+							graphics.setOpacity( 0.14 )
+							graphics.setColor( color.white )
+							graphics.setLineWidth( 1 )
+							graphics.line(
+								topLeftX,             topLeftY,
+								topLeftX + width,     topLeftY,
+								bottomRightX,     bottomRightY,
+								topLeftX,         bottomRightY,
+								topLeftX,              topLeftY
+							)
+							graphics.setOpacity( 1 )
+						end
+					end
+				end
+			end
+		end
+
+		-- Draw shadows
 		if ( r_draw_shadows:getBoolean() ) then
 			for _, v in ipairs( renderables ) do
-				if ( worldIndex == v:getWorldIndex() ) then
+				local isEntity = typeof( v, "entity" )
+				if ( worldIndex == v:getWorldIndex() and isEntity ) then
 					graphics.push()
 						local x, y = v:getDrawPosition()
 						graphics.translate( x, y )
 
 						-- Draw shadow
-						local isEntity = typeof( v, "entity" )
-						if ( isEntity ) then
-							graphics.push()
-								graphics.setOpacity( 0.14 )
-								graphics.setColor( color.black )
+						graphics.push()
+							graphics.setOpacity( 0.14 )
+							graphics.setColor( color.black )
 
-								local sprite = v:getSprite()
-								local height = sprite:getHeight()
-								graphics.translate( sprite:getWidth() / 2, height )
-								graphics.scale( 1, -1 )
-									v:drawShadow()
-								graphics.setOpacity( 1 )
-							graphics.pop()
-						end
+							local sprite = v:getSprite()
+							local height = sprite:getHeight()
+							graphics.translate( sprite:getWidth() / 2, height )
+							graphics.scale( 1, -1 )
+								v:drawShadow()
+							graphics.setOpacity( 1 )
+						graphics.pop()
 					graphics.pop()
 				end
 			end
 		end
 
+		-- Draw entities
 		for _, v in ipairs( renderables ) do
 			if ( worldIndex == v:getWorldIndex() and v:isInViewport() ) then
 				graphics.push()
 					local x, y = v:getDrawPosition()
 					graphics.translate( x, y )
 
-					-- Draw entity
 					graphics.setColor( color.white )
 					v:draw()
 				graphics.pop()
@@ -110,7 +146,6 @@ end
 function entity.findByClassname( classname, region )
 	local t = {}
 	if ( region ) then
-		region = _G.region.getByName( region )
 		local entities = region:getEntities()
 		if ( entities ) then
 			for i, entity in ipairs( region:getEntities() ) do
@@ -166,6 +201,10 @@ function entity:entity()
 	table.insert( entity.entities, self )
 end
 
+function entity:getBody()
+	return self.body
+end
+
 function entity:getClassname()
 	return self.__type
 end
@@ -210,6 +249,10 @@ function entity:getProperties()
 	return self.properties
 end
 
+function entity:getRegion()
+	return self.region
+end
+
 if ( _CLIENT ) then
 	function entity:getSprite()
 		return self.sprite or graphics.error
@@ -225,7 +268,22 @@ if ( _CLIENT ) then
 		-- TODO: Implement me.
 		return true
 	end
+end
 
+function entity:initializePhysics( type )
+	local region   = self:getRegion()
+	local world    = region:getWorld()
+	local position = self:getPosition()
+	local x        = position.x
+	local y        = position.y
+	self.body      = physics.newBody( world, x, y, type )
+	self.body:setUserData( self )
+	self.body:setFixedRotation( true )
+	self.body:setLinearDamping( 16 )
+	return self.body
+end
+
+if ( _CLIENT ) then
 	function entity:draw()
 		local sprite = self:getSprite()
 		if ( type( sprite ) == "sprite" ) then
@@ -359,6 +417,14 @@ end
 
 function entity:onNetworkVarChanged( networkvar )
 	if ( _SERVER ) then
+		if ( networkvar:getName() == "position" ) then
+			local body = self:getBody()
+			if ( body ) then
+				local position = networkvar:getValue()
+				body:setPosition( position.x, position.y )
+			end
+		end
+
 		local payload = payload( "networkVarChanged" )
 		payload:set( "entity", self )
 
@@ -420,6 +486,18 @@ end
 function entity:setCollisionBounds( min, max )
 	self.boundsMin = min
 	self.boundsMax = max
+
+	local body = self:getBody()
+	if ( body ) then
+		local dimensions = max - min
+		dimensions.y     = -dimensions.y
+		local width      = dimensions.x - 2
+		local height     = dimensions.y - 2
+		local x          = width / 2   + 0.5
+		local y          = -height / 2 - 1.5
+		local shape      = physics.newRectangleShape( x, y, width, height )
+		physics.newFixture( body, shape )
+	end
 end
 
 if ( _CLIENT ) then
@@ -438,6 +516,10 @@ end
 
 function entity:setProperties( properties )
 	self.properties = properties
+end
+
+function entity:setRegion( region )
+	self.region = region
 end
 
 if ( _CLIENT ) then
@@ -478,6 +560,13 @@ function entity:updateNetworkVars( payload )
 end
 
 function entity:update( dt )
+	if ( _SERVER ) then
+		local body = self:getBody()
+		if ( body ) then
+			self:setPosition( vector( body:getPosition() ) )
+		end
+	end
+
 	if ( self.think and
 	     self.nextThink and
 	     self.nextThink <= engine.getRealTime() ) then

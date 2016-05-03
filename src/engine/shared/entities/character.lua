@@ -58,10 +58,23 @@ function character:move()
 	end
 
 	-- Move
+	local body = self:getBody()
+	if ( body ) then
+		local velocity = vector( body:getLinearVelocity() )
+		local delta    = 60 * direction - velocity
+		local mass     = body:getMass()
+		body:applyLinearImpulse( delta.x * mass, delta.y * mass )
+	end
+
 	self:setNetworkVar( "position", newPosition )
 
 	-- We've reached our goal
 	if ( self.path and #self.path == 0 ) then
+		local body = self:getBody()
+		if ( body ) then
+			body:setLinearVelocity( 0, 0 )
+		end
+
 		self.path = nil
 
 		if ( self.moveCallback ) then

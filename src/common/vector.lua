@@ -44,25 +44,27 @@ function vector:toAngle()
 	return atan2( self.y, self.x )
 end
 
-function vector:__add( v )
-	return vector( self.x + v.x, self.y + v.y )
+function vector.__add( a, b )
+	return vector( a.x + b.x, a.y + b.y )
 end
 
-function vector:__sub( v )
-	return vector( self.x - v.x, self.y - v.y )
+function vector.__sub( a, b )
+	return vector( a.x - b.x, a.y - b.y )
 end
 
-function vector:__mul( v )
-	if ( type( v ) == "number" ) then
-		return vector( v * self.x, v * self.y )
+function vector.__mul( a, b )
+	if ( type( a ) == "number" ) then
+		return vector( a * b.x, a * b.y )
+	elseif ( type( b ) == "number" ) then
+		return vector( b * a.x, b * a.y )
 	else
-		return vector( self.x * v.x, self.y * v.y )
+		return vector( a.x * b.x, a.y * b.y )
 	end
 end
 
-function vector:__eq( v )
-	return self.x == v.x and
-	       self.y == v.y
+function vector.__eq( a, b )
+	return a.x == b.x and
+	       a.y == b.y
 end
 
 function vector:__tostring()

@@ -30,6 +30,7 @@ function initialize( region, regionEntities )
 	for i, entityData in ipairs( regionEntities ) do
 		local entity = createFromRegionData( region, entityData )
 		if ( entity ) then
+			entity:setRegion( region )
 			entity:spawn()
 			table.insert( t, entity )
 		end
@@ -128,9 +129,12 @@ if ( _G._CLIENT ) then
 			return
 		end
 
-		local entity    = entities[ classname ]()
+		local entity = entities[ classname ]()
 		entity.entIndex = payload:get( "entIndex" )
 		entity:updateNetworkVars( payload )
+		local position = entity:getPosition()
+		local region = _G.region.getAtPosition( position )
+		entity:setRegion( region )
 		entity:spawn()
 	end
 

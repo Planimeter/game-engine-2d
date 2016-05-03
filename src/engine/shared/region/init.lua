@@ -10,6 +10,7 @@ local regions = region and region.regions or {}
 require( "engine.shared.hook" )
 require( "engine.shared.region.tileset" )
 require( "engine.shared.region.layer" )
+require( "engine.shared.physics" )
 
 class( "region" )
 
@@ -131,7 +132,7 @@ function region.unload( name )
 
 	for i, region in ipairs( region.regions ) do
 		if ( name == region:getName() ) then
-			region:removeEntities()
+			region:remove()
 			table.remove( region.regions, i )
 			return
 		end
@@ -224,6 +225,7 @@ end
 
 function region:addEntity( entity )
 	table.insert( self.entities, entity )
+	entity:setRegion( self )
 end
 
 if ( _CLIENT ) then
@@ -340,6 +342,10 @@ function region:getHeight()
 	return self.height
 end
 
+function region:getWorld()
+	return self.world
+end
+
 function region:getWorldIndex()
 	return self.worldIndex
 end
@@ -350,6 +356,10 @@ end
 
 function region:getY()
 	return self.y
+end
+
+function region:initializeWorld()
+	self.world = physics.newWorld()
 end
 
 local gids             = {}
@@ -462,10 +472,20 @@ function region:parse()
 	self:setTileHeight( data[ "tileheight" ] )
 	self:setProperties( table.copy( data[ "properties" ] ) )
 
+	self:initializeWorld()
 	self:loadTilesets( data[ "tilesets" ] )
 	self:loadLayers( data[ "layers" ] )
 
 	self.data = nil
+end
+
+function region:remove()
+	self:removeEntities()
+
+	local world = self:getWorld()
+	if ( world ) then
+		world:destroy()
+	end
 end
 
 function region:removeEntities()
@@ -523,6 +543,15 @@ end
 
 function region:setY( y )
 	self.y = y
+end
+
+function region:update( dt )
+	if ( _SERVER ) then
+		local world = self:getWorld()
+		if ( world ) then
+			world:update( dt )
+		end
+	end
 end
 
 function region:__tostring()

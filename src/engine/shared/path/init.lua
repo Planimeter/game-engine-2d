@@ -21,7 +21,7 @@ local _G       = _G
 
 module( "path" )
 
-local _directions = 8
+local _directions = 4
 
 function getDirections()
 	return _directions

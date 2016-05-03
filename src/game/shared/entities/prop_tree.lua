@@ -16,11 +16,6 @@ class "prop_tree" ( "entity" )
 function prop_tree:prop_tree()
 	entity.entity( self )
 
-	local tileSize = game.tileSize
-	local min      = vector()
-	local max      = vector( 2 * tileSize, -tileSize )
-	self:setCollisionBounds( min, max )
-
 	self:setNetworkVar( "name", "Tree" )
 
 	if ( _CLIENT ) then
@@ -50,6 +45,16 @@ end
 
 function prop_tree:examine()
 	chat.addText( "Looks like a tree." )
+end
+
+function prop_tree:spawn()
+	entity.spawn( self )
+
+	local tileSize = game.tileSize
+	local min      = vector()
+	local max      = vector( 2 * tileSize, -tileSize )
+	self:initializePhysics()
+	self:setCollisionBounds( min, max )
 end
 
 entities.linkToClassname( prop_tree, "prop_tree" )

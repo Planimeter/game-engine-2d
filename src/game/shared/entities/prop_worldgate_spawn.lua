@@ -16,12 +16,8 @@ class "prop_worldgate_spawn" ( "entity" )
 function prop_worldgate_spawn:prop_worldgate_spawn()
 	entity.entity( self )
 
-	local tileSize = game.tileSize
-	local min      = vector()
-	local max      = vector( tileSize, -tileSize )
-	self:setCollisionBounds( min, max )
-
 	if ( _CLIENT ) then
+		local tileSize = game.tileSize
 		self:setLocalPosition( vector( -tileSize, 0 ) )
 	end
 
@@ -46,6 +42,15 @@ end
 
 function prop_worldgate_spawn:examine()
 	chat.addText( "Rather tall and ominous." )
+end
+
+function prop_worldgate_spawn:spawn()
+	entity.spawn( self )
+
+	local tileSize = game.tileSize
+	local min      = vector()
+	local max      = vector( tileSize, -tileSize )
+	self:setCollisionBounds( min, max )
 end
 
 function prop_worldgate_spawn:update( dt )

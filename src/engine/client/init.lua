@@ -161,8 +161,14 @@ end
 
 local r_draw_grid = convar( "r_draw_grid", "0", nil, nil,
                             "Draws a grid overlay" )
+local r_focus     = convar( "r_focus", "0", nil, nil,
+                            "Draw only when the engine has focus" )
 
 function draw()
+	if ( r_focus:getBoolean() and not hasFocus() ) then
+		return
+	end
+
 	if ( isInGame() ) then
 		if ( not gui.viewportFramebuffer ) then
 			gui.viewportFramebuffer = graphics.newFullscreenFramebuffer()

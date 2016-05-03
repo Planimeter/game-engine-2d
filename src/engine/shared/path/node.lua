@@ -24,12 +24,12 @@ end
 
 node.__eq = vector.__eq
 
-function node:__lt( n )
-	return self.f < n.f
+function node.__lt( a, b )
+	return a.f < b.f
 end
 
-function node:__le( n )
-	return self.f <= n.f
+function node.__le( a, b )
+	return a.f <= b.f
 end
 
 function node:__tostring()

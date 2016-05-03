@@ -62,11 +62,6 @@ end
 function player:player()
 	character.character( self )
 
-	local tileSize = game.tileSize
-	local min      = vector()
-	local max      = vector( tileSize, -tileSize )
-	self:setCollisionBounds( min, max )
-
 	self:networkNumber( "id", player.lastPlayerId + 1 )
 	self:networkNumber( "moveSpeed", 0.5 )
 
@@ -114,10 +109,6 @@ function player:getName()
 	end
 
 	return entity.getName( self ) or "Unnamed"
-end
-
-function player:getRegion()
-	return self.region
 end
 
 function player:getSave()
@@ -269,10 +260,6 @@ if ( _AXIS ) then
 	end
 end
 
-function player:setRegion( region )
-	self.region = region
-end
-
 function player:setSave( save )
 	self.save = save
 end
@@ -292,6 +279,13 @@ end
 
 function player:spawn()
 	entity.spawn( self )
+
+	local tileSize = game.tileSize
+	local min      = vector()
+	local max      = vector( tileSize, -tileSize )
+	self:initializePhysics( "dynamic" )
+	self:setCollisionBounds( min, max )
+
 	game.call( "shared", "onPlayerSpawn", self )
 end
 

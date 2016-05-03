@@ -94,6 +94,7 @@ function onPostConnect( event )
 	-- Initialize player
 	require( "engine.shared.entities.player" )
 	local player = _G.player.initialize( event.peer )
+	player:setRegion( _G.region.getByName( region ) )
 
 	if ( _AXIS ) then
 		player:setAuthenticated( true )
@@ -367,6 +368,11 @@ end
 shutdown = quit
 
 function update( dt )
+	local regions = region.getAll()
+	for _, region in ipairs( regions ) do
+		region:update( dt )
+	end
+
 	network.update( dt )
 end
 
