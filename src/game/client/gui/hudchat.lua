@@ -35,6 +35,7 @@ local CHAT_ANIM_TIME = 0.2
 
 function hudchat:activate()
 	if ( not self:isVisible() ) then
+		self:invalidateLayout()
 		self:setOpacity( 0 )
 		self:animate( {
 			opacity = 1
@@ -136,7 +137,7 @@ function hudchat:invalidateLayout()
 	if ( self:isVisible() ) then
 		self.output:setPos( 36, 36 )
 	else
-		local x, y = self:localToScreen( 36, 36 + gui.scale( 494 ) )
+		local x, y = self:localToScreen( gui.scale( 96 ) - 18, 36 + gui.scale( 494 ) )
 		self.output:setPos( x, y )
 	end
 
