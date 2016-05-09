@@ -12,11 +12,14 @@ environment.
 It's a lightweight and fast engine, and it provides many abstractions that you
 would otherwise need to write by hand for your projects or game jams.
 
+<!--
+FIXME: API Documentation is down.
 Create a Project
 ================
 
 [API Documentation](http://www.planimeter.org/grid/api/Home)  
 [API Documentation Source](https://github.com/Planimeter/grid)
+-->
 
 <!--
 FIXME: http://www.andrewmcwatters.com/blog is down due to Node upgrade.
