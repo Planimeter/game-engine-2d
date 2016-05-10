@@ -343,8 +343,12 @@ local frameTime   = 0
 
 function update( dt )
 	if ( _G._DEBUG ) then
-		local shouldUpdate = not client.hasFocus()
-		                     and fs_update:getNumber() == 1
+		local shouldUpdate = false
+		if ( _CLIENT ) then
+			shouldUpdate = not client.hasFocus()
+			               and fs_update:getNumber() == 1
+		end
+
 		if ( _G._DEDICATED or shouldUpdate ) then
 			filesystem.update( dt )
 		end
