@@ -6,7 +6,6 @@
 
 require( "game.client.gui.mainmenu.closebutton" )
 require( "game.client.gui.mainmenu.button" )
-require( "game.client.gui.mainmenu.axisprofile" )
 require( "game.client.gui.closedialog" )
 
 class "mainmenu" ( gui.panel )
@@ -34,13 +33,6 @@ function mainmenu:mainmenu()
 	self.closeDialog:moveToCenter()
 
 	self:createButtons()
-
-	if ( _AXIS ) then
-		self.signinDialog = gui.signindialog( self )
-		self.signinDialog:moveToCenter()
-		self.signinDialog:moveToFront()
-		self.signinDialog:activate()
-	end
 end
 
 local MAINMENU_ANIM_TIME = 0.2
@@ -140,17 +132,6 @@ function mainmenu:createButtons()
 	self:invalidateButtons()
 end
 
-function mainmenu:onAxisSignin()
-	self:initAxisProfile()
-	self:enableUniverseConnections()
-end
-
-hook.set( "client", function()
-	if ( g_MainMenu ) then
-		g_MainMenu:onAxisSignin()
-	end
-end, "onAxisSignin", "mainmenu.onAxisSignin" )
-
 hook.set( "client", function()
 	g_MainMenu.joinLeaveUniverse:setText( "Leave Universe" )
 	g_MainMenu.joinLeaveUniverse:setDisabled( false )
@@ -158,26 +139,12 @@ end, "onConnect", "updateJoinLeaveUniverseButton" )
 
 hook.set( "client", function()
 	g_MainMenu.joinLeaveUniverse:setText( "Join Universe" )
-
-	if ( not _AXIS ) then
-		g_MainMenu.joinLeaveUniverse:setDisabled( true )
-	end
+	g_MainMenu.joinLeaveUniverse:setDisabled( true )
 end, "onDisconnect", "updateJoinLeaveUniverseButton" )
 
 function mainmenu:enableUniverseConnections()
 	if ( self.joinLeaveUniverse ) then
 		self.joinLeaveUniverse:setDisabled( false )
-	end
-end
-
-if ( _AXIS ) then
-	function mainmenu:initAxisProfile()
-		self.axisProfile = gui.axisprofile( self )
-		local height     = graphics.getViewportHeight()
-		local margin     = gui.scale( 96 )
-		local y          = height - self.axisProfile:getHeight() - margin
-		self.axisProfile:setPos( margin, y )
-		self.axisProfile:activate()
 	end
 end
 
@@ -190,23 +157,11 @@ function mainmenu:invalidateLayout()
 
 	self.closeDialog:moveToCenter()
 
-	if ( _AXIS ) then
-		self.signinDialog:moveToCenter()
-	end
-
 	if ( self.testFrame ) then
 		self.testFrame:moveToCenter()
 	end
 
 	self:invalidateButtons()
-
-	if ( _AXIS ) then
-		if ( self.axisProfile ) then
-			local height = graphics.getViewportHeight()
-			y = height - self.axisProfile:getHeight() - margin
-			self.axisProfile:setPos( margin, y )
-		end
-	end
 
 	gui.panel.invalidateLayout( self )
 end

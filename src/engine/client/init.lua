@@ -20,8 +20,6 @@ require( "engine.client.sound" )
 require( "engine.shared.hook" )
 require( "engine.shared.network.payload" )
 
-local _AXIS       = _AXIS
-
 local bind        = bind
 local conf        = _CONF
 local concommand  = concommand
@@ -49,11 +47,6 @@ module( "engine.client" )
 
 function connect( address )
 	disconnect()
-
-	if ( _AXIS and not isSignedIntoAxis() ) then
-		print( "You are not signed into Axis." )
-		return
-	end
 
 	require( "engine.client.network" )
 	network = _G.engine.client.network
@@ -302,14 +295,6 @@ function isInGame()
 	       _G.gameclient.playerInitialized
 end
 
-if ( _AXIS ) then
-	function isSignedIntoAxis()
-		require( "engine.shared.axis" )
-		local account = _G.axis.getCurrentUser()
-		return account ~= nil
-	end
-end
-
 function joystickpressed( joystick, button )
 	gui.joystickpressed( joystick, button )
 end
@@ -391,33 +376,12 @@ function mousereleased( x, y, button, istouch )
 	bind.mousereleased( x, y, button, istouch )
 end
 
-local sendAuthTicket = nil
-
-if ( _AXIS ) then
-	sendAuthTicket = function( server )
-		require( "engine.shared.network.payload" )
-		require( "engine.shared.axis" )
-
-		local payload = _G.payload( "authenticate" )
-		local account = _G.axis.getCurrentUser()
-		if ( account ) then
-			payload:set( "ticket", account:getTicket() )
-			server:send( payload:serialize() )
-		end
-	end
-end
-
 function onConnect( event )
 	connecting = false
 	connected  = true
 	print( "Connected to server!" )
 
 	hook.call( "client", "onConnect", tostring( event.peer ) )
-
-	if ( _AXIS ) then
-		local server = event.peer
-		sendAuthTicket( server )
-	end
 
 	-- Prepare to receive entitySpawned payloads
 	require( "engine.shared.entities" )

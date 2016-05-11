@@ -163,11 +163,6 @@ if ( not _DEDICATED ) then
 
 			engine.disconnect()
 
-			if ( _AXIS and not engine.isSignedIntoAxis() ) then
-				print( "You are not signed into Axis." )
-				return
-			end
-
 			if ( not engine.initializeServer() ) then
 				return
 			end

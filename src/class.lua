@@ -47,16 +47,13 @@ local eventnames = {
 local function metamethod( class, eventname )
 	return function( ... )
 		local event = nil
-		local base = nil
-		if ( class.__base ) then
-			base = getbaseclass( class )
-			while ( base ~= nil ) do
-				if ( base[ eventname ] ) then
-					event = base[ eventname ]
-					break
-				end
-				base = getbaseclass( base )
+		local base = getbaseclass( class )
+		while ( base ~= nil ) do
+			if ( base[ eventname ] ) then
+				event = base[ eventname ]
+				break
 			end
+			base = getbaseclass( base )
 		end
 		local type = type( event )
 		if ( type ~= "function" ) then
@@ -141,15 +138,10 @@ function class( name )
 		-- our members, metatable, and base class, in that order, a la behavior
 		-- via the Lua 5.1 manual's illustrative code for indexing access
 		classes[ name ].__index = function( table, key )
-			local h
-			if ( type( table ) == "table" ) then
-				local v = rawget( table, key )
-				if ( v ~= nil ) then return v end
-				v = rawget( classes[ name ], key )
-				if ( v ~= nil ) then return v end
-				h = rawget( getbaseclass( classes[ name ] ), "__index" )
-				if ( h == nil ) then return nil end
-			end
+			local v = rawget( classes[ name ], key )
+			if ( v ~= nil ) then return v end
+			local h = rawget( getbaseclass( classes[ name ] ), "__index" )
+			if ( h == nil ) then return nil end
 			if ( type( h ) == "function" ) then
 				return h( table, key )
 			else

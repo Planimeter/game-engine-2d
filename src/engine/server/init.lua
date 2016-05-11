@@ -7,8 +7,6 @@
 require( "engine.server.network" )
 require( "engine.shared.network.payload" )
 
-local _AXIS        = _AXIS
-
 local concommand   = concommand
 local convar       = convar
 local debug        = debug
@@ -66,12 +64,6 @@ end
 
 function onConnect( event )
 	print( tostring( event.peer ) .. " has connected." )
-
-	if ( _AXIS ) then
-		-- Post-connect occurs post-authenticate
-		return
-	end
-
 	onPostConnect( event )
 end
 
@@ -96,11 +88,6 @@ function onPostConnect( event )
 	local player = _G.player.initialize( event.peer )
 	player:setRegion( _G.region.getByName( region ) )
 
-	if ( _AXIS ) then
-		player:setAuthenticated( true )
-		getAccount( player, event.peer )
-	end
-
 	player:onConnect()
 
 	-- Set spawn point
@@ -112,20 +99,7 @@ function onPostConnect( event )
 	player:setNetworkVar( "position", position )
 
 	-- Send server info
-	if ( _AXIS ) then
-		local account = player:getAccount()
-		if ( account ) then
-			local username = account:getUsername()
-			player:setNetworkVar( "name", username )
-			print( "Player " .. username .. " has joined the game." )
-			player:onAuthenticated()
-			sendServerInfo( player )
-		else
-			-- Player disconnected during authentication phase
-		end
-	else
-		sendServerInfo( player )
-	end
+	sendServerInfo( player )
 end
 
 local directoryWhitelist = {
@@ -188,79 +162,10 @@ function onDisconnect( event )
 	local player = _G.player.getByPeer( event.peer )
 	if ( player ) then
 		player:onDisconnect()
-
-		if ( _AXIS ) then
-			local account = player:getAccount()
-			if ( account ) then
-				local username = account:getUsername()
-				print( "Player " .. username .. " has left the game." )
-			end
-		end
-
 		player:remove()
 	end
 
 	print( tostring( event.peer ) .. " has disconnected." )
-end
-
-if ( _AXIS ) then
-	local function onPlayerAuthenticateHandler( payload )
-		local peer   = payload:getPeer()
-		local ticket = payload:get( "ticket" )
-		local player = {
-			peer   = peer,
-			ticket = ticket
-		}
-		table.insert( players, player )
-		onPlayerAuthenticate( peer, ticket )
-	end
-
-	payload.setHandler( onPlayerAuthenticateHandler, "authenticate" )
-
-	function onPlayerAuthenticate( peer, ticket )
-		require( "engine.shared.axis" )
-		_G.axis.authenticate( ticket, onPostPlayerAuthenticate( peer ) )
-	end
-
-	local function kick( peer, message )
-		local payload = payload( "kick" )
-		payload:set( "message", message )
-		peer:send( payload:serialize() )
-		peer:disconnect_later()
-	end
-
-	local function setAccount( peer, r )
-		require( "public.json" )
-		require( "engine.shared.axis.axisuser" )
-
-		local account  = _G.json.decode( r )
-		local username = account.username
-		local email    = account.email
-		local ticket   = account.ticket
-		local user     = _G.axisuser( username, email, ticket )
-		for _, player in ipairs( players ) do
-			if ( player.ticket == ticket ) then
-				player.ticket  = nil
-				player.account = user
-			end
-		end
-	end
-
-	function onPostPlayerAuthenticate( peer )
-		return function( r, c, h, s )
-			if ( c ~= 200 ) then
-				kick( peer, "Axis authentication failed!" )
-				return
-			end
-
-			setAccount( peer, r )
-
-			local event = {
-				peer = peer
-			}
-			onPostConnect( event )
-		end
-	end
 end
 
 local function sendEntities( player )
@@ -322,47 +227,9 @@ function quit()
 end
 
 function sendServerInfo( player )
-	if ( _AXIS ) then
-		require( "engine.shared.axis" )
-		local account	= player:getAccount()
-		local username 	= account:getUsername()
-		local appSecret = _G.game.appSecret
-		_G.axis.getSavedGame( username, appSecret, nil, onGetSavedGame( player ) )
-		return
-	end
-
 	local payload = payload( "serverInfo" )
 	payload:set( "region", _G.game.initialRegion )
 	player:send( payload )
-end
-
-function onGetSavedGame( player )
-	return function( r, c, h, s )
-		-- Server shutdown before operation completed.
-		if ( not _G.game ) then
-			return
-		end
-
-		local payload = payload( "serverInfo" )
-
-		require( "public.json" )
-
-		local save = nil
-
-		if ( c == 200 ) then
-			-- FIXME; Decode twice since we get back escaped save data.
-			save = _G.json.decode( r )
-			save = _G.json.decode( save )
-		elseif ( c == 404 ) then
-			save = player:createInitialSave()
-			local r = _G.json.encode( save )
-			_G.axis.setSavedGame( username, appSecret, nil, r )
-		end
-
-		payload:set( "region", save.region )
-		payload:set( "save", c == 200 and r or _G.json.encode( save ) )
-		player:send( payload )
-	end
 end
 
 shutdown = quit

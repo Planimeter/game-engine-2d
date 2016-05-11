@@ -78,41 +78,8 @@ function player:player()
 	table.insert( player.players, self )
 end
 
-if ( _AXIS ) then
-	if ( _SERVER ) then
-		function player:createInitialSave()
-			local spawnPoint = gameserver.getSpawnPoint( self )
-			local position = vector.origin + vector( 0, _G.game.tileSize )
-			if ( spawnPoint ) then
-				position = spawnPoint:getPosition()
-			end
-
-			local save = {
-				region = _G.game.initialRegion,
-				position = {
-					x = position.x,
-					y = position.y
-				}
-			}
-			return save
-		end
-	end
-
-	function player:getAccount()
-		return self.account
-	end
-end
-
 function player:getName()
-	if ( self.account ) then
-		return self.account:getUsername()
-	end
-
 	return entity.getName( self ) or "Unnamed"
-end
-
-function player:getSave()
-	return self.save
 end
 
 function player:getViewportWidth()
@@ -152,12 +119,6 @@ function player:initialSpawn()
 	end
 
 	game.call( "shared", "onPlayerInitialSpawn", self )
-end
-
-if ( _AXIS ) then
-	function player:isAuthenticated()
-		return self.authenticated
-	end
 end
 
 if ( _SERVER ) then
@@ -252,16 +213,6 @@ function player:send( data, channel, flag )
 		data = data:serialize()
 	end
 	self.peer:send( data, channel, flag )
-end
-
-if ( _AXIS ) then
-	function player:setAuthenticated( authenticated )
-		self.authenticated = authenticated
-	end
-end
-
-function player:setSave( save )
-	self.save = save
 end
 
 function player:setViewportWidth( viewportWidth )

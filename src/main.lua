@@ -28,8 +28,6 @@ if ( not _SERVER ) then
 	_CLIENT = true
 end
 
-_AXIS = false
-
 require( "class" )
 require( "engine.shared.require" )
 require( "engine" )

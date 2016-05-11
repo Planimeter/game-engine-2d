@@ -54,9 +54,6 @@ function load( arg )
 	_G.g_DebugOverlay = gui.debugoverlaypanel( _G.g_Viewport )
 end
 
-function onAxisSignin()
-end
-
 function onReloadImage( filename )
 end
 

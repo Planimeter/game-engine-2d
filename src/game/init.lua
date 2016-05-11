@@ -14,7 +14,6 @@ local _G          = _G
 
 module( "game" )
 
-appSecret     = ""
 tileSize      = 16
 initialRegion = "test_01"
 
@@ -62,8 +61,4 @@ function onPlayerSpawn( player )
 end
 
 function onReloadScript( modname )
-end
-
-function usesAxisSavedGames()
-	return true
 end
