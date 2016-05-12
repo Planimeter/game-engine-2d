@@ -33,15 +33,13 @@ function type( object )
 	return rawtype( object )
 end
 
-local base = nil
-
 function typeof( object, class )
 	if ( type( object ) == class ) then
 		return true
 	end
 
-	if ( rawtype( object ) == "table" and object.__base ) then
-		base = getbaseclass( object )
+	if ( rawtype( object ) == "table" ) then
+		local base = getbaseclass( object )
 		while ( base ~= nil ) do
 			if ( base.__type == class ) then
 				return true

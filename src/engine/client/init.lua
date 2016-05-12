@@ -94,6 +94,7 @@ function disconnect()
 	-- Retrieve subsystems
 	local entities = _G.entities
 	local game     = _G.game
+	local region   = _G.region
 	local engine   = _G.engine
 
 	-- Shutdown entities
@@ -109,6 +110,11 @@ function disconnect()
 			 game.client.shutdown()
 			 game.client = nil
 		end
+	end
+
+	-- Unload all regions
+	if ( region ) then
+		region.unloadAll()
 	end
 
 	-- Shutdown server engine interface

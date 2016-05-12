@@ -59,6 +59,10 @@ function player.getInOrNearRegion( region )
 	return #t > 0 and t or nil
 end
 
+function player.removeAll()
+	table.clear( player.players )
+end
+
 function player:player()
 	character.character( self )
 

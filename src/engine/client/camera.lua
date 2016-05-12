@@ -138,6 +138,7 @@ function getZoom()
 end
 
 function resetZoom()
+	setZoom( 2 )
 end
 
 function screenToWorld( x, y )

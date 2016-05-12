@@ -159,6 +159,7 @@ function shutdown()
 	_G.entity.lastEntIndex = 0
 
 	if ( _G.player ) then
+		_G.player.removeAll()
 		_G.player.lastPlayerId = 0
 	end
 
