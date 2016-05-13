@@ -98,21 +98,18 @@ function mainmenu:createButtons()
 -- 	table.insert( self.buttons, blankButton )
 -- end
 
-	self.joinLeaveUniverse = gui.mainmenubutton( self, "Join Universe" )
-	self.joinLeaveUniverse:setDisabled( true )
-	self.joinLeaveUniverse.onClick = function()
+	self.joinLeaveServer = gui.mainmenubutton( self, "Join Server" )
+	self.joinLeaveServer:setDisabled( true )
+	self.joinLeaveServer.onClick = function()
 		if ( not engine.isConnected() ) then
 			if ( _DEBUG ) then
 				engine.connect( "localhost" )
-			else
-				-- TODO: Update this to use a universe browser.
-				engine.connect( "newton.andrewmcwatters.com" )
 			end
 		else
 			engine.disconnect()
 		end
 	end
-	table.insert( self.buttons, self.joinLeaveUniverse )
+	table.insert( self.buttons, self.joinLeaveServer )
 
 	local blankButton = gui.mainmenubutton( self )
 	table.insert( self.buttons, blankButton )
@@ -133,18 +130,18 @@ function mainmenu:createButtons()
 end
 
 hook.set( "client", function()
-	g_MainMenu.joinLeaveUniverse:setText( "Leave Universe" )
-	g_MainMenu.joinLeaveUniverse:setDisabled( false )
-end, "onConnect", "updateJoinLeaveUniverseButton" )
+	g_MainMenu.joinLeaveServer:setText( "Leave Server" )
+	g_MainMenu.joinLeaveServer:setDisabled( false )
+end, "onConnect", "updateJoinLeaveServerButton" )
 
 hook.set( "client", function()
-	g_MainMenu.joinLeaveUniverse:setText( "Join Universe" )
-	g_MainMenu.joinLeaveUniverse:setDisabled( true )
-end, "onDisconnect", "updateJoinLeaveUniverseButton" )
+	g_MainMenu.joinLeaveServer:setText( "Join Server" )
+	g_MainMenu.joinLeaveServer:setDisabled( true )
+end, "onDisconnect", "updateJoinLeaveServerButton" )
 
-function mainmenu:enableUniverseConnections()
-	if ( self.joinLeaveUniverse ) then
-		self.joinLeaveUniverse:setDisabled( false )
+function mainmenu:enableServerConnections()
+	if ( self.joinLeaveServer ) then
+		self.joinLeaveServer:setDisabled( false )
 	end
 end
 
