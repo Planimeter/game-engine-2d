@@ -171,13 +171,6 @@ if ( _CLIENT ) then
 	end
 end
 
-if ( _SERVER ) then
-	function player:onAuthenticated()
-		require( "engine.shared.hook" )
-		game.call( "server", "onPlayerAuthenticated", self )
-	end
-end
-
 function player:onConnect()
 	require( "engine.shared.hook" )
 	game.call( "shared", "onPlayerConnect", self )

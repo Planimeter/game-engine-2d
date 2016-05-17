@@ -21,6 +21,7 @@ local graphics   = graphics
 local ipairs     = ipairs
 local math       = math
 local table      = table
+local tween      = tween
 local vector     = vector
 
 module( "camera" )
@@ -131,14 +132,27 @@ function getMaxZoom()
 	return _maxZoom
 end
 
-local _zoom = zoom
+local _private = {
+	_zoom = zoom
+}
 
 function getZoom()
-	return _zoom
+	return _private._zoom
 end
 
+local _tween = nil
+
 function resetZoom()
-	setZoom( 2 )
+	if ( not _tween ) then
+		_tween = tween( _private, nil, {
+			_zoom = 2,
+			onComplete = function()
+				_tween = nil
+			end
+		} )
+	end
+
+	_tween.pos = 0
 end
 
 function screenToWorld( x, y )
@@ -180,7 +194,11 @@ end
 local clamp = math.clamp
 
 function setZoom( zoom )
-	_zoom = clamp( zoom, getMinZoom(), getMaxZoom() )
+	if ( _tween ) then
+		return
+	end
+
+	_private._zoom = clamp( zoom, getMinZoom(), getMaxZoom() )
 end
 
 concommand( "zoomin", "Zooms the camera in", function()
@@ -194,4 +212,7 @@ concommand( "zoomout", "Zooms the camera out", function()
 end )
 
 function update( dt )
+	if ( _tween ) then
+		_tween:update( dt )
+	end
 end

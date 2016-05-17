@@ -25,6 +25,18 @@ function string.fileextension( s )
 	return match( s, "%.([^%.]+)$" )
 end
 
+function string.fixslashes( path )
+	return gsub( path, "\\", "/" )
+end
+
+function string.ispathabsolute( path )
+	path = string.fixslashes( path )
+	if ( find( path, "/" ) == 1 or find( path, "%a:" ) == 1 ) then
+		return true
+	end
+	return false
+end
+
 function string.parseargs( s )
 	local t      = {}
 	local i      = 1
@@ -63,6 +75,14 @@ function string.parseargs( s )
 	return t
 end
 
+function string.readingtime( s )
+	local text           = string.trim( s )
+	local words          = string.split( text, "%s" )
+	local totalWords     = #words
+	local wordsPerSecond = 4.5
+	return totalWords / wordsPerSecond
+end
+
 function string.split( s, separator )
 	local t = {}
 	for token in gmatch( s, "[^" .. separator .. "]+" ) do
@@ -71,18 +91,21 @@ function string.split( s, separator )
 	return t
 end
 
+function string.stripfilename( path )
+	return match( path, "(.+/)[^/]*$" ) or ""
+end
+
+function string.striptrailingslash( path )
+	local len = len( path )
+	if ( len > 0 ) then
+		local pathseparator = sub( path, len )
+		if ( pathseparator == "\\" or pathseparator == "/" ) then
+			return sub( path, 1, len - 1 )
+		end
+	end
+	return path
+end
+
 function string.trim( s )
 	return gsub( s, "^%s*(.-)%s*$", "%1" )
-end
-
-function string.fixslashes( path )
-	return gsub( path, "\\", "/" )
-end
-
-function string.ispathabsolute( path )
-	path = string.fixslashes( path )
-	if ( find( path, "/" ) == 1 or find( path, "%a:" ) == 1 ) then
-		return true
-	end
-	return false
 end

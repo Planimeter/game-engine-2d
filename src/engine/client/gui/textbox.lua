@@ -99,11 +99,13 @@ function textbox:drawCursor()
 		local opacity = graphics.getOpacity()
 		graphics.setOpacity( opacity * abs( sin( 3 * engine.getRealTime() ) ) )
 		graphics.setColor( graphics.getColor() )
-			graphics.rectangle( "fill",
-			                    getRelativeCursorPos( self ),
-			                    self:getHeight() / 2 - font:getHeight() / 2,
-			                    1,
-			                    font:getHeight() )
+			graphics.rectangle(
+				"fill",
+				getRelativeCursorPos( self ),
+				self:getHeight() / 2 - font:getHeight() / 2,
+				1,
+				font:getHeight()
+			)
 		graphics.setOpacity( opacity )
 	end
 end

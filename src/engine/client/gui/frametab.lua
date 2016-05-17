@@ -38,11 +38,13 @@ function frametab:drawBackground()
 
 	local selected  = self.mouseover or self:isSelected()
 	local mouseover = self.mouseover and not self:isSelected()
-	graphics.rectangle( "fill",
-	                    0,
-	                    -1,
-	                    width - ( selected and 1 or 0 ),
-	                    height + 1 - ( mouseover and 1 or 0 ) )
+	graphics.rectangle(
+		"fill",
+		0,
+		-1,
+		width - ( selected and 1 or 0 ),
+		height + 1 - ( mouseover and 1 or 0 )
+	)
 
 	width = width - 0.5
 	if ( selected ) then
@@ -51,8 +53,10 @@ function frametab:drawBackground()
 	end
 
 	graphics.setColor( self:getScheme( "frametab.outlineColor" ) )
-	graphics.line( width, -0.5,
-	               width, height - 0.5 - ( self:isSelected() and 0 or 1 ) )
+	graphics.line(
+		width, -0.5,
+		width, height - 0.5 - ( self:isSelected() and 0 or 1 )
+	)
 
 	if ( not self:isSelected() ) then
 		graphics.line( 0, height - 1, width, height - 1 )

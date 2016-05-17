@@ -87,7 +87,13 @@ function hudgamemenu:draw()
 end
 
 function hudgamemenu:drawBackground()
-	graphics.setColor( self:getScheme( "hudgamemenu.backgroundColor" ) )
+	local property = "hudgamemenu.backgroundColor"
+
+	if ( not gui.blurFramebuffer ) then
+		property = "frame.backgroundColor"
+	end
+
+	graphics.setColor( self:getScheme( property ) )
 	graphics.rectangle( "fill", 0, 0, self:getWidth(), self:getHeight() )
 end
 

@@ -7,12 +7,6 @@
 payload.structs = {}
 local structs   = payload.structs
 
-structs[ "authenticate" ] = {
-    keys = {
-        { name = "ticket",         type = "string" }
-    }
-}
-
 structs[ "kick" ] = {
     keys = {
         { name = "message",        type = "string" }

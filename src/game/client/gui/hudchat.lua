@@ -97,7 +97,13 @@ function hudchat:draw()
 end
 
 function hudchat:drawBackground()
-	graphics.setColor( self:getScheme( "hudchat.backgroundColor" ) )
+	local property = "hudchat.backgroundColor"
+
+	if ( not gui.blurFramebuffer ) then
+		property = "frame.backgroundColor"
+	end
+
+	graphics.setColor( self:getScheme( property ) )
 	graphics.rectangle( "fill", 0, 0, self:getWidth(), self:getHeight() )
 end
 

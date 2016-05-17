@@ -5,6 +5,7 @@
 --============================================================================--
 
 require( "common.color" )
+require( "engine.shared.tween" )
 
 local gui_draw_bounds = convar( "gui_draw_bounds", "0", nil, nil,
                                 "Draws the bounds of panels for debugging" )
@@ -35,19 +36,7 @@ end
 local cos = math.cos
 local pi  = math.pi
 
-local easing = {
-	linear = function( p )
-		return p
-	end,
-	swing = function( p )
-		return 0.5 - cos( p * pi ) / 2
-	end,
-	easeOutQuint = function ( x, t, b, c, d )
-		local temp = t / d - 1
-		t = t / d - 1
-		return c * ( ( temp ) * t * t * t * t + 1 ) + b
-	end
-}
+local easing = tween.easing
 
 function panel:animate( properties, duration, easing, complete )
 	if ( not self.animations ) then

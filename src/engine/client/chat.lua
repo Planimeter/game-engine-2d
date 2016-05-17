@@ -7,7 +7,9 @@
 local _CLIENT  = _CLIENT
 
 local engine   = engine
+local math     = math
 local select   = select
+local string   = string
 local table    = table
 local tostring = tostring
 local _G       = _G
@@ -26,7 +28,7 @@ function addText( ... )
 		chat:activate()
 		chat:insertText( text .. "\n" )
 
-		-- TODO: Set hide time based on reading-time algorithm.
-		chat:setHideTime( engine.getRealTime() + 5 )
+		local readingtime = math.max( string.readingtime( text ), 5 )
+		chat:setHideTime( engine.getRealTime() + readingtime )
 	end
 end

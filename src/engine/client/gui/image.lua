@@ -45,9 +45,11 @@ function imagepanel:drawMissingImage()
 		graphics.setColor( color.red )
 		local width  = self:getWidth()
 		local height = self:getHeight()
-		graphics.line( width - 1, -0.5,
-		               width - 1, height - 1,
-		               0,         height - 1 )
+		graphics.line(
+			width - 1, -0.5,
+			width - 1, height - 1,
+			0,         height - 1
+		)
 	graphics.setOpacity( opacity )
 end
 

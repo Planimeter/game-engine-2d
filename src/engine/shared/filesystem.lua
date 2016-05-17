@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-local _CLIENT    = _CLIENT
+-- local _CLIENT = _CLIENT
 
 local filesystem = love.filesystem
 local package    = package
@@ -55,7 +55,7 @@ end
 function update( dt )
 	package.update( dt )
 
-	if ( not _CLIENT ) then
+	if ( not _G._CLIENT ) then
 		return
 	end
 

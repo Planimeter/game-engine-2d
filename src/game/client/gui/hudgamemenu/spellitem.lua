@@ -57,12 +57,12 @@ function spellitem:drawText()
 	local font = self:getScheme( "font" )
 	graphics.setFont( font )
 	local margin = 18
-	local x      = margin
-	local y      = self:getHeight() / 2 - font:getHeight() / 2 - 2
+	local x = margin
+	local y = self:getHeight() / 2 - font:getHeight() / 2 - 2
 	graphics.print( self:getText(), x, y )
 
 	local label = "Key or Button"
-	local key   = self:getKey()
+	local key = self:getKey()
 	x = self:getWidth() - margin - font:getWidth( label ) / 2 - font:getWidth( key ) / 2
 	graphics.print( key, x, y )
 end

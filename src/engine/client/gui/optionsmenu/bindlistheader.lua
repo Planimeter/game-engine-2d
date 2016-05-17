@@ -21,16 +21,16 @@ function bindlistheader:draw()
 	graphics.setFont( font )
 
 	local margin = 18
-	local x      = margin
-	local y      = self:getHeight() / 2 - font:getHeight() / 2 - 2
+	local x = margin
+	local y = self:getHeight() / 2 - font:getHeight() / 2 - 2
 	graphics.print( self:getText(), x, y )
 
 	local label = "Key or Button"
-	x           = self:getWidth() - font:getWidth( label ) - margin
+	x = self:getWidth() - font:getWidth( label ) - margin
 	graphics.print( label, x, y )
 
 	graphics.setColor( self:getScheme( 'bindlistheader.borderColor' ) )
-	y           = self:getHeight() - 6
+	y = self:getHeight() - 6
 	local width = self:getWidth() - 2 * margin
 	graphics.rectangle( "fill", margin, y, width, 1 )
 

@@ -143,14 +143,14 @@ function scrollbar:setDisabled( disabled )
 	self.disabled = disabled
 end
 
-local minRange, maxRange = 0, 0
-local range              = 0
-local newRange           = 0
-local percent            = 0
+local min, max = 0, 0
+local range    = 0
+local newRange = 0
+local percent  = 0
 
 local function updateRange( self, min, max )
-	minRange, maxRange = self:getRange()
-	range              = maxRange - minRange
+	min, max = self:getRange()
+	range    = max - min
 	if ( range ~= 0 ) then
 		newRange   = max - min
 		percent    = ( self:getValue() + self:getMin() ) / range
@@ -232,12 +232,12 @@ function scrollbar:update( dt )
 		return
 	end
 
-	minRange, maxRange = self:getRange()
-	range              = maxRange - minRange
-	deltaValue         = ( deltaY / self:getHeight() ) * range
-	deltaValue         = self:setValue( self:getValue() + deltaValue )
-	self.grabbedX      = localX
-	self.grabbedY      = localY + ( deltaValue / range ) * self:getHeight()
+	min, max      = self:getRange()
+	range         = max - min
+	deltaValue    = ( deltaY / self:getHeight() ) * range
+	deltaValue    = self:setValue( self:getValue() + deltaValue )
+	self.grabbedX = localX
+	self.grabbedY = localY + ( deltaValue / range ) * self:getHeight()
 end
 
 gui.register( scrollbar, "scrollbar" )

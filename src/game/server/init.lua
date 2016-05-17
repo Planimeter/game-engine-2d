@@ -27,9 +27,6 @@ end
 function load( arg )
 end
 
-function onPlayerAuthenticated( player )
-end
-
 function onPlayerConnect( player )
 end
 

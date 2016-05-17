@@ -201,6 +201,7 @@ concommand( "toggleconsole", "Show/hide the console", function()
 	         console:isVisible()  and
 	         con_enable:getBoolean() ) then
 		mainmenu:activate()
+		console:activate()
 		return
 	end
 

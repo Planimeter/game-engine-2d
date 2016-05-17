@@ -127,6 +127,7 @@ end
 local mouseX, mouseY   = 0, 0
 local getMousePosition = input.getMousePosition
 local deltaX, deltaY   = 0, 0
+local min, max         = 0, 0
 
 function slider:update( dt )
 	gui.panel.update( self, dt )
@@ -148,12 +149,12 @@ function slider:update( dt )
 		return
 	end
 
-	minRange, maxRange = self:getRange()
-	range              = maxRange - minRange
-	deltaValue         = ( deltaX / self:getWidth() ) * range
-	deltaValue         = self:setValue( self:getValue() + deltaValue )
-	self.grabbedX      = localX + ( deltaValue / range ) * self:getWidth()
-	self.grabbedY      = localY
+	min, max      = self:getRange()
+	range         = max - min
+	deltaValue    = ( deltaX / self:getWidth() ) * range
+	deltaValue    = self:setValue( self:getValue() + deltaValue )
+	self.grabbedX = localX + ( deltaValue / range ) * self:getWidth()
+	self.grabbedY = localY
 end
 
 gui.register( slider, "slider" )

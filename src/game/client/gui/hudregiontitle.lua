@@ -17,8 +17,7 @@ function hudregiontitle:hudregiontitle( parent, name )
 	local regionFont = "fonts/Old English LET.TTF"
 	self.regionFont  = graphics.newFont( regionFont, 48 )
 
-	-- TODO: localplayer:getRegion()
-	local region = region.getAll()[ 1 ]
+	local region = localplayer:getRegion()
 	local title  = region:getProperties()[ "regiontitle" ]
 	self:setTitle( title )
 	self:setRegionName( region:getName() )
@@ -29,19 +28,23 @@ end
 
 function hudregiontitle:draw()
 	graphics.setFont( self.titleFont )
-	graphics.printf( string.upper( self:getTitle() ),
-	                 0,
-	                 0,
-	                 graphics.getViewportWidth(),
-	                 "center" )
+	graphics.printf(
+		string.upper( self:getTitle() ),
+		0,
+		0,
+		graphics.getViewportWidth(),
+		"center"
+	)
 
 	graphics.setFont( self.regionFont )
 	local y = self:getHeight() - self.regionFont:getHeight() + 10
-	graphics.printf( string.capitalize( self:getRegionName() ),
-	                 0,
-	                 y,
-	                 graphics.getViewportWidth(),
-	                 "center" )
+	graphics.printf(
+		string.capitalize( self:getRegionName() ),
+		0,
+		y,
+		graphics.getViewportWidth(),
+		"center"
+	)
 
 	self:drawLines()
 end

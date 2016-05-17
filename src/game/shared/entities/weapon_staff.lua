@@ -1,6 +1,6 @@
 --========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
 --
--- Purpose: item_apple
+-- Purpose: weapon_staff
 --
 --============================================================================--
 
@@ -11,19 +11,19 @@ if ( _CLIENT ) then
 require( "engine.client.chat" )
 end
 
-class "item_apple" ( "item" )
+class "weapon_staff" ( "item" )
 
-item_apple.data = {
-	name  = "Apple",
-	image = "images/entities/item_apple/1.png"
+weapon_staff.data = {
+	name  = "Staff",
+	image = "images/entities/weapon_staff.png"
 }
 
-function item_apple:item_apple()
+function weapon_staff:weapon_staff()
 	item.item( self )
 end
 
 if ( _CLIENT ) then
-	function item_apple:getOptions()
+	function weapon_staff:getOptions()
 		return {
 			{
 				name  = "Pickup",
@@ -37,15 +37,15 @@ if ( _CLIENT ) then
 	end
 end
 
-function item_apple:pickup()
+function weapon_staff:pickup()
 	localplayer:pickup( self )
 end
 
-function item_apple:examine()
-	chat.addText( "Looks like an apple." )
+function weapon_staff:examine()
+	chat.addText( "Brown and sticky." )
 end
 
-function item_apple:spawn()
+function weapon_staff:spawn()
 	entity.spawn( self )
 
 	local tileSize = game.tileSize
@@ -55,4 +55,4 @@ function item_apple:spawn()
 	self:setCollisionBounds( min, max )
 end
 
-entities.linkToClassname( item_apple, "item_apple" )
+entities.linkToClassname( weapon_staff, "weapon_staff" )

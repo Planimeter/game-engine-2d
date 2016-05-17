@@ -452,6 +452,8 @@ end
 function entity:remove()
 	for i, v in pairs( entity.entities ) do
 		if ( v == self ) then
+			local region = self:getRegion()
+			region:removeEntity( self )
 			table.remove( entity.entities, i )
 		end
 	end
@@ -539,6 +541,13 @@ if ( _CLIENT ) then
 end
 
 function entity:spawn()
+	local region = self:getRegion()
+	if ( not region ) then
+		local position = self:getPosition()
+		region = _G.region.getAtPosition( position )
+		region:addEntity( self )
+	end
+
 	if ( _SERVER ) then
 		-- TODO: Send entityCreated payload only to players who can see me.
 		local payload = payload( "entitySpawned" )
@@ -547,6 +556,37 @@ function entity:spawn()
 		payload:set( "networkVars", self:getNetworkVarTypeLenValues() )
 		networkserver.broadcast( payload )
 	end
+end
+
+function entity:testPoint( x, y )
+	local body = self:getBody()
+	if ( body ) then
+		local fixtures = body:getFixtureList()
+		for _, fixture in ipairs( fixtures ) do
+			local shape = fixture:getShape()
+			if ( shape:testPoint( 0, 0, 0, x, y ) ) then
+				return true
+			end
+		end
+	end
+
+	local min, max = self:getCollisionBounds()
+	if ( min and max ) then
+		local px     = x
+		local py     = y
+		local pos    = self:getPosition()
+		min          = pos + min
+		max          = pos + max
+		x            = min.x
+		y            = max.y
+		local width  = max.x - min.x
+		local height = min.y - max.y
+		if ( math.pointinrectangle( px, py, x, y, width, height ) ) then
+			return true
+		end
+	end
+
+	return false
 end
 
 function entity:updateNetworkVars( payload )

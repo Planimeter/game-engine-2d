@@ -20,7 +20,7 @@ function hudgamemenuquests:draw()
 	local font = self:getScheme( "fontBold" )
 	graphics.setFont( font )
 	local x = self:getWidth()  / 2 - font:getWidth( self:getName() .. " Placeholder" ) / 2
-	local y = self:getHeight() / 2 - font:getHeight()                / 2 - 2
+	local y = self:getHeight() / 2 - font:getHeight() / 2 - 2
 	graphics.print( self:getName() .. " Placeholder", x, y )
 end
 

@@ -89,31 +89,39 @@ function drawGrid()
 			-- Grid Lines (32x32)
 			setColor( grid.dark.lines32x32Color )
 			for i = 0, graphics.getWidth() / 32 do
-				line( 32 * i + x,
-				     -32,
-				      32 * i + x,
-				      graphics.getHeight() )
+				line(
+					 32 * i + x,
+					-32,
+					 32 * i + x,
+					 graphics.getHeight()
+				)
 			end
 			for i = 0, graphics.getHeight() / 32 do
-				line(-32,
-				      32 * i + y,
-				      graphics.getWidth(),
-				      32 * i + y )
+				line(
+					-32,
+					 32 * i + y,
+					 graphics.getWidth(),
+					 32 * i + y
+				)
 			end
 
 			-- Grid Lines (64x64)
 			setColor( grid.dark.lines64x64Color )
 			for i = 0, graphics.getWidth() / 64 do
-				line( 64 * i + x,
-				     -64,
-				      64 * i + x,
-				      graphics.getHeight() )
+				line(
+					 64 * i + x,
+					-64,
+					 64 * i + x,
+					 graphics.getHeight()
+				)
 			end
 			for i = 0, graphics.getHeight() / 64 do
-				line(-64,
-				      64 * i + y,
-				      graphics.getWidth(),
-				      64 * i + y )
+				line(
+					-64,
+					 64 * i + y,
+					 graphics.getWidth(),
+					 64 * i + y
+				)
 			end
 		end )
 	end
@@ -333,11 +341,13 @@ function rectangle( mode, x, y, width, height )
 		y4 = y + height - 0.5 - _lineWidth / 2
 		x5 = x          - 0.5 + _lineWidth / 2
 		y5 = y          - 0.5 + _lineWidth
-		line( x1, y1,
-		      x2, y2,
-		      x3, y3,
-		      x4, y4,
-		      x5, y5 )
+		line(
+			x1, y1,
+			x2, y2,
+			x3, y3,
+			x4, y4,
+			x5, y5
+		)
 	else
 		graphics.rectangle( mode, x, y, width, height )
 	end

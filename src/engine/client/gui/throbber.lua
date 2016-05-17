@@ -19,14 +19,16 @@ function throbber:draw()
 	graphics.stencil( gui.image.drawMask )
 	graphics.setStencilTest( "greater", 0 )
 		graphics.setColor( self:getColor() )
-		graphics.draw( self:getImage(),
-		               self:getWidth()  / 2,
-		               self:getHeight() / 2,
-		               engine.getRealTime() % 2 * math.pi,
-		               1,
-		               1,
-		               self:getWidth()  / 2,
-		               self:getHeight() / 2 )
+		graphics.draw(
+			self:getImage(),
+			self:getWidth()  / 2,
+			self:getHeight() / 2,
+			engine.getRealTime() % 2 * math.pi,
+			1,
+			1,
+			self:getWidth()  / 2,
+			self:getHeight() / 2
+		)
 	graphics.setStencilTest()
 
 	missingImage = self:getImage() == graphics.error

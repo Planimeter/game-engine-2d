@@ -31,15 +31,14 @@ function itembutton:drawIcon()
 	graphics.setColor( color.white )
 	local icon = self:getIcon()
 	graphics.push()
-		graphics.translate( 6, -6 )
 		local scale  = 2
 		local width  = icon:getWidth()
 		local height = icon:getHeight()
-		graphics.scale( scale )
 		graphics.translate(
-			( width  / scale ) / 2 - width  / 2,
-			( height / scale ) / 2 - height / 2
+			self:getWidth() / 2 - (  width * scale ) / 2,
+			self:getHeight()    - ( height * scale )
 		)
+		graphics.scale( scale )
 		graphics.draw( icon:getDrawable() )
 	graphics.pop()
 end

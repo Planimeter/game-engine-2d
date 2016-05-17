@@ -364,9 +364,6 @@ local hasvalue         = table.hasvalue
 local hasProperties    = false
 local properties       = {}
 local walkable         = nil
-local pos              = nil
-local min              = nil
-local max              = nil
 local px               = 0
 local py               = 0
 local x                = 0
@@ -395,18 +392,8 @@ function region:isTileWalkableAtPosition( position )
 	px = position.x
 	py = position.y - _G.game.tileSize
 	for _, entity in ipairs( self:getEntities() ) do
-		pos      = entity:getPosition()
-		min, max = entity:getCollisionBounds()
-		if ( min and max ) then
-			min    = pos + min
-			max    = pos + max
-			x      = min.x
-			y      = max.y
-			width  = max.x - min.x
-			height = min.y - max.y
-			if ( pointinrectangle( px, py, x, y, width, height ) ) then
-				return false
-			end
+		if ( entity:testPoint( px, py ) ) then
+			return false
 		end
 	end
 
@@ -475,21 +462,19 @@ function region:parse()
 end
 
 function region:remove()
-	self:removeEntities()
-
 	local world = self:getWorld()
 	if ( world ) then
 		world:destroy()
 	end
 end
 
-function region:removeEntities()
+function region:removeEntity( entity )
 	local entities = self:getEntities()
-	for _, entity in ipairs( entities ) do
-		entity:remove()
+	for i, v in ipairs( entities ) do
+		if ( v == entity ) then
+			table.remove( entities, i )
+		end
 	end
-
-	table.clear( entities )
 end
 
 function region:setFormatVersion( formatVersion )

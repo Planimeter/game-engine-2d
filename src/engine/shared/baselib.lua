@@ -6,31 +6,33 @@
 
 require( "engine.shared.concommand" )
 
-rawtype            = type
-rawprint           = print
+if ( not rawprint and not rawtype ) then
+	rawprint           = print
+	rawtype            = type
 
-local _print       = print
-local rawtype      = rawtype
-local tonumber     = tonumber
-local assert       = assert
-local getmetatable = getmetatable
-local rawget       = rawget
+	local _print       = print
+	local rawtype      = rawtype
+	local tonumber     = tonumber
+	local assert       = assert
+	local getmetatable = getmetatable
+	local rawget       = rawget
 
-function print( ... )
-	_print( ... )
+	function print( ... )
+		_print( ... )
 
-	if ( ( _CLIENT or _INTERACTIVE ) and g_Console ) then
-		g_Console.print( ... )
-	end
-end
-
-function type( object )
-	local mt = getmetatable( object )
-	if ( mt ~= nil and rawget( mt, "__type" ) ~= nil ) then
-		return rawget( mt, "__type" )
+		if ( ( _CLIENT or _INTERACTIVE ) and g_Console ) then
+			g_Console.print( ... )
+		end
 	end
 
-	return rawtype( object )
+	function type( object )
+		local mt = getmetatable( object )
+		if ( mt ~= nil and rawget( mt, "__type" ) ~= nil ) then
+			return rawget( mt, "__type" )
+		end
+
+		return rawtype( object )
+	end
 end
 
 function typeof( object, class )
@@ -67,7 +69,7 @@ concommand( "lua_dofile", "Loads and runs the given file",
 			return
 		end
 
-		local f, err = loadfile( argString )
+		local f, err = loadfile( "src/" .. argString )
 		if ( f ) then
 			local success, err = pcall( f )
 			if ( not success ) then
@@ -76,6 +78,28 @@ concommand( "lua_dofile", "Loads and runs the given file",
 		else
 			print( err )
 		end
+	end,
+
+	nil,
+
+	function( argS )
+		local autocomplete = {}
+		local dir = string.stripfilename( argS )
+		local files = filesystem.getDirectoryItems( dir )
+		for _, v in ipairs( files ) do
+			if ( filesystem.isDirectory( dir .. v ) or
+			     string.fileextension( v ) == "lua" ) then
+				local filename = ( dir ~= "" and dir or "" ) .. v
+				local cmd      = "lua_dofile " .. filename
+				if ( string.find( cmd, "lua_dofile " .. argS, 1, true ) ) then
+					table.insert( autocomplete, cmd )
+				end
+			end
+		end
+
+		table.sort( autocomplete )
+
+		return autocomplete
 	end
 )
 

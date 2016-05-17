@@ -139,7 +139,8 @@ function convar:setValue( value )
 	self.value = value
 
 	numberValue = tonumber( self.value )
-	if ( ( type( self.value ) == "number" or numberValue ) and ( self.min and self.max ) ) then
+	if ( ( type( self.value ) == "number" or numberValue ) and
+	     ( self.min and self.max ) ) then
 		self.value = math.min( self.max, math.max( self.min, numberValue ) )
 	end
 
