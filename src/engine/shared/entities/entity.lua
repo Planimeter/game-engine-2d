@@ -452,8 +452,15 @@ end
 function entity:remove()
 	for i, v in pairs( entity.entities ) do
 		if ( v == self ) then
+			local body = self:getBody()
+			if ( body ) then
+				body:destroy()
+				self.body = nil
+			end
+
 			local region = self:getRegion()
 			region:removeEntity( self )
+
 			table.remove( entity.entities, i )
 		end
 	end
@@ -493,9 +500,9 @@ function entity:setCollisionBounds( min, max )
 	if ( body ) then
 		local dimensions = max - min
 		dimensions.y     = -dimensions.y
-		local width      = dimensions.x - 2
-		local height     = dimensions.y - 2
-		local x          = width / 2   + 0.5
+		local width      =  dimensions.x - 2
+		local height     =  dimensions.y - 2
+		local x          =   width / 2 + 0.5
 		local y          = -height / 2 - 1.5
 		local shape      = physics.newRectangleShape( x, y, width, height )
 		physics.newFixture( body, shape )

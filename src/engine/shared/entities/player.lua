@@ -135,7 +135,7 @@ if ( _SERVER ) then
 end
 
 function player:moveTo( position, callback )
-	character.moveTo( self, position, callback )
+	local moving = character.moveTo( self, position, callback )
 
 	if ( _CLIENT and not _SERVER ) then
 		local payload = payload( "playerMove" )
@@ -145,10 +145,12 @@ function player:moveTo( position, callback )
 
 	if ( _CLIENT ) then
 		require( "engine.client.camera" )
-		if ( camera.getParentEntity() == self ) then
+		if ( moving and camera.getParentEntity() == self ) then
 			camera.resetZoom()
 		end
 	end
+
+	return moving
 end
 
 if ( _SERVER ) then
@@ -160,6 +162,44 @@ if ( _SERVER ) then
 
 	payload.setHandler( onPlayerMove, "playerMove" )
 end
+
+local in_forward = false
+local in_back    = false
+local in_left    = false
+local in_right   = false
+
+concommand( "+forward", "Start moving player forward", function()
+	in_forward = true
+end, { "game" } )
+
+concommand( "-forward", "Stop moving player forward", function()
+	in_forward = false
+end, { "game" } )
+
+concommand( "+back", "Start moving player backward", function()
+	in_back = true
+end, { "game" } )
+
+concommand( "-back", "Stop moving player backward", function()
+	in_back = false
+end, { "game" } )
+
+concommand( "+left", "Start moving player left", function()
+	in_left = true
+end, { "game" } )
+
+concommand( "-left", "Stop moving player left", function()
+	in_left = false
+end, { "game" } )
+
+concommand( "+right", "Start moving player right", function()
+	in_right = true
+end, { "game" } )
+
+concommand( "-right", "Stop moving player right", function()
+	in_right = false
+end, { "game" } )
+
 
 if ( _CLIENT ) then
 	function player:onAnimationEvent( event )
@@ -187,6 +227,30 @@ function player:onDisconnect()
 			return
 		end
 	end
+end
+
+local function updateMovement( self, position )
+	if ( self ~= localplayer ) then
+		return
+	end
+
+	if ( in_forward ) then
+		localplayer:moveTo( position + vector( 0, -game.tileSize ) )
+	elseif ( in_back ) then
+		localplayer:moveTo( position + vector( 0,  game.tileSize ) )
+	elseif ( in_left ) then
+		localplayer:moveTo( position + vector( -game.tileSize, 0 ) )
+	elseif ( in_right ) then
+		localplayer:moveTo( position + vector(  game.tileSize, 0 ) )
+	end
+end
+
+function player:onMoveTo( position )
+	if ( not _CLIENT ) then
+		return
+	end
+
+	updateMovement( self, position )
 end
 
 concommand( "say", "Display player message",
@@ -235,6 +299,22 @@ function player:spawn()
 	self:setCollisionBounds( min, max )
 
 	game.call( "shared", "onPlayerSpawn", self )
+end
+
+function player:update( dt )
+	character.update( self, dt )
+
+	if ( _CLIENT ) then
+		local body = self:getBody()
+		if ( not body ) then
+			return
+		end
+
+		if ( ( in_forward or in_back or in_left or in_right ) and
+		     ( vector( body:getLinearVelocity() ) ):lengthSqr() == 0 ) then
+			updateMovement( self, self:getPosition() )
+		end
+	end
 end
 
 function player:__tostring()

@@ -51,6 +51,8 @@ function character:move()
 		newPosition = next
 		table.remove( self.path, 1 )
 
+		self:onMoveTo( newPosition )
+		
 		if ( self.nextPosition ) then
 			self.path = path.getPath( newPosition, self.nextPosition )
 			self.nextPosition = nil
@@ -103,11 +105,12 @@ function character:moveTo( position, callback )
 	toX, toY     = snapToGrid( toX, toY )
 	if ( fromX == toX and fromY == toY ) then
 		self.moveCallback = callback
-		return
+		return false
 	end
 
 	self.nextPosition = position
 	self.moveCallback = callback
+	return true
 end
 
 function character:nextTask()
@@ -117,6 +120,9 @@ function character:nextTask()
 	if ( #tasks == 0 ) then
 		self.tasks = nil
 	end
+end
+
+function character:onMoveTo( position )
 end
 
 function character:onNetworkVarChanged( networkvar )
