@@ -45,6 +45,9 @@ function character:move()
 	-- Where we'll move to
 	local newPosition = start + direction
 
+	-- If we change direction, don't apply linear impulse
+	local applyLinearImpulse = true
+
 	-- Ensure we're not passing the next tile by comparing the
 	-- distance traveled to the distance to the next tile
 	if ( direction:length() >= ( next - start ):length() ) then
@@ -52,20 +55,25 @@ function character:move()
 		table.remove( self.path, 1 )
 
 		self:onMoveTo( newPosition )
-		
+
 		if ( self.nextPosition ) then
 			self.path = path.getPath( newPosition, self.nextPosition )
 			self.nextPosition = nil
+			applyLinearImpulse = false
 		end
 	end
 
 	-- Move
 	local body = self:getBody()
 	if ( body ) then
-		local velocity = vector( body:getLinearVelocity() )
-		local delta    = 60 * direction - velocity
-		local mass     = body:getMass()
-		body:applyLinearImpulse( delta.x * mass, delta.y * mass )
+		if ( applyLinearImpulse ) then
+			local velocity = vector( body:getLinearVelocity() )
+			local delta    = 60 * direction - velocity
+			local mass     = body:getMass()
+			body:applyLinearImpulse( delta.x * mass, delta.y * mass )
+		else
+			body:setLinearVelocity( 0, 0 )
+		end
 	end
 
 	self:setNetworkVar( "position", newPosition )
@@ -172,6 +180,10 @@ function character:updateAnimation( direction )
 end
 
 function character:updateMovement()
+	if ( _CLIENT ) then
+		self.lastPosition = self:getPosition()
+	end
+
 	if ( self.path ) then
 		self:move()
 	else
@@ -190,10 +202,6 @@ function character:updateMovement()
 				self.moveCallback = nil
 			end
 		end
-	end
-
-	if ( _CLIENT ) then
-		self.lastPosition = self:getPosition()
 	end
 end
 
