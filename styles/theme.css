@@ -8,7 +8,8 @@ a {
   color: rgba(155, 140, 103, 1);
 }
 
-header img {
+header > a {
+  display: inline-block;
   margin-bottom: 36px;
 }
 
@@ -16,6 +17,6 @@ nav ol {
   border-color: rgba(240, 246, 248, .07);
 }
 
-nav a {
-  border-color: rgba(155, 140, 103, 1):
+nav li {
+  border-color: rgba(155, 140, 103, 1);
 }

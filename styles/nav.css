@@ -4,15 +4,13 @@ nav ol {
   list-style-type: none;
   margin: 0;
   padding-left: 0;
-  padding-top: 18px;
 }
 
 nav li {
-  display: inline-block;
-}
-
-nav a {
   border-top-style: solid;
   border-top-width: 1px;
+  display: inline-block;
   padding-top: 18px;
+  position: relative;
+  top: -1px;
 }
