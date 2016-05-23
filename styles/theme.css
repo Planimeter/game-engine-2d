@@ -7,3 +7,15 @@ body {
 a {
   color: rgba(155, 140, 103, 1);
 }
+
+header img {
+  margin-bottom: 36px;
+}
+
+nav ol {
+  border-color: rgba(240, 246, 248, .07);
+}
+
+nav a {
+  border-color: rgba(155, 140, 103, 1):
+}
