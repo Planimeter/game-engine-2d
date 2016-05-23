@@ -22,7 +22,15 @@ main {
 header,
 main,
 footer {
-  margin: 1in;
+  margin: 0.5in;
+}
+
+@media (min-width: 544px) {
+  header,
+  main,
+  footer {
+    margin: 1in;
+  }
 }
 
 header {
