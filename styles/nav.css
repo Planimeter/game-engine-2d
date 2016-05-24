@@ -14,3 +14,7 @@ nav li {
   position: relative;
   top: -1px;
 }
+
+nav li:not(:last-child) {
+  margin-right: 24px;
+}
