@@ -11,7 +11,7 @@ a {
 
 header > a {
   display: inline-block;
-  margin-bottom: 36px;
+  margin-bottom: 0.5in;
 }
 
 nav ol {
