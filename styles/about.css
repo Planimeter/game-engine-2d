@@ -5,7 +5,13 @@ main {
 }
 
 aside {
-  margin: 0 1in 1in;
+  margin: 0 0.5in 0.5in;
+}
+
+@media (min-width: 544px) {
+  aside {
+    margin: 0 1in 1in;
+  }
 }
 
 .logos {
