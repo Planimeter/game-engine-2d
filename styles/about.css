@@ -6,12 +6,12 @@ main {
 }
 
 aside {
-  margin: 0 0.5in 0.5in;
+  margin: 0 0.5in calc(0.5in - 24px);
 }
 
 @media (min-width: 544px) {
   aside {
-    margin: 0 1in 1in;
+    margin: 0 1in calc(1in - 24px);
   }
 }
 
@@ -21,10 +21,8 @@ aside {
   flex-wrap: wrap;
 }
 
-@media (max-width: 543px) {
-  .logos .logo {
-    margin-bottom: 24px;
-  }
+.logos .logo {
+  margin-bottom: 24px;
 }
 
 .logos .logo:not(:last-child) {
