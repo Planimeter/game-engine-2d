@@ -16,8 +16,15 @@ aside {
 }
 
 .logos {
-  display: flex;
   align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 543px) {
+  .logos .logo {
+    margin-bottom: 24px;
+  }
 }
 
 .logos .logo:not(:last-child) {
