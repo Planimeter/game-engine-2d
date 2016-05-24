@@ -3,3 +3,22 @@ main {
   justify-content: center;
   flex-direction: column;
 }
+
+aside {
+  margin: 0 1in 1in;
+}
+
+.logos {
+  display: flex;
+}
+
+.logos .logo:not(:last-child) {
+  margin-right: 24px;
+}
+
+.bootstrap-expo {
+  color: #563d7c;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 300;
+}
