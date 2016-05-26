@@ -361,7 +361,7 @@ concommand( "screenshot", "Take a screenshot", function()
 	filesystem.createDirectory( "screenshots" )
 	local screenshot = graphics.newScreenshot( true )
 	local filename   = os.time() .. ".png"
-	screenshot:encode( "screenshots/" .. filename )
+	screenshot:encode( "png", "screenshots/" .. filename )
 	_G.print( "Wrote 'screenshots/" .. filename .. "'" )
 end )
 

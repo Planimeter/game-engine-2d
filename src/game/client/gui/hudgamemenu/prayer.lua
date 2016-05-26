@@ -19,9 +19,10 @@ function hudgamemenuprayer:draw()
 
 	local font = self:getScheme( "fontBold" )
 	graphics.setFont( font )
-	local x = self:getWidth()  / 2 - font:getWidth( self:getName() .. " Placeholder" ) / 2
-	local y = self:getHeight() / 2 - font:getHeight() / 2 - 2
-	graphics.print( self:getName() .. " Placeholder", x, y )
+	local text = "Panel not implemented"
+	local x = self:getWidth()  / 2 - font:getWidth( text ) / 2
+	local y = self:getHeight() / 2 - font:getHeight()      / 2 - 2
+	graphics.print( text, x, y )
 end
 
 gui.register( hudgamemenuprayer, "hudgamemenuprayer" )

@@ -16,7 +16,7 @@ function itemgrid:itemgrid( parent, name )
 end
 
 function itemgrid:addItem( item, count )
-	local itemdata   = self:getItemClass( item ).data
+	local itemdata   = _G.item.getData( item )
 	local itembutton = self:hasItem( item )
 	if ( not itemdata.stackable or not itembutton ) then
 		require( "game.client.gui.hudgamemenu.itembutton" )
@@ -34,12 +34,6 @@ end
 
 function itemgrid:getRows()
 	return self.rows
-end
-
-function itemgrid:getItemClass( item )
-	entities.requireEntity( item )
-	local classmap = entities.getClassMap()
-	return classmap[ item ]
 end
 
 function itemgrid:getItems()

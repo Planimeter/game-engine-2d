@@ -8,6 +8,12 @@ require( "engine.shared.entities.entity" )
 
 class "item" ( "entity" )
 
+function item.getData( classname )
+	entities.requireEntity( classname )
+	local classmap = entities.getClassMap()
+	return classmap[ classname ].data
+end
+
 item.data = {
 	name  = "Unknown Item",
 	image = "images/error.png"

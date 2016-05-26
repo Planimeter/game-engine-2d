@@ -62,7 +62,7 @@ function convar.saveConfig()
 	end
 end
 
-function convar:convar( name, default, min, max, helpString, onValueChange )
+function convar:convar( name, default, min, max, helpString, onValueChange, flags )
 	self.name              = name
 	self.default           = default
 	self.value             = convar.config[ name ] or default
@@ -70,6 +70,7 @@ function convar:convar( name, default, min, max, helpString, onValueChange )
 	self.max               = max
 	self.helpString        = helpString
 	self.onValueChange     = onValueChange
+	self.flags             = flags
 	convar.convars[ name ] = self
 end
 
@@ -82,6 +83,10 @@ end
 
 function convar:getDefault()
 	return self.default
+end
+
+function convar:getFlags()
+	return self.flags
 end
 
 function convar:getHelpString()
@@ -119,6 +124,10 @@ function convar:setDefault( default )
 	self.default = default
 end
 
+function convar:setFlags( flags )
+	self.flags = flags
+end
+
 function convar:setMin( min )
 	self.min = min
 end
@@ -142,6 +151,19 @@ function convar:setValue( value )
 	if ( ( type( self.value ) == "number" or numberValue ) and
 	     ( self.min and self.max ) ) then
 		self.value = math.min( self.max, math.max( self.min, numberValue ) )
+	end
+
+	if ( _SERVER ) then
+		local flags = self:getFlags()
+		if ( flags ) then
+			local notify = table.hasvalue( flags, "notify" )
+			if ( notify ) then
+				local name = self:getName()
+				local text = "Server cvar " .. name .. " changed to " .. self.value
+				player.sendTextAll( text )
+				return true
+			end
+		end
 	end
 
 	self:onValueChange( oldValue, value )

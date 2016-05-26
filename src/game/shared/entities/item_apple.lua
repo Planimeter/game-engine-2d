@@ -31,7 +31,7 @@ if ( _CLIENT ) then
 			},
 			{
 				name  = "Examine",
-				value = function() self:examine() end
+				value = self.examine
 			}
 		}
 	end

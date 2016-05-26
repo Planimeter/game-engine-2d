@@ -63,6 +63,14 @@ function player.removeAll()
 	table.clear( player.players )
 end
 
+if ( _SERVER ) then
+	function player.sendTextAll( text )
+		local payload = payload( "sayText" )
+		payload:set( "text", text )
+		networkserver.broadcast( payload )
+	end
+end
+
 function player:player()
 	character.character( self )
 
@@ -274,6 +282,23 @@ function player:send( data, channel, flag )
 		data = data:serialize()
 	end
 	self.peer:send( data, channel, flag )
+end
+
+if ( _SERVER ) then
+	function player:sendText( text )
+		local payload = payload( "sayText" )
+		payload:set( "text", text )
+		self:send( payload )
+	end
+end
+
+if ( _CLIENT ) then
+	local function onSayText( payload )
+		local text = payload:get( "text" )
+		chat.addText( text )
+	end
+
+	payload.setHandler( onSayText, "sayText" )
 end
 
 function player:setViewportWidth( viewportWidth )

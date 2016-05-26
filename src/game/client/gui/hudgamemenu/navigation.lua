@@ -12,10 +12,10 @@ function hudgamemenunavigation:hudgamemenunavigation( parent )
 
 	self.tabs = {
 		"Inventory",
-		-- "Prayer",
+		"Prayer",
 		"Spells",
 		"Stats",
-		-- "Quests"
+		"Quests"
 	}
 
 	for _, name in ipairs( self.tabs ) do

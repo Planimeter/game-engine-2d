@@ -632,3 +632,16 @@ end
 function entity:__tostring()
 	return "entity: " .. self.__type
 end
+
+concommand( "ent_create", "Creates an entity where the player is looking",
+	function( self, player, command, argString, argTable )
+		if( _SERVER ) then
+			local entity = _G.entity.create( argString )
+			if ( entity ) then
+				local position = player:getPosition() + vector( 0, game.tileSize )
+				entity:setPosition( position )
+				entity:spawn()
+			end
+		end
+	end, { "network", "cheat" }
+)

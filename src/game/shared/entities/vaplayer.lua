@@ -86,6 +86,19 @@ function vaplayer:give( item, count )
 	game.call( "shared", "onPlayerGotItem", self, item, count )
 end
 
+function vaplayer:hasInventorySpace()
+	local total = 0
+	for item, count in pairs( self:getInventory() ) do
+		local itemdata = _G.item.getData( item )
+		if ( not itemdata.stackable ) then
+			total = total + count
+		else
+			total = total + 1
+		end
+	end
+	return total < 28
+end
+
 local function moveTo( position )
 	return function( character, next )
 		character:moveTo( position, next )
@@ -95,6 +108,12 @@ end
 local function pickup( item )
 	return function( vaplayer, next )
 		if ( _SERVER ) then
+			if ( not vaplayer:hasInventorySpace() ) then
+				local text = "You don't have enough inventory space to do that."
+				vaplayer:sendText( text )
+				return
+			end
+
 			local classname = item:getClassname()
 			item:remove()
 			vaplayer:give( classname )

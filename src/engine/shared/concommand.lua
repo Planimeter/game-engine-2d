@@ -11,21 +11,37 @@ class( "concommand" )
 
 concommand.concommands = concommands
 
+local sv_cheats = convar( "sv_cheats", 0, nil, nil, "Allow cheats on server",
+                          nil, { "notify" } )
+
 function concommand.dispatch( player, name, argString, argTable )
 	local concommand = concommand.getConcommand( name )
-	if ( concommand ) then
-		local flags = concommand:getFlags()
-		if ( _CLIENT ) then
+	if ( not concommand ) then
+		return false
+	end
+
+	local flags = concommand:getFlags()
+	if ( flags ) then
+		local cheat = table.hasvalue( flags, "cheat" )
+		if ( cheat and not sv_cheats:getBoolean() ) then
+			return true
+		end
+	end
+
+	if ( _CLIENT ) then
+		if ( flags ) then
 			local game = table.hasvalue( flags, "game" )
 			if ( game and not engine.isInGame() ) then
 				return true
 			end
-
-			concommand:callback( player, name, argString, argTable )
-		else
-			concommand:callback( player, name, argString, argTable )
 		end
 
+		concommand:callback( player, name, argString, argTable )
+	else
+		concommand:callback( player, name, argString, argTable )
+	end
+
+	if ( flags ) then
 		local networked = table.hasvalue( flags, "network" )
 		if ( _CLIENT and networked ) then
 			local payload = payload( "concommand" )
@@ -33,11 +49,9 @@ function concommand.dispatch( player, name, argString, argTable )
 			payload:set( "argString", argString )
 			networkclient.sendToServer( payload )
 		end
-
-		return true
-	else
-		return false
 	end
+
+	return true
 end
 
 if ( _CLIENT ) then
@@ -64,7 +78,7 @@ function concommand:concommand( name, helpString, callback, flags, autocomplete 
 	self.name         = name
 	self.helpString   = helpString
 	self.callback     = callback
-	self.flags        = flags or {}
+	self.flags        = flags
 	self.autocomplete = autocomplete
 	concommand.concommands[ name ] = self
 end

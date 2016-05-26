@@ -116,3 +116,18 @@ structs[ "playerMove" ] = {
         }
     }
 -- end
+
+structs[ "sayText" ] = {
+    keys = {
+        { name = "text",           type = "string" }
+    }
+}
+
+-- if ( _G._VADVENTURE ) then
+    structs[ "entityOption" ] = {
+        keys = {
+            { name = "entity",     type = "entity" },
+            { name = "option",     type = "number" }
+        }
+    }
+-- end
