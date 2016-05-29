@@ -8,8 +8,8 @@ class "huddialogue" ( gui.panel )
 
 function huddialogue:huddialogue( parent )
 	gui.panel.panel( self, parent, "Dialogue" )
-	self.width  = 519
-	self.height = 142
+	self.width  = point( 519 )
+	self.height = point( 142 )
 
 	self:invalidateLayout()
 	self:setScheme( "Default" )
@@ -88,8 +88,8 @@ function huddialogue:drawName()
 	graphics.setFont( font )
 	local entity = self:getEntity()
 	local name = entity ~= nil and entity:getName() or "Name"
-	local x = 36
-	local y = x - 4
+	local x = point( 36 )
+	local y = x - point( 4 )
 	graphics.print( name, x, y )
 end
 
@@ -98,14 +98,14 @@ function huddialogue:drawMessage()
 	graphics.setColor( self:getScheme( property ) )
 	local font = self:getScheme( "font" )
 	graphics.setFont( font )
-	local x = 36
-	local y = 86
+	local x = point( 36 )
+	local y = point( 86 )
 	graphics.print( "test", x, y )
 end
 
 function huddialogue:invalidateLayout()
 	local x = graphics.getViewportWidth() / 2 - self:getWidth() / 2
-	local y = graphics.getViewportHeight() - self:getHeight() - 18
+	local y = graphics.getViewportHeight() - self:getHeight() - point( 18 )
 	self:setPos( x, y )
 	gui.panel.invalidateLayout( self )
 end

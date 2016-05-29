@@ -27,16 +27,26 @@ end
 function dropdownlistitemgroup:draw()
 	gui.panel.draw( self )
 
-	local property = "dropdownlistitem.backgroundColor"
-	local height   = self:getHeight()
-	local width    = self:getWidth()
-	graphics.setColor( self:getScheme( property ) )
-	graphics.line( 0, 0, width, 0 )
-	graphics.line( 0, height - 1, width, height - 1 )
+	local property  = "dropdownlistitem.backgroundColor"
+	self:drawBorders( property )
 	property = "dropdownlistitem.outlineColor"
+	self:drawBorders( property )
+end
+
+function dropdownlistitemgroup:drawBorders( property )
+	local lineWidth = point( 1 )
+	local height    = self:getHeight()
+	local width     = self:getWidth()
 	graphics.setColor( self:getScheme( property ) )
-	graphics.line( 0, 0, width, 0 )
-	graphics.line( 0, height - 1, width, height - 1 )
+	graphics.setLineWidth( lineWidth )
+	graphics.line(
+		0,     lineWidth / 2,          -- Top-left
+		width, lineWidth / 2           -- Top-right
+	)
+	graphics.line(
+		0,     height - lineWidth / 2, -- Bottom-left
+		width, height - lineWidth / 2  -- Bottom-right
+	)
 end
 
 function dropdownlistitemgroup:getDropDownList()

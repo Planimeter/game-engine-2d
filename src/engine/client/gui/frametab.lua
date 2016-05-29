@@ -10,8 +10,8 @@ function frametab:frametab( parent, name, text )
 	gui.radiobutton.radiobutton( self, parent, name, text )
 	self.text   = text or "Frame Tab"
 	local font  = self:getScheme( "font" )
-	self.width  = font:getWidth( self.text ) + 2 * 24
-	self.height = 61
+	self.width  = font:getWidth( self.text ) + 2 * point( 24 )
+	self.height = point( 61 )
 end
 
 function frametab:draw()
@@ -36,30 +36,37 @@ function frametab:drawBackground()
 
 	graphics.setColor( self:getScheme( property ) )
 
-	local selected  = self.mouseover or self:isSelected()
+	local selected  = self.mouseover or      self:isSelected()
 	local mouseover = self.mouseover and not self:isSelected()
 	graphics.rectangle(
 		"fill",
 		0,
-		-1,
-		width - ( selected and 1 or 0 ),
-		height + 1 - ( mouseover and 1 or 0 )
+		0,
+		width  - ( selected  and point( 1 ) or 0 ),
+		height - ( mouseover and point( 1 ) or 0 )
 	)
 
-	width = width - 0.5
+	local lineWidth = point( 1 )
 	if ( selected ) then
 		graphics.setColor( self:getScheme( "frametab.backgroundColor" ) )
-		graphics.line( width, -0.5, width, height - 0.5 )
+		graphics.line(
+			width - lineWidth / 2, 0,     -- Top-left
+			width - lineWidth / 2, height -- Bottom-left
+		)
 	end
 
+	selected = self:isSelected()
 	graphics.setColor( self:getScheme( "frametab.outlineColor" ) )
 	graphics.line(
-		width, -0.5,
-		width, height - 0.5 - ( self:isSelected() and 0 or 1 )
+		width - lineWidth / 2, 0,
+		width - lineWidth / 2, height - ( selected and 0 or point( 1 ) )
 	)
 
-	if ( not self:isSelected() ) then
-		graphics.line( 0, height - 1, width, height - 1 )
+	if ( not selected ) then
+		graphics.line(
+			0,     height - lineWidth / 2, -- Top-right
+			width, height - lineWidth / 2  -- Bottom-right
+		)
 	end
 end
 
@@ -74,9 +81,9 @@ function frametab:drawText()
 
 	local font = self:getScheme( "font" )
 	graphics.setFont( font )
-	local x = self:getWidth()  / 2 - font:getWidth( self.text ) / 2
-	local y = self:getHeight() / 2 - font:getHeight()           / 2
-	graphics.print( self.text, x, y )
+	local x = self:getWidth()  / 2 - font:getWidth( self:getText() ) / 2
+	local y = self:getHeight() / 2 - font:getHeight()                / 2
+	graphics.print( self:getText(), x, y )
 end
 
 function frametab:mousepressed( x, y, button, istouch )

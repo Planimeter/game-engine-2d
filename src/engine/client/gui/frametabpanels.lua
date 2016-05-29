@@ -9,7 +9,7 @@ class "frametabpanels" ( gui.panel )
 function frametabpanels:frametabpanels( parent, name, text )
 	gui.panel.panel( self, parent, name )
 	self.width	= parent:getWidth()
-	self.height = parent:getHeight() - 62
+	self.height = parent:getHeight() - point( 62 )
 end
 
 function frametabpanels:addPanel( frametabpanel, default )

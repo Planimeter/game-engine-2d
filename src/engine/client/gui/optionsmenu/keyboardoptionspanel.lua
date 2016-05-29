@@ -14,9 +14,9 @@ function keyboardoptionspanel:keyboardoptionspanel()
 	gui.frametabpanel.frametabpanel( self, nil, "Keyboard Options Panel" )
 
 	self.bindList = gui.bindlistpanel( self )
-	local height = 348 - 24
-	self.bindList:setSize( 640 - 48, height )
-	self.bindList:setPos( 24, 24 )
+	local height = point( 348 ) - point( 24 )
+	self.bindList:setSize( point( 640 ) - point( 48 ), height )
+	self.bindList:setPos( point( 24 ), point( 24 ) )
 	self.bindList:readBinds()
 
 	local name      = "Keyboard Options"

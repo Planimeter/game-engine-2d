@@ -15,6 +15,7 @@ local input        = input
 local ipairs       = ipairs
 local math         = math
 local pcall        = pcall
+local point        = point
 local print        = print
 local rawget       = rawget
 local require      = require
@@ -97,7 +98,7 @@ local function updateBlurFramebuffer( convar )
 		blurFramebuffer = nil
 	else
 		blurFramebuffer = shader.getShader( "gaussianblur" )
-		blurFramebuffer:set( "sigma", 12 )
+		blurFramebuffer:set( "sigma", _G.point( 12 ) )
 	end
 end
 
@@ -108,7 +109,7 @@ function draw()
 	if ( viewportFramebuffer and gui_draw_blur:getBoolean() ) then
 		if ( not blurFramebuffer ) then
 			blurFramebuffer = shader.getShader( "gaussianblur" )
-			blurFramebuffer:set( "sigma", 12 )
+			blurFramebuffer:set( "sigma", _G.point( 12 ) )
 		end
 
 		blurFramebuffer:renderTo( function()

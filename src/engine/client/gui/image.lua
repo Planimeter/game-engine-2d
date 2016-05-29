@@ -43,12 +43,14 @@ function imagepanel:drawMissingImage()
 	opacity = graphics.getOpacity()
 	graphics.setOpacity( 0.42 )
 		graphics.setColor( color.red )
-		local width  = self:getWidth()
-		local height = self:getHeight()
+		local lineWidth = point( 1 )
+		local width     = self:getWidth()
+		local height    = self:getHeight()
+		graphics.setLineWidth( lineWidth )
 		graphics.line(
-			width - 1, -0.5,
-			width - 1, height - 1,
-			0,         height - 1
+			width - lineWidth / 2, 0,                      -- Top-right
+			width - lineWidth / 2, height - lineWidth / 2, -- Bottom-right
+			0,                     height - lineWidth / 2  -- Bottom-left
 		)
 	graphics.setOpacity( opacity )
 end
@@ -96,8 +98,8 @@ local w, h, sw, sh = 0, 0, 0, 0
 
 function imagepanel:updateQuad()
 	missingImage = self:getImage() == graphics.error
-	w  = self:getWidth()  - ( missingImage and 1 or 0 )
-	h  = self:getHeight() - ( missingImage and 1 or 0 )
+	w  = self:getWidth()  - ( missingImage and point( 1 ) or 0 )
+	h  = self:getHeight() - ( missingImage and point( 1 ) or 0 )
 	sw = self.imageDatum:getWidth()
 	sh = self.imageDatum:getHeight()
 	if ( self.imageQuad == nil ) then

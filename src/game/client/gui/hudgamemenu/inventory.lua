@@ -15,8 +15,8 @@ function hudgamemenuinventory:hudgamemenuinventory( parent )
 	self:setSize( parent:getSize() )
 
 	-- local sort = gui.borderlessdropdownlist( self, "Sort" )
-	-- local x = self:getWidth() - sort:getWidth() - 18
-	-- sort:setPos( x, 36 - 14 )
+	-- local x = self:getWidth() - sort:getWidth() - point( 18 )
+	-- sort:setPos( x, point( 36 ) - point( 14 ) )
 	-- sort:setDisabled( true )
 	--
 	-- local hand = gui.dropdownlistitem( "Hand Sort", "Sort by Hand" )
@@ -26,8 +26,8 @@ function hudgamemenuinventory:hudgamemenuinventory( parent )
 	-- sort:addItem( alphabetically )
 
 	self.grid = gui.itemgrid( self, "Inventory Item Grid" )
-	self.grid:setPos( 36, 86 + 31 + 18 )
-	self.grid:setSize( parent:getWidth() - 2 * 36, 314 )
+	self.grid:setPos( point( 36 ), point( 86 + 31 + 18 ) )
+	self.grid:setSize( parent:getWidth() - 2 * point( 36 ), point( 314 ) )
 	self.grid:setColumns( 4 )
 	self.grid:setRows( 7 )
 

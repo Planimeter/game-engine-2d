@@ -11,7 +11,7 @@ function hudgamemenunavigationbutton:hudgamemenunavigationbutton( parent, name )
 
 	local font = self:getScheme( "font" )
 	self:setWidth( font:getWidth( self:getText() ) )
-	self:setHeight( 45 )
+	self:setHeight( point( 45 ) )
 	self:setValue( name )
 end
 
@@ -26,10 +26,15 @@ function hudgamemenunavigationbutton:drawBorder()
 		return
 	end
 
-	local property = "hudgamemenunavigationbutton.borderColor"
-	local width    = self:getWidth()
+	local property  = "hudgamemenunavigationbutton.borderColor"
+	local lineWidth = point( 1 )
+	local width     = self:getWidth()
 	graphics.setColor( self:getScheme( property ) )
-	graphics.line( 0, 0, width, 0 )
+	graphics.setLineWidth( lineWidth )
+	graphics.line(
+		0,     lineWidth / 2, -- Top-left
+		width, lineWidth / 2  -- Top-right
+	)
 end
 
 function hudgamemenunavigationbutton:drawLabel()
@@ -46,7 +51,7 @@ function hudgamemenunavigationbutton:drawLabel()
 	local font = self:getScheme( "font" )
 	graphics.setFont( font )
 	local x = 0
-	local y = self:getHeight() / 2 - font:getHeight() / 2 - 1
+	local y = self:getHeight() / 2 - font:getHeight() / 2 - point( 1 )
 	graphics.print( self.text, x, y )
 end
 

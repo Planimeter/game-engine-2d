@@ -16,14 +16,20 @@ table.insert( markdown, "| ---- | ----------- |" )
 local concommands = {}
 
 for name in pairs( concommand.concommands ) do
-    table.insert( concommands, name )
+	table.insert( concommands, name )
 end
 
 table.sort( concommands )
 
 for _, name in ipairs( concommands ) do
-    local concommand = concommand.getConcommand( name )
-    table.insert( markdown, "| " .. name .. " | " .. concommand:getHelpString() .. " |" )
+	local concommand = concommand.getConcommand( name )
+	table.insert(
+		markdown,
+		"| " ..
+			name                       .. " | " ..
+			concommand:getHelpString() ..
+		" |"
+	)
 end
 
 table.insert( markdown, "" )

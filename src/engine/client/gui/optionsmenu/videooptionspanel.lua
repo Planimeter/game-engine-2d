@@ -14,8 +14,8 @@ function videooptionspanel:videooptionspanel()
 
 	local name = "Aspect Ratio"
 	local label = gui.label( self, name, name )
-	local x = 36
-	local y = 36
+	local x = point( 36 )
+	local y = point( 36 )
 	label:setPos( x, y )
 	label:setFont( self:getScheme( "fontBold" ) )
 
@@ -26,12 +26,12 @@ function videooptionspanel:videooptionspanel()
 		options.aspectRatio = newValue
 		self:updateResolutions()
 	end
-	y = y + label:getHeight() + 9
+	y = y + label:getHeight() + point( 9 )
 	aspectRatios:setPos( x, y )
 
 	name = "Resolution"
 	label = gui.label( self, name, name )
-	y = y + aspectRatios:getHeight() + 9
+	y = y + aspectRatios:getHeight() + point( 9 )
 	label:setPos( x, y )
 	label:setFont( self:getScheme( "fontBold" ) )
 
@@ -41,7 +41,7 @@ function videooptionspanel:videooptionspanel()
 	resolutions.onValueChanged = function( dropdownlist, oldValue, newValue )
 		options.resolution = newValue
 	end
-	y = y + label:getHeight() + 9
+	y = y + label:getHeight() + point( 9 )
 	resolutions:setPos( x, y )
 
 	name = "Custom Resolution"
@@ -70,13 +70,13 @@ function videooptionspanel:videooptionspanel()
 			end
 		end
 	end
-	y = y + aspectRatios:getHeight() + 36
+	y = y + aspectRatios:getHeight() + point( 36 )
 	customResolution:setPos( x, y )
 
 	name = "Width"
 	local customWidth = gui.textbox( self, name, name )
 	self.customWidth = customWidth
-	y = y + customResolution:getHeight() + 9
+	y = y + customResolution:getHeight() + point( 9 )
 	customWidth:setPos( x, y )
 	customWidth:setDisabled( true )
 	customWidth:setDefocusOnEnter( true )
@@ -84,9 +84,9 @@ function videooptionspanel:videooptionspanel()
 		local width = tonumber( textbox:getText() )
 		if ( not width ) then
 			return
-		elseif ( width < 640 ) then
-			width = 640
-			textbox:setText( "640" )
+		elseif ( width < 800 ) then
+			width = 800
+			textbox:setText( "800" )
 		end
 		options.resolution.width = width
 	end
@@ -94,7 +94,7 @@ function videooptionspanel:videooptionspanel()
 	name = "Height"
 	local customHeight = gui.textbox( self, name, name )
 	self.customHeight = customHeight
-	y = y + customWidth:getHeight() + 9
+	y = y + customWidth:getHeight() + point( 9 )
 	customHeight:setPos( x, y )
 	customHeight:setDisabled( true )
 	customHeight:setDefocusOnEnter( true )
@@ -102,9 +102,9 @@ function videooptionspanel:videooptionspanel()
 		local height = tonumber( textbox:getText() )
 		if ( not height ) then
 			return
-		elseif ( height < 480 ) then
-			height = 480
-			textbox:setText( "480" )
+		elseif ( height < 600 ) then
+			height = 600
+			textbox:setText( "600" )
 		end
 		options.resolution.height = height
 	end
@@ -123,7 +123,7 @@ function videooptionspanel:videooptionspanel()
 		window.fullscreen = checked
 	end
 	x = 2 * x + resolutions:getWidth()
-	y = 36 + label:getHeight() + 9
+	y = point( 36 ) + label:getHeight() + point( 9 )
 	fullscreen:setPos( x, y )
 
 	name = "Borderless Window"
@@ -135,7 +135,7 @@ function videooptionspanel:videooptionspanel()
 		options.borderless = checked
 		window.borderless = checked
 	end
-	y = y + 2 * fullscreen:getHeight() + 4
+	y = y + 2 * fullscreen:getHeight() + point( 4 )
 	borderless:setPos( x, y )
 
 	name = "Vertical Synchronization"
@@ -147,7 +147,7 @@ function videooptionspanel:videooptionspanel()
 		options.vsync = checked
 		window.vsync = checked
 	end
-	y = y + 2 * borderless:getHeight() + 3
+	y = y + 2 * borderless:getHeight() + point( 3 )
 	vsync:setPos( x, y )
 end
 
@@ -304,8 +304,8 @@ function videooptionspanel:updateResolutions()
 	local name = "Resolution Drop-Down List Item"
 	local text = ""
 	local foundMode = false
-	local width = graphics.getViewportWidth()
-	local height = graphics.getViewportHeight()
+	local width = graphics.getViewportWidth() / graphics.getPixelScale()
+	local height = graphics.getViewportHeight() / graphics.getPixelScale()
 	for i, mode in ipairs( modes ) do
 		text = mode.width .. " × " .. mode.height
 		dropdownlistitem = gui.dropdownlistitem( name .. " " .. i, text )

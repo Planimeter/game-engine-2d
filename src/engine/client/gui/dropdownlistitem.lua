@@ -8,8 +8,8 @@ class "dropdownlistitem" ( gui.radiobutton )
 
 function dropdownlistitem:dropdownlistitem( name, text )
 	gui.radiobutton.radiobutton( self, nil, name, text )
-	self.width  = 216
-	self.height = 46
+	self.width  = point( 216 )
+	self.height = point( 46 )
 	self.text   = text or "Drop-Down List Item"
 end
 
@@ -34,22 +34,32 @@ function dropdownlistitem:drawBackground()
 	graphics.setColor( self:getScheme( property ) )
 
 	local selected = self.mouseover or self:isSelected()
-	local offset   = selected and 1 or 0
-	graphics.rectangle( "fill", offset, 0, width - offset, height )
+	local offset   = selected and point( 1 ) or 0
+	graphics.rectangle( "fill", offset, 0, width - 2 * offset, height )
 
-	width  = width  - 0.5
-	height = height - 0.5
 	if ( selected ) then
 		property = "dropdownlistitem.backgroundColor"
-		graphics.setColor( self:getScheme( property ) )
-		graphics.line( 0,     -0.5, 0,     height )
-		graphics.line( width, -0.5, width, height )
+		self:drawBorders( property )
 	end
 
 	property = "dropdownlistitem.outlineColor"
+	self:drawBorders( property )
+end
+
+function dropdownlistitem:drawBorders( property )
+	local lineWidth = point( 1 )
+	local width     = self:getWidth()
+	local height    = self:getHeight()
 	graphics.setColor( self:getScheme( property ) )
-	graphics.line( 0,     -0.5, 0,     height )
-	graphics.line( width, -0.5, width, height )
+	graphics.setLineWidth( lineWidth )
+	graphics.line(
+		lineWidth / 2,      0,        -- Top-left
+		lineWidth / 2,      height    -- Bottom-left
+	)
+	graphics.line(
+		width - lineWidth / 2, 0,     -- Top-right
+		width - lineWidth / 2, height -- Bottom-right
+	)
 end
 
 function dropdownlistitem:drawText()
@@ -67,8 +77,8 @@ function dropdownlistitem:drawText()
 
 	local font = self:getScheme( "font" )
 	graphics.setFont( font )
-	local x = 18
-	local y = self:getHeight() / 2 - font:getHeight() / 2 - 2
+	local x = point( 18 )
+	local y = self:getHeight() / 2 - font:getHeight() / 2 - point( 2 )
 	graphics.print( self:getText(), x, y )
 end
 

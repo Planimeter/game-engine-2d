@@ -29,7 +29,7 @@ function testframe:createTestPanels()
 		self:setSize( self:getParent():getSize() )
 		gui.panel.invalidateLayout( self )
 	end
-	panel:setInnerHeight( 1386 )
+	panel:setInnerHeight( point( 1386 ) )
 	panel = panel:getInnerPanel()
 
 	panelName = "Command Button Group"
@@ -50,7 +50,7 @@ function testframe:createTestPanels()
 
 	panelName = "Text Box"
 	local textbox = gui.textbox( panel, getDebugName() )
-	local margin = 36
+	local margin = point( 36 )
 	local x = margin
 	local y = margin
 	textbox:setPos( x, y )
@@ -59,7 +59,7 @@ function testframe:createTestPanels()
 
 	panelName = "Password Text Box"
 	local passwordtextbox = gui.passwordtextbox( panel, getDebugName() )
-	y = y + textboxHeight + 9
+	y = y + textboxHeight + point( 9 )
 	passwordtextbox:setPos( x, y )
 	passwordtextbox.onChange = function( passwordtextbox )
 		textbox:setText( passwordtextbox:getPassword() )
@@ -69,19 +69,19 @@ function testframe:createTestPanels()
 
 	panelName = "Button"
 	local button = gui.button( panel, getDebugName() )
-	y = y + passwordtextboxHeight + 9
+	y = y + passwordtextboxHeight + point( 9 )
 	button:setPos( x, y )
 	local buttonHeight = button:getHeight()
 
 	panelName = "Label"
 	local label = gui.label( panel, getDebugName() )
-	y = y + button:getHeight() + 9
+	y = y + button:getHeight() + point( 9 )
 	label:setPos( x, y )
 	local labelHeight = label:getHeight()
 
 	panelName = "Drop-Down List"
 	local dropdownlist = gui.dropdownlist( panel, getDebugName() )
-	y = y + labelHeight + 9
+	y = y + labelHeight + point( 9 )
 	dropdownlist:setPos( x, y )
 	local dropdownlistHeight = dropdownlist:getHeight()
 
@@ -97,13 +97,13 @@ function testframe:createTestPanels()
 
 	panelName = "Slider"
 	local slider = gui.slider( panel, getDebugName() )
-	y = y + dropdownlistHeight + 18
+	y = y + dropdownlistHeight + point( 18 )
 	slider:setPos( x, y )
 
 	panelName = "Checkbox"
 	local checkbox = gui.checkbox( panel, getDebugName() )
 	x = x + textboxWidth + margin
-	y = margin + labelHeight - 3 + 8
+	y = margin + labelHeight - point( 3 ) + point( 8 )
 	checkbox:setPos( x, y )
 	checkbox:setChecked( true )
 	local checkboxHeight = checkbox:getHeight()
@@ -114,14 +114,14 @@ function testframe:createTestPanels()
 	local radiobutton = gui.radiobutton( panel, getDebugName() .. " 1" )
 	radiobuttongroup:addItem( radiobutton )
 	local radiobuttonHeight = radiobutton:getHeight()
-	y = y + checkboxHeight + 9 + passwordtextboxHeight - radiobuttonHeight
+	y = y + checkboxHeight + point( 9 ) + passwordtextboxHeight - radiobuttonHeight
 	radiobutton:setPos( x, y )
 	radiobutton:setDefault( true )
 
 	local image = gui.image( panel, "Image", nil )
 	x = margin
-	image:setPos( x, 1386 - margin - 32 )
-	image:setSize( 32, 32 )
+	image:setPos( x, point( 1386 ) - margin - point( 32 ) )
+	image:setSize( point( 32 ), point( 32 ) )
 
 	self:addTab( "Tab", tab, true )
 end

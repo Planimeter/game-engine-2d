@@ -15,7 +15,7 @@ function consoletextbox:consoletextbox( parent, name )
 end
 
 function consoletextbox:draw()
-	if ( self:getHeight() == 1 ) then
+	if ( self:getHeight() == point( 1 ) ) then
 		return
 	end
 
@@ -44,8 +44,8 @@ end
 
 function consoletextbox:invalidateLayout()
 	local parent = self:getParent()
-	self:setWidth( parent:getWidth() - 2 * 36 )
-	self:setHeight( parent:getHeight() - 86 - 46 - 9 - 36 )
+	self:setWidth( parent:getWidth() - 2 * point( 36 ) )
+	self:setHeight( parent:getHeight() + point( -86 - 46 - 9 - 36 ) )
 
 	gui.panel.invalidateLayout( self )
 end

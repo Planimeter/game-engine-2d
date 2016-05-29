@@ -61,7 +61,7 @@ function dropdownlist:drawForeground()
 	if ( self:isDisabled() ) then
 		property = "button.disabled.outlineColor"
 		graphics.setColor( self:getScheme( property ) )
-		graphics.setLineWidth( 1 )
+		graphics.setLineWidth( point( 1 ) )
 		graphics.rectangle( "line", 0, 0, width, height )
 		return
 	end
@@ -73,7 +73,7 @@ function dropdownlist:drawForeground()
 	end
 
 	graphics.setColor( self:getScheme( property ) )
-	graphics.setLineWidth( 1 )
+	graphics.setLineWidth( point( 1 ) )
 	graphics.rectangle( "line", 0, 0, width, height )
 end
 
@@ -86,7 +86,7 @@ function dropdownlist:drawIcon()
 
 	graphics.setColor( self:getScheme( property ) )
 
-	local x = self:getWidth() - self.icon:getWidth() - 18
+	local x = self:getWidth() - self.icon:getWidth() - point( 18 )
 	local y = self:getHeight() / 2 - self.icon:getHeight() / 2
 	graphics.draw( self.icon:getDrawable(), x, y )
 end
@@ -104,8 +104,8 @@ function dropdownlist:drawText()
 	graphics.setFont( font )
 	local item = self:getListItemGroup():getSelectedItem()
 	local text = item and item:getText() or ""
-	local x    = 18
-	local y    = self:getHeight() / 2 - font:getHeight() / 2 - 2
+	local x    = point( 18 )
+	local y    = self:getHeight() / 2 - font:getHeight() / 2 - point( 2 )
 	graphics.print( text, x, y )
 end
 

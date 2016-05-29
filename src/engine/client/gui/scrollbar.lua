@@ -8,7 +8,7 @@ class "scrollbar" ( gui.panel )
 
 function scrollbar:scrollbar( parent, name )
 	gui.panel.panel( self, parent, name )
-	self.width       = 4
+	self.width       = point( 4 )
 	self.height      = parent:getHeight()
 	self.disabled    = false
 	self.min         = 0

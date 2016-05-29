@@ -8,7 +8,7 @@ class "frametabgroup" ( gui.radiobuttongroup )
 
 function frametabgroup:frametabgroup( parent, name )
 	gui.radiobuttongroup.radiobuttongroup( self, parent, name )
-	self.height = 61
+	self.height = point( 61 )
 	self:setScheme( "Default" )
 end
 
@@ -30,7 +30,12 @@ end
 
 function frametabgroup:draw()
 	graphics.setColor( self:getScheme( "frametab.outlineColor" ) )
-	graphics.line( 0, -0.5, 0, self:getHeight() - 1.5 )
+	local lineWidth = point( 1 )
+	graphics.setLineWidth( lineWidth )
+	graphics.line(
+		lineWidth / 2, 0,               -- Top-left
+		lineWidth / 2, self:getHeight() -- Bottom-left
+	)
 
 	gui.panel.draw( self )
 end
@@ -38,7 +43,7 @@ end
 function frametabgroup:invalidateLayout()
 	local tabs = self:getItems()
 	if ( tabs ) then
-		local x = 1
+		local x = point( 1 )
 		for _, tab in ipairs( tabs ) do
 			tab:setX( x )
 			x = x + tab:getWidth()

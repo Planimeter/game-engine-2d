@@ -14,7 +14,7 @@ function hudmoveindicator:hudmoveindicator( parent )
 	self:setUseFullscreenFramebuffer( true )
 
 	self.options = gui.optionsitemgroup( self, name .. " Options Item Group" )
-	self.options:setWidth( 216 )
+	self.options:setWidth( point( 216 ) )
 	self.optionsActive = false
 
 	self:setScheme( "Default" )

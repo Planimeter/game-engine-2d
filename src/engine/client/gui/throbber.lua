@@ -8,7 +8,7 @@ class "throbber" ( gui.image )
 
 function throbber:throbber( parent, name, image )
 	gui.image.imagepanel( self, parent, name, image or "images/gui/throbber.png" )
-	self:setSize( 16, 16 )
+	self:setSize( point( 16 ), point( 16 ) )
 	self:setOpacity( 0 )
 end
 

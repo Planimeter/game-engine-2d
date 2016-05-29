@@ -9,8 +9,8 @@ class "keyboardoptionsadvancedframe" ( gui.frame )
 function keyboardoptionsadvancedframe:keyboardoptionsadvancedframe( parent )
 	local name = "Advanced Keyboard Options"
 	gui.frame.frame( self, parent, name .. " Frame", name )
-	self:setWidth( 480 )
-	self:setHeight( 147 )
+	self:setWidth( point( 480 ) )
+	self:setHeight( point( 147 ) )
 	self:setResizable( false )
 
 	name = "Developer Console"
@@ -20,7 +20,7 @@ function keyboardoptionsadvancedframe:keyboardoptionsadvancedframe( parent )
 		convar.setConvar( "con_enable", checked and "1" or "0" )
 	end
 
-	self.console:setPos( 36, 86 )
+	self.console:setPos( point( 36 ), point( 86 ) )
 end
 
 gui.register( keyboardoptionsadvancedframe, "keyboardoptionsadvancedframe" )

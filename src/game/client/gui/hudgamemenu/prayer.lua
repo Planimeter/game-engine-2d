@@ -21,7 +21,7 @@ function hudgamemenuprayer:draw()
 	graphics.setFont( font )
 	local text = "Panel not implemented"
 	local x = self:getWidth()  / 2 - font:getWidth( text ) / 2
-	local y = self:getHeight() / 2 - font:getHeight()      / 2 - 2
+	local y = self:getHeight() / 2 - font:getHeight()      / 2 - point( 2 )
 	graphics.print( text, x, y )
 end
 

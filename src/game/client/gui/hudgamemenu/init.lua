@@ -8,8 +8,8 @@ class "hudgamemenu" ( gui.panel )
 
 function hudgamemenu:hudgamemenu( parent )
 	gui.panel.panel( self, parent, "Game Menu" )
-	self.width  = 384 -- - 31
-	self.height = 480
+	self.width  = point( 384 ) -- - point( 31 )
+	self.height = point( 480 )
 
 	self:invalidateLayout()
 	self:setScheme( "Default" )
@@ -18,9 +18,9 @@ function hudgamemenu:hudgamemenu( parent )
 	require( "game.client.gui.hudgamemenu.navigation" )
 	require( "game.client.gui.hudgamemenu.navigationbutton" )
 	self.navigation = gui.hudgamemenunavigation( self )
-	self.navigation:setPos( 36, 86 )
-	self.navigation:setWidth( self.width - 2 * 36 )
-	self.navigation:setHeight( 31 )
+	self.navigation:setPos( point( 36 ), point( 86 ) )
+	self.navigation:setWidth( self.width - 2 * point( 36 ) )
+	self.navigation:setHeight( point( 31 ) )
 
 	require( "game.client.gui.hudgamemenu.inventory" )
 	self.inventory = gui.hudgamemenuinventory( self )
@@ -111,7 +111,7 @@ end
 
 function hudgamemenu:drawForeground()
 	graphics.setColor( self:getScheme( "frame.outlineColor" ) )
-	graphics.setLineWidth( 1 )
+	graphics.setLineWidth( point( 1 ) )
 	graphics.rectangle( "line", 0, 0, self:getWidth(), self:getHeight() )
 end
 
@@ -122,14 +122,14 @@ function hudgamemenu:drawTitle()
 	graphics.setFont( font )
 	local item = self.navigation:getSelectedItem()
 	local title = item:getText()
-	local x = 36
-	local y = x - 4
+	local x = point( 36 )
+	local y = x - point( 4 )
 	graphics.print( string.utf8upper( title ), x, y )
 end
 
 function hudgamemenu:invalidateLayout()
-	local x = graphics.getViewportWidth() - self:getWidth() - 18
-	local y = graphics.getViewportHeight() - self:getHeight() - 18
+	local x = graphics.getViewportWidth()  - self:getWidth()  - point( 18 )
+	local y = graphics.getViewportHeight() - self:getHeight() - point( 18 )
 	self:setPos( x, y )
 	gui.panel.invalidateLayout( self )
 end

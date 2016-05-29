@@ -70,8 +70,8 @@ end
 
 function hudchattextbox:invalidateLayout()
 	local parent = self:getHudChat()
-	self:setWidth( parent:getWidth() - 2 * 36 )
-	self:setHeight( parent:getHeight() - 46 - 9 - 2 * 36 )
+	self:setWidth( parent:getWidth() - 2 * point( 36 ) )
+	self:setHeight( parent:getHeight() - point( 46 - 9 ) - 2 * point( 36 ) )
 
 	gui.panel.invalidateLayout( self )
 end

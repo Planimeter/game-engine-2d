@@ -1,4 +1,4 @@
---========= Copyright Â© 2013-2015, Planimeter, All rights reserved. ==========--
+--========= Copyright © 2013-2015, Planimeter, All rights reserved. ==========--
 --
 -- Purpose: Chat HUD
 --
@@ -77,7 +77,6 @@ function hudchat:close()
 	self.output:animate( {
 		borderOpacity = 0,
 	}, CHAT_ANIM_TIME, "easeOutQuint" )
-	-- self.output:hide()
 
 	gui.setFocusedPanel( self.input, false )
 end
@@ -121,7 +120,7 @@ end
 
 function hudchat:drawForeground()
 	graphics.setColor( self:getScheme( "frame.outlineColor" ) )
-	graphics.setLineWidth( 1 )
+	graphics.setLineWidth( point( 1 ) )
 	graphics.rectangle( "line", 0, 0, self:getWidth(), self:getHeight() )
 end
 
@@ -138,17 +137,26 @@ end
 function hudchat:invalidateLayout()
 	self.width  = math.round( gui.scale( 720 ) )
 	self.height = math.round( gui.scale( 404 ) )
-	self:setPos( gui.scale( 96 ) - 36 - 18, gui.scale( 494 ) )
+	self:setPos(
+		gui.scale( 96 ) - point( 36 ) - point( 18 ),
+		gui.scale( 494 )
+	)
 
 	if ( self:isVisible() ) then
-		self.output:setPos( 36, 36 )
+		self.output:setPos( point( 36 ), point( 36 ) )
 	else
-		local x, y = self:localToScreen( gui.scale( 96 ) - 18, 36 + gui.scale( 494 ) )
+		local x, y = self:localToScreen(
+			gui.scale( 96 ) - point( 18 ),
+			point( 36 ) + gui.scale( 494 )
+		)
 		self.output:setPos( x, y )
 	end
 
-	self.input:setPos( 36, self:getHeight() - self.input:getHeight() - 36 )
-	self.input:setWidth( self:getWidth() - 2 * 36 )
+	self.input:setPos(
+		point( 36 ),
+		self:getHeight() - self.input:getHeight() - point( 36 )
+	)
+	self.input:setWidth( self:getWidth() - 2 * point( 36 ) )
 	gui.panel.invalidateLayout( self )
 end
 

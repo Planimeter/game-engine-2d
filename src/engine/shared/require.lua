@@ -37,7 +37,8 @@ function package.update( dt )
 			local status, err = pcall( require, modname )
 			if ( status == false ) then
 				print( err )
-				package.watched[ modname ] = filesystem.getLastModified( filename )
+				lastModified, errormsg = filesystem.getLastModified( filename )
+				package.watched[ modname ] = lastModified
 			else
 				if ( game ) then
 					game.call( "shared", "onReloadScript", modname )

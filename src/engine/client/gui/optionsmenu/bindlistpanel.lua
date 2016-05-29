@@ -35,7 +35,7 @@ function bindlistpanel:drawForeground()
 	local height   = self:getHeight()
 
 	graphics.setColor( self:getScheme( property ) )
-	graphics.setLineWidth( 1 )
+	graphics.setLineWidth( point( 1 ) )
 	graphics.rectangle( "line", 0, 0, width, height )
 end
 

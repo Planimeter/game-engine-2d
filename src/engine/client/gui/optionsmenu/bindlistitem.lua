@@ -14,7 +14,7 @@ bindlistitem.trappedItem = trappedItem
 function bindlistitem:bindlistitem( parent, name, text, key, concommand )
 	gui.button.button( self, parent, name, text )
 	self.width      = parent:getWidth()
-	self.height     = 30
+	self.height     = point( 30 )
 	self.key        = key
 	self.concommand = concommand
 end
@@ -27,18 +27,18 @@ function bindlistitem:drawBackground()
 	if ( self:isDisabled() ) then
 		property = "button.disabled.backgroundColor"
 		graphics.setColor( self:getScheme( property ) )
-		graphics.rectangle( "fill", 1, 0, width - 2, height )
+		graphics.rectangle( "fill", point( 1 ), 0, width - point( 2 ), height )
 		return
 	end
 
 	if ( self.mousedown and self.mouseover ) then
 		property = "button.mousedown.backgroundColor"
 		graphics.setColor( self:getScheme( property ) )
-		graphics.rectangle( "fill", 1, 0, width - 2, height )
+		graphics.rectangle( "fill", point( 1 ), 0, width - point( 2 ), height )
 	elseif ( self.mousedown or self.mouseover ) then
 		property = "button.mouseover.backgroundColor"
 		graphics.setColor( self:getScheme( property ) )
-		graphics.rectangle( "fill", 1, 0, width - 2, height )
+		graphics.rectangle( "fill", point( 1 ), 0, width - point( 2 ), height )
 	end
 end
 
@@ -56,14 +56,16 @@ function bindlistitem:drawText()
 
 	local font = self:getScheme( "font" )
 	graphics.setFont( font )
-	local margin = 18
+	local margin = point( 18 )
 	local x = margin
-	local y = self:getHeight() / 2 - font:getHeight() / 2 - 2
+	local y = self:getHeight() / 2 - font:getHeight() / 2 - point( 2 )
 	graphics.print( self:getText(), x, y )
 
 	local label = "Key or Button"
 	local key   = self:getKey()
-	x = self:getWidth() - margin - font:getWidth( label ) / 2 - font:getWidth( key ) / 2
+	x = self:getWidth() - margin
+	x = x - font:getWidth( label ) / 2
+	x = x - font:getWidth( key )   / 2
 	graphics.print( key, x, y )
 end
 

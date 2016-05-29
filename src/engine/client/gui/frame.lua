@@ -13,8 +13,8 @@ local utf8upper = string.utf8upper
 
 function frame:frame( parent, name, title )
 	gui.panel.panel( self, parent, name )
-	self.width         = 640
-	self.height        = 480
+	self.width         = point( 640 )
+	self.height        = point( 480 )
 	self.title         = title or "Frame"
 	self.visible       = false
 	self.removeOnClose = false
@@ -22,15 +22,18 @@ function frame:frame( parent, name, title )
 	self.movable       = true
 
 	self.closeButton = gui.closebutton( self, name .. " Close Button" )
-	self.closeButton:setPos( self.width - 2 * 36 - 16, 1 )
+	self.closeButton:setPos(
+		self.width - 2 * point( 36 ) - point( 16 ),
+		point( 1 )
+	)
 
 	self:setScheme( "Default" )
 
 	local font             = self:getScheme( "titleFont" )
 	local titleWidth       = font:getWidth( utf8upper( self.title ) )
 	local closeButtonWidth = self.closeButton:getWidth()
-	self.minWidth  = 2 * 36 + titleWidth + closeButtonWidth
-	self.minHeight = 86
+	self.minWidth  = 2 * point( 36 ) + titleWidth + closeButtonWidth
+	self.minHeight = point( 86 )
 
 	self:setUseFullscreenFramebuffer( true )
 end
@@ -107,7 +110,7 @@ end
 
 function frame:drawForeground()
 	graphics.setColor( self:getScheme( "frame.outlineColor" ) )
-	graphics.setLineWidth( 1 )
+	graphics.setLineWidth( point( 1 ) )
 	graphics.rectangle( "line", 0, 0, self:getWidth(), self:getHeight() )
 end
 
@@ -119,8 +122,8 @@ function frame:drawTitle()
 	graphics.setColor( self:getScheme( property ) )
 	local font = self:getScheme( "titleFont" )
 	graphics.setFont( font )
-	local x = 36
-	local y = x - 4
+	local x = point( 36 )
+	local y = x - point( 4 )
 	graphics.print( utf8upper( self.title ), x, y )
 end
 
@@ -142,7 +145,7 @@ end
 
 function frame:invalidateLayout()
 	if ( self.closeButton ) then
-		self.closeButton:setX( self:getWidth() - 2 * 36 - 16 )
+		self.closeButton:setX( self:getWidth() - 2 * point( 36 ) - point( 16 ) )
 	end
 
 	gui.panel.invalidateLayout( self )
@@ -172,6 +175,8 @@ local function getNextFocusedIndex( children, startpos, endpos, dir )
 	end
 end
 
+local next = getNextFocusedIndex
+
 function frame:moveFocus()
 	local children = self:getChildren()
 	if ( children ) then
@@ -182,14 +187,14 @@ function frame:moveFocus()
 			if ( panel.focus ) then
 				if ( i ~= #children ) then
 					local endpos = dir and 1 or #children
-					focusedIndex = getNextFocusedIndex( children, i + 1, endpos, dir )
+					focusedIndex = next( children, i + 1, endpos, dir )
 					if ( focusedIndex ) then
 						break
 					end
 				end
 
 				if ( not focusedIndex ) then
-					focusedIndex = getNextFocusedIndex( children, 1, i - 1, dir )
+					focusedIndex = next( children, 1, i - 1, dir )
 					if ( focusedIndex ) then
 						break
 					end
@@ -198,7 +203,7 @@ function frame:moveFocus()
 		end
 
 		if ( not focusedIndex ) then
-			focusedIndex = getNextFocusedIndex( children, 1, #children, dir )
+			focusedIndex = next( children, 1, #children, dir )
 		end
 
 		local focusedChild = focusedIndex and children[ focusedIndex ]
@@ -264,10 +269,10 @@ function frame:mousepressed( x, y, button, istouch )
 			mouseIntersects = pointinrectangle(
 				localX,
 				localY,
-				8,
+				point( 8 ),
 				0,
-				width - 16,
-				8
+				width - point( 16 ),
+				point( 8 )
 			)
 			if ( mouseIntersects ) then
 				self.resizing = "top"
@@ -278,10 +283,10 @@ function frame:mousepressed( x, y, button, istouch )
 			mouseIntersects = pointinrectangle(
 				localX,
 				localY,
-				width - 8,
+				width - point( 8 ),
 				0,
-				8,
-				8
+				point( 8 ),
+				point( 8 )
 			)
 			if ( mouseIntersects ) then
 				self.resizing = "topright"
@@ -292,10 +297,10 @@ function frame:mousepressed( x, y, button, istouch )
 			mouseIntersects = pointinrectangle(
 				localX,
 				localY,
-				width  - 8,
-				8,
-				8,
-				height - 16
+				width  - point( 8 ),
+				point( 8 ),
+				point( 8 ),
+				height - point( 16 )
 			)
 			if ( mouseIntersects ) then
 				self.resizing = "right"
@@ -306,10 +311,10 @@ function frame:mousepressed( x, y, button, istouch )
 			mouseIntersects = pointinrectangle(
 				localX,
 				localY,
-				width  - 8,
-				height - 8,
-				8,
-				8
+				width  - point( 8 ),
+				height - point( 8 ),
+				point( 8 ),
+				point( 8 )
 			)
 			if ( mouseIntersects ) then
 				self.resizing = "bottomright"
@@ -320,10 +325,10 @@ function frame:mousepressed( x, y, button, istouch )
 			mouseIntersects = pointinrectangle(
 				localX,
 				localY,
-				8,
-				height - 8,
-				width  - 16,
-				8
+				point( 8 ),
+				height - point( 8 ),
+				width  - point( 16 ),
+				point( 8 )
 			)
 			if ( mouseIntersects ) then
 				self.resizing = "bottom"
@@ -335,9 +340,9 @@ function frame:mousepressed( x, y, button, istouch )
 				localX,
 				localY,
 				0,
-				height - 8,
-				8,
-				8
+				height - point( 8 ),
+				point( 8 ),
+				point( 8 )
 			)
 			if ( mouseIntersects ) then
 				self.resizing = "bottomleft"
@@ -349,9 +354,9 @@ function frame:mousepressed( x, y, button, istouch )
 				localX,
 				localY,
 				0,
-				8,
-				8,
-				height - 16
+				point( 8 ),
+				point( 8 ),
+				height - point( 16 )
 			)
 			if ( mouseIntersects ) then
 				self.resizing = "left"
@@ -364,8 +369,8 @@ function frame:mousepressed( x, y, button, istouch )
 				localY,
 				0,
 				0,
-				8,
-				8
+				point( 8 ),
+				point( 8 )
 			)
 			if ( mouseIntersects ) then
 				self.resizing = "topleft"
@@ -380,7 +385,7 @@ function frame:mousepressed( x, y, button, istouch )
 			0,
 			0,
 			self:getWidth(),
-			86
+			point( 86 )
 		)
 		if ( mouseIntersects ) then
 			self.moving = true
@@ -589,10 +594,10 @@ function frame:updateCursor( mouseX, mouseY )
 	mouseIntersects = pointinrectangle(
 		localX,
 		localY,
-		8,
+		point( 8 ),
 		0,
-		self:getWidth() - 16,
-		8
+		self:getWidth() - point( 16 ),
+		point( 8 )
 	)
 	if ( mouseIntersects and self.mouseover ) then
 		os.setCursor( "sizens" )
@@ -603,10 +608,10 @@ function frame:updateCursor( mouseX, mouseY )
 	mouseIntersects = pointinrectangle(
 		localX,
 		localY,
-		self:getWidth() - 8,
+		self:getWidth() - point( 8 ),
 		0,
-		8,
-		8
+		point( 8 ),
+		point( 8 )
 	)
 	if ( mouseIntersects ) then
 		os.setCursor( "sizenesw" )
@@ -617,10 +622,10 @@ function frame:updateCursor( mouseX, mouseY )
 	mouseIntersects = pointinrectangle(
 		localX,
 		localY,
-		self:getWidth()  - 8,
-		8,
-		8,
-		self:getHeight() - 16
+		self:getWidth()  - point( 8 ),
+		point( 8 ),
+		point( 8 ),
+		self:getHeight() - point( 16 )
 	)
 	if ( mouseIntersects ) then
 		os.setCursor( "sizewe" )
@@ -631,10 +636,10 @@ function frame:updateCursor( mouseX, mouseY )
 	mouseIntersects = pointinrectangle(
 		localX,
 		localY,
-		self:getWidth()  - 8,
-		self:getHeight() - 8,
-		8,
-		8
+		self:getWidth()  - point( 8 ),
+		self:getHeight() - point( 8 ),
+		point( 8 ),
+		point( 8 )
 	)
 	if ( mouseIntersects ) then
 		os.setCursor( "sizenwse" )
@@ -645,10 +650,10 @@ function frame:updateCursor( mouseX, mouseY )
 	mouseIntersects = pointinrectangle(
 		localX,
 		localY,
-		8,
-		self:getHeight() - 8,
-		self:getWidth()  - 16,
-		8
+		point( 8 ),
+		self:getHeight() - point( 8 ),
+		self:getWidth()  - point( 16 ),
+		point( 8 )
 	)
 	if ( mouseIntersects ) then
 		os.setCursor( "sizens" )
@@ -660,9 +665,9 @@ function frame:updateCursor( mouseX, mouseY )
 		localX,
 		localY,
 		0,
-		self:getHeight() - 8,
-		8,
-		8
+		self:getHeight() - point( 8 ),
+		point( 8 ),
+		point( 8 )
 	)
 	if ( mouseIntersects ) then
 		os.setCursor( "sizenesw" )
@@ -674,9 +679,9 @@ function frame:updateCursor( mouseX, mouseY )
 		localX,
 		localY,
 		0,
-		8,
-		8,
-		self:getHeight() - 16
+		point( 8 ),
+		point( 8 ),
+		self:getHeight() - point( 16 )
 	)
 	if ( mouseIntersects ) then
 		os.setCursor( "sizewe" )
@@ -689,8 +694,8 @@ function frame:updateCursor( mouseX, mouseY )
 		localY,
 		0,
 		0,
-		8,
-		8
+		point( 8 ),
+		point( 8 )
 	)
 	if ( mouseIntersects ) then
 		os.setCursor( "sizenwse" )

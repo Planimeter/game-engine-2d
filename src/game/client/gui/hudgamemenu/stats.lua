@@ -12,15 +12,15 @@ function hudgamemenustats:hudgamemenustats( parent )
 	self:setSize( parent:getSize() )
 
 	local panel = gui.scrollablepanel( self, "Stats Scrollable Panel" )
-	panel:setSize( self:getWidth(), 345 )
-	panel:setInnerHeight( 738 )
-	panel:setY( 86 + 31 + 18 )
+	panel:setSize( self:getWidth(), point( 345 ) )
+	panel:setInnerHeight( point( 738 ) )
+	panel:setY( point( 86 ) + point( 31 ) + point( 18 ) )
 	panel = panel:getInnerPanel()
 
 	-- Soul
 	local name       = "Soul"
 	local label      = gui.label( panel, name, name )
-	local x          = 36
+	local x          = point( 36 )
 	local y          = 0
 	local fontBold   = self:getScheme( "fontBold" )
 	label:setPos( x, y )
@@ -29,77 +29,77 @@ function hudgamemenustats:hudgamemenustats( parent )
 	require( "game.client.gui.hudgamemenu.stat" )
 	name             = "Health"
 	local stat       = gui.hudgamemenustat( panel, name, "health" )
-	stat:setWidth( 312 )
+	stat:setWidth( point( 312 ) )
 	local lineHeight = fontBold:getHeight()
-	y                = y + lineHeight + 17
+	y                = y + lineHeight + point( 17 )
 	stat:setPos( x, y )
 
 	name             = "Prayer"
 	local stat       = gui.hudgamemenustat( panel, name, "prayer" )
-	stat:setWidth( 312 )
-	y                = y + stat:getHeight() + 20
+	stat:setWidth( point( 312 ) )
+	y                = y + stat:getHeight() + point( 20 )
 	stat:setPos( x, y )
 
 	-- Combat
 	name             = "Combat"
 	label            = gui.label( panel, name, name )
-	y                = y + stat:getHeight() + 20
+	y                = y + stat:getHeight() + point( 20 )
 	label:setPos( x, y )
 	label:setFont( fontBold )
 
 	name             = "Attack"
 	stat             = gui.hudgamemenustat( panel, name, "attack" )
-	stat:setWidth( 312 )
-	y                = y + lineHeight + 17
+	stat:setWidth( point( 312 ) )
+	y                = y + lineHeight + point( 17 )
 	stat:setPos( x, y )
 
 	name             = "Defense"
 	stat             = gui.hudgamemenustat( panel, name, "defense" )
-	stat:setWidth( 312 )
-	y                = y + stat:getHeight() + 20
+	stat:setWidth( point( 312 ) )
+	y                = y + stat:getHeight() + point( 20 )
 	stat:setPos( x, y )
 
 	name             = "Range"
 	stat             = gui.hudgamemenustat( panel, name, "range" )
-	stat:setWidth( 312 )
-	y                = y + stat:getHeight() + 20
+	stat:setWidth( point( 312 ) )
+	y                = y + stat:getHeight() + point( 20 )
 	stat:setPos( x, y )
 
 	name             = "Magic"
 	stat             = gui.hudgamemenustat( panel, name, "magic" )
-	stat:setWidth( 312 )
-	y                = y + stat:getHeight() + 20
+	stat:setWidth( point( 312 ) )
+	y                = y + stat:getHeight() + point( 20 )
 	stat:setPos( x, y )
 
 	-- Artisan
 	name             = "Artisan"
 	label            = gui.label( panel, name, name )
-	y                = y + stat:getHeight() + 20
+	y                = y + stat:getHeight() + point( 20 )
 	label:setPos( x, y )
 	label:setFont( fontBold )
 
 	name             = "Fishing"
 	stat             = gui.hudgamemenustat( panel, name, "fishing" )
-	stat:setWidth( 312 )
-	y                = y + lineHeight + 17
+	stat:setWidth( point( 312 ) )
+	y                = y + lineHeight + point( 17 )
 	stat:setPos( x, y )
 
 	name             = "Cooking"
 	stat             = gui.hudgamemenustat( panel, name, "cooking" )
-	stat:setWidth( 312 )
-	y                = y + stat:getHeight() + 20
+	stat:setWidth( point( 312 ) )
+	y                = y + stat:getHeight() + point( 20 )
 	stat:setPos( x, y )
 
 	name             = "Mining"
 	stat             = gui.hudgamemenustat( panel, name, "mining" )
-	stat:setWidth( 312 )
-	y                = y + stat:getHeight() + 20
+	stat:setWidth( point( 312 ) )
+	y                = y + stat:getHeight() + point( 20 )
 	stat:setPos( x, y )
 
 	name             = "Smithing"
 	stat             = gui.hudgamemenustat( panel, name, "smithing" )
-	stat:setWidth( 312 )
-	y                = y + stat:getHeight() + 20
+	stat:setWidth( point( 312 ) )
+	y                = y + stat:getHeight() + point( 20 )
 	stat:setPos( x, y )
 end
 

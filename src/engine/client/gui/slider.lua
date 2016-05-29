@@ -8,8 +8,8 @@ class "slider" ( gui.scrollbar )
 
 function slider:slider( parent, name )
 	gui.scrollbar.scrollbar( self, parent, name )
-	self.width    = 216
-	self.height   = 46
+	self.width    = point( 216 )
+	self.height   = point( 46 )
 	self.minLabel = "Min"
 	self.maxLabel = "Max"
 	self:setMax( 100 )
@@ -38,8 +38,8 @@ function slider:drawLabels()
 	local height   = self:getHeight()
 	local width    = self:getWidth()
 	local x        = width - font:getWidth( maxLabel )
-	graphics.print( minLabel, 0, height / 2 + 9 )
-	graphics.print( maxLabel, x, height / 2 + 9 )
+	graphics.print( minLabel, 0, height / 2 + point( 9 ) )
+	graphics.print( maxLabel, x, height / 2 + point( 9 ) )
 end
 
 function slider:drawThumb()
@@ -52,7 +52,7 @@ function slider:drawThumb()
 	end
 
 	graphics.setColor( self:getScheme( property ) )
-	graphics.rectangle( "fill", self:getThumbPos(), y, 4, height / 2 )
+	graphics.rectangle( "fill", self:getThumbPos(), y, point( 4 ), height / 2 )
 end
 
 function slider:drawTrough()
@@ -65,6 +65,7 @@ function slider:drawTrough()
 	end
 
 	graphics.setColor( self:getScheme( property ) )
+	graphics.setLineWidth( point( 1 ) )
 	graphics.line( 0, height / 4, width, height / 4 )
 end
 
@@ -79,14 +80,14 @@ end
 function slider:getThumbLength()
 	local range = self:getMax() - self:getMin()
 	local size  = self:getRangeWindow() / range
-	return size * ( self:getWidth() - 4 )
+	return size * ( self:getWidth() - point( 4 ) )
 end
 
 function slider:getThumbPos()
 	local min     = self:getMin()
 	local range   = self:getMax() - min
 	local percent = ( self:getValue() + min ) / range
-	return percent * ( self:getWidth() - 4 )
+	return percent * ( self:getWidth() - point( 4 ) )
 end
 
 slider.invalidateLayout = gui.panel.invalidateLayout
@@ -114,7 +115,7 @@ function slider:mousepressed( x, y, button, istouch )
 		if ( localX < self:getThumbPos() ) then
 			self:pageUp()
 			return
-		elseif ( localX > self:getThumbPos() + 4 ) then
+		elseif ( localX > self:getThumbPos() + point( 4 ) ) then
 			self:pageDown()
 			return
 		end

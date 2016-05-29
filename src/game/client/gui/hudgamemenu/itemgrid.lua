@@ -58,15 +58,15 @@ function itemgrid:invalidateLayout()
 	local items     =   self:getItems()
 	local columns   =   self:getColumns()
 	local rows      =   self:getRows()
-	local columnGap = ( self:getWidth()  - columns * 44 ) / ( columns - 1 )
-	local rowGap    = ( self:getHeight() - rows    * 44 ) / ( rows    - 1 )
+	local columnGap = ( self:getWidth()  - columns * point( 44 ) ) / ( columns - 1 )
+	local rowGap    = ( self:getHeight() - rows    * point( 44 ) ) / ( rows    - 1 )
 	for n, v in pairs( items ) do
 		n = n - 1
 		local x  =             n % columns
 		local y  = math.floor( n / columns )
 		local xm = x * columnGap
 		local ym = y * rowGap
-		v:setPos( x * 44 + xm, y * 44 + ym )
+		v:setPos( x * point( 44 ) + xm, y * point( 44 ) + ym )
 	end
 	gui.panel.invalidateLayout( self )
 end

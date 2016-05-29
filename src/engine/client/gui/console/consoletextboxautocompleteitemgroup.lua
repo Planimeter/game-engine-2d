@@ -22,7 +22,7 @@ function consoletextboxautocompleteitemgroup:invalidateLayout()
 		for _, listItem in ipairs( listItems ) do
 			listItem:setY( y )
 
-			itemWidth = font:getWidth( listItem:getText() ) + 2 * 18
+			itemWidth = font:getWidth( listItem:getText() ) + 2 * point( 18 )
 			if ( itemWidth > maxWidth ) then
 				maxWidth = itemWidth
 			end

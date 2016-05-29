@@ -31,6 +31,7 @@ local gui         = gui
 local hook        = hook
 local payload     = payload
 local pcall       = pcall
+local point       = point
 local print       = print
 local require     = require
 local scheme      = scheme
@@ -152,10 +153,10 @@ local function drawFrameRate()
 	local height = graphics.getViewportHeight()
 	local margin = gui.scale( 96 )
 	local x      = width  - font:getWidth( time ) - margin
-	local y      = height - font:getHeight()      - margin + 1
+	local y      = height - font:getHeight()      - margin + point( 1 )
 	local color  = scheme.getProperty( "Default", "mainmenubutton.dark.textColor" )
 	graphics.setColor( color )
-	graphics.print( time, x, y - 1 )
+	graphics.print( time, x, y - point( 1 ) )
 end
 
 local r_draw_grid = convar( "r_draw_grid", "0", nil, nil,
@@ -416,7 +417,7 @@ local function onReceivePlayerInitialized( payload )
 
 	require( "engine.client.camera" )
 	_G.camera.setParentEntity( localplayer )
-	_G.camera.setZoom( 2 )
+	_G.camera.setZoom( point( 2 ) )
 
 	if ( not _G._SERVER ) then
 		localplayer:initialSpawn()

@@ -8,7 +8,7 @@ class "commandbuttongroup" ( gui.panel )
 
 function commandbuttongroup:commandbuttongroup( parent, name )
 	gui.panel.panel( self, parent, name )
-	self.height = 46
+	self.height = point( 46 )
 
 	self:setScheme( "Default" )
 	self:invalidateLayout()
@@ -22,11 +22,13 @@ function commandbuttongroup:draw()
 	local height   = self:getHeight()
 
 	graphics.setColor( self:getScheme( property ) )
+	local lineWidth = point( 1 )
+	graphics.setLineWidth( lineWidth )
 	graphics.line(
-		0,               0 + height - 1,
-		0,               0,
-		0 + width - 0.5, 0,
-		0 + width - 0.5, 0 + height - 1
+		lineWidth / 2,         height,        -- Bottom-left
+		lineWidth / 2,         lineWidth / 2, -- Top-left
+		width - lineWidth / 2, lineWidth / 2, -- Top-right
+		width - lineWidth / 2, height         -- Bottom-right
 	)
 end
 
@@ -41,7 +43,8 @@ function commandbuttongroup:invalidateLayout()
 	self:setWidth( width )
 
 	local parent = self:getParent()
-	local margin = typeof( parent, "tabbedframe" ) and 24 or 36
+	local margin = typeof( parent, "tabbedframe" ) and point( 24 )
+	                                                or point( 36 )
 	self:setPos(
 		parent:getWidth()  - self:getWidth() - margin,
 		parent:getHeight() - self:getHeight()

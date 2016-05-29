@@ -16,23 +16,28 @@ table.insert( markdown, "| ---- | ------- | --- | --- | ----------- |" )
 local convars = {}
 
 for name in pairs( convar.convars ) do
-    table.insert( convars, name )
+	table.insert( convars, name )
 end
 
 table.sort( convars )
 
 local function tocell( v )
-    local s = tostring( v )
-    return s ~= "nil" and s or ""
+	local s = tostring( v )
+	return s ~= "nil" and s or ""
 end
 
 for _, name in ipairs( convars ) do
-    local convar = convar.getConvar( name )
-    table.insert( markdown, "| " .. name                      .. " | " ..
-                                    convar:getDefault()       .. " | "..
-                                    tocell( convar:getMin() ) .. " | " ..
-                                    tocell( convar:getMax() ) .. " | " ..
-                                    convar:getHelpString()    .. " |" )
+	local convar = convar.getConvar( name )
+	table.insert(
+		markdown,
+		"| " ..
+			name                      .. " | " ..
+			convar:getDefault()       .. " | "..
+			tocell( convar:getMin() ) .. " | " ..
+			tocell( convar:getMax() ) .. " | " ..
+			convar:getHelpString()    ..
+		" |"
+	)
 end
 
 table.insert( markdown, "" )

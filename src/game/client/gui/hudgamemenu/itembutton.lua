@@ -8,8 +8,8 @@ class "itembutton" ( gui.button )
 
 function itembutton:itembutton( parent, item )
 	gui.button.button( self, parent )
-	self.width  = 44
-	self.height = 44
+	self.width  = point( 44 )
+	self.height = point( 44 )
 
 	self:setScheme( "Default" )
 	self:setItem( item )
@@ -31,11 +31,11 @@ function itembutton:drawIcon()
 	graphics.setColor( color.white )
 	local icon = self:getIcon()
 	graphics.push()
-		local scale  = 2
+		local scale  = point( 2 )
 		local width  = icon:getWidth()
 		local height = icon:getHeight()
 		graphics.translate(
-			self:getWidth() / 2 - (  width * scale ) / 2,
+			self:getWidth() / 2 - ( width  * scale ) / 2,
 			self:getHeight()    - ( height * scale )
 		)
 		graphics.scale( scale )
@@ -64,7 +64,7 @@ function itembutton:drawCount()
 
 	local font = self:getScheme( "itemCountFont" )
 	graphics.setFont( font )
-	local x = self:getWidth() - font:getWidth( self:getCount() ) - 4
+	local x = self:getWidth() - font:getWidth( self:getCount() ) - point( 4 )
 	graphics.print( self:getCount(), x, 0 )
 end
 

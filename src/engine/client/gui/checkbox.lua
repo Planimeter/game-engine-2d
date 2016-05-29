@@ -8,7 +8,7 @@ class "checkbox" ( gui.button )
 
 function checkbox:checkbox( parent, name, text )
 	gui.button.button( self, parent, name, text )
-	self.height  = 24
+	self.height  = point( 24 )
 	self.icon    = self:getScheme( "checkbox.icon" )
 	self.text    = text or "Checkbox Label"
 	self.checked = false
@@ -35,8 +35,8 @@ function checkbox:drawCheck()
 
 	graphics.setColor( self:getScheme( property ) )
 
-	local x = 24 / 2 - self.icon:getWidth()  / 2
-	local y = 24 / 2 - self.icon:getHeight() / 2
+	local x = point( 24 ) / 2 - self.icon:getWidth()  / 2
+	local y = point( 24 ) / 2 - self.icon:getHeight() / 2
 	graphics.draw( self.icon:getDrawable(), x, y )
 end
 
@@ -52,8 +52,8 @@ function checkbox:drawForeground()
 	end
 
 	graphics.setColor( self:getScheme( property ) )
-	graphics.setLineWidth( 1 )
-	graphics.rectangle( "line", 0, 0, 24, 24 )
+	graphics.setLineWidth( point( 1 ) )
+	graphics.rectangle( "line", 0, 0, point( 24 ), point( 24 ) )
 end
 
 function checkbox:drawLabel()
@@ -67,9 +67,9 @@ function checkbox:drawLabel()
 
 	local font = self:getScheme( "font" )
 	graphics.setFont( font )
-	local x = 32
-	local y = self:getHeight() / 2 - font:getHeight() / 2 - 1
-	graphics.print( self.text, x, y )
+	local x = point( 32 )
+	local y = self:getHeight() / 2 - font:getHeight() / 2 - point( 1 )
+	graphics.print( self:getText(), x, y )
 end
 
 function checkbox:isChecked()

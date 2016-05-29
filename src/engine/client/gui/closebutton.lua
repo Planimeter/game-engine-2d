@@ -10,8 +10,8 @@ closebutton.canFocus = false
 
 function closebutton:closebutton( parent, name )
 	gui.button.button( self, parent, name )
-	self.width  = 2 * 36 + 8  - 1
-	self.height = 2 * 36 + 16 - 2
+	self.width  = 2 * point( 36 ) + point( 8 )  - point( 1 )
+	self.height = 2 * point( 36 ) + point( 16 ) - point( 2 )
 	self.icon   = self:getScheme( "closebutton.icon" )
 end
 
@@ -28,7 +28,7 @@ function closebutton:draw()
 
 	graphics.setColor( self:getScheme( property ) )
 
-	local x = round( self:getWidth()  / 2 - self.icon:getWidth()  / 2 + 4 )
+	local x = round( self:getWidth()  / 2 - self.icon:getWidth()  / 2 + point( 4 ) )
 	local y = round( self:getHeight() / 2 - self.icon:getHeight() / 2 )
 	graphics.draw( self.icon:getDrawable(), x, y )
 

@@ -8,14 +8,14 @@ class "hudgamemenustat" ( gui.panel )
 
 function hudgamemenustat:hudgamemenustat( parent, name, stat )
 	gui.panel.panel( self, parent, name )
-	self.width        = 312
-	self.height       = 42
+	self.width        = point( 312 )
+	self.height       = point( 42 )
 	self.stat         = stat
 
 	self:setScheme( "Default" )
 
 	local progressbar = gui.progressbar( self, "Stat Progress" )
-	progressbar:setY( 23 )
+	progressbar:setY( point( 23 ) )
 	self.progressbar  = progressbar
 end
 
@@ -39,7 +39,7 @@ function hudgamemenustat:draw()
 	x        = self:getWidth() - font:getWidth( "0 / 83 XP" )
 	graphics.setColor( self:getScheme( property ) )
 	graphics.setFont( font )
-	graphics.print( "0 / 83 XP", x, 30 )
+	graphics.print( "0 / 83 XP", x, point( 30 ) )
 
 	gui.panel.draw( self )
 end

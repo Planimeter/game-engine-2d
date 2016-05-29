@@ -9,7 +9,7 @@ class "hudregiontitle" ( gui.panel )
 function hudregiontitle:hudregiontitle( parent, name )
 	gui.panel.panel( self, parent, name )
 	self.width  = graphics.getViewportWidth()
-	self.height = 72
+	self.height = point( 72 )
 	self:setPos( 0, graphics.getViewportHeight() / 2 - self.height / 2 )
 
 	local titleFont  = "fonts/Mark Simonson - Proxima Nova Bold.otf"
@@ -37,7 +37,7 @@ function hudregiontitle:draw()
 	)
 
 	graphics.setFont( self.regionFont )
-	local y = self:getHeight() - self.regionFont:getHeight() + 10
+	local y = self:getHeight() - self.regionFont:getHeight() + point( 10 )
 	graphics.printf(
 		string.capitalize( self:getRegionName() ),
 		0,
@@ -54,7 +54,7 @@ function hudregiontitle:drawLines()
 	local titleWidth  = self.titleFont:getWidth( title )
 	local region      = string.capitalize( self:getRegionName() )
 	local regionWidth = self.regionFont:getWidth( region )
-	local padding     = 14
+	local padding     = point( 14 )
 	local x1          = self:getWidth() / 2 - titleWidth / 2
 	local y           = self:getHeight() - padding
 	local width       = ( titleWidth - regionWidth ) / 2 - padding
@@ -73,7 +73,7 @@ end
 
 function hudregiontitle:invalidateLayout()
 	self:setWidth( graphics.getViewportWidth() )
-	self:setPos( 0, graphics.getViewportHeight() - 72 )
+	self:setPos( 0, graphics.getViewportHeight() - point( 72 ) )
 
 	gui.panel.invalidateLayout( self )
 end

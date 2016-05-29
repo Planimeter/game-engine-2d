@@ -8,8 +8,8 @@ class "progressbar" ( gui.panel )
 
 function progressbar:progressbar( parent, name )
 	gui.panel.panel( self, parent, name )
-	self.width    = 216
-	self.height   = 2
+	self.width    = point( 216 )
+	self.height   = point( 2 )
 	self.min      = 0
 	self.max      = 1
 	self.value    = 0

@@ -25,6 +25,7 @@ local string     = string
 local table      = table
 local unpack     = unpack
 local window     = love.window
+local _scale     = window.getPixelScale()
 local _G         = _G
 
 local r_window_width      = convar( "r_window_width", 800, 800, nil,
@@ -38,19 +39,19 @@ local r_window_borderless = convar( "r_window_borderless", "0", nil, nil,
 local r_window_vsync      = convar( "r_window_vsync", "1", nil, nil,
                                     "Toggles vertical synchronization" )
 
+function point( n )
+	return _scale * n
+end
+
+local point = point
+
 module( "graphics" )
 
 class( "grid" )
 
 grid.framebuffer = grid.framebuffer or nil
 
-grid.default = {
-	backgroundColor = color( 240, 246, 247,                      255 ),
-	lines32x32Color	= color(   0,   0,   0, 0.42 * 0.42 * 0.07 * 255 ),
-	lines64x64Color	= color(   0,   0,   0, 0.42 * 0.42 * 0.07 * 255 ),
-}
-
-grid.dark = {
+grid.scheme = {
 	backgroundColor = color(  31,  35,  36,                      255 ),
 	lines32x32Color = color( 255, 255, 255, 0.42 * 0.42 * 0.07 * 255 ),
 	lines64x64Color = color( 255, 255, 255, 0.42 * 0.42 * 0.07 * 255 ),
@@ -62,7 +63,7 @@ error = _error
 
 function initialize()
 	-- Set defaults
-	setBackgroundColor( grid.dark.backgroundColor )
+	setBackgroundColor( grid.scheme.backgroundColor )
 	graphics.setDefaultFilter( "nearest", "nearest" )
 	graphics.setLineStyle( "rough" )
 
@@ -79,48 +80,48 @@ function drawGrid()
 	if ( grid.framebuffer == nil ) then
 		grid.framebuffer = newFullscreenFramebuffer()
 		grid.framebuffer:renderTo( function()
-			graphics.setLineWidth( 1 )
+			graphics.setLineWidth( point( 1 ) )
 			graphics.setLineStyle( "rough" )
 			graphics.setBlendMode( "alpha" )
 
-			local x = graphics.getWidth()  % 32 / 2
-			local y = graphics.getHeight() % 32 / 2
+			local x = graphics.getWidth()  % point( 32 ) / 2
+			local y = graphics.getHeight() % point( 32 ) / 2
 
 			-- Grid Lines (32x32)
-			setColor( grid.dark.lines32x32Color )
-			for i = 0, graphics.getWidth() / 32 do
+			setColor( grid.scheme.lines32x32Color )
+			for i = 0, graphics.getWidth() / point( 32 ) do
 				line(
-					 32 * i + x,
-					-32,
-					 32 * i + x,
-					 graphics.getHeight()
+					point(  32 ) * i + x,
+					point( -32 ),
+					point(  32 ) * i + x,
+					graphics.getHeight()
 				)
 			end
-			for i = 0, graphics.getHeight() / 32 do
+			for i = 0, graphics.getHeight() / point( 32 ) do
 				line(
-					-32,
-					 32 * i + y,
-					 graphics.getWidth(),
-					 32 * i + y
+					point( -32 ),
+					point(  32 ) * i + y,
+					graphics.getWidth(),
+					point(  32 ) * i + y
 				)
 			end
 
 			-- Grid Lines (64x64)
-			setColor( grid.dark.lines64x64Color )
-			for i = 0, graphics.getWidth() / 64 do
+			setColor( grid.scheme.lines64x64Color )
+			for i = 0, graphics.getWidth() / point( 64 ) do
 				line(
-					 64 * i + x,
-					-64,
-					 64 * i + x,
-					 graphics.getHeight()
+					point(  64 ) * i + x,
+					point( -64 ),
+					point(  64 ) * i + x,
+					graphics.getHeight()
 				)
 			end
-			for i = 0, graphics.getHeight() / 64 do
+			for i = 0, graphics.getHeight() / point( 64 ) do
 				line(
-					-64,
-					 64 * i + y,
-					 graphics.getWidth(),
-					 64 * i + y
+					point( -64 ),
+					point(  64 ) * i + y,
+					graphics.getWidth(),
+					point(  64 ) * i + y
 				)
 			end
 		end )
@@ -208,6 +209,10 @@ function getOpacity()
 	return _opacity
 end
 
+function getPixelScale()
+	return _scale
+end
+
 function getShader()
 	return graphics.getShader()
 end
@@ -228,6 +233,7 @@ function getViewportWidth()
 end
 
 function newFont( filename, size )
+	size = _scale * size
 	return graphics.newFont( filename, size )
 end
 
@@ -262,14 +268,8 @@ function newSpriteBatch( image, size, usagehint )
 	return graphics.newSpriteBatch( image, size, usagehint or "dynamic" )
 end
 
-local points = nil
-
 function line( ... )
-	points = { ... }
-	for i, v in ipairs( points ) do
-		points[ i ] = v + 0.5
-	end
-	graphics.line( unpack( points ) )
+	graphics.line( ... )
 end
 
 function pop()
@@ -317,40 +317,16 @@ function push()
 	graphics.push()
 end
 
-local x1         = 0
-local y1         = 0
-local x2         = 0
-local y2         = 0
-local x3         = 0
-local y3         = 0
-local x4         = 0
-local y4         = 0
-local x5         = 0
-local y5         = 0
 local _lineWidth = 1
 
 function rectangle( mode, x, y, width, height )
 	if ( mode == "line" ) then
-		x1 = x          - 0.5
-		y1 = y          - 0.5 + _lineWidth / 2
-		x2 = x + width  - 0.5 - _lineWidth / 2
-		y2 = y          - 0.5 + _lineWidth / 2
-		x3 = x + width  - 0.5 - _lineWidth / 2
-		y3 = y + height - 0.5 - _lineWidth / 2
-		x4 = x          - 0.5 + _lineWidth / 2
-		y4 = y + height - 0.5 - _lineWidth / 2
-		x5 = x          - 0.5 + _lineWidth / 2
-		y5 = y          - 0.5 + _lineWidth
-		line(
-			x1, y1,
-			x2, y2,
-			x3, y3,
-			x4, y4,
-			x5, y5
-		)
-	else
-		graphics.rectangle( mode, x, y, width, height )
+		x      = x      + _lineWidth / 2
+		y      = y      + _lineWidth / 2
+		width  = width  - _lineWidth
+		height = height - _lineWidth
 	end
+	graphics.rectangle( mode, x, y, width, height )
 end
 
 function scale( sx, sy )

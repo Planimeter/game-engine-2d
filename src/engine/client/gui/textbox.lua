@@ -26,13 +26,13 @@ end
 
 function textbox:textbox( parent, name, placeholder )
 	gui.panel.panel( self, parent, name )
-	self.width          = 216
-	self.height         = 46
+	self.width          = point( 216 )
+	self.height         = point( 46 )
 	self.focus          = false
 	self.defocusOnEnter = false
 	self.placeholder    = placeholder or "Text Box"
 	self.text           = ""
-	self.padding        = 18
+	self.padding        = point( 18 )
 	self.cursorPos      = 0
 	self.textOverflow   = 0
 	self.scrollOffset   = 0
@@ -63,7 +63,7 @@ local function getTextY( self )
 		                                           self.padding )
 	else
 		local font = self:getScheme( "font" )
-		return self:getHeight() / 2 - font:getHeight() / 2 - 2
+		return self:getHeight() / 2 - font:getHeight() / 2 - point( 2 )
 	end
 end
 
@@ -103,7 +103,7 @@ function textbox:drawCursor()
 				"fill",
 				getRelativeCursorPos( self ),
 				self:getHeight() / 2 - font:getHeight() / 2,
-				1,
+				point( 1 ),
 				font:getHeight()
 			)
 		graphics.setOpacity( opacity )
@@ -125,7 +125,7 @@ function textbox:drawForeground()
 	end
 
 	graphics.setColor( self:getScheme( property ) )
-	graphics.setLineWidth( 1 )
+	graphics.setLineWidth( point( 1 ) )
 	graphics.rectangle( "line", 0, 0, width, height )
 end
 

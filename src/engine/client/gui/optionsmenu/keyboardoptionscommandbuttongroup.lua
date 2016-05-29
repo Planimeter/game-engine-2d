@@ -21,7 +21,7 @@ function keyboardoptionscommandbuttongroup:invalidateLayout()
 	self:setWidth( width )
 
 	local parent = self:getParent()
-	local margin = 24
+	local margin = point( 24 )
 	self:setPos( margin, parent:getHeight() - self:getHeight() )
 	gui.panel.invalidateLayout( self )
 end

@@ -8,7 +8,7 @@ class "radiobutton" ( gui.button )
 
 function radiobutton:radiobutton( parent, name, text )
 	gui.button.button( self, parent, name, text )
-	self.height     = 24
+	self.height     = point( 24 )
 	self.icon       = self:getScheme( "radiobutton.icon" )
 	self.foreground = self:getScheme( "radiobutton.foreground" )
 	self.text       = text or "Radio Button Label"
@@ -50,8 +50,8 @@ function radiobutton:drawLabel()
 
 	local font = self:getScheme( "font" )
 	graphics.setFont( font )
-	local x = 32
-	local y = self:getHeight() / 2 - font:getHeight() / 2 - 1
+	local x = point( 32 )
+	local y = self:getHeight() / 2 - font:getHeight() / 2 - point( 1 )
 	graphics.print( self.text, x, y )
 end
 
@@ -66,8 +66,8 @@ function radiobutton:drawSelectionDot()
 		graphics.setColor( self:getScheme( "radiobutton.iconColor" ) )
 	end
 
-	local x = 24 / 2 - self.icon:getWidth()  / 2
-	local y = 24 / 2 - self.icon:getHeight() / 2
+	local x = point( 24 ) / 2 - self.icon:getWidth()  / 2
+	local y = point( 24 ) / 2 - self.icon:getHeight() / 2
 	graphics.draw( self.icon:getDrawable(), x, y )
 end
 

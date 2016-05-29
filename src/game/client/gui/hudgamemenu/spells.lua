@@ -12,8 +12,8 @@ function hudgamemenuspells:hudgamemenuspells( parent )
 	self:setSize( parent:getSize() )
 
 	local panel = gui.scrollablepanel( self, "Spells Scrollable Panel" )
-	panel:setSize( self:getWidth(), 345 )
-	panel:setY( 86 + 31 + 18 )
+	panel:setSize( self:getWidth(), point( 345 ) )
+	panel:setY( point( 86 ) + point( 31 ) + point( 18 ) )
 	self.innerPanel = panel:getInnerPanel()
 end
 

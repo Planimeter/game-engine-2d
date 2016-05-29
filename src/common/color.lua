@@ -33,10 +33,12 @@ function color.__eq( a, b )
 end
 
 function color:__tostring()
-	return "color: (" .. self.r .. ", " ..
-	                     self.g .. ", " ..
-	                     self.b .. ", " ..
-	                     self.a .. ")"
+	return "color: ("  ..
+		self.r .. ", " ..
+		self.g .. ", " ..
+		self.b .. ", " ..
+		self.a ..
+	")"
 end
 
 color.red    = color( 255,   0,   0, 255 )

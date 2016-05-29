@@ -10,7 +10,7 @@ function label:label( parent, name, text )
 	gui.panel.panel( self, parent, name )
 	self:setScheme( "Default" )
 	self.font      = self:getScheme( "font" )
-	self.width     = 216
+	self.width     = point( 216 )
 	self.height    = self.font:getHeight()
 	self.text      = text or "Label"
 	self.textAlign = "left"
@@ -26,12 +26,12 @@ function label:draw()
 	if ( align == "left" ) then
 		x = 0
 	elseif ( align == "center" ) then
-		x = self:getWidth() / 2 - font:getWidth( self.text ) / 2
+		x = self:getWidth() / 2 - font:getWidth( self:getText() ) / 2
 	elseif ( align == "right" ) then
-		x = self:getWidth()     - font:getWidth( self.text ) + font:getWidth( " " )
+		x = self:getWidth()     - font:getWidth( self:getText() ) + font:getWidth( " " )
 	end
 
-	graphics.print( self.text, x, 0 )
+	graphics.print( self:getText(), x, 0 )
 
 	gui.panel.draw( self )
 end

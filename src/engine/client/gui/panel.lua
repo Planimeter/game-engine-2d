@@ -20,17 +20,16 @@ function panel.drawMask()
 end
 
 function panel:panel( parent, name )
-	self.x                 = 0
-	self.y                 = 0
-	self.width             = 0
-	self.height            = 0
-	self.name              = name or ""
+	self.x       = 0
+	self.y       = 0
+	self.width   = 0
+	self.height  = 0
+	self.name    = name or ""
 	self:setParent( parent or g_RootPanel )
-	self.zOrder            = -1
-	self.visible           = true
-	self.markedForDeletion = false
-	self.scale             = 1
-	self.opacity           = 1
+	self.zOrder  = -1
+	self.visible = true
+	self.scale   = 1
+	self.opacity = 1
 end
 
 local cos = math.cos
@@ -160,7 +159,7 @@ end
 
 function panel:drawBounds()
 	graphics.setColor( color.red )
-	graphics.setLineWidth( 1 )
+	graphics.setLineWidth( point( 1 ) )
 	graphics.rectangle( "line", 0, 0, self:getWidth(), self:getHeight() )
 end
 
@@ -326,10 +325,6 @@ function panel:isTopMostChild()
 	end
 end
 
-function panel:isValid()
-	return not self.markedForDeletion
-end
-
 function panel:isVisible()
 	return self.visible
 end
@@ -475,11 +470,7 @@ function panel:remove()
 		end
 	end
 
-	self.markedForDeletion = true
-
 	self:onRemove()
-
-	table.clear( self )
 end
 
 function panel:removeChildren()

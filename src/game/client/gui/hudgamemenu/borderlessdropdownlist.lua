@@ -8,7 +8,7 @@ class "borderlessdropdownlist" ( gui.dropdownlist )
 
 function borderlessdropdownlist:borderlessdropdownlist( parent, name )
 	gui.dropdownlist.dropdownlist( self, parent, name )
-	self.width = 202
+	self.width = point( 202 )
 end
 
 function borderlessdropdownlist:drawBackground()

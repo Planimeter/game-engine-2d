@@ -10,8 +10,8 @@ button.canFocus = true
 
 function button:button( parent, name, text )
 	gui.panel.panel( self, parent, name )
-	self.width    = 216
-	self.height   = 46
+	self.width    = point( 216 )
+	self.height   = point( 46 )
 	self.text     = text or "Button"
 	self.disabled = false
 
@@ -61,7 +61,7 @@ function button:drawForeground()
 	if ( self:isDisabled() ) then
 		property = "button.disabled.outlineColor"
 		graphics.setColor( self:getScheme( property ) )
-		graphics.setLineWidth( 1 )
+		graphics.setLineWidth( point( 1 ) )
 		graphics.rectangle( "line", 0, 0, width, height )
 		return
 	end
@@ -73,7 +73,7 @@ function button:drawForeground()
 	end
 
 	graphics.setColor( self:getScheme( property ) )
-	graphics.setLineWidth( 1 )
+	graphics.setLineWidth( point( 1 ) )
 	graphics.rectangle( "line", 0, 0, width, height )
 end
 
@@ -88,8 +88,8 @@ function button:drawText()
 
 	local font = self:getScheme( "font" )
 	graphics.setFont( font )
-	local x = self:getWidth()  / 2 - font:getWidth( self:getText() ) / 2
-	local y = self:getHeight() / 2 - font:getHeight()                / 2 - 2
+	local x = self:getWidth() / 2 - font:getWidth( self:getText() ) / 2
+	local y = self:getHeight() / 2 - font:getHeight() / 2 - point( 2 )
 	graphics.print( self:getText(), x, y )
 end
 

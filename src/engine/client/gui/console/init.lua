@@ -37,18 +37,21 @@ local function doCommand( self, input )
 		concommand.dispatch( localplayer, command, argString, argTable )
 	elseif ( convar.getConvar( command ) ) then
 		if ( argString ~= "" ) then
-			if ( string.utf8sub( argString, 1, 1 )   == "\"" and
+			if ( string.utf8sub( argString,  1,  1 ) == "\"" and
 			     string.utf8sub( argString, -1, -1 ) == "\"" ) then
 				argString = string.utf8sub( argString, 2, -2 )
 			end
 			convar.setConvar( command, argString )
 		else
 			local convar     = convar.getConvar( command )
-			local helpString = convar:getHelpString()
-			local default    = convar:getDefault()
-			print( convar:getName() .. " = \"" .. convar:getValue() .. "\" " ..
-			     ( default    ~= nil and "(Default: \"" .. default .. "\")\n" or "" ) ..
-			     ( helpString ~= nil and helpString                           or "" ) )
+			local name       = convar:getName()
+			local value      = convar:getValue()
+			local helpString = convar:getHelpString() or ""
+			local default    = convar:getDefault()    or ""
+			if ( default ~= "" ) then
+				default = "(Default: \"" .. default .. "\")\n"
+			end
+			print( name .. " = \"" .. value .. "\" " .. default .. helpString )
 		end
 	else
 		print( "'" .. command .. "' is not recognized as a console command " ..
@@ -88,21 +91,17 @@ local function autocomplete( text )
 	end
 
 	local name = string.match( text, "^([^%s]+)" )
-	if ( name ) then
-		local shouldAutocomplete = string.find( text, name .. " ", 1, true )
-		if ( shouldAutocomplete ) then
-			local command = concommand.getConcommand( name )
-			if ( command ) then
-				local _, endPos = string.find( text, name, 1, true )
-				local argString = string.trim( string.utf8sub( text, endPos + 1 ) )
-				local argTable  = string.parseargs( argString )
-				local autocomplete = command:getAutocomplete( argString, argTable )
-				if ( autocomplete ) then
-					local t = autocomplete( argString, argTable )
-					if ( t ) then
-						table.prepend( suggestions, t )
-					end
-				end
+	local command = concommand.getConcommand( name )
+	local shouldAutocomplete = string.find( text, name .. " ", 1, true )
+	if ( command and shouldAutocomplete ) then
+		local _, endPos = string.find( text, name, 1, true )
+		local argS = string.trim( string.utf8sub( text, endPos + 1 ) )
+		local argT = string.parseargs( argS )
+		local autocomplete = command:getAutocomplete( argS, argT )
+		if ( autocomplete ) then
+			local t = autocomplete( argS, argTable )
+			if ( t ) then
+				table.prepend( suggestions, t )
 			end
 		end
 	end
@@ -110,11 +109,29 @@ local function autocomplete( text )
 	return #suggestions > 0 and suggestions or nil
 end
 
+local keypressed = function( itemGroup, key, isrepeat )
+	if ( key ~= "delete" ) then
+		return
+	end
+
+	-- BUGBUG: We never get here anymore due to the introduction of
+	-- cascadeInputToChildren.
+	local commandHistory = gui.console.commandHistory
+	for i, history in ipairs( commandHistory ) do
+		if ( itemGroup:getValue() == history ) then
+			table.remove( commandHistory, i )
+			local item = itemGroup:getSelectedItem()
+			itemGroup:removeItem( item )
+			return
+		end
+	end
+end
+
 function console:console()
 	local name = "Console"
 	gui.frame.frame( self, g_MainMenu or g_RootPanel, name, "Console" )
-	self.width     = 661
-	self.minHeight = 178
+	self.width     = point( 661 )
+	self.minHeight = point( 178 )
 
 	self.output = gui.consoletextbox( self, name .. " Output Text Box", "" )
 	self.input  = gui.textbox( self, name .. " Input Text Box", "" )
@@ -129,25 +146,12 @@ function console:console()
 	end
 
 	if ( not _INTERACTIVE ) then
-		self.input:setAutocomplete( autocomplete )
+		local input = self.input
+		input:setAutocomplete( autocomplete )
 		name = name .. " Autocomplete Item Group"
-		self.input.autocompleteItemGroup = gui.consoletextboxautocompleteitemgroup( self.input, name )
-		self.input.autocompleteItemGroup.keypressed = function( autocompleteItemGroup, key, isrepeat )
-			if ( key ~= "delete" ) then
-				return
-			end
-
-			-- BUGBUG: We never get here anymore due to the introduction of
-			-- cascadeInputToChildren.
-			for i, history in ipairs( gui.console.commandHistory ) do
-				if ( autocompleteItemGroup:getValue() == history ) then
-					table.remove( gui.console.commandHistory, i )
-					local item = autocompleteItemGroup:getSelectedItem()
-					autocompleteItemGroup:removeItem( item )
-					return
-				end
-			end
-		end
+		local autocompleteItemGroup = gui.consoletextboxautocompleteitemgroup
+		input.autocompleteItemGroup = autocompleteItemGroup( self.input, name )
+		input.autocompleteItemGroup.keypressed = keypressed
 	end
 
 	self:invalidateLayout()
@@ -172,20 +176,25 @@ function console:drawBackground()
 end
 
 function console:invalidateLayout()
+	local width  = self:getWidth()
+	local height = self:getHeight()
+	local margin = gui.scale( 36 )
 	if ( not self:isResizing() ) then
 		local parent = self:getParent()
-		local margin = gui.scale( 36 )
 		if ( not _INTERACTIVE ) then
-			self:setPos( parent:getWidth() - self:getWidth() - margin, margin )
+			self:setPos( parent:getWidth() - width - margin, margin )
 		else
 			self:setPos( 0, 0 )
 		end
 	end
 
-	self.output:setPos( 36, 87 )
-	self.output:setWidth( self:getWidth() - 2 * 36 )
-	self.input:setPos( 36, self:getHeight() - self.input:getHeight() - 36 )
-	self.input:setWidth( self:getWidth() - 2 * 36 )
+	margin = point( 36 )
+	self.output:setPos( margin, point( 87 ) )
+	self.output:setWidth( width - 2 * margin )
+
+	self.input:setPos( margin, height - self.input:getHeight() - margin )
+	self.input:setWidth( width - 2 * margin )
+
 	gui.frame.invalidateLayout( self )
 end
 

@@ -101,6 +101,7 @@ function love.conf( c )
 
         loadConfig( c )
         c.window.icon = "images/icon.png"
+        c.window.highdpi = true
 
         return c
 

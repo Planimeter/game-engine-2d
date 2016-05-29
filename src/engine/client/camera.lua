@@ -11,15 +11,16 @@ local contexts   = camera and camera.getWorldContexts() or {}
 local entity     = camera and camera.getParentEntity()
 local position   = camera and camera.getPosition() or vector()
 local worldIndex = camera and camera.getWorldIndex() or 1
-local minZoom    = camera and camera.getMinZoom() or 1
-local maxZoom    = camera and camera.getMaxZoom() or 4
-local zoom       = camera and camera.getZoom() or 1
+local minZoom    = camera and camera.getMinZoom() or point( 1 )
+local maxZoom    = camera and camera.getMaxZoom() or point( 4 )
+local zoom       = camera and camera.getZoom() or point( 1 )
 
 local class      = class
 local concommand = concommand
 local graphics   = graphics
 local ipairs     = ipairs
 local math       = math
+local point      = point
 local table      = table
 local tween      = tween
 local vector     = vector
@@ -145,7 +146,7 @@ local _tween = nil
 function resetZoom()
 	if ( not _tween ) then
 		_tween = tween( _private, nil, {
-			_zoom = 2,
+			_zoom = point( 2 ),
 			onComplete = function()
 				_tween = nil
 			end
