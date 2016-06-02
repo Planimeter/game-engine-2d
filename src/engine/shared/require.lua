@@ -22,6 +22,25 @@ local filename     = nil
 local lastModified = nil
 local errormsg     = nil
 
+local function reloadModule( modname, filename )
+	package.loaded[ modname ]  = nil
+	package.watched[ modname ] = nil
+	print( "Reloading " .. modname .. "..." )
+	local status, err = pcall( require, modname )
+	if ( status == false ) then
+		print( err )
+		lastModified, errormsg = filesystem.getLastModified( filename )
+		package.watched[ modname ] = lastModified
+	else
+		if ( game ) then
+			game.call( "shared", "onReloadScript", modname )
+		else
+			require( "engine.shared.hook" )
+			hook.call( "shared", "onReloadScript", modname )
+		end
+	end
+end
+
 function package.update( dt )
 	for modname, modtime in pairs( package.watched ) do
 		filename = string.gsub( modname, "%.", "/" ) .. ".lua"
@@ -31,22 +50,7 @@ function package.update( dt )
 
 		lastModified, errormsg = filesystem.getLastModified( filename )
 		if ( errormsg == nil and lastModified ~= modtime ) then
-			package.loaded[ modname ]  = nil
-			package.watched[ modname ] = nil
-			print( "Reloading " .. modname .. "..." )
-			local status, err = pcall( require, modname )
-			if ( status == false ) then
-				print( err )
-				lastModified, errormsg = filesystem.getLastModified( filename )
-				package.watched[ modname ] = lastModified
-			else
-				if ( game ) then
-					game.call( "shared", "onReloadScript", modname )
-				else
-					require( "engine.shared.hook" )
-					hook.call( "shared", "onReloadScript", modname )
-				end
-			end
+			reloadModule( modname, filename )
 		end
 	end
 end

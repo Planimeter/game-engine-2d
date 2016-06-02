@@ -16,32 +16,36 @@ image.images = images
 local modtime  = nil
 local errormsg = nil
 
+local function reloadImage( i, filename )
+	-- i.image = nil
+	print( "Reloading " .. filename .. "..." )
+	local status, ret = pcall( graphics.newImage, filename )
+	i.modtime = modtime
+	if ( status == false ) then
+		print( ret )
+	else
+		i.image = ret
+
+		if ( game ) then
+			game.call( "client", "onReloadImage", filename )
+		else
+			require( "engine.shared.hook" )
+			hook.call( "client", "onReloadImage", filename )
+		end
+	end
+end
+
 function image.update( dt )
 	for filename, i in pairs( images ) do
 		modtime, errormsg = filesystem.getLastModified( filename )
 		if ( errormsg == nil and modtime ~= i.modtime ) then
-			-- i.image = nil
-			print( "Reloading " .. filename .. "..." )
-			local status, ret = pcall( graphics.newImage, filename )
-			i.modtime = modtime
-			if ( status == false ) then
-				print( ret )
-			else
-				i.image = ret
-
-				if ( game ) then
-					game.call( "client", "onReloadImage", filename )
-				else
-					require( "engine.shared.hook" )
-					hook.call( "client", "onReloadImage", filename )
-				end
-			end
+			reloadImage( i, filename )
 		end
 	end
 end
 
 function image:image( filename )
-	self.filename = filename
+	self:setFilename( filename )
 end
 
 function image:getDrawable()
@@ -105,7 +109,24 @@ function image:setFilter( min, mag, anisotropy )
 	image:setFilter( min, mag, anisotropy )
 end
 
+local function getHighResolutionVariant( filename )
+	local extention = "." .. string.fileextension( filename )
+	local hrvariant = string.gsub( filename, extention, "" )
+	hrvariant       = hrvariant .. "@2x" .. extention
+
+	if ( filesystem.exists( hrvariant ) ) then
+		return hrvariant
+	end
+end
+
 function image:setFilename( filename )
+	if ( _G.graphics.getPixelScale() > 1 ) then
+		local variant = getHighResolutionVariant( filename )
+		if ( variant ) then
+			filename = variant
+		end
+	end
+
 	self.filename = filename
 end
 

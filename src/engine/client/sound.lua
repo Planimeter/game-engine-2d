@@ -39,26 +39,30 @@ sound.sounds = sounds
 local modtime  = nil
 local errormsg = nil
 
+local function updateSound( s, filename )
+	-- s.sound = nil
+	print( "Reloading " .. filename .. "..." )
+	local status, ret = pcall( audio.newSource, filename )
+	s.modtime = modtime
+	if ( status == false ) then
+		print( ret )
+	else
+		s.sound = ret
+
+		if ( game ) then
+			game.call( "client", "onReloadSound", filename )
+		else
+			require( "engine.shared.hook" )
+			hook.call( "client", "onReloadSound", filename )
+		end
+	end
+end
+
 function sound.update( dt )
 	for filename, s in pairs( sounds ) do
 		modtime, errormsg = filesystem.getLastModified( filename )
 		if ( errormsg == nil and modtime ~= s.modtime ) then
-			-- s.sound = nil
-			print( "Reloading " .. filename .. "..." )
-			local status, ret = pcall( audio.newSource, filename )
-			s.modtime = modtime
-			if ( status == false ) then
-				print( ret )
-			else
-				s.sound = ret
-
-				if ( game ) then
-					game.call( "client", "onReloadSound", filename )
-				else
-					require( "engine.shared.hook" )
-					hook.call( "client", "onReloadSound", filename )
-				end
-			end
+			updateSound( s, filename )
 		end
 	end
 end

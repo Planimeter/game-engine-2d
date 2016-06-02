@@ -4,11 +4,11 @@
 --
 --============================================================================--
 
-class "hudchat" ( gui.panel )
+class "hudchat" ( gui.hudframe )
 
 function hudchat:hudchat( parent )
 	local name = "Chat"
-	gui.panel.panel( self, parent, "Chat" )
+	gui.hudframe.hudframe( self, parent, name, name )
 	self.width  = gui.scale( 720 )
 	self.height = gui.scale( 404 )
 
@@ -25,10 +25,8 @@ function hudchat:hudchat( parent )
 	end
 
 	self:invalidateLayout()
-	self:setScheme( "Default" )
 	self:setUseFullscreenFramebuffer( true )
 	self:dock()
-	self:setVisible( false )
 end
 
 local CHAT_ANIM_TIME = 0.2
@@ -88,40 +86,7 @@ function hudchat:dock()
 	self.output:setPos( x, y )
 end
 
-function hudchat:draw()
-	self:drawBlur()
-	self:drawBackground()
-	gui.panel.draw( self )
-	self:drawForeground()
-end
-
-function hudchat:drawBackground()
-	local property = "hudchat.backgroundColor"
-
-	if ( not gui.blurFramebuffer ) then
-		property = "frame.backgroundColor"
-	end
-
-	graphics.setColor( self:getScheme( property ) )
-	graphics.rectangle( "fill", 0, 0, self:getWidth(), self:getHeight() )
-end
-
-function hudchat:drawBlur()
-	if ( not gui.blurFramebuffer ) then
-		return
-	end
-
-	graphics.push()
-		local x, y = self:localToScreen()
-		graphics.translate( -x, -y )
-		gui.blurFramebuffer:draw()
-	graphics.pop()
-end
-
-function hudchat:drawForeground()
-	graphics.setColor( self:getScheme( "frame.outlineColor" ) )
-	graphics.setLineWidth( point( 1 ) )
-	graphics.rectangle( "line", 0, 0, self:getWidth(), self:getHeight() )
+function hudchat:drawTitle()
 end
 
 function hudchat:keypressed( key, scancode, isrepeat )
@@ -131,7 +96,7 @@ function hudchat:keypressed( key, scancode, isrepeat )
 		return true
 	end
 
-	return gui.panel.keypressed( self, key, scancode, isrepeat )
+	return gui.frame.keypressed( self, key, scancode, isrepeat )
 end
 
 function hudchat:invalidateLayout()
@@ -142,30 +107,27 @@ function hudchat:invalidateLayout()
 		gui.scale( 494 )
 	)
 
-	if ( self:isVisible() ) then
-		self.output:setPos( point( 36 ), point( 36 ) )
-	else
-		local x, y = self:localToScreen(
-			gui.scale( 96 ) - point( 18 ),
-			point( 36 ) + gui.scale( 494 )
+	if ( self.output ) then
+		if ( self:isVisible() ) then
+			self.output:setPos( point( 36 ), point( 36 ) )
+		else
+			local x, y = self:localToScreen(
+				gui.scale( 96 ) - point( 18 ),
+				point( 36 ) + gui.scale( 494 )
+			)
+			self.output:setPos( x, y )
+		end
+	end
+
+	if ( self.input ) then
+		self.input:setPos(
+			point( 36 ),
+			self:getHeight() - self.input:getHeight() - point( 36 )
 		)
-		self.output:setPos( x, y )
+		self.input:setWidth( self:getWidth() - 2 * point( 36 ) )
 	end
 
-	self.input:setPos(
-		point( 36 ),
-		self:getHeight() - self.input:getHeight() - point( 36 )
-	)
-	self.input:setWidth( self:getWidth() - 2 * point( 36 ) )
-	gui.panel.invalidateLayout( self )
-end
-
-function hudchat:update( dt )
-	if ( gui.blurFramebuffer and self:isVisible() ) then
-		self:invalidate()
-	end
-
-	gui.panel.update( self, dt )
+	gui.frame.invalidateLayout( self )
 end
 
 gui.register( hudchat, "hudchat" )

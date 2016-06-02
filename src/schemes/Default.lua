@@ -119,15 +119,7 @@ t.frametab                    = {
     }
 }
 
-t.hudchat                     = {
-    backgroundColor           = color( t.colors.black, 0.27 * 255 )
-}
-
-t.huddialogue                 = {
-    backgroundColor           = color( t.colors.black, 0.27 * 255 )
-}
-
-t.hudgamemenu                 = {
+t.hudframe                    = {
     backgroundColor           = color( t.colors.black, 0.27 * 255 )
 }
 
