@@ -78,7 +78,7 @@ function tabbedframe:drawBackground()
 	local font       = self:getScheme( "titleFont" )
 	local titleWidth = font:getWidth( utf8upper( self:getTitle() ) )
 	titleWidth       = 2 * padding + titleWidth
-	graphics.rectangle( "fill", 0, 0, titleWidth, titleBarHeight )
+	graphics.rectangle( "fill", 0, 0, titleWidth + point( 1 ), titleBarHeight )
 
 	-- Title Bar Inner Shadow
 	property = "frametab.outlineColor"
@@ -101,7 +101,7 @@ function tabbedframe:drawBackground()
 
 	-- Remaining Title Bar
 	local r = self:getWidth() - titleWidth
-	graphics.rectangle( "fill", titleWidth, 0, r, titleBarHeight )
+	graphics.rectangle( "fill", x, 0, r, titleBarHeight )
 
 	-- Remaining Title Bar Inner Shadow
 	graphics.setColor( self:getScheme( "frametab.outlineColor" ) )
