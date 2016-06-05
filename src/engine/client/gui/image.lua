@@ -31,7 +31,7 @@ function imagepanel:draw()
 		graphics.draw( self:getImage(), self:getQuad() )
 	graphics.setStencilTest()
 
-	missingImage = self:getImage() == graphics.error
+	missingImage = self:getImage() == graphics.error:getDrawable()
 	if ( missingImage ) then
 		self:drawMissingImage()
 	end
@@ -43,7 +43,7 @@ function imagepanel:drawMissingImage()
 	opacity = graphics.getOpacity()
 	graphics.setOpacity( 0.42 )
 		graphics.setColor( color.red )
-		local lineWidth = point( 1 )
+		local lineWidth = 1
 		local width     = self:getWidth()
 		local height    = self:getHeight()
 		graphics.setLineWidth( lineWidth )
