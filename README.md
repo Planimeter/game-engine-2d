@@ -1,4 +1,4 @@
-# ![Grid](/src/images/gui/logo.png?raw=true "Grid")  
+# ![Grid](/src/images/gui/logo_dark.png?raw=true "Grid")  
 
 [![Issue Stats](http://issuestats.com/github/Planimeter/grid-sdk/badge/pr?style=flat)](http://issuestats.com/github/Planimeter/grid-sdk)
 [![Issue Stats](http://issuestats.com/github/Planimeter/grid-sdk/badge/issue?style=flat)](http://issuestats.com/github/Planimeter/grid-sdk)
