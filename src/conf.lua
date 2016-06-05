@@ -101,6 +101,11 @@ function love.conf( c )
 
         loadConfig( c )
         c.window.icon = "images/icon.png"
+
+        if ( jit and jit.os == "OSX" ) then
+            c.window.icon = "images/icon_osx.png"
+        end
+
         c.window.highdpi = true
 
         return c
