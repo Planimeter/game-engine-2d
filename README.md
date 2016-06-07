@@ -1,4 +1,4 @@
-# <img src="/src/images/gui/logo_dark@2x.png?raw=true" width="170" height="50" title="Grid">  
+# <img src="/src/images/gui/logo_dark@2x.png?raw=true" width="169" height="49" title="Grid">  
 
 [![Issue Stats](http://issuestats.com/github/Planimeter/grid-sdk/badge/pr?style=flat)](http://issuestats.com/github/Planimeter/grid-sdk)
 [![Issue Stats](http://issuestats.com/github/Planimeter/grid-sdk/badge/issue?style=flat)](http://issuestats.com/github/Planimeter/grid-sdk)
