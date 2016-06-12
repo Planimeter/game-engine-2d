@@ -12,7 +12,6 @@ html {
   display: flex;
   margin-right: -.9375em;
   margin-left: -.9375em;
-  flex-wrap: wrap;
 }
 
 [class^='col-'],
