@@ -1,3 +1,13 @@
-<div class="well" data-ng-bind-html="article" data-ng-if="article">
-  This is the api view.
-</div>
+<section class="api articles fade row">
+  <div data-marked data-ng-include="'/grid/docs/_Sidebar.md'"
+       class="sidebar hidden-print hidden-xs hidden-sm col-md-3 col-lg-2">
+    Loading...
+  </div>
+  <article class="article fade col-xs-12 col-md-9 col-lg-10"
+           role="main"
+           data-ui-view>
+    <div class="well" data-ng-bind-html="article" data-ng-if="article">
+      This is the api view.
+    </div>
+  </article>
+</section>
