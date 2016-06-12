@@ -3,7 +3,7 @@ route
     templateUrl: 'views/main.html'
   })
   .when('/api', {
-    templateUrl: 'views/api.html',
+    redirectTo: '/api/Home'
   })
   .when('/api/:article', {
     templateUrl: 'views/api.article.html',
