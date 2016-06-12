@@ -70,6 +70,28 @@ function Api() {
   };
 
   /**
+   * Update links.
+   */
+
+   function startsWith(haystack, needle) {
+     return haystack.lastIndexOf(needle, 0) === 0;
+   }
+
+  renderer.link = function(href, title, text) {
+    if (!startsWith(href, 'http://') &&
+        !startsWith(href, 'https://')) {
+      href = href.lastIndexOf('api/', 0) === 0 ? href : 'api/' + href;
+    }
+
+    var out = '<a href="' + href + '"';
+    if (title) {
+      out += ' title="' + title + '"';
+    }
+    out += '>' + text + '</a>';
+    return out;
+  };
+
+  /**
    * Set marked options.
    */
 
