@@ -90,12 +90,12 @@ function Api() {
      var markdown = this.response;
      set(markdown);
     } else {
-      location.href = wikiHref + article;
+      set('Cannot GET ' + baseHref + article + '.md');
     }
   };
 
   request.onerror = function() {
-    location.href = wikiHref + article;
+    set('Cannot GET ' + baseHref + article + '.md');
   };
 
   request.send();
