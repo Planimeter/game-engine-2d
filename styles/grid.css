@@ -24,29 +24,29 @@ html {
 }
 
 .col-xs-12 {
-  flex: 100%;
+  flex: 0 0 100%;
 }
 
 @media (min-width: 768px) {
   .col-md-3 {
-    flex: 25%;
+    flex: 0 0 25%;
   }
 
   .col-md-6 {
-    flex: 50%;
+    flex: 0 0 50%;
   }
 
   .col-md-9 {
-    flex: 75%;
+    flex: 0 0 75%;
   }
 }
 
 @media (min-width: 992px) {
   .col-lg-2 {
-    flex: 16.666667%;
+    flex: 0 0 16.666667%;
   }
 
   .col-lg-10 {
-    flex: 83.333333%;
+    flex: 0 0 83.333333%;
   }
 }
