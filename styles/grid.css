@@ -10,6 +10,7 @@ html {
 
 .row {
   display: flex;
+  flex-wrap: wrap;
   margin-right: -.9375em;
   margin-left: -.9375em;
 }
@@ -22,29 +23,29 @@ html {
 }
 
 .col-xs-12 {
-  width: 100%;
+  flex: 0 0 100%;
 }
 
 @media (min-width: 768px) {
   .col-md-3 {
-    width: 25%;
+    flex: 0 0 25%;
   }
 
   .col-md-6 {
-    width: 50%;
+    flex: 0 0 50%;
   }
 
   .col-md-9 {
-    width: 75%;
+    flex: 0 0 75%;
   }
 }
 
 @media (min-width: 992px) {
   .col-lg-2 {
-    width: 16.666667%;
+    flex: 0 0 16.666667%;
   }
 
   .col-lg-10 {
-    width: 83.333333%;
+    flex: 0 0 83.333333%;
   }
 }
