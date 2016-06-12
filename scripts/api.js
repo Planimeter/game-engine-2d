@@ -87,7 +87,7 @@ function Api() {
   var wikiHref = 'https://github.com/Planimeter/grid-sdk/wiki/';
   function onerror() {
     set(
-      'Cannot GET ' + baseHref + article + '.md\n\n' +
+      'Cannot GET /' + article + '.md\n\n' +
       '[New Page](' + wikiHref + article + ')'
     );
   }
