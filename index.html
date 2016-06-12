@@ -3,14 +3,12 @@
   <head>
     <meta charset="utf-8">
     <title>Grid</title>
-    <base href="/grid-sdk/">
+    <!-- <base href="/grid-sdk/"> -->
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="styles/main.css" rel="stylesheet">
     <link href="styles/font-stack.css" rel="stylesheet">
     <link href="styles/theme.css" rel="stylesheet">
     <link href="styles/nav.css" rel="stylesheet">
-    <script src="https://rawgit.com/andrewmcwatters/route.js/master/route.js"></script>
-    <script src="scripts/routes.js"></script>
   </head>
   <body>
     <header>
@@ -20,15 +18,18 @@
       <nav>
         <ol>
           <li class="active"><a href=".">About</a></li>
+          <li><a href="api/Home">API</a></li>
         </ol>
       </nav>
       <h3>
         <small>Grid Engine</small>
       </h3>
     </header>
-    <main></main>
+    <main data-view></main>
     <footer>
       Copyright © 2016 Planimeter
     </footer>
+    <script src="https://rawgit.com/andrewmcwatters/route.js/master/route.js"></script>
+    <script src="scripts/routes.js"></script>
   </body>
 </html>

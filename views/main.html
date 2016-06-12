@@ -1,0 +1,69 @@
+<section class="about">
+  <div class="row">
+    <div id="left" class="col-md-6">
+      <h1>
+        Grid<br>
+        <small>Lightweight, fast &amp;
+        <a class="love project" href="http://love2d.org/">LÖVE</a>-ly.</small>
+      </h1>
+      <p class="lead">
+        Grid is a 2D game engine built by
+        <a class="project" href="/planimeter">Planimeter</a>.<br>It was
+        designed for our fantasy MMORPG,
+        <a class="project" href="/vadventure">Vertex Adventure</a>.
+      </p>
+      <p>
+        <a class="btn btn-primary btn-lg" href="https://github.com/Planimeter/grid-sdk/releases">Download on GitHub</a>
+      </p>
+    </div>
+    <div id="right" class="hidden-xs hidden-sm col-md-6 text-right">
+      <a href="images/grid_engine.png" target="_blank">
+        <img src="images/grid_engine.png" width="904.484">
+      </a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <h2>
+        Examples
+      </h2>
+      <p class="lead">
+        Grid lets you jump straight into game logic.
+      </p>
+      <p>
+        <h3>
+          Making a HUD element
+        </h3>
+        <div data-hljs="" data-language="lua" class="snippet">
+class "health" ( gui.panel )
+
+function health:draw()
+	graphics.print( localplayer:getHealth() )
+	gui.panel.draw( self )
+end</div>
+      </p>
+      <p>
+        <h3>
+          Making an entity
+        </h3>
+        <div data-hljs="" data-language="lua" class="snippet">
+class "monster" ( npc )
+
+function monster:monster()
+	npc.npc( self )
+	self:setSprite( "images/monster.png" )
+end</div>
+      </p>
+      <p>
+        <h3>
+          Playing a sound from an entity
+        </h3>
+        <div data-hljs="" data-language="lua" class="snippet">
+function monster:onTakeDamage()
+	npc.onTakeDamage( self )
+	self:emitSound( "sounds/cry.wav" )
+end</div>
+      </p>
+    </div>
+  </div>
+</section>
