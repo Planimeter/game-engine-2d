@@ -3,13 +3,10 @@ route
     templateUrl: 'views/main.html',
     handler: function() {
       hljs.configure({
-        languages: ['lua']
+        languages: ['Lua']
       });
 
-      var elements = document.querySelectorAll('pre code');
-      Array.prototype.forEach.call(elements, function(el, i){
-        hljs.highlightBlock(el);
-      });
+      hljs.initHighlighting();
     }
   })
   .when('/api', {
