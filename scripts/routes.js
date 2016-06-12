@@ -1,6 +1,12 @@
 route
   .when('/', {
-    templateUrl: 'views/main.html'
+    templateUrl: 'views/main.html',
+    handler: function() {
+      var elements = document.querySelectorAll('pre code');
+      Array.prototype.forEach.call(elements, function(el, i){
+        hljs.highlightBlock(el);
+      });
+    }
   })
   .when('/api', {
     redirectTo: '/api/Home'
