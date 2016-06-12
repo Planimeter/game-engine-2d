@@ -16,10 +16,11 @@ html {
 
 [class^='col-'],
 [class*=' col-'] {
-  position: relative;
+  flex: 1;
   min-height: 1px;
   padding-right: .9375em;
   padding-left: .9375em;
+  position: relative;
 }
 
 .col-xs-12 {
