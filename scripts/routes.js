@@ -2,6 +2,7 @@ route
   .when('/', {
     templateUrl: 'views/main.html',
     handler: function() {
+      hljs.configure({ languages: ['Lua'] });
       hljs.initHighlighting();
     }
   })
