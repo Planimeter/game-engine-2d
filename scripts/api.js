@@ -88,7 +88,7 @@ function Api() {
   function onerror() {
     set(
       'Cannot GET ' + baseHref + article + '.md\n\n' +
-      '[Create new page](' + wikiHref + article + ')'
+      '[New Page](' + wikiHref + article + ')'
     );
   }
 
