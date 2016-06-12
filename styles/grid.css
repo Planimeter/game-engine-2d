@@ -11,15 +11,16 @@ html {
 .row {
   display: flex;
   flex-wrap: wrap;
-  margin-right: -.9375em;
-  margin-left: -.9375em;
+  margin-top: -.1em;
+  margin-bottom: .1em;
+  margin-left: -.1em;
 }
 
 [class^='col-'],
 [class*=' col-'] {
   flex: 1;
-  padding-top: .9375em;
-  padding-left: .9375em;
+  padding-top: .1em;
+  padding-left: .1em;
 }
 
 .col-xs-12 {
