@@ -5,7 +5,7 @@
   flex-wrap: wrap;
 }
 
-[class^='.col-']' {
+[class^='.col-'] {
   position: relative;
   min-height: 1px;
   padding-right: .9375em;
