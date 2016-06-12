@@ -31,3 +31,13 @@
     flex: 0 0 75%;
   }
 }
+
+@media (min-width: 992px) {
+  .col-lg-2 {
+    flex: 0 0 16.666667%;
+  }
+
+  .col-lg-10 {
+    flex: 0 0 83.333333%;
+  }
+}
