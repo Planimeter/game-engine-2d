@@ -101,4 +101,27 @@ function Api() {
     },
     renderer: renderer
   });
+
+  /**
+   * Retrieve an article.
+   */
+
+  var request = new XMLHttpRequest();
+  var article = route.params.article;
+  request.open('GET', 'https://raw.githubusercontent.com/wiki/Planimeter/grid-sdk/' + article + '.md', true);
+
+  request.onload = function() {
+    if (this.status >= 200 && this.status < 400) {
+     var markdown = this.response;
+     document.getElementById('article').innerHTML = marked(markdown);
+    } else {
+      document.getElementById('article').innerHTML = marked('Cannot GET /grid/docs/' + article + '.md');
+    }
+  };
+
+  request.onerror = function() {
+    document.getElementById('article').innerHTML = marked('Cannot GET /grid/docs/' + article + '.md');
+  };
+
+  request.send();
 }
