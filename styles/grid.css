@@ -10,17 +10,15 @@ html {
 
 .row {
   display: flex;
-  margin-right: -.9375em;
+  margin-top: -.9375em;
   margin-left: -.9375em;
 }
 
 [class^='col-'],
 [class*=' col-'] {
   flex: 1;
-  min-height: 1px;
-  padding-right: .9375em;
+  padding-top: .9375em;
   padding-left: .9375em;
-  position: relative;
 }
 
 .col-xs-12 {
