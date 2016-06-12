@@ -84,19 +84,24 @@ function Api() {
     document.getElementById('article').innerHTML = marked(text);
   }
 
-  var wikiHref = 'https://github.com/Planimeter/grid-sdk/wiki/';
+  function onerror() {
+    var wikiHref = 'https://github.com/Planimeter/grid-sdk/wiki/';
+    set(
+      'Cannot GET ' + baseHref + article + '.md\n' +
+      '[Create new page](' + wikiHref + article + ')'
+    );
+  }
+
   request.onload = function() {
     if (this.status >= 200 && this.status < 400) {
      var markdown = this.response;
      set(markdown);
     } else {
-      set('Cannot GET ' + baseHref + article + '.md');
+      onerror();
     }
   };
 
-  request.onerror = function() {
-    set('Cannot GET ' + baseHref + article + '.md');
-  };
+  request.onerror = onerror;
 
   request.send();
 }
