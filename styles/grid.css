@@ -7,6 +7,7 @@
 
 [class^='col-'],
 [class*=' col-'] {
+  box-sizing: border-box;
   position: relative;
   min-height: 1px;
   padding-right: .9375em;
