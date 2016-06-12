@@ -21,7 +21,7 @@ html {
 
 [class^='col-'],
 [class*=' col-'] {
-  padding-top: 1em;
+  padding-right: 1em;
   padding-left: 1em;
 }
 
@@ -53,9 +53,9 @@ html {
   }
 }
 
-@media (min-width: 992px) {
-  [class^='col-lg-'],
-  [class*=' col-lg-'] {
+@media (min-width: 1200px) {
+  [class^='col-xl-'],
+  [class*=' col-xl-'] {
     float: left;
   }
 
