@@ -7,7 +7,7 @@ route
     redirectTo: '/api/Home'
   })
   .when('/api/:article', {
-    templateUrl: 'views/api.article.html',
+    templateUrl: 'views/api.html',
     handler: Api
   })
   .when('/404', {
