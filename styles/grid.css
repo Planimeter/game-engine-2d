@@ -9,11 +9,14 @@ html {
 }
 
 .row {
-  display: flex;
-  flex-wrap: wrap;
-  margin-top: -1em;
-  margin-bottom: 1em;
+  margin-right: -1em;
   margin-left: -1em;
+}
+
+.row::after {
+  display: table;
+  clear: both;
+  content: '';
 }
 
 [class^='col-'],
@@ -22,11 +25,21 @@ html {
   padding-left: 1em;
 }
 
+[class^='col-xs-'],
+[class*=' col-xs-'] {
+  float: left;
+}
+
 .col-xs-12 {
   width: 100%;
 }
 
 @media (min-width: 768px) {
+  [class^='col-md-'],
+  [class*=' col-md-'] {
+    float: left;
+  }
+
   .col-md-3 {
     width: 25%;
   }
@@ -41,6 +54,11 @@ html {
 }
 
 @media (min-width: 992px) {
+  [class^='col-lg-'],
+  [class*=' col-lg-'] {
+    float: left;
+  }
+
   .col-lg-2 {
     width: 16.666667%;
   }
