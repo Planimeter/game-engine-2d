@@ -15,3 +15,9 @@
 .col-xs-12 {
   flex: 0 0 100%;
 }
+
+@media (min-width: 768px) {
+  .col-md-6 {
+    flex: 0 0 50%;
+  }
+}
