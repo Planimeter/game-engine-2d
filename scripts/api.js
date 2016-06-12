@@ -1,13 +1,5 @@
 function Api() {
-  /**
-   * Override renderer methods.
-   */
-
   var renderer = new marked.Renderer();
-
-  /**
-   * Add page headers.
-   */
 
   renderer.heading = function (text, level) {
     var escapedText = text.toLowerCase().replace(/[^\w]+/g, '-');
@@ -23,10 +15,6 @@ function Api() {
     (level === 1 ? '</div>' : '');
   };
 
-  /**
-   * Make lists unstyled.
-   */
-
   renderer.list = function (body, ordered) {
     var tag = ordered ? 'ol' : 'ul';
     return '<' + tag + (tag === 'ul' ? ' class="list-unstyled"' : '') + '>' +
@@ -34,20 +22,12 @@ function Api() {
     '</' + tag + '>';
   };
 
-  /**
-   * Add Bootstap tables.
-   */
-
   renderer.table = function (header, body) {
     return '<table class="table">' +
       header +
       body +
     '</table>';
   };
-
-  /**
-   * Add client and server labels.
-   */
 
   renderer.em = function (text) {
     if (text === 'Client') {
@@ -69,10 +49,6 @@ function Api() {
     return '<em>' + text + '</em>';
   };
 
-  /**
-   * Update links.
-   */
-
    function startsWith(haystack, needle) {
      return haystack.lastIndexOf(needle, 0) === 0;
    }
@@ -91,20 +67,12 @@ function Api() {
     return out;
   };
 
-  /**
-   * Set marked options.
-   */
-
   marked.setOptions({
     highlight: function (code) {
       return hljs.highlightAuto(code).value;
     },
     renderer: renderer
   });
-
-  /**
-   * Retrieve an article.
-   */
 
   var request  = new XMLHttpRequest();
   var article  = route.params.article;
