@@ -59,11 +59,11 @@ html {
     float: left;
   }
 
-  .col-lg-2 {
+  .col-xl-2 {
     width: 16.666667%;
   }
 
-  .col-lg-10 {
+  .col-xl-10 {
     width: 83.333333%;
   }
 }
