@@ -80,8 +80,8 @@ function Api() {
   var url      = baseHref + article + '.md';
   request.open('GET', url, true);
 
-  function set(markdown) {
-    document.getElementById('article').innerHTML = marked(markdown);
+  function set(text) {
+    document.getElementById('article').innerHTML = marked(text);
   }
 
   request.onload = function() {
