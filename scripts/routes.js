@@ -2,6 +2,10 @@ route
   .when('/', {
     templateUrl: 'views/main.html',
     handler: function() {
+      hljs.configure({
+        languages: ['lua']
+      });
+
       var elements = document.querySelectorAll('pre code');
       Array.prototype.forEach.call(elements, function(el, i){
         hljs.highlightBlock(el);
