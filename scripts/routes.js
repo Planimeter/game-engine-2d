@@ -1,13 +1,7 @@
 route
   .when('/', {
     templateUrl: 'views/main.html',
-    handler: function() {
-      hljs.configure({
-        languages: ['Lua']
-      });
-
-      hljs.initHighlighting();
-    }
+    handler: hljs.initHighlighting
   })
   .when('/api', {
     redirectTo: '/api/Home'
