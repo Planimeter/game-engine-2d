@@ -33,7 +33,7 @@
         <h3>
           Making a HUD element
         </h3>
-        <pre><code class="lua">class "health" ( gui.panel )
+        <pre><code>class "health" ( gui.panel )
 
 function health:draw()
 	graphics.print( localplayer:getHealth() )
@@ -44,7 +44,7 @@ end</code></pre>
         <h3>
           Making an entity
         </h3>
-        <pre><code class="lua">class "monster" ( npc )
+        <pre><code>class "monster" ( npc )
 
 function monster:monster()
 	npc.npc( self )
@@ -55,7 +55,7 @@ end</code></pre>
         <h3>
           Playing a sound from an entity
         </h3>
-        <pre><code class="lua">function monster:onTakeDamage()
+        <pre><code>function monster:onTakeDamage()
 	npc.onTakeDamage( self )
 	self:emitSound( "sounds/cry.wav" )
 end</code></pre>
