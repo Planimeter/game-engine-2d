@@ -84,17 +84,18 @@ function Api() {
     document.getElementById('article').innerHTML = marked(text);
   }
 
+  var wikiHref = 'https://github.com/Planimeter/grid-sdk/wiki/';
   request.onload = function() {
     if (this.status >= 200 && this.status < 400) {
      var markdown = this.response;
      set(markdown);
     } else {
-      set('Cannot GET /grid/docs/' + article + '.md');
+      location.href = wikiHref + article;
     }
   };
 
   request.onerror = function() {
-    set('Cannot GET /grid/docs/' + article + '.md');
+    location.href = wikiHref + article;
   };
 
   request.send();
