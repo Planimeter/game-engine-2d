@@ -18,35 +18,34 @@ html {
 
 [class^='col-'],
 [class*=' col-'] {
-  flex: 1;
   padding-top: 1em;
   padding-left: 1em;
 }
 
 .col-xs-12 {
-  flex: 0 0 100%;
+  width: 100%;
 }
 
 @media (min-width: 768px) {
   .col-md-3 {
-    flex: 0 0 25%;
+    width: 25%;
   }
 
   .col-md-6 {
-    flex: 0 0 50%;
+    width: 50%;
   }
 
   .col-md-9 {
-    flex: 0 0 75%;
+    width: 75%;
   }
 }
 
 @media (min-width: 992px) {
   .col-lg-2 {
-    flex: 0 0 16.666667%;
+    width: 16.666667%;
   }
 
   .col-lg-10 {
-    flex: 0 0 83.333333%;
+    width: 83.333333%;
   }
 }
