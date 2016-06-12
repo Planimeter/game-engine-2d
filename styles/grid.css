@@ -1,7 +1,11 @@
+html {
+  box-sizing: border-box;
+}
+
 *,
 *:before,
 *:after {
-  box-sizing: border-box;
+  box-sizing: inherit;
 }
 
 .row {
@@ -14,7 +18,7 @@
 [class^='col-'],
 [class*=' col-'] {
   flex: 1;
-  padding-right: .9375em;
+  padding-top: .9375em;
   padding-left: .9375em;
 }
 
