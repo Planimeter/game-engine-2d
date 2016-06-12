@@ -106,21 +106,27 @@ function Api() {
    * Retrieve an article.
    */
 
-  var request = new XMLHttpRequest();
-  var article = route.params.article;
-  request.open('GET', 'https://raw.githubusercontent.com/wiki/Planimeter/grid-sdk/' + article + '.md', true);
+  var request  = new XMLHttpRequest();
+  var article  = route.params.article;
+  var baseHref = 'https://raw.githubusercontent.com/wiki/Planimeter/grid-sdk/';
+  var url      = baseHref + article + '.md';
+  request.open('GET', url, true);
+
+  function set(markdown) {
+    document.getElementById('article').innerHTML = marked(markdown);
+  }
 
   request.onload = function() {
     if (this.status >= 200 && this.status < 400) {
      var markdown = this.response;
-     document.getElementById('article').innerHTML = marked(markdown);
+     set(markdown);
     } else {
-      document.getElementById('article').innerHTML = marked('Cannot GET /grid/docs/' + article + '.md');
+      set('Cannot GET /grid/docs/' + article + '.md');
     }
   };
 
   request.onerror = function() {
-    document.getElementById('article').innerHTML = marked('Cannot GET /grid/docs/' + article + '.md');
+    set('Cannot GET /grid/docs/' + article + '.md');
   };
 
   request.send();
