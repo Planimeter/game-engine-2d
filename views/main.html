@@ -36,9 +36,9 @@
         <h3>
           Making a HUD element
         </h3>
-        <pre><code>class "health" ( gui.panel )
+        <pre><code>class "hudhealth" ( gui.panel )
 
-function health:draw()
+function hudhealth:draw()
 	graphics.print( localplayer:getHealth() )
 	gui.panel.draw( self )
 end</code></pre>
