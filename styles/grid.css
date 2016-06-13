@@ -9,6 +9,7 @@ html {
 }
 
 .row {
+  display: flex;
   margin-right: -1em;
   margin-left: -1em;
 }
@@ -66,4 +67,8 @@ html {
   .col-xl-10 {
     width: 83.333333%;
   }
+}
+
+.col-xs-center {
+  align-self: center;
 }
