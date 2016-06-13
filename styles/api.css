@@ -26,3 +26,18 @@
   vertical-align: baseline;
   border-radius: .25em;
 }
+
+.label-client {
+  border-color: rgba(168, 168, 123, 1);
+  color: rgba(168, 168, 123, 1);
+}
+
+.label-server {
+  border-color: rgba(123, 158, 168, 1);
+  color: rgba(123, 158, 168, 1);
+}
+
+.label-shared {
+  border-color: rgba(132, 168, 123, 1);
+  color: rgba(132, 168, 123, 1);
+}
