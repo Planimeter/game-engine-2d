@@ -1,12 +1,16 @@
+aside {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .list-unstyled {
   list-style-type: none;
   padding-left: 0;
 }
 
 .card {
-  position: relative;
-  display: block;
-  margin-bottom: .75em;
+  margin-bottom: 1em;
   border: 1px solid rgba(240, 246, 248, .07);
   border-radius: .25em;
 }
@@ -28,7 +32,7 @@
 }
 
 .alert {
-  padding: 15px;
+  padding: 1em;
   margin-bottom: 1em;
   border: 1px solid transparent;
   border-radius: .25em;
@@ -44,9 +48,7 @@
   font-size: 75%;
   font-weight: 300;
   line-height: 1;
-  text-align: center;
   white-space: nowrap;
-  vertical-align: baseline;
   border-radius: .25em;
   border-style: solid;
   border-width: 1px;
