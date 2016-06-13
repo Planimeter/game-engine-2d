@@ -4,15 +4,13 @@ function Api() {
   renderer.heading = function (text, level) {
     var escapedText = text.toLowerCase().replace(/[^\w]+/g, '-');
 
-    return (level === 1 ? '<div class="page-header">' : '') +
-      '<h' + level + '>' +
+    return '<h' + level + '>' +
         '<a name="' + escapedText + '" ' +
           'class="anchor" ' +
           'href="#' + escapedText + '"><span class="header-link"></span>' +
         '</a>' +
         text +
-      '</h' + level + '>' +
-    (level === 1 ? '</div>' : '');
+      '</h' + level + '>';
   };
 
   renderer.list = function (body, ordered) {
