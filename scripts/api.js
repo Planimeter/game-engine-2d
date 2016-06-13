@@ -94,4 +94,6 @@ function Api() {
   request.onerror = onerror;
 
   request.send();
+
+  document.getElementById('view-source').href = wikiHref + article;
 }
