@@ -6,7 +6,8 @@
                     link.getAttribute('href')  ||
                     '';
     if ((routeName === href) ||
-        (href !== '.' && routeName.lastIndexOf(href, 0) === 0)) {
+        (href !== '.' && routeName.lastIndexOf(href, 0) === 0) ||
+        (routeName === '/' && href === '.')) {
       // set active nav link
       element.classList.add('active');
 
