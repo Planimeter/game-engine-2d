@@ -18,7 +18,8 @@ nav ol {
   border-color: rgba(240, 246, 248, .07);
 }
 
-nav li.active {
+nav li.active,
+nav li:hover {
   border-color: rgba(155, 140, 103, 1);
 }
 
