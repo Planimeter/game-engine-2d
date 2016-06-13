@@ -1,18 +1,6 @@
 function Api() {
   var renderer = new marked.Renderer();
 
-  renderer.heading = function (text, level) {
-    var escapedText = text.toLowerCase().replace(/[^\w]+/g, '-');
-
-    return '<h' + level + '>' +
-        '<a name="' + escapedText + '" ' +
-          'class="anchor" ' +
-          'href="#' + escapedText + '"><span class="header-link"></span>' +
-        '</a>' +
-        text +
-      '</h' + level + '>';
-  };
-
   renderer.list = function (body, ordered) {
     var tag = ordered ? 'ol' : 'ul';
     return '<' + tag + (tag === 'ul' ? ' class="list-unstyled"' : '') + '>' +
