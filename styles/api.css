@@ -72,7 +72,7 @@
 }
 
 .card-header {
-  padding: .75em 1.25em;
+  padding: 1em;
   border-bottom: 1px solid rgba(240, 246, 248, .07);
 }
 
@@ -89,7 +89,7 @@
 
 .table td,
 .table th {
-  padding: .75em;
+  padding: 1em;
   line-height: 1.5;
   vertical-align: top;
   border-top: 1px solid rgba(240, 246, 248, .07);
