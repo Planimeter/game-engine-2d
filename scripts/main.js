@@ -1,3 +1,5 @@
+'use strict';
+
 function Main() {
   hljs.configure({ languages: ['Lua'] });
 

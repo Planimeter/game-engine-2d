@@ -1,4 +1,6 @@
 (function() {
+  'use strict';
+
   function navItem(element) {
     var routeName = route.pathname;
     var link      = element.querySelector('a');

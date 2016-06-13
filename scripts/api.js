@@ -1,3 +1,5 @@
+'use strict';
+
 function Api() {
   var renderer = new marked.Renderer();
 
