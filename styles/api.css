@@ -75,3 +75,9 @@
   padding: .75em 1.25em;
   border-bottom: 1px solid rgba(240, 246, 248, .07);
 }
+
+.table {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 1rem;
+}
