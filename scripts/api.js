@@ -75,11 +75,13 @@ function Api() {
   }
 
   var wikiHref = 'https://github.com/Planimeter/grid-sdk/wiki/';
+  var viewSourceLink = document.getElementById('view-source');
   function onerror() {
     set(
       '# Cannot GET /' + article + '.md\r\n' +
       '[New Page](' + wikiHref + article + ')'
     );
+    viewSourceLink.classList.add('hidden-xs-up');
   }
 
   request.onload = function() {
@@ -95,5 +97,5 @@ function Api() {
 
   request.send();
 
-  document.getElementById('view-source').href = wikiHref + article + '/_edit';
+  viewSourceLink.href = wikiHref + article + '/_edit';
 }

@@ -103,3 +103,7 @@ th {
 p:empty {
   display: none;
 }
+
+.hidden-xs-up {
+  display: none;
+}
