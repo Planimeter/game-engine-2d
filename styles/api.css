@@ -10,9 +10,9 @@ aside {
 }
 
 .card {
-  margin-bottom: 1em;
   border: 1px solid rgba(240, 246, 248, .07);
   border-radius: .25em;
+  margin-bottom: 1em;
 }
 
 .card-block {
@@ -20,22 +20,22 @@ aside {
 }
 
 .alert-info {
-  color: #31708f;
   background-color: #d9edf7;
   border-color: #bcdff1;
+  color: #31708f;
 }
 
 .alert-warning {
-  color: #8a6d3b;
   background-color: #fcf8e3;
   border-color: #faf2cc;
+  color: #8a6d3b;
 }
 
 .alert {
-  padding: 1em;
-  margin-bottom: 1em;
   border: 1px solid transparent;
   border-radius: .25em;
+  margin-bottom: 1em;
+  padding: 1em;
 }
 
 .pull-right {
@@ -43,15 +43,15 @@ aside {
 }
 
 .label {
-  display: inline-block;
-  padding: .25em .4em;
-  font-size: 75%;
-  font-weight: 300;
-  line-height: 1;
-  white-space: nowrap;
   border-radius: .25em;
   border-style: solid;
   border-width: 1px;
+  display: inline-block;
+  font-size: 75%;
+  font-weight: 300;
+  line-height: 1;
+  padding: .25em .4em;
+  white-space: nowrap;
 }
 
 .label-client {
@@ -74,8 +74,8 @@ aside {
 }
 
 .card-header {
-  padding: 1em;
   border-bottom: 1px solid rgba(240, 246, 248, .07);
+  padding: 1em;
 }
 
 .table {
@@ -92,7 +92,6 @@ aside {
 .table td,
 .table th {
   border-top: 1px solid rgba(240, 246, 248, .07);
-  line-height: 1.5;
   padding: 1em;
   vertical-align: top;
 }
