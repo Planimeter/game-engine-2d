@@ -41,7 +41,9 @@
 function hudhealth:draw()
 	graphics.print( localplayer:getHealth() )
 	gui.panel.draw( self )
-end</code></pre>
+end
+
+gui.register( hudhealth, "hudhealth" )</code></pre>
       </p>
       <p>
         <h3>
