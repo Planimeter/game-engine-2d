@@ -15,16 +15,22 @@
   padding: 1.25em;
 }
 
+.pull-right {
+  float: right;
+}
+
 .label {
   display: inline-block;
   padding: .25em .4em;
   font-size: 75%;
-  font-weight: 700;
+  font-weight: 300;
   line-height: 1;
   text-align: center;
   white-space: nowrap;
   vertical-align: baseline;
   border-radius: .25em;
+  border-style: solid;
+  border-width: 1px;
 }
 
 .label-client {
