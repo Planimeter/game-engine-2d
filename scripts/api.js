@@ -2,17 +2,21 @@ function Api() {
   var renderer = new marked.Renderer();
 
   renderer.list = function (body, ordered) {
-    var tag = ordered ? 'ol' : 'ul';
-    return '<' + tag + (tag === 'ul' ? ' class="list-unstyled"' : '') + '>' +
+    var type = ordered ? 'ol' : 'ul';
+    return '<' + type + (type === 'ul' ? ' class="list-unstyled"' : '') + '>\n' +
       body +
-    '</' + tag + '>';
+    '</' + type + '>\n';
   };
 
   renderer.table = function (header, body) {
-    return '<table class="table">' +
-      header +
-      body +
-    '</table>';
+    return '<table class="table">\n'
+      + '<thead>\n'
+      + header
+      + '</thead>\n'
+      + '<tbody>\n'
+      + body
+      + '</tbody>\n'
+      + '</table>\n';
   };
 
   renderer.em = function (text) {
