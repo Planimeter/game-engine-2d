@@ -9,7 +9,7 @@ a {
   color: rgba(155, 140, 103, 1);
 }
 
-header .container > a {
+header > a {
   display: inline-block;
   margin-bottom: 0.5in;
 }

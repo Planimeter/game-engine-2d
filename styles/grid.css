@@ -8,43 +8,6 @@ html {
   box-sizing: inherit;
 }
 
-.container {
-  padding-right: 1em;
-  padding-left: 1em;
-  margin-right: auto;
-  margin-left: auto;
-}
-
-.container::after {
-  display: table;
-  clear: both;
-  content: "";
-}
-
-@media (min-width: 544px) {
-  .container {
-    width: 576px;
-  }
-}
-
-@media (min-width: 768px) {
-  .container {
-    width: 720px;
-  }
-}
-
-@media (min-width: 992px) {
-  .container {
-    width: 940px;
-  }
-}
-
-@media (min-width: 1200px) {
-  .container {
-    width: 1140px;
-  }
-}
-
 .row {
   margin-right: -1em;
   margin-left: -1em;
