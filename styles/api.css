@@ -79,5 +79,22 @@
 .table {
   width: 100%;
   max-width: 100%;
-  margin-bottom: 1rem;
+  margin-bottom: 1em;
+}
+
+.table thead th {
+  vertical-align: bottom;
+  border-bottom: 2px solid rgba(240, 246, 248, .07);
+}
+
+.table td,
+.table th {
+  padding: .75em;
+  line-height: 1.5;
+  vertical-align: top;
+  border-top: 1px solid rgba(240, 246, 248, .07);
+}
+
+th {
+  text-align: left;
 }
