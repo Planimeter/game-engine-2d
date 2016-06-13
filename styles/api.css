@@ -7,7 +7,10 @@
   position: relative;
   display: block;
   margin-bottom: .75em;
-  background-color: #fff;
-  border: 1px solid #e5e5e5;
+  border: 1px solid rgba(240, 246, 248, .07);
   border-radius: .25em;
+}
+
+.card-block {
+  padding: 1.25em;
 }
