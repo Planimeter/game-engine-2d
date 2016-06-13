@@ -38,5 +38,6 @@
 
   ready(navItemAll);
 
-  document.body.addEventListener('includecontentloaded', navItemAll);
+  var el = document.querySelector('[data-view]');
+  el.addEventListener('viewcontentloaded', navItemAll);
 })();
