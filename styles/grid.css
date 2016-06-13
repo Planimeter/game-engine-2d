@@ -23,25 +23,25 @@ html {
 
 @media (min-width: 544px) {
   .container {
-    max-width: 576px;
+    width: 576px;
   }
 }
 
 @media (min-width: 768px) {
   .container {
-    max-width: 720px;
+    width: 720px;
   }
 }
 
 @media (min-width: 992px) {
   .container {
-    max-width: 940px;
+    width: 940px;
   }
 }
 
 @media (min-width: 1200px) {
   .container {
-    max-width: 1140px;
+    width: 1140px;
   }
 }
 
