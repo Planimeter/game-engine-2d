@@ -99,3 +99,7 @@
 th {
   text-align: left;
 }
+
+p:empty {
+  display: none;
+}
