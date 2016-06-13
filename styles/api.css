@@ -2,3 +2,12 @@
   list-style-type: none;
   padding-left: 0;
 }
+
+.card {
+  position: relative;
+  display: block;
+  margin-bottom: .75em;
+  background-color: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: .25em;
+}
