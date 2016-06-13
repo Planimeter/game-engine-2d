@@ -95,5 +95,5 @@ function Api() {
 
   request.send();
 
-  document.getElementById('view-source').href = wikiHref + article;
+  document.getElementById('view-source').href = wikiHref + article + '/_edit';
 }
