@@ -2,7 +2,7 @@
   function navItem(element) {
     var routeName = route.pathname;
     var link      = element.querySelector('a');
-    var href      = link.dataset['href-match'] ||
+    var href      = link.dataset.hrefMatch ||
                     link.getAttribute('href')  ||
                     '';
     if ((routeName === href) ||
