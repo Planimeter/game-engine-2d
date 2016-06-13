@@ -15,6 +15,19 @@
   padding: 1.25em;
 }
 
+.alert-info {
+  color: #31708f;
+  background-color: #d9edf7;
+  border-color: #bcdff1;
+}
+
+.alert {
+  padding: 15px;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: .25em;
+}
+
 .pull-right {
   float: right;
 }
