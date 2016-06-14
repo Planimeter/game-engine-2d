@@ -24,6 +24,7 @@ function hudchat:hudchat( parent )
 		self.input:setText( "" )
 	end
 
+	self.initializing = true
 	self:invalidateLayout()
 	self:setUseFullscreenFramebuffer( true )
 	self:dock()
@@ -108,7 +109,8 @@ function hudchat:invalidateLayout()
 	)
 
 	if ( self.output ) then
-		if ( self:isVisible() ) then
+		if ( self:isVisible() or self.initializing ) then
+			self.initializing = false
 			self.output:setPos( point( 36 ), point( 36 ) )
 		else
 			local x, y = self:localToScreen(

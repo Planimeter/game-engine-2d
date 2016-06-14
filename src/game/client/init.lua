@@ -54,12 +54,6 @@ function load( arg )
 	_G.g_DebugOverlay = gui.debugoverlaypanel( _G.g_Viewport )
 end
 
-function onReloadImage( filename )
-end
-
-function onReloadSound( filename )
-end
-
 function onMainMenuActivate()
 end
 
@@ -68,6 +62,12 @@ end
 
 function onPlayerChat( player, message )
 	return true
+end
+
+function onReloadImage( filename )
+end
+
+function onReloadSound( filename )
 end
 
 function quit()
