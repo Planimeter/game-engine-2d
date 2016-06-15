@@ -15,7 +15,7 @@ would otherwise need to write by hand for your projects or game jams.
 Create a Project
 ================
 
-[API Documentation](http://planimeter.github.io/grid-sdk/api/Home)  
+[API Documentation](http://www.planimeter.org/grid-sdk/api/Home)  
 [API Documentation Source](https://github.com/Planimeter/grid-sdk/tree/gh-pages)
 
 Features
