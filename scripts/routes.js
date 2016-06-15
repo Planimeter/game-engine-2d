@@ -12,10 +12,6 @@ route
     templateUrl: 'views/api.html',
     handler: Api
   })
-  .when('/tutorials/:article', {
-    templateUrl: 'views/tutorials.html',
-    handler: Tutorials
-  })
   .when('/404', {
     templateUrl: 'views/404.html'
   })
