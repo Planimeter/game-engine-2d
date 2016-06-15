@@ -49,18 +49,20 @@ gui.register( hudhealth, "hudhealth" )</code></pre>
         <h3>
           Making an entity
         </h3>
-        <pre><code>class "monster" ( npc )
+        <pre><code>class "npc_monster" ( npc )
 
-function monster:monster()
+function npc_monster:npc_monster()
 	npc.npc( self )
 	self:setSprite( "images/monster.png" )
-end</code></pre>
+end
+
+entities.linkToClassname( npc_monster, "npc_monster" )</code></pre>
       </p>
       <p>
         <h3>
           Playing a sound from an entity
         </h3>
-        <pre><code>function monster:onTakeDamage()
+        <pre><code>function npc_monster:onTakeDamage()
 	npc.onTakeDamage( self )
 	self:emitSound( "sounds/cry.wav" )
 end</code></pre>
