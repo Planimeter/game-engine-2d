@@ -9,6 +9,12 @@ aside {
   padding-left: 0;
 }
 
+hr {
+  border-bottom: 0;
+  border-color: rgba(240, 246, 248, .07);
+  border-style: solid;
+}
+
 .card {
   border: 1px solid rgba(240, 246, 248, .07);
   border-radius: .25em;
