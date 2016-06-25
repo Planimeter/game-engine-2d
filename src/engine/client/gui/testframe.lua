@@ -118,7 +118,7 @@ function testframe:createTestPanels()
 	radiobutton:setPos( x, y )
 	radiobutton:setDefault( true )
 
-	local image = gui.image( panel, "Image", nil )
+	local image = gui.imagepanel( panel, "Image", nil )
 	x = margin
 	image:setPos( x, point( 1386 ) - margin - point( 32 ) )
 	image:setSize( point( 32 ), point( 32 ) )

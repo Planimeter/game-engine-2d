@@ -110,9 +110,9 @@ function image:setFilter( min, mag, anisotropy )
 end
 
 local function getHighResolutionVariant( filename )
-	local extention = "." .. string.fileextension( filename )
-	local hrvariant = string.gsub( filename, extention, "" )
-	hrvariant       = hrvariant .. "@2x" .. extention
+	local extension = "." .. string.fileextension( filename )
+	local hrvariant = string.gsub( filename, extension, "" )
+	hrvariant       = hrvariant .. "@2x" .. extension
 
 	if ( filesystem.exists( hrvariant ) ) then
 		return hrvariant

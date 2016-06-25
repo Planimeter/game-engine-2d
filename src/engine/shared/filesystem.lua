@@ -36,6 +36,10 @@ function lines( filename )
 	return filesystem.lines( filename )
 end
 
+function load( name )
+	return filesystem.load( name )
+end
+
 function mount( archive, mountpoint, appendToPath )
 	return filesystem.mount( archive, mountpoint, appendToPath )
 end

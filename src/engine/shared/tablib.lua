@@ -53,6 +53,10 @@ function table.copy( t, recursive )
 end
 
 function table.shallowcopy( t )
+	if ( type( t ) ~= "table" ) then
+		typerror( 1, "table", t )
+	end
+
 	local copy = {}
 	for k, v in pairs( t ) do
 		copy[ k ] = v

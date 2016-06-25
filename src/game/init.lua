@@ -37,6 +37,12 @@ function call( universe, event, ... )
 	return interface[ event ]( ... )
 end
 
+function onAddonMounted( addon )
+end
+
+function onAddonUnmounted( addon )
+end
+
 function onNPCSpawn( npc )
 end
 

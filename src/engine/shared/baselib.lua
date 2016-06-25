@@ -6,6 +6,15 @@
 
 require( "engine.shared.concommand" )
 
+if ( not rawdofile ) then
+	rawdofile = dofile
+
+	function dofile( filename )
+		local f = assert( filesystem.load( filename ) )
+		return f()
+	end
+end
+
 if ( not rawprint and not rawtype ) then
 	rawprint           = print
 	rawtype            = type
@@ -69,14 +78,14 @@ concommand( "lua_dofile", "Loads and runs the given file",
 			return
 		end
 
-		local f, err = loadfile( "src/" .. argString )
-		if ( f ) then
-			local success, err = pcall( f )
+		local success, ret = pcall( filesystem.load, argString )
+		if ( success ) then
+			success, ret = pcall( ret )
 			if ( not success ) then
-				print( err )
+				print( ret )
 			end
 		else
-			print( err )
+			print( ret )
 		end
 	end,
 

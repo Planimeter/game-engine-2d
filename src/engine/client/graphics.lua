@@ -25,7 +25,6 @@ local string     = string
 local table      = table
 local unpack     = unpack
 local window     = love.window
-local _scale     = window.getPixelScale()
 local _G         = _G
 
 local r_window_width      = convar( "r_window_width", 800, 800, nil,
@@ -39,8 +38,8 @@ local r_window_borderless = convar( "r_window_borderless", "0", nil, nil,
 local r_window_vsync      = convar( "r_window_vsync", "1", nil, nil,
                                     "Toggles vertical synchronization" )
 
-function point( n )
-	return _scale * n
+function point( value )
+	return window.toPixels( value )
 end
 
 local point = point
@@ -210,7 +209,7 @@ function getOpacity()
 end
 
 function getPixelScale()
-	return _scale
+	return window.getPixelScale()
 end
 
 function getShader()
@@ -233,7 +232,7 @@ function getViewportWidth()
 end
 
 function newFont( filename, size )
-	size = _scale * size
+	size = getPixelScale() * size
 	return graphics.newFont( filename, size )
 end
 

@@ -74,7 +74,7 @@ local metatable = {
 setmetatable( _M, metatable )
 
 function initialize()
-	rootPanel      = rootpanel()
+	rootPanel = rootpanel()
 	_G.g_RootPanel = rootPanel
 
 	if ( not _G._DEDICATED ) then
@@ -155,9 +155,9 @@ function preDrawWorld()
 	rootPanel:preDrawWorld()
 end
 
-function register( class, name, classname )
+function register( class, name )
 	_M[ name ] = class
-	getfenv( 2 )[ classname or name ] = nil
+	getfenv( 2 )[ name ] = nil
 end
 
 function scale( n )

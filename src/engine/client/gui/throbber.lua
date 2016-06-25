@@ -4,10 +4,10 @@
 --
 --============================================================================--
 
-class "throbber" ( gui.image )
+class "throbber" ( gui.imagepanel )
 
 function throbber:throbber( parent, name, image )
-	gui.image.imagepanel( self, parent, name, image or "images/gui/throbber.png" )
+	gui.imagepanel.imagepanel( self, parent, name, image or "images/gui/throbber.png" )
 	self:setSize( point( 16 ), point( 16 ) )
 	self:setOpacity( 0 )
 end
@@ -15,8 +15,8 @@ end
 local missingImage = false
 
 function throbber:draw()
-	gui.image.maskedImage = self
-	graphics.stencil( gui.image.drawMask )
+	gui.imagepanel.maskedImage = self
+	graphics.stencil( gui.imagepanel.drawMask )
 	graphics.setStencilTest( "greater", 0 )
 		graphics.setColor( self:getColor() )
 		graphics.draw(

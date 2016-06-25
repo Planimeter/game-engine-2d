@@ -255,7 +255,7 @@ function videooptionspanel:updateAspectRatios()
 	local arx, ary = graphics.getViewportAspectRatio()
 	for i, mode in ipairs( supportedAspectRatios ) do
 		local hasModes = #graphics.getFullscreenModes( mode.x, mode.y ) ~= 0
-		-- HACKHACK: Include 683:384 when performing 16:9 lookups
+		-- HACKHACK: Include 683:384 when performing 16:9 lookups.
 		if ( mode.x == 16 and mode.y == 9 and not hasModes ) then
 			hasModes = #graphics.getFullscreenModes( 683, 384 ) ~= 0
 		end
@@ -293,7 +293,7 @@ function videooptionspanel:updateResolutions()
 
 	local r = options.aspectRatio
 	local modes = graphics.getFullscreenModes( r.x, r.y )
-	-- HACKHACK: Include 683:384 when performing 16:9 lookups
+	-- HACKHACK: Include 683:384 when performing 16:9 lookups.
 	if ( r.x == 16 and r.y == 9 ) then
 		table.append( modes, graphics.getFullscreenModes( 683, 384 ) )
 		table.sort( modes, function( a, b )
