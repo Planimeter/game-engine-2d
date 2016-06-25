@@ -15,16 +15,6 @@ hr {
   border-style: solid;
 }
 
-.card {
-  border: 1px solid rgba(240, 246, 248, .07);
-  border-radius: .25em;
-  margin-bottom: 1em;
-}
-
-.card-block {
-  padding: 1em;
-}
-
 .alert-info {
   background-color: #d9edf7;
   border-color: #bcdff1;
@@ -73,15 +63,6 @@ hr {
 .label-shared {
   border-color: rgba(132, 168, 123, 1);
   color: rgba(132, 168, 123, 1);
-}
-
-.card-header:first-child {
-  border-radius: .25em .25em 0 0;
-}
-
-.card-header {
-  border-bottom: 1px solid rgba(240, 246, 248, .07);
-  padding: 1em;
 }
 
 .table {
