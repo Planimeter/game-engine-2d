@@ -6,7 +6,7 @@ route
     handler: Main
   })
   .when('/tutorials', {
-    redirectTo: '/tutorials/Home'
+    redirectTo: '/tutorials/Getting_Started'
   })
   .when('/tutorials/:article', {
     templateUrl: 'views/tutorials.html',
