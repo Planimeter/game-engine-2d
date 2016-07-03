@@ -16,8 +16,7 @@ Create a Project
 ================
 
 [Getting Started](http://www.planimeter.org/grid-sdk/tutorials/Getting_Started)  
-[API Documentation](http://www.planimeter.org/grid-sdk/api/Home)  
-[API Documentation Source](https://github.com/Planimeter/grid-sdk/tree/gh-pages)
+[API Documentation](http://www.planimeter.org/grid-sdk/api/Home)
 
 Features
 ========
