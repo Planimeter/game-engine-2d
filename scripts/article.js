@@ -46,9 +46,10 @@ function Article() {
    }
 
   renderer.link = function(href, title, text) {
+    var parent = route.pathname.slice(1).match(/\w+\//);
     if (!startsWith(href, 'http://') &&
         !startsWith(href, 'https://')) {
-      href = href.lastIndexOf('api/', 0) === 0 ? href : 'api/' + href;
+      href = startsWith(href, parent) ? href : parent + href;
     }
 
     var out = '<a href="' + href + '"';
