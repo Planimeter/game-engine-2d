@@ -1,6 +1,6 @@
 'use strict';
 
-function Api() {
+function Article() {
   var renderer = new marked.Renderer();
 
   renderer.list = function (body, ordered) {
