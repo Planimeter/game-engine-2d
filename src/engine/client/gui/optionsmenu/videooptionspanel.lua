@@ -274,7 +274,6 @@ function videooptionspanel:updateAspectRatios()
 			end
 		end
 	end
-
 end
 
 function videooptionspanel:updateResolutions()

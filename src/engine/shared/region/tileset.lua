@@ -8,8 +8,11 @@ class( "regiontileset" )
 
 function regiontileset:regiontileset( tilesetData )
 	self.data = tilesetData
-
 	self:parse()
+end
+
+function regiontileset:getFilename()
+	return self.filename
 end
 
 function regiontileset:getFirstGid()
@@ -44,6 +47,14 @@ function regiontileset:getMargin()
 	return self.margin
 end
 
+function regiontileset:getTileCount()
+	return self.tilecount
+end
+
+function regiontileset:getTileOffset()
+	return self.tileoffset
+end
+
 function regiontileset:getTiles()
 	return self.tiles
 end
@@ -64,6 +75,7 @@ function regiontileset:parse()
 	local data = self.data
 	self:setName( data[ "name" ] )
 	self:setFirstGid( data[ "firstgid" ] )
+	self:setFilename( data[ "filename" ] )
 	self:setTileWidth( data[ "tilewidth" ] )
 	self:setTileHeight( data[ "tileheight" ] )
 	self:setSpacing( data[ "spacing" ] )
@@ -73,10 +85,19 @@ function regiontileset:parse()
 	end
 	self:setImageWidth( data[ "imagewidth" ] )
 	self:setImageHeight( data[ "imageheight" ] )
+
+	require( "common.vector" )
+	self:setTileOffset( vector.copy( data[ "tileoffset" ] ) )
+
 	self:setProperties( table.copy( data[ "properties" ] ) )
+	self:setTileCount( data[ "tilecount" ] )
 	self:setTiles( table.copy( data[ "tiles" ] ) )
 
 	self.data = nil
+end
+
+function regiontileset:setFilename( filename )
+	self.filename = filename
 end
 
 function regiontileset:setFirstGid( firstgid )
@@ -109,6 +130,14 @@ end
 
 function regiontileset:setMargin( margin )
 	self.margin = margin
+end
+
+function regiontileset:setTileCount( tilecount )
+	self.tilecount = tilecount
+end
+
+function regiontileset:setTileOffset( tileoffset )
+	self.tileoffset = tileoffset
 end
 
 function regiontileset:setTiles( tiles )

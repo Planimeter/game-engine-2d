@@ -6,6 +6,13 @@
 
 require( "math" )
 
+function math.aabbsintersect( minA, maxA, minB, maxB )
+	return minA.x <= maxB.x and
+	       maxA.x >= minB.x and
+	       maxA.y <= minB.y and
+	       minA.y >= maxB.y
+end
+
 function math.clamp( n, l, u )
 	return n < l and ( l ) or
 	                 ( n > u and ( u ) or
@@ -22,18 +29,12 @@ function math.gcd( a, b )
 	return a
 end
 
-function math.remap( n, inMin, inMax, outMin, outMax )
-	return ( n / ( inMax - inMin ) ) * ( outMax - outMin ) + outMin
-end
-
 function math.lerp( f, t, dt )
 	return ( f + ( t - f ) * dt )
 end
 
-local floor = math.floor
-
-function math.round( n )
-	return floor( n + 0.5 )
+function math.nearestmultiple( n, multiple )
+	return math.round( n / multiple ) * multiple
 end
 
 local pow  = math.pow
@@ -55,9 +56,12 @@ function math.pointinrectangle( px, py, x, y, width, height )
 	       py < y + height
 end
 
-function math.aabbsintersect( minA, maxA, minB, maxB )
-	return minA.x <= maxB.x and
-	       maxA.x >= minB.x and
-	       maxA.y <= minB.y and
-	       minA.y >= maxB.y
+function math.remap( n, inMin, inMax, outMin, outMax )
+	return ( n / ( inMax - inMin ) ) * ( outMax - outMin ) + outMin
+end
+
+local floor = math.floor
+
+function math.round( n )
+	return floor( n + 0.5 )
 end

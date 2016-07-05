@@ -113,6 +113,13 @@ function dropdownlist:getListItemGroup()
 	return self.listItemGroup
 end
 
+function dropdownlist:getValue()
+	local listItemGroup = self:getListItemGroup()
+	if ( listItemGroup ) then
+		return listItemGroup:getValue()
+	end
+end
+
 function dropdownlist:invalidate()
 	local listItemGroup = self:getListItemGroup()
 	if ( listItemGroup ) then
