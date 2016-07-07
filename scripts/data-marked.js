@@ -2,7 +2,7 @@
 
 document.body.addEventListener('includecontentloaded', function(event) {
   var el = event.target;
-  if (el.dataset.marked) {
-    el.innerHTML = marked(el.dataset.marked || el.innerHTML);
+  if (el.dataset.marked === '') {
+    el.innerHTML = marked(el.innerHTML);
   };
 });
