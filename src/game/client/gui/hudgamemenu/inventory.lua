@@ -4,7 +4,6 @@
 --
 --============================================================================--
 
-require( "game.client.gui.hudgamemenu.borderlessdropdownlist" )
 require( "game.client.gui.hudgamemenu.itemgrid" )
 
 class "hudgamemenuinventory" ( gui.panel )
