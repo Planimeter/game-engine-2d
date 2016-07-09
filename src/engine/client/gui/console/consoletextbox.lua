@@ -20,7 +20,6 @@ function consoletextbox:draw()
 	end
 
 	self:drawBackground()
-	-- TODO: Implement terminal string styling.
 	self:drawText()
 	self:drawCursor()
 

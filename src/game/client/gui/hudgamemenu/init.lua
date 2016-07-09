@@ -7,7 +7,7 @@
 class "hudgamemenu" ( gui.hudframe )
 
 function hudgamemenu:hudgamemenu( parent )
-	local name = "Game Menu"
+	local name = "HUD Game Menu"
 	gui.hudframe.hudframe( self, parent, name, name )
 	self.width  = point( 384 ) -- - point( 31 )
 	self.height = point( 480 )
@@ -23,25 +23,10 @@ function hudgamemenu:hudgamemenu( parent )
 	self.inventory = gui.hudgamemenuinventory( self )
 	self.inventory:moveToBack()
 
-	require( "game.client.gui.hudgamemenu.prayer" )
-	self.prayer = gui.hudgamemenuprayer( self )
-	self.prayer:moveToBack()
-	self.prayer:setVisible( false )
-
-	require( "game.client.gui.hudgamemenu.spells" )
-	self.spells = gui.hudgamemenuspells( self )
-	self.spells:moveToBack()
-	self.spells:setVisible( false )
-
 	require( "game.client.gui.hudgamemenu.stats" )
 	self.stats = gui.hudgamemenustats( self )
 	self.stats:moveToBack()
 	self.stats:setVisible( false )
-
-	require( "game.client.gui.hudgamemenu.quests" )
-	self.quests = gui.hudgamemenuquests( self )
-	self.quests:moveToBack()
-	self.quests:setVisible( false )
 
 	self:invalidateLayout()
 end

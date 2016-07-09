@@ -11,7 +11,6 @@ class "vaplayer" ( "player" )
 function vaplayer:vaplayer()
 	player.player( self )
 
-	-- TODO: Make this affected by skill level.
 	self:networkNumber( "health", 100 )
 
 	self.stats   = {

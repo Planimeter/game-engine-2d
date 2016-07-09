@@ -7,7 +7,7 @@
 class "hudchat" ( gui.hudframe )
 
 function hudchat:hudchat( parent )
-	local name = "Chat"
+	local name = "HUD Chat"
 	gui.hudframe.hudframe( self, parent, name, name )
 	self.width  = gui.scale( 720 )
 	self.height = gui.scale( 404 )

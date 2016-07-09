@@ -611,8 +611,6 @@ function textbox:mousepressed( x, y, button, istouch )
 			self:onClick( posX, posY )
 		elseif ( button == 2 ) then
 			self.mousedown = true
-			-- TODO: Implement gui.contextmenu!!
-			-- self:openContextMenu( posX, posY )
 		end
 	else
 		if ( self.focus and not self:isChildMousedOver() ) then
