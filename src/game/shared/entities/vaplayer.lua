@@ -34,35 +34,6 @@ function vaplayer:addExperience( stat, xp )
 	game.call( "shared", "onPlayerGainedExperience", self, stat, xp )
 end
 
-function vaplayer:cast( spellName, target, position )
-	require( "game.shared.spells" )
-	local spell = spell.getSpell( spellName )
-	spell:setCaster( self )
-	spell:setTarget( target )
-	spell:setPosition( position )
-	spell:cast()
-
-	if ( _CLIENT and not _SERVER ) then
-		local payload = payload( "playerCast" )
-		payload:set( "spell", spell )
-		payload:set( "target", target )
-		payload:set( "position", position )
-		networkclient.sendToServer( payload )
-	end
-end
-
-if ( _SERVER ) then
-	local function onPlayerCast( payload )
-		local player   = payload:getPlayer()
-		local spell    = payload:get( "spell" )
-		local target   = payload:get( "target" )
-		local position = payload:get( "position" )
-		player:cast( spell, target, position )
-	end
-
-	payload.setHandler( onPlayerCast, "playerCast" )
-end
-
 function vaplayer:getExperience( stat )
 	return self.stats[ stat ] or -1
 end

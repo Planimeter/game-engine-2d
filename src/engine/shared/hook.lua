@@ -42,7 +42,7 @@ end
 
 function set( universe, func, event, name )
 	universe = universe or "shared"
-	hooks[ universe ][ event ]         = hooks[ universe ][ event ] or {}
+	hooks[ universe ][ event ] = hooks[ universe ][ event ] or {}
 	hooks[ universe ][ event ][ name ] = func
 end
 

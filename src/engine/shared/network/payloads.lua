@@ -19,12 +19,6 @@ structs[ "serverInfo" ] = {
     }
 }
 
--- if ( _G._VADVENTURE ) then
-    table.insert( structs[ "serverInfo" ].keys,
-        { name = "save",           type = "string" }
-    )
--- end
-
 structs[ "download" ] = {
     keys = {
         { name = "filename",       type = "string" }
@@ -99,22 +93,6 @@ structs[ "playerMove" ] = {
             { name = "item",       type = "entity" },
         }
     }
-
-    structs[ "playerCast" ] = {
-        keys = {
-            { name = "spell",      type = "string" },
-            { name = "target",     type = "entity" },
-            { name = "position",   type = "vector" }
-        }
-    }
-
-    structs[ "dialogue" ] = {
-        keys = {
-            { name = "entity",     type = "entity" },
-            { name = "type",       type = "string" },
-            { name = "message",    type = "string" }
-        }
-    }
 -- end
 
 structs[ "sayText" ] = {
@@ -122,12 +100,3 @@ structs[ "sayText" ] = {
         { name = "text",           type = "string" }
     }
 }
-
--- if ( _G._VADVENTURE ) then
-    structs[ "entityOption" ] = {
-        keys = {
-            { name = "entity",     type = "entity" },
-            { name = "option",     type = "number" }
-        }
-    }
--- end
