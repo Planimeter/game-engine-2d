@@ -44,7 +44,7 @@ end
 
 function vaplayer:getLevel( stat )
 	if ( stat ) then
-		return self.stats[ stat ] or -1 / 1
+		return -1 / 1
 	end
 
 	return -1

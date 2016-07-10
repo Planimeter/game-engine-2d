@@ -17,6 +17,28 @@ function hudgamemenustat:hudgamemenustat( parent, name, stat )
 	local progressbar = gui.progressbar( self, "Stat Progress" )
 	progressbar:setY( point( 23 ) )
 	self.progressbar  = progressbar
+
+	self:addStatHook()
+end
+
+function hudgamemenustat:addStatHook()
+	local function updateStat( player, stat, xp )
+		if ( player ~= localplayer ) then
+			return
+		end
+
+		if ( stat == self:getStat() ) then
+			local xp = localplayer:getExperience( stat )
+			self.progressbar:setMin( 0 )
+			self.progressbar:setMax( 83 )
+			self.progressbar:setValue( xp )
+			self:invalidate()
+		end
+	end
+
+	local stat = string.capitalize( self:getStat() )
+	local name = "update" .. stat .. "Stat"
+	hook.set( "shared", updateStat, "onPlayerGainedExperience", name )
 end
 
 function hudgamemenustat:draw()
@@ -29,23 +51,36 @@ function hudgamemenustat:draw()
 
 	property = "colors.gold"
 	font     = self:getScheme( "fontBold" )
-	local x  = self:getWidth() - font:getWidth( "Level 1" )
+	local level = "Level " .. localplayer:getLevel( stat )
+	local x  = self:getWidth() - font:getWidth( level )
 	graphics.setColor( self:getScheme( property ) )
 	graphics.setFont( font )
-	graphics.print( "Level 1", x, 0 )
+	graphics.print( level, x, 0 )
 
 	property = "label.textColor"
 	font     = self:getScheme( "fontSmall" )
-	x        = self:getWidth() - font:getWidth( "0 / 83 XP" )
+	local xp = localplayer:getExperience( stat ) .. " / 83 XP"
+	x        = self:getWidth() - font:getWidth( xp )
 	graphics.setColor( self:getScheme( property ) )
 	graphics.setFont( font )
-	graphics.print( "0 / 83 XP", x, point( 30 ) )
+	graphics.print( xp, x, point( 30 ) )
 
 	gui.panel.draw( self )
 end
 
 function hudgamemenustat:getStat()
 	return self.stat
+end
+
+function hudgamemenustat:onRemove()
+	self:removeStatHook()
+	gui.panel.onRemove( self )
+end
+
+function hudgamemenustat:removeStatHook()
+	local stat = string.capitalize( self:getStat() )
+	local name = "update" .. stat .. "Stat"
+	hook.remove( "shared", "onPlayerGainedExperience", name )
 end
 
 function hudgamemenustat:setStat( stat )
