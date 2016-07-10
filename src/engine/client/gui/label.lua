@@ -23,7 +23,8 @@ function label:draw()
 	graphics.setFont( font )
 
 	local align     = self.textAlign
-	local textWidth = font:getWidth( self:getText() )
+	local text      = self:getText()
+	local textWidth = font:getWidth( text )
 	local x         = 0
 
 	if ( align == "left" ) then
@@ -34,7 +35,7 @@ function label:draw()
 		x = self:getWidth()     - textWidth + font:getWidth( " " )
 	end
 
-	graphics.print( self:getText(), x, 0 )
+	graphics.print( text, x, 0 )
 
 	gui.panel.draw( self )
 end

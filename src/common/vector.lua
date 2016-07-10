@@ -18,7 +18,7 @@ end
 local sqrt = math.sqrt
 
 function vector:length()
-	return sqrt( self.x ^ 2 + self.y ^ 2 )
+	return sqrt( self:lengthSqr() )
 end
 
 function vector:lengthSqr()
