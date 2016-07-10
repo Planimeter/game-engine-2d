@@ -29,10 +29,8 @@ end
 function vaplayer:vaplayer()
 	player.player( self )
 
-	self:networkNumber( "health", 100 )
-
 	self.stats   = {
-		health   = 0,
+		health   = 1154,
 		prayer   = 0,
 		attack   = 0,
 		defense  = 0,
@@ -43,6 +41,9 @@ function vaplayer:vaplayer()
 		mining   = 0,
 		smithing = 0
 	}
+
+	local xp = self:getExperience( "health" )
+	self:networkNumber( "health", vaplayer.experienceToLevel( xp ) )
 
 	self.inventory = {}
 end
