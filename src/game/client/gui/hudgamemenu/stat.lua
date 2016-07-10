@@ -28,9 +28,10 @@ function hudgamemenustat:addStatHook()
 		end
 
 		if ( stat == self:getStat() ) then
-			local xp = localplayer:getExperience( stat )
-			self.progressbar:setMin( 0 )
-			self.progressbar:setMax( 83 )
+			local level = localplayer:getLevel( stat )
+			local xp    = localplayer:getExperience( stat )
+			self.progressbar:setMin( vaplayer.levelToExperience( level ) )
+			self.progressbar:setMax( vaplayer.levelToExperience( level + 1 ) )
 			self.progressbar:setValue( xp )
 			self:invalidate()
 		end
@@ -49,21 +50,24 @@ function hudgamemenustat:draw()
 	graphics.setFont( font )
 	graphics.print( string.capitalize( stat ), 0, 0 )
 
-	property = "colors.gold"
-	font     = self:getScheme( "fontBold" )
-	local level = "Level " .. localplayer:getLevel( stat )
-	local x  = self:getWidth() - font:getWidth( level )
+	property    = "colors.gold"
+	font        = self:getScheme( "fontBold" )
+	local level = localplayer:getLevel( stat )
+	local label = "Level " .. level
+	local x     = self:getWidth() - font:getWidth( label )
 	graphics.setColor( self:getScheme( property ) )
 	graphics.setFont( font )
-	graphics.print( level, x, 0 )
+	graphics.print( label, x, 0 )
 
-	property = "label.textColor"
-	font     = self:getScheme( "fontSmall" )
-	local xp = localplayer:getExperience( stat ) .. " / 83 XP"
-	x        = self:getWidth() - font:getWidth( xp )
+	property        = "label.textColor"
+	font            = self:getScheme( "fontSmall" )
+	local nextLvlXp = vaplayer.levelToExperience( level + 1 )
+	local xp        = localplayer:getExperience( stat )
+	label           = xp  .. " / " .. nextLvlXp .. " XP"
+	x               = self:getWidth() - font:getWidth( label )
 	graphics.setColor( self:getScheme( property ) )
 	graphics.setFont( font )
-	graphics.print( xp, x, point( 30 ) )
+	graphics.print( label, x, point( 30 ) )
 
 	gui.panel.draw( self )
 end
