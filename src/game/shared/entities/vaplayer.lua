@@ -17,7 +17,13 @@ function vaplayer.levelToExperience( level )
 end
 
 function vaplayer.experienceToLevel( xp )
-	return -1
+	local level   = 0
+	local levelXp = 0
+	repeat
+		level   = level + 1
+		levelXp = vaplayer.levelToExperience( level )
+	until ( levelXp > xp )
+	return level - 1
 end
 
 function vaplayer:vaplayer()
@@ -56,7 +62,7 @@ end
 
 function vaplayer:getLevel( stat )
 	if ( stat ) then
-		return self.experienceToLevel( self:getExperience( stat ) )
+		return vaplayer.experienceToLevel( self:getExperience( stat ) )
 	end
 
 	return -1
@@ -129,4 +135,7 @@ if ( _SERVER ) then
 	payload.setHandler( onPlayerPickup, "playerPickup" )
 end
 
+-- Preserve the vaplayer interface
+local class = vaplayer
 entities.linkToClassname( vaplayer, "vaplayer" )
+_G.vaplayer = class
