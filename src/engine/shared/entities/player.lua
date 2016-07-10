@@ -261,6 +261,16 @@ function player:onMoveTo( position )
 	updateMovement( self, position )
 end
 
+function player:onNetworkVarChanged( networkvar )
+	if ( _CLIENT and networkvar:getName() == "health" ) then
+		if ( g_HudHealth ) then
+			g_HudHealth:invalidateLayout()
+		end
+	else
+		character.onNetworkVarChanged( self, networkvar )
+	end
+end
+
 concommand( "say", "Display player message",
 	function( self, player, command, argString, argTable )
 		if( _SERVER ) then

@@ -31,7 +31,9 @@ function createDefaultPanels()
 	local gamemenu = gui.hudgamemenu( _G.g_Viewport )
 	_G.g_GameMenu = gamemenu
 
+	-- Initialize health
 	local hudhealth = gui.hudhealth( _G.g_Viewport )
+	_G.g_HudHealth = hudhealth
 end
 
 function draw()

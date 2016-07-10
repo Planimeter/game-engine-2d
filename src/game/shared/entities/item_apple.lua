@@ -35,6 +35,19 @@ if ( _CLIENT ) then
 			}
 		}
 	end
+
+	function item_apple:getInventoryOptions()
+		return {
+			{
+				name  = "Eat",
+				value = function() self:eat() end
+			},
+			{
+				name  = "Examine",
+				value = self.examine
+			}
+		}
+	end
 end
 
 function item_apple:pickup()
@@ -43,6 +56,9 @@ end
 
 function item_apple:examine()
 	chat.addText( "Looks like an apple." )
+end
+
+function item_apple:eat()
 end
 
 function item_apple:spawn()
