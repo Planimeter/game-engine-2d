@@ -68,6 +68,7 @@ hr {
 .table {
   border-collapse: collapse;
   max-width: 100%;
+  table-layout: fixed;
   width: 100%;
 }
 
