@@ -37,12 +37,11 @@ function math.nearestmultiple( n, multiple )
 	return math.round( n / multiple ) * multiple
 end
 
-local pow  = math.pow
 local ceil = math.ceil
 local log  = math.log
 
 function math.nearestpow2( n )
-	return pow( 2, ceil( log( n ) / log( 2 ) ) )
+	return 2 ^ ceil( log( n ) / log( 2 ) )
 end
 
 math.noise = love.math.noise

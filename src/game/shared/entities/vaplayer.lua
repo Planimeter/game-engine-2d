@@ -8,6 +8,18 @@ require( "engine.shared.entities.player" )
 
 class "vaplayer" ( "player" )
 
+function vaplayer.levelToExperience( level )
+	local xp = 0
+	for i = 1, level - 1 do
+		xp = xp + math.floor( i + 300 * ( 2 ^ ( i / 7 ) ) )
+	end
+	return math.floor( xp / 4 )
+end
+
+function vaplayer.experienceToLevel( xp )
+	return -1
+end
+
 function vaplayer:vaplayer()
 	player.player( self )
 
@@ -35,7 +47,7 @@ function vaplayer:addExperience( stat, xp )
 end
 
 function vaplayer:getExperience( stat )
-	return self.stats[ stat ] or -1
+	return self.stats[ stat ]
 end
 
 function vaplayer:getInventory()
@@ -44,7 +56,7 @@ end
 
 function vaplayer:getLevel( stat )
 	if ( stat ) then
-		return -1 / 1
+		return self.experienceToLevel( self:getExperience( stat ) )
 	end
 
 	return -1
