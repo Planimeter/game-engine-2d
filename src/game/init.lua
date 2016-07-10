@@ -53,6 +53,9 @@ function onPlayerDisconnect( player )
 end
 
 if ( _VADVENTURE ) then
+	function onPlayerGainedExperience( player, stat, xp )
+	end
+
 	function onPlayerGotItem( player, item, count )
 	end
 end

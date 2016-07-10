@@ -49,14 +49,15 @@ function debugoverlaypanel:rectangle( x, y, width, height, c, duration )
 end
 
 function debugoverlaypanel:update( dt )
-	for _, overlay in ipairs( self.overlays ) do
+	local overlays = self.overlays
+	for _, overlay in ipairs( overlays ) do
 		overlay.duration = overlay.duration - dt
 		self:invalidate()
 	end
 
-	for i = #self.overlays, 1, -1 do
-		if ( self.overlays[ i ].duration <= 0 ) then
-			table.remove( self.overlays, i )
+	for i = #overlays, 1, -1 do
+		if ( overlays[ i ].duration <= 0 ) then
+			table.remove( overlays, i )
 			self:invalidate()
 		end
 	end
