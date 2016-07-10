@@ -18,17 +18,20 @@ end
 
 function label:draw()
 	graphics.setColor( self:getScheme( "label.textColor" ) )
-	graphics.setFont( self:getFont() )
 
-	local align = self.textAlign
-	local x     = 0
+	local font = self:getFont()
+	graphics.setFont( font )
+
+	local align     = self.textAlign
+	local textWidth = font:getWidth( self:getText() )
+	local x         = 0
 
 	if ( align == "left" ) then
 		x = 0
 	elseif ( align == "center" ) then
-		x = self:getWidth() / 2 - font:getWidth( self:getText() ) / 2
+		x = self:getWidth() / 2 - textWidth / 2
 	elseif ( align == "right" ) then
-		x = self:getWidth()     - font:getWidth( self:getText() ) + font:getWidth( " " )
+		x = self:getWidth()     - textWidth + font:getWidth( " " )
 	end
 
 	graphics.print( self:getText(), x, 0 )
