@@ -131,15 +131,15 @@ end
 local floor = math.floor
 
 function sprite:updateFrame()
-	local quad         = self:getQuad()
-	local frame        = self.frame == 1 and 0 or self.frame
-	local spriteWidth  = self:getWidth()
-	local spriteHeight = self:getHeight()
-	local image        = self:getSpriteSheet()
-	local imageWidth   = image:getWidth()
-	local x            =        frame * spriteWidth % imageWidth
-	local y            = floor( frame * spriteWidth / imageWidth ) * spriteHeight
-	quad:setViewport( x, y, spriteWidth, spriteHeight )
+	local quad       = self:getQuad()
+	local frame      = self.frame == 1 and 0 or self.frame
+	local width      = self:getWidth()
+	local height     = self:getHeight()
+	local image      = self:getSpriteSheet()
+	local imageWidth = image:getWidth()
+	local x          =        frame * width % imageWidth
+	local y          = floor( frame * width / imageWidth ) * height
+	quad:setViewport( x, y, width, height )
 
 	local events = self:getEvents()
 	local event  = events[ frame ]
