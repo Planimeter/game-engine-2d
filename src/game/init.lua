@@ -66,6 +66,11 @@ function onPlayerInitialSpawn( player )
 	end
 end
 
+if ( _VADVENTURE ) then
+	function onPlayerLeveledUp( player, stat, level )
+	end
+end
+
 function onPlayerSpawn( player )
 end
 

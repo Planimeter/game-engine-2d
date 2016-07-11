@@ -49,8 +49,14 @@ function vaplayer:vaplayer()
 end
 
 function vaplayer:addExperience( stat, xp )
-	self.stats[ stat ] = self.stats[ stat ] + xp
+	local level = self:getLevel( stat )
+	self.stats[ stat ] = self:getExperience( stat ) + xp
 	game.call( "shared", "onPlayerGainedExperience", self, stat, xp )
+
+	local newLevel = self:getLevel( stat )
+	if ( level ~= newLevel ) then
+		game.call( "shared", "onPlayerLeveledUp", self, stat, newLevel )
+	end
 end
 
 function vaplayer:getExperience( stat )
