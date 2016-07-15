@@ -50,9 +50,10 @@ function hudgamemenunavigation:invalidateLayout()
 	local listItems = self:getItems()
 	if ( listItems ) then
 		local x = 0
+		local margin = point( 18 )
 		for _, listItem in ipairs( listItems ) do
 			listItem:setX( x )
-			x = x + listItem:getWidth() + point( 18 )
+			x = x + listItem:getWidth() + margin
 		end
 	end
 	gui.panel.invalidateLayout( self )
@@ -61,12 +62,12 @@ end
 function hudgamemenunavigation:onValueChanged( oldValue, newValue )
 	local parent = self:getParent()
 	for _, name in ipairs( self.tabs ) do
-		name = string.lower( name )
+		name = string.utf8lower( name )
 		parent[ name ]:setVisible( false )
 	end
 
 	if ( newValue ) then
-		local panel = parent[ string.lower( newValue ) ]
+		local panel = parent[ string.utf8lower( newValue ) ]
 		panel:setVisible( true )
 		panel:invalidateLayout()
 	end

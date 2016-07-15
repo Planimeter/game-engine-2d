@@ -59,7 +59,8 @@ function testframe:createTestPanels()
 
 	panelName = "Password Text Box"
 	local passwordtextbox = gui.passwordtextbox( panel, getDebugName() )
-	y = y + textboxHeight + point( 9 )
+	local marginBottom = point( 9 )
+	y = y + textboxHeight + marginBottom
 	passwordtextbox:setPos( x, y )
 	passwordtextbox.onChange = function( passwordtextbox )
 		textbox:setText( passwordtextbox:getPassword() )
@@ -69,19 +70,19 @@ function testframe:createTestPanels()
 
 	panelName = "Button"
 	local button = gui.button( panel, getDebugName() )
-	y = y + passwordtextboxHeight + point( 9 )
+	y = y + passwordtextboxHeight + marginBottom
 	button:setPos( x, y )
 	local buttonHeight = button:getHeight()
 
 	panelName = "Label"
 	local label = gui.label( panel, getDebugName() )
-	y = y + button:getHeight() + point( 9 )
+	y = y + button:getHeight() + marginBottom
 	label:setPos( x, y )
 	local labelHeight = label:getHeight()
 
 	panelName = "Drop-Down List"
 	local dropdownlist = gui.dropdownlist( panel, getDebugName() )
-	y = y + labelHeight + point( 9 )
+	y = y + labelHeight + marginBottom
 	dropdownlist:setPos( x, y )
 	local dropdownlistHeight = dropdownlist:getHeight()
 
@@ -97,7 +98,7 @@ function testframe:createTestPanels()
 
 	panelName = "Slider"
 	local slider = gui.slider( panel, getDebugName() )
-	y = y + dropdownlistHeight + point( 18 )
+	y = y + dropdownlistHeight + 2 * marginBottom
 	slider:setPos( x, y )
 
 	panelName = "Checkbox"
@@ -114,14 +115,15 @@ function testframe:createTestPanels()
 	local radiobutton = gui.radiobutton( panel, getDebugName() .. " 1" )
 	radiobuttongroup:addItem( radiobutton )
 	local radiobuttonHeight = radiobutton:getHeight()
-	y = y + checkboxHeight + point( 9 ) + passwordtextboxHeight - radiobuttonHeight
+	y = y + checkboxHeight + marginBottom + passwordtextboxHeight - radiobuttonHeight
 	radiobutton:setPos( x, y )
 	radiobutton:setDefault( true )
 
 	local image = gui.imagepanel( panel, "Image", nil )
 	x = margin
-	image:setPos( x, point( 1386 ) - margin - point( 32 ) )
-	image:setSize( point( 32 ), point( 32 ) )
+	local imageSize = point( 32 )
+	image:setPos( x, point( 1386 ) - margin - imageSize )
+	image:setSize( imageSize, imageSize )
 
 	self:addTab( "Tab", tab, true )
 end

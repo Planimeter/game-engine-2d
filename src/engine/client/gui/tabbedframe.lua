@@ -22,7 +22,7 @@ function tabbedframe:tabbedframe( parent, name, title )
 	self.closeButton:setSize( width, height )
 
 	local font             = self:getScheme( "titleFont" )
-	local titleWidth       = font:getWidth( utf8upper( self.title ) )
+	local titleWidth       = font:getWidth( utf8upper( self:getTitle() ) )
 	local closeButtonWidth = self.closeButton:getWidth()
 	self.minWidth  = 2 * padding + titleWidth + closeButtonWidth
 	self.minHeight = point( 62 )
@@ -175,17 +175,18 @@ function tabbedframe:mousepressed( x, y, button, istouch )
 		self.grabbedY  = localY
 
 		if ( self:isResizable() ) then
-			local width  = self:getWidth()
-			local height = self:getHeight()
+			local borderWidth = point( 8 )
+			local width       = self:getWidth()
+			local height      = self:getHeight()
 
 			-- Top Resize Bounds
 			mouseIntersects = pointinrectangle(
 				localX,
 				localY,
-				point( 8 ),
+				borderWidth,
 				0,
-				width - point( 16 ),
-				point( 8 )
+				width - 2 * borderWidth,
+				borderWidth
 			)
 			if ( mouseIntersects ) then
 				self.resizing = "top"
@@ -196,10 +197,10 @@ function tabbedframe:mousepressed( x, y, button, istouch )
 			mouseIntersects = pointinrectangle(
 				localX,
 				localY,
-				width - point( 8 ),
+				width - borderWidth,
 				0,
-				point( 8 ),
-				point( 8 )
+				borderWidth,
+				borderWidth
 			)
 			if ( mouseIntersects ) then
 				self.resizing = "topright"
@@ -210,10 +211,10 @@ function tabbedframe:mousepressed( x, y, button, istouch )
 			mouseIntersects = pointinrectangle(
 				localX,
 				localY,
-				width  - point( 8 ),
-				point( 8 ),
-				point( 8 ),
-				height - point( 16 )
+				width - borderWidth,
+				borderWidth,
+				borderWidth,
+				height - 2 * borderWidth
 			)
 			if ( mouseIntersects ) then
 				self.resizing = "right"
@@ -224,10 +225,10 @@ function tabbedframe:mousepressed( x, y, button, istouch )
 			mouseIntersects = pointinrectangle(
 				localX,
 				localY,
-				width  - point( 8 ),
-				height - point( 8 ),
-				point( 8 ),
-				point( 8 )
+				width - borderWidth,
+				height - borderWidth,
+				borderWidth,
+				borderWidth
 			)
 			if ( mouseIntersects ) then
 				self.resizing = "bottomright"
@@ -238,10 +239,10 @@ function tabbedframe:mousepressed( x, y, button, istouch )
 			mouseIntersects = pointinrectangle(
 				localX,
 				localY,
-				point( 8 ),
-				height - point( 8 ),
-				width  - point( 16 ),
-				point( 8 )
+				borderWidth,
+				height - borderWidth,
+				width - 2 * borderWidth,
+				borderWidth
 			)
 			if ( mouseIntersects ) then
 				self.resizing = "bottom"
@@ -253,9 +254,9 @@ function tabbedframe:mousepressed( x, y, button, istouch )
 				localX,
 				localY,
 				0,
-				height - point( 8 ),
-				point( 8 ),
-				point( 8 )
+				height - borderWidth,
+				borderWidth,
+				borderWidth
 			)
 			if ( mouseIntersects ) then
 				self.resizing = "bottomleft"
@@ -267,9 +268,9 @@ function tabbedframe:mousepressed( x, y, button, istouch )
 				localX,
 				localY,
 				0,
-				point( 8 ),
-				point( 8 ),
-				height - point( 16 )
+				borderWidth,
+				borderWidth,
+				height - 2 * borderWidth
 			)
 			if ( mouseIntersects ) then
 				self.resizing = "left"
@@ -282,8 +283,8 @@ function tabbedframe:mousepressed( x, y, button, istouch )
 				localY,
 				0,
 				0,
-				point( 8 ),
-				point( 8 )
+				borderWidth,
+				borderWidth
 			)
 			if ( mouseIntersects ) then
 				self.resizing = "topleft"
@@ -292,13 +293,14 @@ function tabbedframe:mousepressed( x, y, button, istouch )
 		end
 
 		-- Title Bar Resize Bounds
+		local titleBarHeight = point( 62 )
 		mouseIntersects = pointinrectangle(
 			localX,
 			localY,
 			0,
 			0,
 			self:getWidth(),
-			point( 62 )
+			titleBarHeight
 		)
 		if ( mouseIntersects ) then
 			self.moving = true

@@ -43,8 +43,19 @@ end
 
 function consoletextbox:invalidateLayout()
 	local parent = self:getParent()
-	self:setWidth( parent:getWidth() - 2 * point( 36 ) )
-	self:setHeight( parent:getHeight() + point( -86 - 46 - 9 - 36 ) )
+	local margin = point( 36 )
+	self:setWidth( parent:getWidth() - 2 * margin )
+
+	local titleBarHeight = point( 86 )
+	local textboxHeight  = point( 46 )
+	local marginBottom   = point( 9 )
+	self:setHeight(
+		parent:getHeight() -
+		titleBarHeight -
+		textboxHeight -
+		marginBottom -
+		margin
+	)
 
 	gui.panel.invalidateLayout( self )
 end
