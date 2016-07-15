@@ -32,6 +32,10 @@ function hudgamemenu:hudgamemenu( parent )
 end
 
 function hudgamemenu:getTitle()
+	if ( not self.navigation ) then
+		return "Game Menu"
+	end
+
 	local item = self.navigation:getSelectedItem()
 	return item:getText()
 end
