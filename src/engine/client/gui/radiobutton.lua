@@ -50,11 +50,9 @@ function radiobutton:drawLabel()
 
 	local font = self:getScheme( "font" )
 	graphics.setFont( font )
-	local height = self:getHeight()
-	local marginRight = point( 9 )
-	local x = height + marginRight
-	local y = height / 2 - font:getHeight() / 2 - point( 1 )
-	graphics.print( self:getText(), x, y )
+	local x = point( 32 )
+	local y = self:getHeight() / 2 - font:getHeight() / 2 - point( 1 )
+	graphics.print( self.text, x, y )
 end
 
 function radiobutton:drawSelectionDot()
@@ -68,9 +66,8 @@ function radiobutton:drawSelectionDot()
 		graphics.setColor( self:getScheme( "radiobutton.iconColor" ) )
 	end
 
-	local height = self:getHeight()
-	local x      = height / 2 - self.icon:getWidth()  / 2
-	local y      = height / 2 - self.icon:getHeight() / 2
+	local x = point( 24 ) / 2 - self.icon:getWidth()  / 2
+	local y = point( 24 ) / 2 - self.icon:getHeight() / 2
 	graphics.draw( self.icon:getDrawable(), x, y )
 end
 

@@ -14,9 +14,8 @@ function videooptionspanel:videooptionspanel()
 
 	local name = "Aspect Ratio"
 	local label = gui.label( self, name, name )
-	local margin = point( 24 )
-	local x = margin
-	local y = margin
+	local x = point( 36 )
+	local y = point( 36 )
 	label:setPos( x, y )
 	label:setFont( self:getScheme( "fontBold" ) )
 
@@ -27,13 +26,12 @@ function videooptionspanel:videooptionspanel()
 		options.aspectRatio = newValue
 		self:updateResolutions()
 	end
-	local marginBottom = point( 9 )
-	y = y + label:getHeight() + marginBottom
+	y = y + label:getHeight() + point( 9 )
 	aspectRatios:setPos( x, y )
 
 	name = "Resolution"
 	label = gui.label( self, name, name )
-	y = y + aspectRatios:getHeight() + marginBottom
+	y = y + aspectRatios:getHeight() + point( 9 )
 	label:setPos( x, y )
 	label:setFont( self:getScheme( "fontBold" ) )
 
@@ -43,7 +41,7 @@ function videooptionspanel:videooptionspanel()
 	resolutions.onValueChanged = function( dropdownlist, oldValue, newValue )
 		options.resolution = newValue
 	end
-	y = y + label:getHeight() + marginBottom
+	y = y + label:getHeight() + point( 9 )
 	resolutions:setPos( x, y )
 
 	name = "Custom Resolution"
@@ -72,13 +70,13 @@ function videooptionspanel:videooptionspanel()
 			end
 		end
 	end
-	y = y + aspectRatios:getHeight() + margin
+	y = y + aspectRatios:getHeight() + point( 36 )
 	customResolution:setPos( x, y )
 
 	name = "Width"
 	local customWidth = gui.textbox( self, name, name )
 	self.customWidth = customWidth
-	y = y + customResolution:getHeight() + marginBottom
+	y = y + customResolution:getHeight() + point( 9 )
 	customWidth:setPos( x, y )
 	customWidth:setDisabled( true )
 	customWidth:setDefocusOnEnter( true )
@@ -96,7 +94,7 @@ function videooptionspanel:videooptionspanel()
 	name = "Height"
 	local customHeight = gui.textbox( self, name, name )
 	self.customHeight = customHeight
-	y = y + customWidth:getHeight() + marginBottom
+	y = y + customWidth:getHeight() + point( 9 )
 	customHeight:setPos( x, y )
 	customHeight:setDisabled( true )
 	customHeight:setDefocusOnEnter( true )
@@ -125,7 +123,7 @@ function videooptionspanel:videooptionspanel()
 		window.fullscreen = checked
 	end
 	x = 2 * x + resolutions:getWidth()
-	y = margin + label:getHeight() + marginBottom
+	y = point( 36 ) + label:getHeight() + point( 9 )
 	fullscreen:setPos( x, y )
 
 	name = "Borderless Window"

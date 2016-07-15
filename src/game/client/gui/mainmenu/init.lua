@@ -81,6 +81,22 @@ end
 
 function mainmenu:createButtons()
 	self.buttons = {}
+-- if ( _DEBUG ) then
+-- 	local testFrame = gui.mainmenubutton( self, "Test Frame" )
+-- 	testFrame.onClick = function()
+-- 		if ( not self.testFrame ) then
+-- 			self.testFrame = gui.testframe( self )
+-- 			self.testFrame:activate()
+-- 			self.testFrame:moveToCenter()
+-- 		else
+-- 			self.testFrame:activate()
+-- 		end
+-- 	end
+-- 	table.insert( self.buttons, testFrame )
+
+-- 	local blankButton = gui.mainmenubutton( self )
+-- 	table.insert( self.buttons, blankButton )
+-- end
 
 	self.joinLeaveServer = gui.mainmenubutton( self, "Join Server" )
 	self.joinLeaveServer:setDisabled( true )

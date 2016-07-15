@@ -55,21 +55,18 @@ function itemgrid:hasItem( item )
 end
 
 function itemgrid:invalidateLayout()
-	local items      = self:getItems()
-	local width      = self:getWidth()
-	local height     = self:getHeight()
-	local columns    = self:getColumns()
-	local rows       = self:getRows()
-	local buttonSize = point( 44 )
-	local columnGap  = ( width  - columns * buttonSize ) / ( columns - 1 )
-	local rowGap     = ( height - rows    * buttonSize ) / ( rows    - 1 )
+	local items     =   self:getItems()
+	local columns   =   self:getColumns()
+	local rows      =   self:getRows()
+	local columnGap = ( self:getWidth()  - columns * point( 44 ) ) / ( columns - 1 )
+	local rowGap    = ( self:getHeight() - rows    * point( 44 ) ) / ( rows    - 1 )
 	for n, v in pairs( items ) do
 		n = n - 1
 		local x  =             n % columns
 		local y  = math.floor( n / columns )
 		local xm = x * columnGap
 		local ym = y * rowGap
-		v:setPos( x * buttonSize + xm, y * buttonSize + ym )
+		v:setPos( x * point( 44 ) + xm, y * point( 44 ) + ym )
 	end
 	gui.panel.invalidateLayout( self )
 end

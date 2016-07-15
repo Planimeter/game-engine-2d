@@ -14,8 +14,7 @@ function hudgamemenustats:hudgamemenustats( parent )
 	local panel = gui.scrollablepanel( self, "Stats Scrollable Panel" )
 	panel:setSize( self:getWidth(), point( 345 ) )
 	panel:setInnerHeight( point( 738 ) )
-	local titleBarHeight = point( 86 )
-	panel:setY( titleBarHeight + point( 31 ) + point( 18 ) )
+	panel:setY( point( 86 ) + point( 31 ) + point( 18 ) )
 	panel = panel:getInnerPanel()
 
 	-- Soul

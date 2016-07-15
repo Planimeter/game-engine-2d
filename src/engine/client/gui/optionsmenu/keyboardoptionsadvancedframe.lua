@@ -20,9 +20,7 @@ function keyboardoptionsadvancedframe:keyboardoptionsadvancedframe( parent )
 		convar.setConvar( "con_enable", checked and "1" or "0" )
 	end
 
-	local margin = point( 36 )
-	local titleBarHeight = point( 86 )
-	self.console:setPos( margin, titleBarHeight )
+	self.console:setPos( point( 36 ), point( 86 ) )
 end
 
 gui.register( keyboardoptionsadvancedframe, "keyboardoptionsadvancedframe" )

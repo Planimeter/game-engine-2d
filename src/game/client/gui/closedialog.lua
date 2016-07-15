@@ -18,16 +18,13 @@ function closedialog:closedialog( parent, name )
 		"Close Dialog Label",
 		"Are you sure you want to quit the game?"
 	)
-	local margin         = point( 36 )
-	local titleBarHeight = point( 86 )
-	label:setPos( margin, titleBarHeight )
+	label:setPos( point( 36 ), point( 86 ) )
 	label:setWidth( point( 252 ) )
 
-	local buttonYes    = gui.button( self, "Close Dialog Yes Button", "Yes" )
-	local marginBottom = point( 18 )
+	local buttonYes = gui.button( self, "Close Dialog Yes Button", "Yes" )
 	buttonYes:setPos(
-		margin,
-		titleBarHeight + label:getHeight() + marginBottom
+		point( 36 ),
+		point( 86 ) + label:getHeight() + point( 18 )
 	)
 	buttonYes.onClick = function()
 		engine.setRequestingShutdown( true )
@@ -37,7 +34,7 @@ function closedialog:closedialog( parent, name )
 	local buttonNo = gui.button( self, "Close Dialog No Button", "No" )
 	buttonNo:setPos(
 		point( 288 ),
-		titleBarHeight + label:getHeight() + marginBottom
+		point( 86 ) + label:getHeight() + point( 18 )
 	)
 	buttonNo.onClick = function()
 		self:close()

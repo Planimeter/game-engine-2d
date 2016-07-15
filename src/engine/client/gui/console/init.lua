@@ -21,30 +21,6 @@ function console.print( ... )
 	g_Console.output:insertText( table.concat( args, "\t" ) .. "\n" )
 end
 
-local function doConsoleCommand( command, argString, argTable )
-	concommand.dispatch( localplayer, command, argString, argTable )
-end
-
-local function doConsoleVariable( command, argString )
-	if ( argString ~= "" ) then
-		if ( string.utf8sub( argString,  1,  1 ) == "\"" and
-			 string.utf8sub( argString, -1, -1 ) == "\"" ) then
-			argString = string.utf8sub( argString, 2, -2 )
-		end
-		convar.setConvar( command, argString )
-	else
-		local convar     = convar.getConvar( command )
-		local name       = convar:getName()
-		local value      = convar:getValue()
-		local helpString = convar:getHelpString() or ""
-		local default    = convar:getDefault()    or ""
-		if ( default ~= "" ) then
-			default = "(Default: \"" .. default .. "\")\n"
-		end
-		print( name .. " = \"" .. value .. "\" " .. default .. helpString )
-	end
-end
-
 local function doCommand( self, input )
 	self.input:setText( "" )
 	print( "] " .. input )
@@ -58,9 +34,25 @@ local function doCommand( self, input )
 	local argString = string.trim( string.utf8sub( input, endPos + 1 ) )
 	local argTable  = string.parseargs( argString )
 	if ( concommand.getConcommand( command ) ) then
-		doConsoleCommand( command, argString, argTable )
+		concommand.dispatch( localplayer, command, argString, argTable )
 	elseif ( convar.getConvar( command ) ) then
-		doConsoleVariable( command, argString )
+		if ( argString ~= "" ) then
+			if ( string.utf8sub( argString,  1,  1 ) == "\"" and
+			     string.utf8sub( argString, -1, -1 ) == "\"" ) then
+				argString = string.utf8sub( argString, 2, -2 )
+			end
+			convar.setConvar( command, argString )
+		else
+			local convar     = convar.getConvar( command )
+			local name       = convar:getName()
+			local value      = convar:getValue()
+			local helpString = convar:getHelpString() or ""
+			local default    = convar:getDefault()    or ""
+			if ( default ~= "" ) then
+				default = "(Default: \"" .. default .. "\")\n"
+			end
+			print( name .. " = \"" .. value .. "\" " .. default .. helpString )
+		end
 	else
 		print( "'" .. command .. "' is not recognized as a console command " ..
 		       "or variable." )
@@ -197,8 +189,7 @@ function console:invalidateLayout()
 	end
 
 	margin = point( 36 )
-	local titleBarHeight = point( 86 )
-	self.output:setPos( margin, titleBarHeight + point( 1 ) )
+	self.output:setPos( margin, point( 87 ) )
 	self.output:setWidth( width - 2 * margin )
 
 	self.input:setPos( margin, height - self.input:getHeight() - margin )

@@ -101,23 +101,21 @@ function hudchat:keypressed( key, scancode, isrepeat )
 end
 
 function hudchat:invalidateLayout()
-	self.width    = math.round( gui.scale( 720 ) )
-	self.height   = math.round( gui.scale( 404 ) )
-	local margin  = point( 36 )
-	local padding = point( 18 )
+	self.width  = math.round( gui.scale( 720 ) )
+	self.height = math.round( gui.scale( 404 ) )
 	self:setPos(
-		gui.scale( 96 ) - margin - padding,
+		gui.scale( 96 ) - point( 36 ) - point( 18 ),
 		gui.scale( 494 )
 	)
 
 	if ( self.output ) then
 		if ( self:isVisible() or self.initializing ) then
 			self.initializing = false
-			self.output:setPos( margin, margin )
+			self.output:setPos( point( 36 ), point( 36 ) )
 		else
 			local x, y = self:localToScreen(
-				gui.scale( 96 ) - padding,
-				margin + gui.scale( 494 )
+				gui.scale( 96 ) - point( 18 ),
+				point( 36 ) + gui.scale( 494 )
 			)
 			self.output:setPos( x, y )
 		end
@@ -125,10 +123,10 @@ function hudchat:invalidateLayout()
 
 	if ( self.input ) then
 		self.input:setPos(
-			margin,
-			self:getHeight() - self.input:getHeight() - margin
+			point( 36 ),
+			self:getHeight() - self.input:getHeight() - point( 36 )
 		)
-		self.input:setWidth( self:getWidth() - 2 * margin )
+		self.input:setWidth( self:getWidth() - 2 * point( 36 ) )
 	end
 
 	gui.frame.invalidateLayout( self )

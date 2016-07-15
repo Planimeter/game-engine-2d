@@ -19,22 +19,19 @@ function throbber:draw()
 	graphics.stencil( gui.imagepanel.drawMask )
 	graphics.setStencilTest( "greater", 0 )
 		graphics.setColor( self:getColor() )
-		local image  = self:getImage()
-		local width  = self:getWidth()
-		local height = self:getHeight()
 		graphics.draw(
-			image,
-			width  / 2,
-			height / 2,
+			self:getImage(),
+			self:getWidth()  / 2,
+			self:getHeight() / 2,
 			engine.getRealTime() % 2 * math.pi,
 			1,
 			1,
-			width  / 2,
-			height / 2
+			self:getWidth()  / 2,
+			self:getHeight() / 2
 		)
 	graphics.setStencilTest()
 
-	missingImage = image == graphics.error
+	missingImage = self:getImage() == graphics.error
 	if ( missingImage ) then
 		self:drawMissingImage()
 	end
@@ -55,16 +52,15 @@ function throbber:isEnabled()
 end
 
 function throbber:update( dt )
-	local opacity = self:getOpacity()
-	if ( self:isVisible() and opacity ~= 0 ) then
+	if ( self:isVisible() and self:getOpacity() ~= 0 ) then
 		self:invalidate()
 	end
 
 	-- FIXME: self:animate doesn't work for gui.throbber
-	if ( self.enabled and opacity ~= 1 ) then
-		self:setOpacity( math.min( opacity + dt * ( 1 / 0.4 ), 1 ) )
-	elseif ( opacity ~= 0 ) then
-		self:setOpacity( math.max( opacity - dt * ( 1 / 0.4 ), 0 ) )
+	if ( self.enabled and self:getOpacity() ~= 1 ) then
+		self:setOpacity( math.min( self:getOpacity() + dt * ( 1 / 0.4 ), 1 ) )
+	elseif ( self:getOpacity() ~= 0 ) then
+		self:setOpacity( math.max( self:getOpacity() - dt * ( 1 / 0.4 ), 0 ) )
 	end
 end
 

@@ -19,11 +19,10 @@ function consoletextboxautocompleteitemgroup:invalidateLayout()
 	local listItems = self:getItems()
 	if ( listItems ) then
 		local y = 0
-		local padding = point( 18 )
 		for _, listItem in ipairs( listItems ) do
 			listItem:setY( y )
 
-			itemWidth = font:getWidth( listItem:getText() ) + 2 * padding
+			itemWidth = font:getWidth( listItem:getText() ) + 2 * point( 18 )
 			if ( itemWidth > maxWidth ) then
 				maxWidth = itemWidth
 			end

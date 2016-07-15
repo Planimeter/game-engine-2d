@@ -35,9 +35,8 @@ function checkbox:drawCheck()
 
 	graphics.setColor( self:getScheme( property ) )
 
-	local height = self:getHeight()
-	local x      = height / 2 - self.icon:getWidth()  / 2
-	local y      = height / 2 - self.icon:getHeight() / 2
+	local x = point( 24 ) / 2 - self.icon:getWidth()  / 2
+	local y = point( 24 ) / 2 - self.icon:getHeight() / 2
 	graphics.draw( self.icon:getDrawable(), x, y )
 end
 
@@ -54,8 +53,7 @@ function checkbox:drawForeground()
 
 	graphics.setColor( self:getScheme( property ) )
 	graphics.setLineWidth( point( 1 ) )
-	local height = self:getHeight()
-	graphics.rectangle( "line", 0, 0, height, height )
+	graphics.rectangle( "line", 0, 0, point( 24 ), point( 24 ) )
 end
 
 function checkbox:drawLabel()
@@ -69,10 +67,8 @@ function checkbox:drawLabel()
 
 	local font = self:getScheme( "font" )
 	graphics.setFont( font )
-	local height = self:getHeight()
-	local marginRight = point( 9 )
-	local x = height + marginRight
-	local y = height / 2 - font:getHeight() / 2 - point( 1 )
+	local x = point( 32 )
+	local y = self:getHeight() / 2 - font:getHeight() / 2 - point( 1 )
 	graphics.print( self:getText(), x, y )
 end
 

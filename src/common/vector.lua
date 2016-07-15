@@ -63,7 +63,8 @@ function vector.__mul( a, b )
 end
 
 function vector.__eq( a, b )
-	return a.x == b.x and a.y == b.y
+	return a.x == b.x and
+	       a.y == b.y
 end
 
 function vector:__tostring()

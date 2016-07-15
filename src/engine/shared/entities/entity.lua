@@ -73,7 +73,31 @@ if ( _CLIENT ) then
 			for _, v in ipairs( renderables ) do
 				local isEntity = typeof( v, "entity" )
 				if ( worldIndex == v:getWorldIndex() and isEntity ) then
-					v:drawBoundingBoxes()
+					local body = v:getBody()
+					if ( body ) then
+						local fixtures = body:getFixtureList()
+						for _, fixture in ipairs( fixtures ) do
+							local shape = fixture:getShape()
+							local topLeftX,     topLeftY,
+							      bottomRightX, bottomRightY =
+							      body:getWorldPoints(
+							      	shape:computeAABB( 0, 0, 0 )
+							      )
+							local width  = bottomRightX - topLeftX
+							local height = topLeftY - bottomRightY
+							graphics.setOpacity( 0.14 )
+							graphics.setColor( color.white )
+							graphics.setLineWidth( 1 )
+							graphics.line(
+								topLeftX,             topLeftY,
+								topLeftX + width,     topLeftY,
+								bottomRightX,     bottomRightY,
+								topLeftX,         bottomRightY,
+								topLeftX,              topLeftY
+							)
+							graphics.setOpacity( 1 )
+						end
+					end
 				end
 			end
 		end
@@ -91,12 +115,10 @@ if ( _CLIENT ) then
 						graphics.push()
 							graphics.setOpacity( 0.14 )
 							graphics.setColor( color.black )
+
 							local sprite = v:getSprite()
 							local height = sprite:getHeight()
-							graphics.translate(
-								sprite:getWidth() / 2,
-								height
-							)
+							graphics.translate( sprite:getWidth() / 2, height )
 							graphics.scale( 1, -1 )
 								v:drawShadow()
 							graphics.setOpacity( 1 )
@@ -113,7 +135,6 @@ if ( _CLIENT ) then
 					local x, y = v:getDrawPosition()
 					graphics.translate( x, y )
 
-					-- Draw entity
 					graphics.setColor( color.white )
 					v:draw()
 				graphics.pop()
@@ -269,36 +290,6 @@ if ( _CLIENT ) then
 			sprite:draw()
 		else
 			graphics.draw( sprite:getDrawable() )
-		end
-	end
-
-	function entity:drawBoundingBoxes()
-		local body = self:getBody()
-		if ( not body ) then
-			return
-		end
-
-		local fixtures = body:getFixtureList()
-		for _, fixture in ipairs( fixtures ) do
-			local opacity = graphics.getOpacity()
-			local shape   = fixture:getShape()
-			local topLeftX,     topLeftY,
-			      bottomRightX, bottomRightY =
-			      body:getWorldPoints(
-			      	shape:computeAABB( 0, 0, 0 )
-			      )
-			local width = bottomRightX - topLeftX
-			graphics.setOpacity( 0.14 )
-			graphics.setColor( color.white )
-			graphics.setLineWidth( 1 )
-			graphics.line(
-				topLeftX,             topLeftY,
-				topLeftX + width,     topLeftY,
-				bottomRightX,     bottomRightY,
-				topLeftX,         bottomRightY,
-				topLeftX,              topLeftY
-			)
-			graphics.setOpacity( opacity )
 		end
 	end
 

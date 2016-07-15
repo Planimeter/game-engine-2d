@@ -10,10 +10,9 @@ closebutton.canFocus = false
 
 function closebutton:closebutton( parent, name )
 	gui.button.button( self, parent, name )
-	local padding = point( 36 )
-	self.width    = 2 * padding + point( 8 )  - point( 1 )
-	self.height   = 2 * padding + point( 16 ) - point( 2 )
-	self.icon     = self:getScheme( "closebutton.icon" )
+	self.width  = 2 * point( 36 ) + point( 8 )  - point( 1 )
+	self.height = 2 * point( 36 ) + point( 16 ) - point( 2 )
+	self.icon   = self:getScheme( "closebutton.icon" )
 end
 
 local round = math.round

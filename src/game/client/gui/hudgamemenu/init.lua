@@ -14,11 +14,9 @@ function hudgamemenu:hudgamemenu( parent )
 
 	require( "game.client.gui.hudgamemenu.navigation" )
 	require( "game.client.gui.hudgamemenu.navigationbutton" )
-	self.navigation      = gui.hudgamemenunavigation( self )
-	local margin         = point( 36 )
-	local titleBarHeight = point( 86 )
-	self.navigation:setPos( margin, titleBarHeight )
-	self.navigation:setWidth( self:getWidth() - 2 * margin )
+	self.navigation = gui.hudgamemenunavigation( self )
+	self.navigation:setPos( point( 36 ), point( 86 ) )
+	self.navigation:setWidth( self.width - 2 * point( 36 ) )
 	self.navigation:setHeight( point( 31 ) )
 
 	require( "game.client.gui.hudgamemenu.inventory" )
@@ -34,18 +32,13 @@ function hudgamemenu:hudgamemenu( parent )
 end
 
 function hudgamemenu:getTitle()
-	if ( not self.navigation ) then
-		return "Game Menu"
-	end
-
 	local item = self.navigation:getSelectedItem()
 	return item:getText()
 end
 
 function hudgamemenu:invalidateLayout()
-	local margin = point( 18 )
-	local x = graphics.getViewportWidth()  - self:getWidth()  - margin
-	local y = graphics.getViewportHeight() - self:getHeight() - margin
+	local x = graphics.getViewportWidth()  - self:getWidth()  - point( 18 )
+	local y = graphics.getViewportHeight() - self:getHeight() - point( 18 )
 	self:setPos( x, y )
 	gui.frame.invalidateLayout( self )
 end

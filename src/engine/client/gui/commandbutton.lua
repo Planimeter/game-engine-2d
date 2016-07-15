@@ -11,8 +11,7 @@ function commandbutton:commandbutton( parent, name, text )
 
 	if ( text ) then
 		local font = self:getScheme( "font" )
-		local padding = point( 18 )
-		self:setWidth( font:getWidth( text ) + 2 * padding )
+		self:setWidth( font:getWidth( text ) + 2 * point( 18 ) )
 		parent:invalidateLayout()
 	end
 end

@@ -88,10 +88,9 @@ function button:drawText()
 
 	local font = self:getScheme( "font" )
 	graphics.setFont( font )
-	local text = self:getText()
-	local x = self:getWidth() / 2 - font:getWidth( text ) / 2
+	local x = self:getWidth() / 2 - font:getWidth( self:getText() ) / 2
 	local y = self:getHeight() / 2 - font:getHeight() / 2 - point( 2 )
-	graphics.print( text, x, y )
+	graphics.print( self:getText(), x, y )
 end
 
 function button:getText()

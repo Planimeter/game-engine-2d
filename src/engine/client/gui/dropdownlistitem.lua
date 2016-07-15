@@ -77,8 +77,7 @@ function dropdownlistitem:drawText()
 
 	local font = self:getScheme( "font" )
 	graphics.setFont( font )
-	local padding = point( 18 )
-	local x = padding
+	local x = point( 18 )
 	local y = self:getHeight() / 2 - font:getHeight() / 2 - point( 2 )
 	graphics.print( self:getText(), x, y )
 end

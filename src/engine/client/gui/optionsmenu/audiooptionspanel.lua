@@ -14,9 +14,8 @@ function audiooptionspanel:audiooptionspanel()
 
 	local name = "Master Volume"
 	local label = gui.label( self, name, name )
-	local margin = point( 36 )
-	local x = margin
-	local y = margin
+	local x = point( 36 )
+	local y = point( 36 )
 	label:setPos( x, y )
 	label:setFont( self:getScheme( "fontBold" ) )
 
@@ -30,8 +29,7 @@ function audiooptionspanel:audiooptionspanel()
 		options.masterVolume = newValue
 		c.sound.volume = newValue
 	end
-	local marginBottom = point( 9 )
-	y = y + label:getHeight() + marginBottom
+	y = y + label:getHeight() + point( 9 )
 	masterVolume:setPos( x, y )
 
 	name = "Play Sound in Desktop"
@@ -44,7 +42,7 @@ function audiooptionspanel:audiooptionspanel()
 		c.sound.desktop = checked
 	end
 	x = 2 * x + masterVolume:getWidth()
-	y = margin + label:getHeight() + marginBottom
+	y = point( 36 ) + label:getHeight() + point( 9 )
 	desktopSound:setPos( x, y )
 end
 

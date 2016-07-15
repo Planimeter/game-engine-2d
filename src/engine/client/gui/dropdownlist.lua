@@ -86,8 +86,7 @@ function dropdownlist:drawIcon()
 
 	graphics.setColor( self:getScheme( property ) )
 
-	local padding = point( 18 )
-	local x = self:getWidth() - self.icon:getWidth() - padding
+	local x = self:getWidth() - self.icon:getWidth() - point( 18 )
 	local y = self:getHeight() / 2 - self.icon:getHeight() / 2
 	graphics.draw( self.icon:getDrawable(), x, y )
 end
@@ -101,13 +100,12 @@ function dropdownlist:drawText()
 
 	graphics.setColor( self:getScheme( property ) )
 
-	local font    = self:getScheme( "font" )
+	local font = self:getScheme( "font" )
 	graphics.setFont( font )
-	local item    = self:getListItemGroup():getSelectedItem()
-	local text    = item and item:getText() or ""
-	local padding = point( 18 )
-	local x       = padding
-	local y       = self:getHeight() / 2 - font:getHeight() / 2 - point( 2 )
+	local item = self:getListItemGroup():getSelectedItem()
+	local text = item and item:getText() or ""
+	local x    = point( 18 )
+	local y    = self:getHeight() / 2 - font:getHeight() / 2 - point( 2 )
 	graphics.print( text, x, y )
 end
 
