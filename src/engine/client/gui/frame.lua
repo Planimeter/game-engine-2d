@@ -9,8 +9,6 @@ local gui_draw_frame_focus = convar( "gui_draw_frame_focus", "0", nil, nil,
 
 class "frame" ( gui.panel )
 
-local utf8upper = string.utf8upper
-
 function frame:frame( parent, name, title )
 	gui.panel.panel( self, parent, name )
 	self.width         = point( 640 )
@@ -31,7 +29,7 @@ function frame:frame( parent, name, title )
 	self:setScheme( "Default" )
 
 	local font             = self:getScheme( "titleFont" )
-	local titleWidth       = font:getWidth( utf8upper( self:getTitle() ) )
+	local titleWidth       = font:getWidth( string.utf8upper( self:getTitle() ) )
 	local closeButtonWidth = self.closeButton:getWidth()
 	self.minWidth          = 2 * margin + titleWidth + closeButtonWidth
 	local titleBarHeight   = point( 86 )
@@ -127,7 +125,7 @@ function frame:drawTitle()
 	local margin = point( 36 )
 	local x = margin
 	local y = x - point( 4 )
-	graphics.print( utf8upper( self:getTitle() ), x, y )
+	graphics.print( string.utf8upper( self:getTitle() ), x, y )
 end
 
 function frame:getMinWidth()
