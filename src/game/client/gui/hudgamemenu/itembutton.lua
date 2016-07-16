@@ -74,13 +74,8 @@ function itembutton:getCount()
 	return inventory[ item ] or 0
 end
 
-function itembutton:getIcon()
-	return self.icon
-end
-
-function itembutton:getItem()
-	return self.item
-end
+accessor( itembutton, "icon" )
+mutator( itembutton, "item" )
 
 function itembutton:getItemClass()
 	local classmap = _G.entities.getClassMap()
@@ -88,9 +83,7 @@ function itembutton:getItemClass()
 	return classmap[ class ]
 end
 
-function itembutton:getSource()
-	return self.source
-end
+mutator( itembutton, "source" )
 
 function itembutton:setItem( item )
 	self.item = item
@@ -102,10 +95,6 @@ function itembutton:setItem( item )
 		self.text  = name
 		self.icon  = graphics.newImage( item.data.image )
 	end
-end
-
-function itembutton:setSource( source )
-	self.source = source
 end
 
 gui.register( itembutton, "itembutton" )

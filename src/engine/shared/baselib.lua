@@ -15,12 +15,12 @@ if ( not rawdofile ) then
 	end
 end
 
-function mutator( class, member )
-	class[ "set" .. string.capitalize( member ) ] = function( self, _member )
-		self[ member ] = _member
+function mutator( class, member, key )
+	class[ "set" .. string.capitalize( member ) ] = function( self, value )
+		self[ key or member ] = value
 	end
 
-	accessor( class, member )
+	accessor( class, member, key )
 end
 
 function accessor( class, member, key )

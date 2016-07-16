@@ -65,14 +65,6 @@ function framebuffer:getDrawable()
 	return self._framebuffer
 end
 
-function framebuffer:getDesiredWidth()
-	return self.requestedWidth
-end
-
-function framebuffer:getDesiredHeight()
-	return self.requestedHeight
-end
-
 function framebuffer:getWidth()
 	return self._framebuffer:getWidth()
 end

@@ -104,17 +104,9 @@ function typelenvalues:get( key )
 	return self.data[ key ]
 end
 
-function typelenvalues:getData()
-	return self.data
-end
-
-function typelenvalues:getDefinitions()
-	return self.definitions
-end
-
-function typelenvalues:getStruct()
-	return self.struct
-end
+accessor( typelenvalues, "data" )
+mutator( typelenvalues, "definitions" )
+mutator( typelenvalues, "struct" )
 
 function typelenvalues:getStructDefinition( struct )
 	local definitions = self:getDefinitions()
@@ -278,14 +270,6 @@ end
 
 function typelenvalues:set( key, value )
 	self.data[ key ] = value
-end
-
-function typelenvalues:setDefinitions( definitions )
-	self.definitions = definitions
-end
-
-function typelenvalues:setStruct( struct )
-	self.struct = struct
 end
 
 function typelenvalues:__tostring()

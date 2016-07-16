@@ -20,13 +20,8 @@ function networkvar:onValueChanged()
 	entity:onNetworkVarChanged( self )
 end
 
-function networkvar:getName()
-	return self.name
-end
-
-function networkvar:getValue()
-	return self.value
-end
+accessor( networkvar, "name" )
+mutator( networkvar, "value" )
 
 function networkvar:setValue( value )
 	local oldValue = self.value

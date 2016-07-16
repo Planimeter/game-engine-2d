@@ -25,21 +25,10 @@ function sprite:draw()
 	graphics.draw( image:getDrawable(), self:getQuad() )
 end
 
-function sprite:getAnimation()
-	return self.animation
-end
-
-function sprite:getAnimationName()
-	return self.animationName
-end
-
-function sprite:getAnimations()
-	return self.animations
-end
-
-function sprite:getEvents()
-	return self.events
-end
+mutator( sprite, "animation" )
+accessor( sprite, "animationName" )
+accessor( sprite, "animations" )
+accessor( sprite, "events" )
 
 function sprite:getQuad()
 	if ( not self.quad ) then
@@ -57,17 +46,9 @@ function sprite:getQuad()
 	return self.quad
 end
 
-function sprite:getSpriteSheet()
-	return self.spriteSheet
-end
-
-function sprite:getWidth()
-	return self.width
-end
-
-function sprite:getHeight()
-	return self.height
-end
+mutator( sprite, "spriteSheet" )
+mutator( sprite, "width" )
+mutator( sprite, "height" )
 
 function sprite:onAnimationEnd( animation )
 end
@@ -92,18 +73,6 @@ function sprite:setAnimation( animation )
 	self.frame         = animation.from
 
 	self:updateFrame()
-end
-
-function sprite:setSpriteSheet( spriteSheet )
-	self.spriteSheet = spriteSheet
-end
-
-function sprite:setWidth( width )
-	self.width = width
-end
-
-function sprite:setHeight( height )
-	self.height = height
 end
 
 function sprite:update( dt )

@@ -72,9 +72,7 @@ function hudgamemenustat:draw()
 	gui.panel.draw( self )
 end
 
-function hudgamemenustat:getStat()
-	return self.stat
-end
+mutator( hudgamemenustat, "stat" )
 
 function hudgamemenustat:onRemove()
 	self:removeStatHook()
@@ -85,10 +83,6 @@ function hudgamemenustat:removeStatHook()
 	local stat = string.capitalize( self:getStat() )
 	local name = "update" .. stat .. "Stat"
 	hook.remove( "shared", "onPlayerGainedExperience", name )
-end
-
-function hudgamemenustat:setStat( stat )
-	self.stat = stat
 end
 
 function hudgamemenustat:setWidth( width )

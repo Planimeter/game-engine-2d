@@ -69,9 +69,7 @@ function image:getDrawable()
 	return images[ filename ].image
 end
 
-function image:getFilename()
-	return self.filename
-end
+mutator( image, "filename" )
 
 function image:getHeight()
 	local image = self:getDrawable()

@@ -41,9 +41,7 @@ if ( _CLIENT ) then
 	end
 end
 
-function regionlayer:getData()
-	return self.data
-end
+mutator( regionlayer, "data" )
 
 function regionlayer:getHighestTileGid()
 	local highestTileGid = -1
@@ -55,51 +53,21 @@ function regionlayer:getHighestTileGid()
 	return highestTileGid
 end
 
-function regionlayer:getName()
-	return self.name
-end
-
-function regionlayer:getOpacity()
-	return self.opacity
-end
-
-function regionlayer:getProperties()
-	return self.properties
-end
-
-function regionlayer:getRegion()
-	return self.region
-end
+mutator( regionlayer, "name" )
+mutator( regionlayer, "opacity" )
+mutator( regionlayer, "properties" )
+mutator( regionlayer, "region" )
 
 if ( _CLIENT ) then
-	function regionlayer:getSpriteBatch()
-		return self.spritebatch
-	end
+	accessor( regionlayer, "spriteBatch", "spritebatch" )
 end
 
-function regionlayer:getTileset()
-	return self.tileset
-end
-
-function regionlayer:getType()
-	return self.type
-end
-
-function regionlayer:getWidth()
-	return self.width
-end
-
-function regionlayer:getHeight()
-	return self.height
-end
-
-function regionlayer:getX()
-	return self.x
-end
-
-function regionlayer:getY()
-	return self.y
-end
+mutator( regionlayer, "tileset" )
+mutator( regionlayer, "type" )
+mutator( regionlayer, "width" )
+mutator( regionlayer, "height" )
+mutator( regionlayer, "x" )
+mutator( regionlayer, "y" )
 
 if ( _CLIENT ) then
 	function regionlayer:initializeTiles()
@@ -182,26 +150,6 @@ function regionlayer:parse()
 	-- self.data = nil
 end
 
-function regionlayer:setData( data )
-	self.data = data
-end
-
-function regionlayer:setName( name )
-	self.name = name
-end
-
-function regionlayer:setOpacity( opacity )
-	self.opacity = opacity
-end
-
-function regionlayer:setProperties( properties )
-	self.properties = properties
-end
-
-function regionlayer:setRegion( region )
-	self.region = region
-end
-
 function regionlayer:setTileset( tileset )
 	self.tileset = tileset
 
@@ -212,28 +160,8 @@ function regionlayer:setTileset( tileset )
 	end
 end
 
-function regionlayer:setType( type )
-	self.type = type
-end
-
 function regionlayer:setVisible( visible )
 	self.visible = visible
-end
-
-function regionlayer:setWidth( width )
-	self.width = width
-end
-
-function regionlayer:setHeight( height )
-	self.height = height
-end
-
-function regionlayer:setX( x )
-	self.x = x
-end
-
-function regionlayer:setY( y )
-	self.y = y
 end
 
 function regionlayer:__tostring()

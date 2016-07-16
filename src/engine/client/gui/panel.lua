@@ -214,25 +214,11 @@ function panel:filedropped( file )
 	return cascadeInputToChildren( self, "filedropped", file )
 end
 
-function panel:getChildren()
-	return self.children
-end
-
-function panel:getName()
-	return self.name
-end
-
-function panel:getOpacity()
-	return self.opacity
-end
-
-function panel:getParent()
-	return self.parent
-end
-
-function panel:getScale()
-	return self.scale
-end
+accessor( panel, "children" )
+mutator( panel, "name" )
+mutator( panel, "opacity" )
+mutator( panel, "parent" )
+mutator( panel, "scale" )
 
 local getProperty = scheme.getProperty
 
@@ -240,25 +226,15 @@ function panel:getScheme( property )
 	return getProperty( self.scheme, property )
 end
 
-function panel:getWidth()
-	return self.width
-end
-
-function panel:getHeight()
-	return self.height
-end
+mutator( panel, "width" )
+mutator( panel, "height" )
 
 function panel:getSize()
 	return self:getWidth(), self:getHeight()
 end
 
-function panel:getX()
-	return self.x
-end
-
-function panel:getY()
-	return self.y
-end
+mutator( panel, "x" )
+mutator( panel, "y" )
 
 function panel:getPos()
 	return self:getX(), self:getY()
@@ -523,16 +499,13 @@ function panel:setSuppressFramebufferWarnings( suppressFramebufferWarnings )
 	self.suppressFramebufferWarnings = suppressFramebufferWarnings
 end
 
-function panel:setName( name )
-	self.name = name
-end
-
 function panel:setNextThink( nextThink )
 	self.nextThink = nextThink
 end
 
 function panel:setOpacity( opacity )
 	self.opacity = opacity
+	self:invalidate()
 end
 
 function panel:setParent( panel )
@@ -559,6 +532,7 @@ end
 
 function panel:setScale( scale )
 	self.scale = scale
+	self:invalidate()
 end
 
 function panel:setScheme( name )

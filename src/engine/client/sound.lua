@@ -81,9 +81,7 @@ function sound:getData()
 	return self.data
 end
 
-function sound:getFilename()
-	return self.filename
-end
+accessor( sound, "filename" )
 
 function sound:getVolume()
 	local filename = self:getFilename()

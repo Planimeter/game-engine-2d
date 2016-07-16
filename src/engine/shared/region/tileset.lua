@@ -11,61 +11,20 @@ function regiontileset:regiontileset( tilesetData )
 	self:parse()
 end
 
-function regiontileset:getFilename()
-	return self.filename
-end
-
-function regiontileset:getFirstGid()
-	return self.firstgid
-end
-
-function regiontileset:getImage()
-	return self.image
-end
-
-function regiontileset:getImageWidth()
-	return self.imagewidth
-end
-
-function regiontileset:getImageHeight()
-	return self.imageheight
-end
-
-function regiontileset:getName()
-	return self.name
-end
-
-function regiontileset:getProperties()
-	return self.properties
-end
-
-function regiontileset:getSpacing()
-	return self.spacing
-end
-
-function regiontileset:getMargin()
-	return self.margin
-end
-
-function regiontileset:getTileCount()
-	return self.tilecount
-end
-
-function regiontileset:getTileOffset()
-	return self.tileoffset
-end
-
-function regiontileset:getTiles()
-	return self.tiles
-end
-
-function regiontileset:getTileWidth()
-	return self.tilewidth
-end
-
-function regiontileset:getTileHeight()
-	return self.tileheight
-end
+mutator( regiontileset, "filename" )
+mutator( regiontileset, "firstGid", "firstgid" )
+mutator( regiontileset, "image" )
+mutator( regiontileset, "imageWidth", "imagewidth" )
+mutator( regiontileset, "imageHeight", "imageheight" )
+mutator( regiontileset, "name" )
+mutator( regiontileset, "properties" )
+mutator( regiontileset, "spacing" )
+mutator( regiontileset, "margin" )
+mutator( regiontileset, "tileCount", "tilecount" )
+mutator( regiontileset, "tileOffset", "tileoffset" )
+mutator( regiontileset, "tiles" )
+mutator( regiontileset, "tileWidth", "tilewidth" )
+mutator( regiontileset, "tileHeight", "tileheight" )
 
 function regiontileset:parse()
 	if ( not self.data ) then
@@ -96,60 +55,8 @@ function regiontileset:parse()
 	self.data = nil
 end
 
-function regiontileset:setFilename( filename )
-	self.filename = filename
-end
-
-function regiontileset:setFirstGid( firstgid )
-	self.firstgid = firstgid
-end
-
 function regiontileset:setImage( image )
 	self.image = graphics.newImage( image )
-end
-
-function regiontileset:setImageWidth( imagewidth )
-	self.imagewidth = imagewidth
-end
-
-function regiontileset:setImageHeight( imageheight )
-	self.imageheight = imageheight
-end
-
-function regiontileset:setName( name )
-	self.name = name
-end
-
-function regiontileset:setProperties( properties )
-	self.properties = properties
-end
-
-function regiontileset:setSpacing( spacing )
-	self.spacing = spacing
-end
-
-function regiontileset:setMargin( margin )
-	self.margin = margin
-end
-
-function regiontileset:setTileCount( tilecount )
-	self.tilecount = tilecount
-end
-
-function regiontileset:setTileOffset( tileoffset )
-	self.tileoffset = tileoffset
-end
-
-function regiontileset:setTiles( tiles )
-	self.tiles = tiles
-end
-
-function regiontileset:setTileWidth( tilewidth )
-	self.tilewidth = tilewidth
-end
-
-function regiontileset:setTileHeight( tileheight )
-	self.tileheight = tileheight
 end
 
 function regiontileset:__tostring()

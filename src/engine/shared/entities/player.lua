@@ -94,13 +94,8 @@ function player:getName()
 	return entity.getName( self ) or "Unnamed"
 end
 
-function player:getViewportWidth()
-	return self.viewportWidth
-end
-
-function player:getViewportHeight()
-	return self.viewportHeight
-end
+mutator( player, "viewportWidth" )
+mutator( player, "viewportHeight" )
 
 function player:getViewportBounds()
 	local width  = self:getViewportWidth()  or 0
@@ -309,14 +304,6 @@ if ( _CLIENT ) then
 	end
 
 	payload.setHandler( onSayText, "sayText" )
-end
-
-function player:setViewportWidth( viewportWidth )
-	self.viewportWidth = viewportWidth
-end
-
-function player:setViewportHeight( viewportHeight )
-	self.viewportHeight = viewportHeight
 end
 
 function player:setViewportSize( viewportWidth, viewportHeight )

@@ -14,13 +14,7 @@ function node:node( x, y, parent )
 	self.f      = 0
 end
 
-function node:getParent()
-	return self.parent
-end
-
-function node:setParent( node )
-	self.parent = node
-end
+mutator( node, "parent" )
 
 node.__eq = vector.__eq
 

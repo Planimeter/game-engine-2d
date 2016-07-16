@@ -249,17 +249,13 @@ function region:cleanUp()
 	end
 end
 
-function region:getEntities()
-	return self.entities
-end
+accessor( region, "entities" )
 
 function region:getFilename()
 	return self.name .. ".lua"
 end
 
-function region:getFormatVersion()
-	return self.formatVersion
-end
+mutator( region, "formatVersion" )
 
 local data = {}
 local gid  = 0
@@ -282,17 +278,9 @@ function region:getGidsAtPosition( position )
 	return gids
 end
 
-function region:getLayers()
-	return self.layers
-end
-
-function region:getName()
-	return self.name
-end
-
-function region:getOrientation()
-	return self.orientation
-end
+accessor( region, "layers" )
+mutator( region, "name" )
+mutator( region, "orientation" )
 
 function region:getPixelWidth()
 	return self:getTileWidth() * self:getWidth()
@@ -302,9 +290,7 @@ function region:getPixelHeight()
 	return self:getTileHeight() * self:getHeight()
 end
 
-function region:getProperties()
-	return self.properties
-end
+mutator( region, "properties" )
 
 function region:getTileset( layer )
 	local gid = layer:getHighestTileGid()
@@ -317,41 +303,15 @@ function region:getTileset( layer )
 	return tileset
 end
 
-function region:getTilesets()
-	return self.tilesets
-end
-
-function region:getTileWidth()
-	return self.tileWidth
-end
-
-function region:getTileHeight()
-	return self.tileHeight
-end
-
-function region:getWidth()
-	return self.width
-end
-
-function region:getHeight()
-	return self.height
-end
-
-function region:getWorld()
-	return self.world
-end
-
-function region:getWorldIndex()
-	return self.worldIndex
-end
-
-function region:getX()
-	return self.x
-end
-
-function region:getY()
-	return self.y
-end
+accessor( region, "tilesets" )
+mutator( region, "tileWidth" )
+mutator( region, "tileHeight" )
+mutator( region, "width" )
+mutator( region, "height" )
+accessor( region, "world" )
+mutator( region, "worldIndex" )
+mutator( region, "x" )
+mutator( region, "y" )
 
 function region:initializeWorld()
 	self.world = physics.newWorld()
@@ -477,52 +437,8 @@ function region:removeEntity( entity )
 	end
 end
 
-function region:setFormatVersion( formatVersion )
-	self.formatVersion = formatVersion
-end
-
-function region:setName( name )
-	self.name = name
-end
-
-function region:setOrientation( orientation )
-	self.orientation = orientation
-end
-
-function region:setProperties( properties )
-	self.properties = properties
-end
-
-function region:setTileWidth( tileWidth )
-	self.tileWidth = tileWidth
-end
-
-function region:setTileHeight( tileHeight )
-	self.tileHeight = tileHeight
-end
-
 function region:getTileSize()
 	return self:getTileWidth(), self:getTileHeight()
-end
-
-function region:setWidth( width )
-	self.width = width
-end
-
-function region:setHeight( height )
-	self.height = height
-end
-
-function region:setWorldIndex( worldIndex )
-	self.worldIndex = worldIndex
-end
-
-function region:setX( x )
-	self.x = x
-end
-
-function region:setY( y )
-	self.y = y
 end
 
 function region:update( dt )

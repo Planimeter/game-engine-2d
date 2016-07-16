@@ -201,9 +201,7 @@ function entity:entity()
 	table.insert( entity.entities, self )
 end
 
-function entity:getBody()
-	return self.body
-end
+accessor( entity, "body" )
 
 function entity:getClassname()
 	return self.__type
@@ -245,13 +243,8 @@ function entity:getPosition()
 	return self:getNetworkVar( "position" )
 end
 
-function entity:getProperties()
-	return self.properties
-end
-
-function entity:getRegion()
-	return self.region
-end
+mutator( entity, "properties" )
+mutator( entity, "region" )
 
 if ( _CLIENT ) then
 	function entity:getSprite()
@@ -521,14 +514,6 @@ end
 
 function entity:setPosition( position )
 	self:setNetworkVar( "position", position )
-end
-
-function entity:setProperties( properties )
-	self.properties = properties
-end
-
-function entity:setRegion( region )
-	self.region = region
 end
 
 if ( _CLIENT ) then

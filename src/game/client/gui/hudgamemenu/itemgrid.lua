@@ -28,21 +28,10 @@ function itemgrid:addItem( item, count )
 	self:invalidateLayout()
 end
 
-function itemgrid:getColumns()
-	return self.columns
-end
-
-function itemgrid:getRows()
-	return self.rows
-end
-
-function itemgrid:getItems()
-	return self.items
-end
-
-function itemgrid:getSource()
-	return self.source
-end
+mutator( itemgrid, "columns" )
+mutator( itemgrid, "rows" )
+accessor( itemgrid, "items" )
+mutator( itemgrid, "source" )
 
 function itemgrid:hasItem( item )
 	local items = self:getItems()
@@ -69,18 +58,6 @@ function itemgrid:invalidateLayout()
 		v:setPos( x * point( 44 ) + xm, y * point( 44 ) + ym )
 	end
 	gui.panel.invalidateLayout( self )
-end
-
-function itemgrid:setColumns( columns )
-	self.columns = columns
-end
-
-function itemgrid:setRows( rows )
-	self.rows = rows
-end
-
-function itemgrid:setSource( source )
-	self.source = source
 end
 
 gui.register( itemgrid, "itemgrid" )
