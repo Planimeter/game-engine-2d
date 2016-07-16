@@ -26,7 +26,6 @@ function panel:panel( parent, name )
 	self.height  = 0
 	self.name    = name or ""
 	self:setParent( parent or g_RootPanel )
-	self.zOrder  = -1
 	self.visible = true
 	self.scale   = 1
 	self.opacity = 1
@@ -122,8 +121,6 @@ function panel:draw()
 			v:createFramebuffer()
 		end
 	end
-
-	self:setZOrder()
 
 	if ( children ) then
 		for _, v in ipairs( children ) do
@@ -602,11 +599,6 @@ end
 function panel:setPos( x, y )
 	self:setX( x )
 	self:setY( y )
-end
-
-function panel:setZOrder()
-	gui.zIteration = gui.zIteration + 1
-	self.zOrder    = gui.zIteration
 end
 
 function panel:shouldUseFullscreenFramebuffer()

@@ -117,8 +117,6 @@ function draw()
 		end )
 	end
 
-	zIteration = 0
-
 	rootPanel:createFramebuffer()
 	rootPanel:drawFramebuffer()
 end
