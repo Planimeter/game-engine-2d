@@ -40,21 +40,14 @@ function scrollbar:draw()
 	gui.panel.draw( self )
 end
 
-function scrollbar:getMin()
-	return self.min
-end
-
-function scrollbar:getMax()
-	return self.max
-end
+mutator( scrollbar, "min" )
+mutator( scrollbar, "max" )
 
 function scrollbar:getRange()
 	return self.min, self.max
 end
 
-function scrollbar:getRangeWindow()
-	return self.rangeWindow
-end
+mutator( scrollbar, "rangeWindow" )
 
 function scrollbar:getThumbLength()
 	local range = self:getMax() - self:getMin()
@@ -69,9 +62,7 @@ function scrollbar:getThumbPos()
 	return percent * self:getHeight()
 end
 
-function scrollbar:getValue()
-	return self.value
-end
+mutator( scrollbar, "value" )
 
 function scrollbar:invalidateLayout()
 	local parent = self:getParent()
@@ -93,10 +84,11 @@ function scrollbar:mousepressed( x, y, button, istouch )
 	if ( self.mousedown and button == 1 ) then
 		localX, localY = self:screenToLocal( x, y )
 
-		if ( localY < self:getThumbPos() ) then
+		local thumbPos = self:getThumbPos()
+		if ( localY < thumbPos ) then
 			self:pageUp()
 			return
-		elseif ( localY > self:getThumbPos() + self:getThumbLength() ) then
+		elseif ( localY > thumbPos + self:getThumbLength() ) then
 			self:pageDown()
 			return
 		end
@@ -141,6 +133,7 @@ end
 
 function scrollbar:setDisabled( disabled )
 	self.disabled = disabled
+	self:invalidate()
 end
 
 local min, max = 0, 0

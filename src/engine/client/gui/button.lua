@@ -28,53 +28,36 @@ function button:draw()
 end
 
 function button:drawBackground()
-	local property = "button.backgroundColor"
-	local width    = self:getWidth()
-	local height   = self:getHeight()
-
 	if ( self:isDisabled() ) then
-		property = "button.disabled.backgroundColor"
-		graphics.setColor( self:getScheme( property ) )
-		graphics.rectangle( "fill", 0, 0, width, height )
+		gui.panel.drawBackground( self, "button.disabled.backgroundColor" )
 		return
 	else
-		graphics.setColor( self:getScheme( property ) )
-		graphics.rectangle( "fill", 0, 0, width, height )
+		gui.panel.drawBackground( self, "button.backgroundColor" )
 	end
 
 	if ( self.mousedown and self.mouseover ) then
-		property = "button.mousedown.backgroundColor"
-		graphics.setColor( self:getScheme( property ) )
-		graphics.rectangle( "fill", 0, 0, width, height )
+		gui.panel.drawBackground( self, "button.mousedown.backgroundColor" )
 	elseif ( self.mousedown or self.mouseover ) then
-		property = "button.mouseover.backgroundColor"
-		graphics.setColor( self:getScheme( property ) )
-		graphics.rectangle( "fill", 0, 0, width, height )
+		gui.panel.drawBackground( self, "button.mouseover.backgroundColor" )
 	end
 end
 
 function button:drawForeground()
-	local property = "button.outlineColor"
-	local width    = self:getWidth()
-	local height   = self:getHeight()
+	local color = "button.outlineColor"
 
 	if ( self:isDisabled() ) then
-		property = "button.disabled.outlineColor"
-		graphics.setColor( self:getScheme( property ) )
-		graphics.setLineWidth( point( 1 ) )
-		graphics.rectangle( "line", 0, 0, width, height )
+		color = "button.disabled.outlineColor"
+		gui.panel.drawForeground( self, color )
 		return
 	end
 
 	if ( self.mousedown and self.mouseover ) then
-		property = "button.mousedown.outlineColor"
+		color = "button.mousedown.outlineColor"
 	elseif ( self.mousedown or self.mouseover or self.focus ) then
-		property = "button.mouseover.outlineColor"
+		color = "button.mouseover.outlineColor"
 	end
 
-	graphics.setColor( self:getScheme( property ) )
-	graphics.setLineWidth( point( 1 ) )
-	graphics.rectangle( "line", 0, 0, width, height )
+	gui.panel.drawForeground( self, color )
 end
 
 function button:drawText()
@@ -89,13 +72,11 @@ function button:drawText()
 	local font = self:getScheme( "font" )
 	graphics.setFont( font )
 	local x = self:getWidth() / 2 - font:getWidth( self:getText() ) / 2
-	local y = self:getHeight() / 2 - font:getHeight() / 2 - point( 2 )
+	local y = self:getHeight() / 2 - font:getHeight() / 2
 	graphics.print( self:getText(), x, y )
 end
 
-function button:getText()
-	return self.text
-end
+accessor( button, "text" )
 
 function button:isDisabled()
 	return self.disabled

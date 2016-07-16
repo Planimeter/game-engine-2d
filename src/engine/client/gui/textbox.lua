@@ -318,21 +318,10 @@ end
 local function doSelectAll( self )
 end
 
-function textbox:getAutocomplete()
-	return self.autocomplete
-end
-
-function textbox:getDefocusOnEnter()
-	return self.defocusOnEnter
-end
-
-function textbox:getPlaceholder()
-	return self.placeholder
-end
-
-function textbox:getText()
-	return self.text
-end
+mutator( textbox, "autocomplete" )
+mutator( textbox, "defocusOnEnter" )
+mutator( textbox, "placeholder" )
+mutator( textbox, "text" )
 
 local function updateScrollbarRange( self )
 	local textHeight = getTextHeight( self ) + 2 * self.padding
@@ -698,10 +687,6 @@ function textbox:setAutocomplete( autocomplete )
 	end
 end
 
-function textbox:setDefocusOnEnter( defocus )
-	self.defocusOnEnter = defocus
-end
-
 function textbox:setDisabled( disabled )
 	self.disabled = disabled
 	self.canFocus = not disabled
@@ -728,10 +713,6 @@ function textbox:setMultiline( multiline )
 			self.scrollbar = nil
 		end
 	end
-end
-
-function textbox:setPlaceholder( placeholder )
-	self.placeholder = placeholder
 end
 
 function textbox:setText( text )

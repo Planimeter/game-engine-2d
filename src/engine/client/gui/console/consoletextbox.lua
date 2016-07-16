@@ -19,7 +19,10 @@ function consoletextbox:draw()
 		return
 	end
 
-	self:drawBackground()
+	if ( not _INTERACTIVE ) then
+		self:drawBackground( "textbox.backgroundColor" )
+	end
+
 	self:drawText()
 	self:drawCursor()
 
@@ -28,23 +31,20 @@ function consoletextbox:draw()
 	self:drawForeground()
 end
 
-function consoletextbox:drawBackground()
-	if ( _INTERACTIVE ) then
-		return
-	end
-
-	local property = "textbox.backgroundColor"
-	local width    = self:getWidth()
-	local height   = self:getHeight()
-
-	graphics.setColor( self:getScheme( property ) )
-	graphics.rectangle( "fill", 0, 0, width, height )
-end
-
 function consoletextbox:invalidateLayout()
-	local parent = self:getParent()
-	self:setWidth( parent:getWidth() - 2 * point( 36 ) )
-	self:setHeight( parent:getHeight() + point( -86 - 46 - 9 - 36 ) )
+	local parent         = self:getParent()
+	local margin         = point( 36 )
+	local titleBarHeight = point( 86 )
+	local textboxHeight  = point( 46 )
+	local marginBottom   = point( 9 )
+	self:setWidth( parent:getWidth() - 2 * margin )
+	self:setHeight(
+		parent:getHeight() -
+		titleBarHeight -
+		textboxHeight -
+		marginBottom -
+		margin
+	)
 
 	gui.panel.invalidateLayout( self )
 end

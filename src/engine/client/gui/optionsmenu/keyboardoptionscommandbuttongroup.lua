@@ -11,9 +11,10 @@ function keyboardoptionscommandbuttongroup:keyboardoptionscommandbuttongroup( pa
 end
 
 function keyboardoptionscommandbuttongroup:invalidateLayout()
+	local children = self:getChildren()
 	local width = 0
-	if ( self:getChildren() ) then
-		for i, commandbutton in ipairs( self:getChildren() ) do
+	if ( children ) then
+		for i, commandbutton in ipairs( children ) do
 			commandbutton:setX( width )
 			width = width + commandbutton:getWidth()
 		end

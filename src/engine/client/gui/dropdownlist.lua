@@ -28,90 +28,72 @@ function dropdownlist:draw()
 end
 
 function dropdownlist:drawBackground()
-	local property = "button.backgroundColor"
-	local width    = self:getWidth()
-	local height   = self:getHeight()
-
 	if ( self:isDisabled() ) then
-		property = "button.disabled.backgroundColor"
-		graphics.setColor( self:getScheme( property ) )
-		graphics.rectangle( "fill", 0, 0, width, height )
+		gui.panel.drawBackground( self, "button.disabled.backgroundColor" )
 		return
 	else
-		graphics.setColor( self:getScheme( property ) )
-		graphics.rectangle( "fill", 0, 0, width, height )
+		gui.panel.drawBackground( self, "button.backgroundColor" )
 	end
 
 	if ( ( self.mousedown and self.mouseover ) or self:isActive() ) then
-		property = "button.mousedown.backgroundColor"
-		graphics.setColor( self:getScheme( property ) )
-		graphics.rectangle( "fill", 0, 0, width, height )
+		gui.panel.drawBackground( self, "button.mousedown.backgroundColor" )
 	elseif ( self.mousedown or self.mouseover ) then
-		property = "button.mouseover.backgroundColor"
-		graphics.setColor( self:getScheme( property ) )
-		graphics.rectangle( "fill", 0, 0, width, height )
+		gui.panel.drawBackground( self, "button.mouseover.backgroundColor" )
 	end
 end
 
 function dropdownlist:drawForeground()
-	local property = "button.outlineColor"
-	local width    = self:getWidth()
-	local height   = self:getHeight()
+	local color = "button.outlineColor"
 
 	if ( self:isDisabled() ) then
-		property = "button.disabled.outlineColor"
-		graphics.setColor( self:getScheme( property ) )
-		graphics.setLineWidth( point( 1 ) )
-		graphics.rectangle( "line", 0, 0, width, height )
+		color = "button.disabled.outlineColor"
+		gui.panel.drawForeground( self, color )
 		return
 	end
 
 	if ( ( self.mousedown and self.mouseover ) or self:isActive() ) then
-		property = "button.mousedown.outlineColor"
+		color = "button.mousedown.outlineColor"
 	elseif ( self.mousedown or self.mouseover or self.focus ) then
-		property = "button.mouseover.outlineColor"
+		color = "button.mouseover.outlineColor"
 	end
 
-	graphics.setColor( self:getScheme( property ) )
-	graphics.setLineWidth( point( 1 ) )
-	graphics.rectangle( "line", 0, 0, width, height )
+	gui.panel.drawForeground( self, color )
 end
 
 function dropdownlist:drawIcon()
-	local property = "button.textColor"
+	local color = "button.textColor"
 
 	if ( self:isDisabled() ) then
-		property = "button.disabled.textColor"
+		color = "button.disabled.textColor"
 	end
 
-	graphics.setColor( self:getScheme( property ) )
+	graphics.setColor( self:getScheme( color ) )
 
-	local x = self:getWidth() - self.icon:getWidth() - point( 18 )
+	local padding = point( 18 )
+	local x = self:getWidth() - self.icon:getWidth() - padding
 	local y = self:getHeight() / 2 - self.icon:getHeight() / 2
 	graphics.draw( self.icon:getDrawable(), x, y )
 end
 
 function dropdownlist:drawText()
-	local property = "button.textColor"
+	local color = "button.textColor"
 
 	if ( self:isDisabled() ) then
-		property = "button.disabled.textColor"
+		color = "button.disabled.textColor"
 	end
 
-	graphics.setColor( self:getScheme( property ) )
+	graphics.setColor( self:getScheme( color ) )
 
 	local font = self:getScheme( "font" )
 	graphics.setFont( font )
 	local item = self:getListItemGroup():getSelectedItem()
 	local text = item and item:getText() or ""
 	local x    = point( 18 )
-	local y    = self:getHeight() / 2 - font:getHeight() / 2 - point( 2 )
+	local y    = self:getHeight() / 2 - font:getHeight() / 2
 	graphics.print( text, x, y )
 end
 
-function dropdownlist:getListItemGroup()
-	return self.listItemGroup
-end
+accessor( dropdownlist, "listItemGroup" )
 
 function dropdownlist:getValue()
 	local listItemGroup = self:getListItemGroup()

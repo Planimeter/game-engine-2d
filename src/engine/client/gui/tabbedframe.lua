@@ -125,13 +125,8 @@ function tabbedframe:drawTitle()
 	graphics.print( utf8upper( self.title ), x, y )
 end
 
-function tabbedframe:getTabGroup()
-	return self.tabGroup
-end
-
-function tabbedframe:getTabPanels()
-	return self.tabPanels
-end
+accessor( tabbedframe, "tabGroup" )
+accessor( tabbedframe, "tabPanels" )
 
 function tabbedframe:invalidateLayout()
 	local padding   = point( 24 )

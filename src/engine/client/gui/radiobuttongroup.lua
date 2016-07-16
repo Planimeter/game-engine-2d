@@ -34,13 +34,8 @@ function radiobuttongroup:removeItem( item )
 	end
 end
 
-function radiobuttongroup:getItems()
-	return self.items
-end
-
-function radiobuttongroup:getSelectedId()
-	return self.selectedId
-end
+accessor( radiobuttongroup, "items" )
+mutator( radiobuttongroup, "selectedId" )
 
 function radiobuttongroup:getSelectedItem()
 	local items = self:getItems()

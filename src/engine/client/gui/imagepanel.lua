@@ -55,9 +55,7 @@ function imagepanel:drawMissingImage()
 	graphics.setOpacity( opacity )
 end
 
-function imagepanel:getColor()
-	return self.color
-end
+mutator( imagepanel, "color" )
 
 function imagepanel:getQuad()
 	return self.imageQuad
@@ -65,10 +63,6 @@ end
 
 function imagepanel:getImage()
 	return self.imageDatum:getDrawable()
-end
-
-function imagepanel:setColor( color )
-	self.color = color
 end
 
 function imagepanel:setImage( image )

@@ -69,13 +69,8 @@ function slider:drawTrough()
 	graphics.line( 0, height / 4, width, height / 4 )
 end
 
-function slider:getMinLabel()
-	return self.minLabel
-end
-
-function slider:getMaxLabel()
-	return self.maxLabel
-end
+mutator( slider, "minLabel" )
+mutator( slider, "maxLabel" )
 
 function slider:getThumbLength()
 	local range = self:getMax() - self:getMin()

@@ -22,7 +22,7 @@ function label:draw()
 	local font = self:getFont()
 	graphics.setFont( font )
 
-	local align     = self.textAlign
+	local align     = self:getTextAlign()
 	local text      = self:getText()
 	local textWidth = font:getWidth( text )
 	local x         = 0
@@ -40,20 +40,13 @@ function label:draw()
 	gui.panel.draw( self )
 end
 
-function label:getFont()
-	return self.font
-end
-
-function label:getText()
-	return self.text
-end
-
-function label:getTextAlign()
-	return self.textAlign
-end
+mutator( label, "font" )
+mutator( label, "text" )
+mutator( label, "textAlign" )
 
 function label:setFont( font )
 	self.font = font
+	self:invalidate()
 end
 
 function label:setText( text )

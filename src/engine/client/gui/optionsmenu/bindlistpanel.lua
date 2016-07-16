@@ -15,28 +15,9 @@ function bindlistpanel:bindlistpanel( parent, name )
 end
 
 function bindlistpanel:draw()
-	self:drawBackground()
+	self:drawBackground( "bindlistpanel.backgroundColor" )
 	gui.panel.draw( self )
-	self:drawForeground()
-end
-
-function bindlistpanel:drawBackground()
-	local property = "bindlistpanel.backgroundColor"
-	local width    = self:getWidth()
-	local height   = self:getHeight()
-
-	graphics.setColor( self:getScheme( property ) )
-	graphics.rectangle( "fill", 0, 0, width, height )
-end
-
-function bindlistpanel:drawForeground()
-	local property = "bindlistpanel.outlineColor"
-	local width    = self:getWidth()
-	local height   = self:getHeight()
-
-	graphics.setColor( self:getScheme( property ) )
-	graphics.setLineWidth( point( 1 ) )
-	graphics.rectangle( "line", 0, 0, width, height )
+	self:drawForeground( "bindlistpanel.outlineColor" )
 end
 
 local function getLastY( self )

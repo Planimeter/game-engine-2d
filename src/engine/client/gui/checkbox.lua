@@ -27,48 +27,52 @@ function checkbox:drawCheck()
 		return
 	end
 
-	local property = "checkbox.iconColor"
+	local color = "checkbox.iconColor"
 
 	if ( self:isDisabled() ) then
-		property = "checkbox.disabled.iconColor"
+		color = "checkbox.disabled.iconColor"
 	end
 
-	graphics.setColor( self:getScheme( property ) )
+	graphics.setColor( self:getScheme( color ) )
 
-	local x = point( 24 ) / 2 - self.icon:getWidth()  / 2
-	local y = point( 24 ) / 2 - self.icon:getHeight() / 2
+	local height = self:getHeight()
+	local x      = height / 2 - self.icon:getWidth()  / 2
+	local y      = height / 2 - self.icon:getHeight() / 2
 	graphics.draw( self.icon:getDrawable(), x, y )
 end
 
 function checkbox:drawForeground()
-	local property = "checkbox.outlineColor"
+	local color = "checkbox.outlineColor"
 
 	if ( not self:isDisabled() ) then
 		if ( self.mousedown and self.mouseover ) then
-			property = "checkbox.mousedown.outlineColor"
+			color = "checkbox.mousedown.outlineColor"
 		elseif ( self.mousedown or self.mouseover or self.focus ) then
-			property = "checkbox.mouseover.outlineColor"
+			color = "checkbox.mouseover.outlineColor"
 		end
 	end
 
-	graphics.setColor( self:getScheme( property ) )
+	graphics.setColor( self:getScheme( color ) )
 	graphics.setLineWidth( point( 1 ) )
-	graphics.rectangle( "line", 0, 0, point( 24 ), point( 24 ) )
+	local height = self:getHeight()
+	graphics.rectangle( "line", 0, 0, height, height )
 end
 
 function checkbox:drawLabel()
-	local property = "checkbox.textColor"
+	local color = "checkbox.textColor"
 
 	if ( self:isDisabled() ) then
-		property = "checkbox.disabled.textColor"
+		color = "checkbox.disabled.textColor"
 	end
 
-	graphics.setColor( self:getScheme( property ) )
+	graphics.setColor( self:getScheme( color ) )
 
 	local font = self:getScheme( "font" )
 	graphics.setFont( font )
-	local x = point( 32 )
-	local y = self:getHeight() / 2 - font:getHeight() / 2 - point( 1 )
+	local height = self:getHeight()
+	local marginLeft = point( 9 )
+	local x = height + marginLeft
+	local y = height / 2 - font:getHeight() / 2
 	graphics.print( self:getText(), x, y )
 end
 

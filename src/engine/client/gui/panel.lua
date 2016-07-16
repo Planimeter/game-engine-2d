@@ -157,10 +157,25 @@ function panel:draw()
 	end
 end
 
+function panel:drawBackground( color )
+	local width  = self:getWidth()
+	local height = self:getHeight()
+	graphics.setColor( self:getScheme( color ) )
+	graphics.rectangle( "fill", 0, 0, width, height )
+end
+
 function panel:drawBounds()
 	graphics.setColor( color.red )
 	graphics.setLineWidth( point( 1 ) )
 	graphics.rectangle( "line", 0, 0, self:getWidth(), self:getHeight() )
+end
+
+function panel:drawForeground( color )
+	local width  = self:getWidth()
+	local height = self:getHeight()
+	graphics.setColor( self:getScheme( color ) )
+	graphics.setLineWidth( point( 1 ) )
+	graphics.rectangle( "line", 0, 0, width, height )
 end
 
 function panel:drawFramebuffer()

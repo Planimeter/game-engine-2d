@@ -17,17 +17,9 @@ function scrollablepanel:scrollablepanel( parent, name )
 	self:setScheme( "Default" )
 end
 
-function scrollablepanel:getInnerHeight()
-	return self.innerHeight
-end
-
-function scrollablepanel:getInnerPanel()
-	return self.panel
-end
-
-function scrollablepanel:getScrollbar()
-	return self.scrollbar
-end
+mutator( scrollablepanel, "innerHeight" )
+accessor( scrollablepanel, "innerPanel", "panel" )
+accessor( scrollablepanel, "scrollbar" )
 
 function scrollablepanel:invalidateLayout()
 	self:setSize( self:getSize() )

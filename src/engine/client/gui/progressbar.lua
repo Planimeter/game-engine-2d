@@ -18,18 +18,10 @@ function progressbar:progressbar( parent, name )
 end
 
 function progressbar:draw()
-	self:drawBackground()
+	self:drawBackground( "progressbar.backgroundColor" )
 	self:drawForeground()
 
 	gui.panel.draw( self )
-end
-
-function progressbar:drawBackground()
-	local property = "progressbar.backgroundColor"
-	local width    = self:getWidth()
-	local height   = self:getHeight()
-	graphics.setColor( self:getScheme( property ) )
-	graphics.rectangle( "fill", 0, 0, width, height )
 end
 
 function progressbar:drawForeground()
@@ -44,17 +36,9 @@ function progressbar:drawForeground()
 	graphics.rectangle( "fill", 0, 0, width, height )
 end
 
-function progressbar:getMin()
-	return self.min
-end
-
-function progressbar:getMax()
-	return self.max
-end
-
-function progressbar:getValue()
-	return self.value
-end
+mutator( progressbar, "min" )
+mutator( progressbar, "max" )
+mutator( progressbar, "value" )
 
 function progressbar:setMin( min )
 	self.min = min

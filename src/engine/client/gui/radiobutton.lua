@@ -71,13 +71,8 @@ function radiobutton:drawSelectionDot()
 	graphics.draw( self.icon:getDrawable(), x, y )
 end
 
-function radiobutton:getGroup()
-	return self.group
-end
-
-function radiobutton:getValue()
-	return self.value
-end
+accessor( radiobutton, "group" )
+mutator( radiobutton, "value" )
 
 function radiobutton:isDisabled()
 	local radiobuttongroup = self:getGroup()
@@ -128,10 +123,6 @@ end
 function radiobutton:setSelected( selected )
 	self.selected = selected
 	self:invalidate()
-end
-
-function radiobutton:setValue( value )
-	self.value = value
 end
 
 gui.register( radiobutton, "radiobutton" )

@@ -69,13 +69,8 @@ function bindlistitem:drawText()
 	graphics.print( key, x, y )
 end
 
-function bindlistitem:getConcommand()
-	return self.concommand
-end
-
-function bindlistitem:getKey()
-	return self.key
-end
+mutator( bindlistitem, "concommand" )
+mutator( bindlistitem, "key" )
 
 function bindlistitem.keyTrap( key )
 	local self = gui.bindlistitem.trappedItem
@@ -89,10 +84,6 @@ function bindlistitem:onClick()
 	gui.bindlistitem.trappedItem = self
 	os.setCursorVisible( false )
 	input.setKeyTrap( self.keyTrap )
-end
-
-function bindlistitem:setConcommand( concommand )
-	self.concommand = concommand
 end
 
 function bindlistitem:setKey( key )

@@ -15,6 +15,20 @@ if ( not rawdofile ) then
 	end
 end
 
+function mutator( class, member )
+	class[ "set" .. string.capitalize( member ) ] = function( self, _member )
+		self[ member ] = _member
+	end
+
+	accessor( class, member )
+end
+
+function accessor( class, member, key )
+	class[ "get" .. string.capitalize( member ) ] = function( self )
+		return self[ key or member ]
+	end
+end
+
 if ( not rawprint and not rawtype ) then
 	rawprint           = print
 	rawtype            = type

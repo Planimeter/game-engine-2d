@@ -22,7 +22,7 @@ function bindlistheader:draw()
 
 	local margin = point( 18 )
 	local x = margin
-	local y = self:getHeight() / 2 - font:getHeight() / 2 - point( 2 )
+	local y = self:getHeight() / 2 - font:getHeight() / 2
 	graphics.print( self:getText(), x, y )
 
 	local label = "Key or Button"
@@ -30,19 +30,14 @@ function bindlistheader:draw()
 	graphics.print( label, x, y )
 
 	graphics.setColor( self:getScheme( 'bindlistheader.borderColor' ) )
-	y = self:getHeight() - point( 6 )
+	local paddingBottom = point( 6 )
+	y = self:getHeight() - paddingBottom
 	local width = self:getWidth() - 2 * margin
 	graphics.rectangle( "fill", margin, y, width, point( 1 ) )
 
 	gui.panel.draw( self )
 end
 
-function bindlistheader:getText()
-	return self.text
-end
-
-function bindlistheader:setText( text )
-	self.text = text
-end
+mutator( bindlistheader, "text" )
 
 gui.register( bindlistheader, "bindlistheader" )

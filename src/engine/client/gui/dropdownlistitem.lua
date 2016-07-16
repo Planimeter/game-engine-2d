@@ -21,36 +21,36 @@ function dropdownlistitem:draw()
 end
 
 function dropdownlistitem:drawBackground()
-	local property = "dropdownlistitem.backgroundColor"
-	local width    = self:getWidth()
-	local height   = self:getHeight()
+	local color  = "dropdownlistitem.backgroundColor"
+	local width  = self:getWidth()
+	local height = self:getHeight()
 
 	if ( self:isSelected() ) then
-		property = "dropdownlistitem.selected.backgroundColor"
+		color = "dropdownlistitem.selected.backgroundColor"
 	elseif ( self.mouseover ) then
-		property = "dropdownlistitem.mouseover.backgroundColor"
+		color = "dropdownlistitem.mouseover.backgroundColor"
 	end
 
-	graphics.setColor( self:getScheme( property ) )
+	graphics.setColor( self:getScheme( color ) )
 
 	local selected = self.mouseover or self:isSelected()
 	local offset   = selected and point( 1 ) or 0
 	graphics.rectangle( "fill", offset, 0, width - 2 * offset, height )
 
 	if ( selected ) then
-		property = "dropdownlistitem.backgroundColor"
-		self:drawBorders( property )
+		color = "dropdownlistitem.backgroundColor"
+		self:drawBorders( color )
 	end
 
-	property = "dropdownlistitem.outlineColor"
-	self:drawBorders( property )
+	color = "dropdownlistitem.outlineColor"
+	self:drawBorders( color )
 end
 
-function dropdownlistitem:drawBorders( property )
+function dropdownlistitem:drawBorders( color )
 	local lineWidth = point( 1 )
 	local width     = self:getWidth()
 	local height    = self:getHeight()
-	graphics.setColor( self:getScheme( property ) )
+	graphics.setColor( self:getScheme( color ) )
 	graphics.setLineWidth( lineWidth )
 	graphics.line(
 		lineWidth / 2,      0,        -- Top-left
@@ -63,22 +63,22 @@ function dropdownlistitem:drawBorders( property )
 end
 
 function dropdownlistitem:drawText()
-	local property = "button.textColor"
+	local color = "button.textColor"
 
 	if ( self:isDisabled() ) then
-		property = "button.disabled.textColor"
+		color = "button.disabled.textColor"
 	elseif ( self:isSelected() ) then
-		property = "dropdownlistitem.selected.textColor"
+		color = "dropdownlistitem.selected.textColor"
 	elseif ( self.mouseover ) then
-		property = "dropdownlistitem.mouseover.textColor"
+		color = "dropdownlistitem.mouseover.textColor"
 	end
 
-	graphics.setColor( self:getScheme( property ) )
+	graphics.setColor( self:getScheme( color ) )
 
 	local font = self:getScheme( "font" )
 	graphics.setFont( font )
 	local x = point( 18 )
-	local y = self:getHeight() / 2 - font:getHeight() / 2 - point( 2 )
+	local y = self:getHeight() / 2 - font:getHeight() / 2
 	graphics.print( self:getText(), x, y )
 end
 
