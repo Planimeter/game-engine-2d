@@ -18,9 +18,9 @@ function commandbutton:commandbutton( parent, name, text )
 end
 
 function commandbutton:drawBackground()
-	local color = "button.backgroundColor"
-	local width    = self:getWidth()
-	local height   = self:getHeight()
+	local color  = "button.backgroundColor"
+	local width  = self:getWidth()
+	local height = self:getHeight()
 
 	if ( self:isDisabled() ) then
 		color = "button.disabled.backgroundColor"

@@ -24,13 +24,13 @@ function slider:draw()
 end
 
 function slider:drawLabels()
-	local property = "slider.fontColor"
+	local color = "slider.fontColor"
 
 	if ( self:isDisabled() ) then
-		property = "slider.disabled.fontColor"
+		color = "slider.disabled.fontColor"
 	end
 
-	graphics.setColor( self:getScheme( property ) )
+	graphics.setColor( self:getScheme( color ) )
 	local font = self:getScheme( "fontSmall" )
 	graphics.setFont( font )
 	local minLabel = self:getMinLabel()
@@ -43,28 +43,28 @@ function slider:drawLabels()
 end
 
 function slider:drawThumb()
-	local property = "scrollbar.backgroundColor"
-	local height   = self:getHeight()
-	local y        = 0
+	local color  = "scrollbar.backgroundColor"
+	local height = self:getHeight()
+	local y      = 0
 
 	if ( self:isDisabled() ) then
-		property = "scrollbar.disabled.backgroundColor"
+		color = "scrollbar.disabled.backgroundColor"
 	end
 
-	graphics.setColor( self:getScheme( property ) )
+	graphics.setColor( self:getScheme( color ) )
 	graphics.rectangle( "fill", self:getThumbPos(), y, point( 4 ), height / 2 )
 end
 
 function slider:drawTrough()
-	local property = "slider.backgroundColor"
-	local height   = self:getHeight()
-	local width    = self:getWidth()
+	local color  = "slider.backgroundColor"
+	local height = self:getHeight()
+	local width  = self:getWidth()
 
 	if ( self:isDisabled() ) then
-		property = "slider.disabled.backgroundColor"
+		color = "slider.disabled.backgroundColor"
 	end
 
-	graphics.setColor( self:getScheme( property ) )
+	graphics.setColor( self:getScheme( color ) )
 	graphics.setLineWidth( point( 1 ) )
 	graphics.line( 0, height / 4, width, height / 4 )
 end

@@ -30,7 +30,8 @@ function audiooptionspanel:audiooptionspanel()
 		options.masterVolume = newValue
 		c.sound.volume = newValue
 	end
-	y = y + label:getHeight() + point( 9 )
+	local marginBottom = point( 9 )
+	y = y + label:getHeight() + marginBottom
 	masterVolume:setPos( x, y )
 
 	name = "Play Sound in Desktop"
@@ -43,7 +44,7 @@ function audiooptionspanel:audiooptionspanel()
 		c.sound.desktop = checked
 	end
 	x = 2 * x + masterVolume:getWidth()
-	y = margin + label:getHeight() + point( 9 )
+	y = margin + label:getHeight() + marginBottom
 	desktopSound:setPos( x, y )
 end
 

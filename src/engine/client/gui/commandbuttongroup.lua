@@ -17,11 +17,11 @@ end
 function commandbuttongroup:draw()
 	gui.panel.draw( self )
 
-	local property = "commandbuttongroup.outlineColor"
-	local width    = self:getWidth()
-	local height   = self:getHeight()
+	local color  = "commandbuttongroup.outlineColor"
+	local width  = self:getWidth()
+	local height = self:getHeight()
 
-	graphics.setColor( self:getScheme( property ) )
+	graphics.setColor( self:getScheme( color ) )
 	local lineWidth = point( 1 )
 	graphics.setLineWidth( lineWidth )
 	graphics.line(

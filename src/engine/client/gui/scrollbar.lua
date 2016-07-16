@@ -26,15 +26,15 @@ function scrollbar:draw()
 		return
 	end
 
-	local property = "scrollbar.backgroundColor"
-	local width    = self:getWidth()
-	local x        = 0
+	local color = "scrollbar.backgroundColor"
+	local width = self:getWidth()
+	local x     = 0
 
 	if ( self:isDisabled() ) then
-		property = "scrollbar.disabled.backgroundColor"
+		color = "scrollbar.disabled.backgroundColor"
 	end
 
-	graphics.setColor( self:getScheme( property ) )
+	graphics.setColor( self:getScheme( color ) )
 	graphics.rectangle( "fill", x, self:getThumbPos(), width, length )
 
 	gui.panel.draw( self )

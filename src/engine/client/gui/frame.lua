@@ -91,58 +91,40 @@ function frame:doModal()
 end
 
 function frame:draw()
-	self:drawBackground()
+	self:drawBackground( "frame.backgroundColor" )
 
 	gui.panel.draw( self )
 
 	self:drawTitle()
-	self:drawForeground()
+	self:drawForeground( "frame.outlineColor" )
 
 	if ( gui_draw_frame_focus:getBoolean() and self.focus ) then
 		self:drawBounds()
 	end
 end
 
-function frame:drawBackground()
-	graphics.setColor( self:getScheme( "frame.backgroundColor" ) )
-	graphics.rectangle( "fill", 0, 0, self:getWidth(), self:getHeight() )
-end
-
-function frame:drawForeground()
-	graphics.setColor( self:getScheme( "frame.outlineColor" ) )
-	graphics.setLineWidth( point( 1 ) )
-	graphics.rectangle( "line", 0, 0, self:getWidth(), self:getHeight() )
-end
-
 function frame:drawTitle()
-	local property = "frame.titleTextColor"
+	local color = "frame.titleTextColor"
 	if ( not self.focus ) then
-		property = "frame.defocus.titleTextColor"
+		color = "frame.defocus.titleTextColor"
 	end
-	graphics.setColor( self:getScheme( property ) )
+	graphics.setColor( self:getScheme( color ) )
 	local font = self:getScheme( "titleFont" )
 	graphics.setFont( font )
 	local margin = point( 36 )
 	local x = margin
-	local y = x - point( 4 )
+	local y = margin - point( 4 )
 	graphics.print( string.utf8upper( self:getTitle() ), x, y )
 end
 
-function frame:getMinWidth()
-	return self.minWidth
-end
-
-function frame:getMinHeight()
-	return self.minHeight
-end
+mutator( frame, "minWidth" )
+mutator( frame, "minHeight" )
 
 function frame:getMinSize()
 	return self:getMinWidth(), self:getMinHeight()
 end
 
-function frame:getTitle()
-	return self.title
-end
+mutator( frame, "title" )
 
 function frame:invalidateLayout()
 	if ( self.closeButton ) then
@@ -500,10 +482,6 @@ end
 
 function frame:setResizable( resizable )
 	self.resizable = resizable
-end
-
-function frame:setTitle( title )
-	self.title = title
 end
 
 function frame:shouldRemoveOnClose()

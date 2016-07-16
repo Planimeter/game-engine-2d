@@ -27,17 +27,17 @@ function radiobutton:draw()
 end
 
 function radiobutton:drawForeground()
-	local property = "radiobutton.outlineColor"
+	local color = "radiobutton.outlineColor"
 
 	if ( not self:isDisabled() ) then
 		if ( self.mousedown and self.mouseover ) then
-			property = "radiobutton.mousedown.outlineColor"
+			color = "radiobutton.mousedown.outlineColor"
 		elseif ( self.mousedown or self.mouseover ) then
-			property = "radiobutton.mouseover.outlineColor"
+			color = "radiobutton.mouseover.outlineColor"
 		end
 	end
 
-	graphics.setColor( self:getScheme( property ) )
+	graphics.setColor( self:getScheme( color ) )
 	graphics.draw( self.foreground:getDrawable(), x, y )
 end
 
@@ -50,9 +50,11 @@ function radiobutton:drawLabel()
 
 	local font = self:getScheme( "font" )
 	graphics.setFont( font )
-	local x = point( 32 )
-	local y = self:getHeight() / 2 - font:getHeight() / 2 - point( 1 )
-	graphics.print( self.text, x, y )
+	local height = self:getHeight()
+	local marginLeft = point( 9 )
+	local x = height + marginLeft
+	local y = height / 2 - font:getHeight() / 2
+	graphics.print( self:getText(), x, y )
 end
 
 function radiobutton:drawSelectionDot()
@@ -66,8 +68,9 @@ function radiobutton:drawSelectionDot()
 		graphics.setColor( self:getScheme( "radiobutton.iconColor" ) )
 	end
 
-	local x = point( 24 ) / 2 - self.icon:getWidth()  / 2
-	local y = point( 24 ) / 2 - self.icon:getHeight() / 2
+	local height = self:getHeight()
+	local x      = height / 2 - self.icon:getWidth()  / 2
+	local y      = height / 2 - self.icon:getHeight() / 2
 	graphics.draw( self.icon:getDrawable(), x, y )
 end
 

@@ -61,19 +61,20 @@ function button:drawForeground()
 end
 
 function button:drawText()
-	local property = "button.textColor"
+	local color = "button.textColor"
 
 	if ( self:isDisabled() ) then
-		property = "button.disabled.textColor"
+		color = "button.disabled.textColor"
 	end
 
-	graphics.setColor( self:getScheme( property ) )
+	graphics.setColor( self:getScheme( color ) )
 
 	local font = self:getScheme( "font" )
 	graphics.setFont( font )
-	local x = self:getWidth() / 2 - font:getWidth( self:getText() ) / 2
+	local text = self:getText()
+	local x = self:getWidth() / 2 - font:getWidth( text ) / 2
 	local y = self:getHeight() / 2 - font:getHeight() / 2
-	graphics.print( self:getText(), x, y )
+	graphics.print( text, x, y )
 end
 
 accessor( button, "text" )

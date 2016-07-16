@@ -32,7 +32,7 @@ function label:draw()
 	elseif ( align == "center" ) then
 		x = self:getWidth() / 2 - textWidth / 2
 	elseif ( align == "right" ) then
-		x = self:getWidth()     - textWidth + font:getWidth( " " )
+		x = self:getWidth() - textWidth + font:getWidth( " " )
 	end
 
 	graphics.print( text, x, 0 )

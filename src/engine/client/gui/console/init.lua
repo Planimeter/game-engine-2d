@@ -175,12 +175,12 @@ function console:activate()
 	gui.setFocusedPanel( self.input, true )
 end
 
-function console:drawBackground()
+function console:drawBackground( color )
 	if ( _INTERACTIVE ) then
 		return
 	end
 
-	gui.frame.drawBackground( self )
+	gui.panel.drawBackground( self, color )
 end
 
 function console:invalidateLayout()

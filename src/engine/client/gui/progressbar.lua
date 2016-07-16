@@ -25,14 +25,14 @@ function progressbar:draw()
 end
 
 function progressbar:drawForeground()
-	local property = "progressbar.foregroundColor"
-	local value    = self:getValue()
-	local min      = self:getMin()
-	local max      = self:getMax()
-	local percent  = math.remap( value, min, max, 0, 1 )
-	local width    = self:getWidth() * percent
-	local height   = self:getHeight()
-	graphics.setColor( self:getScheme( property ) )
+	local color   = "progressbar.foregroundColor"
+	local value   = self:getValue()
+	local min     = self:getMin()
+	local max     = self:getMax()
+	local percent = math.remap( value, min, max, 0, 1 )
+	local width   = self:getWidth() * percent
+	local height  = self:getHeight()
+	graphics.setColor( self:getScheme( color ) )
 	graphics.rectangle( "fill", 0, 0, width, height )
 end
 

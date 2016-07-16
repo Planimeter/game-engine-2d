@@ -55,13 +55,13 @@ function tabbedframe:addTab( tabName, tabPanel, default )
 end
 
 function tabbedframe:drawBackground()
-	local property       = "frame.backgroundColor"
+	local color          = "frame.backgroundColor"
 	local titleBarHeight = point( 62 )
 	local width          = self:getWidth()
 	local height         = self:getHeight()
 
 	if ( not self.tabPanels:getChildren() ) then
-		graphics.setColor( self:getScheme( property ) )
+		graphics.setColor( self:getScheme( color ) )
 		graphics.rectangle(
 			"fill",
 			0,
@@ -72,8 +72,8 @@ function tabbedframe:drawBackground()
 	end
 
 	-- Title Bar
-	property = "frametab.backgroundColor"
-	graphics.setColor( self:getScheme( property ) )
+	color = "frametab.backgroundColor"
+	graphics.setColor( self:getScheme( color ) )
 	local padding    = point( 24 )
 	local font       = self:getScheme( "titleFont" )
 	local titleWidth = font:getWidth( utf8upper( self:getTitle() ) )
@@ -81,8 +81,8 @@ function tabbedframe:drawBackground()
 	graphics.rectangle( "fill", 0, 0, titleWidth + point( 1 ), titleBarHeight )
 
 	-- Title Bar Inner Shadow
-	property = "frametab.outlineColor"
-	graphics.setColor( self:getScheme( property ) )
+	color = "frametab.outlineColor"
+	graphics.setColor( self:getScheme( color ) )
 	local lineWidth = point( 1 )
 	graphics.setLineWidth( lineWidth )
 	local y = titleBarHeight - lineWidth / 2
@@ -112,17 +112,17 @@ function tabbedframe:drawBackground()
 end
 
 function tabbedframe:drawTitle()
-	local property = "frame.titleTextColor"
+	local color = "frame.titleTextColor"
 	if ( not self.focus ) then
-		property = "frame.defocus.titleTextColor"
+		color = "frame.defocus.titleTextColor"
 	end
-	graphics.setColor( self:getScheme( property ) )
+	graphics.setColor( self:getScheme( color ) )
 	local font = self:getScheme( "titleFont" )
 	graphics.setFont( font )
-	local padding = point( 24 )
-	local x       = padding
-	local y       = x - point( 4 )
-	graphics.print( utf8upper( self.title ), x, y )
+	local margin = point( 24 )
+	local x = margin
+	local y = margin - point( 4 )
+	graphics.print( utf8upper( self:getTitle() ), x, y )
 end
 
 accessor( tabbedframe, "tabGroup" )
@@ -170,17 +170,18 @@ function tabbedframe:mousepressed( x, y, button, istouch )
 		self.grabbedY  = localY
 
 		if ( self:isResizable() ) then
-			local width  = self:getWidth()
-			local height = self:getHeight()
+			local borderWidth = point( 8 )
+			local width       = self:getWidth()
+			local height      = self:getHeight()
 
 			-- Top Resize Bounds
 			mouseIntersects = pointinrectangle(
 				localX,
 				localY,
-				point( 8 ),
+				borderWidth,
 				0,
-				width - point( 16 ),
-				point( 8 )
+				width - 2 * borderWidth,
+				borderWidth
 			)
 			if ( mouseIntersects ) then
 				self.resizing = "top"
@@ -191,10 +192,10 @@ function tabbedframe:mousepressed( x, y, button, istouch )
 			mouseIntersects = pointinrectangle(
 				localX,
 				localY,
-				width - point( 8 ),
+				width - borderWidth,
 				0,
-				point( 8 ),
-				point( 8 )
+				borderWidth,
+				borderWidth
 			)
 			if ( mouseIntersects ) then
 				self.resizing = "topright"
@@ -205,10 +206,10 @@ function tabbedframe:mousepressed( x, y, button, istouch )
 			mouseIntersects = pointinrectangle(
 				localX,
 				localY,
-				width  - point( 8 ),
-				point( 8 ),
-				point( 8 ),
-				height - point( 16 )
+				width - borderWidth,
+				borderWidth,
+				borderWidth,
+				height - 2 * borderWidth
 			)
 			if ( mouseIntersects ) then
 				self.resizing = "right"
@@ -219,10 +220,10 @@ function tabbedframe:mousepressed( x, y, button, istouch )
 			mouseIntersects = pointinrectangle(
 				localX,
 				localY,
-				width  - point( 8 ),
-				height - point( 8 ),
-				point( 8 ),
-				point( 8 )
+				width - borderWidth,
+				height - borderWidth,
+				borderWidth,
+				borderWidth
 			)
 			if ( mouseIntersects ) then
 				self.resizing = "bottomright"
@@ -233,10 +234,10 @@ function tabbedframe:mousepressed( x, y, button, istouch )
 			mouseIntersects = pointinrectangle(
 				localX,
 				localY,
-				point( 8 ),
-				height - point( 8 ),
-				width  - point( 16 ),
-				point( 8 )
+				borderWidth,
+				height - borderWidth,
+				width - 2 * borderWidth,
+				borderWidth
 			)
 			if ( mouseIntersects ) then
 				self.resizing = "bottom"
@@ -248,9 +249,9 @@ function tabbedframe:mousepressed( x, y, button, istouch )
 				localX,
 				localY,
 				0,
-				height - point( 8 ),
-				point( 8 ),
-				point( 8 )
+				height - borderWidth,
+				borderWidth,
+				borderWidth
 			)
 			if ( mouseIntersects ) then
 				self.resizing = "bottomleft"
@@ -262,9 +263,9 @@ function tabbedframe:mousepressed( x, y, button, istouch )
 				localX,
 				localY,
 				0,
-				point( 8 ),
-				point( 8 ),
-				height - point( 16 )
+				borderWidth,
+				borderWidth,
+				height - 2 * borderWidth
 			)
 			if ( mouseIntersects ) then
 				self.resizing = "left"
@@ -277,8 +278,8 @@ function tabbedframe:mousepressed( x, y, button, istouch )
 				localY,
 				0,
 				0,
-				point( 8 ),
-				point( 8 )
+				borderWidth,
+				borderWidth
 			)
 			if ( mouseIntersects ) then
 				self.resizing = "topleft"
@@ -287,13 +288,14 @@ function tabbedframe:mousepressed( x, y, button, istouch )
 		end
 
 		-- Title Bar Resize Bounds
+		local titleBarHeight = point( 62 )
 		mouseIntersects = pointinrectangle(
 			localX,
 			localY,
 			0,
 			0,
 			self:getWidth(),
-			point( 62 )
+			titleBarHeight
 		)
 		if ( mouseIntersects ) then
 			self.moving = true

@@ -17,15 +17,15 @@ function closebutton:closebutton( parent, name )
 end
 
 function closebutton:draw()
-	local property = "closebutton.iconColor"
+	local color = "closebutton.iconColor"
 
 	if ( self.mousedown and self.mouseover ) then
-		property = "closebutton.mousedown.iconColor"
+		color = "closebutton.mousedown.iconColor"
 	elseif ( self.mousedown or self.mouseover or self.focus ) then
-		property = "closebutton.mouseover.iconColor"
+		color = "closebutton.mouseover.iconColor"
 	end
 
-	graphics.setColor( self:getScheme( property ) )
+	graphics.setColor( self:getScheme( color ) )
 
 	local width  = self:getWidth()
 	local height = self:getHeight()

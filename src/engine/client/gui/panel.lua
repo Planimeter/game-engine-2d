@@ -127,32 +127,9 @@ function panel:draw()
 
 	if ( children ) then
 		for _, v in ipairs( children ) do
-			if ( v:isVisible() ) then
-				local scale  = v:getScale()
-				local width  = v:getWidth()
-				local height = v:getHeight()
-				graphics.push()
-					graphics.translate( v:getX(), v:getY() )
-					graphics.scale( scale )
-					graphics.translate(
-						( width  / scale ) / 2 - width  / 2,
-						( height / scale ) / 2 - height / 2
-					)
-					local opacity = opacityStack[ #opacityStack ]
-					opacity = opacity * v:getOpacity()
-					graphics.setOpacity( opacity )
-					table.insert( opacityStack, opacity )
-						v:drawFramebuffer()
-
-						if ( gui_draw_bounds:getBoolean() ) then
-							if ( v.mouseover ) then
-								v:drawBounds()
-							end
-						end
-					table.remove( opacityStack, #opacityStack )
-					graphics.setOpacity( opacityStack[ #opacityStack ] )
-				graphics.pop()
-			end
+			v:preDraw()
+			v:drawFramebuffer()
+			v:postDraw()
 		end
 	end
 end
@@ -179,6 +156,10 @@ function panel:drawForeground( color )
 end
 
 function panel:drawFramebuffer()
+	if ( not self:isVisible() ) then
+		return
+	end
+
 	if ( not self.framebuffer ) then
 		self:createFramebuffer()
 	end
@@ -190,6 +171,14 @@ function panel:drawFramebuffer()
 	graphics.setStencilTest()
 end
 
+local filtered = function( panel, func, ... )
+	if ( not panel:isVisible() ) then
+		return
+	end
+
+	return panel[ func ]( panel, ... )
+end
+
 local function cascadeInputToChildren( self, func, ... )
 	if ( not self:isVisible() ) then
 		return
@@ -197,14 +186,11 @@ local function cascadeInputToChildren( self, func, ... )
 
 	local children = self:getChildren()
 	if ( children ) then
-		local v
-		local filtered
+		local value
 		for _, v in ipairs( children ) do
-			if ( v:isVisible() ) then
-				filtered = v[ func ]( v, ... )
-				if ( filtered ~= nil ) then
-					return filtered
-				end
+			value = filtered( v, func, ... )
+			if ( value ~= nil ) then
+				return value
 			end
 		end
 	end
@@ -363,9 +349,7 @@ function panel:mousereleased( x, y, button, istouch )
 	local children = self:getChildren()
 	if ( children ) then
 		for _, v in ipairs( children ) do
-			if ( v:isVisible() ) then
-				v:mousereleased( x, y, button, istouch )
-			end
+			v:mousereleased( x, y, button, istouch )
 		end
 	end
 end
@@ -432,6 +416,45 @@ function panel:onMouseLeave()
 end
 
 function panel:onRemove()
+end
+
+local opacity = 1
+
+function panel:preDraw()
+	if ( not self:isVisible() ) then
+		return
+	end
+
+	local scale  = self:getScale()
+	local width  = self:getWidth()
+	local height = self:getHeight()
+	graphics.push()
+	graphics.translate( self:getX(), self:getY() )
+	graphics.scale( scale )
+	graphics.translate(
+		( width  / scale ) / 2 - width  / 2,
+		( height / scale ) / 2 - height / 2
+	)
+	opacity = opacityStack[ #opacityStack ]
+	opacity = opacity * self:getOpacity()
+	graphics.setOpacity( opacity )
+	table.insert( opacityStack, opacity )
+end
+
+function panel:postDraw()
+	if ( not self:isVisible() ) then
+		return
+	end
+
+	if ( gui_draw_bounds:getBoolean() ) then
+		if ( self.mouseover ) then
+			self:drawBounds()
+		end
+	end
+
+	table.remove( opacityStack, #opacityStack )
+	graphics.setOpacity( opacityStack[ #opacityStack ] )
+	graphics.pop()
 end
 
 function panel:preDrawWorld()
