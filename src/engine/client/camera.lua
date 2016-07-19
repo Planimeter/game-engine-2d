@@ -55,11 +55,6 @@ function context:getWorldIndex()
 	return self.worldIndex
 end
 
-function context:isInViewport()
-	-- TODO: Implement me.
-	return true
-end
-
 function context:remove()
 	for i, v in ipairs( _contexts ) do
 		if ( v == self ) then

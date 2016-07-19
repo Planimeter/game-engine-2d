@@ -130,7 +130,7 @@ if ( _CLIENT ) then
 
 		-- Draw entities
 		for _, v in ipairs( renderables ) do
-			if ( worldIndex == v:getWorldIndex() and v:isInViewport() ) then
+			if ( worldIndex == v:getWorldIndex() ) then
 				graphics.push()
 					local x, y = v:getDrawPosition()
 					graphics.translate( x, y )
@@ -254,13 +254,6 @@ end
 
 function entity:getWorldIndex()
 	return self:getNetworkVar( "worldIndex" )
-end
-
-if ( _CLIENT ) then
-	function entity:isInViewport()
-		-- TODO: Implement me.
-		return true
-	end
 end
 
 function entity:initializePhysics( type )
