@@ -20,7 +20,7 @@ function hudmoveindicator:hudmoveindicator( parent )
 	self:setScheme( "Default" )
 end
 
-function hudmoveindicator:createMoveIndicator( x, y )
+function hudmoveindicator:createMoveIndicator( worldIndex, x, y )
 	if ( not self.sprites ) then
 		self.sprites = {}
 	end
@@ -39,9 +39,10 @@ function hudmoveindicator:createMoveIndicator( x, y )
 	end
 
 	local indicator = {
-		sprite = sprite,
-		x      = x,
-		y      = y
+		sprite     = sprite,
+		worldIndex = worldIndex,
+		x          = x,
+		y          = y
 	}
 	indicator.sprite:setAnimation( "click" )
 	table.insert( self.sprites, indicator )
@@ -120,11 +121,12 @@ function hudmoveindicator:drawMoveIndicators()
 	local property = "hudmoveindicator.indicatorColor"
 	local color    = self:getScheme( property )
 	for _, indicator in ipairs( self.sprites ) do
-		local width  = indicator.sprite:getWidth()
-		local height = indicator.sprite:getHeight()
-		local x      = indicator.x - width / 2
-		local y      = indicator.y - height / 2
-		camera.drawToWorld( x, y, function()
+		local width      = indicator.sprite:getWidth()
+		local height     = indicator.sprite:getHeight()
+		local worldIndex = indicator.worldIndex
+		local x          = indicator.x - width / 2
+		local y          = indicator.y - height / 2
+		camera.drawToWorld( worldIndex, x, y, function()
 			graphics.setColor( color )
 			indicator.sprite:draw()
 		end )
@@ -171,9 +173,10 @@ local function onLeftClick( self, x, y )
 		self:invalidate()
 		self:setActive( false )
 
-		local player   = localplayer
-		local position = vector( camera.screenToWorld( x, y ) )
-		self:createMoveIndicator( position.x, position.y )
+		local player     = localplayer
+		local worldIndex = player:getWorldIndex()
+		local position   = vector( camera.screenToWorld( x, y ) )
+		self:createMoveIndicator( worldIndex, position.x, position.y )
 		player:moveTo( position + vector( 0, game.tileSize ) )
 
 		return true

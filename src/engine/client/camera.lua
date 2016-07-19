@@ -31,10 +31,9 @@ local _contexts = contexts
 
 class( "context" )
 
-function context:context( x, y, func )
+function context:context( worldIndex, x, y, func )
+	self.worldIndex = worldIndex
 	self.position   = vector( x, y )
-	-- TODO: Add worldIndex to constructor.
-	self.worldIndex = 1
 	self._drawFunc  = func
 end
 
@@ -69,8 +68,8 @@ function context:remove()
 	end
 end
 
-function drawToWorld( x, y, func )
-	local context = context( x, y, func )
+function drawToWorld( worldIndex, x, y, func )
+	local context = context( worldIndex, x, y, func )
 	table.insert( _contexts, context )
 end
 

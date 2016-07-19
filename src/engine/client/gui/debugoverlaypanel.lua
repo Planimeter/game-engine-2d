@@ -15,14 +15,29 @@ function debugoverlaypanel:debugoverlaypanel( parent )
 	self.overlays = {}
 end
 
+local function rectangle( overlay )
+	return function()
+		graphics.setColor( overlay.color )
+		graphics.setLineWidth( 1 )
+		graphics.rectangle(
+			"line",
+			0,
+			0,
+			overlay.width,
+			overlay.height
+		)
+	end
+end
+
 function debugoverlaypanel:preDrawWorld()
 	for _, overlay in ipairs( self.overlays ) do
 		if ( overlay.type == "rectangle" ) then
-			camera.drawToWorld( overlay.x, overlay.y, function()
-				graphics.setColor( overlay.color )
-				graphics.setLineWidth( 1 )
-				graphics.rectangle( "line", 0, 0, overlay.width, overlay.height )
-			end )
+			camera.drawToWorld(
+				overlay.worldIndex,
+				overlay.x,
+				overlay.y,
+				rectangle( overlay )
+			)
 		end
 	end
 
@@ -30,20 +45,32 @@ function debugoverlaypanel:preDrawWorld()
 end
 
 function debugoverlaypanel:invalidateLayout()
-	self:setSize( graphics.getViewportWidth(), graphics.getViewportHeight() )
+	self:setSize(
+		graphics.getViewportWidth(),
+		graphics.getViewportHeight()
+	)
 
 	gui.panel.invalidateLayout( self )
 end
 
-function debugoverlaypanel:rectangle( x, y, width, height, c, duration )
+function debugoverlaypanel:rectangle(
+	worldIndex,
+	x,
+	y,
+	width,
+	height,
+	c,
+	duration
+)
 	local overlay = {
-		type     = "rectangle",
-		x        = x,
-		y        = y,
-		width    = width,
-		height   = height,
-		color    = c,
-		duration = duration
+		type       = "rectangle",
+		worldIndex = worldIndex,
+		x          = x,
+		y          = y,
+		width      = width,
+		height     = height,
+		color      = c,
+		duration   = duration
 	}
 	table.insert( self.overlays, overlay )
 end

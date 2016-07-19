@@ -354,7 +354,6 @@ function load( arg )
 		convar.getConvar( "con_enable" ):setValue( "1" )
 	end
 
-	-- TODO: Move to config system!!
 	bind.readBinds()
 end
 
