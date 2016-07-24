@@ -58,8 +58,8 @@ Graphics function overrides for LÖVE
 * [love-window](https://github.com/Planimeter/love-window)  
 Extends the window module
 * [love-conf](https://github.com/Planimeter/love-conf)  
-Adds argv, a --dedicated argument that disables client-side modules, and
-OS-specific c.window.icon functionality
+Adds `argv`, a `--dedicated` argument that disables client-side modules, and
+OS-specific `c.window.icon` functionality
 * [common](https://github.com/Planimeter/common)  
 Common game development classes
 
@@ -81,12 +81,17 @@ http://www.microsoft.com/en-us/download/details.aspx?id=29
 Contributing
 ============
 
-Issues are responded to in less than 24 hours. In most cases, [@andrewmcwatters,](https://github.com/andrewmcwatters) or another Planimeter engineer will get back to you within the hour.
+Issues are responded to in less than 24 hours. In most cases,
+[@andrewmcwatters,](https://github.com/andrewmcwatters) or another Planimeter
+engineer will get back to you within the hour.
 
 Contributors
 ============
 
-Grid is built by Planimeter volunteer contributors, and contributors like you. Here are the lovely folks who have powered the project. GitHub doesn't show all of the contributors behind its metrics, so we extend our thanks here in alphabetical order by last name for every addition and deletion.
+Grid is built by Planimeter volunteer contributors, and contributors like you.
+Here are the lovely folks who have powered the project. GitHub doesn't show all
+of the contributors behind its metrics, so we extend our thanks here in
+alphabetical order by last name for every addition and deletion.
 
 Ryan Kingstone ([@ryan-kingstone](https://github.com/ryan-kingstone))  
 Matthias "Zeh Matt" Moninger  ([@ZehM4tt](https://github.com/ZehM4tt))  
