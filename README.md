@@ -45,6 +45,24 @@ Features
 * Tweening system
 * UTF-8 aware string functions via [utf8.lua](http://www.curse.com/addons/wow/utf8 "utf8.lua")
 
+Libraries
+=========
+
+Though Grid is a lightweight engine, if you find it to be too large for what you
+need, you can find similar features in the packages below.
+
+* [love-require](https://github.com/Planimeter/love-require)  
+Adds live reloading to LÖVE
+* [love-graphics](https://github.com/Planimeter/love-graphics)  
+Graphics function overrides for LÖVE
+* [love-window](https://github.com/Planimeter/love-window)  
+Extends the window module
+* [love-conf](https://github.com/Planimeter/love-conf)  
+Adds argv, a --dedicated argument that disables client-side modules, and
+OS-specific c.window.icon functionality
+* [common](https://github.com/Planimeter/common)  
+Common game development classes
+
 Requirements
 ============
 
