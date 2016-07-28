@@ -58,8 +58,8 @@ Graphics function overrides for LÖVE
 * [love-window](https://github.com/Planimeter/love-window)  
 Extends the window module
 * [love-conf](https://github.com/Planimeter/love-conf)  
-Adds `argv`, a `--dedicated` argument that disables client-side modules, and
-OS-specific `c.window.icon` functionality
+Adds `argv`, `_CLIENT`, `_SERVER`, `_DEDICATED`, a `--dedicated` argument that
+disables client-side modules, and OS-specific `c.window.icon` functionality
 * [common](https://github.com/Planimeter/common)  
 Common game development classes
 
