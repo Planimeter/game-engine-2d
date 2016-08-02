@@ -21,28 +21,23 @@ Create a Project
 Features
 ========
 
-* Addon system
+* Addons
 * Animation events
-* Classes via [lclass](https://github.com/andrewmcwatters/lclass "lclass")
 * Client-server model
 * Client-side prediction
-* Common convenience classes
-* Entity system
-* GUI system
-* JSON decoding and encoding via [JSON4Lua](http://json.luaforge.net/ "JSON4Lua")
+* Entities
+* GUI
 * Level streaming
 * Live reloadable assets
 * Lua 5.1.5 base library extensions
 * Massively multiplayer
-* MD5 sums via [md5.lua](https://github.com/kikito/md5.lua "md5.lua")
 * Pathfinding
 * Real-time scripting
 * Retina support
 * Soundscripts
 * Spritesheet animations
 * [Tiled](http://www.mapeditor.org/ "Tiled")-based region system
-* Tweening system
-* UTF-8 aware string functions via [utf8.lua](http://www.curse.com/addons/wow/utf8 "utf8.lua")
+* Tweening
 
 Libraries
 =========
