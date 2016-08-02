@@ -41,7 +41,6 @@ Features
 * Soundscripts
 * Spritesheet animations
 * [Tiled](http://www.mapeditor.org/ "Tiled")-based region system
-* Threaded [LuaSec](https://github.com/brunoos/luasec "LuaSec") support
 * Tweening system
 * UTF-8 aware string functions via [utf8.lua](http://www.curse.com/addons/wow/utf8 "utf8.lua")
 
