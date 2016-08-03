@@ -55,21 +55,6 @@ disables client-side modules, and OS-specific `c.window.icon` functionality
 * [common](https://github.com/Planimeter/common)  
 Common game development classes
 
-Requirements
-============
-
-Windows 64-bit
---------------
-
-Microsoft Visual C++ 2008 Redistributable Package (x64)  
-http://www.microsoft.com/en-us/download/details.aspx?id=15336
-
-Windows 32-bit
---------------
-
-Microsoft Visual C++ 2008 Redistributable Package (x86)  
-http://www.microsoft.com/en-us/download/details.aspx?id=29
-
 Contributing
 ============
 
