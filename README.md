@@ -40,6 +40,8 @@ would otherwise need to write by hand for your projects or game jams.
 Though Grid is a lightweight engine, if you find it to be too large for what you
 need, you can find similar features in the packages below.
 
+* [lauxlib](https://github.com/Planimeter/lauxlib)  
+Lua 5.1.5 Auxiliary Library
 * [love-require](https://github.com/Planimeter/love-require)  
 Adds live reloading to LÖVE
 * [love-graphics](https://github.com/Planimeter/love-graphics)  
