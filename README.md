@@ -10,14 +10,12 @@ environment.
 It's a lightweight and fast engine, and it provides many abstractions that you
 would otherwise need to write by hand for your projects or game jams.
 
-Create a Project
-================
+## Create a Project
 
 [Getting Started](http://www.planimeter.org/grid-sdk/tutorials/Getting_Started)  
 [API Documentation](http://www.planimeter.org/grid-sdk/api/Home)
 
-Features
-========
+## Features
 
 * Addons
 * Animation events
@@ -37,8 +35,7 @@ Features
 * [Tiled](http://www.mapeditor.org/ "Tiled")-based region system
 * Tweening
 
-Libraries
-=========
+## Libraries
 
 Though Grid is a lightweight engine, if you find it to be too large for what you
 need, you can find similar features in the packages below.
@@ -55,24 +52,26 @@ disables client-side modules, and OS-specific `c.window.icon` functionality
 * [common](https://github.com/Planimeter/common)  
 Common game development classes
 
-Contributing
-============
+## License
 
-Issues are responded to in less than 24 hours. In most cases,
-[@andrewmcwatters,](https://github.com/andrewmcwatters) or another Planimeter
-engineer will get back to you within the hour.
+The MIT License
 
-Contributors
-============
+Copyright (c) 2016 Planimeter. http://planimeter.org
 
-Grid is built by Planimeter volunteer contributors, and contributors like you.
-Here are the lovely folks who have powered the project. GitHub doesn't show all
-of the contributors behind its metrics, so we extend our thanks here in
-alphabetical order by last name for every addition and deletion.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-Ryan Kingstone ([@ryan-kingstone](https://github.com/ryan-kingstone))  
-Matthias "Zeh Matt" Moninger  ([@ZehM4tt](https://github.com/ZehM4tt))  
-Matthew "Polkm" Nichols ([@Polkm](https://github.com/Polkm))  
-Lachlan "skooch" Temple ([@skooch](https://github.com/skooch))  
-Manolis Vrondakis ([@vrondakis](https://github.com/vrondakis))  
-Kamil Zmich ([@KamilKZ](https://github.com/KamilKZ))
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
