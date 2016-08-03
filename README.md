@@ -29,7 +29,7 @@ Features
 * GUI
 * Level streaming
 * Live reloadable assets
-* Lua 5.1.5 base library extensions
+* Lua 5.1.5 auxiliary library
 * Massively multiplayer
 * Pathfinding
 * Real-time scripting
