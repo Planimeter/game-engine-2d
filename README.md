@@ -1,4 +1,4 @@
-# <img src="/src/images/gui/logo_dark@2x.png?raw=true" width="169" height="49" title="Grid">  
+# <img src="/images/gui/logo_dark@2x.png?raw=true" width="169" height="49" title="Grid">  
 
 [![Gitter](https://img.shields.io/badge/chat-on%20gitter-brightgreen.svg)](https://gitter.im/Planimeter/grid-sdk?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Development Supercollective](https://img.shields.io/badge/Made%20with%20L%C3%96VE%20by-Planimeter-brightgreen.svg)](http://www.planimeter.org/)
