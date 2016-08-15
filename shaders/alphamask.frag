@@ -1,4 +1,4 @@
-//========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========//
+//=========== Copyright © 2016, Planimeter, All rights reserved. =============//
 //
 // Purpose: Alpha Mask pixel shader
 //
