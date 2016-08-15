@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Password Text Box class
 --
@@ -20,9 +20,6 @@ local utf8sub = string.utf8sub
 function passwordtextbox:doBackspace( count )
 	count = count or 1
 
-	-- Andrew; nextWord returns a position of 0 if no more words are found.
-	-- Since we're backspacing a word in this case, but no word is found,
-	-- backspace whatever is in front of us.
 	if ( count == 0 ) then
 		count = self.cursorPos + 1
 	end
@@ -45,9 +42,6 @@ local utf8len = string.utf8len
 function passwordtextbox:doDelete( count )
 	count = count or 1
 
-	-- Andrew; nextWord returns a position of 0 if no more words are found.
-	-- Since we're deleting a word in this case, but no word is found,
-	-- delete whatever is in back of us.
 	if ( count == 0 ) then
 		count = utf8len( self.password ) - self.cursorPos
 	end

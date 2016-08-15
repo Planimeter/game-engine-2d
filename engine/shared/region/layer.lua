@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Region Layer class
 --
@@ -19,7 +19,7 @@ if ( _CLIENT ) then
 
 		local image = tileset:getImage()
 		local count = self:getWidth() * self:getHeight()
-		self.spritebatch = graphics.newSpriteBatch( image:getDrawable(), count )
+		self.spritebatch = love.graphics.newSpriteBatch( image:getDrawable(), count )
 	end
 
 	function regionlayer:draw()
@@ -32,16 +32,16 @@ if ( _CLIENT ) then
 			return
 		end
 
-		graphics.push()
-			graphics.translate( self:getX(), self:getY() )
+		love.graphics.push()
+			love.graphics.translate( self:getX(), self:getY() )
 			graphics.setOpacity( self:getOpacity() )
 			graphics.setColor( color.white )
-			graphics.draw( spritebatch )
-		graphics.pop()
+			love.graphics.draw( spritebatch )
+		love.graphics.pop()
 	end
 end
 
-mutator( regionlayer, "data" )
+accessor( regionlayer, "data" )
 
 function regionlayer:getHighestTileGid()
 	local highestTileGid = -1
@@ -53,21 +53,21 @@ function regionlayer:getHighestTileGid()
 	return highestTileGid
 end
 
-mutator( regionlayer, "name" )
-mutator( regionlayer, "opacity" )
-mutator( regionlayer, "properties" )
-mutator( regionlayer, "region" )
+accessor( regionlayer, "name" )
+accessor( regionlayer, "opacity" )
+accessor( regionlayer, "properties" )
+accessor( regionlayer, "region" )
 
 if ( _CLIENT ) then
 	accessor( regionlayer, "spriteBatch", "spritebatch" )
 end
 
-mutator( regionlayer, "tileset" )
-mutator( regionlayer, "type" )
-mutator( regionlayer, "width" )
-mutator( regionlayer, "height" )
-mutator( regionlayer, "x" )
-mutator( regionlayer, "y" )
+accessor( regionlayer, "tileset" )
+accessor( regionlayer, "type" )
+accessor( regionlayer, "width" )
+accessor( regionlayer, "height" )
+accessor( regionlayer, "x" )
+accessor( regionlayer, "y" )
 
 if ( _CLIENT ) then
 	function regionlayer:initializeTiles()
@@ -84,7 +84,7 @@ if ( _CLIENT ) then
 		local image    = tileset:getImage()
 		local imgW     = image:getWidth()
 		local imgH     = image:getHeight()
-		local quad     = graphics.newQuad( 0, 0, tileW, tileH, imgW, imgH )
+		local quad     = love.graphics.newQuad( 0, 0, tileW, tileH, imgW, imgH )
 		local id       = 0
 		local tileX    = 0
 		local tileY    = 0

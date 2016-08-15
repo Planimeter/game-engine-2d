@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Pathfinding Node class
 --
@@ -14,7 +14,7 @@ function node:node( x, y, parent )
 	self.f      = 0
 end
 
-mutator( node, "parent" )
+accessor( node, "parent" )
 
 node.__eq = vector.__eq
 

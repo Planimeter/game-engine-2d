@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Button class
 --
@@ -70,7 +70,7 @@ function button:drawText()
 	graphics.setColor( self:getScheme( color ) )
 
 	local font = self:getScheme( "font" )
-	graphics.setFont( font )
+	love.graphics.setFont( font )
 	local text = self:getText()
 	local x = self:getWidth() / 2 - font:getWidth( text ) / 2
 	local y = self:getHeight() / 2 - font:getHeight() / 2

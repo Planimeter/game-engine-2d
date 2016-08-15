@@ -1,113 +1,52 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose:
 --
 --============================================================================--
 
-local function loadConfig( c )
-    love.filesystem.setIdentity( c.identity, c.appendidentity )
+argv = {}
+for _, v in ipairs( arg ) do argv[ v ] = true end
 
-    require( "class" )
-    require( "engine.shared.filesystem" )
-    require( "engine.shared.convar" )
-    convar.readConfig()
+if ( argv[ "--debug" ] ) then
+	_DEBUG = true
+end
 
-    local _INTERACTIVE = c.args[ "-dedicated" ] and
-                         c.args[ "-interactive" ]
+if ( argv[ "--dedicated" ] ) then
+	_SERVER    = true
+	_DEDICATED = true
+end
 
-    local r_window_width = convar.getConfig( "r_window_width" )
-    local r_window_height = convar.getConfig( "r_window_height" )
-    local r_window_fullscreen = convar.getConfig( "r_window_fullscreen" )
-    local r_window_borderless = convar.getConfig( "r_window_borderless" )
-    local r_window_vsync = convar.getConfig( "r_window_vsync" )
-    if ( _INTERACTIVE ) then
-        c.window.width = 661
-    elseif ( r_window_width ) then
-        c.window.width = tonumber( r_window_width )
-    end
-    if ( _INTERACTIVE ) then
-        c.window.height = 480
-    elseif ( r_window_height ) then
-        c.window.height = tonumber( r_window_height )
-    end
-    if ( r_window_fullscreen ) then
-        c.window.fullscreen = tonumber( r_window_fullscreen ) ~= nil and
-                              tonumber( r_window_fullscreen ) ~= 0
-    end
-    if ( _INTERACTIVE ) then
-        -- c.window.borderless = true
-    elseif ( r_window_borderless ) then
-        c.window.borderless = tonumber( r_window_borderless ) ~= nil and
-                              tonumber( r_window_borderless ) ~= 0
-    end
-    if ( r_window_vsync ) then
-        c.window.vsync = tonumber( r_window_vsync ) ~= nil and
-                         tonumber( r_window_vsync ) ~= 0
-    end
-
-    c.sound = c.sound or {}
-    c.sound.volume = 1
-    c.sound.desktop = true
-
-    local snd_volume = convar.getConfig( "snd_volume" )
-    local snd_desktop = convar.getConfig( "snd_desktop" )
-    if ( snd_volume ) then
-        c.sound.volume = tonumber( snd_volume )
-    end
-    if ( snd_desktop ) then
-        c.sound.desktop = tonumber( snd_desktop ) ~= nil and
-                          tonumber( snd_desktop ) ~= 0
-    end
-
-    _CONF = c
+if ( not _SERVER ) then
+	_CLIENT = true
 end
 
 function love.conf( c )
+	c.title = "Grid Engine"
+	c.version = "0.10.1"
+	if ( _DEDICATED ) then
+		c.modules.keyboard = false
+		c.modules.mouse = false
+		c.modules.joystick = false
+		c.modules.touch = false
+		c.modules.image = false
+		c.modules.graphics = false
+		c.modules.audio = false
+		c.modules.sound = false
+		c.modules.system = false
+		c.modules.font = false
+		c.modules.window = false
+		c.modules.video = false
+	else
+		c.window.highdpi = true
+		c.window.icon = "images/icon.png"
+		require( "love.system" )
+		if ( love.system.getOS() == "OS X" ) then
+			c.window.icon = "images/icon_osx.png"
+		end
+	end
+	c.identity = "grid"
 
-        c.title = "Grid Engine"
-        c.author = "Planimeter"
-
-        c.args = {}
-        for _, v in ipairs( arg ) do
-            c.args[ v ] = true
-        end
-
-        if ( c.args[ "-dedicated" ] ) then
-            c.modules.joystick = false
-            c.modules.audio = false
-            c.modules.sound = false
-            c.modules.video = false
-
-            if ( not c.args[ "-interactive" ] ) then
-                c.modules.keyboard = false
-                c.modules.mouse = false
-                c.modules.touch = false
-                c.modules.graphics = false
-                c.modules.font = false
-                c.modules.window = false
-            else
-                c.window.resizable = true
-                c.window.centered = false
-            end
-            c.console = true -- Only relevant for windows.
-        end
-
-        if ( c.args[ "-debug" ] ) then
-            c.console = true -- Only relevant for windows.
-        end
-
-        c.identity = "grid"
-        c.apppendidentity = true
-
-        loadConfig( c )
-        c.window.icon = "images/icon.png"
-
-        if ( jit and jit.os == "OSX" ) then
-            c.window.icon = "images/icon_osx.png"
-        end
-
-        c.window.highdpi = true
-
-        return c
-
+	require( "engine.shared.require" )
+	require( "engine.shared.config" )
+	config.load( c )
 end

@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Scrollbar class
 --
@@ -40,14 +40,14 @@ function scrollbar:draw()
 	gui.panel.draw( self )
 end
 
-mutator( scrollbar, "min" )
-mutator( scrollbar, "max" )
+accessor( scrollbar, "min" )
+accessor( scrollbar, "max" )
 
 function scrollbar:getRange()
 	return self.min, self.max
 end
 
-mutator( scrollbar, "rangeWindow" )
+accessor( scrollbar, "rangeWindow" )
 
 function scrollbar:getThumbLength()
 	local range = self:getMax() - self:getMin()
@@ -62,7 +62,7 @@ function scrollbar:getThumbPos()
 	return percent * self:getHeight()
 end
 
-mutator( scrollbar, "value" )
+accessor( scrollbar, "value" )
 
 function scrollbar:invalidateLayout()
 	local parent = self:getParent()

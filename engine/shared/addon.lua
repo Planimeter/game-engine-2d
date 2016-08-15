@@ -1,50 +1,35 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Addon interface
 --
 --============================================================================--
 
-local filesystem = filesystem
-local string     = string
-local table      = table
-local ipairs     = ipairs
-local print      = print
-local require    = require
-local hook       = hook
+class( "addon" )
 
-module( "addon" )
-
-local addons = {}
-
-function initialize()
-	local addons = filesystem.getDirectoryItems( "addons" )
-	local v
+function addon.load( arg )
+	local addons = love.filesystem.getDirectoryItems( "addons" )
 	for i = #addons, -1, 1 do
-		v = addons[ i ]
+		local v = addons[ i ]
 		if ( string.fileextension( v ) ~= "zip" or
-		     not filesystem.isDirectory( v ) ) then
+		     not love.filesystem.isDirectory( v ) ) then
 			table.remove( addons, i )
 		end
 	end
 
-	for _, addon in ipairs( addons ) do
-		mount( addon )
+	for _, v in ipairs( addons ) do
+		addon.mount( v )
 	end
 end
 
-function getAddons()
+local addons = {}
+
+function addon.getAddons()
 	return addons
 end
 
-function load( arg )
-end
-
-function unload()
-end
-
-function mount( addon )
-	if ( filesystem.mount( "addons/" .. addon, "" ) ) then
-		table.insert( addons, addon )
+function addon.mount( addon )
+	if ( love.filesystem.mount( "addons/" .. addon, "" ) ) then
+		table.insert( addon.getAddons(), addon )
 		print( "Mounted \"" .. addon .. "\"!" )
 		require( "addons." .. addon )
 		hook.call( "shared", "onAddonMounted", addon )
@@ -55,14 +40,14 @@ function mount( addon )
 	return false
 end
 
-function unmount( addon )
-	local mounted = table.hasvalue( getAddons(), addon )
+function addon.unmount( addon )
+	local mounted = table.hasvalue( addon.getAddons(), addon )
 	if ( not mounted ) then
 		print( "Addon \"" .. addon .. "\" is not mounted!" )
 		return false
 	end
 
-	if ( filesystem.unmount( "addons/" .. addon ) ) then
+	if ( love.filesystem.unmount( "addons/" .. addon ) ) then
 		hook.call( "shared", "onAddonUnmounted", addon )
 		unrequire( "addons." .. addon )
 		print( "Unmounted \"" .. addon .. "\"!" )

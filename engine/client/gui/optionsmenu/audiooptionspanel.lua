@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Audio Options Panel class
 --
@@ -10,7 +10,7 @@ function audiooptionspanel:audiooptionspanel()
 	gui.frametabpanel.frametabpanel( self, nil, "Audio Options Panel" )
 	local options = {}
 	self.options = options
-	local c = engine.getConfig()
+	local c = config.getConfig()
 
 	local name = "Master Volume"
 	local label = gui.label( self, name, name )

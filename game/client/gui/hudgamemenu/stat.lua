@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Game Menu Stat class
 --
@@ -47,7 +47,7 @@ function hudgamemenustat:draw()
 	local font     = self:getScheme( "font" )
 	local stat     = self:getStat()
 	graphics.setColor( self:getScheme( property ) )
-	graphics.setFont( font )
+	love.graphics.setFont( font )
 	graphics.print( string.capitalize( stat ), 0, 0 )
 
 	property    = "colors.gold"
@@ -56,7 +56,7 @@ function hudgamemenustat:draw()
 	local label = "Level " .. level
 	local x     = self:getWidth() - font:getWidth( label )
 	graphics.setColor( self:getScheme( property ) )
-	graphics.setFont( font )
+	love.graphics.setFont( font )
 	graphics.print( label, x, 0 )
 
 	property        = "label.textColor"
@@ -66,13 +66,13 @@ function hudgamemenustat:draw()
 	label           = xp  .. " / " .. nextLvlXp .. " XP"
 	x               = self:getWidth() - font:getWidth( label )
 	graphics.setColor( self:getScheme( property ) )
-	graphics.setFont( font )
+	love.graphics.setFont( font )
 	graphics.print( label, x, point( 30 ) )
 
 	gui.panel.draw( self )
 end
 
-mutator( hudgamemenustat, "stat" )
+accessor( hudgamemenustat, "stat" )
 
 function hudgamemenustat:onRemove()
 	self:removeStatHook()

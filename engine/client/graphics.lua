@@ -1,23 +1,18 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Graphics interface
 --
 --============================================================================--
 
--- These values are preserved during real-time scripting.
-local _error = graphics and graphics.error or nil
-
 require( "common.color" )
-
-local _INTERACTIVE = _INTERACTIVE
 
 local class      = class
 local color      = color
 local concommand = concommand
-local filesystem = filesystem
 local graphics   = love.graphics
 local image      = love.image
 local ipairs     = ipairs
+local love       = love
 local math       = math
 local os         = os
 local require    = require
@@ -58,30 +53,13 @@ grid.scheme = {
 
 grid.marks = {}
 
-error = _error
-
-function initialize()
-	-- Set defaults
-	setBackgroundColor( grid.scheme.backgroundColor )
-	graphics.setDefaultFilter( "nearest", "nearest" )
-	graphics.setLineStyle( "rough" )
-
-	-- Set error
-	error = newImage( "images/error.png" )
-	error:setWrap( "repeat", "repeat" )
-end
-
-function draw( ... )
-	graphics.draw( ... )
-end
-
 function drawGrid()
 	if ( grid.framebuffer == nil ) then
 		grid.framebuffer = newFullscreenFramebuffer()
 		grid.framebuffer:renderTo( function()
 			graphics.setLineWidth( point( 1 ) )
 			graphics.setLineStyle( "rough" )
-			graphics.setBlendMode( "alpha" )
+			love.graphics.setBlendMode( "alpha" )
 
 			local x = graphics.getWidth()  % point( 32 ) / 2
 			local y = graphics.getHeight() % point( 32 ) / 2
@@ -89,7 +67,7 @@ function drawGrid()
 			-- Grid Lines (32x32)
 			setColor( grid.scheme.lines32x32Color )
 			for i = 0, graphics.getWidth() / point( 32 ) do
-				line(
+				love.graphics.line(
 					point(  32 ) * i + x,
 					point( -32 ),
 					point(  32 ) * i + x,
@@ -97,7 +75,7 @@ function drawGrid()
 				)
 			end
 			for i = 0, graphics.getHeight() / point( 32 ) do
-				line(
+				love.graphics.line(
 					point( -32 ),
 					point(  32 ) * i + y,
 					graphics.getWidth(),
@@ -108,7 +86,7 @@ function drawGrid()
 			-- Grid Lines (64x64)
 			setColor( grid.scheme.lines64x64Color )
 			for i = 0, graphics.getWidth() / point( 64 ) do
-				line(
+				love.graphics.line(
 					point(  64 ) * i + x,
 					point( -64 ),
 					point(  64 ) * i + x,
@@ -116,7 +94,7 @@ function drawGrid()
 				)
 			end
 			for i = 0, graphics.getHeight() / point( 64 ) do
-				line(
+				love.graphics.line(
 					point( -64 ),
 					point(  64 ) * i + y,
 					graphics.getWidth(),
@@ -153,23 +131,19 @@ local _color     = color( r, g, b, a )
 
 function getBackgroundColor()
 	r, g, b, a = graphics.getBackgroundColor()
-	_color.r = r
-	_color.g = g
-	_color.b = b
-	_color.a = a
+	_color[ 1 ] = r
+	_color[ 2 ] = g
+	_color[ 3 ] = b
+	_color[ 4 ] = a
 	return _color
-end
-
-function getBlendMode()
-	return graphics.getBlendMode()
 end
 
 function getColor()
 	r, g, b, a = graphics.getColor()
-	_color.r = r
-	_color.g = g
-	_color.b = b
-	_color.a = a
+	_color[ 1 ] = r
+	_color[ 2 ] = g
+	_color[ 3 ] = b
+	_color[ 4 ] = a
 	return _color
 end
 
@@ -208,31 +182,15 @@ function getOpacity()
 	return _opacity
 end
 
-function getPixelScale()
-	return window.getPixelScale()
-end
-
-function getShader()
-	return graphics.getShader()
-end
-
-function getViewportAspectRatio()
+function getAspectRatios()
 	w = graphics.getWidth()
 	h = graphics.getHeight()
 	r = gcd( w, h )
 	return w / r, h / r
 end
 
-function getViewportHeight()
-	return graphics.getHeight()
-end
-
-function getViewportWidth()
-	return graphics.getWidth()
-end
-
 function newFont( filename, size )
-	size = getPixelScale() * size
+	size = love.window.getPixelScale() * size
 	return graphics.newFont( filename, size )
 end
 
@@ -249,30 +207,6 @@ end
 function newImage( filename )
 	require( "engine.client.image" )
 	return _G.image( filename )
-end
-
-function newImageData( ... )
-	return image.newImageData( ... )
-end
-
-function newQuad( x, y, width, height, sw, sh )
-	return graphics.newQuad( x, y, width, height, sw, sh )
-end
-
-function newShader( ... )
-	return graphics.newShader( ... )
-end
-
-function newSpriteBatch( image, size, usagehint )
-	return graphics.newSpriteBatch( image, size, usagehint or "dynamic" )
-end
-
-function line( ... )
-	graphics.line( ... )
-end
-
-function pop()
-	graphics.pop()
 end
 
 local floor = math.floor
@@ -312,10 +246,6 @@ function printf( text, x, y, limit, align, r, sx, sy, ox, oy, kx, ky )
 	graphics.printf( text, x, y, limit, align, r, sx, sy, ox, oy, kx, ky )
 end
 
-function push()
-	graphics.push()
-end
-
 local _lineWidth = 1
 
 function rectangle( mode, x, y, width, height )
@@ -328,42 +258,22 @@ function rectangle( mode, x, y, width, height )
 	graphics.rectangle( mode, x, y, width, height )
 end
 
-function scale( sx, sy )
-	graphics.scale( sx, sy )
-end
-
-concommand( "screenshot", "Take a screenshot", function()
-	filesystem.createDirectory( "screenshots" )
-	local screenshot = graphics.newScreenshot( true )
-	local filename   = os.time() .. ".png"
-	screenshot:encode( "png", "screenshots/" .. filename )
-	_G.print( "Wrote 'screenshots/" .. filename .. "'" )
-end )
-
 local tempColor = color()
 
 function setBackgroundColor( color, multiplicative )
-	tempColor[ 1 ] = color.r * ( multiplicative and _opacity or 1 )
-	tempColor[ 2 ] = color.g * ( multiplicative and _opacity or 1 )
-	tempColor[ 3 ] = color.b * ( multiplicative and _opacity or 1 )
-	tempColor[ 4 ] = color.a * _opacity
+	tempColor[ 1 ] = color[ 1 ] * ( multiplicative and _opacity or 1 )
+	tempColor[ 2 ] = color[ 2 ] * ( multiplicative and _opacity or 1 )
+	tempColor[ 3 ] = color[ 3 ] * ( multiplicative and _opacity or 1 )
+	tempColor[ 4 ] = color[ 4 ] * _opacity
 	graphics.setBackgroundColor( tempColor )
 end
 
-function setBlendMode( mode )
-	graphics.setBlendMode( mode )
-end
-
 function setColor( color, multiplicative )
-	tempColor[ 1 ] = color.r * ( multiplicative and _opacity or 1 )
-	tempColor[ 2 ] = color.g * ( multiplicative and _opacity or 1 )
-	tempColor[ 3 ] = color.b * ( multiplicative and _opacity or 1 )
-	tempColor[ 4 ] = color.a * _opacity
+	tempColor[ 1 ] = color[ 1 ] * ( multiplicative and _opacity or 1 )
+	tempColor[ 2 ] = color[ 2 ] * ( multiplicative and _opacity or 1 )
+	tempColor[ 3 ] = color[ 3 ] * ( multiplicative and _opacity or 1 )
+	tempColor[ 4 ] = color[ 4 ] * _opacity
 	graphics.setColor( tempColor )
-end
-
-function setFont( font )
-	graphics.setFont( font )
 end
 
 function setLineWidth( width )
@@ -371,30 +281,6 @@ function setLineWidth( width )
 	graphics.setLineWidth( width )
 end
 
-function setMode( width, height, flags )
-	local success = window.setMode( width, height, flags )
-	if ( success ) then
-		_G.engine.reload()
-	end
-	return success
-end
-
 function setOpacity( opacity )
 	_opacity = opacity
-end
-
-function setShader( shader )
-	graphics.setShader( shader )
-end
-
-function setStencilTest( comparemode, comparevalue )
-	return graphics.setStencilTest( comparemode, comparevalue )
-end
-
-function stencil( stencilfunction, action, value, keepvalues )
-	graphics.stencil( stencilfunction, action, value, keepvalues )
-end
-
-function translate( dx, dy )
-	graphics.translate( dx, dy )
 end

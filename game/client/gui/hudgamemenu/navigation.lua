@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Game Menu Navigation class
 --
@@ -40,7 +40,7 @@ function hudgamemenunavigation:draw()
 	local width     = self:getWidth()
 	graphics.setColor( self:getScheme( property ) )
 	graphics.setLineWidth( lineWidth )
-	graphics.line(
+	love.graphics.line(
 		0,     lineWidth / 2, -- Top-left
 		width, lineWidth / 2  -- Top-right
 	)

@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Tabbed Frame class
 --
@@ -86,7 +86,7 @@ function tabbedframe:drawBackground()
 	local lineWidth = point( 1 )
 	graphics.setLineWidth( lineWidth )
 	local y = titleBarHeight - lineWidth / 2
-	graphics.line(
+	love.graphics.line(
 		0,          y, -- Bottom-left
 		titleWidth, y  -- Bottom-right
 	)
@@ -94,7 +94,7 @@ function tabbedframe:drawBackground()
 	-- Top Resize Bounds
 	graphics.setColor( self:getScheme( "frametab.backgroundColor" ) )
 	local x = titleWidth + self.tabGroup:getWidth()
-	graphics.line(
+	love.graphics.line(
 		titleWidth, lineWidth / 2, -- Top-left
 		x,          lineWidth / 2  -- Top-right
 	)
@@ -105,7 +105,7 @@ function tabbedframe:drawBackground()
 
 	-- Remaining Title Bar Inner Shadow
 	graphics.setColor( self:getScheme( "frametab.outlineColor" ) )
-	graphics.line(
+	love.graphics.line(
 		x,     y, -- Bottom-left
 		x + r, y  -- Bottom-right
 	)
@@ -118,7 +118,7 @@ function tabbedframe:drawTitle()
 	end
 	graphics.setColor( self:getScheme( color ) )
 	local font = self:getScheme( "titleFont" )
-	graphics.setFont( font )
+	love.graphics.setFont( font )
 	local margin = point( 24 )
 	local x = margin
 	local y = margin - point( 4 )
@@ -144,9 +144,9 @@ function tabbedframe:invalidateLayout()
 	gui.panel.invalidateLayout( self )
 end
 
-local localX, localY   = 0, 0
-local mouseIntersects  = false
-local pointinrectangle = math.pointinrectangle
+local localX, localY  = 0, 0
+local mouseIntersects = false
+local pointinrect     = math.pointinrect
 
 function tabbedframe:mousepressed( x, y, button, istouch )
 	if ( gui.panel.mousepressed( self, x, y, button, istouch ) ) then
@@ -175,7 +175,7 @@ function tabbedframe:mousepressed( x, y, button, istouch )
 			local height      = self:getHeight()
 
 			-- Top Resize Bounds
-			mouseIntersects = pointinrectangle(
+			mouseIntersects = pointinrect(
 				localX,
 				localY,
 				borderWidth,
@@ -189,7 +189,7 @@ function tabbedframe:mousepressed( x, y, button, istouch )
 			end
 
 			-- Top-Right Resize Bounds
-			mouseIntersects = pointinrectangle(
+			mouseIntersects = pointinrect(
 				localX,
 				localY,
 				width - borderWidth,
@@ -203,7 +203,7 @@ function tabbedframe:mousepressed( x, y, button, istouch )
 			end
 
 			-- Right Resize Bounds
-			mouseIntersects = pointinrectangle(
+			mouseIntersects = pointinrect(
 				localX,
 				localY,
 				width - borderWidth,
@@ -217,7 +217,7 @@ function tabbedframe:mousepressed( x, y, button, istouch )
 			end
 
 			-- Bottom-Right Resize Bounds
-			mouseIntersects = pointinrectangle(
+			mouseIntersects = pointinrect(
 				localX,
 				localY,
 				width - borderWidth,
@@ -231,7 +231,7 @@ function tabbedframe:mousepressed( x, y, button, istouch )
 			end
 
 			-- Bottom Resize Bounds
-			mouseIntersects = pointinrectangle(
+			mouseIntersects = pointinrect(
 				localX,
 				localY,
 				borderWidth,
@@ -245,7 +245,7 @@ function tabbedframe:mousepressed( x, y, button, istouch )
 			end
 
 			-- Bottom-Left Resize Bounds
-			mouseIntersects = pointinrectangle(
+			mouseIntersects = pointinrect(
 				localX,
 				localY,
 				0,
@@ -259,7 +259,7 @@ function tabbedframe:mousepressed( x, y, button, istouch )
 			end
 
 			-- Left Resize Bounds
-			mouseIntersects = pointinrectangle(
+			mouseIntersects = pointinrect(
 				localX,
 				localY,
 				0,
@@ -273,7 +273,7 @@ function tabbedframe:mousepressed( x, y, button, istouch )
 			end
 
 			-- Top-Left Resize Bounds
-			mouseIntersects = pointinrectangle(
+			mouseIntersects = pointinrect(
 				localX,
 				localY,
 				0,
@@ -289,7 +289,7 @@ function tabbedframe:mousepressed( x, y, button, istouch )
 
 		-- Title Bar Resize Bounds
 		local titleBarHeight = point( 62 )
-		mouseIntersects = pointinrectangle(
+		mouseIntersects = pointinrect(
 			localX,
 			localY,
 			0,

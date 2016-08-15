@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Video Options Panel class
 --
@@ -10,7 +10,7 @@ function videooptionspanel:videooptionspanel()
 	gui.frametabpanel.frametabpanel( self, nil, "Video Options Panel" )
 	local options = {}
 	self.options = options
-	local c = engine.getConfig()
+	local c = config.getConfig()
 
 	local name = "Aspect Ratio"
 	local label = gui.label( self, name, name )
@@ -235,11 +235,11 @@ function videooptionspanel:updateMode()
 		convar.setConvar( "r_window_borderless", options.borderless and 1 or 0 )
 		convar.setConvar( "r_window_vsync",      options.vsync      and 1 or 0 )
 
-		local flags  = table.copy( engine.getConfig().window )
+		local flags  = table.copy( config.getConfig().window )
 		flags.width  = nil
 		flags.height = nil
 		flags.icon   = nil
-		graphics.setMode( resolution.width, resolution.height, flags )
+		love.window.setMode( resolution.width, resolution.height, flags )
 	end
 end
 
@@ -254,7 +254,7 @@ function videooptionspanel:updateAspectRatios()
 	local dropdownlistitem = nil
 	local name = "Aspect Ratio Drop-Down List Item"
 	local text = ""
-	local arx, ary = graphics.getViewportAspectRatio()
+	local arx, ary = graphics.getAspectRatios()
 	for i, mode in ipairs( supportedAspectRatios ) do
 		local hasModes = #graphics.getFullscreenModes( mode.x, mode.y ) ~= 0
 		-- HACKHACK: Include 683:384 when performing 16:9 lookups.
@@ -305,8 +305,9 @@ function videooptionspanel:updateResolutions()
 	local name = "Resolution Drop-Down List Item"
 	local text = ""
 	local foundMode = false
-	local width = graphics.getViewportWidth() / graphics.getPixelScale()
-	local height = graphics.getViewportHeight() / graphics.getPixelScale()
+	local pixelScale = love.window.getPixelScale()
+	local width = love.graphics.getWidth() / pixelScale
+	local height = love.graphics.getHeight() / pixelScale
 	for i, mode in ipairs( modes ) do
 		text = mode.width .. " × " .. mode.height
 		dropdownlistitem = gui.dropdownlistitem( name .. " " .. i, text )

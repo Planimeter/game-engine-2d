@@ -1,7 +1,7 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Default engine entry point
 --
 --============================================================================--
 
-require( "src.main" )
+assert( false, "attempt to load game from init.lua" )

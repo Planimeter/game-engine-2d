@@ -1,11 +1,11 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Console class
 --
 --============================================================================--
 
 -- UNDONE: The gui subsystem will load gui.console again here just by indexing
--- it the first time around, so we can't persist commandHistory in debug
+-- it the first time around, so we can't persist commandHistory in debug.
 -- local commandHistory = gui.console and gui.console.commandHistory or {}
 
 require( "engine.client.gui.console.consoletextbox" )
@@ -153,20 +153,14 @@ function console:console()
 		end
 	end
 
-	if ( not _INTERACTIVE ) then
-		local input = self.input
-		input:setAutocomplete( autocomplete )
-		name = name .. " Autocomplete Item Group"
-		local autocompleteItemGroup = gui.consoletextboxautocompleteitemgroup
-		input.autocompleteItemGroup = autocompleteItemGroup( self.input, name )
-		input.autocompleteItemGroup.keypressed = keypressed
-	end
+	local input = self.input
+	input:setAutocomplete( autocomplete )
+	name = name .. " Autocomplete Item Group"
+	local autocompleteItemGroup = gui.consoletextboxautocompleteitemgroup
+	input.autocompleteItemGroup = autocompleteItemGroup( self.input, name )
+	input.autocompleteItemGroup.keypressed = keypressed
 
 	self:invalidateLayout()
-
-	if ( _INTERACTIVE ) then
-		self:doModal()
-	end
 end
 
 function console:activate()
@@ -175,25 +169,13 @@ function console:activate()
 	gui.setFocusedPanel( self.input, true )
 end
 
-function console:drawBackground( color )
-	if ( _INTERACTIVE ) then
-		return
-	end
-
-	gui.panel.drawBackground( self, color )
-end
-
 function console:invalidateLayout()
 	local width  = self:getWidth()
 	local height = self:getHeight()
 	local margin = gui.scale( 36 )
 	if ( not self:isResizing() ) then
 		local parent = self:getParent()
-		if ( not _INTERACTIVE ) then
-			self:setPos( parent:getWidth() - width - margin, margin )
-		else
-			self:setPos( 0, 0 )
-		end
+		self:setPos( parent:getWidth() - width - margin, margin )
 	end
 
 	margin = point( 36 )
@@ -239,7 +221,7 @@ concommand( "toggleconsole", "Show/hide the console", function()
 end )
 
 concommand( "clear", "Clears the console", function()
-	if ( _WINDOWS ) then
+	if ( love.system.getOS() == "Windows" ) then
 		-- This breaks the LOVE console. :(
 		-- os.execute( "cls" )
 	else

@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Localhost ENet Server class
 --
@@ -17,7 +17,7 @@ function localhost_enet_server:disconnect( data )
 		data = data
 	}
 	g_localhost_enet_peer = nil
-	serverengine.onDisconnect( event )
+	engineserver.onDisconnect( event )
 end
 
 function localhost_enet_server:send( data, channel, flag )
@@ -26,7 +26,7 @@ function localhost_enet_server:send( data, channel, flag )
 		type = "receive",
 		data = data
 	}
-	serverengine.onReceive( event )
+	engineserver.onReceive( event )
 end
 
 function localhost_enet_server:__tostring()

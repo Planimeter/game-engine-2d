@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Sound class
 --
@@ -60,7 +60,7 @@ end
 
 function sound.update( dt )
 	for filename, s in pairs( sounds ) do
-		modtime, errormsg = filesystem.getLastModified( filename )
+		modtime, errormsg = love.filesystem.getLastModified( filename )
 		if ( errormsg == nil and modtime ~= s.modtime ) then
 			updateSound( s, filename )
 		end
@@ -112,7 +112,7 @@ function sound:play()
 		local sound = audio.newSource( filename )
 		sounds[ filename ] = {
 			sound   = sound,
-			modtime = filesystem.getLastModified( filename )
+			modtime = love.filesystem.getLastModified( filename )
 		}
 
 		local data = self:getData()

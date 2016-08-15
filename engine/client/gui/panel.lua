@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Panel class
 --
@@ -162,10 +162,10 @@ function panel:drawFramebuffer()
 	end
 
 	gui.panel.maskedPanel = self
-	graphics.stencil( gui.panel.drawMask )
-	graphics.setStencilTest( "greater", 0 )
+	love.graphics.stencil( gui.panel.drawMask )
+	love.graphics.setStencilTest( "greater", 0 )
 		self.framebuffer:draw()
-	graphics.setStencilTest()
+	love.graphics.setStencilTest()
 end
 
 local filtered = function( panel, func, ... )
@@ -198,10 +198,10 @@ function panel:filedropped( file )
 end
 
 accessor( panel, "children" )
-mutator( panel, "name" )
-mutator( panel, "opacity" )
-mutator( panel, "parent" )
-mutator( panel, "scale" )
+accessor( panel, "name" )
+accessor( panel, "opacity" )
+accessor( panel, "parent" )
+accessor( panel, "scale" )
 
 local getProperty = scheme.getProperty
 
@@ -209,25 +209,25 @@ function panel:getScheme( property )
 	return getProperty( self.scheme, property )
 end
 
-mutator( panel, "width" )
-mutator( panel, "height" )
+accessor( panel, "width" )
+accessor( panel, "height" )
 
 function panel:getSize()
 	return self:getWidth(), self:getHeight()
 end
 
-mutator( panel, "x" )
-mutator( panel, "y" )
+accessor( panel, "x" )
+accessor( panel, "y" )
 
 function panel:getPos()
 	return self:getX(), self:getY()
 end
 
-local sx, sy           = 0, 0
-local w,  h            = 0, 0
-local pointinrectangle = math.pointinrectangle
-local children         = nil
-local topChild         = nil
+local sx, sy      = 0, 0
+local w,  h       = 0, 0
+local pointinrect = math.pointinrect
+local children    = nil
+local topChild    = nil
 
 function panel:getTopMostChildAtPos( x, y )
 	if ( not self:isVisible() ) then
@@ -236,7 +236,7 @@ function panel:getTopMostChildAtPos( x, y )
 
 	sx, sy = self:localToScreen()
 	w,  h  = self:getWidth(), self:getHeight()
-	if ( not pointinrectangle( x, y, sx, sy, w, h ) ) then
+	if ( not pointinrect( x, y, sx, sy, w, h ) ) then
 		return nil
 	end
 
@@ -425,10 +425,10 @@ function panel:preDraw()
 	local scale  = self:getScale()
 	local width  = self:getWidth()
 	local height = self:getHeight()
-	graphics.push()
-	graphics.translate( self:getX(), self:getY() )
-	graphics.scale( scale )
-	graphics.translate(
+	love.graphics.push()
+	love.graphics.translate( self:getX(), self:getY() )
+	love.graphics.scale( scale )
+	love.graphics.translate(
 		( width  / scale ) / 2 - width  / 2,
 		( height / scale ) / 2 - height / 2
 	)
@@ -451,7 +451,7 @@ function panel:postDraw()
 
 	table.remove( opacityStack, #opacityStack )
 	graphics.setOpacity( opacityStack[ #opacityStack ] )
-	graphics.pop()
+	love.graphics.pop()
 end
 
 function panel:preDrawWorld()
@@ -620,7 +620,7 @@ end
 function panel:update( dt )
 	if ( self.think and
 	     self.nextThink and
-	     self.nextThink <= engine.getRealTime() ) then
+	     self.nextThink <= love.timer.getTime() ) then
 		self.nextThink = nil
 		self:think()
 	end
@@ -651,12 +651,12 @@ local len        = table.len
 function panel:updateAnimations( dt )
 	for _, animation in ipairs( self.animations ) do
 		if ( not animation.startTime ) then
-			animation.startTime = engine.getRealTime()
+			animation.startTime = love.timer.getTime()
 		end
 
 		startTime     = animation.startTime
 		duration      = animation.duration
-		remaining     = max( 0, startTime + duration - engine.getRealTime() )
+		remaining     = max( 0, startTime + duration - love.timer.getTime() )
 		percent       = 1 - ( remaining / duration or 0 )
 		animation.pos = percent
 

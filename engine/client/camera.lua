@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Camera interface
 --
@@ -19,6 +19,7 @@ local class      = class
 local concommand = concommand
 local graphics   = graphics
 local ipairs     = ipairs
+local love       = love
 local math       = math
 local point      = point
 local table      = table
@@ -92,8 +93,8 @@ local scale  = 1
 
 function getTranslation()
 	pos    = getPosition()
-	width  = graphics.getViewportWidth()
-	height = graphics.getViewportHeight()
+	width  = love.graphics.getWidth()
+	height = love.graphics.getHeight()
 	scale  = getZoom()
 	if ( not pos ) then pos = vector.origin end
 	return -pos.x + ( width  / 2 ) / scale,
@@ -152,8 +153,8 @@ end
 
 function screenToWorld( x, y )
 	pos    = getPosition()
-	width  = graphics.getViewportWidth()
-	height = graphics.getViewportHeight()
+	width  = love.graphics.getWidth()
+	height = love.graphics.getHeight()
 	scale  = getZoom()
 	if ( not pos ) then pos = vector.origin end
 	return pos.x - ( width  / 2 ) / scale + x / scale,
@@ -162,8 +163,8 @@ end
 
 function worldToScreen( x, y )
 	pos    = getPosition()
-	width  = graphics.getViewportWidth()
-	height = graphics.getViewportHeight()
+	width  = love.graphics.getWidth()
+	height = love.graphics.getHeight()
 	scale  = getZoom()
 	if ( not pos ) then pos = vector.origin end
 	return pos.x * -scale + ( width  / 2 ) + x * scale,

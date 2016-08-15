@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Console Text Box class
 --
@@ -19,10 +19,7 @@ function consoletextbox:draw()
 		return
 	end
 
-	if ( not _INTERACTIVE ) then
-		self:drawBackground( "textbox.backgroundColor" )
-	end
-
+	self:drawBackground( "textbox.backgroundColor" )
 	self:drawText()
 	self:drawCursor()
 

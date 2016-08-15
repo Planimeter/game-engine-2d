@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Main Menu Button class
 --
@@ -24,7 +24,7 @@ function mainmenubutton:draw()
 	end
 
 	local font = self:getScheme( "mainmenuFont" )
-	graphics.setFont( font )
+	love.graphics.setFont( font )
 	local x =   self:getWidth()        / 2 - font:getWidth( self.text ) / 2
 	local y = ( self:getHeight() - 1 ) / 2 - font:getHeight()           / 2 - 1
 	graphics.setColor( self:getScheme( textColor ) )

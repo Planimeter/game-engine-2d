@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Test line drawing
 --
@@ -15,19 +15,19 @@ function frame:draw()
 	graphics.setLineWidth( lineWidth )
 
 	-- Horizontal Line
-	-- graphics.line(
+	-- love.graphics.line(
 	-- 	lineWidth / 2,   lineWidth / 2, -- Top-left
 	-- 	self:getWidth(), lineWidth / 2  -- Top-right
 	-- )
 
 	-- Vertical Line
-	-- graphics.line(
+	-- love.graphics.line(
 	-- 	self:getWidth() - lineWidth / 2, 0                -- Top-right
 	-- 	self:getWidth() - lineWidth / 2, self:getHeight() -- Bottom-right
 	-- )
 
 	-- Three-point line
-	graphics.line(
+	love.graphics.line(
 		lineWidth / 2,                   lineWidth / 2,   -- Top-left
 		self:getWidth() - lineWidth / 2, lineWidth / 2,   -- Top-right
 		self:getWidth() - lineWidth / 2, self:getHeight() -- Bottom-right

@@ -1,21 +1,10 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Extends the table library
 --
 --============================================================================--
 
 require( "table" )
-
-local ipairs       = ipairs
-local pairs        = pairs
-local setmetatable = setmetatable
-local getmetatable = getmetatable
-local type         = type
-local typeof       = typeof
--- local print     = print
-local tostring     = tostring
-local string       = string
-local math         = math
 
 function table.append( a, b )
 	for _, v in ipairs( b ) do
@@ -148,35 +137,31 @@ function table.prepend( a, b )
 	end
 end
 
-function table.print( t, i )
+function table.print( t, i, printed )
 	if ( t == nil ) then
 		print( nil )
 		return
 	end
 
+	printed = printed or {}
+	printed[ t ] = true
+
 	i = i or 0
-
-	local indent = ""
-	for j = 1, i do
-		indent = indent .. "\t"
-	end
-
+	local indent = string.rep( "\t", i )
 	for k, v in pairs( t ) do
-		if ( k ~= "_G" and k ~= "_M" and type( v ) == "table" ) then
+		if ( type( v ) == "table" and not printed[ v ] ) then
 			print( indent .. k )
-			table.print( v, i + 1 )
+			table.print( v, i + 1, printed )
 		else
 			print( indent .. tostring( k ), v )
 		end
 	end
 end
 
-local match = string.match
-
 function table.raise( t )
 	local sub, key
 	for k, v in pairs( t ) do
-		sub, key = match( k, "(.-)%.(.+)" )
+		sub, key = string.match( k, "(.-)%.(.+)" )
 		if ( sub and key ) then
 			sub = tonumber( sub ) or sub
 			t[ sub ]        = t[ sub ] or {}
@@ -188,10 +173,8 @@ function table.raise( t )
 	end
 end
 
-local random = math.random
-
 function table.irandom( t )
-	return t[ random( #t ) ]
+	return t[ math.random( #t ) ]
 end
 
 function table.unique( t )

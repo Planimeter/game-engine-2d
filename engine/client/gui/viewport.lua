@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Viewport Panel class
 --
@@ -8,14 +8,14 @@ class "viewport" ( gui.panel )
 
 function viewport:viewport( parent )
 	gui.panel.panel( self, parent, "Viewport" )
-	self.width  = graphics.getViewportWidth()
-	self.height = graphics.getViewportHeight()
+	self.width  = love.graphics.getWidth()
+	self.height = love.graphics.getHeight()
 	self:setUseFullscreenFramebuffer( true )
 	self:moveToBack()
 end
 
 function viewport:invalidateLayout()
-	self:setSize( graphics.getViewportWidth(), graphics.getViewportHeight() )
+	self:setSize( love.graphics.getWidth(), love.graphics.getHeight() )
 
 	gui.panel.invalidateLayout( self )
 end

@@ -1,4 +1,4 @@
---========= Copyright © 2013-2015, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Health HUD
 --
@@ -30,7 +30,7 @@ function hudhealth:drawHealth()
 	local property = "hudmoveindicator.textColor"
 	graphics.setColor( self:getScheme( property ) )
 	local font = self:getScheme( "entityFont" )
-	graphics.setFont( font )
+	love.graphics.setFont( font )
 	local health = localplayer:getNetworkVar( "health" )
 	graphics.print(
 		health, -- text
@@ -53,15 +53,15 @@ function hudhealth:drawLabel()
 	local font = self:getScheme( "entityFont" )
 	local lineHeight = font:getHeight()
 	font = self:getScheme( "font" )
-	graphics.setFont( font )
+	love.graphics.setFont( font )
 	graphics.print( "Health", 0, lineHeight )
 end
 
 function hudhealth:invalidateLayout()
 	local margin = gui.scale( 96 )
-	local viewportHeight = graphics.getViewportHeight()
+	local graphicsHeight = love.graphics.getHeight()
 	local height = self:getHeight()
-	self:setPos( margin, viewportHeight - margin - height )
+	self:setPos( margin, graphicsHeight - margin - height )
 
 	gui.panel.invalidateLayout( self )
 end

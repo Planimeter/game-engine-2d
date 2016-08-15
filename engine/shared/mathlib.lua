@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Extends the math library
 --
@@ -33,22 +33,17 @@ function math.lerp( f, t, dt )
 	return ( f + ( t - f ) * dt )
 end
 
-function math.nearestmultiple( n, multiple )
-	return math.round( n / multiple ) * multiple
+function math.nearestmult( n, mult )
+	return math.round( n / mult ) * mult
 end
-
-local ceil = math.ceil
-local log  = math.log
 
 function math.nearestpow2( n )
-	return 2 ^ ceil( log( n ) / log( 2 ) )
+	return 2 ^ math.ceil( math.log( n ) / math.log( 2 ) )
 end
-
-math.noise = love.math.noise
 
 math.phi = ( 1 + math.sqrt( 5 ) ) / 2
 
-function math.pointinrectangle( px, py, x, y, width, height )
+function math.pointinrect( px, py, x, y, width, height )
 	return px >= x and
 	       py >= y and
 	       px < x + width and
@@ -59,8 +54,6 @@ function math.remap( n, inMin, inMax, outMin, outMax )
 	return ( n / ( inMax - inMin ) ) * ( outMax - outMin ) + outMin
 end
 
-local floor = math.floor
-
 function math.round( n )
-	return floor( n + 0.5 )
+	return math.floor( n + 0.5 )
 end

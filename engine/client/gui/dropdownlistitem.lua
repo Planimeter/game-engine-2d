@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Drop-Down List Item class
 --
@@ -52,11 +52,11 @@ function dropdownlistitem:drawBorders( color )
 	local height    = self:getHeight()
 	graphics.setColor( self:getScheme( color ) )
 	graphics.setLineWidth( lineWidth )
-	graphics.line(
+	love.graphics.line(
 		lineWidth / 2,      0,        -- Top-left
 		lineWidth / 2,      height    -- Bottom-left
 	)
-	graphics.line(
+	love.graphics.line(
 		width - lineWidth / 2, 0,     -- Top-right
 		width - lineWidth / 2, height -- Bottom-right
 	)
@@ -76,7 +76,7 @@ function dropdownlistitem:drawText()
 	graphics.setColor( self:getScheme( color ) )
 
 	local font = self:getScheme( "font" )
-	graphics.setFont( font )
+	love.graphics.setFont( font )
 	local x = point( 18 )
 	local y = self:getHeight() / 2 - font:getHeight() / 2
 	graphics.print( self:getText(), x, y )

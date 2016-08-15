@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Slider class
 --
@@ -32,7 +32,7 @@ function slider:drawLabels()
 
 	graphics.setColor( self:getScheme( color ) )
 	local font = self:getScheme( "fontSmall" )
-	graphics.setFont( font )
+	love.graphics.setFont( font )
 	local minLabel = self:getMinLabel()
 	local maxLabel = self:getMaxLabel()
 	local height   = self:getHeight()
@@ -66,11 +66,11 @@ function slider:drawTrough()
 
 	graphics.setColor( self:getScheme( color ) )
 	graphics.setLineWidth( point( 1 ) )
-	graphics.line( 0, height / 4, width, height / 4 )
+	love.graphics.line( 0, height / 4, width, height / 4 )
 end
 
-mutator( slider, "minLabel" )
-mutator( slider, "maxLabel" )
+accessor( slider, "minLabel" )
+accessor( slider, "maxLabel" )
 
 function slider:getThumbLength()
 	local range = self:getMax() - self:getMin()

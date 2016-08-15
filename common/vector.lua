@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Vector class
 --
@@ -15,33 +15,27 @@ function vector:vector( x, y )
 	self.y = y or 0
 end
 
-local sqrt = math.sqrt
-
 function vector:length()
-	return sqrt( self:lengthSqr() )
+	return math.sqrt( self:lengthSqr() )
 end
 
 function vector:lengthSqr()
 	return self.x ^ 2 + self.y ^ 2
 end
 
-local length = 0
-
 function vector:normalize()
-	length = self:length()
+	local length = self:length()
 	return vector( self.x / length, self.y / length )
 end
 
 function vector:normalizeInPlace()
-	length = self:length()
+	local length = self:length()
 	self.x = length == 0 and 0 or self.x / length
 	self.y = length == 0 and 0 or self.y / length
 end
 
-local atan2 = math.atan2
-
 function vector:toAngle()
-	return atan2( self.y, self.x )
+	return math.atan2( self.y, self.x )
 end
 
 function vector.__add( a, b )

@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Speech Balloons HUD
 --
@@ -9,8 +9,8 @@ class "hudspeechballoons" ( gui.panel )
 function hudspeechballoons:hudspeechballoons( parent )
 	gui.panel.panel( self, parent, "HUD Speech Balloons" )
 
-	self.width  = graphics.getViewportWidth()
-	self.height = graphics.getViewportHeight()
+	self.width  = love.graphics.getWidth()
+	self.height = love.graphics.getHeight()
 
 	self:setScheme( "Default" )
 
@@ -38,7 +38,7 @@ end
 
 function hudspeechballoons:draw()
 	local font = self:getScheme( "fontBold" )
-	graphics.setFont( font )
+	love.graphics.setFont( font )
 	graphics.setColor( self:getScheme( "hudspeechballoons.textColor" ) )
 
 	if ( self.speechBalloons ) then
@@ -59,8 +59,8 @@ function hudspeechballoons:draw()
 end
 
 function hudspeechballoons:invalidateLayout()
-	self:setWidth( graphics.getViewportWidth() )
-	self:setHeight( graphics.getViewportHeight() )
+	self:setWidth( love.graphics.getWidth() )
+	self:setHeight( love.graphics.getHeight() )
 
 	gui.panel.invalidateLayout( self )
 end

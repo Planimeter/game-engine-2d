@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Radio Button class
 --
@@ -38,7 +38,7 @@ function radiobutton:drawForeground()
 	end
 
 	graphics.setColor( self:getScheme( color ) )
-	graphics.draw( self.foreground:getDrawable(), x, y )
+	love.graphics.draw( self.foreground, x, y )
 end
 
 function radiobutton:drawLabel()
@@ -49,7 +49,7 @@ function radiobutton:drawLabel()
 	end
 
 	local font = self:getScheme( "font" )
-	graphics.setFont( font )
+	love.graphics.setFont( font )
 	local height = self:getHeight()
 	local marginLeft = point( 9 )
 	local x = height + marginLeft
@@ -71,11 +71,11 @@ function radiobutton:drawSelectionDot()
 	local height = self:getHeight()
 	local x      = height / 2 - self.icon:getWidth()  / 2
 	local y      = height / 2 - self.icon:getHeight() / 2
-	graphics.draw( self.icon:getDrawable(), x, y )
+	love.graphics.draw( self.icon, x, y )
 end
 
 accessor( radiobutton, "group" )
-mutator( radiobutton, "value" )
+accessor( radiobutton, "value" )
 
 function radiobutton:isDisabled()
 	local radiobuttongroup = self:getGroup()

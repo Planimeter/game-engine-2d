@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Default scheme
 --
@@ -36,7 +36,7 @@ t.button                      = {
 }
 
 t.checkbox                    = {
-    icon                      = graphics.newImage( "images/gui/check.png" ),
+    icon                      = love.graphics.newImage( "images/gui/check.png" ),
     iconColor                 = color( 163, 167, 168,         255 ),
     outlineColor              = color( t.colors.gray,  0.66 * 255 ),
     textColor                 = color( 163, 167, 168,         255 ),
@@ -56,7 +56,7 @@ t.checkbox                    = {
 }
 
 t.closebutton                 = {
-    icon                      = graphics.newImage( "images/gui/close.png" ),
+    icon                      = love.graphics.newImage( "images/gui/close.png" ),
     iconColor                 = t.colors.white,
 
     mouseover                 = {
@@ -78,7 +78,7 @@ t.commandbuttongroup          = {
 }
 
 t.dropdownlist                = {
-    icon                      = graphics.newImage( "images/gui/arrow_down.png" ),
+    icon                      = love.graphics.newImage( "images/gui/arrow_down.png" ),
 }
 
 t.dropdownlistitem            = {
@@ -153,8 +153,8 @@ t.label                       = {
 
 t.mainmenu                    = {
     backgroundColor           = color( t.colors.black, 0.27 * 255 ),
-    logo                      = graphics.newImage( "images/gui/logo.png" ),
-    logoSmall                 = graphics.newImage( "images/gui/logo_small.png" )
+    logo                      = love.graphics.newImage( "images/gui/logo.png" ),
+    logoSmall                 = love.graphics.newImage( "images/gui/logo_small.png" )
 }
 
 t.mainmenubutton              = {
@@ -188,7 +188,7 @@ t.mainmenubutton              = {
 }
 
 t.mainmenuclosebutton         = {
-    icon                      = graphics.newImage( "images/gui/close_large.png" ),
+    icon                      = love.graphics.newImage( "images/gui/close_large.png" ),
 
     t                         = {
         iconColor             = t.colors.gray,
@@ -221,8 +221,8 @@ t.progressbar                 = {
 }
 
 t.radiobutton                 = {
-    foreground                = graphics.newImage( "images/gui/radiobutton_foreground.png" ),
-    icon                      = graphics.newImage( "images/gui/selection_dot.png" ),
+    foreground                = love.graphics.newImage( "images/gui/radiobutton_foreground.png" ),
+    icon                      = love.graphics.newImage( "images/gui/selection_dot.png" ),
     iconColor                 = color( 163, 167, 168,         255 ),
     outlineColor              = color( t.colors.gray,  0.86 * 255 ),
     textColor                 = color( 163, 167, 168,         255 ),
@@ -288,12 +288,12 @@ t.bindlistheader              = {
     borderColor               = color(  15,  15,  15,         255 ),
 }
 
-t.mainmenuFont                = graphics.newFont( "fonts/SourceSansPro-Regular.otf", 24 )
-t.titleFont                   = graphics.newFont( "fonts/SourceSansPro-Bold.otf", 18 )
-t.font                        = graphics.newFont( "fonts/SourceSansPro-Regular.otf", 14 )
-t.fontBold                    = graphics.newFont( "fonts/SourceSansPro-Bold.otf", 14 )
-t.fontSmall                   = graphics.newFont( "fonts/SourceSansPro-Regular.otf", 12 )
-t.consoleFont                 = graphics.newFont( "fonts/SourceCodePro-Light.otf", 12 )
-t.chatFont                    = graphics.newFont( "fonts/SourceCodePro-Light.otf", 14 )
-t.entityFont                  = graphics.newFont( "fonts/SourceSansPro-Regular.otf", 24 )
-t.itemCountFont               = graphics.newFont( "fonts/SourceSansPro-Regular.otf", 12 )
+t.mainmenuFont                = love.graphics.newFont( "fonts/SourceSansPro-Regular.otf", 24 )
+t.titleFont                   = love.graphics.newFont( "fonts/SourceSansPro-Bold.otf", 18 )
+t.font                        = love.graphics.newFont( "fonts/SourceSansPro-Regular.otf", 14 )
+t.fontBold                    = love.graphics.newFont( "fonts/SourceSansPro-Bold.otf", 14 )
+t.fontSmall                   = love.graphics.newFont( "fonts/SourceSansPro-Regular.otf", 12 )
+t.consoleFont                 = love.graphics.newFont( "fonts/SourceCodePro-Light.otf", 12 )
+t.chatFont                    = love.graphics.newFont( "fonts/SourceCodePro-Light.otf", 14 )
+t.entityFont                  = love.graphics.newFont( "fonts/SourceSansPro-Regular.otf", 24 )
+t.itemCountFont               = love.graphics.newFont( "fonts/SourceSansPro-Regular.otf", 12 )

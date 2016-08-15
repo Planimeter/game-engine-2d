@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Command Button Group class
 --
@@ -24,7 +24,7 @@ function commandbuttongroup:draw()
 	graphics.setColor( self:getScheme( color ) )
 	local lineWidth = point( 1 )
 	graphics.setLineWidth( lineWidth )
-	graphics.line(
+	love.graphics.line(
 		lineWidth / 2,         height,        -- Bottom-left
 		lineWidth / 2,         lineWidth / 2, -- Top-left
 		width - lineWidth / 2, lineWidth / 2, -- Top-right

@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Network Variable class
 --
@@ -21,7 +21,7 @@ function networkvar:onValueChanged()
 end
 
 accessor( networkvar, "name" )
-mutator( networkvar, "value" )
+accessor( networkvar, "value" )
 
 function networkvar:setValue( value )
 	local oldValue = self.value

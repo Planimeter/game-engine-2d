@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Image class
 --
@@ -37,7 +37,7 @@ end
 
 function image.update( dt )
 	for filename, i in pairs( images ) do
-		modtime, errormsg = filesystem.getLastModified( filename )
+		modtime, errormsg = love.filesystem.getLastModified( filename )
 		if ( errormsg == nil and modtime ~= i.modtime ) then
 			reloadImage( i, filename )
 		end
@@ -62,14 +62,14 @@ function image:getDrawable()
 		local image = graphics.newImage( filename )
 		images[ filename ] = {
 			image   = image,
-			modtime = filesystem.getLastModified( filename )
+			modtime = love.filesystem.getLastModified( filename )
 		}
 	end
 
 	return images[ filename ].image
 end
 
-mutator( image, "filename" )
+accessor( image, "filename" )
 
 function image:getHeight()
 	local image = self:getDrawable()
@@ -112,13 +112,13 @@ local function getHighResolutionVariant( filename )
 	local hrvariant = string.gsub( filename, extension, "" )
 	hrvariant       = hrvariant .. "@2x" .. extension
 
-	if ( filesystem.exists( hrvariant ) ) then
+	if ( love.filesystem.exists( hrvariant ) ) then
 		return hrvariant
 	end
 end
 
 function image:setFilename( filename )
-	if ( _G.graphics.getPixelScale() > 1 ) then
+	if ( love.window.getPixelScale() > 1 ) then
 		local variant = getHighResolutionVariant( filename )
 		if ( variant ) then
 			filename = variant

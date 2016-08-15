@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Type-length-values class
 --
@@ -105,8 +105,8 @@ function typelenvalues:get( key )
 end
 
 accessor( typelenvalues, "data" )
-mutator( typelenvalues, "definitions" )
-mutator( typelenvalues, "struct" )
+accessor( typelenvalues, "definitions" )
+accessor( typelenvalues, "struct" )
 
 function typelenvalues:getStructDefinition( struct )
 	local definitions = self:getDefinitions()

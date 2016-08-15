@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Move Indicator HUD
 --
@@ -9,8 +9,8 @@ class "hudmoveindicator" ( gui.panel )
 function hudmoveindicator:hudmoveindicator( parent )
 	local name   = "HUD Move Indicator"
 	gui.panel.panel( self, parent, name )
-	self.width   = graphics.getViewportWidth()
-	self.height  = graphics.getViewportHeight()
+	self.width   = love.graphics.getWidth()
+	self.height  = love.graphics.getHeight()
 	self:setUseFullscreenFramebuffer( true )
 
 	self.options = gui.optionsitemgroup( self, name .. " Options Item Group" )
@@ -69,7 +69,7 @@ function hudmoveindicator:drawEntityName()
 	local property = "hudmoveindicator.textColor"
 	graphics.setColor( self:getScheme( property ) )
 	local font = self:getScheme( "entityFont" )
-	graphics.setFont( font )
+	love.graphics.setFont( font )
 	local name = self.entity:getName()
 	local margin = gui.scale( 96 )
 	graphics.print(
@@ -98,7 +98,7 @@ function hudmoveindicator:drawEntityInfo()
 	local margin = gui.scale( 96 )
 	local lineHeight = font:getHeight()
 	font = self:getScheme( "font" )
-	graphics.setFont( font )
+	love.graphics.setFont( font )
 
 	if ( self.entity.getLevel ) then
 		local l = self.entity:getLevel()
@@ -134,8 +134,8 @@ function hudmoveindicator:drawMoveIndicators()
 end
 
 function hudmoveindicator:invalidateLayout()
-	self:setWidth( graphics.getViewportWidth() )
-	self:setHeight( graphics.getViewportHeight() )
+	self:setWidth( love.graphics.getWidth() )
+	self:setHeight( love.graphics.getHeight() )
 
 	self.options:invalidateLayout()
 
@@ -147,7 +147,7 @@ function hudmoveindicator:isActive()
 end
 
 local t = {}
-local pointinrectangle = math.pointinrectangle
+local pointinrect = math.pointinrect
 
 local getEntitiesAtMousePos = function( px, py )
 	table.clear( t )
@@ -159,7 +159,7 @@ local getEntitiesAtMousePos = function( px, py )
 		if ( sprite and sprite ~= graphics.error ) then
 			local width  = sprite:getWidth()  * scale
 			local height = sprite:getHeight() * scale
-			if ( pointinrectangle( px, py, x, y, width, height ) ) then
+			if ( pointinrect( px, py, x, y, width, height ) ) then
 				table.insert( t, entity )
 			end
 		end

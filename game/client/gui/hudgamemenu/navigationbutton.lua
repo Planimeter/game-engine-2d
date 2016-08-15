@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Game Menu Navigation Button class
 --
@@ -31,7 +31,7 @@ function hudgamemenunavigationbutton:drawBorder()
 	local width     = self:getWidth()
 	graphics.setColor( self:getScheme( property ) )
 	graphics.setLineWidth( lineWidth )
-	graphics.line(
+	love.graphics.line(
 		0,     lineWidth / 2, -- Top-left
 		width, lineWidth / 2  -- Top-right
 	)
@@ -49,7 +49,7 @@ function hudgamemenunavigationbutton:drawLabel()
 	end
 
 	local font = self:getScheme( "font" )
-	graphics.setFont( font )
+	love.graphics.setFont( font )
 	local x = 0
 	local y = self:getHeight() / 2 - font:getHeight() / 2 - point( 1 )
 	graphics.print( self.text, x, y )

@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Convar class
 --
@@ -34,11 +34,11 @@ function convar.setConvar( name, value )
 end
 
 function convar.readConfig()
-	if ( not filesystem.exists( "cfg/config.cfg" ) ) then
+	if ( not love.filesystem.exists( "cfg/config.cfg" ) ) then
 		return
 	end
 
-	for line in filesystem.lines( "cfg/config.cfg" ) do
+	for line in love.filesystem.lines( "cfg/config.cfg" ) do
 		for k, v in string.gmatch( line, "(.+)%s(.+)" ) do
 			convar.config[ k ] = v
 		end
@@ -53,9 +53,9 @@ function convar.saveConfig()
 	table.insert( config, "" )
 	config = table.concat( config, "\r\n" )
 
-	filesystem.createDirectory( "cfg" )
+	love.filesystem.createDirectory( "cfg" )
 
-	if ( filesystem.write( "cfg/config.cfg", config ) ) then
+	if ( love.filesystem.write( "cfg/config.cfg", config ) ) then
 		print( "Saved configuration." )
 	else
 		print( "Failed to save configuration!" )
@@ -74,10 +74,8 @@ function convar:convar( name, default, min, max, helpString, onValueChange, flag
 	convar.convars[ name ] = self
 end
 
-local n = 0
-
 function convar:getBoolean()
-	n = self:getNumber()
+	local n = self:getNumber()
 	return n ~= nil and n ~= 0
 end
 
@@ -140,14 +138,11 @@ function convar:setHelpString( helpString )
 	self.helpString = helpString
 end
 
-local oldValue    = nil
-local numberValue = 0
-
 function convar:setValue( value )
-	oldValue   = self.value
-	self.value = value
+	local oldValue = self.value
+	self.value     = value
 
-	numberValue = tonumber( self.value )
+	local numberValue = tonumber( self.value )
 	if ( ( type( self.value ) == "number" or numberValue ) and
 	     ( self.min and self.max ) ) then
 		self.value = math.min( self.max, math.max( self.min, numberValue ) )

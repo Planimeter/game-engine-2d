@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Entity class
 --
@@ -88,7 +88,7 @@ if ( _CLIENT ) then
 							graphics.setOpacity( 0.14 )
 							graphics.setColor( color.white )
 							graphics.setLineWidth( 1 )
-							graphics.line(
+							love.graphics.line(
 								topLeftX,             topLeftY,
 								topLeftX + width,     topLeftY,
 								bottomRightX,     bottomRightY,
@@ -107,23 +107,23 @@ if ( _CLIENT ) then
 			for _, v in ipairs( renderables ) do
 				local isEntity = typeof( v, "entity" )
 				if ( worldIndex == v:getWorldIndex() and isEntity ) then
-					graphics.push()
+					love.graphics.push()
 						local x, y = v:getDrawPosition()
-						graphics.translate( x, y )
+						love.graphics.translate( x, y )
 
 						-- Draw shadow
-						graphics.push()
+						love.graphics.push()
 							graphics.setOpacity( 0.14 )
 							graphics.setColor( color.black )
 
 							local sprite = v:getSprite()
 							local height = sprite:getHeight()
-							graphics.translate( sprite:getWidth() / 2, height )
-							graphics.scale( 1, -1 )
+							love.graphics.translate( sprite:getWidth() / 2, height )
+							love.graphics.scale( 1, -1 )
 								v:drawShadow()
 							graphics.setOpacity( 1 )
-						graphics.pop()
-					graphics.pop()
+						love.graphics.pop()
+					love.graphics.pop()
 				end
 			end
 		end
@@ -131,13 +131,13 @@ if ( _CLIENT ) then
 		-- Draw entities
 		for _, v in ipairs( renderables ) do
 			if ( worldIndex == v:getWorldIndex() ) then
-				graphics.push()
+				love.graphics.push()
 					local x, y = v:getDrawPosition()
-					graphics.translate( x, y )
+					love.graphics.translate( x, y )
 
 					graphics.setColor( color.white )
 					v:draw()
-				graphics.pop()
+				love.graphics.pop()
 			end
 		end
 	end
@@ -243,8 +243,8 @@ function entity:getPosition()
 	return self:getNetworkVar( "position" )
 end
 
-mutator( entity, "properties" )
-mutator( entity, "region" )
+accessor( entity, "properties" )
+accessor( entity, "region" )
 
 if ( _CLIENT ) then
 	function entity:getSprite()
@@ -262,7 +262,7 @@ function entity:initializePhysics( type )
 	local position = self:getPosition()
 	local x        = position.x
 	local y        = position.y
-	self.body      = physics.newBody( world, x, y, type )
+	self.body      = love.physics.newBody( world, x, y, type )
 	self.body:setUserData( self )
 	self.body:setFixedRotation( true )
 	self.body:setLinearDamping( 16 )
@@ -275,7 +275,7 @@ if ( _CLIENT ) then
 		if ( type( sprite ) == "sprite" ) then
 			sprite:draw()
 		else
-			graphics.draw( sprite:getDrawable() )
+			love.graphics.draw( sprite:getDrawable() )
 		end
 	end
 
@@ -291,13 +291,13 @@ if ( _CLIENT ) then
 		local kx     = -1
 		local ky     = 0
 		if ( type( sprite ) == "sprite" ) then
-			graphics.draw(
+			love.graphics.draw(
 				sprite:getSpriteSheet():getDrawable(),
 				sprite:getQuad(),
 				x, y, r, sx, sy, ox, oy, kx, ky
 			)
 		else
-			graphics.draw(
+			love.graphics.draw(
 				sprite:getDrawable(),
 				x, y, r, sx, sy, ox, oy, kx, ky
 			)
@@ -490,8 +490,8 @@ function entity:setCollisionBounds( min, max )
 		local height     =  dimensions.y - 2
 		local x          =   width / 2 + 0.5
 		local y          = -height / 2 - 1.5
-		local shape      = physics.newRectangleShape( x, y, width, height )
-		physics.newFixture( body, shape )
+		local shape      = love.physics.newRectangleShape( x, y, width, height )
+		love.physics.newFixture( body, shape )
 	end
 end
 
@@ -566,7 +566,7 @@ function entity:testPoint( x, y )
 		y            = max.y
 		local width  = max.x - min.x
 		local height = min.y - max.y
-		if ( math.pointinrectangle( px, py, x, y, width, height ) ) then
+		if ( math.pointinrect( px, py, x, y, width, height ) ) then
 			return true
 		end
 	end
@@ -592,9 +592,10 @@ function entity:update( dt )
 		end
 	end
 
+	-- TODO: Use engine.getCurrentTime()
 	if ( self.think and
 	     self.nextThink and
-	     self.nextThink <= engine.getRealTime() ) then
+	     self.nextThink <= love.timer.getTime() ) then
 		self.nextThink = nil
 		self:think()
 	end

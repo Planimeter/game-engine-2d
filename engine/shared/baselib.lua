@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Extends the base library
 --
@@ -10,20 +10,16 @@ if ( not rawdofile ) then
 	rawdofile = dofile
 
 	function dofile( filename )
-		local f = assert( filesystem.load( filename ) )
+		local f = assert( love.filesystem.load( filename ) )
 		return f()
 	end
 end
 
-function mutator( class, member, key )
+function accessor( class, member, key )
 	class[ "set" .. string.capitalize( member ) ] = function( self, value )
 		self[ key or member ] = value
 	end
 
-	accessor( class, member, key )
-end
-
-function accessor( class, member, key )
 	class[ "get" .. string.capitalize( member ) ] = function( self )
 		return self[ key or member ]
 	end
@@ -33,7 +29,6 @@ if ( not rawprint and not rawtype ) then
 	rawprint           = print
 	rawtype            = type
 
-	local _print       = print
 	local rawtype      = rawtype
 	local tonumber     = tonumber
 	local assert       = assert
@@ -41,9 +36,9 @@ if ( not rawprint and not rawtype ) then
 	local rawget       = rawget
 
 	function print( ... )
-		_print( ... )
+		rawprint( ... )
 
-		if ( ( _CLIENT or _INTERACTIVE ) and g_Console ) then
+		if ( _CLIENT and g_Console ) then
 			g_Console.print( ... )
 		end
 	end
@@ -92,7 +87,7 @@ concommand( "lua_dofile", "Loads and runs the given file",
 			return
 		end
 
-		local success, ret = pcall( filesystem.load, argString )
+		local success, ret = pcall( love.filesystem.load, argString )
 		if ( success ) then
 			success, ret = pcall( ret )
 			if ( not success ) then
@@ -108,9 +103,9 @@ concommand( "lua_dofile", "Loads and runs the given file",
 	function( argS )
 		local autocomplete = {}
 		local dir = string.stripfilename( argS )
-		local files = filesystem.getDirectoryItems( dir )
+		local files = love.filesystem.getDirectoryItems( dir )
 		for _, v in ipairs( files ) do
-			if ( filesystem.isDirectory( dir .. v ) or
+			if ( love.filesystem.isDirectory( dir .. v ) or
 			     string.fileextension( v ) == "lua" ) then
 				local filename = ( dir ~= "" and dir or "" ) .. v
 				local cmd      = "lua_dofile " .. filename

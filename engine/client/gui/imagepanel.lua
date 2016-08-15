@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Image class
 --
@@ -25,13 +25,13 @@ local missingImage = false
 
 function imagepanel:draw()
 	gui.imagepanel.maskedImage = self
-	graphics.stencil( gui.imagepanel.drawMask )
-	graphics.setStencilTest( "greater", 0 )
+	love.graphics.stencil( gui.imagepanel.drawMask )
+	love.graphics.setStencilTest( "greater", 0 )
 		graphics.setColor( self:getColor() )
-		graphics.draw( self:getImage(), self:getQuad() )
-	graphics.setStencilTest()
+		love.graphics.draw( self:getImage(), self:getQuad() )
+	love.graphics.setStencilTest()
 
-	missingImage = self:getImage() == graphics.error:getDrawable()
+	missingImage = self:getImage() == graphics.error
 	if ( missingImage ) then
 		self:drawMissingImage()
 	end
@@ -47,7 +47,7 @@ function imagepanel:drawMissingImage()
 		local width     = self:getWidth()
 		local height    = self:getHeight()
 		graphics.setLineWidth( lineWidth )
-		graphics.line(
+		love.graphics.line(
 			width - lineWidth / 2, 0,                      -- Top-right
 			width - lineWidth / 2, height - lineWidth / 2, -- Bottom-right
 			0,                     height - lineWidth / 2  -- Bottom-left
@@ -55,20 +55,20 @@ function imagepanel:drawMissingImage()
 	graphics.setOpacity( opacity )
 end
 
-mutator( imagepanel, "color" )
+accessor( imagepanel, "color" )
 
 function imagepanel:getQuad()
 	return self.imageQuad
 end
 
 function imagepanel:getImage()
-	return self.imageDatum:getDrawable()
+	return self.imageDatum
 end
 
 function imagepanel:setImage( image )
 	if ( type( image ) == "image" ) then
 		self.imageDatum = image
-	elseif ( image ~= nil and filesystem.exists( image ) ) then
+	elseif ( image ~= nil and love.filesystem.exists( image ) ) then
 		self.imageDatum = graphics.newImage( image )
 		self.imageDatum:setFilter( "linear", "linear" )
 	else
@@ -97,7 +97,7 @@ function imagepanel:updateQuad()
 	sw = self.imageDatum:getWidth()
 	sh = self.imageDatum:getHeight()
 	if ( self.imageQuad == nil ) then
-		self.imageQuad = graphics.newQuad( 0, 0, w, h, sw, sh )
+		self.imageQuad = love.graphics.newQuad( 0, 0, w, h, sw, sh )
 	else
 		self.imageQuad:setViewport( 0, 0, w, h )
 	end

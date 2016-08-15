@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Bind List Panel class
 --
@@ -58,12 +58,12 @@ function bindlistpanel:onBindChange( item, key, oldKey, concommand )
 end
 
 function bindlistpanel:readBinds( binds )
-	if ( not filesystem.exists( "cfg/binds.lst" ) ) then
+	if ( not love.filesystem.exists( "cfg/binds.lst" ) ) then
 		return
 	end
 
 	local list = {}
-	for line in filesystem.lines( "cfg/binds.lst" ) do
+	for line in love.filesystem.lines( "cfg/binds.lst" ) do
 		table.insert( list, line )
 	end
 

@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Sprite class
 --
@@ -22,10 +22,10 @@ end
 
 function sprite:draw()
 	local image = self:getSpriteSheet()
-	graphics.draw( image:getDrawable(), self:getQuad() )
+	love.graphics.draw( image:getDrawable(), self:getQuad() )
 end
 
-mutator( sprite, "animation" )
+accessor( sprite, "animation" )
 accessor( sprite, "animationName" )
 accessor( sprite, "animations" )
 accessor( sprite, "events" )
@@ -33,7 +33,7 @@ accessor( sprite, "events" )
 function sprite:getQuad()
 	if ( not self.quad ) then
 		local image = self:getSpriteSheet()
-		self.quad = graphics.newQuad(
+		self.quad = love.graphics.newQuad(
 			0,
 			0,
 			self:getWidth(),
@@ -46,9 +46,9 @@ function sprite:getQuad()
 	return self.quad
 end
 
-mutator( sprite, "spriteSheet" )
-mutator( sprite, "width" )
-mutator( sprite, "height" )
+accessor( sprite, "spriteSheet" )
+accessor( sprite, "width" )
+accessor( sprite, "height" )
 
 function sprite:onAnimationEnd( animation )
 end

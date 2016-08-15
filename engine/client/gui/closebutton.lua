@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Close Button class
 --
@@ -31,7 +31,7 @@ function closebutton:draw()
 	local height = self:getHeight()
 	local x = math.round( width  / 2 - self.icon:getWidth()  / 2 + point( 4 ) )
 	local y = math.round( height / 2 - self.icon:getHeight() / 2 )
-	graphics.draw( self.icon:getDrawable(), x, y )
+	love.graphics.draw( self.icon, x, y )
 
 	gui.panel.draw( self )
 end

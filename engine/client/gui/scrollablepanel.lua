@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Scrollable Panel class
 --
@@ -17,7 +17,7 @@ function scrollablepanel:scrollablepanel( parent, name )
 	self:setScheme( "Default" )
 end
 
-mutator( scrollablepanel, "innerHeight" )
+accessor( scrollablepanel, "innerHeight" )
 accessor( scrollablepanel, "innerPanel", "panel" )
 accessor( scrollablepanel, "scrollbar" )
 

@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Progress Bar class
 --
@@ -36,9 +36,9 @@ function progressbar:drawForeground()
 	graphics.rectangle( "fill", 0, 0, width, height )
 end
 
-mutator( progressbar, "min" )
-mutator( progressbar, "max" )
-mutator( progressbar, "value" )
+accessor( progressbar, "min" )
+accessor( progressbar, "max" )
+accessor( progressbar, "value" )
 
 function progressbar:setMin( min )
 	self.min = min

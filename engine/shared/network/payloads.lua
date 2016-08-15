@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Payload Definitions
 --
@@ -34,8 +34,8 @@ structs[ "upload" ] = {
 
 structs[ "clientInfo" ] = {
     keys = {
-        { name = "viewportWidth",  type = "number" },
-        { name = "viewportHeight", type = "number" }
+        { name = "graphicsWidth",  type = "number" },
+        { name = "graphicsHeight", type = "number" }
     }
 }
 

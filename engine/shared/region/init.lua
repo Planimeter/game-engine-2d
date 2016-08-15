@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Region class
 --
@@ -10,7 +10,6 @@ local regions = region and region.regions or {}
 require( "engine.shared.hook" )
 require( "engine.shared.region.tileset" )
 require( "engine.shared.region.layer" )
-require( "engine.shared.physics" )
 
 class( "region" )
 
@@ -19,32 +18,32 @@ region.regions = regions
 if ( _CLIENT ) then
 	function region.drawWorld()
 		local color  = graphics.getBackgroundColor()
-		local width  = graphics.getViewportWidth()
-		local height = graphics.getViewportHeight()
+		local width  = love.graphics.getWidth()
+		local height = love.graphics.getHeight()
 		graphics.setColor( color )
 		graphics.rectangle( "fill", 0, 0, width, height )
-		graphics.push()
+		love.graphics.push()
 			local scale = camera.getZoom()
-			graphics.scale( scale )
+			love.graphics.scale( scale )
 			local x, y = camera.getTranslation()
-			graphics.translate( x, y )
+			love.graphics.translate( x, y )
 			local worldIndex = camera.getWorldIndex()
 			for _, region in ipairs( region.regions ) do
 				if ( worldIndex == region:getWorldIndex() ) then
-					graphics.push()
-						graphics.translate( region:getX(), region:getY() )
+					love.graphics.push()
+						love.graphics.translate( region:getX(), region:getY() )
 						region:draw()
-					graphics.pop()
+					love.graphics.pop()
 				end
 			end
 
 			entity.drawAll()
-		graphics.pop()
+		love.graphics.pop()
 	end
 end
 
 function region.exists( name )
-	return filesystem.exists( "regions/" .. name .. ".lua" )
+	return love.filesystem.exists( "regions/" .. name .. ".lua" )
 end
 
 function region.findNextWorldIndex()
@@ -77,7 +76,7 @@ function region.getAtPosition( position, worldIndex )
 		local x,  y  = region:getX(), region:getY()
 		local width  = region:getPixelWidth()
 		local height = region:getPixelHeight()
-		if ( math.pointinrectangle( px, py, x, y, width, height ) ) then
+		if ( math.pointinrect( px, py, x, y, width, height ) ) then
 			return region
 		end
 	end
@@ -147,6 +146,8 @@ function region.unloadAll()
 	end
 end
 
+region.shutdown = region.unloadAll
+
 if ( not _DEDICATED ) then
 	concommand( "region", "Loads the specified region",
 		function( _, _, _, _, argT )
@@ -161,22 +162,22 @@ if ( not _DEDICATED ) then
 				return
 			end
 
-			engine.disconnect()
+			engineclient.disconnect()
 
-			if ( not engine.initializeServer() ) then
+			if ( not engineclient.initializeServer() ) then
 				return
 			end
 
-			_G.game.initialRegion = name
+			game.initialRegion = name
 
-			engine.connectToListenServer()
+			engineclient.connectToListenServer()
 		end,
 
 		nil,
 
 		function( argS )
 			local autocomplete = {}
-			local files = filesystem.getDirectoryItems( "regions" )
+			local files = love.filesystem.getDirectoryItems( "regions" )
 			for _, v in ipairs( files ) do
 				if ( string.fileextension( v ) == "lua" ) then
 					local name  = string.gsub( v, ".lua", "" )
@@ -232,11 +233,11 @@ if ( _CLIENT ) then
 
 		for _, layer in ipairs( layers ) do
 			if ( layer:isVisible() ) then
-				graphics.push()
+				love.graphics.push()
 					graphics.setOpacity( layer:getOpacity() )
 					layer:draw()
 					graphics.setOpacity( 1 )
-				graphics.pop()
+				love.graphics.pop()
 			end
 		end
 	end
@@ -255,7 +256,7 @@ function region:getFilename()
 	return self.name .. ".lua"
 end
 
-mutator( region, "formatVersion" )
+accessor( region, "formatVersion" )
 
 local data = {}
 local gid  = 0
@@ -279,8 +280,8 @@ function region:getGidsAtPosition( position )
 end
 
 accessor( region, "layers" )
-mutator( region, "name" )
-mutator( region, "orientation" )
+accessor( region, "name" )
+accessor( region, "orientation" )
 
 function region:getPixelWidth()
 	return self:getTileWidth() * self:getWidth()
@@ -290,7 +291,7 @@ function region:getPixelHeight()
 	return self:getTileHeight() * self:getHeight()
 end
 
-mutator( region, "properties" )
+accessor( region, "properties" )
 
 function region:getTileset( layer )
 	local gid = layer:getHighestTileGid()
@@ -304,33 +305,33 @@ function region:getTileset( layer )
 end
 
 accessor( region, "tilesets" )
-mutator( region, "tileWidth" )
-mutator( region, "tileHeight" )
-mutator( region, "width" )
-mutator( region, "height" )
+accessor( region, "tileWidth" )
+accessor( region, "tileHeight" )
+accessor( region, "width" )
+accessor( region, "height" )
 accessor( region, "world" )
-mutator( region, "worldIndex" )
-mutator( region, "x" )
-mutator( region, "y" )
+accessor( region, "worldIndex" )
+accessor( region, "x" )
+accessor( region, "y" )
 
 function region:initializeWorld()
-	self.world = physics.newWorld()
+	self.world = love.physics.newWorld()
 end
 
-local gids             = {}
-local firstGid         = 0
-local tiles            = {}
-local hasvalue         = table.hasvalue
-local hasProperties    = false
-local properties       = {}
-local walkable         = nil
-local px               = 0
-local py               = 0
-local x                = 0
-local y                = 0
-local width            = 0
-local height           = 0
-local pointinrectangle = math.pointinrectangle
+local gids          = {}
+local firstGid      = 0
+local tiles         = {}
+local hasvalue      = table.hasvalue
+local hasProperties = false
+local properties    = {}
+local walkable      = nil
+local px            = 0
+local py            = 0
+local x             = 0
+local y             = 0
+local width         = 0
+local height        = 0
+local pointinrect   = math.pointinrect
 
 function region:isTileWalkableAtPosition( position )
 	-- Check world collisions
@@ -350,7 +351,7 @@ function region:isTileWalkableAtPosition( position )
 
 	-- Check entity collisions
 	px = position.x
-	py = position.y - _G.game.tileSize
+	py = position.y - game.tileSize
 	for _, entity in ipairs( self:getEntities() ) do
 		if ( entity:testPoint( px, py ) ) then
 			return false
@@ -362,7 +363,7 @@ function region:isTileWalkableAtPosition( position )
 	y      = self:getY()
 	width  = self:getPixelWidth()
 	height = self:getPixelHeight()
-	if ( not pointinrectangle( px, py, x, y, width, height ) ) then
+	if ( not pointinrect( px, py, x, y, width, height ) ) then
 		return false
 	end
 

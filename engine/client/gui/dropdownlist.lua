@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Drop-Down List class
 --
@@ -72,7 +72,7 @@ function dropdownlist:drawIcon()
 	local padding = point( 18 )
 	local x = self:getWidth() - self.icon:getWidth() - padding
 	local y = self:getHeight() / 2 - self.icon:getHeight() / 2
-	graphics.draw( self.icon:getDrawable(), x, y )
+	love.graphics.draw( self.icon, x, y )
 end
 
 function dropdownlist:drawText()
@@ -85,7 +85,7 @@ function dropdownlist:drawText()
 	graphics.setColor( self:getScheme( color ) )
 
 	local font = self:getScheme( "font" )
-	graphics.setFont( font )
+	love.graphics.setFont( font )
 	local item = self:getListItemGroup():getSelectedItem()
 	local text = item and item:getText() or ""
 	local x    = point( 18 )

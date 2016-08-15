@@ -1,24 +1,18 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Profiling interface
 --
 --============================================================================--
 
-local timer  = love.timer
-local print  = print
-local string = string
-
-module( "profile" )
+class( "profile" )
 
 local profiles = {}
 
-function start( name )
-	profiles[ name ] = timer.getTime()
+function profile.start( name )
+	profiles[ name ] = love.timer.getTime()
 end
 
-local format = string.format
-
-function stop( name )
-	local duration = timer.getTime() - profiles[ name ]
-	print( name .. " took " .. format( "%.3fs", duration ) )
+function profile.stop( name )
+	local duration = love.timer.getTime() - profiles[ name ]
+	print( name .. " took " .. string.format( "%.3fs", duration ) )
 end

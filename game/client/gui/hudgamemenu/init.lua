@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Game Menu HUD
 --
@@ -41,8 +41,8 @@ function hudgamemenu:getTitle()
 end
 
 function hudgamemenu:invalidateLayout()
-	local x = graphics.getViewportWidth()  - self:getWidth()  - point( 18 )
-	local y = graphics.getViewportHeight() - self:getHeight() - point( 18 )
+	local x = love.graphics.getWidth()  - self:getWidth()  - point( 18 )
+	local y = love.graphics.getHeight() - self:getHeight() - point( 18 )
 	self:setPos( x, y )
 	gui.frame.invalidateLayout( self )
 end

@@ -1,15 +1,13 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Debug Overlay interface
 --
 --============================================================================--
 
-local _G = _G
+class( "debugoverlay" )
 
-module( "debugoverlay" )
-
-function rectangle( x, y, width, height, color, duration )
-	if ( _G.g_DebugOverlay ) then
-		_G.g_DebugOverlay:rectangle( x, y, width, height, color, duration )
+function debugoverlay.rectangle( x, y, width, height, color, duration )
+	if ( g_DebugOverlay ) then
+		g_DebugOverlay:rectangle( x, y, width, height, color, duration )
 	end
 end

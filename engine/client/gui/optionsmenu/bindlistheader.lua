@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Bind List Header class
 --
@@ -18,7 +18,7 @@ end
 function bindlistheader:draw()
 	graphics.setColor( self:getScheme( "label.textColor" ) )
 	local font = self:getScheme( "fontBold" )
-	graphics.setFont( font )
+	love.graphics.setFont( font )
 
 	local margin = point( 18 )
 	local x = margin
@@ -38,6 +38,6 @@ function bindlistheader:draw()
 	gui.panel.draw( self )
 end
 
-mutator( bindlistheader, "text" )
+accessor( bindlistheader, "text" )
 
 gui.register( bindlistheader, "bindlistheader" )

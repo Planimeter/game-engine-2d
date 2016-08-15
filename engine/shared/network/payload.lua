@@ -1,23 +1,23 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Payload class
 --
 --============================================================================--
 
--- These values are preserved during real-time scripting.
-local _handlers = payload and payload.handlers or {}
-
 require( "engine.shared.typelenvalues" )
 
 class "payload" ( "typelenvalues" )
 
-payload.handlers = _handlers
-local handlers   = payload.handlers
+payload.handlers = {}
 
 -- Generate ids for packet structures
 do
-	unrequire( "engine.shared.network.payloads" )
-	require( "engine.shared.network.payloads" )
+	local payloads = "engine.shared.network.payloads"
+	if ( package.loaded[ payloads ] ) then
+		unrequire( payloads )
+	end
+
+	require( payloads )
 
 	typelenvalues.generateIds( payload.structs )
 end
@@ -30,7 +30,7 @@ function payload.initializeFromData( data )
 end
 
 function payload.setHandler( func, struct )
-	handlers[ struct ] = func
+	payload.handlers[ struct ] = func
 end
 
 function payload:payload( struct )
@@ -40,20 +40,14 @@ end
 function payload:dispatchToHandler()
 	local name = self:getStructName()
 	if ( name ) then
-		local handler = handlers[ name ]
+		local handler = payload.handlers[ name ]
 		if ( handler ) then
 			handler( self )
 		end
 	end
 end
 
-function payload:getPeer()
-	return self.peer
-end
-
-function payload:setPeer( peer )
-	self.peer = peer
-end
+accessor( payload, "peer" )
 
 function payload:getPlayer()
 	return player.getByPeer( self.peer )

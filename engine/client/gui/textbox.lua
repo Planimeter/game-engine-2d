@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Text Box class
 --
@@ -97,7 +97,7 @@ function textbox:drawCursor()
 	local font = self:getScheme( "font" )
 	if ( self.focus ) then
 		local opacity = graphics.getOpacity()
-		graphics.setOpacity( opacity * abs( sin( 3 * engine.getRealTime() ) ) )
+		graphics.setOpacity( opacity * abs( sin( 3 * love.timer.getTime() ) ) )
 		graphics.setColor( graphics.getColor() )
 			graphics.rectangle(
 				"fill",
@@ -131,8 +131,8 @@ end
 
 function textbox:drawText()
 	gui.textbox.maskedTextbox = self
-	graphics.stencil( gui.textbox.drawMask )
-	graphics.setStencilTest( "greater", 0 )
+	love.graphics.stencil( gui.textbox.drawMask )
+	love.graphics.setStencilTest( "greater", 0 )
 		local property = "textbox.textColor"
 		local text     = self.placeholder
 
@@ -154,7 +154,7 @@ function textbox:drawText()
 		graphics.setColor( self:getScheme( property ) )
 
 		local font = self:getScheme( "font" )
-		graphics.setFont( font )
+		love.graphics.setFont( font )
 		local x = getTextX( self )
 		local y = getTextY( self )
 		if ( not self:isMultiline() ) then
@@ -162,7 +162,7 @@ function textbox:drawText()
 		else
 			graphics.printf( text, x, y, self:getWidth() - 2 * self.padding )
 		end
-	graphics.setStencilTest()
+	love.graphics.setStencilTest()
 end
 
 local function getTextWidth( self )
@@ -212,9 +212,6 @@ end
 function textbox:doBackspace( count )
 	count = count or 1
 
-	-- Andrew; nextWord returns a position of 0 if no more words are found.
-	-- Since we're backspacing a word in this case, but no word is found,
-	-- backspace whatever is in front of us.
 	if ( count == 0 ) then
 		count = self.cursorPos + 1
 	end
@@ -265,9 +262,6 @@ local utf8len = string.utf8len
 function textbox:doDelete( count )
 	count = count or 1
 
-	-- Andrew; nextWord returns a position of 0 if no more words are found.
-	-- Since we're deleting a word in this case, but no word is found,
-	-- delete whatever is in back of us.
 	if ( count == 0 ) then
 		count = utf8len( self.text ) - self.cursorPos
 	end
@@ -303,7 +297,7 @@ end
 local gsub = string.gsub
 
 local function doPaste( self )
-	local clipboardText = os.getClipboardText()
+	local clipboardText = love.system.getClipboardText()
 	if ( not clipboardText ) then
 		return
 	end
@@ -318,10 +312,10 @@ end
 local function doSelectAll( self )
 end
 
-mutator( textbox, "autocomplete" )
-mutator( textbox, "defocusOnEnter" )
-mutator( textbox, "placeholder" )
-mutator( textbox, "text" )
+accessor( textbox, "autocomplete" )
+accessor( textbox, "defocusOnEnter" )
+accessor( textbox, "placeholder" )
+accessor( textbox, "text" )
 
 local function updateScrollbarRange( self )
 	local textHeight = getTextHeight( self ) + 2 * self.padding
@@ -671,7 +665,7 @@ function textbox:onLostFocus()
 end
 
 function textbox:onMouseLeave()
-	os.setCursor()
+	love.mouse.setCursor()
 end
 
 function textbox:setAutocomplete( autocomplete )
@@ -760,7 +754,8 @@ local function updateCursor( self )
 		return
 	end
 
-	os.setCursor( "ibeam" )
+	local cursor = love.mouse.getSystemCursor( "ibeam" )
+	love.mouse.setCursor( cursor )
 end
 
 function textbox:update( dt )

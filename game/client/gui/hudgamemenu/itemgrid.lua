@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Item Grid class
 --
@@ -28,10 +28,10 @@ function itemgrid:addItem( item, count )
 	self:invalidateLayout()
 end
 
-mutator( itemgrid, "columns" )
-mutator( itemgrid, "rows" )
+accessor( itemgrid, "columns" )
+accessor( itemgrid, "rows" )
 accessor( itemgrid, "items" )
-mutator( itemgrid, "source" )
+accessor( itemgrid, "source" )
 
 function itemgrid:hasItem( item )
 	local items = self:getItems()

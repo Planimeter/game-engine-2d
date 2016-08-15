@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Radio Button Group class
 --
@@ -35,7 +35,7 @@ function radiobuttongroup:removeItem( item )
 end
 
 accessor( radiobuttongroup, "items" )
-mutator( radiobuttongroup, "selectedId" )
+accessor( radiobuttongroup, "selectedId" )
 
 function radiobuttongroup:getSelectedItem()
 	local items = self:getItems()

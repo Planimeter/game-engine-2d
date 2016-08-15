@@ -1,41 +1,30 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Bind interface
 --
 --============================================================================--
 
--- These values are preserved during real-time scripting.
-local _binds = bind and bind.getBinds() or {}
+class( "bind" )
 
-local concommand = concommand
-local filesystem = filesystem
-local pairs      = pairs
-local print      = print
-local string     = string
-local table      = table
-local _G         = _G
+local binds = {}
 
-module( "bind" )
-
-local binds = _binds
-
-function getBinds()
+function bind.getBinds()
 	return binds
 end
 
-function getBind( key )
+function bind.getBind( key )
 	return binds[ key ]
 end
 
-function getKeyForBind( concommand )
-	for key, bind in pairs( binds ) do
+function bind.getKeyForBind( concommand )
+	for key, bind in pairs( bind.getBinds() ) do
 		if ( bind == concommand ) then
 			return key
 		end
 	end
 end
 
-function setBind( key, concommand )
+function bind.setBind( key, concommand )
 	binds[ key ] = concommand
 end
 
@@ -49,89 +38,89 @@ concommand( "bind", "Binds a key",
 		end
 
 		if ( concommand ) then
-			setBind( key, concommand )
+			bind.setBind( key, concommand )
 		else
-			print( getBind( key ) )
+			print( bind.getBind( key ) )
 		end
 	end
 )
 
-function readBinds()
+function bind.readBinds()
 	local config = "cfg/binds.cfg"
-	if ( not filesystem.exists( config ) ) then
+	if ( not love.filesystem.exists( config ) ) then
 		config = "cfg/binds_default.cfg"
-		if ( filesystem.exists( config ) ) then
-			filesystem.write( "cfg/binds.cfg", filesystem.read( config ) )
+		if ( love.filesystem.exists( config ) ) then
+			love.filesystem.write( "cfg/binds.cfg", love.filesystem.read( config ) )
 		else
 			return
 		end
 	end
 
-	for line in filesystem.lines( config ) do
+	for line in love.filesystem.lines( config ) do
 		for k, v in string.gmatch( line, "(.+)%s(.+)" ) do
-			binds[ string.trim( k ) ] = string.trim( v )
+			bind.setBind( string.trim( k ), string.trim( v ) )
 		end
 	end
 end
 
-function readDefaultBinds()
+function bind.readDefaultBinds()
 	local config = "cfg/binds_default.cfg"
-	if ( not filesystem.exists( config ) ) then
+	if ( not love.filesystem.exists( config ) ) then
 		return
 	end
 
-	local binds  = {}
-	for line in filesystem.lines( config ) do
+	local binds = {}
+	for line in love.filesystem.lines( config ) do
 		for k, v in string.gmatch( line, "(.+)%s(.+)" ) do
-			binds[ string.trim( k ) ] = string.trim( v )
+			bind.setBind( string.trim( k ), string.trim( v ) )
 		end
 	end
 	return binds
 end
 
-function saveBinds()
+function bind.saveBinds()
 	local config = {}
-	for k, v in pairs( binds ) do
+	for k, v in pairs( bind.getBinds() ) do
 		table.insert( config, k .. " " .. v )
 	end
 	table.insert( config, "" )
 	config = table.concat( config, "\r\n" )
 
-	filesystem.createDirectory( "cfg" )
+	love.filesystem.createDirectory( "cfg" )
 
-	if ( filesystem.write( "cfg/binds.cfg", config ) ) then
+	if ( love.filesystem.write( "cfg/binds.cfg", config ) ) then
 		print( "Saved binds." )
 	else
 		print( "Failed to save binds!" )
 	end
 end
 
-function keypressed( key, scancode, isrepeat )
-	local bind = getBind( key )
-	if ( bind and not concommand.dispatch( _G.localplayer, bind ) ) then
+function bind.keypressed( key, scancode, isrepeat )
+	local bind = bind.getBind( key )
+	if ( bind and not concommand.dispatch( localplayer, bind ) ) then
 		print( "'" .. bind .. "' is not recognized as a command." )
 	end
 end
 
-function keyreleased( key, scancode )
-	local bind = getBind( key )
+function bind.keyreleased( key, scancode )
+	local bind = bind.getBind( key )
 	if ( not bind ) then
 		return
 	end
 
-	local isButtonCommand = string.sub( bind, 1, 1 ) == "+"
+	local isButtonCommand = string.find( bind, "+" ) == 1
 	if ( isButtonCommand ) then
 		bind = string.gsub( bind, "%+", "-" )
-		if ( not concommand.dispatch( _G.localplayer, bind ) ) then
+		if ( not concommand.dispatch( localplayer, bind ) ) then
 			print( "'" .. bind .. "' is not recognized as a command." )
 		end
 	end
 end
 
-function mousepressed( x, y, button, istouch )
-	keypressed( button, nil, false )
+function bind.mousepressed( x, y, button, istouch )
+	bind.keypressed( button, nil, false )
 end
 
-function mousereleased( x, y, button, istouch )
-	keyreleased( button )
+function bind.mousereleased( x, y, button, istouch )
+	bind.keyreleased( button )
 end

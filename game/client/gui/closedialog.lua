@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Close Dialog class
 --
@@ -27,8 +27,8 @@ function closedialog:closedialog( parent, name )
 		point( 86 ) + label:getHeight() + point( 18 )
 	)
 	buttonYes.onClick = function()
-		engine.setRequestingShutdown( true )
-		engine.quit()
+		love._quit = true
+		love.quit()
 	end
 
 	local buttonNo = gui.button( self, "Close Dialog No Button", "No" )

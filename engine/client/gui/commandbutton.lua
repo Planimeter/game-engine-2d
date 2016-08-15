@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Command Button class
 --
@@ -57,7 +57,7 @@ function commandbutton:drawForeground()
 	graphics.setColor( self:getScheme( color ) )
 	local lineWidth = point( 1 )
 	graphics.setLineWidth( lineWidth )
-	graphics.line(
+	love.graphics.line(
 		width - lineWidth / 2, 0,     -- Top-right
 		width - lineWidth / 2, height -- Bottom-right
 	)

@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Frame Tab Group class
 --
@@ -32,7 +32,7 @@ function frametabgroup:draw()
 	graphics.setColor( self:getScheme( "frametab.outlineColor" ) )
 	local lineWidth = point( 1 )
 	graphics.setLineWidth( lineWidth )
-	graphics.line(
+	love.graphics.line(
 		lineWidth / 2, 0,               -- Top-left
 		lineWidth / 2, self:getHeight() -- Bottom-left
 	)

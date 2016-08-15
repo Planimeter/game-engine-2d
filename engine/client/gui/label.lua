@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Label class
 --
@@ -20,7 +20,7 @@ function label:draw()
 	graphics.setColor( self:getScheme( "label.textColor" ) )
 
 	local font = self:getFont()
-	graphics.setFont( font )
+	love.graphics.setFont( font )
 
 	local align     = self:getTextAlign()
 	local text      = self:getText()
@@ -40,9 +40,9 @@ function label:draw()
 	gui.panel.draw( self )
 end
 
-mutator( label, "font" )
-mutator( label, "text" )
-mutator( label, "textAlign" )
+accessor( label, "font" )
+accessor( label, "text" )
+accessor( label, "textAlign" )
 
 function label:setFont( font )
 	self.font = font

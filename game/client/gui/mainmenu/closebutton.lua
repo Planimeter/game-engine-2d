@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Main Menu Close Button class
 --
@@ -24,7 +24,7 @@ function mainmenuclosebutton:draw()
 	local x =   self:getWidth()                 / 2 - self.icon:getWidth()  / 2
 	local y = ( self:getHeight() - point( 1 ) ) / 2 - self.icon:getHeight() / 2
 	graphics.setColor( self:getScheme( iconColor ) )
-	graphics.draw( self.icon:getDrawable(), x, y )
+	love.graphics.draw( self.icon, x, y )
 
 	gui.panel.draw( self )
 end

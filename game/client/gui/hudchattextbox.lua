@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Chat Textbox HUD
 --
@@ -54,7 +54,7 @@ function hudchattextbox:drawForeground()
 	local width    = self:getWidth()
 	local height   = self:getHeight()
 	local color    = color( self:getScheme( property ) )
-	color.a        = color.a * self.borderOpacity
+	color[ 4 ]     = color[ 4 ] * self.borderOpacity
 	graphics.setColor( color )
 	graphics.setLineWidth( 1 )
 	graphics.rectangle( "line", 0, 0, width, height )
@@ -84,7 +84,7 @@ function hudchattextbox:update( dt )
 	local hudchat  = self:getHudChat()
 	local hideTime = self:getHideTime()
 	if ( hideTime and
-	     hideTime <= engine.getRealTime() and
+	     hideTime <= love.timer.getTime() and
 	     not hudchat:isVisible() ) then
 		self:hide()
 	end

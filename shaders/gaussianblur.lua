@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Gaussian Blur pixel shader
 --
@@ -53,7 +53,7 @@ local function build_shader(sigma)
 
 	code[#code+1] = ("return c * vec4(%f) * color;}"):format(norm > 0 and 1/norm or 1)
 
-	return graphics.newShader(table.concat(code))
+	return love.graphics.newShader(table.concat(code))
 end
 
 function gaussianblur:gaussianblur()
@@ -64,29 +64,29 @@ function gaussianblur:gaussianblur()
 end
 
 function gaussianblur:renderTo(func)
-	local s = graphics.getShader()
+	local s = love.graphics.getShader()
 
-	graphics.setShader(self.shader)
+	love.graphics.setShader(self.shader)
 
 	-- first pass (horizontal blur)
-	self.shader:send('direction', {1 / graphics.getViewportWidth(), 0})
+	self.shader:send('direction', {1 / love.graphics.getWidth(), 0})
 	-- draw scene
 	self.canvas_h:clear()
 	self.canvas_h:renderTo(func)
 
-	local b = graphics.getBlendMode()
-	graphics.setBlendMode('alpha', 'premultiplied')
+	local b = love.graphics.getBlendMode()
+	love.graphics.setBlendMode('alpha', 'premultiplied')
 
 	-- second pass (vertical blur)
-	self.shader:send('direction', {0, 1 / graphics.getViewportHeight()})
+	self.shader:send('direction', {0, 1 / love.graphics.getHeight()})
 	self.canvas_v:clear()
-	self.canvas_v:renderTo(function() graphics.draw(self.canvas_h:getDrawable(), 0,0) end)
+	self.canvas_v:renderTo(function() love.graphics.draw(self.canvas_h:getDrawable(), 0,0) end)
 
-	-- graphics.draw(self.canvas_v:getDrawable(), 0,0)
+	-- love.graphics.draw(self.canvas_v:getDrawable(), 0,0)
 
 	-- restore blendmode, shader and canvas
-	graphics.setBlendMode(b)
-	graphics.setShader(s)
+	love.graphics.setBlendMode(b)
+	love.graphics.setShader(s)
 end
 
 function gaussianblur:draw()

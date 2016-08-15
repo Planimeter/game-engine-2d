@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Frame Tab class
 --
@@ -49,7 +49,7 @@ function frametab:drawBackground()
 	local lineWidth = point( 1 )
 	if ( selected ) then
 		graphics.setColor( self:getScheme( "frametab.backgroundColor" ) )
-		graphics.line(
+		love.graphics.line(
 			width - lineWidth / 2, 0,     -- Top-left
 			width - lineWidth / 2, height -- Bottom-left
 		)
@@ -57,13 +57,13 @@ function frametab:drawBackground()
 
 	selected = self:isSelected()
 	graphics.setColor( self:getScheme( "frametab.outlineColor" ) )
-	graphics.line(
+	love.graphics.line(
 		width - lineWidth / 2, 0,
 		width - lineWidth / 2, height - ( selected and 0 or point( 1 ) )
 	)
 
 	if ( not selected ) then
-		graphics.line(
+		love.graphics.line(
 			0,     height - lineWidth / 2, -- Top-right
 			width, height - lineWidth / 2  -- Bottom-right
 		)

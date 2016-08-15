@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Player class
 --
@@ -44,7 +44,7 @@ end
 function player.getInOrNearRegion( region )
 	local t = {}
 	for _, player in ipairs( players ) do
-		local minA, maxA = player:getViewportBounds()
+		local minA, maxA = player:getGraphicsBounds()
 
 		local x, y   = region:getX(), region:getY()
 		local width  = region:getPixelWidth()
@@ -94,19 +94,19 @@ function player:getName()
 	return entity.getName( self ) or "Unnamed"
 end
 
-mutator( player, "viewportWidth" )
-mutator( player, "viewportHeight" )
+accessor( player, "graphicsWidth" )
+accessor( player, "graphicsHeight" )
 
-function player:getViewportBounds()
-	local width  = self:getViewportWidth()  or 0
-	local height = self:getViewportHeight() or 0
+function player:getGraphicsBounds()
+	local width  = self:getGraphicsWidth()  or 0
+	local height = self:getGraphicsHeight() or 0
 	local min    = self:localToWorld( vector( -width / 2,  height / 2 ) )
 	local max    = self:localToWorld( vector(  width / 2, -height / 2 ) )
 	return min, max
 end
 
-function player:getViewportSize()
-	return self:getViewportWidth(), self:getViewportHeight()
+function player:getGraphicsSize()
+	return self:getGraphicsWidth(), self:getGraphicsHeight()
 end
 
 function player:initialSpawn()
@@ -306,9 +306,9 @@ if ( _CLIENT ) then
 	payload.setHandler( onSayText, "sayText" )
 end
 
-function player:setViewportSize( viewportWidth, viewportHeight )
-	self:setViewportWidth( viewportWidth )
-	self:setViewportHeight( viewportHeight )
+function player:setGraphicsSize( graphicsWidth, graphicsHeight )
+	self:setGraphicsWidth( graphicsWidth )
+	self:setGraphicsHeight( graphicsHeight )
 end
 
 function player:spawn()

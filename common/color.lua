@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Color class
 --
@@ -7,37 +7,37 @@
 class( "color" )
 
 function color.copy( c )
-	return color( c.r, c.g, c.b, c.a )
+	return color( unpack( c ) )
 end
 
 function color:color( r, g, b, a )
 	if ( type( r ) == "color" ) then
-		self.r = r.r or 0
-		self.g = r.g or 0
-		self.b = r.b or 0
-		self.a = g   or r.a or 0
+		self[ 1 ] = r[ 1 ] or 0
+		self[ 2 ] = r[ 2 ] or 0
+		self[ 3 ] = r[ 3 ] or 0
+		self[ 4 ] = g      or r[ 4 ] or 0
 		return
 	end
 
-	self.r = r or 0
-	self.g = g or 0
-	self.b = b or 0
-	self.a = a or 0
+	self[ 1 ] = r or 0
+	self[ 2 ] = g or 0
+	self[ 3 ] = b or 0
+	self[ 4 ] = a or 0
 end
 
 function color.__eq( a, b )
-	return a.r == b.r and
-	       a.g == b.g and
-	       a.b == b.b and
-	       a.a == b.a
+	return a[ 1 ] == b[ 1 ] and
+	       a[ 2 ] == b[ 2 ] and
+	       a[ 3 ] == b[ 3 ] and
+	       a[ 4 ] == b[ 4 ]
 end
 
 function color:__tostring()
 	return "color: ("  ..
-		self.r .. ", " ..
-		self.g .. ", " ..
-		self.b .. ", " ..
-		self.a ..
+		self[ 1 ] .. ", " ..
+		self[ 2 ] .. ", " ..
+		self[ 3 ] .. ", " ..
+		self[ 4 ] ..
 	")"
 end
 

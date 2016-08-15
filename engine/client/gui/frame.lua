@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Frame class
 --
@@ -110,21 +110,21 @@ function frame:drawTitle()
 	end
 	graphics.setColor( self:getScheme( color ) )
 	local font = self:getScheme( "titleFont" )
-	graphics.setFont( font )
+	love.graphics.setFont( font )
 	local margin = point( 36 )
 	local x = margin
 	local y = margin - point( 4 )
 	graphics.print( string.utf8upper( self:getTitle() ), x, y )
 end
 
-mutator( frame, "minWidth" )
-mutator( frame, "minHeight" )
+accessor( frame, "minWidth" )
+accessor( frame, "minHeight" )
 
 function frame:getMinSize()
 	return self:getMinWidth(), self:getMinHeight()
 end
 
-mutator( frame, "title" )
+accessor( frame, "title" )
 
 function frame:invalidateLayout()
 	if ( self.closeButton ) then
@@ -217,7 +217,7 @@ end
 
 local localX, localY   = 0, 0
 local mouseIntersects  = false
-local pointinrectangle = math.pointinrectangle
+local pointinrect      = math.pointinrect
 
 function frame:mousepressed( x, y, button, istouch )
 	if ( self.closing ) then
@@ -250,7 +250,7 @@ function frame:mousepressed( x, y, button, istouch )
 			local height      = self:getHeight()
 
 			-- Top Resize Bounds
-			mouseIntersects = pointinrectangle(
+			mouseIntersects = pointinrect(
 				localX,
 				localY,
 				borderWidth,
@@ -264,7 +264,7 @@ function frame:mousepressed( x, y, button, istouch )
 			end
 
 			-- Top-Right Resize Bounds
-			mouseIntersects = pointinrectangle(
+			mouseIntersects = pointinrect(
 				localX,
 				localY,
 				width - borderWidth,
@@ -278,7 +278,7 @@ function frame:mousepressed( x, y, button, istouch )
 			end
 
 			-- Right Resize Bounds
-			mouseIntersects = pointinrectangle(
+			mouseIntersects = pointinrect(
 				localX,
 				localY,
 				width - borderWidth,
@@ -292,7 +292,7 @@ function frame:mousepressed( x, y, button, istouch )
 			end
 
 			-- Bottom-Right Resize Bounds
-			mouseIntersects = pointinrectangle(
+			mouseIntersects = pointinrect(
 				localX,
 				localY,
 				width - borderWidth,
@@ -306,7 +306,7 @@ function frame:mousepressed( x, y, button, istouch )
 			end
 
 			-- Bottom Resize Bounds
-			mouseIntersects = pointinrectangle(
+			mouseIntersects = pointinrect(
 				localX,
 				localY,
 				borderWidth,
@@ -320,7 +320,7 @@ function frame:mousepressed( x, y, button, istouch )
 			end
 
 			-- Bottom-Left Resize Bounds
-			mouseIntersects = pointinrectangle(
+			mouseIntersects = pointinrect(
 				localX,
 				localY,
 				0,
@@ -334,7 +334,7 @@ function frame:mousepressed( x, y, button, istouch )
 			end
 
 			-- Left Resize Bounds
-			mouseIntersects = pointinrectangle(
+			mouseIntersects = pointinrect(
 				localX,
 				localY,
 				0,
@@ -348,7 +348,7 @@ function frame:mousepressed( x, y, button, istouch )
 			end
 
 			-- Top-Left Resize Bounds
-			mouseIntersects = pointinrectangle(
+			mouseIntersects = pointinrect(
 				localX,
 				localY,
 				0,
@@ -364,7 +364,7 @@ function frame:mousepressed( x, y, button, istouch )
 
 		-- Title Bar Resize Bounds
 		local titleBarHeight = point( 86 )
-		mouseIntersects = pointinrectangle(
+		mouseIntersects = pointinrect(
 			localX,
 			localY,
 			0,
@@ -409,7 +409,7 @@ end
 
 function frame:onMouseLeave()
 	if ( not self.mousedown ) then
-		os.setCursor()
+		love.mouse.setCursor()
 	end
 end
 
@@ -575,7 +575,7 @@ function frame:updateCursor( mouseX, mouseY )
 	local height      = self:getHeight()
 
 	-- Top Resize Bounds
-	mouseIntersects = pointinrectangle(
+	mouseIntersects = pointinrect(
 		localX,
 		localY,
 		borderWidth,
@@ -583,13 +583,14 @@ function frame:updateCursor( mouseX, mouseY )
 		width - 2 * borderWidth,
 		borderWidth
 	)
-	if ( mouseIntersects and self.mouseover ) then
-		os.setCursor( "sizens" )
+	if ( mouseIntersects ) then
+		local cursor = love.mouse.getSystemCursor( "sizens" )
+		love.mouse.setCursor( cursor )
 		return
 	end
 
 	-- Top-Right Resize Bounds
-	mouseIntersects = pointinrectangle(
+	mouseIntersects = pointinrect(
 		localX,
 		localY,
 		width - borderWidth,
@@ -598,12 +599,13 @@ function frame:updateCursor( mouseX, mouseY )
 		borderWidth
 	)
 	if ( mouseIntersects ) then
-		os.setCursor( "sizenesw" )
+		local cursor = love.mouse.getSystemCursor( "sizenesw" )
+		love.mouse.setCursor( cursor )
 		return
 	end
 
 	-- Right Resize Bounds
-	mouseIntersects = pointinrectangle(
+	mouseIntersects = pointinrect(
 		localX,
 		localY,
 		width - borderWidth,
@@ -612,12 +614,13 @@ function frame:updateCursor( mouseX, mouseY )
 		height - 2 * borderWidth
 	)
 	if ( mouseIntersects ) then
-		os.setCursor( "sizewe" )
+		local cursor = love.mouse.getSystemCursor( "sizewe" )
+		love.mouse.setCursor( cursor )
 		return
 	end
 
 	-- Bottom-Right Resize Bounds
-	mouseIntersects = pointinrectangle(
+	mouseIntersects = pointinrect(
 		localX,
 		localY,
 		width - borderWidth,
@@ -626,12 +629,13 @@ function frame:updateCursor( mouseX, mouseY )
 		borderWidth
 	)
 	if ( mouseIntersects ) then
-		os.setCursor( "sizenwse" )
+		local cursor = love.mouse.getSystemCursor( "sizenwse" )
+		love.mouse.setCursor( cursor )
 		return
 	end
 
 	-- Bottom Resize Bounds
-	mouseIntersects = pointinrectangle(
+	mouseIntersects = pointinrect(
 		localX,
 		localY,
 		borderWidth,
@@ -640,12 +644,13 @@ function frame:updateCursor( mouseX, mouseY )
 		borderWidth
 	)
 	if ( mouseIntersects ) then
-		os.setCursor( "sizens" )
+		local cursor = love.mouse.getSystemCursor( "sizens" )
+		love.mouse.setCursor( cursor )
 		return
 	end
 
 	-- Bottom-Left Resize Bounds
-	mouseIntersects = pointinrectangle(
+	mouseIntersects = pointinrect(
 		localX,
 		localY,
 		0,
@@ -654,12 +659,13 @@ function frame:updateCursor( mouseX, mouseY )
 		borderWidth
 	)
 	if ( mouseIntersects ) then
-		os.setCursor( "sizenesw" )
+		local cursor = love.mouse.getSystemCursor( "sizenesw" )
+		love.mouse.setCursor( cursor )
 		return
 	end
 
 	-- Left Resize Bounds
-	mouseIntersects = pointinrectangle(
+	mouseIntersects = pointinrect(
 		localX,
 		localY,
 		0,
@@ -668,12 +674,13 @@ function frame:updateCursor( mouseX, mouseY )
 		height - 2 * borderWidth
 	)
 	if ( mouseIntersects ) then
-		os.setCursor( "sizewe" )
+		local cursor = love.mouse.getSystemCursor( "sizewe" )
+		love.mouse.setCursor( cursor )
 		return
 	end
 
 	-- Top-Left Resize Bounds
-	mouseIntersects = pointinrectangle(
+	mouseIntersects = pointinrect(
 		localX,
 		localY,
 		0,
@@ -682,11 +689,12 @@ function frame:updateCursor( mouseX, mouseY )
 		borderWidth
 	)
 	if ( mouseIntersects ) then
-		os.setCursor( "sizenwse" )
+		local cursor = love.mouse.getSystemCursor( "sizenwse" )
+		love.mouse.setCursor( cursor )
 		return
 	end
 
-	os.setCursor()
+	love.mouse.setCursor()
 end
 
 gui.register( frame, "frame" )

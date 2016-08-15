@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Debug Overlay Panel class
 --
@@ -8,8 +8,8 @@ class "debugoverlaypanel" ( gui.panel )
 
 function debugoverlaypanel:debugoverlaypanel( parent )
 	gui.panel.panel( self, parent, "Debug Overlay" )
-	self.width  = graphics.getViewportWidth()
-	self.height = graphics.getViewportHeight()
+	self.width  = love.graphics.getWidth()
+	self.height = love.graphics.getHeight()
 	self:setUseFullscreenFramebuffer( true )
 
 	self.overlays = {}
@@ -46,8 +46,8 @@ end
 
 function debugoverlaypanel:invalidateLayout()
 	self:setSize(
-		graphics.getViewportWidth(),
-		graphics.getViewportHeight()
+		love.graphics.getWidth(),
+		love.graphics.getHeight()
 	)
 
 	gui.panel.invalidateLayout( self )

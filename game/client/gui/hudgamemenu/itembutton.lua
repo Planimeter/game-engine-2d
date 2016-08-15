@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Item Button class
 --
@@ -30,17 +30,17 @@ function itembutton:drawIcon()
 
 	graphics.setColor( color.white )
 	local icon = self:getIcon()
-	graphics.push()
+	love.graphics.push()
 		local scale  = point( 2 )
 		local width  = icon:getWidth()
 		local height = icon:getHeight()
-		graphics.translate(
+		love.graphics.translate(
 			self:getWidth() / 2 - ( width  * scale ) / 2,
 			self:getHeight()    - ( height * scale )
 		)
-		graphics.scale( scale )
-		graphics.draw( icon:getDrawable() )
-	graphics.pop()
+		love.graphics.scale( scale )
+		love.graphics.draw( icon )
+	love.graphics.pop()
 end
 
 function itembutton:drawCount()
@@ -63,7 +63,7 @@ function itembutton:drawCount()
 	graphics.setColor( self:getScheme( property ) )
 
 	local font = self:getScheme( "itemCountFont" )
-	graphics.setFont( font )
+	love.graphics.setFont( font )
 	local x = self:getWidth() - font:getWidth( self:getCount() ) - point( 4 )
 	graphics.print( self:getCount(), x, 0 )
 end
@@ -75,7 +75,7 @@ function itembutton:getCount()
 end
 
 accessor( itembutton, "icon" )
-mutator( itembutton, "item" )
+accessor( itembutton, "item" )
 
 function itembutton:getItemClass()
 	local classmap = _G.entities.getClassMap()
@@ -83,7 +83,7 @@ function itembutton:getItemClass()
 	return classmap[ class ]
 end
 
-mutator( itembutton, "source" )
+accessor( itembutton, "source" )
 
 function itembutton:setItem( item )
 	self.item = item

@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Main Menu class
 --
@@ -12,8 +12,8 @@ class "mainmenu" ( gui.panel )
 
 function mainmenu:mainmenu()
 	gui.panel.panel( self, g_RootPanel, "Main Menu" )
-	self.width       = graphics.getViewportWidth()
-	self.height      = graphics.getViewportHeight()
+	self.width       = love.graphics.getWidth()
+	self.height      = love.graphics.getHeight()
 	self:setScheme( "Default" )
 	self:setUseFullscreenFramebuffer( true )
 
@@ -67,7 +67,7 @@ function mainmenu:close()
 
 	self:animate( {
 		opacity  = 0
-		-- y     = graphics.getViewportHeight()
+		-- y     = love.graphics.getHeight()
 		-- scale = 0
 	}, MAINMENU_ANIM_TIME, "easeOutQuint", function()
 		self:setVisible( false )
@@ -85,12 +85,12 @@ function mainmenu:createButtons()
 	self.joinLeaveServer = gui.mainmenubutton( self, "Join Server" )
 	self.joinLeaveServer:setDisabled( true )
 	self.joinLeaveServer.onClick = function()
-		if ( not engine.isConnected() ) then
+		if ( not engineclient.isConnected() ) then
 			if ( _DEBUG ) then
 				engine.connect( "localhost" )
 			end
 		else
-			engine.disconnect()
+			engineclient.disconnect()
 		end
 	end
 	table.insert( self.buttons, self.joinLeaveServer )
@@ -130,7 +130,7 @@ function mainmenu:enableServerConnections()
 end
 
 function mainmenu:invalidateLayout()
-	self:setSize( graphics.getViewportWidth(), graphics.getViewportHeight() )
+	self:setSize( love.graphics.getWidth(), love.graphics.getHeight() )
 
 	local margin = gui.scale( 96 )
 	local y      = margin
@@ -166,19 +166,14 @@ function mainmenu:invalidateButtons()
 end
 
 function mainmenu:draw()
-	if ( engine.isInGame() ) then
+	if ( engineclient.isInGame() ) then
 		self:drawBlur()
-		self:drawBackground()
+		self:drawBackground( "mainmenu.backgroundColor" )
 	end
 
 	self:drawLogo()
 
 	gui.panel.draw( self )
-end
-
-function mainmenu:drawBackground()
-	graphics.setColor( self:getScheme( "mainmenu.backgroundColor" ) )
-	graphics.rectangle( "fill", 0, 0, self:getWidth(), self:getHeight() )
 end
 
 function mainmenu:drawBlur()
@@ -200,7 +195,7 @@ function mainmenu:drawLogo()
 	end
 
 	graphics.setColor( color.white )
-	graphics.draw( logo:getDrawable(), marginX, marginPhi, 0, scale, scale )
+	love.graphics.draw( logo, marginX, marginPhi, 0, scale, scale )
 end
 
 function mainmenu:keypressed( key, scancode, isrepeat )
@@ -242,6 +237,13 @@ function mainmenu:update( dt )
 	end
 
 	gui.panel.update( self, dt )
+end
+
+function mainmenu:quit()
+	self:activate()
+	self.closeDialog:activate()
+
+	return true
 end
 
 gui.register( mainmenu, "mainmenu" )

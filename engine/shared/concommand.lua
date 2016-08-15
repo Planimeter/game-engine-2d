@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Concommand class
 --
@@ -31,7 +31,7 @@ function concommand.dispatch( player, name, argString, argTable )
 	if ( _CLIENT ) then
 		if ( flags ) then
 			local game = table.hasvalue( flags, "game" )
-			if ( game and not engine.isInGame() ) then
+			if ( game and not engineclient.isInGame() ) then
 				return true
 			end
 		end

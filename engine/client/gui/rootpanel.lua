@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Root Panel class
 --
@@ -9,8 +9,8 @@ class "rootpanel" ( gui.panel )
 function rootpanel:rootpanel()
 	self.x        = 0
 	self.y        = 0
-	self.width    = graphics.getViewportWidth()
-	self.height   = graphics.getViewportHeight()
+	self.width    = love.graphics.getWidth()
+	self.height   = love.graphics.getHeight()
 	self.name     = "Root Panel"
 	self.zOrder   = -1
 	self.visible  = true
@@ -21,7 +21,7 @@ function rootpanel:rootpanel()
 end
 
 function rootpanel:invalidateLayout()
-	self:setSize( graphics.getViewportWidth(), graphics.getViewportHeight() )
+	self:setSize( love.graphics.getWidth(), love.graphics.getHeight() )
 
 	gui.panel.invalidateLayout( self )
 end

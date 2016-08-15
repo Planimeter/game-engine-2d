@@ -1,18 +1,22 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: GUI interface
 --
 --============================================================================--
 
+if ( _SERVER ) then return end
+
 require( "engine.client.input" )
 require( "engine.client.gui.scheme" )
 require( "shaders.gaussianblur" )
 
+local argv         = argv
 local convar       = convar
 local getfenv      = getfenv
 local graphics     = graphics
 local input        = input
 local ipairs       = ipairs
+local love         = love
 local math         = math
 local pcall        = pcall
 local point        = point
@@ -82,8 +86,7 @@ function initialize()
 	end
 
 	_G.g_Console = console()
-	if ( _G._DEBUG or
-		hasvalue( _G.engine.getArguments(), "-console" ) ) then
+	if ( _G._DEBUG or argv[ "--console" ] ) then
 		_G.g_Console:activate()
 	end
 end
@@ -125,14 +128,6 @@ function filedropped( file )
 	rootPanel:filedropped( file )
 end
 
-function joystickpressed( joystick, button )
-	rootPanel:joystickpressed( joystick, button )
-end
-
-function joystickreleased( joystick, button )
-	rootPanel:joystickreleased( joystick, button )
-end
-
 function keypressed( key, scancode, isrepeat )
 	return rootPanel:keypressed( key, scancode, isrepeat )
 end
@@ -159,7 +154,7 @@ function register( class, name )
 end
 
 function scale( n )
-	return n * ( _G.graphics.getViewportHeight() / 1080 )
+	return n * ( love.graphics.getHeight() / 1080 )
 end
 
 function setFocusedPanel( panel, focus )

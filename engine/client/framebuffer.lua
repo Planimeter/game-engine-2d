@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Framebuffer class
 --
@@ -50,14 +50,14 @@ end
 
 function framebuffer:draw()
 	_G.graphics.setColor( color.white, true )
-	graphics.setBlendMode( "alpha", "premultiplied" )
-		graphics.draw( self:getDrawable() )
-	graphics.setBlendMode( "alpha", "alphamultiply" )
+	love.graphics.setBlendMode( "alpha", "premultiplied" )
+		love.graphics.draw( self:getDrawable() )
+	love.graphics.setBlendMode( "alpha", "alphamultiply" )
 end
 
 function framebuffer:getDrawable()
 	if ( self.needsRedraw ) then
-		graphics.setBlendMode( "alpha" )
+		love.graphics.setBlendMode( "alpha" )
 		self:render()
 		self.needsRedraw = false
 	end
@@ -115,7 +115,7 @@ function fullscreenframebuffer:fullscreenframebuffer()
 end
 
 function fullscreenframebuffer:createFramebuffer()
-	local width  = _G.graphics.getViewportWidth()
-	local height = _G.graphics.getViewportHeight()
+	local width  = love.graphics.getWidth()
+	local height = love.graphics.getHeight()
 	framebuffer.createFramebuffer( self, width, height )
 end

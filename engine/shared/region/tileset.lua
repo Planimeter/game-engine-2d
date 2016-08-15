@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Region Tileset class
 --
@@ -11,20 +11,20 @@ function regiontileset:regiontileset( tilesetData )
 	self:parse()
 end
 
-mutator( regiontileset, "filename" )
-mutator( regiontileset, "firstGid", "firstgid" )
-mutator( regiontileset, "image" )
-mutator( regiontileset, "imageWidth", "imagewidth" )
-mutator( regiontileset, "imageHeight", "imageheight" )
-mutator( regiontileset, "name" )
-mutator( regiontileset, "properties" )
-mutator( regiontileset, "spacing" )
-mutator( regiontileset, "margin" )
-mutator( regiontileset, "tileCount", "tilecount" )
-mutator( regiontileset, "tileOffset", "tileoffset" )
-mutator( regiontileset, "tiles" )
-mutator( regiontileset, "tileWidth", "tilewidth" )
-mutator( regiontileset, "tileHeight", "tileheight" )
+accessor( regiontileset, "filename" )
+accessor( regiontileset, "firstGid", "firstgid" )
+accessor( regiontileset, "image" )
+accessor( regiontileset, "imageWidth", "imagewidth" )
+accessor( regiontileset, "imageHeight", "imageheight" )
+accessor( regiontileset, "name" )
+accessor( regiontileset, "properties" )
+accessor( regiontileset, "spacing" )
+accessor( regiontileset, "margin" )
+accessor( regiontileset, "tileCount", "tilecount" )
+accessor( regiontileset, "tileOffset", "tileoffset" )
+accessor( regiontileset, "tiles" )
+accessor( regiontileset, "tileWidth", "tilewidth" )
+accessor( regiontileset, "tileHeight", "tileheight" )
 
 function regiontileset:parse()
 	if ( not self.data ) then

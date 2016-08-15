@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Throbber class
 --
@@ -16,23 +16,23 @@ local missingImage = false
 
 function throbber:draw()
 	gui.imagepanel.maskedImage = self
-	graphics.stencil( gui.imagepanel.drawMask )
-	graphics.setStencilTest( "greater", 0 )
+	love.graphics.stencil( gui.imagepanel.drawMask )
+	love.graphics.setStencilTest( "greater", 0 )
 		graphics.setColor( self:getColor() )
 		local image  = self:getImage()
 		local width  = self:getWidth()
 		local height = self:getHeight()
-		graphics.draw(
+		love.graphics.draw(
 			image,
 			width  / 2,
 			height / 2,
-			engine.getRealTime() % 2 * math.pi,
+			love.timer.getTime() % 2 * math.pi,
 			1,
 			1,
 			width  / 2,
 			height / 2
 		)
-	graphics.setStencilTest()
+	love.graphics.setStencilTest()
 
 	missingImage = image == graphics.error
 	if ( missingImage ) then
@@ -60,7 +60,7 @@ function throbber:update( dt )
 		self:invalidate()
 	end
 
-	-- FIXME: self:animate doesn't work for gui.throbber
+	-- FIXME: self:animate doesn't work for gui.throbber.
 	if ( self.enabled and opacity ~= 1 ) then
 		self:setOpacity( math.min( opacity + dt * ( 1 / 0.4 ), 1 ) )
 	elseif ( opacity ~= 0 ) then

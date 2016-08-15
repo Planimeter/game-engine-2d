@@ -1,18 +1,9 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Engine client interface
 --
 --============================================================================--
 
--- These values are preserved during real-time scripting.
-local _connected = engine                   and
-                   engine.client            and
-                   engine.client.connected  or  false
-local f          = engine                   and
-                   engine.client            and
-                   engine.client.hasFocus() or  true
-
-require( "conf" )
 require( "engine.client.bind" )
 require( "engine.client.graphics" )
 require( "engine.client.gui" )
@@ -20,371 +11,121 @@ require( "engine.client.sound" )
 require( "engine.shared.hook" )
 require( "engine.shared.network.payload" )
 
-local bind        = bind
-local conf        = _CONF
-local concommand  = concommand
-local convar      = convar
-local filesystem  = filesystem
-local framebuffer = framebuffer
-local graphics    = graphics
-local gui         = gui
-local hook        = hook
-local payload     = payload
-local pcall       = pcall
-local point       = point
-local print       = print
-local require     = require
-local scheme      = scheme
-local sound       = sound
-local string      = string
-local table       = table
-local tostring    = tostring
-local love        = love
-local timer       = love.timer
-local unrequire   = unrequire
-local _G          = _G
+class( "engineclient" )
 
-module( "engine.client" )
+dofile( "engine/client/handlers.lua" )
+dofile( "engine/client/payloads.lua" )
 
-function connect( address )
-	disconnect()
+function engineclient.connect( address )
+	engineclient.disconnect()
 
 	require( "engine.client.network" )
-	network = _G.engine.client.network
-	_G.networkclient = network
-	network.connect( address )
-	connecting = true
+	networkclient.connect( address )
+	engineclient.connecting = true
 end
 
-function connectToListenServer()
+function engineclient.connectToListenServer()
 	require( "engine.client.network" )
-	network = _G.engine.client.network
-	_G.networkclient = network
-	network.connectToListenServer()
-	connecting = true
+	networkclient.connectToListenServer()
+	engineclient.connecting = true
 end
 
 concommand( "connect", "Connects to a server",
 	function( _, _, _, argS, argT )
 		if ( argT[ 1 ] == nil ) then
-			_G.print( "connect <address>" )
+			print( "connect <address>" )
 			return
 		end
 
-		connect( argS )
+		engineclient.connect( argS )
 	end
 )
 
-function disconnect()
-	-- Check if connected
-	if ( not isConnected() ) then
-		return
+function engineclient.disconnect()
+	if ( not engineclient.isConnected() ) then return end
+	if ( networkclient ) then networkclient.disconnect() end
+
+	engineclient.connecting = false
+	engineclient.connected  = false
+
+	g_MainMenu:activate()
+
+	if ( entities ) then entities.shutdown() end
+
+	if ( game and game.client ) then
+		gui.viewportFramebuffer = nil
+		gui.blurFramebuffer = nil
+		game.client.shutdown()
+		game.client = nil
 	end
 
-	-- Disconnect from server
-	if ( network ) then
-		network.disconnect()
-	end
+	if ( region ) then region.shutdown() end
 
-	connecting = false
-	connected  = false
-
-	-- Activate main menu
-	_G.g_MainMenu:activate()
-
-	-- Retrieve subsystems
-	local entities = _G.entities
-	local game     = _G.game
-	local region   = _G.region
-	local engine   = _G.engine
-
-	-- Shutdown entities
-	if ( entities ) then
-		entities.shutdown()
-	end
-
-	-- Shutdown client game interface
-	if ( game ) then
-		if ( game.client ) then
-			 gui.viewportFramebuffer = nil
-			 gui.blurFramebuffer = nil
-			 game.client.shutdown()
-			 game.client = nil
-		end
-	end
-
-	-- Unload all regions
-	if ( region ) then
-		region.unloadAll()
-	end
-
-	-- Shutdown server engine interface
 	if ( engine ) then
-		if ( engine.server ) then
-			 engine.server.shutdown()
-			 engine.server = nil
+		if ( engineserver ) then
+			engineserver.shutdown()
+			engineserver = nil
 		end
 
-		if ( _G._SERVER ) then
-			 _G._SERVER = nil
-		end
+		if ( _SERVER ) then _SERVER = nil end
 	end
 end
 
 concommand( "disconnect", "Disconnects from the server", function()
-	disconnect()
+	engineclient.disconnect()
 end )
 
-function download( filename )
+function engineclient.download( filename )
 	local payload = payload( "download" )
 	payload:set( "filename", filename )
-	network.sendToServer( payload )
+	networkclient.sendToServer( payload )
 end
 
-local perf_draw_frame_rate = convar( "perf_draw_frame_rate", "0", nil, nil,
-                                     "Draws the frame rate" )
+function engineclient.initializeServer()
+	if ( _SERVER ) then return false end
+	if ( engineclient.connecting ) then return false end
 
-local function drawFrameRate()
-	local font   = scheme.getProperty( "Default", "font" )
-	graphics.setFont( font )
-	local time   = getFPS() .. " FPS / " ..
-	               string.format( "%.3f", 1000 * getAverageFrameTime() ) .. " ms"
-	local width  = graphics.getViewportWidth()
-	local height = graphics.getViewportHeight()
-	local margin = gui.scale( 96 )
-	local x      = width  - font:getWidth( time ) - margin
-	local y      = height - font:getHeight()      - margin + point( 1 )
-	local color  = scheme.getProperty( "Default", "mainmenubutton.dark.textColor" )
-	graphics.setColor( color )
-	graphics.print( time, x, y - point( 1 ) )
-end
-
-local r_draw_grid = convar( "r_draw_grid", "0", nil, nil,
-                            "Draws a grid overlay" )
-local r_focus     = convar( "r_focus", "0", nil, nil,
-                            "Draw only when the engine has focus" )
-
-function draw()
-	if ( r_focus:getBoolean() and not hasFocus() ) then
-		return
-	end
-
-	if ( isInGame() ) then
-		if ( not gui.viewportFramebuffer ) then
-			gui.viewportFramebuffer = graphics.newFullscreenFramebuffer()
-		end
-
-		local viewportFramebuffer = gui.viewportFramebuffer
-		viewportFramebuffer:clear()
-		viewportFramebuffer:renderTo( _G.gameclient.draw )
-		viewportFramebuffer:draw()
-
-		if ( r_draw_grid:getBoolean() ) then
-			graphics.drawGrid()
-		end
-	else
-		graphics.drawGrid()
-	end
-
-	gui.draw()
-
-	if ( perf_draw_frame_rate:getBoolean() ) then
-		drawFrameRate()
-	end
-end
-
-local _focus = f
-
-local updateDesktopSound = function( f )
-	local snd_desktop = convar.getConvar( "snd_desktop" )
-	if ( snd_desktop:getBoolean() ) then
-		return
-	end
-
-	if ( not f ) then
-		sound.setVolume( 0 )
-	else
-		local snd_volume = convar.getConvar( "snd_volume" )
-		sound.setVolume( snd_volume:getNumber() )
-	end
-end
-
-function focus( f )
-	_focus = f
-	updateDesktopSound( f )
-end
-
-local _getAverageDelta = timer.getAverageDelta
-
-function getAverageFrameTime()
-	return _getAverageDelta()
-end
-
-local _conf = nil
-
-function getConfig()
-	return _conf
-end
-
-local _getFPS = timer.getFPS
-
-function getFPS()
-	return _getFPS()
-end
-
-local _getDelta = timer.getDelta
-
-function getFrameTime()
-	return _getDelta()
-end
-
-local _getTime = timer.getTime
-
-function getTime()
-	return _getTime()
-end
-
-function hasFocus()
-	if ( _focus ~= nil ) then
-		return _focus
-	else
-		return true
-	end
-end
-
-function initializeServer()
-	local args = _G.engine.getArguments()
-
-	if ( _G._SERVER ) then
-		return false
-	end
-
-	if ( connecting ) then
-		return false
-	end
-
-	_G._SERVER = true
-	local status, ret = pcall( require, "engine.server" )
+	_SERVER = true
+	local status, err = pcall( require, "engine.server" )
 	if ( status ~= false ) then
-		_G.serverengine = ret
-		if ( _G.serverengine.load( args ) ) then
-			_G.networkserver.onNetworkInitializedServer()
+		if ( engineserver.load( args ) ) then
+			networkserver.onNetworkInitializedServer()
 		else
 			print( "Failed to initialize server!" )
-			connecting = false
-			connected  = false
-			disconnect()
-			_G._SERVER = nil
+			engineclient.connecting = false
+			engineclient.connected  = false
+			engineclient.disconnect()
+			_SERVER = nil
 			return false
 		end
 	else
-		_G._SERVER = nil
-		print( ret )
+		_SERVER = nil
+		print( err )
 		return false
 	end
 
 	return true
 end
 
-connected = _connected
+engineclient.connected = false
 
-function isConnected()
-	return connected or _G.engine.server ~= nil
+function engineclient.isConnected()
+	return engineclient.connected or engineserver ~= nil
 end
 
-function isDisconnecting()
-	return disconnecting
+function engineclient.isDisconnecting()
+	return engineclient.disconnecting
 end
 
-function isInGame()
-	return isConnected() and
-	       _G.gameclient and
-	       _G.gameclient.playerInitialized
+function engineclient.isInGame()
+	return engineclient.isConnected() and
+	       gameclient and
+	       gameclient.playerInitialized
 end
 
-function joystickpressed( joystick, button )
-	gui.joystickpressed( joystick, button )
-end
-
-function joystickreleased( joystick, button )
-	gui.joystickreleased( joystick, button )
-end
-
-function keypressed( key, scancode, isrepeat )
-	require( "engine.client.input" )
-	if ( _G.input.isKeyTrapped( key ) ) then
-		return
-	end
-
-	if ( gui.keypressed( key, scancode, isrepeat ) ) then
-		return
-	end
-
-	-- TODO: Move to bind system!!
-	local mainmenu = _G.g_MainMenu
-	if ( key == "escape" and mainmenu and isConnected() ) then
-		if ( mainmenu:isVisible() ) then
-			mainmenu:close()
-		else
-			mainmenu:activate()
-		end
-	end
-
-	bind.keypressed( key, scancode, isrepeat )
-end
-
-function keyreleased( key, scancode )
-	if ( gui.keyreleased( key, scancode ) ) then
-		return
-	end
-
-	bind.keyreleased( key, scancode )
-end
-
-function load( arg )
-	_conf = conf
-
-	graphics.initialize()
-	gui.initialize()
-
-	sound.setVolume( conf.sound.volume )
-
-	if ( _G._DEBUG ) then
-		convar.getConvar( "perf_draw_frame_rate" ):setValue( "1" )
-		convar.getConvar( "con_enable" ):setValue( "1" )
-	end
-
-	bind.readBinds()
-end
-
-function mousepressed( x, y, button, istouch )
-	require( "engine.client.input" )
-	if ( _G.input.isKeyTrapped( button ) ) then
-		return
-	end
-
-	if ( gui.mousepressed( x, y, button, istouch ) ) then
-		return
-	end
-
-	if ( _G.g_MainMenu:isVisible() ) then
-		return
-	end
-
-	bind.mousepressed( x, y, button, istouch )
-end
-
-function mousereleased( x, y, button, istouch )
-	if ( gui.mousereleased( x, y, button, istouch ) ) then
-		return
-	end
-
-	bind.mousereleased( x, y, button, istouch )
-end
-
-function onConnect( event )
-	connecting = false
-	connected  = true
+function engineclient.onConnect( event )
+	engineclient.connecting = false
+	engineclient.connected  = true
 	print( "Connected to server!" )
 
 	hook.call( "client", "onConnect", tostring( event.peer ) )
@@ -393,139 +134,33 @@ function onConnect( event )
 	require( "engine.shared.entities" )
 end
 
-local cl_payload_show_receive = convar( "cl_payload_show_receive", "0", nil, nil,
-                                        "Prints payloads received from server" )
-
-function onReceive( event )
+function engineclient.onReceive( event )
 	local payload = payload.initializeFromData( event.data )
 	payload:setPeer( event.peer )
-
-	if ( cl_payload_show_receive:getBoolean() ) then
-		print( "Received payload \"" .. payload:getStructName() .. "\":" )
-		table.print( payload:getData(), 1 )
-	end
-
 	payload:dispatchToHandler()
 end
 
-local function onReceivePlayerInitialized( payload )
-	local localplayer = _G.player.getById( payload:get( "id" ) )
-	_G.localplayer = localplayer
-
-	_G.g_MainMenu:close()
-
-	require( "engine.client.camera" )
-	_G.camera.setParentEntity( localplayer )
-	_G.camera.setZoom( point( 2 ) )
-
-	if ( not _G._SERVER ) then
-		localplayer:initialSpawn()
-	end
-
-	_G.gameclient.playerInitialized = true
-end
-
-payload.setHandler( onReceivePlayerInitialized, "playerInitialized" )
-
-local function onReceiveServerInfo( payload )
-	local regionName = payload:get( "region" )
-
-	require( "engine.shared.region" )
-	if ( not _G.region.exists( regionName ) ) then
-		download( "regions/" .. regionName .. ".lua" )
-	else
-		local args = _G.engine.getArguments()
-
-		_G.region.load( regionName )
-
-		require( "game" )
-
-		_G.gameclient = require( "game.client" )
-		_G.gameclient.load( args )
-
-		sendClientInfo()
-	end
-end
-
-payload.setHandler( onReceiveServerInfo, "serverInfo" )
-
-function onDisconnect( event )
-	if ( connected ) then
-		disconnecting = true
-		disconnect()
-		connected     = false
-		disconnecting = false
+function engineclient.onDisconnect( event )
+	if ( engineclient.connected ) then
+		engineclient.disconnecting = true
+		engineclient.disconnect()
+		engineclient.connected     = false
+		engineclient.disconnecting = false
 		hook.call( "client", "onDisconnect" )
 
 		print( "Disconnected from server." )
 	else
-		connecting = false
+		engineclient.connecting = false
 		print( "Failed to connect to server!" )
 	end
 
 	unrequire( "engine.client.network" )
-	_G.networkclient = nil
-	network = nil
+	networkclient = nil
 end
 
-function reload()
-	_G.framebuffer.invalidateFramebuffers()
-	gui.invalidateTree()
-end
-
-function sendClientInfo()
+function engineclient.sendClientInfo()
 	local payload = payload( "clientInfo" )
-	payload:set( "viewportWidth",  graphics.getViewportWidth() )
-	payload:set( "viewportHeight", graphics.getViewportHeight() )
-	network.sendToServer( payload )
-end
-
-function textinput( t )
-	gui.textinput( t )
-end
-
-function textedited( text, start, length )
-	gui.textedited( text, start, length )
-end
-
-function quit()
-end
-
-function update( dt )
-	if ( _G.gameclient ) then
-		_G.gameclient.update( dt )
-	end
-
-	if ( network ) then
-		network.update( dt )
-	end
-end
-
-local mx, my = 0, 0
-local button = nil
-
-function wheelmoved( x, y )
-	require( "engine.client.input" )
-	mx, my = _G.input.getMousePosition()
-	button = nil
-	if ( y < 0 ) then
-		button = "wd"
-	elseif ( y > 0 ) then
-		button = "wu"
-	end
-
-	require( "engine.client.input" )
-	if ( _G.input.isKeyTrapped( button ) ) then
-		return
-	end
-
-	if ( gui.wheelmoved( x, y ) ) then
-		return
-	end
-
-	if ( _G.g_MainMenu:isVisible() ) then
-		return
-	end
-
-	bind.mousepressed( mx, my, button, false )
+	payload:set( "graphicsWidth",  love.graphics.getWidth() )
+	payload:set( "graphicsHeight", love.graphics.getHeight() )
+	networkclient.sendToServer( payload )
 end

@@ -1,4 +1,4 @@
---========= Copyright © 2013-2015, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Frame HUD
 --
@@ -63,8 +63,7 @@ function hudframe:drawBackground()
 		return
 	end
 
-	graphics.setColor( self:getScheme( "hudframe.backgroundColor" ) )
-	graphics.rectangle( "fill", 0, 0, self:getWidth(), self:getHeight() )
+	gui.panel.drawBackground( self, "hudframe.backgroundColor" )
 end
 
 function hudframe:drawBlur()
@@ -72,18 +71,18 @@ function hudframe:drawBlur()
 		return
 	end
 
-	graphics.push()
+	love.graphics.push()
 		local x, y = self:localToScreen()
-		graphics.translate( -x, -y )
+		love.graphics.translate( -x, -y )
 		gui.blurFramebuffer:draw()
-	graphics.pop()
+	love.graphics.pop()
 end
 
 function hudframe:drawTitle()
 	local property = "frame.titleTextColor"
 	graphics.setColor( self:getScheme( property ) )
 	local font = self:getScheme( "titleFont" )
-	graphics.setFont( font )
+	love.graphics.setFont( font )
 	local x = point( 36 )
 	local y = x - point( 4 )
 	graphics.print( string.utf8upper( self:getTitle() ), x, y )

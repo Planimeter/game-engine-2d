@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Checkbox class
 --
@@ -38,7 +38,7 @@ function checkbox:drawCheck()
 	local height = self:getHeight()
 	local x      = height / 2 - self.icon:getWidth()  / 2
 	local y      = height / 2 - self.icon:getHeight() / 2
-	graphics.draw( self.icon:getDrawable(), x, y )
+	love.graphics.draw( self.icon, x, y )
 end
 
 function checkbox:drawForeground()
@@ -68,7 +68,7 @@ function checkbox:drawLabel()
 	graphics.setColor( self:getScheme( color ) )
 
 	local font = self:getScheme( "font" )
-	graphics.setFont( font )
+	love.graphics.setFont( font )
 	local height = self:getHeight()
 	local marginLeft = point( 9 )
 	local x = height + marginLeft

@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Drop-Down List Item Group class
 --
@@ -39,11 +39,11 @@ function dropdownlistitemgroup:drawBorders( property )
 	local width     = self:getWidth()
 	graphics.setColor( self:getScheme( property ) )
 	graphics.setLineWidth( lineWidth )
-	graphics.line(
+	love.graphics.line(
 		0,     lineWidth / 2,          -- Top-left
 		width, lineWidth / 2           -- Top-right
 	)
-	graphics.line(
+	love.graphics.line(
 		0,     height - lineWidth / 2, -- Bottom-left
 		width, height - lineWidth / 2  -- Bottom-right
 	)

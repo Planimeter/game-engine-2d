@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Bind List Item class
 --
@@ -55,7 +55,7 @@ function bindlistitem:drawText()
 	graphics.setColor( self:getScheme( color ) )
 
 	local font = self:getScheme( "font" )
-	graphics.setFont( font )
+	love.graphics.setFont( font )
 	local margin = point( 18 )
 	local x = margin
 	local y = self:getHeight() / 2 - font:getHeight() / 2
@@ -69,20 +69,20 @@ function bindlistitem:drawText()
 	graphics.print( key, x, y )
 end
 
-mutator( bindlistitem, "concommand" )
-mutator( bindlistitem, "key" )
+accessor( bindlistitem, "concommand" )
+accessor( bindlistitem, "key" )
 
 function bindlistitem.keyTrap( key )
 	local self = gui.bindlistitem.trappedItem
 	gui.bindlistitem.trappedItem = nil
 	self:setKey( key )
-	os.setCursorVisible( true )
+	love.mouse.setVisible( true )
 	return true
 end
 
 function bindlistitem:onClick()
 	gui.bindlistitem.trappedItem = self
-	os.setCursorVisible( false )
+	love.mouse.setVisible( false )
 	input.setKeyTrap( self.keyTrap )
 end
 

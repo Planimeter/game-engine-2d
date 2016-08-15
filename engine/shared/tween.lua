@@ -1,4 +1,4 @@
---========= Copyright © 2013-2016, Planimeter, All rights reserved. ==========--
+--=========== Copyright © 2016, Planimeter, All rights reserved. =============--
 --
 -- Purpose: Inbetweening interface
 --
@@ -58,12 +58,12 @@ local onComplete = nil
 
 function tween:update( dt )
 	if ( not self.startTime ) then
-		self.startTime = engine.getRealTime()
+		self.startTime = love.timer.getTime()
 	end
 
 	startTime = self.startTime
 	duration  = self.duration
-	remaining = max( 0, startTime + duration - engine.getRealTime() )
+	remaining = max( 0, startTime + duration - love.timer.getTime() )
 	percent   = 1 - ( remaining / duration or 0 )
 	self.pos  = percent
 
