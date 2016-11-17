@@ -47,8 +47,6 @@ Lua 5.1.5 Auxiliary Library
 Adds live reloading to LÖVE
 * [love-graphics](https://github.com/Planimeter/love-graphics)  
 Graphics function overrides for LÖVE
-* [love-window](https://github.com/Planimeter/love-window)  
-Extends the window module
 * [love-conf](https://github.com/Planimeter/love-conf)  
 Adds `argv`, `_CLIENT`, `_SERVER`, `_DEDICATED`, a `--dedicated` argument that
 disables client-side modules, and OS-specific `c.window.icon` functionality
