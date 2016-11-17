@@ -43,7 +43,7 @@ need, you can find similar features in the packages below.
 
 * [lauxlib](https://github.com/Planimeter/lauxlib)  
 Lua 5.1.5 Auxiliary Library
-* [love-require](https://github.com/Planimeter/love-require)  
+* [love-package](https://github.com/Planimeter/love-package)  
 Adds live reloading to LÖVE
 * [love-graphics](https://github.com/Planimeter/love-graphics)  
 Graphics function overrides for LÖVE
