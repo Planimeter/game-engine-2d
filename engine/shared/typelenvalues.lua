@@ -4,14 +4,20 @@
 --
 --============================================================================--
 
-class( "typelenvalues" )
+local accessor = accessor
+local math     = math
+local pairs    = pairs
+local string   = string
+local table    = table
+
+module( "typelenvalues", package.class )
 
 local reverse = string.reverse
 local byte    = string.byte
 local floor   = math.floor
 local ldexp   = math.ldexp
 
-function typelenvalues.bytesToNumber( bytes )
+function bytesToNumber( bytes )
 	bytes = reverse( bytes )
 
 	local sign     = 1
@@ -34,8 +40,6 @@ function typelenvalues.bytesToNumber( bytes )
 	return ldexp( mantissa, exponent - 1023 )
 end
 
-local bytesToNumber = typelenvalues.bytesToNumber
-
 local char = string.char
 
 local function getByte( v )
@@ -44,7 +48,7 @@ end
 
 local frexp = math.frexp
 
-function typelenvalues.numberToBytes( number )
+function numberToBytes( number )
 	local sign = 0
 
 	if ( number < 0 ) then
@@ -77,11 +81,9 @@ function typelenvalues.numberToBytes( number )
 	return reverse( v )
 end
 
-local numberToBytes = typelenvalues.numberToBytes
-
 local pairs = pairs
 
-function typelenvalues.generateIds( definitions )
+function generateIds( definitions )
 	local id = 1
 	for _, v in pairs( definitions ) do
 		v.id = id
@@ -89,7 +91,7 @@ function typelenvalues.generateIds( definitions )
 	end
 end
 
-function typelenvalues:typelenvalues( definitions, struct )
+function _M:typelenvalues( definitions, struct )
 	self.data = {}
 
 	self:setDefinitions( definitions )
@@ -100,20 +102,20 @@ function typelenvalues:typelenvalues( definitions, struct )
 	self:setStruct( struct )
 end
 
-function typelenvalues:get( key )
+function _M:get( key )
 	return self.data[ key ]
 end
 
-accessor( typelenvalues, "data" )
-accessor( typelenvalues, "definitions" )
-accessor( typelenvalues, "struct" )
+accessor( _M, "data" )
+accessor( _M, "definitions" )
+accessor( _M, "struct" )
 
-function typelenvalues:getStructDefinition( struct )
+function _M:getStructDefinition( struct )
 	local definitions = self:getDefinitions()
 	return definitions[ struct ]
 end
 
-function typelenvalues:getStructName()
+function _M:getStructName()
 	for name, struct in pairs( self.definitions ) do
 		if ( struct == self.struct ) then
 			return name
@@ -125,7 +127,7 @@ local insert = table.insert
 local len    = string.len
 local concat = table.concat
 
-function typelenvalues:serialize()
+function _M:serialize()
 	local struct = self:getStruct()
 	if ( not struct ) then
 		return ""
@@ -183,7 +185,7 @@ end
 local ipairs = ipairs
 local sub    = string.sub
 
-function typelenvalues:deserialize()
+function _M:deserialize()
 	local data = self:getData()
 	self.data  = {}
 
@@ -268,11 +270,11 @@ function typelenvalues:deserialize()
 	end
 end
 
-function typelenvalues:set( key, value )
+function _M:set( key, value )
 	self.data[ key ] = value
 end
 
-function typelenvalues:__tostring()
+function _M:__tostring()
 	if ( self:getStruct() ) then
 		return self:serialize()
 	else

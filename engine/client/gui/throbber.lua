@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "throbber" ( gui.imagepanel )
+module( "gui.throbber", package.class, package.inherit "gui.imagepanel" )
 
 function throbber:throbber( parent, name, image )
 	gui.imagepanel.imagepanel( self, parent, name, image or "images/gui/throbber.png" )
@@ -68,4 +68,4 @@ function throbber:update( dt )
 	end
 end
 
-gui.register( throbber, "throbber" )
+

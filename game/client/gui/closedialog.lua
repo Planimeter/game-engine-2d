@@ -4,9 +4,9 @@
 --
 --============================================================================--
 
-class "closedialog" ( gui.frame )
+module( "gui.closedialog", package.class, package.inherit "gui.frame" )
 
-function closedialog:closedialog( parent, name )
+function _M:closedialog( parent, name )
 	gui.frame.frame( self, parent, "Close Dialog", "Quit Game" )
 	self.width  = point( 546 )
 	self.height = point( 203 )
@@ -40,5 +40,3 @@ function closedialog:closedialog( parent, name )
 		self:close()
 	end
 end
-
-gui.register( closedialog, "closedialog" )

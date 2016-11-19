@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "frametab" ( gui.radiobutton )
+module( "gui.frametab", package.class, package.inherit "gui.radiobutton" )
 
 function frametab:frametab( parent, name, text )
 	gui.radiobutton.radiobutton( self, parent, name, text )
@@ -91,4 +91,4 @@ function frametab:mousereleased( x, y, button, istouch )
 	self:invalidate()
 end
 
-gui.register( frametab, "frametab" )
+

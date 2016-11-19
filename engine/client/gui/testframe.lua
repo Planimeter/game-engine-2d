@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "testframe" ( gui.tabbedframe )
+module( "gui.testframe", package.class, package.inherit "gui.tabbedframe" )
 
 function testframe:testframe( parent, name )
 	name = "Test Frame"
@@ -126,7 +126,7 @@ function testframe:createTestPanels()
 	self:addTab( "Tab", tab, true )
 end
 
-gui.register( testframe, "testframe" )
+
 
 if ( g_MainMenu and g_MainMenu.testFrame ) then
 	local visible = g_MainMenu.testFrame:isVisible()

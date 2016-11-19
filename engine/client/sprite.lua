@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class( "sprite" )
+module( "sprite", package.class )
 
 function sprite:sprite( spriteSheet )
 	local data       = require( spriteSheet )

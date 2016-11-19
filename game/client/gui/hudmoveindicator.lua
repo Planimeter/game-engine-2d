@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "hudmoveindicator" ( gui.panel )
+module( "gui.hudmoveindicator", package.class, package.inherit "gui.panel" )
 
 function hudmoveindicator:hudmoveindicator( parent )
 	local name   = "HUD Move Indicator"
@@ -241,11 +241,11 @@ function hudmoveindicator:setActive( active )
 	gui.setFocusedPanel( self, active )
 end
 
-local mouseX, mouseY   = 0, 0
-local getMousePosition = input.getMousePosition
+local mouseX, mouseY = 0, 0
+local getPosition    = love.mouse.getPosition
 
 function hudmoveindicator:update( dt )
-	mouseX, mouseY = getMousePosition()
+	mouseX, mouseY = getPosition()
 	local entity   = getEntitiesAtMousePos( mouseX, mouseY )[ 1 ]
 	self.entity    = entity
 
@@ -259,4 +259,4 @@ function hudmoveindicator:update( dt )
 	self:invalidate()
 end
 
-gui.register( hudmoveindicator, "hudmoveindicator" )
+

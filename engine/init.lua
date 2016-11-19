@@ -4,15 +4,54 @@
 --
 --============================================================================--
 
-require( "engine.loader" )
+require( "engine.shared.baselib" )
+require( "engine.shared.tablib" )
+require( "engine.shared.strlib" )
+require( "engine.shared.mathlib" )
+require( "engine.shared.addon" )
+require( "engine.shared.filesystem" )
+require( "engine.client.gui" )
+require( "engine.shared.region" )
 
-class( "engine" )
+if ( _CLIENT ) then
+	require( "engine.client" )
+	love.draw = engine.client.draw
+end
+
+if ( _SERVER ) then
+	require( "engine.server" )
+	love.errhand = engine.server.errhand
+end
+
+-- Standard callback handlers
+for k in pairs( love.handlers ) do
+	love[ k ] = function( ... )
+		if ( not _CLIENT ) then return end
+		local v = engine.client[ k ]
+		if ( v ) then return v( ... ) end
+	end
+end
+
+local addon      = addon
+local concommand = concommand
+local server     = engine.server
+local client     = engine.client
+local gui        = gui
+local love       = love
+local math       = math
+local os         = os
+local print      = print
+local _CLIENT    = _CLIENT
+local _SERVER    = _SERVER
+local _G         = _G
+
+module( "engine" )
 
 function love.load( arg )
 	math.randomseed( os.time() )
 
-	if ( _SERVER ) then engineserver.load( arg ) end
-	if ( _CLIENT ) then engineclient.load( arg ) end
+	if ( _SERVER ) then server.load( arg ) end
+	if ( _CLIENT ) then client.load( arg ) end
 
 	print( "Grid Engine" )
 
@@ -24,9 +63,9 @@ function love.quit()
 		return g_MainMenu:quit()
 	end
 
-	if ( _CLIENT ) then engineclient.disconnect() end
-	if ( _SERVER ) then engineserver.quit() end
-	if ( _CLIENT ) then engineclient.quit() end
+	if ( _CLIENT ) then client.disconnect() end
+	if ( _SERVER ) then server.quit() end
+	if ( _CLIENT ) then client.quit() end
 
 	love.event.quit()
 end
@@ -52,8 +91,8 @@ function love.update( dt )
 			end
 		end
 
-		if ( _SERVER ) then engineserver.update( timestep ) end
-		if ( _CLIENT ) then engineclient.update( timestep ) end
+		if ( _SERVER ) then server.update( timestep ) end
+		if ( _CLIENT ) then client.update( timestep ) end
 
 		accumulator = accumulator - timestep
 	end

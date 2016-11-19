@@ -6,7 +6,7 @@
 
 require( "engine.shared.entities.player" )
 
-class "vaplayer" ( "player" )
+module( "vaplayer", package.class, package.inherit( "player" ) )
 
 function vaplayer.levelToExperience( level )
 	local xp = 0

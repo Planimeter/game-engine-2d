@@ -36,7 +36,7 @@ local function onDownloadRequest( payload )
 		return
 	end
 
-	engineserver.upload( filename, peer )
+	engine.server.upload( filename, peer )
 end
 
 payload.setHandler( onDownloadRequest, "download" )

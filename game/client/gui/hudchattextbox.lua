@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "hudchattextbox" ( gui.textbox )
+module( "gui.hudchattextbox", package.class, package.inherit "gui.textbox" )
 
 function hudchattextbox:hudchattextbox( parent, name )
 	gui.textbox.textbox( self, parent, name, "" )
@@ -92,4 +92,4 @@ function hudchattextbox:update( dt )
 	gui.textbox.update( self, dt )
 end
 
-gui.register( hudchattextbox, "hudchattextbox" )
+

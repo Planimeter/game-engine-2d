@@ -8,7 +8,7 @@ require( "engine.client.gui.optionsmenu.bindlistpanel" )
 require( "engine.client.gui.optionsmenu.keyboardoptionscommandbuttongroup" )
 require( "engine.client.gui.optionsmenu.keyboardoptionsadvancedframe" )
 
-class "keyboardoptionspanel" ( gui.frametabpanel )
+module( "gui.keyboardoptionspanel", package.class, package.inherit "gui.frametabpanel" )
 
 function keyboardoptionspanel:keyboardoptionspanel()
 	gui.frametabpanel.frametabpanel( self, nil, "Keyboard Options Panel" )
@@ -57,4 +57,4 @@ end
 
 keyboardoptionspanel.onApply = keyboardoptionspanel.onOK
 
-gui.register( keyboardoptionspanel, "keyboardoptionspanel" )
+

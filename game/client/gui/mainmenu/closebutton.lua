@@ -4,16 +4,16 @@
 --
 --============================================================================--
 
-class "mainmenuclosebutton" ( gui.closebutton )
+module( "gui.mainmenu.closebutton", package.class, package.inherit "gui.closebutton" )
 
-function mainmenuclosebutton:mainmenuclosebutton( parent )
+function _M:closebutton( parent )
 	gui.closebutton.closebutton( self, parent, "Main Menu Close Button" )
 	self.width  = point( 32 )
 	self.height = self.width + point( 1 )
 	self.icon   = self:getScheme( "mainmenuclosebutton.icon" )
 end
 
-function mainmenuclosebutton:draw()
+function _M:draw()
 	local iconColor = "mainmenuclosebutton.dark.iconColor"
 	if ( self.mousedown and self.mouseover ) then
 		iconColor = "mainmenuclosebutton.dark.mousedown.iconColor"
@@ -28,5 +28,3 @@ function mainmenuclosebutton:draw()
 
 	gui.panel.draw( self )
 end
-
-gui.register( mainmenuclosebutton, "mainmenuclosebutton" )

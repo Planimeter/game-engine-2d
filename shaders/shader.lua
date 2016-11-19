@@ -4,32 +4,34 @@
 --
 --============================================================================--
 
--- These values are preserved during real-time scripting.
-local shaders = shader and shader.shaders or {}
+local getfenv      = getfenv
+local getmetatable = getmetatable
+local setmetatable = setmetatable
+local tostring     = tostring
 
-class( "shader" )
+module( "shader", package.class )
 
-shader.shaders = shaders
+shaders = shaders or {}
 
-function shader.getShader( name )
-	return shader.shaders[ name ]()
+function getShader( name )
+	return shaders[ name ]()
 end
 
-function shader.register( class, name )
-	shader.shaders[ name ] = class
+function register( class, name )
+	shaders[ name ] = class
 	getfenv( 2 )[ name ] = nil
 end
 
-function shader:renderTo( func )
+function _M:renderTo( func )
 end
 
-function shader:draw()
+function _M:draw()
 end
 
-function shader:set( key, value )
+function _M:set( key, value )
 end
 
-function shader:__tostring()
+function _M:__tostring()
 	local t = getmetatable( self )
 	setmetatable( self, {} )
 	local s = string.gsub( tostring( self ), "table", "shader" )

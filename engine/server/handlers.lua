@@ -4,19 +4,21 @@
 --
 --============================================================================--
 
-function engineserver.load( arg )
-	local initialized = networkserver.initializeServer()
+module( "engineserver" )
+
+function load( arg )
+	local initialized = network.initializeServer()
 	if ( not initialized ) then return false end
 
 	require( "game" )
 
-	gameserver = require( "game.server" )
-	gameserver.load( arg )
+	game.server = require( "game.server" )
+	game.server.load( arg )
 
 	return true
 end
 
-function engineserver.quit()
+function quit()
 	if ( game and game.server ) then
 		 game.server.shutdown()
 		 game.server = nil
@@ -25,23 +27,23 @@ function engineserver.quit()
 	unrequire( "game" )
 	game = nil
 
-	networkserver.shutdownServer()
+	network.shutdownServer()
 
 	region.unloadAll()
 
 	unrequire( "engine.server.network" )
-	networkserver = nil
+	network = nil
 	unrequire( "engine.server" )
-	engineserver = nil
+	engine.server = nil
 end
 
-function engineserver.update( dt )
+function update( dt )
 	local regions = region.getAll()
 	for _, region in ipairs( regions ) do
 		region:update( dt )
 	end
 
-	networkserver.update( dt )
+	network.update( dt )
 end
 
 local function error_printer(msg, layer)
@@ -49,7 +51,7 @@ local function error_printer(msg, layer)
 	       tostring(msg), 1+(layer or 1)):gsub("\n[^\n]+$", "")))
 end
 
-function engineserver.errhand(msg)
+function errhand(msg)
 	msg = tostring(msg)
 
 	error_printer(msg, 2)

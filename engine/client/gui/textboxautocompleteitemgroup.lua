@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "textboxautocompleteitemgroup" ( gui.dropdownlistitemgroup )
+module( "gui.textboxautocompleteitemgroup", package.class, package.inherit "gui.dropdownlistitemgroup" )
 
 function textboxautocompleteitemgroup:textboxautocompleteitemgroup( parent, name )
 	gui.dropdownlistitemgroup.dropdownlistitemgroup( self, parent, name )
@@ -85,4 +85,4 @@ function textboxautocompleteitemgroup:updatePos()
 	end
 end
 
-gui.register( textboxautocompleteitemgroup, "textboxautocompleteitemgroup" )
+

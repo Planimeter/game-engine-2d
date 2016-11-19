@@ -4,19 +4,29 @@
 --
 --============================================================================--
 
--- These values are preserved during real-time scripting.
-local regions = region and region.regions or {}
-
 require( "engine.shared.hook" )
 require( "engine.shared.region.tileset" )
 require( "engine.shared.region.layer" )
 
-class( "region" )
+local accessor   = accessor
+local concommand = concommand
+local hook       = hook
+local ipairs     = ipairs
+local layer      = layer
+local math       = math
+local pairs      = pairs
+local string     = string
+local table      = table
+local tileset    = tileset
+local _CLIENT    = _CLIENT
+local _DEDICATED = _DEDICATED
 
-region.regions = regions
+module( "region", package.class )
+
+regions = regions or {}
 
 if ( _CLIENT ) then
-	function region.drawWorld()
+	function drawWorld()
 		local color  = graphics.getBackgroundColor()
 		local width  = love.graphics.getWidth()
 		local height = love.graphics.getHeight()
@@ -28,7 +38,7 @@ if ( _CLIENT ) then
 			local x, y = camera.getTranslation()
 			love.graphics.translate( x, y )
 			local worldIndex = camera.getWorldIndex()
-			for _, region in ipairs( region.regions ) do
+			for _, region in ipairs( _regions ) do
 				if ( worldIndex == region:getWorldIndex() ) then
 					love.graphics.push()
 						love.graphics.translate( region:getX(), region:getY() )
@@ -42,13 +52,13 @@ if ( _CLIENT ) then
 	end
 end
 
-function region.exists( name )
+function exists( name )
 	return love.filesystem.exists( "regions/" .. name .. ".lua" )
 end
 
-function region.findNextWorldIndex()
+function findNextWorldIndex()
 	local worldIndex = 1
-	for _, region in ipairs( region.regions ) do
+	for _, region in ipairs( _regions ) do
 		if ( worldIndex == region:getWorldIndex() ) then
 			worldIndex = worldIndex + 1
 		end
@@ -57,21 +67,21 @@ function region.findNextWorldIndex()
 	return worldIndex
 end
 
-function region.getAll()
-	return table.shallowcopy( region.regions )
+function getAll()
+	return table.shallowcopy( _regions )
 end
 
-function region.getByName( name )
-	for _, region in ipairs( region.regions ) do
+function getByName( name )
+	for _, region in ipairs( _regions ) do
 		if ( name == region:getName() ) then
 			return region
 		end
 	end
 end
 
-function region.getAtPosition( position, worldIndex )
+function getAtPosition( position, worldIndex )
 	worldIndex = worldIndex or 1
-	for _, region in ipairs( region.regions ) do
+	for _, region in ipairs( _regions ) do
 		local px, py = position.x, position.y
 		local x,  y  = region:getX(), region:getY()
 		local width  = region:getPixelWidth()
@@ -82,16 +92,16 @@ function region.getAtPosition( position, worldIndex )
 	end
 end
 
-function region.load( name, x, y, worldIndex )
+function load( name, x, y, worldIndex )
 	if ( region.getByName( name ) ) then
 		return
 	end
 
 	local region = region( name, x, y, worldIndex )
-	table.insert( region.regions, region )
+	table.insert( _regions, region )
 end
 
-function region.reload( library )
+function reload( library )
 	if ( string.sub( library, 1, 8 ) ~= "regions." ) then
 		return
 	end
@@ -106,15 +116,15 @@ function region.reload( library )
 	region.load( name, x, y, worldIndex )
 end
 
-hook.set( "shared", region.reload, "onReloadScript", "reloadRegion" )
+hook.set( "shared", reload, "onReloadScript", "reloadRegion" )
 
 if ( _CLIENT ) then
-	function region.reloadTiles( filename )
+	function reloadTiles( filename )
 		if ( not string.find( filename, "images/tilesets/" ) ) then
 			return
 		end
 
-		for _, region in ipairs( region.regions ) do
+		for _, region in ipairs( _regions ) do
 			for _, regionlayer in ipairs( region:getLayers() ) do
 				if ( regionlayer:getType() == "tilelayer" ) then
 					regionlayer:initializeTiles()
@@ -123,30 +133,30 @@ if ( _CLIENT ) then
 		end
 	end
 
-	hook.set( "client",  region.reloadTiles, "onReloadImage", "reloadTiles")
+	hook.set( "client", reloadTiles, "onReloadImage", "reloadTiles" )
 end
 
-function region.unload( name )
+function unload( name )
 	unrequire( "regions." .. name )
 
-	for i, region in ipairs( region.regions ) do
+	for i, region in ipairs( _regions ) do
 		if ( name == region:getName() ) then
 			region:remove()
-			table.remove( region.regions, i )
+			table.remove( _regions, i )
 			return
 		end
 	end
 end
 
-function region.unloadAll()
-	for i = #region.regions, 1, -1 do
-		local region = region.regions[ i ]
+function unloadAll()
+	for i = #_regions, 1, -1 do
+		local region = _regions[ i ]
 		unrequire( "regions." .. region:getName() )
-		table.remove( region.regions, i )
+		table.remove( _regions, i )
 	end
 end
 
-region.shutdown = region.unloadAll
+shutdown = unloadAll
 
 if ( not _DEDICATED ) then
 	concommand( "region", "Loads the specified region",
@@ -162,15 +172,15 @@ if ( not _DEDICATED ) then
 				return
 			end
 
-			engineclient.disconnect()
+			engine.client.disconnect()
 
-			if ( not engineclient.initializeServer() ) then
+			if ( not engine.client.initializeServer() ) then
 				return
 			end
 
 			game.initialRegion = name
 
-			engineclient.connectToListenServer()
+			engine.client.connectToListenServer()
 		end,
 
 		nil,
@@ -195,7 +205,7 @@ if ( not _DEDICATED ) then
 	)
 end
 
-function region.snapToGrid( x, y )
+function snapToGrid( x, y )
 	local region = region.getAtPosition( vector( x, y ) )
 	if ( not region ) then
 		return x, y
@@ -207,7 +217,7 @@ function region.snapToGrid( x, y )
 	return x, y
 end
 
-function region:region( name, x, y, worldIndex )
+function _M:region( name, x, y, worldIndex )
 	self.name     = name
 	self.data     = require( "regions." .. name )
 	self.entities = {}
@@ -219,13 +229,13 @@ function region:region( name, x, y, worldIndex )
 	self:parse()
 end
 
-function region:addEntity( entity )
+function _M:addEntity( entity )
 	table.insert( self.entities, entity )
 	entity:setRegion( self )
 end
 
 if ( _CLIENT ) then
-	function region:draw()
+	function _M:draw()
 		local layers = self:getLayers()
 		if ( not layers ) then
 			return
@@ -243,25 +253,25 @@ if ( _CLIENT ) then
 	end
 end
 
-function region:cleanUp()
+function _M:cleanUp()
 	local entities = self:getEntities()
 	for _, entity in pairs( entities ) do
 		entity:remove()
 	end
 end
 
-accessor( region, "entities" )
+accessor( _M, "entities" )
 
-function region:getFilename()
+function _M:getFilename()
 	return self.name .. ".lua"
 end
 
-accessor( region, "formatVersion" )
+accessor( _M, "formatVersion" )
 
 local data = {}
 local gid  = 0
 
-function region:getGidsAtPosition( position )
+function _M:getGidsAtPosition( position )
 	local tileWidth  = self:getTileWidth()
 	local tileHeight = self:getTileHeight()
 	position         = vector.copy( position )
@@ -279,21 +289,21 @@ function region:getGidsAtPosition( position )
 	return gids
 end
 
-accessor( region, "layers" )
-accessor( region, "name" )
-accessor( region, "orientation" )
+accessor( _M, "layers" )
+accessor( _M, "name" )
+accessor( _M, "orientation" )
 
-function region:getPixelWidth()
+function _M:getPixelWidth()
 	return self:getTileWidth() * self:getWidth()
 end
 
-function region:getPixelHeight()
+function _M:getPixelHeight()
 	return self:getTileHeight() * self:getHeight()
 end
 
-accessor( region, "properties" )
+accessor( _M, "properties" )
 
-function region:getTileset( layer )
+function _M:getTileset( layer )
 	local gid = layer:getHighestTileGid()
 	local tileset = nil
 	for _, t in ipairs( self:getTilesets() ) do
@@ -304,17 +314,17 @@ function region:getTileset( layer )
 	return tileset
 end
 
-accessor( region, "tilesets" )
-accessor( region, "tileWidth" )
-accessor( region, "tileHeight" )
-accessor( region, "width" )
-accessor( region, "height" )
-accessor( region, "world" )
-accessor( region, "worldIndex" )
-accessor( region, "x" )
-accessor( region, "y" )
+accessor( _M, "tilesets" )
+accessor( _M, "tileWidth" )
+accessor( _M, "tileHeight" )
+accessor( _M, "width" )
+accessor( _M, "height" )
+accessor( _M, "world" )
+accessor( _M, "worldIndex" )
+accessor( _M, "x" )
+accessor( _M, "y" )
 
-function region:initializeWorld()
+function _M:initializeWorld()
 	self.world = love.physics.newWorld()
 end
 
@@ -333,7 +343,7 @@ local width         = 0
 local height        = 0
 local pointinrect   = math.pointinrect
 
-function region:isTileWalkableAtPosition( position )
+function _M:isTileWalkableAtPosition( position )
 	-- Check world collisions
 	gids = self:getGidsAtPosition( position )
 	for _, tileset in ipairs( self:getTilesets() ) do
@@ -370,7 +380,7 @@ function region:isTileWalkableAtPosition( position )
 	return true
 end
 
-function region:loadTilesets( tilesets )
+function _M:loadTilesets( tilesets )
 	if ( self.tilesets ) then
 		return
 	end
@@ -383,7 +393,7 @@ function region:loadTilesets( tilesets )
 	end
 end
 
-function region:loadLayers( layers )
+function _M:loadLayers( layers )
 	if ( self.layers ) then
 		return
 	end
@@ -401,7 +411,7 @@ function region:loadLayers( layers )
 	end
 end
 
-function region:parse()
+function _M:parse()
 	if ( not self.data ) then
 		return
 	end
@@ -422,14 +432,14 @@ function region:parse()
 	self.data = nil
 end
 
-function region:remove()
+function _M:remove()
 	local world = self:getWorld()
 	if ( world ) then
 		world:destroy()
 	end
 end
 
-function region:removeEntity( entity )
+function _M:removeEntity( entity )
 	local entities = self:getEntities()
 	for i, v in ipairs( entities ) do
 		if ( v == entity ) then
@@ -438,11 +448,11 @@ function region:removeEntity( entity )
 	end
 end
 
-function region:getTileSize()
+function _M:getTileSize()
 	return self:getTileWidth(), self:getTileHeight()
 end
 
-function region:update( dt )
+function _M:update( dt )
 	if ( _SERVER ) then
 		local world = self:getWorld()
 		if ( world ) then
@@ -451,6 +461,6 @@ function region:update( dt )
 	end
 end
 
-function region:__tostring()
+function _M:__tostring()
 	return "region: \"" .. self:getFilename() .. "\""
 end

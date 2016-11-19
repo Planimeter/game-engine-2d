@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "button" ( gui.panel )
+module( "gui.button", package.class, package.inherit "gui.panel" )
 
 button.canFocus = true
 
@@ -125,5 +125,3 @@ function button:setText( text )
 	self.text = text
 	self:invalidate()
 end
-
-gui.register( button, "button" )

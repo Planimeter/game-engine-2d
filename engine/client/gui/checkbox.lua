@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "checkbox" ( gui.button )
+module( "gui.checkbox", package.class, package.inherit "gui.button" )
 
 function checkbox:checkbox( parent, name, text )
 	gui.button.button( self, parent, name, text )
@@ -118,4 +118,4 @@ function checkbox:setChecked( checked )
 	self:invalidate()
 end
 
-gui.register( checkbox, "checkbox" )
+

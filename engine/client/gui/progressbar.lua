@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "progressbar" ( gui.panel )
+module( "gui.progressbar", package.class, package.inherit "gui.panel" )
 
 function progressbar:progressbar( parent, name )
 	gui.panel.panel( self, parent, name )
@@ -55,4 +55,4 @@ function progressbar:setValue( value )
 	self:invalidate()
 end
 
-gui.register( progressbar, "progressbar" )
+

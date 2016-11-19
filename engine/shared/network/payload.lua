@@ -6,9 +6,16 @@
 
 require( "engine.shared.typelenvalues" )
 
-class "payload" ( "typelenvalues" )
+local accessor      = accessor
+local package       = package
+local require       = require
+local typelenvalues = typelenvalues
+local unrequire     = unrequire
+local _G            = _G
 
-payload.handlers = {}
+module( "payload", package.class, package.inherit( "typelenvalues" ) )
+
+handlers = handlers or {}
 
 -- Generate ids for packet structures
 do
@@ -19,36 +26,34 @@ do
 
 	require( payloads )
 
-	typelenvalues.generateIds( payload.structs )
+	typelenvalues.generateIds( _structs )
 end
 
-function payload.initializeFromData( data )
-	local payload = payload()
+function initializeFromData( data )
+	local payload = _M()
 	payload.data  = data
 	payload:deserialize()
 	return payload
 end
 
-function payload.setHandler( func, struct )
-	payload.handlers[ struct ] = func
+function setHandler( func, struct )
+	handlers[ struct ] = func
 end
 
-function payload:payload( struct )
-	typelenvalues.typelenvalues( self, payload.structs, struct )
+function _M:payload( struct )
+	typelenvalues.typelenvalues( self, structs, struct )
 end
 
-function payload:dispatchToHandler()
+function _M:dispatchToHandler()
 	local name = self:getStructName()
-	if ( name ) then
-		local handler = payload.handlers[ name ]
-		if ( handler ) then
-			handler( self )
-		end
-	end
+	if ( not name ) then return end
+
+	local handler = handlers[ name ]
+	if ( handler ) then handler( self ) end
 end
 
-accessor( payload, "peer" )
+accessor( _M, "peer" )
 
-function payload:getPlayer()
-	return player.getByPeer( self.peer )
+function _M:getPlayer()
+	return _G.player.getByPeer( self.peer )
 end

@@ -4,26 +4,23 @@
 --
 --============================================================================--
 
--- These values are preserved during real-time scripting.
-local schemes = scheme and scheme.schemes or {}
+module( "scheme", package.class )
 
-class( "scheme" )
-
-scheme.schemes = schemes
+schemes = schemes or {}
 
 local properties = {}
 
-function scheme.clear( name )
+function clear( name )
 	properties[ name ] = {}
 end
 
-function scheme.getProperty( name, property )
+function getProperty( name, property )
 	local cachedProperty = properties[ name ][ property ]
 	if ( cachedProperty ) then
 		return cachedProperty
 	end
 
-	local value = scheme.schemes[ name ]
+	local value = schemes[ name ]
 	local type  = type( value )
 	if ( type ~= "scheme" ) then
 		error( "attempt to index scheme '" .. name .. "' " ..
@@ -43,20 +40,20 @@ function scheme.getProperty( name, property )
 	return value
 end
 
-function scheme.isLoaded( name )
-	return scheme.schemes[ name ] ~= nil
+function isLoaded( name )
+	return schemes[ name ] ~= nil
 end
 
-function scheme.load( name )
+function load( name )
 	require( "schemes." .. name )
 end
 
-function scheme:scheme( name )
+function _M:scheme( name )
 	self.name = name
-	scheme.schemes[ name ] = self
-	scheme.clear( name )
+	schemes[ name ] = self
+	clear( name )
 end
 
-function scheme:__tostring()
+function _M:__tostring()
 	return "scheme: \"" .. self.name .. "\""
 end

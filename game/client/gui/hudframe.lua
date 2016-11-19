@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "hudframe" ( gui.frame )
+module( "gui.hudframe", package.class, package.inherit "gui.frame" )
 
 function hudframe:hudframe( parent, name, title )
 	gui.frame.frame( self, parent, name, title )
@@ -96,4 +96,4 @@ function hudframe:update( dt )
 	gui.frame.update( self, dt )
 end
 
-gui.register( hudframe, "hudframe" )
+

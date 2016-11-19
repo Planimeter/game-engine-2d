@@ -7,7 +7,7 @@
 -- These values are preserved during real-time scripting.
 local trappedItem = gui.bindlistitem and gui.bindlistitem.trappedItem or nil
 
-class "bindlistitem" ( gui.button )
+module( "gui.bindlistitem", package.class, package.inherit "gui.button" )
 
 bindlistitem.trappedItem = trappedItem
 
@@ -95,4 +95,4 @@ function bindlistitem:setKey( key )
 	self:invalidate()
 end
 
-gui.register( bindlistitem, "bindlistitem" )
+

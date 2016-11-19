@@ -4,27 +4,33 @@
 --
 --============================================================================--
 
--- These values are preserved during real-time scripting.
-local config  = convar and convar.config  or {}
-local convars = convar and convar.convars or {}
-
 require( "class" )
 
-class( "convar" )
+local love     = love
+local math     = math
+local pairs    = pairs
+local print    = print
+local string   = string
+local table    = table
+local tonumber = tonumber
+local tostring = tostring
+local _G       = _G
 
-convar.config  = config
-convar.convars = convars
+module( "convar", package.class )
 
-function convar.getConfig( name )
-	return convar.config[ name ]
+config  = config  or {}
+convars = convars or {}
+
+function getConfig( name )
+	return config[ name ]
 end
 
-function convar.getConvar( name )
-	return convar.convars[ name ]
+function getConvar( name )
+	return convars[ name ]
 end
 
-function convar.setConvar( name, value )
-	local convar = convar.getConvar( name )
+function setConvar( name, value )
+	local convar = getConvar( name )
 	if ( convar ) then
 		convar:setValue( value )
 		return true
@@ -33,21 +39,21 @@ function convar.setConvar( name, value )
 	end
 end
 
-function convar.readConfig()
+function readConfig()
 	if ( not love.filesystem.exists( "cfg/config.cfg" ) ) then
 		return
 	end
 
 	for line in love.filesystem.lines( "cfg/config.cfg" ) do
 		for k, v in string.gmatch( line, "(.+)%s(.+)" ) do
-			convar.config[ k ] = v
+			config[ k ] = v
 		end
 	end
 end
 
-function convar.saveConfig()
+function saveConfig()
 	local config = {}
-	for k, v in pairs( convar.convars ) do
+	for k, v in pairs( convars ) do
 		table.insert( config, k .. " " .. tostring( v:getValue() ) )
 	end
 	table.insert( config, "" )
@@ -62,83 +68,83 @@ function convar.saveConfig()
 	end
 end
 
-function convar:convar( name, default, min, max, helpString, onValueChange, flags )
-	self.name              = name
-	self.default           = default
-	self.value             = convar.config[ name ] or default
-	self.min               = min
-	self.max               = max
-	self.helpString        = helpString
-	self.onValueChange     = onValueChange
-	self.flags             = flags
-	convar.convars[ name ] = self
+function _M:convar( name, default, min, max, helpString, onValueChange, flags )
+	self.name          = name
+	self.default       = default
+	self.value         = config[ name ] or default
+	self.min           = min
+	self.max           = max
+	self.helpString    = helpString
+	self.onValueChange = onValueChange
+	self.flags         = flags
+	convars[ name ]    = self
 end
 
-function convar:getBoolean()
+function _M:getBoolean()
 	local n = self:getNumber()
 	return n ~= nil and n ~= 0
 end
 
-function convar:getDefault()
+function _M:getDefault()
 	return self.default
 end
 
-function convar:getFlags()
+function _M:getFlags()
 	return self.flags
 end
 
-function convar:getHelpString()
+function _M:getHelpString()
 	return self.helpString
 end
 
-function convar:getMin()
+function _M:getMin()
 	return self.min
 end
 
-function convar:getMax()
+function _M:getMax()
 	return self.max
 end
 
-function convar:getName()
+function _M:getName()
 	return self.name
 end
 
-function convar:getNumber()
+function _M:getNumber()
 	return tonumber( self.value )
 end
 
-function convar:getValue()
+function _M:getValue()
 	return self.value
 end
 
-function convar:onValueChange( oldValue, newValue )
+function _M:onValueChange( oldValue, newValue )
 end
 
-function convar:remove()
-	convar.convars[ self:getName() ] = nil
+function _M:remove()
+	convars[ self:getName() ] = nil
 end
 
-function convar:setDefault( default )
+function _M:setDefault( default )
 	self.default = default
 end
 
-function convar:setFlags( flags )
+function _M:setFlags( flags )
 	self.flags = flags
 end
 
-function convar:setMin( min )
+function _M:setMin( min )
 	self.min = min
 end
 
-function convar:setMax( max )
+function _M:setMax( max )
 	self.max = max
 end
 
-function convar:setHelpString( helpString )
+function _M:setHelpString( helpString )
 	self.helpString = helpString
 end
 
-function convar:setValue( value )
+function _M:setValue( value )
 	local oldValue = self.value
 	self.value     = value
 
@@ -148,14 +154,14 @@ function convar:setValue( value )
 		self.value = math.min( self.max, math.max( self.min, numberValue ) )
 	end
 
-	if ( _SERVER ) then
+	if ( _G._SERVER ) then
 		local flags = self:getFlags()
 		if ( flags ) then
 			local notify = table.hasvalue( flags, "notify" )
 			if ( notify ) then
 				local name = self:getName()
 				local text = "Server cvar " .. name .. " changed to " .. self.value
-				player.sendTextAll( text )
+				_G.player.sendTextAll( text )
 				return true
 			end
 		end
@@ -164,6 +170,6 @@ function convar:setValue( value )
 	self:onValueChange( oldValue, value )
 end
 
-function convar:__tostring()
+function _M:__tostring()
 	return "convar: " .. self.name .. " = \"" .. self.value .. "\""
 end

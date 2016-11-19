@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "frametabpanel" ( gui.panel )
+module( "gui.frametabpanel", package.class, package.inherit "gui.panel" )
 
 function frametabpanel:frametabpanel( parent, name )
 	gui.panel.panel( self, parent, name )
@@ -41,4 +41,4 @@ function frametabpanel:keypressed( key, scancode, isrepeat )
 	return gui.panel.keypressed( self, key, scancode, isrepeat )
 end
 
-gui.register( frametabpanel, "frametabpanel" )
+

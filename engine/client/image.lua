@@ -9,7 +9,7 @@ local images = image and image.images or {}
 
 local graphics = love.graphics
 
-class( "image" )
+module( "image", package.class )
 
 image.images = images
 
@@ -29,7 +29,6 @@ local function reloadImage( i, filename )
 		if ( game ) then
 			game.call( "client", "onReloadImage", filename )
 		else
-			require( "engine.shared.hook" )
 			hook.call( "client", "onReloadImage", filename )
 		end
 	end

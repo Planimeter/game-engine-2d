@@ -4,8 +4,8 @@
 --
 --============================================================================--
 
-payload.structs = {}
-local structs   = payload.structs
+payload._structs = {}
+local structs    = payload._structs
 
 structs[ "kick" ] = {
     keys = {

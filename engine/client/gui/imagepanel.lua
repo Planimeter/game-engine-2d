@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "imagepanel" ( gui.panel )
+module( "gui.imagepanel", package.class, package.inherit "gui.panel" )
 
 imagepanel.maskedImage = imagepanel.maskedImage or nil
 
@@ -103,4 +103,4 @@ function imagepanel:updateQuad()
 	end
 end
 
-gui.register( imagepanel, "imagepanel" )
+

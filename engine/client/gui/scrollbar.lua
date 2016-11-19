@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "scrollbar" ( gui.panel )
+module( "gui.scrollbar", package.class, package.inherit "gui.panel" )
 
 function scrollbar:scrollbar( parent, name )
 	gui.panel.panel( self, parent, name )
@@ -201,9 +201,9 @@ function scrollbar:setValue( value )
 	return 0
 end
 
-local mouseX, mouseY   = 0, 0
-local getMousePosition = input.getMousePosition
-local deltaX, deltaY   = 0, 0
+local mouseX, mouseY = 0, 0
+local getPosition    = love.mouse.getPosition
+local deltaX, deltaY = 0, 0
 
 function scrollbar:update( dt )
 	gui.panel.update( self, dt )
@@ -216,7 +216,7 @@ function scrollbar:update( dt )
 		return
 	end
 
-	mouseX, mouseY = getMousePosition()
+	mouseX, mouseY = getPosition()
 	localX, localY = self:screenToLocal( mouseX, mouseY )
 	deltaX, deltaY = localX - self.grabbedX,
 	                 localY - self.grabbedY
@@ -233,4 +233,4 @@ function scrollbar:update( dt )
 	self.grabbedY = localY + ( deltaValue / range ) * self:getHeight()
 end
 
-gui.register( scrollbar, "scrollbar" )
+

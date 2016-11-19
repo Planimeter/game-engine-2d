@@ -4,9 +4,14 @@
 --
 --============================================================================--
 
-class( "addon" )
+local love   = love
+local string = string
+local table  = table
+local ipairs = ipairs
 
-function addon.load( arg )
+module( "addon" )
+
+function load( arg )
 	local addons = love.filesystem.getDirectoryItems( "addons" )
 	for i = #addons, -1, 1 do
 		local v = addons[ i ]
@@ -17,19 +22,19 @@ function addon.load( arg )
 	end
 
 	for _, v in ipairs( addons ) do
-		addon.mount( v )
+		mount( v )
 	end
 end
 
-local addons = {}
+_addons = _addons or {}
 
-function addon.getAddons()
-	return addons
+function getAddons()
+	return _addons
 end
 
-function addon.mount( addon )
+function mount( addon )
 	if ( love.filesystem.mount( "addons/" .. addon, "" ) ) then
-		table.insert( addon.getAddons(), addon )
+		table.insert( getAddons(), addon )
 		print( "Mounted \"" .. addon .. "\"!" )
 		require( "addons." .. addon )
 		hook.call( "shared", "onAddonMounted", addon )
@@ -40,8 +45,8 @@ function addon.mount( addon )
 	return false
 end
 
-function addon.unmount( addon )
-	local mounted = table.hasvalue( addon.getAddons(), addon )
+function unmount( addon )
+	local mounted = table.hasvalue( getAddons(), addon )
 	if ( not mounted ) then
 		print( "Addon \"" .. addon .. "\" is not mounted!" )
 		return false

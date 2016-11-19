@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "commandbutton" ( gui.button )
+module( "gui.commandbutton", package.class, package.inherit "gui.button" )
 
 function commandbutton:commandbutton( parent, name, text )
 	gui.button.button( self, parent, name, text )
@@ -78,4 +78,4 @@ function commandbutton:setParent( panel )
 	panel:invalidate()
 end
 
-gui.register( commandbutton, "commandbutton" )
+

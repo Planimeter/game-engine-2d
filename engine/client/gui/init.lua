@@ -34,57 +34,17 @@ local rootPanel    = g_RootPanel or nil
 
 module( "gui" )
 
-local hasvalue = table.hasvalue
-
-local privateMembers = {
-	"rootPanel",
-	"topPanel",
-	"focusedPanel"
-}
-
-local modules = {
-	"engine.client",
-	"game.client"
-}
-
-local find = string.find
-
-local metatable = {
-	__index = function( t, k )
-		if ( hasvalue( privateMembers, k ) ) then
-			return
-		end
-
-		local library
-		local status, err
-		local message
-		for i, module in ipairs( modules ) do
-			library = module .. ".gui." .. k
-			status, err = pcall( require, library )
-			if ( status == true ) then
-				break
-			end
-
-			message = "module '" .. library .. "' not found:"
-			if ( status == false and find( err, message ) ~= 1 ) then
-				print( err )
-			end
-		end
-
-		local v = rawget( t, k )
-		if ( v ~= nil ) then return v end
-	end
-}
-setmetatable( _M, metatable )
-
 function initialize()
+	require( "engine.client.gui.rootpanel" )
 	rootPanel = rootpanel()
 	_G.g_RootPanel = rootPanel
 
 	if ( not _G._DEDICATED ) then
+		require( "game.client.gui.mainmenu" )
 		_G.g_MainMenu = mainmenu()
 	end
 
+	require( "engine.client.gui.console" )
 	_G.g_Console = console()
 	if ( _G._DEBUG or argv[ "--console" ] ) then
 		_G.g_Console:activate()
@@ -148,11 +108,6 @@ function preDrawWorld()
 	rootPanel:preDrawWorld()
 end
 
-function register( class, name )
-	_M[ name ] = class
-	getfenv( 2 )[ name ] = nil
-end
-
 function scale( n )
 	return n * ( love.graphics.getHeight() / 1080 )
 end
@@ -206,13 +161,13 @@ function update( dt )
 	rootPanel:update( dt )
 end
 
-local mx, my           = 0, 0
-local panel            = nil
-local getMousePosition = input.getMousePosition
-local oldPanel         = nil
+local mx, my      = 0, 0
+local panel       = nil
+local getPosition = love.mouse.getPosition
+local oldPanel    = nil
 
 function updateMouseOver()
-	mx, my = getMousePosition()
+	mx, my = getPosition()
 	panel  = rootPanel:getTopMostChildAtPos( mx, my )
 	if ( panel ~= topPanel ) then
 		if ( topPanel ) then

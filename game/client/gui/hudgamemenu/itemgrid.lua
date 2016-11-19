@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "itemgrid" ( gui.panel )
+module( "gui.itemgrid", package.class, package.inherit "gui.panel" )
 
 function itemgrid:itemgrid( parent, name )
 	gui.panel.panel( self, parent, name )
@@ -60,4 +60,4 @@ function itemgrid:invalidateLayout()
 	gui.panel.invalidateLayout( self )
 end
 
-gui.register( itemgrid, "itemgrid" )
+

@@ -16,6 +16,10 @@ if ( not rawdofile ) then
 end
 
 function accessor( class, member, key )
+	if ( type( class ) ~= "table" ) then
+		typerror( 1, "table", class )
+	end
+
 	class[ "set" .. string.capitalize( member ) ] = function( self, value )
 		self[ key or member ] = value
 	end
@@ -38,8 +42,8 @@ if ( not rawprint and not rawtype ) then
 	function print( ... )
 		rawprint( ... )
 
-		if ( _CLIENT and g_Console ) then
-			g_Console.print( ... )
+		if ( _CLIENT and gui ) then
+			gui.console.print( ... )
 		end
 	end
 

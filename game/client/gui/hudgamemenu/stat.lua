@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "hudgamemenustat" ( gui.panel )
+module( "gui.hudgamemenustat", package.class, package.inherit "gui.panel" )
 
 function hudgamemenustat:hudgamemenustat( parent, name, stat )
 	gui.panel.panel( self, parent, name )
@@ -90,4 +90,4 @@ function hudgamemenustat:setWidth( width )
 	self.progressbar:setWidth( width )
 end
 
-gui.register( hudgamemenustat, "hudgamemenustat" )
+

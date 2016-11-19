@@ -8,9 +8,11 @@ require( "game.client.gui.mainmenu.closebutton" )
 require( "game.client.gui.mainmenu.button" )
 require( "game.client.gui.closedialog" )
 
-class "mainmenu" ( gui.panel )
+local hook = hook
 
-function mainmenu:mainmenu()
+module( "gui.mainmenu", package.class, package.inherit "gui.panel" )
+
+function _M:mainmenu()
 	gui.panel.panel( self, g_RootPanel, "Main Menu" )
 	self.width       = love.graphics.getWidth()
 	self.height      = love.graphics.getHeight()
@@ -22,7 +24,7 @@ function mainmenu:mainmenu()
 	self.logo:setFilter( "linear", "linear" )
 	self.logoSmall:setFilter( "linear", "linear" )
 
-	self.closeButton = gui.mainmenuclosebutton( self )
+	self.closeButton = gui.mainmenu.closebutton( self )
 	local margin     = gui.scale( 96 )
 	self.closeButton:setPos( self.width - point( 32 ) - margin, margin )
 	self.closeButton.onClick = function()
@@ -37,7 +39,7 @@ end
 
 local MAINMENU_ANIM_TIME = 0.2
 
-function mainmenu:activate()
+function _M:activate()
 	if ( not self:isVisible() ) then
 		self:setOpacity( 0 )
 		self:animate( {
@@ -56,7 +58,7 @@ function mainmenu:activate()
 	end
 end
 
-function mainmenu:close()
+function _M:close()
 	if ( self.closing ) then
 		return
 	end
@@ -79,18 +81,18 @@ function mainmenu:close()
 	game.call( "client", "onMainMenuClose" )
 end
 
-function mainmenu:createButtons()
+function _M:createButtons()
 	self.buttons = {}
 
 	self.joinLeaveServer = gui.mainmenubutton( self, "Join Server" )
 	self.joinLeaveServer:setDisabled( true )
 	self.joinLeaveServer.onClick = function()
-		if ( not engineclient.isConnected() ) then
+		if ( not engine.client.isConnected() ) then
 			if ( _DEBUG ) then
-				engine.connect( "localhost" )
+				engine.client.connect( "localhost" )
 			end
 		else
-			engineclient.disconnect()
+			engine.client.disconnect()
 		end
 	end
 	table.insert( self.buttons, self.joinLeaveServer )
@@ -123,13 +125,13 @@ hook.set( "client", function()
 	g_MainMenu.joinLeaveServer:setDisabled( true )
 end, "onDisconnect", "updateJoinLeaveServerButton" )
 
-function mainmenu:enableServerConnections()
+function _M:enableServerConnections()
 	if ( self.joinLeaveServer ) then
 		self.joinLeaveServer:setDisabled( false )
 	end
 end
 
-function mainmenu:invalidateLayout()
+function _M:invalidateLayout()
 	self:setSize( love.graphics.getWidth(), love.graphics.getHeight() )
 
 	local margin = gui.scale( 96 )
@@ -147,7 +149,7 @@ function mainmenu:invalidateLayout()
 	gui.panel.invalidateLayout( self )
 end
 
-function mainmenu:invalidateButtons()
+function _M:invalidateButtons()
 	local logo      = self.logo
 	local height    = self:getHeight()
 	local marginPhi = height - height / math.phi
@@ -165,8 +167,8 @@ function mainmenu:invalidateButtons()
 	end
 end
 
-function mainmenu:draw()
-	if ( engineclient.isInGame() ) then
+function _M:draw()
+	if ( engine.client.isInGame() ) then
 		self:drawBlur()
 		self:drawBackground( "mainmenu.backgroundColor" )
 	end
@@ -176,13 +178,13 @@ function mainmenu:draw()
 	gui.panel.draw( self )
 end
 
-function mainmenu:drawBlur()
+function _M:drawBlur()
 	if ( gui.blurFramebuffer ) then
 		gui.blurFramebuffer:draw()
 	end
 end
 
-function mainmenu:drawLogo()
+function _M:drawLogo()
 	local logo      = self.logo
 	local height    = self:getHeight()
 	local scale     = height / point( 1080 )
@@ -198,7 +200,7 @@ function mainmenu:drawLogo()
 	love.graphics.draw( logo, marginX, marginPhi, 0, scale, scale )
 end
 
-function mainmenu:keypressed( key, scancode, isrepeat )
+function _M:keypressed( key, scancode, isrepeat )
 	if ( self.closing ) then
 		return
 	end
@@ -210,7 +212,7 @@ function mainmenu:keypressed( key, scancode, isrepeat )
 	return gui.panel.keypressed( self, key, scancode, isrepeat )
 end
 
-function mainmenu:mousepressed( x, y, button, istouch )
+function _M:mousepressed( x, y, button, istouch )
 	if ( self.closing ) then
 		return
 	end
@@ -218,7 +220,7 @@ function mainmenu:mousepressed( x, y, button, istouch )
 	return gui.panel.mousepressed( self, x, y, button, istouch )
 end
 
-function mainmenu:mousereleased( x, y, button, istouch )
+function _M:mousereleased( x, y, button, istouch )
 	if ( self.closing ) then
 		return
 	end
@@ -226,12 +228,12 @@ function mainmenu:mousereleased( x, y, button, istouch )
 	gui.panel.mousereleased( self, x, y, button, istouch )
 end
 
-function mainmenu:remove()
+function _M:remove()
 	gui.panel.remove( self )
 	self.logo = nil
 end
 
-function mainmenu:update( dt )
+function _M:update( dt )
 	if ( gui.blurFramebuffer and self:isVisible() ) then
 		self:invalidate()
 	end
@@ -239,11 +241,9 @@ function mainmenu:update( dt )
 	gui.panel.update( self, dt )
 end
 
-function mainmenu:quit()
+function _M:quit()
 	self:activate()
 	self.closeDialog:activate()
 
 	return true
 end
-
-gui.register( mainmenu, "mainmenu" )

@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class( "tween" )
+module( "tween", package.class )
 
 local pi  = math.pi
 local cos = math.cos

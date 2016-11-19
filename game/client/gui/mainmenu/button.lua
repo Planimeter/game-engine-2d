@@ -4,16 +4,16 @@
 --
 --============================================================================--
 
-class "mainmenubutton" ( gui.button )
+module( "gui.mainmenu.button", package.class, package.inherit "gui.button" )
 
-function mainmenubutton:mainmenubutton( parent, text )
+function _M:button( parent, text )
 	gui.button.button( self, parent, text and text or "Blank" .. " Button",
 	                   text or "" )
 	local font  = self:getScheme( "mainmenuFont" )
 	self.height = font:getHeight()
 end
 
-function mainmenubutton:draw()
+function _M:draw()
 	local textColor = "mainmenubutton.dark.textColor"
 	if ( self:isDisabled() ) then
 		textColor = "mainmenubutton.dark.disabled.textColor"
@@ -32,5 +32,3 @@ function mainmenubutton:draw()
 
 	gui.panel.draw( self )
 end
-
-gui.register( mainmenubutton, "mainmenubutton" )

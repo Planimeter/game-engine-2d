@@ -4,12 +4,16 @@
 --
 --============================================================================--
 
+local accessor = accessor
+local love     = love
+local math     = math
+
 local gui_draw_frame_focus = convar( "gui_draw_frame_focus", "0", nil, nil,
                              "Draws bounds around the focused frame" )
 
-class "frame" ( gui.panel )
+module( "gui.frame", package.class, package.inherit "gui.panel" )
 
-function frame:frame( parent, name, title )
+function _M:frame( parent, name, title )
 	gui.panel.panel( self, parent, name )
 	self.width         = point( 640 )
 	self.height        = point( 480 )
@@ -41,7 +45,7 @@ end
 local FRAME_ANIM_SCALE = 0.93
 local FRAME_ANIM_TIME  = 0.2
 
-function frame:activate()
+function _M:activate()
 	if ( not self:isVisible() ) then
 		self:setOpacity( 0 )
 		self:setScale( FRAME_ANIM_SCALE )
@@ -56,7 +60,7 @@ function frame:activate()
 	self:setFocusedFrame( true )
 end
 
-function frame:close()
+function _M:close()
 	if ( self.closing ) then
 		return
 	end
@@ -79,7 +83,7 @@ function frame:close()
 	end )
 end
 
-function frame:doModal()
+function _M:doModal()
 	self.modal = true
 	self:setResizable( false )
 	self:setMovable( false )
@@ -90,7 +94,7 @@ function frame:doModal()
 	end
 end
 
-function frame:draw()
+function _M:draw()
 	self:drawBackground( "frame.backgroundColor" )
 
 	gui.panel.draw( self )
@@ -103,7 +107,7 @@ function frame:draw()
 	end
 end
 
-function frame:drawTitle()
+function _M:drawTitle()
 	local color = "frame.titleTextColor"
 	if ( not self.focus ) then
 		color = "frame.defocus.titleTextColor"
@@ -117,16 +121,16 @@ function frame:drawTitle()
 	graphics.print( string.utf8upper( self:getTitle() ), x, y )
 end
 
-accessor( frame, "minWidth" )
-accessor( frame, "minHeight" )
+accessor( _M, "minWidth" )
+accessor( _M, "minHeight" )
 
-function frame:getMinSize()
+function _M:getMinSize()
 	return self:getMinWidth(), self:getMinHeight()
 end
 
-accessor( frame, "title" )
+accessor( _M, "title" )
 
-function frame:invalidateLayout()
+function _M:invalidateLayout()
 	if ( self.closeButton ) then
 		self.closeButton:setX( self:getWidth() - 2 * point( 36 ) - point( 16 ) )
 	end
@@ -134,15 +138,15 @@ function frame:invalidateLayout()
 	gui.panel.invalidateLayout( self )
 end
 
-function frame:isResizable()
+function _M:isResizable()
 	return self.resizable
 end
 
-function frame:isResizing()
+function _M:isResizing()
 	return self.resizing
 end
 
-function frame:isMovable()
+function _M:isMovable()
 	return self.movable
 end
 
@@ -160,10 +164,10 @@ end
 
 local next = getNextFocusedIndex
 
-function frame:moveFocus()
+function _M:moveFocus()
 	local children = self:getChildren()
 	if ( children ) then
-		local shiftDown    = input.isKeyDown( "lshift", "rshift" )
+		local shiftDown    = love.keyboard.isDown( "lshift", "rshift" )
 		local dir          = shiftDown and -1 or nil
 		local focusedIndex = nil
 		for i, panel in ipairs( children ) do
@@ -196,13 +200,13 @@ function frame:moveFocus()
 	end
 end
 
-function frame:keypressed( key, scancode, isrepeat )
+function _M:keypressed( key, scancode, isrepeat )
 	if ( self.closing ) then
 		return
 	end
 
 	if ( self.focus ) then
-		local controlDown = input.isKeyDown( "lctrl", "rctrl", "lgui", "rgui" )
+		local controlDown = love.keyboard.isDown( "lctrl", "rctrl", "lgui", "rgui" )
 		if ( key == "tab" ) then
 			self:moveFocus()
 		elseif ( key == "w" and controlDown ) then
@@ -219,7 +223,7 @@ local localX, localY   = 0, 0
 local mouseIntersects  = false
 local pointinrect      = math.pointinrect
 
-function frame:mousepressed( x, y, button, istouch )
+function _M:mousepressed( x, y, button, istouch )
 	if ( self.closing ) then
 		return
 	end
@@ -378,7 +382,7 @@ function frame:mousepressed( x, y, button, istouch )
 	end
 end
 
-function frame:mousereleased( x, y, button, istouch )
+function _M:mousereleased( x, y, button, istouch )
 	if ( self.closing ) then
 		return
 	end
@@ -396,7 +400,7 @@ function frame:mousereleased( x, y, button, istouch )
 	end
 end
 
-function frame:moveToCenter()
+function _M:moveToCenter()
 	local parent = self:getParent()
 	local width  = parent:getWidth()
 	local height = parent:getHeight()
@@ -404,16 +408,16 @@ function frame:moveToCenter()
 	             ( height - self:getHeight() ) / 2 )
 end
 
-function frame:onLostFocus()
+function _M:onLostFocus()
 end
 
-function frame:onMouseLeave()
+function _M:onMouseLeave()
 	if ( not self.mousedown ) then
 		love.mouse.setCursor()
 	end
 end
 
-function frame:setFocusedFrame( focus )
+function _M:setFocusedFrame( focus )
 	local focusedFrame = gui.frame.focusedFrame
 	if ( focusedFrame ) then
 		focusedFrame.focus = nil
@@ -433,7 +437,7 @@ end
 
 local deltaWidth = 0
 
-function frame:setWidth( width )
+function _M:setWidth( width )
 	gui.panel.setWidth( self, width )
 	if ( self.width < self.minWidth ) then
 		deltaWidth = self.minWidth - self.width
@@ -447,7 +451,7 @@ end
 
 local deltaHeight = 0
 
-function frame:setHeight( height )
+function _M:setHeight( height )
 	gui.panel.setHeight( self, height )
 	if ( self.height < self.minHeight ) then
 		deltaHeight = self.minHeight - self.height
@@ -459,47 +463,47 @@ function frame:setHeight( height )
 	return 0
 end
 
-function frame:setMinWidth( minWidth )
+function _M:setMinWidth( minWidth )
 	self.minWidth = math.round( minWidth )
 end
 
-function frame:setMinHeight( minHeight )
+function _M:setMinHeight( minHeight )
 	self.minHeight = math.round( minHeight )
 end
 
-function frame:setMinSize( minWidth, minHeight )
+function _M:setMinSize( minWidth, minHeight )
 	self:setMinWidth( minWidth )
 	self:setMinHeight( minHeight )
 end
 
-function frame:setMovable( movable )
+function _M:setMovable( movable )
 	self.movable = movable
 end
 
-function frame:setRemoveOnClose( removeOnClose )
+function _M:setRemoveOnClose( removeOnClose )
 	self.removeOnClose = removeOnClose
 end
 
-function frame:setResizable( resizable )
+function _M:setResizable( resizable )
 	self.resizable = resizable
 end
 
-function frame:shouldRemoveOnClose()
+function _M:shouldRemoveOnClose()
 	return self.removeOnClose
 end
 
-local mouseX, mouseY   = 0, 0
-local getMousePosition = input.getMousePosition
-local deltaX, deltaY   = 0, 0
+local mouseX, mouseY = 0, 0
+local getPosition    = love.mouse.getPosition
+local deltaX, deltaY = 0, 0
 
-function frame:update( dt )
+function _M:update( dt )
 	gui.panel.update( self, dt )
 
 	if ( not self:isVisible() ) then
 		return
 	end
 
-	mouseX, mouseY = getMousePosition()
+	mouseX, mouseY = getPosition()
 	self:updateCursor( mouseX, mouseY )
 
 	if ( not ( self.grabbedX or self.grabbedY ) ) then
@@ -564,7 +568,7 @@ function frame:update( dt )
 	end
 end
 
-function frame:updateCursor( mouseX, mouseY )
+function _M:updateCursor( mouseX, mouseY )
 	if ( not self.mouseover or self.mousedown or not self:isResizable() ) then
 		return
 	end
@@ -696,5 +700,3 @@ function frame:updateCursor( mouseX, mouseY )
 
 	love.mouse.setCursor()
 end
-
-gui.register( frame, "frame" )

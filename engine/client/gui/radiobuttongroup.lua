@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "radiobuttongroup" ( gui.panel )
+module( "gui.radiobuttongroup", package.class, package.inherit "gui.panel" )
 
 function radiobuttongroup:radiobuttongroup( parent, name )
 	gui.panel.panel( self, parent, name )
@@ -81,4 +81,4 @@ end
 function radiobuttongroup:onValueChanged( oldValue, newValue )
 end
 
-gui.register( radiobuttongroup, "radiobuttongroup" )
+

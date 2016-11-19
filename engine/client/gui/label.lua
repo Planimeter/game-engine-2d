@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "label" ( gui.panel )
+module( "gui.label", package.class, package.inherit "gui.panel" )
 
 function label:label( parent, name, text )
 	gui.panel.panel( self, parent, name )
@@ -59,4 +59,4 @@ function label:setTextAlign( textAlign )
 	self:invalidate()
 end
 
-gui.register( label, "label" )
+

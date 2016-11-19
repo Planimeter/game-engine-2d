@@ -7,17 +7,17 @@
 require( "engine.server.network" )
 require( "engine.shared.network.payload" )
 
-class( "engineserver" )
+module( "engineserver" )
 
-dofile( "engine/server/handlers.lua" )
-dofile( "engine/server/payloads.lua" )
+require( "engine.server.handlers" )
+require( "engine.server.payloads" )
 
-function engineserver.onConnect( event )
+function onConnect( event )
 	print( tostring( event.peer ) .. " has connected." )
-	engineserver.onPostConnect( event )
+	onPostConnect( event )
 end
 
-function engineserver.onPostConnect( event )
+function onPostConnect( event )
 	-- Initialize region
 	local regionName = game.initialRegion
 	region.load( regionName )
@@ -38,16 +38,16 @@ function engineserver.onPostConnect( event )
 	player:setNetworkVar( "position", position )
 
 	-- Send server info
-	engineserver.sendServerInfo( player )
+	sendServerInfo( player )
 end
 
-function engineserver.onReceive( event )
+function onReceive( event )
 	local payload = payload.initializeFromData( event.data )
 	payload:setPeer( event.peer )
 	payload:dispatchToHandler()
 end
 
-function engineserver.onDisconnect( event )
+function onDisconnect( event )
 	local player = player.getByPeer( event.peer )
 	if ( player ) then
 		player:onDisconnect()
@@ -57,15 +57,15 @@ function engineserver.onDisconnect( event )
 	print( tostring( event.peer ) .. " has disconnected." )
 end
 
-function engineserver.sendServerInfo( player )
+function sendServerInfo( player )
 	local payload = payload( "serverInfo" )
 	payload:set( "region", game.initialRegion )
 	player:send( payload )
 end
 
-engineserver.shutdown = engineserver.quit
+shutdown = quit
 
-function engineserver.upload( filename, peer )
+function upload( filename, peer )
 	local payload = payload( "upload" )
 	payload:set( "filename", filename )
 	payload:set( "file", love.filesystem.read( filename ) )

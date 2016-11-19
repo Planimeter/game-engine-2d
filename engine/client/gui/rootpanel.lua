@@ -4,9 +4,11 @@
 --
 --============================================================================--
 
-class "rootpanel" ( gui.panel )
+local love = love
 
-function rootpanel:rootpanel()
+module( "gui.rootpanel", package.class, package.inherit "gui.panel" )
+
+function _M:rootpanel()
 	self.x        = 0
 	self.y        = 0
 	self.width    = love.graphics.getWidth()
@@ -20,10 +22,8 @@ function rootpanel:rootpanel()
 	self:setUseFullscreenFramebuffer( true )
 end
 
-function rootpanel:invalidateLayout()
+function _M:invalidateLayout()
 	self:setSize( love.graphics.getWidth(), love.graphics.getHeight() )
 
 	gui.panel.invalidateLayout( self )
 end
-
-gui.register( rootpanel, "rootpanel" )

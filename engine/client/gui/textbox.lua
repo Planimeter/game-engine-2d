@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "textbox" ( gui.panel )
+module( "gui.textbox", package.class, package.inherit "gui.panel" )
 
 textbox.maskedTextbox = textbox.maskedTextbox or nil
 textbox.canFocus      = true
@@ -493,8 +493,8 @@ function textbox:keypressed( key, scancode, isrepeat )
 		return
 	end
 
-	local controlDown = input.isKeyDown( "lctrl", "rctrl", "lgui", "rgui" )
-	local shiftDown   = input.isKeyDown( "lshift", "rshift" )
+	local controlDown = love.keyboard.isDown( "lctrl", "rctrl", "lgui", "rgui" )
+	local shiftDown   = love.keyboard.isDown( "lshift", "rshift" )
 	if ( key == "backspace" ) then
 		self:doBackspace( controlDown and math.abs( nextWord( self, -1 ) ) or 1 )
 	elseif ( key == "delete" ) then
@@ -655,13 +655,13 @@ function textbox:onEnter( text )
 end
 
 function textbox:onFocus()
-	input.setTextInput( true )
-	input.setKeyRepeat( true )
+	love.keyboard.setTextInput( true )
+	love.keyboard.setKeyRepeat( true )
 end
 
 function textbox:onLostFocus()
-	input.setTextInput( false )
-	input.setKeyRepeat( false )
+	love.keyboard.setTextInput( false )
+	love.keyboard.setKeyRepeat( false )
 end
 
 function textbox:onMouseLeave()
@@ -792,4 +792,4 @@ function textbox:wheelmoved( x, y )
 	return gui.panel.wheelmoved( self, x, y )
 end
 
-gui.register( textbox, "textbox" )
+

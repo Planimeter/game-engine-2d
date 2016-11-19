@@ -10,7 +10,7 @@ require( "engine.shared.tween" )
 local gui_draw_bounds = convar( "gui_draw_bounds", "0", nil, nil,
                                 "Draws the bounds of panels for debugging" )
 
-class( "panel" )
+module( "panel", package.class )
 
 panel.maskedPanel = panel.maskedPanel or nil
 
@@ -703,4 +703,4 @@ function panel:__tostring()
 	return "panel: \"" .. self.name .. "\" (" .. self.__type .. ")"
 end
 
-gui.register( panel, "panel" )
+

@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "bindlistheader" ( gui.panel )
+module( "gui.bindlistheader", package.class, package.inherit "gui.panel" )
 
 function bindlistheader:bindlistheader( parent, name, text )
 	gui.panel.panel( self, parent, name )
@@ -40,4 +40,4 @@ end
 
 accessor( bindlistheader, "text" )
 
-gui.register( bindlistheader, "bindlistheader" )
+

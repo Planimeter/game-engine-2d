@@ -10,7 +10,7 @@ local lastPlayerId = player and player.lastPlayerId or 0
 
 require( "engine.shared.entities.character" )
 
-class "player" ( "character" )
+module( "player", package.class, package.inherit( "character" ) )
 
 player.players      = players
 player.lastPlayerId = lastPlayerId
@@ -215,12 +215,10 @@ if ( _CLIENT ) then
 end
 
 function player:onConnect()
-	require( "engine.shared.hook" )
 	game.call( "shared", "onPlayerConnect", self )
 end
 
 function player:onDisconnect()
-	require( "engine.shared.hook" )
 	game.call( "shared", "onPlayerDisconnect", self )
 
 	for i, player in ipairs( players ) do

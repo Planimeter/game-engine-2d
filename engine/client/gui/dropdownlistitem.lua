@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "dropdownlistitem" ( gui.radiobutton )
+module( "gui.dropdownlistitem", package.class, package.inherit "gui.radiobutton" )
 
 function dropdownlistitem:dropdownlistitem( name, text )
 	gui.radiobutton.radiobutton( self, nil, name, text )
@@ -103,4 +103,4 @@ function dropdownlistitem:mousepressed( x, y, button, istouch )
 	end
 end
 
-gui.register( dropdownlistitem, "dropdownlistitem" )
+

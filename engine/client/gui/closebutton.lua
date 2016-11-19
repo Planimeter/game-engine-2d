@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "closebutton" ( gui.button )
+module( "gui.closebutton", package.class, package.inherit "gui.button" )
 
 closebutton.canFocus = false
 
@@ -41,4 +41,4 @@ function closebutton:onClick()
 	parent:close()
 end
 
-gui.register( closebutton, "closebutton" )
+

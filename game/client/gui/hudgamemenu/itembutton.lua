@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "itembutton" ( gui.button )
+module( "gui.itembutton", package.class, package.inherit "gui.button" )
 
 function itembutton:itembutton( parent, item )
 	gui.button.button( self, parent )
@@ -97,4 +97,4 @@ function itembutton:setItem( item )
 	end
 end
 
-gui.register( itembutton, "itembutton" )
+

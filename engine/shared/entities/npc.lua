@@ -6,7 +6,7 @@
 
 require( "engine.shared.entities.character" )
 
-class "npc" ( "character" )
+module( "npc", package.class, package.inherit( "character" ) )
 
 function npc:npc()
 	character.character( self )

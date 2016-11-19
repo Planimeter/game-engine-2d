@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "dropdownlistitemgroup" ( gui.radiobuttongroup )
+module( "gui.dropdownlistitemgroup", package.class, package.inherit "gui.radiobuttongroup" )
 
 function dropdownlistitemgroup:dropdownlistitemgroup( parent, name )
 	gui.radiobuttongroup.radiobuttongroup( self, nil, name )
@@ -102,4 +102,4 @@ function dropdownlistitemgroup:updatePos()
 	end
 end
 
-gui.register( dropdownlistitemgroup, "dropdownlistitemgroup" )
+

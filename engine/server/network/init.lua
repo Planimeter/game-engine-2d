@@ -5,7 +5,6 @@
 --============================================================================--
 
 require( "engine.shared.convar" )
-require( "engine.shared.hook" )
 require( "engine.server.network.host" )
 
 local host_ip          = convar( "host_ip", "", nil, nil,
@@ -15,7 +14,7 @@ local host_port        = convar( "host_port", "26015", nil, nil,
 local host_max_players = convar( "host_maxplayers", 1000, 0, 1000,
                                  "Host game server max number of players" )
 
-class( "networkserver" )
+module( "networkserver", package.class )
 
 function networkserver.broadcast( data, channel, flag )
 	if ( type( data ) == "payload" ) then

@@ -15,7 +15,7 @@ local function onReceivePlayerInitialized( payload )
 
 	if ( not _SERVER ) then localplayer:initialSpawn() end
 
-	gameclient.playerInitialized = true
+	game.client.playerInitialized = true
 end
 
 payload.setHandler( onReceivePlayerInitialized, "playerInitialized" )
@@ -25,16 +25,16 @@ local function onReceiveServerInfo( payload )
 
 	require( "engine.shared.region" )
 	if ( not region.exists( regionName ) ) then
-		engineclient.download( "regions/" .. regionName .. ".lua" )
+		engine.client.download( "regions/" .. regionName .. ".lua" )
 	else
 		region.load( regionName )
 
 		require( "game" )
 
-		gameclient = require( "game.client" )
-		gameclient.load( args )
+		require( "game.client" )
+		game.client.load( args )
 
-		engineclient.sendClientInfo()
+		engine.client.sendClientInfo()
 	end
 end
 

@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "frametabpanels" ( gui.panel )
+module( "gui.frametabpanels", package.class, package.inherit "gui.panel" )
 
 function frametabpanels:frametabpanels( parent, name, text )
 	gui.panel.panel( self, parent, name )
@@ -28,4 +28,4 @@ function frametabpanels:setSelectedChild( i )
 	end
 end
 
-gui.register( frametabpanels, "frametabpanels" )
+

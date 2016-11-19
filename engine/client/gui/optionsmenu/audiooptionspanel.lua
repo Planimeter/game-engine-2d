@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "audiooptionspanel" ( gui.frametabpanel )
+module( "gui.audiooptionspanel", package.class, package.inherit "gui.frametabpanel" )
 
 function audiooptionspanel:audiooptionspanel()
 	gui.frametabpanel.frametabpanel( self, nil, "Audio Options Panel" )
@@ -82,4 +82,4 @@ function audiooptionspanel:updateSound()
 	convar.setConvar( "snd_desktop", options.desktopSound and 1 or 0 )
 end
 
-gui.register( audiooptionspanel, "audiooptionspanel" )
+

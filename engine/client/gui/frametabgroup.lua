@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "frametabgroup" ( gui.radiobuttongroup )
+module( "gui.frametabgroup", package.class, package.inherit "gui.radiobuttongroup" )
 
 function frametabgroup:frametabgroup( parent, name )
 	gui.radiobuttongroup.radiobuttongroup( self, parent, name )
@@ -59,4 +59,4 @@ function frametabgroup:onValueChanged( oldValue, newValue )
 	tabPanels:setSelectedChild( newValue )
 end
 
-gui.register( frametabgroup, "frametabgroup" )
+

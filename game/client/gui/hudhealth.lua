@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "hudhealth" ( gui.panel )
+module( "gui.hudhealth", package.class, package.inherit "gui.panel" )
 
 function hudhealth:hudhealth( parent )
 	gui.panel.panel( self, parent, "HUD Health" )
@@ -66,4 +66,4 @@ function hudhealth:invalidateLayout()
 	gui.panel.invalidateLayout( self )
 end
 
-gui.register( hudhealth, "hudhealth" )
+
