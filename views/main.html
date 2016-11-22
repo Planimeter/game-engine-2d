@@ -36,33 +36,31 @@
         <h3>
           Making a HUD element
         </h3>
-        <pre><code>class "hudhealth" ( gui.panel )
+        <pre><code>module( "gui.hudhealth", package.class, package.inherits "gui.panel" )
 
-function hudhealth:draw()
+function _M:draw()
 	love.graphics.print( localplayer:getHealth() )
 	gui.panel.draw( self )
-end
-
-gui.register( hudhealth, "hudhealth" )</code></pre>
+end</code></pre>
       </p>
       <p>
         <h3>
           Making an entity
         </h3>
-        <pre><code>class "npc_monster" ( npc )
+        <pre><code>module( "npc_monster", package.class, package.inherits "npc" )
 
-function npc_monster:npc_monster()
+function _M:npc_monster()
 	npc.npc( self )
 	self:setSprite( "images/monster.png" )
 end
 
-entities.linkToClassname( npc_monster, "npc_monster" )</code></pre>
+entities.linkToClassname( _M, "npc_monster" )</code></pre>
       </p>
       <p>
         <h3>
           Playing a sound from an entity
         </h3>
-        <pre><code>function npc_monster:onTakeDamage()
+        <pre><code>function _M:onTakeDamage()
 	npc.onTakeDamage( self )
 	self:emitSound( "sounds/cry.wav" )
 end</code></pre>
