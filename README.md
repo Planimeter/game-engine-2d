@@ -26,7 +26,6 @@ would otherwise need to write by hand for your projects or game jams.
 * GUI
 * Level streaming
 * Live reloadable assets
-* Lua 5.1.5 auxiliary library
 * Massively multiplayer
 * Pathfinding
 * Real-time scripting
