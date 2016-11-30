@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-module( "gui.hudmoveindicator", package.class, package.inherit "gui.panel" )
+class "gui.hudmoveindicator" ( "gui.panel" )
 
 function hudmoveindicator:hudmoveindicator( parent )
 	local name   = "HUD Move Indicator"

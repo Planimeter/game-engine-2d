@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-module( "gui.videooptionspanel", package.class, package.inherit "gui.frametabpanel" )
+class "gui.videooptionspanel" ( "gui.frametabpanel" )
 
 function videooptionspanel:videooptionspanel()
 	gui.frametabpanel.frametabpanel( self, nil, "Video Options Panel" )

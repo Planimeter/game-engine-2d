@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-module( "gui.progressbar", package.class, package.inherit "gui.panel" )
+class "gui.progressbar" ( "gui.panel" )
 
 function progressbar:progressbar( parent, name )
 	gui.panel.panel( self, parent, name )

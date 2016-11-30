@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-module( "gui.debugoverlaypanel", package.class, package.inherit "gui.panel" )
+class "gui.debugoverlaypanel" ( "gui.panel" )
 
 function debugoverlaypanel:debugoverlaypanel( parent )
 	gui.panel.panel( self, parent, "Debug Overlay" )

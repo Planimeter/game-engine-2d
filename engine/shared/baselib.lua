@@ -42,8 +42,8 @@ if ( not rawprint and not rawtype ) then
 	function print( ... )
 		rawprint( ... )
 
-		if ( _CLIENT and gui ) then
-			gui.console.print( ... )
+		if ( _CLIENT and g_Console ) then
+			g_Console.print( ... )
 		end
 	end
 

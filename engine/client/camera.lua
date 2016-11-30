@@ -10,7 +10,7 @@ module( "camera" )
 
 _contexts = _contexts or {}
 
-module( "context", package.class )
+class( "context" )
 
 function context:context( worldIndex, x, y, func )
 	self.worldIndex = worldIndex

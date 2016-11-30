@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-module( "gui.tabbedframe", package.class, package.inherit "gui.frame" )
+class "gui.tabbedframe" ( "gui.frame" )
 
 local utf8upper = string.utf8upper
 

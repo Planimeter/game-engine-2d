@@ -4,9 +4,14 @@
 --
 --============================================================================--
 
-module( "gui.scrollbar", package.class, package.inherit "gui.panel" )
+local accessor = accessor
+local gui      = gui
+local love     = love
+local point    = point
 
-function scrollbar:scrollbar( parent, name )
+class "gui.scrollbar" ( "gui.panel" )
+
+function _M:scrollbar( parent, name )
 	gui.panel.panel( self, parent, name )
 	self.width       = point( 4 )
 	self.height      = parent:getHeight()
@@ -20,7 +25,7 @@ function scrollbar:scrollbar( parent, name )
 	self:setUseFullscreenFramebuffer( true )
 end
 
-function scrollbar:draw()
+function _M:draw()
 	local length = self:getThumbLength()
 	if ( length == self:getHeight() ) then
 		return
@@ -34,49 +39,49 @@ function scrollbar:draw()
 		color = "scrollbar.disabled.backgroundColor"
 	end
 
-	graphics.setColor( self:getScheme( color ) )
-	graphics.rectangle( "fill", x, self:getThumbPos(), width, length )
+	love.graphics.setColor( self:getScheme( color ) )
+	love.graphics.rectangle( "fill", x, self:getThumbPos(), width, length )
 
 	gui.panel.draw( self )
 end
 
-accessor( scrollbar, "min" )
-accessor( scrollbar, "max" )
+accessor( _M, "min" )
+accessor( _M, "max" )
 
-function scrollbar:getRange()
+function _M:getRange()
 	return self.min, self.max
 end
 
-accessor( scrollbar, "rangeWindow" )
+accessor( _M, "rangeWindow" )
 
-function scrollbar:getThumbLength()
+function _M:getThumbLength()
 	local range = self:getMax() - self:getMin()
 	local size  = self:getRangeWindow() / range
 	return size * self:getHeight()
 end
 
-function scrollbar:getThumbPos()
+function _M:getThumbPos()
 	local min     = self:getMin()
 	local range   = self:getMax() - min
 	local percent = ( self:getValue() + min ) / range
 	return percent * self:getHeight()
 end
 
-accessor( scrollbar, "value" )
+accessor( _M, "value" )
 
-function scrollbar:invalidateLayout()
+function _M:invalidateLayout()
 	local parent = self:getParent()
 	self:setPos( parent:getWidth() - self:getWidth(), 0 )
 	self:setHeight( parent:getHeight() )
 end
 
-function scrollbar:isDisabled()
+function _M:isDisabled()
 	return self.disabled
 end
 
 local localX, localY = 0, 0
 
-function scrollbar:mousepressed( x, y, button, istouch )
+function _M:mousepressed( x, y, button, istouch )
 	if ( self.mouseover and button == 1 ) then
 		self.mousedown = true
 	end
@@ -98,40 +103,40 @@ function scrollbar:mousepressed( x, y, button, istouch )
 	end
 end
 
-function scrollbar:mousereleased( x, y, button, istouch )
+function _M:mousereleased( x, y, button, istouch )
 	self.mousedown = false
 	self.grabbedX  = nil
 	self.grabbedY  = nil
 end
 
-function scrollbar:onValueChanged( oldValue, newValue )
+function _M:onValueChanged( oldValue, newValue )
 end
 
-function scrollbar:pageDown()
+function _M:pageDown()
 	self:scrollDown( self:getRangeWindow() )
 end
 
-function scrollbar:pageUp()
+function _M:pageUp()
 	self:scrollUp( self:getRangeWindow() )
 end
 
-function scrollbar:scrollDown( value )
+function _M:scrollDown( value )
 	self:setValue( self:getValue() + value )
 end
 
-function scrollbar:scrollUp( value )
+function _M:scrollUp( value )
 	self:setValue( self:getValue() - value )
 end
 
-function scrollbar:scrollToBottom()
+function _M:scrollToBottom()
 	self:setValue( self:getMax() )
 end
 
-function scrollbar:scrollToTop()
+function _M:scrollToTop()
 	self:setValue( self:getMin() )
 end
 
-function scrollbar:setDisabled( disabled )
+function _M:setDisabled( disabled )
 	self.disabled = disabled
 	self:invalidate()
 end
@@ -154,22 +159,22 @@ local function updateRange( self, min, max )
 	end
 end
 
-function scrollbar:setMin( min )
+function _M:setMin( min )
 	updateRange( self, min, self:getMax() )
 	self.min = min
 end
 
-function scrollbar:setMax( max )
+function _M:setMax( max )
 	updateRange( self, self:getMin(), max )
 	self.max = max
 end
 
-function scrollbar:setRange( min, max )
+function _M:setRange( min, max )
 	self:setMin( min )
 	self:setMax( max )
 end
 
-function scrollbar:setRangeWindow( rangeWindow )
+function _M:setRangeWindow( rangeWindow )
 	self.rangeWindow = rangeWindow
 	local rangeSize  = self:getMax() - self:getMin()
 	if ( rangeWindow > rangeSize ) then
@@ -180,7 +185,7 @@ end
 local oldValue   = 0
 local deltaValue = 0
 
-function scrollbar:setValue( value )
+function _M:setValue( value )
 	oldValue   = self.value
 	self.value = value
 	if ( self.value < self.min ) then
@@ -205,7 +210,7 @@ local mouseX, mouseY = 0, 0
 local getPosition    = love.mouse.getPosition
 local deltaX, deltaY = 0, 0
 
-function scrollbar:update( dt )
+function _M:update( dt )
 	gui.panel.update( self, dt )
 
 	if ( not self:isVisible() or self:isDisabled() ) then
@@ -232,5 +237,3 @@ function scrollbar:update( dt )
 	self.grabbedX = localX
 	self.grabbedY = localY + ( deltaValue / range ) * self:getHeight()
 end
-
-

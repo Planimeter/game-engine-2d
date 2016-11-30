@@ -12,8 +12,10 @@ require( "shaders.gaussianblur" )
 
 local argv         = argv
 local convar       = convar
+local error        = error
 local getfenv      = getfenv
 local graphics     = graphics
+local gui          = gui
 local input        = input
 local ipairs       = ipairs
 local love         = love
@@ -34,18 +36,57 @@ local rootPanel    = g_RootPanel or nil
 
 module( "gui" )
 
-function initialize()
+local hasvalue = table.hasvalue
+
+local privateMembers = {
+	"rootPanel",
+	"topPanel",
+	"focusedPanel"
+}
+
+local modules = {
+	"engine.client",
+	"game.client"
+}
+
+local find = string.find
+
+setmetatable( _M, {
+	__index = function( t, k )
+		if ( hasvalue( privateMembers, k ) ) then
+			return
+		end
+
+		for i, module in ipairs( modules ) do
+			local library = module .. ".gui." .. k
+			local status, err = pcall( require, library )
+			if ( status == true ) then
+				break
+			end
+
+			local message = "module '" .. library .. "' not found:"
+			if ( status == false and find( err, message ) ~= 1 ) then
+				error( err, 2 )
+			end
+		end
+
+		local v = rawget( t, k )
+		if ( v ~= nil ) then return v end
+	end
+} )
+
+function load()
 	require( "engine.client.gui.rootpanel" )
-	rootPanel = rootpanel()
+	rootPanel = _M.rootpanel()
 	_G.g_RootPanel = rootPanel
 
 	if ( not _G._DEDICATED ) then
 		require( "game.client.gui.mainmenu" )
-		_G.g_MainMenu = mainmenu()
+		_G.g_MainMenu = _M.mainmenu()
 	end
 
 	require( "engine.client.gui.console" )
-	_G.g_Console = console()
+	_G.g_Console = _M.console()
 	if ( _G._DEBUG or argv[ "--console" ] ) then
 		_G.g_Console:activate()
 	end

@@ -7,7 +7,7 @@
 require( "engine.client.gui.optionsmenu.bindlistheader" )
 require( "engine.client.gui.optionsmenu.bindlistitem" )
 
-module( "gui.bindlistpanel", package.class, package.inherit "gui.scrollablepanel" )
+class "gui.bindlistpanel" ( "gui.scrollablepanel" )
 
 function bindlistpanel:bindlistpanel( parent, name )
 	gui.scrollablepanel.scrollablepanel( self, parent, name )

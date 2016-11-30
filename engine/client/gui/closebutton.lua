@@ -4,11 +4,17 @@
 --
 --============================================================================--
 
-module( "gui.closebutton", package.class, package.inherit "gui.button" )
+local gui    = gui
+local love   = love
+local math   = math
+local point  = point
+local unpack = unpack
 
-closebutton.canFocus = false
+class "gui.closebutton" ( "gui.button" )
 
-function closebutton:closebutton( parent, name )
+canFocus = false
+
+function _M:closebutton( parent, name )
 	gui.button.button( self, parent, name )
 	local margin = point( 36 )
 	self.width  = 2 * margin + point( 8 )  - point( 1 )
@@ -16,7 +22,7 @@ function closebutton:closebutton( parent, name )
 	self.icon   = self:getScheme( "closebutton.icon" )
 end
 
-function closebutton:draw()
+function _M:draw()
 	local color = "closebutton.iconColor"
 
 	if ( self.mousedown and self.mouseover ) then
@@ -25,7 +31,7 @@ function closebutton:draw()
 		color = "closebutton.mouseover.iconColor"
 	end
 
-	graphics.setColor( self:getScheme( color ) )
+	love.graphics.setColor( unpack( self:getScheme( color ) ) )
 
 	local width  = self:getWidth()
 	local height = self:getHeight()
@@ -36,9 +42,7 @@ function closebutton:draw()
 	gui.panel.draw( self )
 end
 
-function closebutton:onClick()
+function _M:onClick()
 	local parent = self:getParent()
 	parent:close()
 end
-
-

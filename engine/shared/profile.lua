@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-module( "profile", package.class )
+class( "profile" )
 
 local profiles = {}
 

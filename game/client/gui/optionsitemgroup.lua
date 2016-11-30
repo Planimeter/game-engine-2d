@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-module( "gui.optionsitemgroup", package.class, package.inherit "gui.dropdownlistitemgroup" )
+class "gui.optionsitemgroup" ( "gui.dropdownlistitemgroup" )
 
 function optionsitemgroup:optionsitemgroup( parent, name )
 	gui.dropdownlistitemgroup.dropdownlistitemgroup( self, parent, name )

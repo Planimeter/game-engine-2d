@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-module( "gui.commandbutton", package.class, package.inherit "gui.button" )
+class "gui.commandbutton" ( "gui.button" )
 
 function commandbutton:commandbutton( parent, name, text )
 	gui.button.button( self, parent, name, text )

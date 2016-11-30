@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-module( "gui.keyboardoptionsadvancedframe", package.class, package.inherit "gui.frame" )
+class "gui.keyboardoptionsadvancedframe" ( "gui.frame" )
 
 function keyboardoptionsadvancedframe:keyboardoptionsadvancedframe( parent )
 	local name = "Advanced Keyboard Options"

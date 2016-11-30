@@ -4,9 +4,11 @@
 --
 --============================================================================--
 
+require( "engine.client.gui.panel" )
+
 local love = love
 
-module( "gui.rootpanel", package.class, package.inherit "gui.panel" )
+class "gui.rootpanel" ( "gui.panel" )
 
 function _M:rootpanel()
 	self.x        = 0

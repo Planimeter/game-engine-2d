@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-module( "gui.scrollablepanel", package.class, package.inherit "gui.panel" )
+class "gui.scrollablepanel" ( "gui.panel" )
 
 function scrollablepanel:scrollablepanel( parent, name )
 	gui.panel.panel( self, parent, name )

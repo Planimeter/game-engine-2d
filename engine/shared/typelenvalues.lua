@@ -4,20 +4,14 @@
 --
 --============================================================================--
 
-local accessor = accessor
-local math     = math
-local pairs    = pairs
-local string   = string
-local table    = table
-
-module( "typelenvalues", package.class )
+class( "typelenvalues" )
 
 local reverse = string.reverse
 local byte    = string.byte
 local floor   = math.floor
 local ldexp   = math.ldexp
 
-function bytesToNumber( bytes )
+function typelenvalues.bytesToNumber( bytes )
 	bytes = reverse( bytes )
 
 	local sign     = 1
@@ -48,7 +42,7 @@ end
 
 local frexp = math.frexp
 
-function numberToBytes( number )
+function typelenvalues.numberToBytes( number )
 	local sign = 0
 
 	if ( number < 0 ) then
@@ -83,7 +77,7 @@ end
 
 local pairs = pairs
 
-function generateIds( definitions )
+function typelenvalues.generateIds( definitions )
 	local id = 1
 	for _, v in pairs( definitions ) do
 		v.id = id
@@ -91,7 +85,7 @@ function generateIds( definitions )
 	end
 end
 
-function _M:typelenvalues( definitions, struct )
+function typelenvalues:typelenvalues( definitions, struct )
 	self.data = {}
 
 	self:setDefinitions( definitions )
@@ -102,20 +96,20 @@ function _M:typelenvalues( definitions, struct )
 	self:setStruct( struct )
 end
 
-function _M:get( key )
+function typelenvalues:get( key )
 	return self.data[ key ]
 end
 
-accessor( _M, "data" )
-accessor( _M, "definitions" )
-accessor( _M, "struct" )
+accessor( typelenvalues, "data" )
+accessor( typelenvalues, "definitions" )
+accessor( typelenvalues, "struct" )
 
-function _M:getStructDefinition( struct )
+function typelenvalues:getStructDefinition( struct )
 	local definitions = self:getDefinitions()
 	return definitions[ struct ]
 end
 
-function _M:getStructName()
+function typelenvalues:getStructName()
 	for name, struct in pairs( self.definitions ) do
 		if ( struct == self.struct ) then
 			return name
@@ -127,7 +121,7 @@ local insert = table.insert
 local len    = string.len
 local concat = table.concat
 
-function _M:serialize()
+function typelenvalues:serialize()
 	local struct = self:getStruct()
 	if ( not struct ) then
 		return ""
@@ -152,26 +146,26 @@ function _M:serialize()
 			-- Insert length if necessary
 			if ( key.type == "string" ) then
 				local size = len( value )
-				insert( data, numberToBytes( size ) )
+				insert( data, typelenvalues.numberToBytes( size ) )
 			elseif ( key.type == "typelenvalues" ) then
 				local size = len( value:serialize() )
-				insert( data, numberToBytes( size ) )
+				insert( data, typelenvalues.numberToBytes( size ) )
 			end
 
 			-- Insert data
 			if ( key.type == "boolean" ) then
 				insert( data, char( value and 1 or 0 ) )
 			elseif ( key.type == "number" ) then
-				insert( data, numberToBytes( value ) )
+				insert( data, typelenvalues.numberToBytes( value ) )
 			elseif ( key.type == "string" ) then
 				insert( data, value )
 			elseif ( key.type == "vector" ) then
-				insert( data, numberToBytes( value.x ) )
-				insert( data, numberToBytes( value.y ) )
+				insert( data, typelenvalues.numberToBytes( value.x ) )
+				insert( data, typelenvalues.numberToBytes( value.y ) )
 			elseif ( key.type == "typelenvalues" ) then
 				insert( data, value:serialize() )
 			elseif ( key.type == "entity" ) then
-				insert( data, numberToBytes( value and value.entIndex or 0 ) )
+				insert( data, typelenvalues.numberToBytes( value and value.entIndex or 0 ) )
 			else
 				print( "Can't serialize " .. key.type .. " for " ..
 				       self:getStructName() .. "!" )
@@ -185,7 +179,7 @@ end
 local ipairs = ipairs
 local sub    = string.sub
 
-function _M:deserialize()
+function typelenvalues:deserialize()
 	local data = self:getData()
 	self.data  = {}
 
@@ -229,12 +223,12 @@ function _M:deserialize()
 			elseif ( key.type == "number" ) then
 				size = 8
 			elseif ( key.type == "string" ) then
-				size  = bytesToNumber( sub( data, index, index + 7 ) )
+				size  = typelenvalues.bytesToNumber( sub( data, index, index + 7 ) )
 				index = index + 8
 			elseif ( key.type == "vector" ) then
 				size = 2 * 8
 			elseif ( key.type == "typelenvalues" ) then
-				size  = bytesToNumber( sub( data, index, index + 7 ) )
+				size  = typelenvalues.bytesToNumber( sub( data, index, index + 7 ) )
 				index = index + 8
 			elseif ( key.type == "entity" ) then
 				size = 8
@@ -245,21 +239,21 @@ function _M:deserialize()
 			if ( key.type == "boolean" ) then
 				self.data[ key.name ] = byte( bytes ) ~= 0
 			elseif ( key.type == "number" ) then
-				self.data[ key.name ] = bytesToNumber( bytes )
+				self.data[ key.name ] = typelenvalues.bytesToNumber( bytes )
 			elseif ( key.type == "string" ) then
 				self.data[ key.name ] = bytes
 			elseif ( key.type == "vector" ) then
 				require( "common.vector" )
 				self.data[ key.name ] = vector(
-					bytesToNumber( sub( bytes, 1, 8 ) ), --x
-					bytesToNumber( sub( bytes, 8, 16 ) ) --y
+					typelenvalues.bytesToNumber( sub( bytes, 1, 8 ) ), --x
+					typelenvalues.bytesToNumber( sub( bytes, 8, 16 ) ) --y
 				)
 			elseif ( key.type == "typelenvalues" ) then
 				local tlvs = typelenvalues()
 				tlvs.data  = bytes
 				self.data[ key.name ] = tlvs
 			elseif ( key.type == "entity" ) then
-				local entIndex = bytesToNumber( bytes )
+				local entIndex = typelenvalues.bytesToNumber( bytes )
 				require( "engine.shared.entities.entity" )
 				self.data[ key.name ] = entity.getByEntIndex( entIndex )
 			end
@@ -270,11 +264,11 @@ function _M:deserialize()
 	end
 end
 
-function _M:set( key, value )
+function typelenvalues:set( key, value )
 	self.data[ key ] = value
 end
 
-function _M:__tostring()
+function typelenvalues:__tostring()
 	if ( self:getStruct() ) then
 		return self:serialize()
 	else

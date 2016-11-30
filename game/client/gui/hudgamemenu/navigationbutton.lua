@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-module( "gui.hudgamemenunavigationbutton", package.class, package.inherit "gui.radiobutton" )
+class "gui.hudgamemenunavigationbutton" ( "gui.radiobutton" )
 
 function hudgamemenunavigationbutton:hudgamemenunavigationbutton( parent, name )
 	gui.radiobutton.radiobutton( self, parent, name, name )

@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-module( "gui.imagepanel", package.class, package.inherit "gui.panel" )
+class "gui.imagepanel" ( "gui.panel" )
 
 imagepanel.maskedImage = imagepanel.maskedImage or nil
 

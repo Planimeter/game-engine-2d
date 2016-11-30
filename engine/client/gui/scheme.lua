@@ -4,17 +4,17 @@
 --
 --============================================================================--
 
-module( "scheme", package.class )
+class( "scheme" )
 
-schemes = schemes or {}
+scheme.schemes = scheme.schemes or {}
 
 local properties = {}
 
-function clear( name )
+function scheme.clear( name )
 	properties[ name ] = {}
 end
 
-function getProperty( name, property )
+function scheme.getProperty( name, property )
 	local cachedProperty = properties[ name ][ property ]
 	if ( cachedProperty ) then
 		return cachedProperty
@@ -40,20 +40,20 @@ function getProperty( name, property )
 	return value
 end
 
-function isLoaded( name )
-	return schemes[ name ] ~= nil
+function scheme.isLoaded( name )
+	return scheme.schemes[ name ] ~= nil
 end
 
-function load( name )
+function scheme.load( name )
 	require( "schemes." .. name )
 end
 
-function _M:scheme( name )
+function scheme:scheme( name )
 	self.name = name
-	schemes[ name ] = self
-	clear( name )
+	scheme.schemes[ name ] = self
+	scheme.clear( name )
 end
 
-function _M:__tostring()
+function scheme:__tostring()
 	return "scheme: \"" .. self.name .. "\""
 end

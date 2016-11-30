@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-module( "gui.dropdownlistitem", package.class, package.inherit "gui.radiobutton" )
+class "gui.dropdownlistitem" ( "gui.radiobutton" )
 
 function dropdownlistitem:dropdownlistitem( name, text )
 	gui.radiobutton.radiobutton( self, nil, name, text )

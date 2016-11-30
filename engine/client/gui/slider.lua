@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-module( "gui.slider", package.class, package.inherit "gui.scrollbar" )
+class "gui.slider" ( "gui.scrollbar" )
 
 function slider:slider( parent, name )
 	gui.scrollbar.scrollbar( self, parent, name )

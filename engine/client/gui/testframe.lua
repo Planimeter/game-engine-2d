@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-module( "gui.testframe", package.class, package.inherit "gui.tabbedframe" )
+class "gui.testframe" ( "gui.tabbedframe" )
 
 function testframe:testframe( parent, name )
 	name = "Test Frame"

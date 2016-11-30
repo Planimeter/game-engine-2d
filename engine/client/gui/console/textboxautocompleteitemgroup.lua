@@ -4,7 +4,9 @@
 --
 --============================================================================--
 
-module( "gui.console.textboxautocompleteitemgroup", package.class, package.inherit "gui.textboxautocompleteitemgroup" )
+local gui = gui
+
+class "gui.console.textboxautocompleteitemgroup" ( "gui.textboxautocompleteitemgroup" )
 
 function _M:textboxautocompleteitemgroup( parent, name )
 	gui.textboxautocompleteitemgroup.textboxautocompleteitemgroup( self, parent, name )

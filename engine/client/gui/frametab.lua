@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-module( "gui.frametab", package.class, package.inherit "gui.radiobutton" )
+class "gui.frametab" ( "gui.radiobutton" )
 
 function frametab:frametab( parent, name, text )
 	gui.radiobutton.radiobutton( self, parent, name, text )

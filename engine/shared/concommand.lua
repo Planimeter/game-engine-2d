@@ -4,20 +4,15 @@
 --
 --============================================================================--
 
-local convar  = convar
-local engine  = engine
-local table   = table
-local _CLIENT = _CLIENT
+class( "concommand" )
 
-module( "concommand", package.class )
-
-concommands = concommands or {}
+concommand.concommands = concommand.concommands or {}
 
 local sv_cheats = convar( "sv_cheats", 0, nil, nil, "Allow cheats on server",
                           nil, { "notify" } )
 
-function dispatch( player, name, argString, argTable )
-	local concommand = getConcommand( name )
+function concommand.dispatch( player, name, argString, argTable )
+	local concommand = concommand.getConcommand( name )
 	if ( not concommand ) then
 		return false
 	end
@@ -49,7 +44,7 @@ function dispatch( player, name, argString, argTable )
 			local payload = payload( "concommand" )
 			payload:set( "name", name )
 			payload:set( "argString", argString )
-			networkclient.sendToServer( payload )
+			engine.client.network.sendToServer( payload )
 		end
 	end
 
@@ -57,7 +52,7 @@ function dispatch( player, name, argString, argTable )
 end
 
 if ( _CLIENT ) then
-	function run( name )
+	function concommand.run( name )
 		local command = string.match( name, "^([^%s]+)" )
 		if ( not command ) then
 			return
@@ -66,68 +61,68 @@ if ( _CLIENT ) then
 		local _, endPos = string.find( name, command, 1, true )
 		local argString = string.trim( string.utf8sub( name, endPos + 1 ) )
 		local argTable  = string.parseargs( argString )
-		if ( getConcommand( command ) ) then
-			dispatch( localplayer, command, argString, argTable )
+		if ( concommand.getConcommand( command ) ) then
+			concommand.dispatch( localplayer, command, argString, argTable )
 		end
 	end
 end
 
-function getConcommand( name )
-	return concommands[ name ]
+function concommand.getConcommand( name )
+	return concommand.concommands[ name ]
 end
 
-function _M:concommand( name, helpString, callback, flags, autocomplete )
+function concommand:concommand( name, helpString, callback, flags, autocomplete )
 	self.name         = name
 	self.helpString   = helpString
 	self.callback     = callback
 	self.flags        = flags
 	self.autocomplete = autocomplete
-	concommands[ name ] = self
+	concommand.concommands[ name ] = self
 end
 
-function _M:callback( player, command, argString, argTable )
+function concommand:callback( player, command, argString, argTable )
 end
 
-function _M:getAutocomplete()
+function concommand:getAutocomplete()
 	return self.autocomplete
 end
 
-function _M:getCallback()
+function concommand:getCallback()
 	return self.callback
 end
 
-function _M:getFlags()
+function concommand:getFlags()
 	return self.flags
 end
 
-function _M:getHelpString()
+function concommand:getHelpString()
 	return self.helpString
 end
 
-function _M:getName()
+function concommand:getName()
 	return self.name
 end
 
-function _M:remove()
-	concommands[ self:getName() ] = nil
+function concommand:remove()
+	concommand.concommands[ self:getName() ] = nil
 end
 
-function _M:setAutocomplete( autocomplete )
+function concommand:setAutocomplete( autocomplete )
 	self.autocomplete = autocomplete
 end
 
-function _M:setCallback( callback )
+function concommand:setCallback( callback )
 	self.callback = callback
 end
 
-function _M:setFlags( flags )
+function concommand:setFlags( flags )
 	self.flags = flags
 end
 
-function _M:setHelpString( helpString )
+function concommand:setHelpString( helpString )
 	self.helpString = helpString
 end
 
-function _M:__tostring()
+function concommand:__tostring()
 	return "concommand: \"" .. self.name .. "\""
 end

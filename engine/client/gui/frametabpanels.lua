@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-module( "gui.frametabpanels", package.class, package.inherit "gui.panel" )
+class "gui.frametabpanels" ( "gui.panel" )
 
 function frametabpanels:frametabpanels( parent, name, text )
 	gui.panel.panel( self, parent, name )

@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-module( "gui.itemgrid", package.class, package.inherit "gui.panel" )
+class "gui.itemgrid" ( "gui.panel" )
 
 function itemgrid:itemgrid( parent, name )
 	gui.panel.panel( self, parent, name )

@@ -5,13 +5,17 @@
 --============================================================================--
 
 local accessor = accessor
+local gui      = gui
 local love     = love
 local math     = math
+local point    = point
+local string   = string
+local unpack   = unpack
 
 local gui_draw_frame_focus = convar( "gui_draw_frame_focus", "0", nil, nil,
                              "Draws bounds around the focused frame" )
 
-module( "gui.frame", package.class, package.inherit "gui.panel" )
+class "gui.frame" ( "gui.panel" )
 
 function _M:frame( parent, name, title )
 	gui.panel.panel( self, parent, name )
@@ -112,13 +116,13 @@ function _M:drawTitle()
 	if ( not self.focus ) then
 		color = "frame.defocus.titleTextColor"
 	end
-	graphics.setColor( self:getScheme( color ) )
+	love.graphics.setColor( unpack( self:getScheme( color ) ) )
 	local font = self:getScheme( "titleFont" )
 	love.graphics.setFont( font )
 	local margin = point( 36 )
 	local x = margin
 	local y = margin - point( 4 )
-	graphics.print( string.utf8upper( self:getTitle() ), x, y )
+	love.graphics.print( string.utf8upper( self:getTitle() ), x, y )
 end
 
 accessor( _M, "minWidth" )

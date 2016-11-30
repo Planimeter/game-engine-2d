@@ -7,7 +7,7 @@
 -- These values are preserved during real-time scripting.
 local trappedItem = gui.bindlistitem and gui.bindlistitem.trappedItem or nil
 
-module( "gui.bindlistitem", package.class, package.inherit "gui.button" )
+class "gui.bindlistitem" ( "gui.button" )
 
 bindlistitem.trappedItem = trappedItem
 

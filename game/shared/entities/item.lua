@@ -6,7 +6,7 @@
 
 require( "engine.shared.entities.entity" )
 
-module( "item", package.class, package.inherit( "entity" ) )
+class "item" ( "entity" )
 
 function item.getData( classname )
 	entities.requireEntity( classname )

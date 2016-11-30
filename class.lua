@@ -14,7 +14,7 @@ local ipairs = ipairs
 
 -------------------------------------------------------------------------------
 -- new()
--- Purpose: Creates a new object
+-- Purpose: Creates an object
 -- Input: metatable
 -- Output: object
 -------------------------------------------------------------------------------
@@ -87,24 +87,24 @@ _G.getbaseclass = getbaseclass
 -------------------------------------------------------------------------------
 function package.class( module )
 	module.__index = module
-	module.__type = module._NAME
+	module.__type = string.gsub( module._NAME, module._PACKAGE, "" )
 	-- Create a shortcut to name()
 	setmetatable( module, {
 		__call = function( self, ... )
-			-- Create a new instance of this object
+			-- Create an instance of this object
 			local object = new( self )
 			-- Call its constructor (function name:name( ... ) ... end) if it
 			-- exists
-			local v = rawget( self, self._NAME )
-			if ( v ~= nil ) then
-				local type = type( v )
+			local constructor = rawget( self, self.__type )
+			if ( constructor ~= nil ) then
+				local type = type( constructor )
 				if ( type ~= "function" ) then
 					error( "attempt to call constructor '" .. name .. "' " ..
 					       "(a " .. type .. " value)", 2 )
 				end
-				v( object, ... )
+				constructor( object, ... )
 			end
-			-- Return the new instance
+			-- Return the instance
 			return object
 		end
 	} )
@@ -123,13 +123,14 @@ function package.inherit( base )
 		-- our members, metatable, and base class, in that order, a la behavior
 		-- via the Lua 5.1 manual's illustrative code for indexing access
 		module.__index = function( table, key )
-			local module = package.loaded[ module._NAME ]
+			local v = rawget( module, key )
+			if ( v ~= nil ) then return v end
 			local baseclass = getbaseclass( module )
 			if ( baseclass == nil ) then
-				error( "attempt to index class '" .. module.__base .. "' " ..
-				       "(a nil value)", 2 )
+				error( "attempt to index base class '" .. base .. "' " ..
+					   "(a nil value)", 2 )
 			end
-			local h = rawget( getbaseclass( module ), "__index" )
+			local h = rawget( baseclass, "__index" )
 			if ( h == nil ) then return nil end
 			if ( type( h ) == "function" ) then
 				return h( table, key )
@@ -141,5 +142,21 @@ function package.inherit( base )
 		for _, event in ipairs( eventnames ) do
 			module[ event ] = metamethod( module, event )
 		end
+	end
+end
+
+-------------------------------------------------------------------------------
+-- class()
+-- Purpose: Creates a class
+-- Input: name - Name of class
+-------------------------------------------------------------------------------
+function class( name )
+	local function setmodule( name )
+		module( name, package.class )
+	end setmodule( name )
+	-- For syntactic sugar, return a function to set inheritance
+	return function( base )
+		local _M = package.loaded[ name ]
+		package.inherit( base )( _M )
 	end
 end

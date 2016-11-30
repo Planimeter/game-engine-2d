@@ -60,27 +60,6 @@ function getAspectRatios()
 	return modes
 end
 
-local r, g, b, a = 0, 0, 0, 0
-local _color     = color( r, g, b, a )
-
-function getBackgroundColor()
-	r, g, b, a = graphics.getBackgroundColor()
-	_color[ 1 ] = r
-	_color[ 2 ] = g
-	_color[ 3 ] = b
-	_color[ 4 ] = a
-	return _color
-end
-
-function getColor()
-	r, g, b, a = graphics.getColor()
-	_color[ 1 ] = r
-	_color[ 2 ] = g
-	_color[ 3 ] = b
-	_color[ 4 ] = a
-	return _color
-end
-
 local mode   = nil
 local w, h   = -1, -1
 local r      = 1
@@ -123,11 +102,6 @@ function getAspectRatios()
 	return w / r, h / r
 end
 
-function newFont( filename, size )
-	size = love.window.getPixelScale() * size
-	return graphics.newFont( filename, size )
-end
-
 function newFramebuffer( width, height )
 	require( "engine.client.framebuffer" )
 	return _G.framebuffer( width, height )
@@ -136,11 +110,6 @@ end
 function newFullscreenFramebuffer()
 	require( "engine.client.framebuffer" )
 	return _G.fullscreenframebuffer()
-end
-
-function newImage( filename )
-	require( "engine.client.image" )
-	return _G.image( filename )
 end
 
 local floor = math.floor
@@ -168,30 +137,6 @@ function print( text, x, y, r, sx, sy, ox, oy, kx, ky, tracking )
 	graphics.print( text, x, y, r, sx, sy, ox, oy, kx, ky )
 end
 
-function printf( text, x, y, limit, align, r, sx, sy, ox, oy, kx, ky )
-	if ( x ) then
-		x = floor( x )
-	end
-
-	if ( y ) then
-		y = floor( y )
-	end
-
-	graphics.printf( text, x, y, limit, align, r, sx, sy, ox, oy, kx, ky )
-end
-
-local _lineWidth = 1
-
-function rectangle( mode, x, y, width, height )
-	if ( mode == "line" ) then
-		x      = x      + _lineWidth / 2
-		y      = y      + _lineWidth / 2
-		width  = width  - _lineWidth
-		height = height - _lineWidth
-	end
-	graphics.rectangle( mode, x, y, width, height )
-end
-
 local tempColor = color()
 
 function setBackgroundColor( color, multiplicative )
@@ -208,11 +153,6 @@ function setColor( color, multiplicative )
 	tempColor[ 3 ] = color[ 3 ] * ( multiplicative and _opacity or 1 )
 	tempColor[ 4 ] = color[ 4 ] * _opacity
 	graphics.setColor( tempColor )
-end
-
-function setLineWidth( width )
-	_lineWidth = width
-	graphics.setLineWidth( width )
 end
 
 function setOpacity( opacity )

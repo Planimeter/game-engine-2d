@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-module( "gui.hudframe", package.class, package.inherit "gui.frame" )
+class "gui.hudframe" ( "gui.frame" )
 
 function hudframe:hudframe( parent, name, title )
 	gui.frame.frame( self, parent, name, title )

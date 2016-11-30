@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-module( "gui.checkbox", package.class, package.inherit "gui.button" )
+class "gui.checkbox" ( "gui.button" )
 
 function checkbox:checkbox( parent, name, text )
 	gui.button.button( self, parent, name, text )

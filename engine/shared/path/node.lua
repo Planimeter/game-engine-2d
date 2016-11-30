@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-module( "node", package.class, package.inherit( "vector" ) )
+class "node" ( "vector" )
 
 function node:node( x, y, parent )
 	vector.vector( self, x, y )

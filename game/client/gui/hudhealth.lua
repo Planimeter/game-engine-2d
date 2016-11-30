@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-module( "gui.hudhealth", package.class, package.inherit "gui.panel" )
+class "gui.hudhealth" ( "gui.panel" )
 
 function hudhealth:hudhealth( parent )
 	gui.panel.panel( self, parent, "HUD Health" )

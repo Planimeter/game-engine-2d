@@ -22,7 +22,7 @@ function load( arg )
 	require( "common.color" )
 	love.graphics.setBackgroundColor( unpack( _G.color( 31, 35, 36, 255 ) ) )
 	love.graphics.setDefaultFilter( "nearest", "nearest" )
-	gui.initialize()
+	gui.load()
 
 	sound.setVolume( c.sound.volume )
 

@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-module( "gui.hudspeechballoons", package.class, package.inherit "gui.panel" )
+class "gui.hudspeechballoons" ( "gui.panel" )
 
 function hudspeechballoons:hudspeechballoons( parent )
 	gui.panel.panel( self, parent, "HUD Speech Balloons" )

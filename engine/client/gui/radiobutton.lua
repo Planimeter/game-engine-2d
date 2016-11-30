@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-module( "gui.radiobutton", package.class, package.inherit "gui.button" )
+class "gui.radiobutton" ( "gui.button" )
 
 function radiobutton:radiobutton( parent, name, text )
 	gui.button.button( self, parent, name, text )

@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-module( "gui.dropdownlist", package.class, package.inherit "gui.button" )
+class "gui.dropdownlist" ( "gui.button" )
 
 function dropdownlist:dropdownlist( parent, name )
 	gui.button.button( self, parent, name )

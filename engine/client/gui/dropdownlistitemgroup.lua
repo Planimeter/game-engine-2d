@@ -4,16 +4,21 @@
 --
 --============================================================================--
 
-module( "gui.dropdownlistitemgroup", package.class, package.inherit "gui.radiobuttongroup" )
+local gui    = gui
+local love   = love
+local point  = point
+local unpack = unpack
 
-function dropdownlistitemgroup:dropdownlistitemgroup( parent, name )
+class "gui.dropdownlistitemgroup" ( "gui.radiobuttongroup" )
+
+function _M:dropdownlistitemgroup( parent, name )
 	gui.radiobuttongroup.radiobuttongroup( self, nil, name )
 	self.width        = parent:getWidth()
 	self.dropDownList = parent
 	self:setScheme( "Default" )
 end
 
-function dropdownlistitemgroup:addItem( item, default )
+function _M:addItem( item, default )
 	item:setParent( self )
 	gui.radiobuttongroup.addItem( self, item )
 
@@ -24,7 +29,7 @@ function dropdownlistitemgroup:addItem( item, default )
 	self:invalidateLayout()
 end
 
-function dropdownlistitemgroup:draw()
+function _M:draw()
 	gui.panel.draw( self )
 
 	local property  = "dropdownlistitem.backgroundColor"
@@ -33,12 +38,12 @@ function dropdownlistitemgroup:draw()
 	self:drawBorders( property )
 end
 
-function dropdownlistitemgroup:drawBorders( property )
+function _M:drawBorders( property )
 	local lineWidth = point( 1 )
 	local height    = self:getHeight()
 	local width     = self:getWidth()
-	graphics.setColor( self:getScheme( property ) )
-	graphics.setLineWidth( lineWidth )
+	love.graphics.setColor( unpack( self:getScheme( property ) ) )
+	love.graphics.setLineWidth( lineWidth )
 	love.graphics.line(
 		0,     lineWidth / 2,          -- Top-left
 		width, lineWidth / 2           -- Top-right
@@ -49,11 +54,11 @@ function dropdownlistitemgroup:drawBorders( property )
 	)
 end
 
-function dropdownlistitemgroup:getDropDownList()
+function _M:getDropDownList()
 	return self.dropDownList
 end
 
-function dropdownlistitemgroup:invalidateLayout()
+function _M:invalidateLayout()
 	self:updatePos()
 	self:setWidth( self:getDropDownList():getWidth() )
 
@@ -69,12 +74,12 @@ function dropdownlistitemgroup:invalidateLayout()
 	end
 end
 
-function dropdownlistitemgroup:isVisible()
+function _M:isVisible()
 	local dropDownList = self:getDropDownList()
 	return dropDownList:isVisible() and dropDownList:isActive()
 end
 
-function dropdownlistitemgroup:mousepressed( x, y, button, istouch )
+function _M:mousepressed( x, y, button, istouch )
 	if ( button == 1 ) then
 		local dropDownList = self:getDropDownList()
 		if ( dropDownList ~= gui.topPanel and
@@ -86,7 +91,7 @@ function dropdownlistitemgroup:mousepressed( x, y, button, istouch )
 	return gui.panel.mousepressed( self, x, y, button, istouch )
 end
 
-function dropdownlistitemgroup:onValueChanged( oldValue, newValue )
+function _M:onValueChanged( oldValue, newValue )
 	local dropDownList = self:getDropDownList()
 	dropDownList:setActive( false )
 	dropDownList:onValueChanged( oldValue, newValue )
@@ -94,12 +99,10 @@ end
 
 local x, y = 0, 0
 
-function dropdownlistitemgroup:updatePos()
+function _M:updatePos()
 	local dropDownList = self:getDropDownList()
 	if ( dropDownList ) then
 		x, y = dropDownList:localToScreen()
 		self:setPos( x, y + dropDownList:getHeight() )
 	end
 end
-
-

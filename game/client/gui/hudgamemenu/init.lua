@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-module( "gui.hudgamemenu", package.class, package.inherit "gui.hudframe" )
+class "gui.hudgamemenu" ( "gui.hudframe" )
 
 function hudgamemenu:hudgamemenu( parent )
 	local name = "HUD Game Menu"

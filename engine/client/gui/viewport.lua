@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-module( "gui.viewport", package.class, package.inherit "gui.panel" )
+class "gui.viewport" ( "gui.panel" )
 
 function viewport:viewport( parent )
 	gui.panel.panel( self, parent, "Viewport" )

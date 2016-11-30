@@ -6,11 +6,19 @@
 
 require( "game.client.gui.mainmenu.closebutton" )
 require( "game.client.gui.mainmenu.button" )
-require( "game.client.gui.closedialog" )
 
-local hook = hook
+local color  = color
+local engine = engine
+local gui    = gui
+local hook   = hook
+local ipairs = ipairs
+local love   = love
+local math   = math
+local point  = point
+local table  = table
+local unpack = unpack
 
-module( "gui.mainmenu", package.class, package.inherit "gui.panel" )
+class "gui.mainmenu" ( "gui.panel" )
 
 function _M:mainmenu()
 	gui.panel.panel( self, g_RootPanel, "Main Menu" )
@@ -84,7 +92,7 @@ end
 function _M:createButtons()
 	self.buttons = {}
 
-	self.joinLeaveServer = gui.mainmenubutton( self, "Join Server" )
+	self.joinLeaveServer = gui.mainmenu.button( self, "Join Server" )
 	self.joinLeaveServer:setDisabled( true )
 	self.joinLeaveServer.onClick = function()
 		if ( not engine.client.isConnected() ) then
@@ -97,10 +105,10 @@ function _M:createButtons()
 	end
 	table.insert( self.buttons, self.joinLeaveServer )
 
-	local blankButton = gui.mainmenubutton( self )
+	local blankButton = gui.mainmenu.button( self )
 	table.insert( self.buttons, blankButton )
 
-	local options = gui.mainmenubutton( self, "Options" )
+	local options = gui.mainmenu.button( self, "Options" )
 	options.onClick = function()
 		if ( not self.optionsMenu ) then
 			self.optionsMenu = gui.optionsmenu( self )
@@ -196,7 +204,7 @@ function _M:drawLogo()
 		scale = height / point( 720 )
 	end
 
-	graphics.setColor( color.white )
+	love.graphics.setColor( unpack( color.white ) )
 	love.graphics.draw( logo, marginX, marginPhi, 0, scale, scale )
 end
 

@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-module( "heap", package.class )
+class( "heap" )
 
 local function getparentindex( i )
 	return i % 2 == 0 and i / 2 or ( i - 1 ) / 2

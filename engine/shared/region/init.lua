@@ -5,23 +5,8 @@
 --============================================================================--
 
 require( "engine.shared.hook" )
-require( "engine.shared.region.tileset" )
-require( "engine.shared.region.layer" )
 
-local accessor   = accessor
-local concommand = concommand
-local hook       = hook
-local ipairs     = ipairs
-local layer      = layer
-local math       = math
-local pairs      = pairs
-local string     = string
-local table      = table
-local tileset    = tileset
-local _CLIENT    = _CLIENT
-local _DEDICATED = _DEDICATED
-
-module( "region", package.class )
+class( "region" )
 
 regions = regions or {}
 
@@ -217,7 +202,7 @@ function snapToGrid( x, y )
 	return x, y
 end
 
-function _M:region( name, x, y, worldIndex )
+function region:region( name, x, y, worldIndex )
 	self.name     = name
 	self.data     = require( "regions." .. name )
 	self.entities = {}
@@ -229,13 +214,13 @@ function _M:region( name, x, y, worldIndex )
 	self:parse()
 end
 
-function _M:addEntity( entity )
+function region:addEntity( entity )
 	table.insert( self.entities, entity )
 	entity:setRegion( self )
 end
 
 if ( _CLIENT ) then
-	function _M:draw()
+	function region:draw()
 		local layers = self:getLayers()
 		if ( not layers ) then
 			return
@@ -253,25 +238,25 @@ if ( _CLIENT ) then
 	end
 end
 
-function _M:cleanUp()
+function region:cleanUp()
 	local entities = self:getEntities()
 	for _, entity in pairs( entities ) do
 		entity:remove()
 	end
 end
 
-accessor( _M, "entities" )
+accessor( region, "entities" )
 
-function _M:getFilename()
+function region:getFilename()
 	return self.name .. ".lua"
 end
 
-accessor( _M, "formatVersion" )
+accessor( region, "formatVersion" )
 
 local data = {}
 local gid  = 0
 
-function _M:getGidsAtPosition( position )
+function region:getGidsAtPosition( position )
 	local tileWidth  = self:getTileWidth()
 	local tileHeight = self:getTileHeight()
 	position         = vector.copy( position )
@@ -289,21 +274,21 @@ function _M:getGidsAtPosition( position )
 	return gids
 end
 
-accessor( _M, "layers" )
-accessor( _M, "name" )
-accessor( _M, "orientation" )
+accessor( region, "layers" )
+accessor( region, "name" )
+accessor( region, "orientation" )
 
-function _M:getPixelWidth()
+function region:getPixelWidth()
 	return self:getTileWidth() * self:getWidth()
 end
 
-function _M:getPixelHeight()
+function region:getPixelHeight()
 	return self:getTileHeight() * self:getHeight()
 end
 
-accessor( _M, "properties" )
+accessor( region, "properties" )
 
-function _M:getTileset( layer )
+function region:getTileset( layer )
 	local gid = layer:getHighestTileGid()
 	local tileset = nil
 	for _, t in ipairs( self:getTilesets() ) do
@@ -314,17 +299,17 @@ function _M:getTileset( layer )
 	return tileset
 end
 
-accessor( _M, "tilesets" )
-accessor( _M, "tileWidth" )
-accessor( _M, "tileHeight" )
-accessor( _M, "width" )
-accessor( _M, "height" )
-accessor( _M, "world" )
-accessor( _M, "worldIndex" )
-accessor( _M, "x" )
-accessor( _M, "y" )
+accessor( region, "tilesets" )
+accessor( region, "tileWidth" )
+accessor( region, "tileHeight" )
+accessor( region, "width" )
+accessor( region, "height" )
+accessor( region, "world" )
+accessor( region, "worldIndex" )
+accessor( region, "x" )
+accessor( region, "y" )
 
-function _M:initializeWorld()
+function region:initializeWorld()
 	self.world = love.physics.newWorld()
 end
 
@@ -343,7 +328,7 @@ local width         = 0
 local height        = 0
 local pointinrect   = math.pointinrect
 
-function _M:isTileWalkableAtPosition( position )
+function region:isTileWalkableAtPosition( position )
 	-- Check world collisions
 	gids = self:getGidsAtPosition( position )
 	for _, tileset in ipairs( self:getTilesets() ) do
@@ -380,28 +365,30 @@ function _M:isTileWalkableAtPosition( position )
 	return true
 end
 
-function _M:loadTilesets( tilesets )
+function region:loadTilesets( tilesets )
 	if ( self.tilesets ) then
 		return
 	end
 
 	self.tilesets = {}
 
+	require( "engine.shared.region.tileset" )
 	for _, tilesetData in ipairs( tilesets ) do
-		local tileset = regiontileset( tilesetData )
+		local tileset = region.tileset( tilesetData )
 		table.insert( self.tilesets, tileset )
 	end
 end
 
-function _M:loadLayers( layers )
+function region:loadLayers( layers )
 	if ( self.layers ) then
 		return
 	end
 
 	self.layers = {}
 
+	require( "engine.shared.region.layer" )
 	for _, layerData in ipairs( layers ) do
-		local layer = regionlayer( layerData )
+		local layer = region.layer( layerData )
 		layer:setRegion( self )
 		layer:parse()
 
@@ -411,7 +398,7 @@ function _M:loadLayers( layers )
 	end
 end
 
-function _M:parse()
+function region:parse()
 	if ( not self.data ) then
 		return
 	end
@@ -432,14 +419,14 @@ function _M:parse()
 	self.data = nil
 end
 
-function _M:remove()
+function region:remove()
 	local world = self:getWorld()
 	if ( world ) then
 		world:destroy()
 	end
 end
 
-function _M:removeEntity( entity )
+function region:removeEntity( entity )
 	local entities = self:getEntities()
 	for i, v in ipairs( entities ) do
 		if ( v == entity ) then
@@ -448,11 +435,11 @@ function _M:removeEntity( entity )
 	end
 end
 
-function _M:getTileSize()
+function region:getTileSize()
 	return self:getTileWidth(), self:getTileHeight()
 end
 
-function _M:update( dt )
+function region:update( dt )
 	if ( _SERVER ) then
 		local world = self:getWorld()
 		if ( world ) then
@@ -461,6 +448,6 @@ function _M:update( dt )
 	end
 end
 
-function _M:__tostring()
+function region:__tostring()
 	return "region: \"" .. self:getFilename() .. "\""
 end

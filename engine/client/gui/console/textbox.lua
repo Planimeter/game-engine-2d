@@ -4,9 +4,12 @@
 --
 --============================================================================--
 
-module( "gui.console.textbox", package.class, package.inherit "gui.textbox" )
+local gui   = gui
+local point = point
 
-function _M:consoletextbox( parent, name )
+class "gui.console.textbox" ( "gui.textbox" )
+
+function _M:textbox( parent, name )
 	gui.textbox.textbox( self, parent, name, "" )
 
 	self:setEditable( false )

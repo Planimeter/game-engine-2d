@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-module( "gui.audiooptionspanel", package.class, package.inherit "gui.frametabpanel" )
+class "gui.audiooptionspanel" ( "gui.frametabpanel" )
 
 function audiooptionspanel:audiooptionspanel()
 	gui.frametabpanel.frametabpanel( self, nil, "Audio Options Panel" )

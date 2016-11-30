@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-module( "gui.optionsmenu", package.class, package.inherit "gui.tabbedframe" )
+class "gui.optionsmenu" ( "gui.tabbedframe" )
 
 function optionsmenu:optionsmenu( parent )
 	local name = "Options Menu"

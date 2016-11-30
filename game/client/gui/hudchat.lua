@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-module( "gui.hudchat", package.class, package.inherit "gui.hudframe" )
+class "gui.hudchat" ( "gui.hudframe" )
 
 function hudchat:hudchat( parent )
 	local name = "HUD Chat"

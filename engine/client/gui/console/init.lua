@@ -4,21 +4,19 @@
 --
 --============================================================================--
 
--- UNDONE: The gui subsystem will load gui.console again here just by indexing
--- it the first time around, so we can't persist commandHistory in debug.
--- local commandHistory = gui.console and gui.console.commandHistory or {}
-
-require( "engine.client.gui.frame" )
-require( "engine.client.gui.console.consoletextbox" )
-require( "engine.client.gui.console.consoletextboxautocompleteitemgroup" )
+require( "engine.client.gui.console.textbox" )
+require( "engine.client.gui.console.textboxautocompleteitemgroup" )
 
 local concommand = concommand
 local convar     = convar
+local gui        = gui
+local point      = point
 local select     = select
+local table      = table
 local tostring   = tostring
 local _G         = _G
 
-module( "gui.console", package.class, package.inherit "gui.frame" )
+class "gui.console" ( "gui.frame" )
 
 function print( ... )
 	local args = { ... }

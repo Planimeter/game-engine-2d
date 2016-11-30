@@ -4,8 +4,10 @@
 --
 --============================================================================--
 
-payload._structs = {}
-local structs    = payload._structs
+class "payload" ( "typelenvalues" )
+
+payload.structs = payload.structs or {}
+local structs   = payload.structs
 
 structs[ "kick" ] = {
     keys = {

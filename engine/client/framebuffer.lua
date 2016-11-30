@@ -8,7 +8,7 @@
 local _framebuffers = framebuffer and framebuffer._framebuffers or {}
 local _renderStack  = framebuffer and framebuffer._renderStack  or {}
 
-module( "framebuffer", package.class )
+class( "framebuffer" )
 
 framebuffer._framebuffers = _framebuffers
 
@@ -107,7 +107,7 @@ function framebuffer:__tostring()
 	return s
 end
 
-module( "fullscreenframebuffer", package.class, package.inherit( "framebuffer" ) )
+class "fullscreenframebuffer" ( "framebuffer" )
 
 function fullscreenframebuffer:fullscreenframebuffer()
 	framebuffer.framebuffer( self )

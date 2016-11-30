@@ -4,10 +4,18 @@
 --
 --============================================================================--
 
-module( "gui.textbox", package.class, package.inherit "gui.panel" )
+local accessor = accessor
+local gui      = gui
+local love     = love
+local math     = math
+local point    = point
+local string   = string
+local unpack   = unpack
 
-textbox.maskedTextbox = textbox.maskedTextbox or nil
-textbox.canFocus      = true
+class "gui.textbox" ( "gui.panel" )
+
+maskedTextbox = maskedTextbox or nil
+canFocus      = true
 
 local function getInnerWidth( self )
 	return self:getWidth() - 2 * self.padding
@@ -17,14 +25,14 @@ local function getInnerHeight( self )
 	return self:getHeight() - 2 * self.padding
 end
 
-function textbox.drawMask()
+function drawMask()
 	local self   = gui.textbox.maskedTextbox
 	local width  = getInnerWidth( self )
 	local height = self:getHeight()
-	graphics.rectangle( "fill", self.padding, 0, width, height )
+	love.graphics.rectangle( "fill", self.padding, 0, width, height )
 end
 
-function textbox:textbox( parent, name, placeholder )
+function _M:textbox( parent, name, placeholder )
 	gui.panel.panel( self, parent, name )
 	self.width          = point( 216 )
 	self.height         = point( 46 )
@@ -44,7 +52,7 @@ function textbox:textbox( parent, name, placeholder )
 	self:setUseFullscreenFramebuffer( true )
 end
 
-function textbox:draw()
+function _M:draw()
 	self:drawText()
 	self:drawCursor()
 
@@ -89,28 +97,28 @@ end
 local abs = math.abs
 local sin = math.sin
 
-function textbox:drawCursor()
+function _M:drawCursor()
 	if ( not self:isEditable() ) then
 		return
 	end
 
 	local font = self:getScheme( "font" )
 	if ( self.focus ) then
-		local opacity = graphics.getOpacity()
-		graphics.setOpacity( opacity * abs( sin( 3 * love.timer.getTime() ) ) )
-		graphics.setColor( graphics.getColor() )
-			graphics.rectangle(
+		-- local opacity = graphics.getOpacity()
+		-- graphics.setOpacity( opacity * abs( sin( 3 * love.timer.getTime() ) ) )
+		-- graphics.setColor( graphics.getColor() )
+			love.graphics.rectangle(
 				"fill",
 				getRelativeCursorPos( self ),
 				self:getHeight() / 2 - font:getHeight() / 2,
 				point( 1 ),
 				font:getHeight()
 			)
-		graphics.setOpacity( opacity )
+		-- graphics.setOpacity( opacity )
 	end
 end
 
-function textbox:drawForeground()
+function _M:drawForeground()
 	local property = "textbox.outlineColor"
 	local width    = self:getWidth()
 	local height   = self:getHeight()
@@ -124,12 +132,12 @@ function textbox:drawForeground()
 		end
 	end
 
-	graphics.setColor( self:getScheme( property ) )
-	graphics.setLineWidth( point( 1 ) )
-	graphics.rectangle( "line", 0, 0, width, height )
+	love.graphics.setColor( unpack( self:getScheme( property ) ) )
+	love.graphics.setLineWidth( point( 1 ) )
+	love.graphics.rectangle( "line", 0, 0, width, height )
 end
 
-function textbox:drawText()
+function _M:drawText()
 	gui.textbox.maskedTextbox = self
 	love.graphics.stencil( gui.textbox.drawMask )
 	love.graphics.setStencilTest( "greater", 0 )
@@ -151,16 +159,16 @@ function textbox:drawText()
 			end
 		end
 
-		graphics.setColor( self:getScheme( property ) )
+		love.graphics.setColor( unpack( self:getScheme( property ) ) )
 
 		local font = self:getScheme( "font" )
 		love.graphics.setFont( font )
 		local x = getTextX( self )
 		local y = getTextY( self )
 		if ( not self:isMultiline() ) then
-			graphics.print( text, x, y )
+			love.graphics.print( text, x, y )
 		else
-			graphics.printf( text, x, y, self:getWidth() - 2 * self.padding )
+			love.graphics.printf( text, x, y, self:getWidth() - 2 * self.padding )
 		end
 	love.graphics.setStencilTest()
 end
@@ -209,7 +217,7 @@ local function updateAutocomplete( self, suggestions )
 	end
 end
 
-function textbox:doBackspace( count )
+function _M:doBackspace( count )
 	count = count or 1
 
 	if ( count == 0 ) then
@@ -259,7 +267,7 @@ end
 
 local utf8len = string.utf8len
 
-function textbox:doDelete( count )
+function _M:doDelete( count )
 	count = count or 1
 
 	if ( count == 0 ) then
@@ -288,10 +296,10 @@ function textbox:doDelete( count )
 	self:onChange()
 end
 
-function textbox:doCut()
+function _M:doCut()
 end
 
-function textbox:doCopy()
+function _M:doCopy()
 end
 
 local gsub = string.gsub
@@ -312,10 +320,10 @@ end
 local function doSelectAll( self )
 end
 
-accessor( textbox, "autocomplete" )
-accessor( textbox, "defocusOnEnter" )
-accessor( textbox, "placeholder" )
-accessor( textbox, "text" )
+accessor( _M, "autocomplete" )
+accessor( _M, "defocusOnEnter" )
+accessor( _M, "placeholder" )
+accessor( _M, "text" )
 
 local function updateScrollbarRange( self )
 	local textHeight = getTextHeight( self ) + 2 * self.padding
@@ -328,7 +336,7 @@ local function updateScrollbarRange( self )
 	end
 end
 
-function textbox:insertText( text )
+function _M:insertText( text )
 	local underflow = getTextWidth( self ) < getInnerWidth( self )
 	local font      = self:getScheme( "font" )
 	local sub1      = utf8sub( self.text, self.cursorPos + 1 )
@@ -372,7 +380,7 @@ function textbox:insertText( text )
 	self:onChange()
 end
 
-function textbox:invalidateLayout()
+function _M:invalidateLayout()
 	if ( self.autocompleteItemGroup ) then
 		self.autocompleteItemGroup:invalidateLayout()
 	end
@@ -384,7 +392,7 @@ function textbox:invalidateLayout()
 	gui.panel.invalidateLayout( self )
 end
 
-function textbox:isChildMousedOver()
+function _M:isChildMousedOver()
 	local panel = gui.topPanel
 	while ( panel ~= nil ) do
 		panel = panel:getParent()
@@ -396,15 +404,15 @@ function textbox:isChildMousedOver()
 	return false
 end
 
-function textbox:isDisabled()
+function _M:isDisabled()
 	return self.disabled
 end
 
-function textbox:isEditable()
+function _M:isEditable()
 	return self.editable
 end
 
-function textbox:isMultiline()
+function _M:isMultiline()
 	return self.multiline
 end
 
@@ -488,7 +496,7 @@ local function selectSuggestion( self, dir )
 	end
 end
 
-function textbox:keypressed( key, scancode, isrepeat )
+function _M:keypressed( key, scancode, isrepeat )
 	if ( not self.focus or not self:isEditable() ) then
 		return
 	end
@@ -576,7 +584,7 @@ function textbox:keypressed( key, scancode, isrepeat )
 	return true
 end
 
-function textbox:keyreleased( key, scancode )
+function _M:keyreleased( key, scancode )
 	if ( not self.focus or not self:isEditable() ) then
 		return
 	end
@@ -586,7 +594,7 @@ end
 
 local posX, posY = 0, 0
 
-function textbox:mousepressed( x, y, button, istouch )
+function _M:mousepressed( x, y, button, istouch )
 	if ( self.mouseover and not self:isDisabled() ) then
 		posX, posY = self:screenToLocal( x, y )
 		if ( button == 1 ) then
@@ -604,15 +612,15 @@ function textbox:mousepressed( x, y, button, istouch )
 	return gui.panel.mousepressed( self, x, y, button, istouch )
 end
 
-function textbox:mousereleased( x, y, button, istouch )
+function _M:mousereleased( x, y, button, istouch )
 	self.mousedown = false
 	gui.panel.mousereleased( self, x, y, button, istouch )
 end
 
-function textbox:onChange( text )
+function _M:onChange( text )
 end
 
-function textbox:onClick( x, y )
+function _M:onClick( x, y )
 	x = x - getTextX( self )
 
 	if ( not self.focus ) then
@@ -651,24 +659,24 @@ function textbox:onClick( x, y )
 	end
 end
 
-function textbox:onEnter( text )
+function _M:onEnter( text )
 end
 
-function textbox:onFocus()
+function _M:onFocus()
 	love.keyboard.setTextInput( true )
 	love.keyboard.setKeyRepeat( true )
 end
 
-function textbox:onLostFocus()
+function _M:onLostFocus()
 	love.keyboard.setTextInput( false )
 	love.keyboard.setKeyRepeat( false )
 end
 
-function textbox:onMouseLeave()
+function _M:onMouseLeave()
 	love.mouse.setCursor()
 end
 
-function textbox:setAutocomplete( autocomplete )
+function _M:setAutocomplete( autocomplete )
 	self.autocomplete = autocomplete
 	if ( autocomplete ) then
 		local name = self.name .. " Autocomplete Item Group"
@@ -681,7 +689,7 @@ function textbox:setAutocomplete( autocomplete )
 	end
 end
 
-function textbox:setDisabled( disabled )
+function _M:setDisabled( disabled )
 	self.disabled = disabled
 	self.canFocus = not disabled
 
@@ -692,12 +700,12 @@ function textbox:setDisabled( disabled )
 	self:invalidate()
 end
 
-function textbox:setEditable( editable )
+function _M:setEditable( editable )
 	self.editable = editable
 	self.canFocus = editable
 end
 
-function textbox:setMultiline( multiline )
+function _M:setMultiline( multiline )
 	self.multiline = multiline
 	if ( multiline ) then
 		self.scrollbar = gui.scrollbar( self, self:getName() .. " Scrollbar" )
@@ -709,7 +717,7 @@ function textbox:setMultiline( multiline )
 	end
 end
 
-function textbox:setText( text )
+function _M:setText( text )
 	self.text      = text
 	self.cursorPos = utf8len( text )
 
@@ -726,21 +734,21 @@ function textbox:setText( text )
 	self:onChange()
 end
 
-function textbox:setWidth( width )
+function _M:setWidth( width )
 	gui.panel.setWidth( self, width )
 	if ( self.scrollbar ) then
 		updateScrollbarRange( self )
 	end
 end
 
-function textbox:setHeight( height )
+function _M:setHeight( height )
 	gui.panel.setHeight( self, height )
 	if ( self.scrollbar ) then
 		updateScrollbarRange( self )
 	end
 end
 
-function textbox:textinput( text )
+function _M:textinput( text )
 	if ( not self.focus or not self:isEditable() ) then
 		return
 	end
@@ -758,7 +766,7 @@ local function updateCursor( self )
 	love.mouse.setCursor( cursor )
 end
 
-function textbox:update( dt )
+function _M:update( dt )
 	if ( not self:isVisible() ) then
 		return
 	end
@@ -772,7 +780,7 @@ function textbox:update( dt )
 	gui.panel.update( self, dt )
 end
 
-function textbox:wheelmoved( x, y )
+function _M:wheelmoved( x, y )
 	if ( self.mouseover and not self:isDisabled() ) then
 		if ( y < 0 ) then
 			if ( self.scrollbar ) then
@@ -791,5 +799,3 @@ function textbox:wheelmoved( x, y )
 
 	return gui.panel.wheelmoved( self, x, y )
 end
-
-

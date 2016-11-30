@@ -6,7 +6,7 @@
 
 require( "game.client.gui.hudgamemenu.itemgrid" )
 
-module( "gui.hudgamemenuinventory", package.class, package.inherit "gui.panel" )
+class "gui.hudgamemenuinventory" ( "gui.panel" )
 
 function hudgamemenuinventory:hudgamemenuinventory( parent )
 	gui.panel.panel( self, parent, "Inventory" )

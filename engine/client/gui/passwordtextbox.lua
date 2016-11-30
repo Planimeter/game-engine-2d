@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-module( "gui.passwordtextbox", package.class, package.inherit "gui.textbox" )
+class "gui.passwordtextbox" ( "gui.textbox" )
 
 local function getInnerWidth( self )
 	return self:getWidth() - 2 * self.padding

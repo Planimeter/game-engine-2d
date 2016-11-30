@@ -4,7 +4,12 @@
 --
 --============================================================================--
 
-module( "gui.mainmenu.closebutton", package.class, package.inherit "gui.closebutton" )
+local gui    = gui
+local love   = love
+local point  = point
+local unpack = unpack
+
+class "gui.mainmenu.closebutton" ( "gui.closebutton" )
 
 function _M:closebutton( parent )
 	gui.closebutton.closebutton( self, parent, "Main Menu Close Button" )
@@ -23,7 +28,7 @@ function _M:draw()
 
 	local x =   self:getWidth()                 / 2 - self.icon:getWidth()  / 2
 	local y = ( self:getHeight() - point( 1 ) ) / 2 - self.icon:getHeight() / 2
-	graphics.setColor( self:getScheme( iconColor ) )
+	love.graphics.setColor( unpack( self:getScheme( iconColor ) ) )
 	love.graphics.draw( self.icon, x, y )
 
 	gui.panel.draw( self )

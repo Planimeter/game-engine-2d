@@ -4,13 +4,7 @@
 --
 --============================================================================--
 
-local accessor = accessor
-local audio    = love.audio
-local convar   = convar
-local hook     = hook
-local type     = type
-
-module( "sound", package.class )
+class( "sound" )
 
 local function updateVolume( convar )
 	local volume = convar:getNumber()
@@ -23,7 +17,7 @@ local snd_volume  = convar( "snd_volume", 1, 0, 1,
 local snd_desktop = convar( "snd_desktop", "1", nil, nil,
                             "Toggles playing sound from the desktop" )
 
-function reload( library )
+function sound.reload( library )
 	if ( string.sub( library, 1, 7 ) ~= "sounds." ) then
 		return
 	end
@@ -33,7 +27,7 @@ end
 
 hook.set( "shared", reload, "onReloadScript", "reloadSound" )
 
-sounds = sounds or {}
+sound.sounds = sound.sounds or {}
 
 local modtime  = nil
 local errormsg = nil
@@ -56,7 +50,7 @@ local function updateSound( s, filename )
 	end
 end
 
-function update( dt )
+function sound.update( dt )
 	for filename, s in pairs( sounds ) do
 		modtime, errormsg = love.filesystem.getLastModified( filename )
 		if ( errormsg == nil and modtime ~= s.modtime ) then
@@ -65,7 +59,7 @@ function update( dt )
 	end
 end
 
-function _M:sound( filename )
+function sound:sound( filename )
 	local status, ret = pcall( require, filename )
 	if ( status == false ) then
 		self.filename = filename
@@ -75,32 +69,27 @@ function _M:sound( filename )
 	end
 end
 
-function _M:getData()
+function sound:getData()
 	return self.data
 end
 
-accessor( _M, "filename" )
+accessor( sound, "filename" )
 
-function _M:getVolume()
+function sound:getVolume()
 	local filename = self:getFilename()
 	if ( sounds[ filename ] ) then
 		return sounds[ filename ].sound:getVolume()
 	end
 end
 
-function _M:setVolume( volume )
-	if ( type( self ) == "number" ) then
-		audio.setVolume( self ) -- volume
-		return
-	end
-
+function sound:setVolume( volume )
 	local filename = self:getFilename()
 	if ( sounds[ filename ] ) then
 		sounds[ filename ].sound:setVolume( volume )
 	end
 end
 
-function _M:play()
+function sound:play()
 	local filename = self:getFilename()
 	if ( not filename ) then
 		return
@@ -131,7 +120,7 @@ function _M:play()
 	audio.play( sound )
 end
 
-function _M:__tostring()
+function sound:__tostring()
 	local t = getmetatable( self )
 	setmetatable( self, {} )
 	local s = string.gsub( tostring( self ), "table", "sound" )

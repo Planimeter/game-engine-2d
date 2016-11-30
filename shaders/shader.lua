@@ -4,34 +4,29 @@
 --
 --============================================================================--
 
-local getfenv      = getfenv
-local getmetatable = getmetatable
-local setmetatable = setmetatable
-local tostring     = tostring
+class( "shader" )
 
-module( "shader", package.class )
+shader.shaders = shader.shaders or {}
 
-shaders = shaders or {}
-
-function getShader( name )
-	return shaders[ name ]()
+function shader.getShader( name )
+	return shader.shaders[ name ]()
 end
 
-function register( class, name )
-	shaders[ name ] = class
+function shader.register( class, name )
+	shader.shaders[ name ] = class
 	getfenv( 2 )[ name ] = nil
 end
 
-function _M:renderTo( func )
+function shader:renderTo( func )
 end
 
-function _M:draw()
+function shader:draw()
 end
 
-function _M:set( key, value )
+function shader:set( key, value )
 end
 
-function _M:__tostring()
+function shader:__tostring()
 	local t = getmetatable( self )
 	setmetatable( self, {} )
 	local s = string.gsub( tostring( self ), "table", "shader" )

@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-module( "gui.throbber", package.class, package.inherit "gui.imagepanel" )
+class "gui.throbber" ( "gui.imagepanel" )
 
 function throbber:throbber( parent, name, image )
 	gui.imagepanel.imagepanel( self, parent, name, image or "images/gui/throbber.png" )

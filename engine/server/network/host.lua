@@ -6,7 +6,7 @@
 
 require( "enet" )
 
-module( "host", package.class )
+class( "host" )
 
 function host:host( bind_address, peer_count, channel_count, in_bandwidth, out_bandwidth )
 	self._host = enet.host_create(

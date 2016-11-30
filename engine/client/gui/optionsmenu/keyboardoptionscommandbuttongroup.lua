@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-module( "gui.keyboardoptionscommandbuttongroup", package.class, package.inherit "gui.commandbuttongroup" )
+class "gui.keyboardoptionscommandbuttongroup" ( "gui.commandbuttongroup" )
 
 function keyboardoptionscommandbuttongroup:keyboardoptionscommandbuttongroup( parent, name )
 	gui.commandbuttongroup.commandbuttongroup( self, parent, name )

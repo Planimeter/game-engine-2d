@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-module( "gui.hudchattextbox", package.class, package.inherit "gui.textbox" )
+class "gui.hudchattextbox" ( "gui.textbox" )
 
 function hudchattextbox:hudchattextbox( parent, name )
 	gui.textbox.textbox( self, parent, name, "" )

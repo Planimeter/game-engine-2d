@@ -7,7 +7,7 @@
 require( "engine.shared.entities" )
 require( "engine.shared.entities.entity" )
 
-module( "character", package.class, package.inherit( "entity" ) )
+class "character" ( "entity" )
 
 function character:character()
 	entity.entity( self )

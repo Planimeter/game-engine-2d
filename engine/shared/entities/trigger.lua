@@ -6,7 +6,7 @@
 
 require( "engine.shared.entities.entity" )
 
-module( "trigger", package.class, package.inherit( "entity" ) )
+class "trigger" ( "entity" )
 
 function trigger:trigger()
 	entity.entity( self )

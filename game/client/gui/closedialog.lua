@@ -4,7 +4,10 @@
 --
 --============================================================================--
 
-module( "gui.closedialog", package.class, package.inherit "gui.frame" )
+local gui   = gui
+local point = point
+
+class "gui.closedialog" ( "gui.frame" )
 
 function _M:closedialog( parent, name )
 	gui.frame.frame( self, parent, "Close Dialog", "Quit Game" )

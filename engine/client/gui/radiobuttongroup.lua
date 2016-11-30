@@ -4,9 +4,13 @@
 --
 --============================================================================--
 
-module( "gui.radiobuttongroup", package.class, package.inherit "gui.panel" )
+local accessor = accessor
+local gui      = gui
+local table    = table
 
-function radiobuttongroup:radiobuttongroup( parent, name )
+class "gui.radiobuttongroup" ( "gui.panel" )
+
+function _M:radiobuttongroup( parent, name )
 	gui.panel.panel( self, parent, name )
 	self.selectedId = 0
 	self.disabled   = false
@@ -14,14 +18,14 @@ function radiobuttongroup:radiobuttongroup( parent, name )
 	self:setSuppressFramebufferWarnings( true )
 end
 
-function radiobuttongroup:addItem( item )
+function _M:addItem( item )
 	self.items =  self.items or {}
 	item.id    = #self.items + 1
 	table.insert( self.items, item )
 	item.group = self
 end
 
-function radiobuttongroup:removeItem( item )
+function _M:removeItem( item )
 	local items = self:getItems()
 	for i, v in ipairs( items ) do
 		if ( v == item ) then
@@ -34,32 +38,32 @@ function radiobuttongroup:removeItem( item )
 	end
 end
 
-accessor( radiobuttongroup, "items" )
-accessor( radiobuttongroup, "selectedId" )
+accessor( _M, "items" )
+accessor( _M, "selectedId" )
 
-function radiobuttongroup:getSelectedItem()
+function _M:getSelectedItem()
 	local items = self:getItems()
 	if ( items ) then
 		return items[ self:getSelectedId() ]
 	end
 end
 
-function radiobuttongroup:getValue()
+function _M:getValue()
 	local item = self:getSelectedItem()
 	if ( item ) then
 		return item:getValue()
 	end
 end
 
-function radiobuttongroup:isDisabled()
+function _M:isDisabled()
 	return self.disabled
 end
 
-function radiobuttongroup:setDisabled( disabled )
+function _M:setDisabled( disabled )
 	self.disabled = disabled
 end
 
-function radiobuttongroup:setSelectedId( selectedId, default )
+function _M:setSelectedId( selectedId, default )
 	local oldSelectedId = self:getSelectedId()
 	local items         = self:getItems()
 	local oldSelection  = items[ oldSelectedId ]
@@ -78,7 +82,5 @@ function radiobuttongroup:setSelectedId( selectedId, default )
 	end
 end
 
-function radiobuttongroup:onValueChanged( oldValue, newValue )
+function _M:onValueChanged( oldValue, newValue )
 end
-
-

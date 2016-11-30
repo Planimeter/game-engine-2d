@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-module( "gui.hudgamemenustat", package.class, package.inherit "gui.panel" )
+class "gui.hudgamemenustat" ( "gui.panel" )
 
 function hudgamemenustat:hudgamemenustat( parent, name, stat )
 	gui.panel.panel( self, parent, name )

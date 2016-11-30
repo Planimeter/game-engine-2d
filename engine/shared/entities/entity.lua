@@ -11,7 +11,7 @@ local lastEntIndex = entity and entity.lastEntIndex or 0
 require( "common.vector" )
 require( "engine.shared.entities.networkvar" )
 
-module( "entity", package.class )
+class( "entity" )
 
 entity.entities     = entities
 entity.lastEntIndex = lastEntIndex

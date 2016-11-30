@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-module( "gui.commandbuttongroup", package.class, package.inherit "gui.panel" )
+class "gui.commandbuttongroup" ( "gui.panel" )
 
 function commandbuttongroup:commandbuttongroup( parent, name )
 	gui.panel.panel( self, parent, name )

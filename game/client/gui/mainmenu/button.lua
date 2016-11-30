@@ -4,7 +4,10 @@
 --
 --============================================================================--
 
-module( "gui.mainmenu.button", package.class, package.inherit "gui.button" )
+local gui  = gui
+local love = love
+
+class "gui.mainmenu.button" ( "gui.button" )
 
 function _M:button( parent, text )
 	gui.button.button( self, parent, text and text or "Blank" .. " Button",
@@ -27,8 +30,8 @@ function _M:draw()
 	love.graphics.setFont( font )
 	local x =   self:getWidth()        / 2 - font:getWidth( self.text ) / 2
 	local y = ( self:getHeight() - 1 ) / 2 - font:getHeight()           / 2 - 1
-	graphics.setColor( self:getScheme( textColor ) )
-	graphics.print( ( self.text ), 0, y )
+	love.graphics.setColor( self:getScheme( textColor ) )
+	love.graphics.print( ( self.text ), 0, y )
 
 	gui.panel.draw( self )
 end

@@ -9,7 +9,7 @@ local images = image and image.images or {}
 
 local graphics = love.graphics
 
-module( "image", package.class )
+class( "image" )
 
 image.images = images
 

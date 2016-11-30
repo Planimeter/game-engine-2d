@@ -14,7 +14,7 @@ local host_port        = convar( "host_port", "26015", nil, nil,
 local host_max_players = convar( "host_maxplayers", 1000, 0, 1000,
                                  "Host game server max number of players" )
 
-module( "networkserver", package.class )
+class( "networkserver" )
 
 function networkserver.broadcast( data, channel, flag )
 	if ( type( data ) == "payload" ) then

@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-module( "networkvar", package.class )
+class( "networkvar" )
 
 function networkvar:networkvar( entity, name )
 	self.entity = entity

@@ -4,34 +4,29 @@
 --
 --============================================================================--
 
-local accessor = accessor
-local love     = love
-local require  = require
-local _CLIENT  = _CLIENT
+class( "tileset" )
 
-module( "regiontileset", package.class )
-
-function _M:regiontileset( tilesetData )
+function tileset:tileset( tilesetData )
 	self.data = tilesetData
 	self:parse()
 end
 
-accessor( _M, "filename" )
-accessor( _M, "firstGid", "firstgid" )
-accessor( _M, "image" )
-accessor( _M, "imageWidth", "imagewidth" )
-accessor( _M, "imageHeight", "imageheight" )
-accessor( _M, "name" )
-accessor( _M, "properties" )
-accessor( _M, "spacing" )
-accessor( _M, "margin" )
-accessor( _M, "tileCount", "tilecount" )
-accessor( _M, "tileOffset", "tileoffset" )
-accessor( _M, "tiles" )
-accessor( _M, "tileWidth", "tilewidth" )
-accessor( _M, "tileHeight", "tileheight" )
+accessor( tileset, "filename" )
+accessor( tileset, "firstGid", "firstgid" )
+accessor( tileset, "image" )
+accessor( tileset, "imageWidth", "imagewidth" )
+accessor( tileset, "imageHeight", "imageheight" )
+accessor( tileset, "name" )
+accessor( tileset, "properties" )
+accessor( tileset, "spacing" )
+accessor( tileset, "margin" )
+accessor( tileset, "tileCount", "tilecount" )
+accessor( tileset, "tileOffset", "tileoffset" )
+accessor( tileset, "tiles" )
+accessor( tileset, "tileWidth", "tilewidth" )
+accessor( tileset, "tileHeight", "tileheight" )
 
-function _M:parse()
+function tileset:parse()
 	if ( not self.data ) then
 		return
 	end
@@ -60,10 +55,10 @@ function _M:parse()
 	self.data = nil
 end
 
-function _M:setImage( image )
+function tileset:setImage( image )
 	self.image = love.graphics.newImage( image )
 end
 
-function _M:__tostring()
-	return "regiontileset: \"" .. self:getName() .. "\""
+function tileset:__tostring()
+	return "tileset: \"" .. self:getName() .. "\""
 end

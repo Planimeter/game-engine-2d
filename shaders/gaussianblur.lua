@@ -30,11 +30,7 @@ SOFTWARE.
 
 require( "shaders.shader" )
 
-local love   = love
-local math   = math
-local shader = shader
-
-module( "gaussianblur", package.class, package.inherit( "shader" ) )
+class "gaussianblur" ( "shader" )
 
 -- unroll convolution loop
 local function build_shader(sigma)
@@ -60,14 +56,14 @@ local function build_shader(sigma)
 	return love.graphics.newShader(table.concat(code))
 end
 
-function _M:gaussianblur()
+function gaussianblur:gaussianblur()
 	self.canvas_h = graphics.newFullscreenFramebuffer()
 	self.canvas_v = graphics.newFullscreenFramebuffer()
 	self.shader = build_shader(1)
 	self.shader:send("direction",{1.0,0.0})
 end
 
-function _M:renderTo(func)
+function gaussianblur:renderTo(func)
 	local s = love.graphics.getShader()
 
 	love.graphics.setShader(self.shader)
@@ -93,11 +89,11 @@ function _M:renderTo(func)
 	love.graphics.setShader(s)
 end
 
-function _M:draw()
+function gaussianblur:draw()
 	self.canvas_v:draw()
 end
 
-function _M:set(key, value)
+function gaussianblur:set(key, value)
 	if key == "sigma" then
 		self.shader = build_shader(tonumber(value))
 	else

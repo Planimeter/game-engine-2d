@@ -6,8 +6,9 @@
 
 require( "engine.shared.convar" )
 
-local love   = love
-local convar = convar
+local convar   = convar
+local love     = love
+local tonumber = tonumber
 
 module( "config" )
 
