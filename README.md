@@ -40,6 +40,8 @@ would otherwise need to write by hand for your projects or game jams.
 Though Grid is a lightweight engine, if you find it to be too large for what you
 need, you can find similar features in the packages below.
 
+* [lclass](https://github.com/andrewmcwatters/lclass)  
+Lua with Classes
 * [lauxlib](https://github.com/Planimeter/lauxlib)  
 Lua 5.1.5 Auxiliary Library
 * [love-package](https://github.com/Planimeter/love-package)  
