@@ -2,17 +2,17 @@
 
 var target = window;
 target.addEventListener('routechange', function(event) {
-  console.log('[Task] 3: routechange');
+  console.log('1 [Task]: routechange');
 });
 
 target = document.querySelector('[data-view]');
 target.addEventListener('viewcontentloaded', function(event) {
-  console.log('[Task] 2: viewcontentloaded');
+  console.log('2 [Task]: viewcontentloaded');
 });
 
 function update(node) {
   if (node.dataset && node.dataset.include) {
-    console.log('[Microtask] 1: childList mutation');
+    console.log('3 [Microtask]: childList mutation');
     return;
   }
 
@@ -32,13 +32,13 @@ observer.observe(document.body, { childList: true, subtree: true });
 
 target = document.body;
 target.addEventListener('includecontentrequested', function(event) {
-  console.log('[Task] 4: includecontentrequested');
+  console.log('4 [Task]: includecontentrequested');
 });
 
 target.addEventListener('includecontentloaded', function(event) {
-  console.log('[Task] 5: includecontentloaded');
+  console.log('5 [Task]: includecontentloaded');
 });
 
 target.addEventListener('includecontenterror', function(event) {
-  console.log('[Task] 5: includecontenterror');
+  console.log('5 [Task]: includecontenterror');
 });
