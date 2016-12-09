@@ -12,7 +12,7 @@ target.addEventListener('viewcontentloaded', function(event) {
 
 function update(node) {
   if (node.dataset && node.dataset.include) {
-    console.log('3 [Microtask]: childList mutation');
+    console.log('4 [Microtask]: childList mutation');
     return;
   }
 
@@ -32,7 +32,7 @@ observer.observe(document.body, { childList: true, subtree: true });
 
 target = document.body;
 target.addEventListener('includecontentrequested', function(event) {
-  console.log('4 [Task]: includecontentrequested');
+  console.log('3 [Task]: includecontentrequested');
 });
 
 target.addEventListener('includecontentloaded', function(event) {
