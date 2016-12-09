@@ -2,12 +2,12 @@
 
 var target = window;
 target.addEventListener('routechange', function(event) {
-  console.log('1 [Task]: routechange');
+  console.log('2 [Task]: routechange');
 });
 
 target = document.querySelector('[data-view]');
 target.addEventListener('viewcontentloaded', function(event) {
-  console.log('2 [Task]: viewcontentloaded');
+  console.log('1 [Task]: viewcontentloaded');
 });
 
 function update(node) {
