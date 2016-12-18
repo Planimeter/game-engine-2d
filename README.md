@@ -44,13 +44,6 @@ need, you can find similar features in the packages below.
 Lua with Classes
 * [lauxlib](https://github.com/Planimeter/lauxlib)  
 Lua 5.1.5 Auxiliary Library
-* [love-package](https://github.com/Planimeter/love-package)  
-Adds live reloading to LÖVE
-* [love-graphics](https://github.com/Planimeter/love-graphics)  
-Graphics function overrides for LÖVE
-* [love-conf](https://github.com/Planimeter/love-conf)  
-Adds `argv`, `_CLIENT`, `_SERVER`, `_DEDICATED`, a `--dedicated` argument that
-disables client-side modules, and OS-specific `c.window.icon` functionality
 * [common](https://github.com/Planimeter/common)  
 Common game development classes
 
