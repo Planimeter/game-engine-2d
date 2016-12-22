@@ -2,7 +2,6 @@
 
 [![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/Planimeter/grid-sdk?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Discord](https://img.shields.io/badge/chat-on%20discord-brightgreen.svg)](https://discord.gg/Gbj4jnv?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Development Supercollective](https://img.shields.io/badge/Made%20with%20L%C3%96VE%20by-Planimeter-brightgreen.svg)](http://www.planimeter.org/)
 
 The Grid engine is a 2D game engine for Lua.  
 Grid makes powerful concepts from 3D game engines accessible in a 2D game
