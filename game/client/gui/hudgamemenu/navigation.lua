@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "hudgamemenunavigation" ( gui.radiobuttongroup )
+class "gui.hudgamemenunavigation" ( "gui.radiobuttongroup" )
 
 function hudgamemenunavigation:hudgamemenunavigation( parent )
 	gui.radiobuttongroup.radiobuttongroup( self, parent, "Game Menu Navigation" )
@@ -72,4 +72,4 @@ function hudgamemenunavigation:onValueChanged( oldValue, newValue )
 	end
 end
 
-gui.register( hudgamemenunavigation, "hudgamemenunavigation" )
+

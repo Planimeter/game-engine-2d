@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "hudgamemenustats" ( gui.panel )
+class "gui.hudgamemenustats" ( "gui.panel" )
 
 function hudgamemenustats:hudgamemenustats( parent )
 	gui.panel.panel( self, parent, "Stats" )
@@ -103,4 +103,4 @@ function hudgamemenustats:hudgamemenustats( parent )
 	stat:setPos( x, y )
 end
 
-gui.register( hudgamemenustats, "hudgamemenustats" )
+

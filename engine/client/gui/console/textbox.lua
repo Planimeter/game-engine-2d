@@ -4,9 +4,12 @@
 --
 --============================================================================--
 
-class "consoletextbox" ( gui.textbox )
+local gui   = gui
+local point = point
 
-function consoletextbox:consoletextbox( parent, name )
+class "gui.console.textbox" ( "gui.textbox" )
+
+function _M:textbox( parent, name )
 	gui.textbox.textbox( self, parent, name, "" )
 
 	self:setEditable( false )
@@ -14,7 +17,7 @@ function consoletextbox:consoletextbox( parent, name )
 	self:setScheme( "Console" )
 end
 
-function consoletextbox:draw()
+function _M:draw()
 	if ( self:getHeight() == point( 1 ) ) then
 		return
 	end
@@ -28,7 +31,7 @@ function consoletextbox:draw()
 	self:drawForeground()
 end
 
-function consoletextbox:invalidateLayout()
+function _M:invalidateLayout()
 	local parent         = self:getParent()
 	local margin         = point( 36 )
 	local titleBarHeight = point( 86 )
@@ -45,5 +48,3 @@ function consoletextbox:invalidateLayout()
 
 	gui.panel.invalidateLayout( self )
 end
-
-gui.register( consoletextbox, "consoletextbox" )

@@ -34,8 +34,6 @@ function typelenvalues.bytesToNumber( bytes )
 	return ldexp( mantissa, exponent - 1023 )
 end
 
-local bytesToNumber = typelenvalues.bytesToNumber
-
 local char = string.char
 
 local function getByte( v )
@@ -76,8 +74,6 @@ function typelenvalues.numberToBytes( number )
 	v = v .. byte
 	return reverse( v )
 end
-
-local numberToBytes = typelenvalues.numberToBytes
 
 local pairs = pairs
 
@@ -150,26 +146,26 @@ function typelenvalues:serialize()
 			-- Insert length if necessary
 			if ( key.type == "string" ) then
 				local size = len( value )
-				insert( data, numberToBytes( size ) )
+				insert( data, typelenvalues.numberToBytes( size ) )
 			elseif ( key.type == "typelenvalues" ) then
 				local size = len( value:serialize() )
-				insert( data, numberToBytes( size ) )
+				insert( data, typelenvalues.numberToBytes( size ) )
 			end
 
 			-- Insert data
 			if ( key.type == "boolean" ) then
 				insert( data, char( value and 1 or 0 ) )
 			elseif ( key.type == "number" ) then
-				insert( data, numberToBytes( value ) )
+				insert( data, typelenvalues.numberToBytes( value ) )
 			elseif ( key.type == "string" ) then
 				insert( data, value )
 			elseif ( key.type == "vector" ) then
-				insert( data, numberToBytes( value.x ) )
-				insert( data, numberToBytes( value.y ) )
+				insert( data, typelenvalues.numberToBytes( value.x ) )
+				insert( data, typelenvalues.numberToBytes( value.y ) )
 			elseif ( key.type == "typelenvalues" ) then
 				insert( data, value:serialize() )
 			elseif ( key.type == "entity" ) then
-				insert( data, numberToBytes( value and value.entIndex or 0 ) )
+				insert( data, typelenvalues.numberToBytes( value and value.entIndex or 0 ) )
 			else
 				print( "Can't serialize " .. key.type .. " for " ..
 				       self:getStructName() .. "!" )
@@ -227,12 +223,12 @@ function typelenvalues:deserialize()
 			elseif ( key.type == "number" ) then
 				size = 8
 			elseif ( key.type == "string" ) then
-				size  = bytesToNumber( sub( data, index, index + 7 ) )
+				size  = typelenvalues.bytesToNumber( sub( data, index, index + 7 ) )
 				index = index + 8
 			elseif ( key.type == "vector" ) then
 				size = 2 * 8
 			elseif ( key.type == "typelenvalues" ) then
-				size  = bytesToNumber( sub( data, index, index + 7 ) )
+				size  = typelenvalues.bytesToNumber( sub( data, index, index + 7 ) )
 				index = index + 8
 			elseif ( key.type == "entity" ) then
 				size = 8
@@ -243,21 +239,21 @@ function typelenvalues:deserialize()
 			if ( key.type == "boolean" ) then
 				self.data[ key.name ] = byte( bytes ) ~= 0
 			elseif ( key.type == "number" ) then
-				self.data[ key.name ] = bytesToNumber( bytes )
+				self.data[ key.name ] = typelenvalues.bytesToNumber( bytes )
 			elseif ( key.type == "string" ) then
 				self.data[ key.name ] = bytes
 			elseif ( key.type == "vector" ) then
 				require( "common.vector" )
 				self.data[ key.name ] = vector(
-					bytesToNumber( sub( bytes, 1, 8 ) ), --x
-					bytesToNumber( sub( bytes, 8, 16 ) ) --y
+					typelenvalues.bytesToNumber( sub( bytes, 1, 8 ) ), --x
+					typelenvalues.bytesToNumber( sub( bytes, 8, 16 ) ) --y
 				)
 			elseif ( key.type == "typelenvalues" ) then
 				local tlvs = typelenvalues()
 				tlvs.data  = bytes
 				self.data[ key.name ] = tlvs
 			elseif ( key.type == "entity" ) then
-				local entIndex = bytesToNumber( bytes )
+				local entIndex = typelenvalues.bytesToNumber( bytes )
 				require( "engine.shared.entities.entity" )
 				self.data[ key.name ] = entity.getByEntIndex( entIndex )
 			end

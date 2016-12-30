@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "slider" ( gui.scrollbar )
+class "gui.slider" ( "gui.scrollbar" )
 
 function slider:slider( parent, name )
 	gui.scrollbar.scrollbar( self, parent, name )
@@ -120,10 +120,10 @@ function slider:mousepressed( x, y, button, istouch )
 	end
 end
 
-local mouseX, mouseY   = 0, 0
-local getMousePosition = input.getMousePosition
-local deltaX, deltaY   = 0, 0
-local min, max         = 0, 0
+local mouseX, mouseY = 0, 0
+local getPosition    = love.mouse.getPosition
+local deltaX, deltaY = 0, 0
+local min, max       = 0, 0
 
 function slider:update( dt )
 	gui.panel.update( self, dt )
@@ -136,7 +136,7 @@ function slider:update( dt )
 		return
 	end
 
-	mouseX, mouseY = getMousePosition()
+	mouseX, mouseY = getPosition()
 	localX, localY = self:screenToLocal( mouseX, mouseY )
 	deltaX, deltaY = localX - self.grabbedX,
 	                 localY - self.grabbedY
@@ -153,4 +153,4 @@ function slider:update( dt )
 	self.grabbedY = localY
 end
 
-gui.register( slider, "slider" )
+

@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "debugoverlaypanel" ( gui.panel )
+class "gui.debugoverlaypanel" ( "gui.panel" )
 
 function debugoverlaypanel:debugoverlaypanel( parent )
 	gui.panel.panel( self, parent, "Debug Overlay" )
@@ -90,4 +90,4 @@ function debugoverlaypanel:update( dt )
 	end
 end
 
-gui.register( debugoverlaypanel, "debugoverlaypanel" )
+

@@ -8,7 +8,7 @@ local require   = require
 local unrequire = unrequire
 local _G        = _G
 
-module( "game.server" )
+module( "gameserver" )
 
 function getPlayerClass()
 	require( "game.shared.entities.vaplayer" )

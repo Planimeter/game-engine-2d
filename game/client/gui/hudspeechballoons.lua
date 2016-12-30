@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "hudspeechballoons" ( gui.panel )
+class "gui.hudspeechballoons" ( "gui.panel" )
 
 function hudspeechballoons:hudspeechballoons( parent )
 	gui.panel.panel( self, parent, "HUD Speech Balloons" )
@@ -78,4 +78,4 @@ function hudspeechballoons:update( dt )
 	self:invalidate()
 end
 
-gui.register( hudspeechballoons, "hudspeechballoons" )
+

@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "scrollablepanel" ( gui.panel )
+class "gui.scrollablepanel" ( "gui.panel" )
 
 function scrollablepanel:scrollablepanel( parent, name )
 	gui.panel.panel( self, parent, name )
@@ -83,4 +83,4 @@ function scrollablepanel:wheelmoved( x, y )
 	return gui.panel.wheelmoved( self, x, y )
 end
 
-gui.register( scrollablepanel, "scrollablepanel" )
+

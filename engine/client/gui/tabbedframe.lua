@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "tabbedframe" ( gui.frame )
+class "gui.tabbedframe" ( "gui.frame" )
 
 local utf8upper = string.utf8upper
 
@@ -303,4 +303,4 @@ function tabbedframe:mousepressed( x, y, button, istouch )
 	end
 end
 
-gui.register( tabbedframe, "tabbedframe" )
+

@@ -8,7 +8,7 @@ require( "engine.shared.typelenvalues" )
 
 class "payload" ( "typelenvalues" )
 
-payload.handlers = {}
+payload.handlers = payload.handlers or {}
 
 -- Generate ids for packet structures
 do
@@ -34,17 +34,15 @@ function payload.setHandler( func, struct )
 end
 
 function payload:payload( struct )
-	typelenvalues.typelenvalues( self, payload.structs, struct )
+	typelenvalues.typelenvalues( self, structs, struct )
 end
 
 function payload:dispatchToHandler()
 	local name = self:getStructName()
-	if ( name ) then
-		local handler = payload.handlers[ name ]
-		if ( handler ) then
-			handler( self )
-		end
-	end
+	if ( not name ) then return end
+
+	local handler = handlers[ name ]
+	if ( handler ) then handler( self ) end
 end
 
 accessor( payload, "peer" )

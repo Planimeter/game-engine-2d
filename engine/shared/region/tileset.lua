@@ -4,29 +4,29 @@
 --
 --============================================================================--
 
-class( "regiontileset" )
+class( "tileset" )
 
-function regiontileset:regiontileset( tilesetData )
+function tileset:tileset( tilesetData )
 	self.data = tilesetData
 	self:parse()
 end
 
-accessor( regiontileset, "filename" )
-accessor( regiontileset, "firstGid", "firstgid" )
-accessor( regiontileset, "image" )
-accessor( regiontileset, "imageWidth", "imagewidth" )
-accessor( regiontileset, "imageHeight", "imageheight" )
-accessor( regiontileset, "name" )
-accessor( regiontileset, "properties" )
-accessor( regiontileset, "spacing" )
-accessor( regiontileset, "margin" )
-accessor( regiontileset, "tileCount", "tilecount" )
-accessor( regiontileset, "tileOffset", "tileoffset" )
-accessor( regiontileset, "tiles" )
-accessor( regiontileset, "tileWidth", "tilewidth" )
-accessor( regiontileset, "tileHeight", "tileheight" )
+accessor( tileset, "filename" )
+accessor( tileset, "firstGid", "firstgid" )
+accessor( tileset, "image" )
+accessor( tileset, "imageWidth", "imagewidth" )
+accessor( tileset, "imageHeight", "imageheight" )
+accessor( tileset, "name" )
+accessor( tileset, "properties" )
+accessor( tileset, "spacing" )
+accessor( tileset, "margin" )
+accessor( tileset, "tileCount", "tilecount" )
+accessor( tileset, "tileOffset", "tileoffset" )
+accessor( tileset, "tiles" )
+accessor( tileset, "tileWidth", "tilewidth" )
+accessor( tileset, "tileHeight", "tileheight" )
 
-function regiontileset:parse()
+function tileset:parse()
 	if ( not self.data ) then
 		return
 	end
@@ -55,10 +55,10 @@ function regiontileset:parse()
 	self.data = nil
 end
 
-function regiontileset:setImage( image )
-	self.image = graphics.newImage( image )
+function tileset:setImage( image )
+	self.image = love.graphics.newImage( image )
 end
 
-function regiontileset:__tostring()
-	return "regiontileset: \"" .. self:getName() .. "\""
+function tileset:__tostring()
+	return "tileset: \"" .. self:getName() .. "\""
 end

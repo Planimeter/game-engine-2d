@@ -4,16 +4,12 @@
 --
 --============================================================================--
 
--- These values are preserved during real-time scripting.
-local config  = convar and convar.config  or {}
-local convars = convar and convar.convars or {}
-
 require( "class" )
 
 class( "convar" )
 
-convar.config  = config
-convar.convars = convars
+convar.config  = convar.config  or {}
+convar.convars = convar.convars or {}
 
 function convar.getConfig( name )
 	return convar.config[ name ]

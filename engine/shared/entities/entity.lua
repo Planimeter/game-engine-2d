@@ -419,7 +419,7 @@ function entity:onNetworkVarChanged( networkvar )
 		networkVar:set( networkvar:getName(), networkvar:getValue() )
 		payload:set( "networkVars", networkVar )
 
-		networkserver.broadcast( payload )
+		engine.server.network.broadcast( payload )
 	end
 end
 
@@ -454,7 +454,7 @@ function entity:remove()
 	if ( _SERVER and not _CLIENT ) then
 		local payload = payload( "entityRemoved" )
 		payload:set( "entity", self )
-		networkserver.broadcast( payload )
+		engine.server.network.broadcast( payload )
 	end
 end
 
@@ -539,7 +539,7 @@ function entity:spawn()
 		payload:set( "classname", self:getClassname() )
 		payload:set( "entIndex", self.entIndex )
 		payload:set( "networkVars", self:getNetworkVarTypeLenValues() )
-		networkserver.broadcast( payload )
+		engine.server.network.broadcast( payload )
 	end
 end
 

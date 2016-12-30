@@ -4,14 +4,16 @@
 --
 --============================================================================--
 
-class( "regionlayer" )
+class( "region.layer" )
 
-function regionlayer:regionlayer( layerData )
+local layer = region.layer
+
+function layer:layer( layerData )
 	self.data = layerData
 end
 
 if ( _CLIENT ) then
-	function regionlayer:createSpriteBatch()
+	function layer:createSpriteBatch()
 		local tileset = self:getTileset()
 		if ( not tileset ) then
 			return
@@ -22,7 +24,7 @@ if ( _CLIENT ) then
 		self.spritebatch = love.graphics.newSpriteBatch( image:getDrawable(), count )
 	end
 
-	function regionlayer:draw()
+	function layer:draw()
 		if ( self:getType() ~= "tilelayer" ) then
 			return
 		end
@@ -41,9 +43,9 @@ if ( _CLIENT ) then
 	end
 end
 
-accessor( regionlayer, "data" )
+accessor( layer, "data" )
 
-function regionlayer:getHighestTileGid()
+function layer:getHighestTileGid()
 	local highestTileGid = -1
 	for xy, gid in ipairs( self:getData() ) do
 		if ( gid >= highestTileGid ) then
@@ -53,24 +55,24 @@ function regionlayer:getHighestTileGid()
 	return highestTileGid
 end
 
-accessor( regionlayer, "name" )
-accessor( regionlayer, "opacity" )
-accessor( regionlayer, "properties" )
-accessor( regionlayer, "region" )
+accessor( layer, "name" )
+accessor( layer, "opacity" )
+accessor( layer, "properties" )
+accessor( layer, "region" )
 
 if ( _CLIENT ) then
-	accessor( regionlayer, "spriteBatch", "spritebatch" )
+	accessor( layer, "spriteBatch", "spritebatch" )
 end
 
-accessor( regionlayer, "tileset" )
-accessor( regionlayer, "type" )
-accessor( regionlayer, "width" )
-accessor( regionlayer, "height" )
-accessor( regionlayer, "x" )
-accessor( regionlayer, "y" )
+accessor( layer, "tileset" )
+accessor( layer, "type" )
+accessor( layer, "width" )
+accessor( layer, "height" )
+accessor( layer, "x" )
+accessor( layer, "y" )
 
 if ( _CLIENT ) then
-	function regionlayer:initializeTiles()
+	function layer:initializeTiles()
 		self:createSpriteBatch()
 
 		local spritebatch = self:getSpriteBatch()
@@ -109,11 +111,11 @@ if ( _CLIENT ) then
 	end
 end
 
-function regionlayer:isVisible()
+function layer:isVisible()
 	return self.visible
 end
 
-function regionlayer:parse()
+function layer:parse()
 	if ( not self.data ) then
 		return
 	end
@@ -150,7 +152,7 @@ function regionlayer:parse()
 	-- self.data = nil
 end
 
-function regionlayer:setTileset( tileset )
+function layer:setTileset( tileset )
 	self.tileset = tileset
 
 	if ( _CLIENT ) then
@@ -160,10 +162,10 @@ function regionlayer:setTileset( tileset )
 	end
 end
 
-function regionlayer:setVisible( visible )
+function layer:setVisible( visible )
 	self.visible = visible
 end
 
-function regionlayer:__tostring()
-	return "regionlayer: \"" .. self:getName() .. "\""
+function layer:__tostring()
+	return "layer: \"" .. self:getName() .. "\""
 end

@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "dropdownlist" ( gui.button )
+class "gui.dropdownlist" ( "gui.button" )
 
 function dropdownlist:dropdownlist( parent, name )
 	gui.button.button( self, parent, name )
@@ -191,4 +191,4 @@ function dropdownlist:setActive( active )
 	gui.setFocusedPanel( self, active )
 end
 
-gui.register( dropdownlist, "dropdownlist" )
+

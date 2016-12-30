@@ -4,12 +4,9 @@
 --
 --============================================================================--
 
--- These values are preserved during real-time scripting.
-local schemes = scheme and scheme.schemes or {}
-
 class( "scheme" )
 
-scheme.schemes = schemes
+scheme.schemes = scheme.schemes or {}
 
 local properties = {}
 
@@ -23,7 +20,7 @@ function scheme.getProperty( name, property )
 		return cachedProperty
 	end
 
-	local value = scheme.schemes[ name ]
+	local value = schemes[ name ]
 	local type  = type( value )
 	if ( type ~= "scheme" ) then
 		error( "attempt to index scheme '" .. name .. "' " ..

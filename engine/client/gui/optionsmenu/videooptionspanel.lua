@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "videooptionspanel" ( gui.frametabpanel )
+class "gui.videooptionspanel" ( "gui.frametabpanel" )
 
 function videooptionspanel:videooptionspanel()
 	gui.frametabpanel.frametabpanel( self, nil, "Video Options Panel" )
@@ -330,4 +330,4 @@ function videooptionspanel:updateResolutions()
 	end
 end
 
-gui.register( videooptionspanel, "videooptionspanel" )
+

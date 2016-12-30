@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "hudgamemenunavigationbutton" ( gui.radiobutton )
+class "gui.hudgamemenunavigationbutton" ( "gui.radiobutton" )
 
 function hudgamemenunavigationbutton:hudgamemenunavigationbutton( parent, name )
 	gui.radiobutton.radiobutton( self, parent, name, name )
@@ -55,4 +55,4 @@ function hudgamemenunavigationbutton:drawLabel()
 	graphics.print( self.text, x, y )
 end
 
-gui.register( hudgamemenunavigationbutton, "hudgamemenunavigationbutton" )
+

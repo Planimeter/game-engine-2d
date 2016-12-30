@@ -4,16 +4,21 @@
 --
 --============================================================================--
 
-class "mainmenuclosebutton" ( gui.closebutton )
+local gui    = gui
+local love   = love
+local point  = point
+local unpack = unpack
 
-function mainmenuclosebutton:mainmenuclosebutton( parent )
+class "gui.mainmenu.closebutton" ( "gui.closebutton" )
+
+function _M:closebutton( parent )
 	gui.closebutton.closebutton( self, parent, "Main Menu Close Button" )
 	self.width  = point( 32 )
 	self.height = self.width + point( 1 )
 	self.icon   = self:getScheme( "mainmenuclosebutton.icon" )
 end
 
-function mainmenuclosebutton:draw()
+function _M:draw()
 	local iconColor = "mainmenuclosebutton.dark.iconColor"
 	if ( self.mousedown and self.mouseover ) then
 		iconColor = "mainmenuclosebutton.dark.mousedown.iconColor"
@@ -23,10 +28,8 @@ function mainmenuclosebutton:draw()
 
 	local x =   self:getWidth()                 / 2 - self.icon:getWidth()  / 2
 	local y = ( self:getHeight() - point( 1 ) ) / 2 - self.icon:getHeight() / 2
-	graphics.setColor( self:getScheme( iconColor ) )
+	love.graphics.setColor( unpack( self:getScheme( iconColor ) ) )
 	love.graphics.draw( self.icon, x, y )
 
 	gui.panel.draw( self )
 end
-
-gui.register( mainmenuclosebutton, "mainmenuclosebutton" )

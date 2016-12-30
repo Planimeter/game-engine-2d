@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "keyboardoptionsadvancedframe" ( gui.frame )
+class "gui.keyboardoptionsadvancedframe" ( "gui.frame" )
 
 function keyboardoptionsadvancedframe:keyboardoptionsadvancedframe( parent )
 	local name = "Advanced Keyboard Options"
@@ -25,4 +25,4 @@ function keyboardoptionsadvancedframe:keyboardoptionsadvancedframe( parent )
 	self.console:setPos( margin, titleBarHeight )
 end
 
-gui.register( keyboardoptionsadvancedframe, "keyboardoptionsadvancedframe" )
+

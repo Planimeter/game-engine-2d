@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "optionsmenu" ( gui.tabbedframe )
+class "gui.optionsmenu" ( "gui.tabbedframe" )
 
 function optionsmenu:optionsmenu( parent )
 	local name = "Options Menu"
@@ -67,7 +67,7 @@ function optionsmenu:invalidateLayout()
 	gui.tabbedframe.invalidateLayout( self )
 end
 
-gui.register( optionsmenu, "optionsmenu" )
+
 
 if ( g_MainMenu and g_MainMenu.optionsMenu ) then
 	local visible = g_MainMenu.optionsMenu:isVisible()

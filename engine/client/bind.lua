@@ -4,28 +4,34 @@
 --
 --============================================================================--
 
-class( "bind" )
+local concommand = concommand
+local love       = love
+local pairs      = pairs
+local print      = print
+local string     = string
 
-local binds = {}
+module( "bind" )
 
-function bind.getBinds()
-	return binds
+_binds = _binds or {}
+
+function getBinds()
+	return _binds
 end
 
-function bind.getBind( key )
-	return binds[ key ]
+function getBind( key )
+	return _binds[ key ]
 end
 
-function bind.getKeyForBind( concommand )
-	for key, bind in pairs( bind.getBinds() ) do
+function getKeyForBind( concommand )
+	for key, bind in pairs( getBinds() ) do
 		if ( bind == concommand ) then
 			return key
 		end
 	end
 end
 
-function bind.setBind( key, concommand )
-	binds[ key ] = concommand
+function setBind( key, concommand )
+	_binds[ key ] = concommand
 end
 
 concommand( "bind", "Binds a key",
@@ -38,19 +44,22 @@ concommand( "bind", "Binds a key",
 		end
 
 		if ( concommand ) then
-			bind.setBind( key, concommand )
+			setBind( key, concommand )
 		else
-			print( bind.getBind( key ) )
+			print( getBind( key ) )
 		end
 	end
 )
 
-function bind.readBinds()
+function readBinds()
 	local config = "cfg/binds.cfg"
 	if ( not love.filesystem.exists( config ) ) then
 		config = "cfg/binds_default.cfg"
 		if ( love.filesystem.exists( config ) ) then
-			love.filesystem.write( "cfg/binds.cfg", love.filesystem.read( config ) )
+			love.filesystem.write(
+				"cfg/binds.cfg",
+				love.filesystem.read( config )
+			)
 		else
 			return
 		end
@@ -58,12 +67,12 @@ function bind.readBinds()
 
 	for line in love.filesystem.lines( config ) do
 		for k, v in string.gmatch( line, "(.+)%s(.+)" ) do
-			bind.setBind( string.trim( k ), string.trim( v ) )
+			setBind( string.trim( k ), string.trim( v ) )
 		end
 	end
 end
 
-function bind.readDefaultBinds()
+function readDefaultBinds()
 	local config = "cfg/binds_default.cfg"
 	if ( not love.filesystem.exists( config ) ) then
 		return
@@ -72,15 +81,15 @@ function bind.readDefaultBinds()
 	local binds = {}
 	for line in love.filesystem.lines( config ) do
 		for k, v in string.gmatch( line, "(.+)%s(.+)" ) do
-			bind.setBind( string.trim( k ), string.trim( v ) )
+			setBind( string.trim( k ), string.trim( v ) )
 		end
 	end
 	return binds
 end
 
-function bind.saveBinds()
+function saveBinds()
 	local config = {}
-	for k, v in pairs( bind.getBinds() ) do
+	for k, v in pairs( getBinds() ) do
 		table.insert( config, k .. " " .. v )
 	end
 	table.insert( config, "" )
@@ -95,15 +104,15 @@ function bind.saveBinds()
 	end
 end
 
-function bind.keypressed( key, scancode, isrepeat )
-	local bind = bind.getBind( key )
+function keypressed( key, scancode, isrepeat )
+	local bind = getBind( key )
 	if ( bind and not concommand.dispatch( localplayer, bind ) ) then
 		print( "'" .. bind .. "' is not recognized as a command." )
 	end
 end
 
-function bind.keyreleased( key, scancode )
-	local bind = bind.getBind( key )
+function keyreleased( key, scancode )
+	local bind = getBind( key )
 	if ( not bind ) then
 		return
 	end
@@ -117,10 +126,10 @@ function bind.keyreleased( key, scancode )
 	end
 end
 
-function bind.mousepressed( x, y, button, istouch )
-	bind.keypressed( button, nil, false )
+function mousepressed( x, y, button, istouch )
+	keypressed( button, nil, false )
 end
 
-function bind.mousereleased( x, y, button, istouch )
-	bind.keyreleased( button )
+function mousereleased( x, y, button, istouch )
+	keyreleased( button )
 end

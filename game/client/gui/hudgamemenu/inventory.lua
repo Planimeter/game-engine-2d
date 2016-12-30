@@ -6,7 +6,7 @@
 
 require( "game.client.gui.hudgamemenu.itemgrid" )
 
-class "hudgamemenuinventory" ( gui.panel )
+class "gui.hudgamemenuinventory" ( "gui.panel" )
 
 function hudgamemenuinventory:hudgamemenuinventory( parent )
 	gui.panel.panel( self, parent, "Inventory" )
@@ -40,4 +40,4 @@ function hudgamemenuinventory:onRemove()
 	gui.panel.onRemove( self )
 end
 
-gui.register( hudgamemenuinventory, "hudgamemenuinventory" )
+

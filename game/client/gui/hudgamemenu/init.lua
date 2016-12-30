@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "hudgamemenu" ( gui.hudframe )
+class "gui.hudgamemenu" ( "gui.hudframe" )
 
 function hudgamemenu:hudgamemenu( parent )
 	local name = "HUD Game Menu"
@@ -47,7 +47,7 @@ function hudgamemenu:invalidateLayout()
 	gui.frame.invalidateLayout( self )
 end
 
-gui.register( hudgamemenu, "hudgamemenu" )
+
 
 concommand( "+gamemenu", "Opens the gamemenu", function()
 	local visible = _G.g_GameMenu:isVisible()

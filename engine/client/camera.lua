@@ -6,29 +6,9 @@
 
 require( "common.vector" )
 
--- These values are preserved during real-time scripting.
-local contexts   = camera and camera.getWorldContexts() or {}
-local entity     = camera and camera.getParentEntity()
-local position   = camera and camera.getPosition() or vector()
-local worldIndex = camera and camera.getWorldIndex() or 1
-local minZoom    = camera and camera.getMinZoom() or point( 1 )
-local maxZoom    = camera and camera.getMaxZoom() or point( 4 )
-local zoom       = camera and camera.getZoom() or point( 1 )
-
-local class      = class
-local concommand = concommand
-local graphics   = graphics
-local ipairs     = ipairs
-local love       = love
-local math       = math
-local point      = point
-local table      = table
-local tween      = tween
-local vector     = vector
-
 module( "camera" )
 
-local _contexts = contexts
+_contexts = _contexts or {}
 
 class( "context" )
 
@@ -69,13 +49,13 @@ function drawToWorld( worldIndex, x, y, func )
 	table.insert( _contexts, context )
 end
 
-local _entity = entity
+_entity = _entity or nil
 
 function getParentEntity()
 	return _entity
 end
 
-local _position = position
+_position = _position or vector()
 
 function getPosition()
 	local entity = getParentEntity()
@@ -86,16 +66,11 @@ function getPosition()
 	return _position
 end
 
-local pos    = vector.origin
-local width  = 0
-local height = 0
-local scale  = 1
-
 function getTranslation()
-	pos    = getPosition()
-	width  = love.graphics.getWidth()
-	height = love.graphics.getHeight()
-	scale  = getZoom()
+	local pos    = getPosition()
+	local width  = love.graphics.getWidth()
+	local height = love.graphics.getHeight()
+	local scale  = getZoom()
 	if ( not pos ) then pos = vector.origin end
 	return -pos.x + ( width  / 2 ) / scale,
 	       -pos.y + ( height / 2 ) / scale
@@ -105,7 +80,7 @@ function getWorldContexts()
 	return _contexts
 end
 
-local _worldIndex = worldIndex
+_worldIndex = _worldIndex or 1
 
 function getWorldIndex()
 	local entity = getParentEntity()
@@ -116,31 +91,29 @@ function getWorldIndex()
 	return _worldIndex
 end
 
-local _minZoom = minZoom
+_minZoom = _minZoom or point( 1 )
 
 function getMinZoom()
 	return _minZoom
 end
 
-local _maxZoom = maxZoom
+_maxZoom = _maxZoom or point( 4 )
 
 function getMaxZoom()
 	return _maxZoom
 end
 
-local _private = {
-	_zoom = zoom
-}
+_zoom = _zoom or point( 1 )
 
 function getZoom()
-	return _private._zoom
+	return _zoom
 end
 
-local _tween = nil
+_tween = _tween or nil
 
 function resetZoom()
 	if ( not _tween ) then
-		_tween = tween( _private, nil, {
+		_tween = tween( _M, nil, {
 			_zoom = point( 2 ),
 			onComplete = function()
 				_tween = nil
@@ -152,20 +125,20 @@ function resetZoom()
 end
 
 function screenToWorld( x, y )
-	pos    = getPosition()
-	width  = love.graphics.getWidth()
-	height = love.graphics.getHeight()
-	scale  = getZoom()
+	local pos    = getPosition()
+	local width  = love.graphics.getWidth()
+	local height = love.graphics.getHeight()
+	local scale  = getZoom()
 	if ( not pos ) then pos = vector.origin end
 	return pos.x - ( width  / 2 ) / scale + x / scale,
 	       pos.y - ( height / 2 ) / scale + y / scale
 end
 
 function worldToScreen( x, y )
-	pos    = getPosition()
-	width  = love.graphics.getWidth()
-	height = love.graphics.getHeight()
-	scale  = getZoom()
+	local pos    = getPosition()
+	local width  = love.graphics.getWidth()
+	local height = love.graphics.getHeight()
+	local scale  = getZoom()
 	if ( not pos ) then pos = vector.origin end
 	return pos.x * -scale + ( width  / 2 ) + x * scale,
 	       pos.y * -scale + ( height / 2 ) + y * scale
@@ -187,14 +160,12 @@ function setMaxZoom( maxZoom )
 	_maxZoom = maxZoom
 end
 
-local clamp = math.clamp
-
 function setZoom( zoom )
 	if ( _tween ) then
 		return
 	end
 
-	_private._zoom = clamp( zoom, getMinZoom(), getMaxZoom() )
+	_zoom = math.clamp( zoom, getMinZoom(), getMaxZoom() )
 end
 
 concommand( "zoomin", "Zooms the camera in", function()

@@ -7,7 +7,7 @@
 require( "engine.client.gui.optionsmenu.bindlistheader" )
 require( "engine.client.gui.optionsmenu.bindlistitem" )
 
-class "bindlistpanel" ( gui.scrollablepanel )
+class "gui.bindlistpanel" ( "gui.scrollablepanel" )
 
 function bindlistpanel:bindlistpanel( parent, name )
 	gui.scrollablepanel.scrollablepanel( self, parent, name )
@@ -122,4 +122,4 @@ function bindlistpanel:useDefaults()
 	self:readBinds( defaultBinds )
 end
 
-gui.register( bindlistpanel, "bindlistpanel" )
+

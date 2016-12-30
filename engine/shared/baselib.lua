@@ -16,6 +16,10 @@ if ( not rawdofile ) then
 end
 
 function accessor( class, member, key )
+	if ( type( class ) ~= "table" ) then
+		typerror( 1, "table", class )
+	end
+
 	class[ "set" .. string.capitalize( member ) ] = function( self, value )
 		self[ key or member ] = value
 	end

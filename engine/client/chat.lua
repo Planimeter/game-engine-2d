@@ -4,9 +4,9 @@
 --
 --============================================================================--
 
-class( "chat" )
+module( "chat" )
 
-function chat.addText( ... )
+function addText( ... )
 	local args = { ... }
 	for i = 1, select( "#", ... ) do
 		args[ i ] = tostring( args[ i ] )

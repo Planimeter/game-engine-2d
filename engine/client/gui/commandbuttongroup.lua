@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "commandbuttongroup" ( gui.panel )
+class "gui.commandbuttongroup" ( "gui.panel" )
 
 function commandbuttongroup:commandbuttongroup( parent, name )
 	gui.panel.panel( self, parent, name )
@@ -53,4 +53,4 @@ function commandbuttongroup:invalidateLayout()
 	gui.panel.invalidateLayout( self )
 end
 
-gui.register( commandbuttongroup, "commandbuttongroup" )
+

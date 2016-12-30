@@ -6,110 +6,110 @@
 
 require( "enet" )
 
-class( "networkclient" )
+module( "networkclient" )
 
-networkclient.host   = _host
-networkclient.server = _server
+_host   = _host   or nil
+_server = _server or nil
 
-function networkclient.connect( address )
+function connect( address )
 	if ( not string.find( address, ":" ) ) then
 		address = address .. ":26015"
 	end
 
 	print( "Connecting to " .. address .. "..." )
-	networkclient.host = enet.host_create()
-	networkclient.host:compress_with_range_coder()
+	_host = enet.host_create()
+	_host:compress_with_range_coder()
 
 	local status, ret = pcall( function()
-		return networkclient.host:connect( address, 1000 )
+		return _host:connect( address, 1000 )
 	end )
 	if ( status ) then
-		server = ret
+		_server = ret
 	else
 		print( string.match( ret, ".-: (.+)" ) )
-		networkclient.host = nil
+		_host = nil
 		collectgarbage()
 	end
 end
 
-function networkclient.connectToListenServer()
+function connectToListenServer()
 	require( "engine.client.network.localhost_enet_peer" )
 	require( "engine.client.network.localhost_enet_server" )
 
-	networkclient.server = _G.localhost_enet_server()
+	_server = localhost_enet_server()
 	local event = {
-		peer = _G.localhost_enet_peer(),
+		peer = localhost_enet_peer(),
 		type = "connect",
 		data = 0,
 	}
-	engineserver.onConnect( event )
+	engine.server.onConnect( event )
 
 	local event = {
-		peer = server,
+		peer = _server,
 		type = "connect",
 		data = 0,
 	}
-	engineclient.onConnect( event )
+	engine.client.onConnect( event )
 end
 
-function networkclient.disconnect()
-	if ( not engineclient.isConnected() or
-	         engineclient.isDisconnecting() ) then
+function disconnect()
+	if ( not engine.client.isConnected() or
+	         engine.client.isDisconnecting() ) then
 		return
 	end
 
 	print( "Disconnecting from server..." )
 
-	if ( networkclient.server ) then
-		networkclient.server:disconnect()
-		networkclient.server = nil
+	if ( _server ) then
+		_server:disconnect()
+		_server = nil
 	end
 
-	if ( networkclient.host ) then
-		networkclient.host:flush()
-		networkclient.host = nil
+	if ( _host ) then
+		_host:flush()
+		_host = nil
 	end
 
 	collectgarbage()
 
-	engineclient.onDisconnect()
+	engine.client.onDisconnect()
 end
 
-function networkclient.sendToServer( data, channel, flag )
+function sendToServer( data, channel, flag )
 	if ( type( data ) == "payload" ) then
 		data = data:serialize()
 	end
-	networkclient.server:send( data, channel, flag )
+	_server:send( data, channel, flag )
 end
 
-local timestep    = 1/20
-local accumulator = _accumulator
+local timestep = 1/20
+_accumulator   = _accumulator or 0
 
-function networkclient.update( dt )
-	if ( not networkclient.host ) then return end
+function update( dt )
+	if ( not _host ) then return end
 
-	-- accumulator = accumulator + dt
+	-- _accumulator = _accumulator + dt
 
-	-- while ( accumulator >= timestep ) do
+	-- while ( _accumulator >= timestep ) do
 		pollEvents()
 
-		-- accumulator = accumulator - timestep
+		-- _accumulator = _accumulator - timestep
 	-- end
 end
 
-function networkclient.pollEvents()
-	local event = networkclient.host:service()
+function pollEvents()
+	local event = _host:service()
 	while ( event ~= nil ) do
 		if ( event.type == "connect" ) then
-			engineclient.onConnect( event )
+			engine.client.onConnect( event )
 		elseif ( event.type == "receive" ) then
-			engineclient.onReceive( event )
+			engine.client.onReceive( event )
 		elseif ( event.type == "disconnect" ) then
-			engineclient.onDisconnect( event )
+			engine.client.onDisconnect( event )
 		end
 
 		if ( host ) then
-			event = host:service()
+			event = _host:service()
 		else
 			event = nil
 		end

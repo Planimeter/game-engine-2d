@@ -4,16 +4,19 @@
 --
 --============================================================================--
 
-class "mainmenubutton" ( gui.button )
+local gui  = gui
+local love = love
 
-function mainmenubutton:mainmenubutton( parent, text )
+class "gui.mainmenu.button" ( "gui.button" )
+
+function _M:button( parent, text )
 	gui.button.button( self, parent, text and text or "Blank" .. " Button",
 	                   text or "" )
 	local font  = self:getScheme( "mainmenuFont" )
 	self.height = font:getHeight()
 end
 
-function mainmenubutton:draw()
+function _M:draw()
 	local textColor = "mainmenubutton.dark.textColor"
 	if ( self:isDisabled() ) then
 		textColor = "mainmenubutton.dark.disabled.textColor"
@@ -27,10 +30,8 @@ function mainmenubutton:draw()
 	love.graphics.setFont( font )
 	local x =   self:getWidth()        / 2 - font:getWidth( self.text ) / 2
 	local y = ( self:getHeight() - 1 ) / 2 - font:getHeight()           / 2 - 1
-	graphics.setColor( self:getScheme( textColor ) )
-	graphics.print( ( self.text ), 0, y )
+	love.graphics.setColor( self:getScheme( textColor ) )
+	love.graphics.print( ( self.text ), 0, y )
 
 	gui.panel.draw( self )
 end
-
-gui.register( mainmenubutton, "mainmenubutton" )

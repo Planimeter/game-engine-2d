@@ -41,72 +41,6 @@ local point = point
 
 module( "graphics" )
 
-class( "grid" )
-
-grid.framebuffer = grid.framebuffer or nil
-
-grid.scheme = {
-	backgroundColor = color(  31,  35,  36,                      255 ),
-	lines32x32Color = color( 255, 255, 255, 0.42 * 0.42 * 0.07 * 255 ),
-	lines64x64Color = color( 255, 255, 255, 0.42 * 0.42 * 0.07 * 255 ),
-}
-
-grid.marks = {}
-
-function drawGrid()
-	if ( grid.framebuffer == nil ) then
-		grid.framebuffer = newFullscreenFramebuffer()
-		grid.framebuffer:renderTo( function()
-			graphics.setLineWidth( point( 1 ) )
-			graphics.setLineStyle( "rough" )
-			love.graphics.setBlendMode( "alpha" )
-
-			local x = graphics.getWidth()  % point( 32 ) / 2
-			local y = graphics.getHeight() % point( 32 ) / 2
-
-			-- Grid Lines (32x32)
-			setColor( grid.scheme.lines32x32Color )
-			for i = 0, graphics.getWidth() / point( 32 ) do
-				love.graphics.line(
-					point(  32 ) * i + x,
-					point( -32 ),
-					point(  32 ) * i + x,
-					graphics.getHeight()
-				)
-			end
-			for i = 0, graphics.getHeight() / point( 32 ) do
-				love.graphics.line(
-					point( -32 ),
-					point(  32 ) * i + y,
-					graphics.getWidth(),
-					point(  32 ) * i + y
-				)
-			end
-
-			-- Grid Lines (64x64)
-			setColor( grid.scheme.lines64x64Color )
-			for i = 0, graphics.getWidth() / point( 64 ) do
-				love.graphics.line(
-					point(  64 ) * i + x,
-					point( -64 ),
-					point(  64 ) * i + x,
-					graphics.getHeight()
-				)
-			end
-			for i = 0, graphics.getHeight() / point( 64 ) do
-				love.graphics.line(
-					point( -64 ),
-					point(  64 ) * i + y,
-					graphics.getWidth(),
-					point(  64 ) * i + y
-				)
-			end
-		end )
-	end
-
-	grid.framebuffer:draw()
-end
-
 local gcd = math.gcd
 
 function getAspectRatios()
@@ -124,27 +58,6 @@ function getAspectRatios()
 	end )
 	modes = table.unique( modes )
 	return modes
-end
-
-local r, g, b, a = 0, 0, 0, 0
-local _color     = color( r, g, b, a )
-
-function getBackgroundColor()
-	r, g, b, a = graphics.getBackgroundColor()
-	_color[ 1 ] = r
-	_color[ 2 ] = g
-	_color[ 3 ] = b
-	_color[ 4 ] = a
-	return _color
-end
-
-function getColor()
-	r, g, b, a = graphics.getColor()
-	_color[ 1 ] = r
-	_color[ 2 ] = g
-	_color[ 3 ] = b
-	_color[ 4 ] = a
-	return _color
 end
 
 local mode   = nil
@@ -189,11 +102,6 @@ function getAspectRatios()
 	return w / r, h / r
 end
 
-function newFont( filename, size )
-	size = love.window.getPixelScale() * size
-	return graphics.newFont( filename, size )
-end
-
 function newFramebuffer( width, height )
 	require( "engine.client.framebuffer" )
 	return _G.framebuffer( width, height )
@@ -202,11 +110,6 @@ end
 function newFullscreenFramebuffer()
 	require( "engine.client.framebuffer" )
 	return _G.fullscreenframebuffer()
-end
-
-function newImage( filename )
-	require( "engine.client.image" )
-	return _G.image( filename )
 end
 
 local floor = math.floor
@@ -234,30 +137,6 @@ function print( text, x, y, r, sx, sy, ox, oy, kx, ky, tracking )
 	graphics.print( text, x, y, r, sx, sy, ox, oy, kx, ky )
 end
 
-function printf( text, x, y, limit, align, r, sx, sy, ox, oy, kx, ky )
-	if ( x ) then
-		x = floor( x )
-	end
-
-	if ( y ) then
-		y = floor( y )
-	end
-
-	graphics.printf( text, x, y, limit, align, r, sx, sy, ox, oy, kx, ky )
-end
-
-local _lineWidth = 1
-
-function rectangle( mode, x, y, width, height )
-	if ( mode == "line" ) then
-		x      = x      + _lineWidth / 2
-		y      = y      + _lineWidth / 2
-		width  = width  - _lineWidth
-		height = height - _lineWidth
-	end
-	graphics.rectangle( mode, x, y, width, height )
-end
-
 local tempColor = color()
 
 function setBackgroundColor( color, multiplicative )
@@ -274,11 +153,6 @@ function setColor( color, multiplicative )
 	tempColor[ 3 ] = color[ 3 ] * ( multiplicative and _opacity or 1 )
 	tempColor[ 4 ] = color[ 4 ] * _opacity
 	graphics.setColor( tempColor )
-end
-
-function setLineWidth( width )
-	_lineWidth = width
-	graphics.setLineWidth( width )
 end
 
 function setOpacity( opacity )

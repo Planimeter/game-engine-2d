@@ -4,12 +4,9 @@
 --
 --============================================================================--
 
--- These values are preserved during real-time scripting.
-local shaders = shader and shader.shaders or {}
-
 class( "shader" )
 
-shader.shaders = shaders
+shader.shaders = shader.shaders or {}
 
 function shader.getShader( name )
 	return shader.shaders[ name ]()

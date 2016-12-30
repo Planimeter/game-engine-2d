@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "viewport" ( gui.panel )
+class "gui.viewport" ( "gui.panel" )
 
 function viewport:viewport( parent )
 	gui.panel.panel( self, parent, "Viewport" )
@@ -62,4 +62,4 @@ end
 
 hook.set( "client", showViewport, "onMainMenuClose", "showViewport" )
 
-gui.register( viewport, "viewport" )
+

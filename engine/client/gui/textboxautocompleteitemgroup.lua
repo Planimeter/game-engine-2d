@@ -4,9 +4,11 @@
 --
 --============================================================================--
 
-class "textboxautocompleteitemgroup" ( gui.dropdownlistitemgroup )
+local gui = gui
 
-function textboxautocompleteitemgroup:textboxautocompleteitemgroup( parent, name )
+class "gui.textboxautocompleteitemgroup" ( "gui.dropdownlistitemgroup" )
+
+function _M:textboxautocompleteitemgroup( parent, name )
 	gui.dropdownlistitemgroup.dropdownlistitemgroup( self, parent, name )
 	-- UNDONE: The drop-down list field is reserved for the control responsible
 	-- for the drop-down list item group. The control does not necessarily have
@@ -17,7 +19,7 @@ function textboxautocompleteitemgroup:textboxautocompleteitemgroup( parent, name
 	self:setSuppressFramebufferWarnings( true )
 end
 
-function textboxautocompleteitemgroup:addItem( item )
+function _M:addItem( item )
 	item:setParent( self )
 	gui.radiobuttongroup.addItem( self, item )
 
@@ -31,11 +33,11 @@ function textboxautocompleteitemgroup:addItem( item )
 	self:invalidateLayout()
 end
 
-function textboxautocompleteitemgroup:getTextBox()
+function _M:getTextBox()
 	return self.textBox
 end
 
-function textboxautocompleteitemgroup:invalidateLayout()
+function _M:invalidateLayout()
 	self:updatePos()
 	self:setWidth( self:getTextBox():getWidth() )
 
@@ -51,14 +53,14 @@ function textboxautocompleteitemgroup:invalidateLayout()
 	end
 end
 
-function textboxautocompleteitemgroup:isVisible()
+function _M:isVisible()
 	local textBox     = self:getTextBox()
 	local children    = self:getChildren()
 	local hasChildren = children and #children > 0
 	return textBox:isVisible() and textBox.focus and hasChildren
 end
 
-function textboxautocompleteitemgroup:mousepressed( x, y, button, istouch )
+function _M:mousepressed( x, y, button, istouch )
 	if ( button == 1 ) then
 		local textBox = self:getTextBox()
 		if ( textBox ~= gui.topPanel and
@@ -72,17 +74,15 @@ function textboxautocompleteitemgroup:mousepressed( x, y, button, istouch )
 	return gui.panel.mousepressed( self, x, y, button, istouch )
 end
 
-function textboxautocompleteitemgroup:onValueChanged( oldValue, newValue )
+function _M:onValueChanged( oldValue, newValue )
 end
 
 local sx, sy = 0, 0
 
-function textboxautocompleteitemgroup:updatePos()
+function _M:updatePos()
 	local textBox = self:getTextBox()
 	if ( textBox ) then
 		sx, sy = textBox:localToScreen()
 		self:setPos( sx, sy + textBox:getHeight() )
 	end
 end
-
-gui.register( textboxautocompleteitemgroup, "textboxautocompleteitemgroup" )

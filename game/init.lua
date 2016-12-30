@@ -62,7 +62,7 @@ end
 
 function onPlayerInitialSpawn( player )
 	if ( _CLIENT ) then
-		_G.gameclient.createDefaultPanels()
+		client.createDefaultPanels()
 	end
 end
 

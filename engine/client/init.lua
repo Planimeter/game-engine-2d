@@ -8,26 +8,29 @@ require( "engine.client.bind" )
 require( "engine.client.graphics" )
 require( "engine.client.gui" )
 require( "engine.client.sound" )
-require( "engine.shared.hook" )
 require( "engine.shared.network.payload" )
 
-class( "engineclient" )
+local require    = require
+local concommand = concommand
+local _G         = _G
 
-dofile( "engine/client/handlers.lua" )
-dofile( "engine/client/payloads.lua" )
+module( "engine.client" )
 
-function engineclient.connect( address )
-	engineclient.disconnect()
+require( "engine.client.handlers" )
+require( "engine.client.payloads" )
+
+function connect( address )
+	disconnect()
 
 	require( "engine.client.network" )
-	networkclient.connect( address )
-	engineclient.connecting = true
+	network.connect( address )
+	connecting = true
 end
 
-function engineclient.connectToListenServer()
+function connectToListenServer()
 	require( "engine.client.network" )
-	networkclient.connectToListenServer()
-	engineclient.connecting = true
+	network.connectToListenServer()
+	connecting = true
 end
 
 concommand( "connect", "Connects to a server",
@@ -37,16 +40,16 @@ concommand( "connect", "Connects to a server",
 			return
 		end
 
-		engineclient.connect( argS )
+		connect( argS )
 	end
 )
 
-function engineclient.disconnect()
-	if ( not engineclient.isConnected() ) then return end
-	if ( networkclient ) then networkclient.disconnect() end
+function disconnect()
+	if ( not isConnected() ) then return end
+	if ( network ) then network.disconnect() end
 
-	engineclient.connecting = false
-	engineclient.connected  = false
+	connecting = false
+	connected  = false
 
 	g_MainMenu:activate()
 
@@ -62,9 +65,9 @@ function engineclient.disconnect()
 	if ( region ) then region.shutdown() end
 
 	if ( engine ) then
-		if ( engineserver ) then
-			engineserver.shutdown()
-			engineserver = nil
+		if ( engine.server ) then
+			engine.server.shutdown()
+			engine.server = nil
 		end
 
 		if ( _SERVER ) then _SERVER = nil end
@@ -72,29 +75,29 @@ function engineclient.disconnect()
 end
 
 concommand( "disconnect", "Disconnects from the server", function()
-	engineclient.disconnect()
+	disconnect()
 end )
 
-function engineclient.download( filename )
+function download( filename )
 	local payload = payload( "download" )
 	payload:set( "filename", filename )
-	networkclient.sendToServer( payload )
+	network.sendToServer( payload )
 end
 
-function engineclient.initializeServer()
+function initializeServer()
 	if ( _SERVER ) then return false end
-	if ( engineclient.connecting ) then return false end
+	if ( connecting ) then return false end
 
 	_SERVER = true
 	local status, err = pcall( require, "engine.server" )
 	if ( status ~= false ) then
-		if ( engineserver.load( args ) ) then
+		if ( engine.server.load( args ) ) then
 			networkserver.onNetworkInitializedServer()
 		else
 			print( "Failed to initialize server!" )
-			engineclient.connecting = false
-			engineclient.connected  = false
-			engineclient.disconnect()
+			connecting = false
+			connected  = false
+			disconnect()
 			_SERVER = nil
 			return false
 		end
@@ -107,25 +110,25 @@ function engineclient.initializeServer()
 	return true
 end
 
-engineclient.connected = false
+connected = false
 
-function engineclient.isConnected()
-	return engineclient.connected or engineserver ~= nil
+function isConnected()
+	return connected or _G.engine.server ~= nil
 end
 
-function engineclient.isDisconnecting()
-	return engineclient.disconnecting
+function isDisconnecting()
+	return disconnecting
 end
 
-function engineclient.isInGame()
-	return engineclient.isConnected() and
-	       gameclient and
-	       gameclient.playerInitialized
+function isInGame()
+	return isConnected() and
+	       game.client and
+	       game.client.playerInitialized
 end
 
-function engineclient.onConnect( event )
-	engineclient.connecting = false
-	engineclient.connected  = true
+function onConnect( event )
+	connecting = false
+	connected  = true
 	print( "Connected to server!" )
 
 	hook.call( "client", "onConnect", tostring( event.peer ) )
@@ -134,33 +137,33 @@ function engineclient.onConnect( event )
 	require( "engine.shared.entities" )
 end
 
-function engineclient.onReceive( event )
+function onReceive( event )
 	local payload = payload.initializeFromData( event.data )
 	payload:setPeer( event.peer )
 	payload:dispatchToHandler()
 end
 
-function engineclient.onDisconnect( event )
-	if ( engineclient.connected ) then
-		engineclient.disconnecting = true
-		engineclient.disconnect()
-		engineclient.connected     = false
-		engineclient.disconnecting = false
+function onDisconnect( event )
+	if ( connected ) then
+		disconnecting = true
+		disconnect()
+		connected     = false
+		disconnecting = false
 		hook.call( "client", "onDisconnect" )
 
 		print( "Disconnected from server." )
 	else
-		engineclient.connecting = false
+		connecting = false
 		print( "Failed to connect to server!" )
 	end
 
 	unrequire( "engine.client.network" )
-	networkclient = nil
+	network = nil
 end
 
-function engineclient.sendClientInfo()
+function sendClientInfo()
 	local payload = payload( "clientInfo" )
 	payload:set( "graphicsWidth",  love.graphics.getWidth() )
 	payload:set( "graphicsHeight", love.graphics.getHeight() )
-	networkclient.sendToServer( payload )
+	network.sendToServer( payload )
 end

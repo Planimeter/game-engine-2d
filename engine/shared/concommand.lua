@@ -4,12 +4,9 @@
 --
 --============================================================================--
 
--- These values are preserved during real-time scripting.
-local concommands = concommand and concommand.concommands or {}
-
 class( "concommand" )
 
-concommand.concommands = concommands
+concommand.concommands = concommand.concommands or {}
 
 local sv_cheats = convar( "sv_cheats", 0, nil, nil, "Allow cheats on server",
                           nil, { "notify" } )
@@ -31,7 +28,7 @@ function concommand.dispatch( player, name, argString, argTable )
 	if ( _CLIENT ) then
 		if ( flags ) then
 			local game = table.hasvalue( flags, "game" )
-			if ( game and not engineclient.isInGame() ) then
+			if ( game and not engine.client.isInGame() ) then
 				return true
 			end
 		end
@@ -47,7 +44,7 @@ function concommand.dispatch( player, name, argString, argTable )
 			local payload = payload( "concommand" )
 			payload:set( "name", name )
 			payload:set( "argString", argString )
-			networkclient.sendToServer( payload )
+			engine.client.network.sendToServer( payload )
 		end
 	end
 

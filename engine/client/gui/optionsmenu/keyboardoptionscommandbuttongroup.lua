@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "keyboardoptionscommandbuttongroup" ( gui.commandbuttongroup )
+class "gui.keyboardoptionscommandbuttongroup" ( "gui.commandbuttongroup" )
 
 function keyboardoptionscommandbuttongroup:keyboardoptionscommandbuttongroup( parent, name )
 	gui.commandbuttongroup.commandbuttongroup( self, parent, name )
@@ -27,4 +27,4 @@ function keyboardoptionscommandbuttongroup:invalidateLayout()
 	gui.panel.invalidateLayout( self )
 end
 
-gui.register( keyboardoptionscommandbuttongroup, "keyboardoptionscommandbuttongroup" )
+

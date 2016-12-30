@@ -4,13 +4,15 @@
 --
 --============================================================================--
 
-class "consoletextboxautocompleteitemgroup" ( gui.textboxautocompleteitemgroup )
+local gui = gui
 
-function consoletextboxautocompleteitemgroup:consoletextboxautocompleteitemgroup( parent, name )
+class "gui.console.textboxautocompleteitemgroup" ( "gui.textboxautocompleteitemgroup" )
+
+function _M:textboxautocompleteitemgroup( parent, name )
 	gui.textboxautocompleteitemgroup.textboxautocompleteitemgroup( self, parent, name )
 end
 
-function consoletextboxautocompleteitemgroup:invalidateLayout()
+function _M:invalidateLayout()
 	self:updatePos()
 
 	local itemWidth = 0
@@ -38,5 +40,3 @@ function consoletextboxautocompleteitemgroup:invalidateLayout()
 		self:setHeight( y )
 	end
 end
-
-gui.register( consoletextboxautocompleteitemgroup, "consoletextboxautocompleteitemgroup" )

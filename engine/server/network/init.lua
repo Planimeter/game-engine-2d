@@ -5,7 +5,6 @@
 --============================================================================--
 
 require( "engine.shared.convar" )
-require( "engine.shared.hook" )
 require( "engine.server.network.host" )
 
 local host_ip          = convar( "host_ip", "", nil, nil,

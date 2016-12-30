@@ -4,19 +4,14 @@
 --
 --============================================================================--
 
--- These values are preserved during real-time scripting.
-local regions = region and region.regions or {}
-
 require( "engine.shared.hook" )
-require( "engine.shared.region.tileset" )
-require( "engine.shared.region.layer" )
 
 class( "region" )
 
-region.regions = regions
+regions = regions or {}
 
 if ( _CLIENT ) then
-	function region.drawWorld()
+	function drawWorld()
 		local color  = graphics.getBackgroundColor()
 		local width  = love.graphics.getWidth()
 		local height = love.graphics.getHeight()
@@ -28,7 +23,7 @@ if ( _CLIENT ) then
 			local x, y = camera.getTranslation()
 			love.graphics.translate( x, y )
 			local worldIndex = camera.getWorldIndex()
-			for _, region in ipairs( region.regions ) do
+			for _, region in ipairs( _regions ) do
 				if ( worldIndex == region:getWorldIndex() ) then
 					love.graphics.push()
 						love.graphics.translate( region:getX(), region:getY() )
@@ -42,13 +37,13 @@ if ( _CLIENT ) then
 	end
 end
 
-function region.exists( name )
+function exists( name )
 	return love.filesystem.exists( "regions/" .. name .. ".lua" )
 end
 
-function region.findNextWorldIndex()
+function findNextWorldIndex()
 	local worldIndex = 1
-	for _, region in ipairs( region.regions ) do
+	for _, region in ipairs( _regions ) do
 		if ( worldIndex == region:getWorldIndex() ) then
 			worldIndex = worldIndex + 1
 		end
@@ -57,21 +52,21 @@ function region.findNextWorldIndex()
 	return worldIndex
 end
 
-function region.getAll()
-	return table.shallowcopy( region.regions )
+function getAll()
+	return table.shallowcopy( _regions )
 end
 
-function region.getByName( name )
-	for _, region in ipairs( region.regions ) do
+function getByName( name )
+	for _, region in ipairs( _regions ) do
 		if ( name == region:getName() ) then
 			return region
 		end
 	end
 end
 
-function region.getAtPosition( position, worldIndex )
+function getAtPosition( position, worldIndex )
 	worldIndex = worldIndex or 1
-	for _, region in ipairs( region.regions ) do
+	for _, region in ipairs( _regions ) do
 		local px, py = position.x, position.y
 		local x,  y  = region:getX(), region:getY()
 		local width  = region:getPixelWidth()
@@ -82,16 +77,16 @@ function region.getAtPosition( position, worldIndex )
 	end
 end
 
-function region.load( name, x, y, worldIndex )
+function load( name, x, y, worldIndex )
 	if ( region.getByName( name ) ) then
 		return
 	end
 
 	local region = region( name, x, y, worldIndex )
-	table.insert( region.regions, region )
+	table.insert( _regions, region )
 end
 
-function region.reload( library )
+function reload( library )
 	if ( string.sub( library, 1, 8 ) ~= "regions." ) then
 		return
 	end
@@ -106,15 +101,15 @@ function region.reload( library )
 	region.load( name, x, y, worldIndex )
 end
 
-hook.set( "shared", region.reload, "onReloadScript", "reloadRegion" )
+hook.set( "shared", reload, "onReloadScript", "reloadRegion" )
 
 if ( _CLIENT ) then
-	function region.reloadTiles( filename )
+	function reloadTiles( filename )
 		if ( not string.find( filename, "images/tilesets/" ) ) then
 			return
 		end
 
-		for _, region in ipairs( region.regions ) do
+		for _, region in ipairs( _regions ) do
 			for _, regionlayer in ipairs( region:getLayers() ) do
 				if ( regionlayer:getType() == "tilelayer" ) then
 					regionlayer:initializeTiles()
@@ -123,30 +118,30 @@ if ( _CLIENT ) then
 		end
 	end
 
-	hook.set( "client",  region.reloadTiles, "onReloadImage", "reloadTiles")
+	hook.set( "client", reloadTiles, "onReloadImage", "reloadTiles" )
 end
 
-function region.unload( name )
+function unload( name )
 	unrequire( "regions." .. name )
 
-	for i, region in ipairs( region.regions ) do
+	for i, region in ipairs( _regions ) do
 		if ( name == region:getName() ) then
 			region:remove()
-			table.remove( region.regions, i )
+			table.remove( _regions, i )
 			return
 		end
 	end
 end
 
-function region.unloadAll()
-	for i = #region.regions, 1, -1 do
-		local region = region.regions[ i ]
+function unloadAll()
+	for i = #_regions, 1, -1 do
+		local region = _regions[ i ]
 		unrequire( "regions." .. region:getName() )
-		table.remove( region.regions, i )
+		table.remove( _regions, i )
 	end
 end
 
-region.shutdown = region.unloadAll
+shutdown = unloadAll
 
 if ( not _DEDICATED ) then
 	concommand( "region", "Loads the specified region",
@@ -162,15 +157,15 @@ if ( not _DEDICATED ) then
 				return
 			end
 
-			engineclient.disconnect()
+			engine.client.disconnect()
 
-			if ( not engineclient.initializeServer() ) then
+			if ( not engine.client.initializeServer() ) then
 				return
 			end
 
 			game.initialRegion = name
 
-			engineclient.connectToListenServer()
+			engine.client.connectToListenServer()
 		end,
 
 		nil,
@@ -195,7 +190,7 @@ if ( not _DEDICATED ) then
 	)
 end
 
-function region.snapToGrid( x, y )
+function snapToGrid( x, y )
 	local region = region.getAtPosition( vector( x, y ) )
 	if ( not region ) then
 		return x, y
@@ -377,8 +372,9 @@ function region:loadTilesets( tilesets )
 
 	self.tilesets = {}
 
+	require( "engine.shared.region.tileset" )
 	for _, tilesetData in ipairs( tilesets ) do
-		local tileset = regiontileset( tilesetData )
+		local tileset = region.tileset( tilesetData )
 		table.insert( self.tilesets, tileset )
 	end
 end
@@ -390,8 +386,9 @@ function region:loadLayers( layers )
 
 	self.layers = {}
 
+	require( "engine.shared.region.layer" )
 	for _, layerData in ipairs( layers ) do
-		local layer = regionlayer( layerData )
+		local layer = region.layer( layerData )
 		layer:setRegion( self )
 		layer:parse()
 

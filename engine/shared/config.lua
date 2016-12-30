@@ -6,15 +6,19 @@
 
 require( "engine.shared.convar" )
 
-class( "config" )
+local convar   = convar
+local love     = love
+local tonumber = tonumber
 
-local conf = nil
+module( "config" )
 
-function config.load( c )
+conf = nil
+
+function load( c )
 	love.filesystem.setIdentity( c.identity, c.appendidentity )
 	convar.readConfig()
-	config.setWindow( c )
-	config.setSound( c )
+	setWindow( c )
+	setSound( c )
 
 	conf = c
 end
@@ -24,7 +28,7 @@ local function toboolean( v )
 	return n ~= nil and n ~= 0
 end
 
-function config.setWindow( c )
+function setWindow( c )
 	local r_window_width      = convar.getConfig( "r_window_width" )
 	local r_window_height     = convar.getConfig( "r_window_height" )
 	local r_window_fullscreen = convar.getConfig( "r_window_fullscreen" )
@@ -52,7 +56,7 @@ function config.setWindow( c )
 	end
 end
 
-function config.setSound( c )
+function setSound( c )
 	c.sound         = c.sound or {}
 	c.sound.volume  = 1
 	c.sound.desktop = true
@@ -69,6 +73,6 @@ function config.setSound( c )
 	end
 end
 
-function config.getConfig()
+function getConfig()
 	return conf
 end

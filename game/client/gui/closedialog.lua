@@ -4,9 +4,12 @@
 --
 --============================================================================--
 
-class "closedialog" ( gui.frame )
+local gui   = gui
+local point = point
 
-function closedialog:closedialog( parent, name )
+class "gui.closedialog" ( "gui.frame" )
+
+function _M:closedialog( parent, name )
 	gui.frame.frame( self, parent, "Close Dialog", "Quit Game" )
 	self.width  = point( 546 )
 	self.height = point( 203 )
@@ -40,5 +43,3 @@ function closedialog:closedialog( parent, name )
 		self:close()
 	end
 end
-
-gui.register( closedialog, "closedialog" )

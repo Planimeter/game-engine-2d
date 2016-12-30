@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "hudchat" ( gui.hudframe )
+class "gui.hudchat" ( "gui.hudframe" )
 
 function hudchat:hudchat( parent )
 	local name = "HUD Chat"
@@ -132,7 +132,7 @@ function hudchat:invalidateLayout()
 	gui.frame.invalidateLayout( self )
 end
 
-gui.register( hudchat, "hudchat" )
+
 
 concommand( "chat", "Toggles the chat", function()
 	local visible = _G.g_Chat:isVisible()

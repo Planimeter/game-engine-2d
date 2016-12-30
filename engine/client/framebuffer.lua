@@ -5,16 +5,15 @@
 --============================================================================--
 
 -- These values are preserved during real-time scripting.
-local framebuffers = framebuffer and framebuffer.framebuffers or {}
-
-local graphics = love.graphics
+local _framebuffers = framebuffer and framebuffer._framebuffers or {}
+local _renderStack  = framebuffer and framebuffer._renderStack  or {}
 
 class( "framebuffer" )
 
-framebuffer.framebuffers = framebuffers
+framebuffer._framebuffers = _framebuffers
 
 function framebuffer.invalidateFramebuffers()
-	for _, v in ipairs( framebuffer.framebuffers ) do
+	for _, v in ipairs( _framebuffers ) do
 		if ( typeof( v, "fullscreenframebuffer" ) ) then
 			v:createFramebuffer()
 		end
@@ -31,21 +30,21 @@ function framebuffer:framebuffer( width, height )
 	self._drawFunc     = nil
 	self.needsRedraw   = false
 	self.autoRedraw    = true
-	table.insert( framebuffer.framebuffers, self )
+	table.insert( _framebuffers, self )
 
 	self:createFramebuffer( width, height )
 end
 
 function framebuffer:clear()
 	if ( self._framebuffer ) then
-		graphics.setCanvas( self._framebuffer )
-			graphics.clear()
-		graphics.setCanvas()
+		love.graphics.setCanvas( self._framebuffer )
+			love.graphics.clear()
+		love.graphics.setCanvas()
 	end
 end
 
 function framebuffer:createFramebuffer( width, height )
-	self._framebuffer = graphics.newCanvas( width, height )
+	self._framebuffer = love.graphics.newCanvas( width, height )
 end
 
 function framebuffer:draw()
@@ -77,14 +76,14 @@ function framebuffer:invalidate()
 	self.needsRedraw = true
 end
 
-framebuffer.renderStack = {}
+framebuffer._renderStack = _renderStack
 
 function framebuffer:render()
-	graphics.setCanvas( self._framebuffer )
-	table.insert( framebuffer.renderStack, self._framebuffer )
+	love.graphics.setCanvas( self._framebuffer )
+	table.insert( _renderStack, self._framebuffer )
 		self._drawFunc()
-	table.remove( framebuffer.renderStack, #framebuffer.renderStack )
-	graphics.setCanvas( framebuffer.renderStack[ #framebuffer.renderStack ] )
+	table.remove( _renderStack, #_renderStack )
+	love.graphics.setCanvas( _renderStack[ #_renderStack ] )
 end
 
 function framebuffer:renderTo( func )

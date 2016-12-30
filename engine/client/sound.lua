@@ -4,18 +4,11 @@
 --
 --============================================================================--
 
-require( "engine.shared.hook" )
-
--- These values are preserved during real-time scripting.
-local sounds = sound and sound.sounds or {}
-
-local audio = love.audio
-
 class( "sound" )
 
 local function updateVolume( convar )
 	local volume = convar:getNumber()
-	sound.setVolume( volume )
+	setVolume( volume )
 end
 
 local snd_volume  = convar( "snd_volume", 1, 0, 1,
@@ -32,9 +25,9 @@ function sound.reload( library )
 	-- TODO: Reload soundscript.
 end
 
-hook.set( "shared", sound.reload, "onReloadScript", "reloadSound" )
+hook.set( "shared", reload, "onReloadScript", "reloadSound" )
 
-sound.sounds = sounds
+sound.sounds = sound.sounds or {}
 
 local modtime  = nil
 local errormsg = nil
@@ -52,7 +45,6 @@ local function updateSound( s, filename )
 		if ( game ) then
 			game.call( "client", "onReloadSound", filename )
 		else
-			require( "engine.shared.hook" )
 			hook.call( "client", "onReloadSound", filename )
 		end
 	end
@@ -91,11 +83,6 @@ function sound:getVolume()
 end
 
 function sound:setVolume( volume )
-	if ( type( self ) == "number" ) then
-		audio.setVolume( self ) -- volume
-		return
-	end
-
 	local filename = self:getFilename()
 	if ( sounds[ filename ] ) then
 		sounds[ filename ].sound:setVolume( volume )

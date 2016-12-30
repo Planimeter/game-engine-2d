@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "optionsitemgroup" ( gui.dropdownlistitemgroup )
+class "gui.optionsitemgroup" ( "gui.dropdownlistitemgroup" )
 
 function optionsitemgroup:optionsitemgroup( parent, name )
 	gui.dropdownlistitemgroup.dropdownlistitemgroup( self, parent, name )
@@ -43,4 +43,4 @@ function optionsitemgroup:invalidateLayout()
 	end
 end
 
-gui.register( optionsitemgroup, "optionsitemgroup" )
+

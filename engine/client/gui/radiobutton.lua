@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-class "radiobutton" ( gui.button )
+class "gui.radiobutton" ( "gui.button" )
 
 function radiobutton:radiobutton( parent, name, text )
 	gui.button.button( self, parent, name, text )
@@ -128,4 +128,4 @@ function radiobutton:setSelected( selected )
 	self:invalidate()
 end
 
-gui.register( radiobutton, "radiobutton" )
+

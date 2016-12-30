@@ -4,21 +4,26 @@
 --
 --============================================================================--
 
--- UNDONE: The gui subsystem will load gui.console again here just by indexing
--- it the first time around, so we can't persist commandHistory in debug.
--- local commandHistory = gui.console and gui.console.commandHistory or {}
+require( "engine.client.gui.console.textbox" )
+require( "engine.client.gui.console.textboxautocompleteitemgroup" )
 
-require( "engine.client.gui.console.consoletextbox" )
-require( "engine.client.gui.console.consoletextboxautocompleteitemgroup" )
+local concommand = concommand
+local convar     = convar
+local gui        = gui
+local point      = point
+local select     = select
+local table      = table
+local tostring   = tostring
+local _G         = _G
 
-class "console" ( gui.frame )
+class "gui.console" ( "gui.frame" )
 
-function console.print( ... )
+function print( ... )
 	local args = { ... }
 	for i = 1, select( "#", ... ) do
 		args[ i ] = tostring( args[ i ] )
 	end
-	g_Console.output:insertText( table.concat( args, "\t" ) .. "\n" )
+	_G.g_Console.output:insertText( table.concat( args, "\t" ) .. "\n" )
 end
 
 local function doConCommand( command, argString, argTable )
@@ -67,8 +72,7 @@ local function doCommand( self, input )
 	end
 end
 
--- console.commandHistory = commandHistory
-console.commandHistory = {}
+commandHistory = commandHistory or {}
 
 local function autocomplete( text )
 	if ( text == "" ) then
@@ -135,13 +139,13 @@ local keypressed = function( itemGroup, key, isrepeat )
 	end
 end
 
-function console:console()
+function _M:console()
 	local name = "Console"
 	gui.frame.frame( self, g_MainMenu or g_RootPanel, name, "Console" )
 	self.width     = point( 661 )
 	self.minHeight = point( 178 )
 
-	self.output = gui.consoletextbox( self, name .. " Output Text Box", "" )
+	self.output = gui.console.textbox( self, name .. " Output Text Box", "" )
 	self.input  = gui.textbox( self, name .. " Input Text Box", "" )
 	self.input.onEnter = function( textbox, text )
 		text = string.trim( text )
@@ -156,20 +160,20 @@ function console:console()
 	local input = self.input
 	input:setAutocomplete( autocomplete )
 	name = name .. " Autocomplete Item Group"
-	local autocompleteItemGroup = gui.consoletextboxautocompleteitemgroup
+	local autocompleteItemGroup = gui.console.textboxautocompleteitemgroup
 	input.autocompleteItemGroup = autocompleteItemGroup( self.input, name )
 	input.autocompleteItemGroup.keypressed = keypressed
 
 	self:invalidateLayout()
 end
 
-function console:activate()
+function _M:activate()
 	self:invalidate()
 	gui.frame.activate( self )
 	gui.setFocusedPanel( self.input, true )
 end
 
-function console:invalidateLayout()
+function _M:invalidateLayout()
 	local width  = self:getWidth()
 	local height = self:getHeight()
 	local margin = gui.scale( 36 )
@@ -189,14 +193,14 @@ function console:invalidateLayout()
 	gui.frame.invalidateLayout( self )
 end
 
-gui.register( console, "console" )
+
 
 local con_enable = convar( "con_enable", "0", nil, nil,
                            "Allows the console to be activated" )
 
 concommand( "toggleconsole", "Show/hide the console", function()
 	local mainmenu = g_MainMenu
-	local console  = g_Console
+	local console  = _G.g_Console
 	if ( not mainmenu:isVisible() and
 	         console:isVisible()  and
 	         con_enable:getBoolean() ) then
@@ -228,8 +232,8 @@ concommand( "clear", "Clears the console", function()
 		os.execute( "clear" )
 	end
 
-	if ( g_Console ) then
-		g_Console.output:setText( "" )
+	if ( _G.g_Console ) then
+		_G.g_Console.output:setText( "" )
 	end
 end )
 
@@ -258,14 +262,14 @@ concommand( "help", "Prints help info for the console command or variable",
 	end
 )
 
-if ( g_Console ) then
-	local visible = g_Console:isVisible()
-	local output  = g_Console.output:getText()
-	g_Console:remove()
-	g_Console = nil
-	g_Console = gui.console()
-	g_Console.output:setText( output )
+if ( _G.g_Console ) then
+	local visible = _G.g_Console:isVisible()
+	local output  = _G.g_Console.output:getText()
+	_G.g_Console:remove()
+	_G.g_Console = nil
+	_G.g_Console = gui.console()
+	_G.g_Console.output:setText( output )
 	if ( visible ) then
-		g_Console:activate()
+		_G.g_Console:activate()
 	end
 end
