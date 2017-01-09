@@ -2,9 +2,6 @@
 [![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/Planimeter/grid-sdk?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Discord](https://img.shields.io/badge/chat-on%20discord-brightgreen.svg)](https://discord.gg/Gbj4jnv?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-It's a lightweight and fast engine, and it provides many abstractions that you
-would otherwise need to write by hand for your projects or game jams.
-
 ## Create a Project
 [Getting Started](http://www.planimeter.org/grid-sdk/tutorials/Getting_Started)  
 [API Documentation](http://www.planimeter.org/grid-sdk/api/Home)
