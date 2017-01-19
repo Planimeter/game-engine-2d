@@ -7,7 +7,7 @@
 [API Documentation](http://www.planimeter.org/grid-sdk/api/Home)
 
 ## Features
-* Addons
+* Add-ons
 * Animation events
 * Client-server model
 * Client-side prediction
