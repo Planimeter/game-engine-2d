@@ -83,6 +83,11 @@ function sound:getVolume()
 end
 
 function sound:setVolume( volume )
+	if ( type( self ) == "number" ) then
+		love.audio.setVolume( self )
+		return
+	end
+
 	local filename = self:getFilename()
 	if ( sounds[ filename ] ) then
 		sounds[ filename ].sound:setVolume( volume )
