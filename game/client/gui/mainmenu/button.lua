@@ -9,14 +9,16 @@ local love = love
 
 class "gui.mainmenu.button" ( "gui.button" )
 
-function _M:button( parent, text )
+local button = gui.mainmenu.button
+
+function button:button( parent, text )
 	gui.button.button( self, parent, text and text or "Blank" .. " Button",
 	                   text or "" )
 	local font  = self:getScheme( "mainmenuFont" )
 	self.height = font:getHeight()
 end
 
-function _M:draw()
+function button:draw()
 	local textColor = "mainmenubutton.dark.textColor"
 	if ( self:isDisabled() ) then
 		textColor = "mainmenubutton.dark.disabled.textColor"

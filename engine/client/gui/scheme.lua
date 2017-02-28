@@ -20,7 +20,7 @@ function scheme.getProperty( name, property )
 		return cachedProperty
 	end
 
-	local value = schemes[ name ]
+	local value = scheme.schemes[ name ]
 	local type  = type( value )
 	if ( type ~= "scheme" ) then
 		error( "attempt to index scheme '" .. name .. "' " ..

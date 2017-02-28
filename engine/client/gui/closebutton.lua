@@ -12,9 +12,11 @@ local unpack = unpack
 
 class "gui.closebutton" ( "gui.button" )
 
-canFocus = false
+local closebutton = gui.closebutton
 
-function _M:closebutton( parent, name )
+closebutton.canFocus = false
+
+function closebutton:closebutton( parent, name )
 	gui.button.button( self, parent, name )
 	local margin = point( 36 )
 	self.width  = 2 * margin + point( 8 )  - point( 1 )
@@ -22,7 +24,7 @@ function _M:closebutton( parent, name )
 	self.icon   = self:getScheme( "closebutton.icon" )
 end
 
-function _M:draw()
+function closebutton:draw()
 	local color = "closebutton.iconColor"
 
 	if ( self.mousedown and self.mouseover ) then
@@ -42,7 +44,7 @@ function _M:draw()
 	gui.panel.draw( self )
 end
 
-function _M:onClick()
+function closebutton:onClick()
 	local parent = self:getParent()
 	parent:close()
 end

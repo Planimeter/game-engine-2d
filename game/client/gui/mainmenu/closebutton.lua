@@ -11,14 +11,16 @@ local unpack = unpack
 
 class "gui.mainmenu.closebutton" ( "gui.closebutton" )
 
-function _M:closebutton( parent )
+local closebutton = gui.mainmenu.closebutton
+
+function closebutton:closebutton( parent )
 	gui.closebutton.closebutton( self, parent, "Main Menu Close Button" )
 	self.width  = point( 32 )
 	self.height = self.width + point( 1 )
 	self.icon   = self:getScheme( "mainmenuclosebutton.icon" )
 end
 
-function _M:draw()
+function closebutton:draw()
 	local iconColor = "mainmenuclosebutton.dark.iconColor"
 	if ( self.mousedown and self.mouseover ) then
 		iconColor = "mainmenuclosebutton.dark.mousedown.iconColor"

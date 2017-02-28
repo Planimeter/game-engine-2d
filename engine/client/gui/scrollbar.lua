@@ -11,7 +11,9 @@ local point    = point
 
 class "gui.scrollbar" ( "gui.panel" )
 
-function _M:scrollbar( parent, name )
+local scrollbar = gui.scrollbar
+
+function scrollbar:scrollbar( parent, name )
 	gui.panel.panel( self, parent, name )
 	self.width       = point( 4 )
 	self.height      = parent:getHeight()
@@ -25,7 +27,7 @@ function _M:scrollbar( parent, name )
 	self:setUseFullscreenFramebuffer( true )
 end
 
-function _M:draw()
+function scrollbar:draw()
 	local length = self:getThumbLength()
 	if ( length == self:getHeight() ) then
 		return
@@ -45,43 +47,43 @@ function _M:draw()
 	gui.panel.draw( self )
 end
 
-accessor( _M, "min" )
-accessor( _M, "max" )
+accessor( scrollbar, "min" )
+accessor( scrollbar, "max" )
 
-function _M:getRange()
+function scrollbar:getRange()
 	return self.min, self.max
 end
 
-accessor( _M, "rangeWindow" )
+accessor( scrollbar, "rangeWindow" )
 
-function _M:getThumbLength()
+function scrollbar:getThumbLength()
 	local range = self:getMax() - self:getMin()
 	local size  = self:getRangeWindow() / range
 	return size * self:getHeight()
 end
 
-function _M:getThumbPos()
+function scrollbar:getThumbPos()
 	local min     = self:getMin()
 	local range   = self:getMax() - min
 	local percent = ( self:getValue() + min ) / range
 	return percent * self:getHeight()
 end
 
-accessor( _M, "value" )
+accessor( scrollbar, "value" )
 
-function _M:invalidateLayout()
+function scrollbar:invalidateLayout()
 	local parent = self:getParent()
 	self:setPos( parent:getWidth() - self:getWidth(), 0 )
 	self:setHeight( parent:getHeight() )
 end
 
-function _M:isDisabled()
+function scrollbar:isDisabled()
 	return self.disabled
 end
 
 local localX, localY = 0, 0
 
-function _M:mousepressed( x, y, button, istouch )
+function scrollbar:mousepressed( x, y, button, istouch )
 	if ( self.mouseover and button == 1 ) then
 		self.mousedown = true
 	end
@@ -103,40 +105,40 @@ function _M:mousepressed( x, y, button, istouch )
 	end
 end
 
-function _M:mousereleased( x, y, button, istouch )
+function scrollbar:mousereleased( x, y, button, istouch )
 	self.mousedown = false
 	self.grabbedX  = nil
 	self.grabbedY  = nil
 end
 
-function _M:onValueChanged( oldValue, newValue )
+function scrollbar:onValueChanged( oldValue, newValue )
 end
 
-function _M:pageDown()
+function scrollbar:pageDown()
 	self:scrollDown( self:getRangeWindow() )
 end
 
-function _M:pageUp()
+function scrollbar:pageUp()
 	self:scrollUp( self:getRangeWindow() )
 end
 
-function _M:scrollDown( value )
+function scrollbar:scrollDown( value )
 	self:setValue( self:getValue() + value )
 end
 
-function _M:scrollUp( value )
+function scrollbar:scrollUp( value )
 	self:setValue( self:getValue() - value )
 end
 
-function _M:scrollToBottom()
+function scrollbar:scrollToBottom()
 	self:setValue( self:getMax() )
 end
 
-function _M:scrollToTop()
+function scrollbar:scrollToTop()
 	self:setValue( self:getMin() )
 end
 
-function _M:setDisabled( disabled )
+function scrollbar:setDisabled( disabled )
 	self.disabled = disabled
 	self:invalidate()
 end
@@ -159,22 +161,22 @@ local function updateRange( self, min, max )
 	end
 end
 
-function _M:setMin( min )
+function scrollbar:setMin( min )
 	updateRange( self, min, self:getMax() )
 	self.min = min
 end
 
-function _M:setMax( max )
+function scrollbar:setMax( max )
 	updateRange( self, self:getMin(), max )
 	self.max = max
 end
 
-function _M:setRange( min, max )
+function scrollbar:setRange( min, max )
 	self:setMin( min )
 	self:setMax( max )
 end
 
-function _M:setRangeWindow( rangeWindow )
+function scrollbar:setRangeWindow( rangeWindow )
 	self.rangeWindow = rangeWindow
 	local rangeSize  = self:getMax() - self:getMin()
 	if ( rangeWindow > rangeSize ) then
@@ -185,7 +187,7 @@ end
 local oldValue   = 0
 local deltaValue = 0
 
-function _M:setValue( value )
+function scrollbar:setValue( value )
 	oldValue   = self.value
 	self.value = value
 	if ( self.value < self.min ) then
@@ -210,7 +212,7 @@ local mouseX, mouseY = 0, 0
 local getPosition    = love.mouse.getPosition
 local deltaX, deltaY = 0, 0
 
-function _M:update( dt )
+function scrollbar:update( dt )
 	gui.panel.update( self, dt )
 
 	if ( not self:isVisible() or self:isDisabled() ) then

@@ -10,7 +10,9 @@ local love = love
 
 class "gui.rootpanel" ( "gui.panel" )
 
-function _M:rootpanel()
+local rootpanel = gui.rootpanel
+
+function rootpanel:rootpanel()
 	self.x        = 0
 	self.y        = 0
 	self.width    = love.graphics.getWidth()
@@ -24,7 +26,7 @@ function _M:rootpanel()
 	self:setUseFullscreenFramebuffer( true )
 end
 
-function _M:invalidateLayout()
+function rootpanel:invalidateLayout()
 	self:setSize( love.graphics.getWidth(), love.graphics.getHeight() )
 
 	gui.panel.invalidateLayout( self )

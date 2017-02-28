@@ -8,11 +8,13 @@ local gui = gui
 
 class "gui.console.textboxautocompleteitemgroup" ( "gui.textboxautocompleteitemgroup" )
 
-function _M:textboxautocompleteitemgroup( parent, name )
+local textboxautocompleteitemgroup = gui.console.textboxautocompleteitemgroup
+
+function textboxautocompleteitemgroup:textboxautocompleteitemgroup( parent, name )
 	gui.textboxautocompleteitemgroup.textboxautocompleteitemgroup( self, parent, name )
 end
 
-function _M:invalidateLayout()
+function textboxautocompleteitemgroup:invalidateLayout()
 	self:updatePos()
 
 	local itemWidth = 0

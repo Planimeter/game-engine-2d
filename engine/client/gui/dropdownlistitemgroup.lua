@@ -11,14 +11,16 @@ local unpack = unpack
 
 class "gui.dropdownlistitemgroup" ( "gui.radiobuttongroup" )
 
-function _M:dropdownlistitemgroup( parent, name )
+local dropdownlistitemgroup = gui.dropdownlistitemgroup
+
+function dropdownlistitemgroup:dropdownlistitemgroup( parent, name )
 	gui.radiobuttongroup.radiobuttongroup( self, nil, name )
 	self.width        = parent:getWidth()
 	self.dropDownList = parent
 	self:setScheme( "Default" )
 end
 
-function _M:addItem( item, default )
+function dropdownlistitemgroup:addItem( item, default )
 	item:setParent( self )
 	gui.radiobuttongroup.addItem( self, item )
 
@@ -29,7 +31,7 @@ function _M:addItem( item, default )
 	self:invalidateLayout()
 end
 
-function _M:draw()
+function dropdownlistitemgroup:draw()
 	gui.panel.draw( self )
 
 	local property  = "dropdownlistitem.backgroundColor"
@@ -38,7 +40,7 @@ function _M:draw()
 	self:drawBorders( property )
 end
 
-function _M:drawBorders( property )
+function dropdownlistitemgroup:drawBorders( property )
 	local lineWidth = point( 1 )
 	local height    = self:getHeight()
 	local width     = self:getWidth()
@@ -54,11 +56,11 @@ function _M:drawBorders( property )
 	)
 end
 
-function _M:getDropDownList()
+function dropdownlistitemgroup:getDropDownList()
 	return self.dropDownList
 end
 
-function _M:invalidateLayout()
+function dropdownlistitemgroup:invalidateLayout()
 	self:updatePos()
 	self:setWidth( self:getDropDownList():getWidth() )
 
@@ -74,12 +76,12 @@ function _M:invalidateLayout()
 	end
 end
 
-function _M:isVisible()
+function dropdownlistitemgroup:isVisible()
 	local dropDownList = self:getDropDownList()
 	return dropDownList:isVisible() and dropDownList:isActive()
 end
 
-function _M:mousepressed( x, y, button, istouch )
+function dropdownlistitemgroup:mousepressed( x, y, button, istouch )
 	if ( button == 1 ) then
 		local dropDownList = self:getDropDownList()
 		if ( dropDownList ~= gui.topPanel and
@@ -91,7 +93,7 @@ function _M:mousepressed( x, y, button, istouch )
 	return gui.panel.mousepressed( self, x, y, button, istouch )
 end
 
-function _M:onValueChanged( oldValue, newValue )
+function dropdownlistitemgroup:onValueChanged( oldValue, newValue )
 	local dropDownList = self:getDropDownList()
 	dropDownList:setActive( false )
 	dropDownList:onValueChanged( oldValue, newValue )
@@ -99,7 +101,7 @@ end
 
 local x, y = 0, 0
 
-function _M:updatePos()
+function dropdownlistitemgroup:updatePos()
 	local dropDownList = self:getDropDownList()
 	if ( dropDownList ) then
 		x, y = dropDownList:localToScreen()

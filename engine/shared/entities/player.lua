@@ -72,7 +72,7 @@ if ( _SERVER ) then
 	end
 end
 
-function _M:player()
+function player:player()
 	character.character( self )
 
 	self:networkNumber( "id", player.lastPlayerId + 1 )
@@ -91,14 +91,14 @@ function _M:player()
 	table.insert( player.players, self )
 end
 
-function _M:getName()
+function player:getName()
 	return entity.getName( self ) or "Unnamed"
 end
 
-accessor( _M, "graphicsWidth" )
-accessor( _M, "graphicsHeight" )
+accessor( player, "graphicsWidth" )
+accessor( player, "graphicsHeight" )
 
-function _M:getGraphicsBounds()
+function player:getGraphicsBounds()
 	local width  = self:getGraphicsWidth()  or 0
 	local height = self:getGraphicsHeight() or 0
 	local min    = self:localToWorld( vector( -width / 2,  height / 2 ) )
@@ -106,11 +106,11 @@ function _M:getGraphicsBounds()
 	return min, max
 end
 
-function _M:getGraphicsSize()
+function player:getGraphicsSize()
 	return self:getGraphicsWidth(), self:getGraphicsHeight()
 end
 
-function _M:initialSpawn()
+function player:initialSpawn()
 	if ( self.initialized ) then
 		return
 	else
@@ -130,7 +130,7 @@ function _M:initialSpawn()
 end
 
 if ( _SERVER ) then
-	function _M:kick( message )
+	function player:kick( message )
 		local payload = payload( "kick" )
 		payload:set( "message", message )
 		self.peer:send( payload:serialize() )
@@ -138,7 +138,7 @@ if ( _SERVER ) then
 	end
 end
 
-function _M:moveTo( position, callback )
+function player:moveTo( position, callback )
 	local moving = character.moveTo( self, position, callback )
 
 	if ( _CLIENT and not _SERVER ) then
@@ -206,7 +206,7 @@ end, { "game" } )
 
 
 if ( _CLIENT ) then
-	function _M:onAnimationEvent( event )
+	function player:onAnimationEvent( event )
 		if ( event == "leftfootstep" ) then
 			self:emitSound( "sounds.footsteps.grassleft" )
 		elseif ( event == "rightfootstep" ) then
@@ -215,11 +215,11 @@ if ( _CLIENT ) then
 	end
 end
 
-function _M:onConnect()
+function player:onConnect()
 	game.call( "shared", "onPlayerConnect", self )
 end
 
-function _M:onDisconnect()
+function player:onDisconnect()
 	game.call( "shared", "onPlayerDisconnect", self )
 
 	for i, player in ipairs( players ) do
@@ -247,7 +247,7 @@ local function updateMovement( self, position )
 	end
 end
 
-function _M:onMoveTo( position )
+function player:onMoveTo( position )
 	if ( not _CLIENT ) then
 		return
 	end
@@ -255,7 +255,7 @@ function _M:onMoveTo( position )
 	updateMovement( self, position )
 end
 
-function _M:onNetworkVarChanged( networkvar )
+function player:onNetworkVarChanged( networkvar )
 	if ( _CLIENT and networkvar:getName() == "health" ) then
 		if ( g_HudHealth ) then
 			g_HudHealth:invalidateLayout()
@@ -281,7 +281,7 @@ concommand( "say", "Display player message",
 	end, { "network" }
 )
 
-function _M:send( data, channel, flag )
+function player:send( data, channel, flag )
 	if ( type( data ) == "payload" ) then
 		data = data:serialize()
 	end
@@ -289,7 +289,7 @@ function _M:send( data, channel, flag )
 end
 
 if ( _SERVER ) then
-	function _M:sendText( text )
+	function player:sendText( text )
 		local payload = payload( "sayText" )
 		payload:set( "text", text )
 		self:send( payload )
@@ -305,12 +305,12 @@ if ( _CLIENT ) then
 	payload.setHandler( onSayText, "sayText" )
 end
 
-function _M:setGraphicsSize( graphicsWidth, graphicsHeight )
+function player:setGraphicsSize( graphicsWidth, graphicsHeight )
 	self:setGraphicsWidth( graphicsWidth )
 	self:setGraphicsHeight( graphicsHeight )
 end
 
-function _M:spawn()
+function player:spawn()
 	entity.spawn( self )
 
 	local tileSize = game.tileSize
@@ -322,7 +322,7 @@ function _M:spawn()
 	game.call( "shared", "onPlayerSpawn", self )
 end
 
-function _M:update( dt )
+function player:update( dt )
 	character.update( self, dt )
 
 	if ( _CLIENT ) then
@@ -338,8 +338,8 @@ function _M:update( dt )
 	end
 end
 
-function _M:__tostring()
+function player:__tostring()
 	return "player: " .. self:getName()
 end
 
-entities.linkToClassname( _M, "player" )
+entities.linkToClassname( player, "player" )

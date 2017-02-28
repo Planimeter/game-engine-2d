@@ -10,7 +10,9 @@ local point    = point
 
 class "gui.label" ( "gui.panel" )
 
-function _M:label( parent, name, text )
+local label = gui.label
+
+function label:label( parent, name, text )
 	gui.panel.panel( self, parent, name )
 	self:setScheme( "Default" )
 	self.font      = self:getScheme( "font" )
@@ -20,7 +22,7 @@ function _M:label( parent, name, text )
 	self.textAlign = "left"
 end
 
-function _M:draw()
+function label:draw()
 	graphics.setColor( self:getScheme( "label.textColor" ) )
 
 	local font = self:getFont()
@@ -44,21 +46,21 @@ function _M:draw()
 	gui.panel.draw( self )
 end
 
-accessor( _M, "font" )
-accessor( _M, "text" )
-accessor( _M, "textAlign" )
+accessor( label, "font" )
+accessor( label, "text" )
+accessor( label, "textAlign" )
 
-function _M:setFont( font )
+function label:setFont( font )
 	self.font = font
 	self:invalidate()
 end
 
-function _M:setText( text )
+function label:setText( text )
 	self.text = text
 	self:invalidate()
 end
 
-function _M:setTextAlign( textAlign )
+function label:setTextAlign( textAlign )
 	self.textAlign = textAlign
 	self:invalidate()
 end

@@ -11,9 +11,11 @@ local print    = print
 
 class "gui.button" ( "gui.panel" )
 
-canFocus = true
+local button = gui.button
 
-function _M:button( parent, name, text )
+button.canFocus = true
+
+function button:button( parent, name, text )
 	gui.panel.panel( self, parent, name )
 	self.width    = point( 216 )
 	self.height   = point( 46 )
@@ -23,7 +25,7 @@ function _M:button( parent, name, text )
 	self:setScheme( "Default" )
 end
 
-function _M:draw()
+function button:draw()
 	self:drawBackground()
 	self:drawText()
 
@@ -32,7 +34,7 @@ function _M:draw()
 	self:drawForeground()
 end
 
-function _M:drawBackground()
+function button:drawBackground()
 	if ( self:isDisabled() ) then
 		gui.panel.drawBackground( self, "button.disabled.backgroundColor" )
 		return
@@ -47,7 +49,7 @@ function _M:drawBackground()
 	end
 end
 
-function _M:drawForeground()
+function button:drawForeground()
 	local color = "button.outlineColor"
 
 	if ( self:isDisabled() ) then
@@ -65,7 +67,7 @@ function _M:drawForeground()
 	gui.panel.drawForeground( self, color )
 end
 
-function _M:drawText()
+function button:drawText()
 	local color = "button.textColor"
 
 	if ( self:isDisabled() ) then
@@ -82,13 +84,13 @@ function _M:drawText()
 	graphics.print( text, x, y )
 end
 
-accessor( _M, "text" )
+accessor( button, "text" )
 
-function _M:isDisabled()
+function button:isDisabled()
 	return self.disabled
 end
 
-function _M:keypressed( key, scancode, isrepeat )
+function button:keypressed( key, scancode, isrepeat )
 	if ( not self.focus or self:isDisabled() ) then
 		return
 	end
@@ -100,14 +102,14 @@ function _M:keypressed( key, scancode, isrepeat )
 	end
 end
 
-function _M:mousepressed( x, y, button, istouch )
+function button:mousepressed( x, y, button, istouch )
 	if ( self.mouseover and button == 1 ) then
 		self.mousedown = true
 		self:invalidate()
 	end
 end
 
-function _M:mousereleased( x, y, button, istouch )
+function button:mousereleased( x, y, button, istouch )
 	if ( ( self.mousedown and self.mouseover ) and not self:isDisabled() ) then
 		self:onClick()
 	end
@@ -118,15 +120,15 @@ function _M:mousereleased( x, y, button, istouch )
 	end
 end
 
-function _M:onClick()
+function button:onClick()
 end
 
-function _M:setDisabled( disabled )
+function button:setDisabled( disabled )
 	self.disabled = disabled
 	self:invalidate()
 end
 
-function _M:setText( text )
+function button:setText( text )
 	self.text = text
 	self:invalidate()
 end

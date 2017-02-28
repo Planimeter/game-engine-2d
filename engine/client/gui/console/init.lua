@@ -18,7 +18,9 @@ local _G         = _G
 
 class "gui.console" ( "gui.frame" )
 
-function print( ... )
+local console = gui.console
+
+function console.print( ... )
 	local args = { ... }
 	for i = 1, select( "#", ... ) do
 		args[ i ] = tostring( args[ i ] )
@@ -72,7 +74,7 @@ local function doCommand( self, input )
 	end
 end
 
-commandHistory = commandHistory or {}
+console.commandHistory = console.commandHistory or {}
 
 local function autocomplete( text )
 	if ( text == "" ) then
@@ -139,7 +141,7 @@ local keypressed = function( itemGroup, key, isrepeat )
 	end
 end
 
-function _M:console()
+function console:console()
 	local name = "Console"
 	gui.frame.frame( self, g_MainMenu or g_RootPanel, name, "Console" )
 	self.width     = point( 661 )
@@ -167,13 +169,13 @@ function _M:console()
 	self:invalidateLayout()
 end
 
-function _M:activate()
+function console:activate()
 	self:invalidate()
 	gui.frame.activate( self )
 	gui.setFocusedPanel( self.input, true )
 end
 
-function _M:invalidateLayout()
+function console:invalidateLayout()
 	local width  = self:getWidth()
 	local height = self:getHeight()
 	local margin = gui.scale( 36 )

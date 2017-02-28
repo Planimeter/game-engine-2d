@@ -26,14 +26,16 @@ local gui_draw_bounds = convar( "gui_draw_bounds", "0", nil, nil,
 
 class( "gui.panel" )
 
-maskedPanel = maskedPanel or nil
+local panel = gui.panel
 
-function drawMask()
+panel.maskedPanel = panel.maskedPanel or nil
+
+function panel.drawMask()
 	local self = gui.panel.maskedPanel
 	love.graphics.rectangle( "fill", 0, 0, self:getWidth(), self:getHeight() )
 end
 
-function _M:panel( parent, name )
+function panel:panel( parent, name )
 	self.x       = 0
 	self.y       = 0
 	self.width   = 0
@@ -50,7 +52,7 @@ local pi  = math.pi
 
 local easing = tween.easing
 
-function _M:animate( properties, duration, easing, complete )
+function panel:animate( properties, duration, easing, complete )
 	if ( not self.animations ) then
 		self.animations = {}
 	end
@@ -83,7 +85,7 @@ function _M:animate( properties, duration, easing, complete )
 	table.insert( self.animations, animation )
 end
 
-function _M:createFramebuffer()
+function panel:createFramebuffer()
 	local framebuffer = self.framebuffer
 	if ( framebuffer and not self.needsRedraw ) then
 		return
@@ -123,7 +125,7 @@ end
 
 local opacityStack = { 1 }
 
-function _M:draw()
+function panel:draw()
 	if ( not self:isVisible() ) then
 		return
 	end
@@ -144,20 +146,20 @@ function _M:draw()
 	end
 end
 
-function _M:drawBackground( color )
+function panel:drawBackground( color )
 	local width  = self:getWidth()
 	local height = self:getHeight()
 	love.graphics.setColor( unpack( self:getScheme( color ) ) )
 	love.graphics.rectangle( "fill", 0, 0, width, height )
 end
 
-function _M:drawBounds()
+function panel:drawBounds()
 	love.graphics.setColor( unpack( color.red ) )
 	love.graphics.setLineWidth( point( 1 ) )
 	love.graphics.rectangle( "line", 0, 0, self:getWidth(), self:getHeight() )
 end
 
-function _M:drawForeground( color )
+function panel:drawForeground( color )
 	local width  = self:getWidth()
 	local height = self:getHeight()
 	love.graphics.setColor( unpack( self:getScheme( color ) ) )
@@ -165,7 +167,7 @@ function _M:drawForeground( color )
 	love.graphics.rectangle( "line", 0, 0, width, height )
 end
 
-function _M:drawFramebuffer()
+function panel:drawFramebuffer()
 	if ( not self:isVisible() ) then
 		return
 	end
@@ -206,33 +208,33 @@ local function cascadeInputToChildren( self, func, ... )
 	end
 end
 
-function _M:filedropped( file )
+function panel:filedropped( file )
 	return cascadeInputToChildren( self, "filedropped", file )
 end
 
-accessor( _M, "children" )
-accessor( _M, "name" )
-accessor( _M, "opacity" )
-accessor( _M, "parent" )
-accessor( _M, "scale" )
+accessor( panel, "children" )
+accessor( panel, "name" )
+accessor( panel, "opacity" )
+accessor( panel, "parent" )
+accessor( panel, "scale" )
 
 local getProperty = scheme.getProperty
 
-function _M:getScheme( property )
+function panel:getScheme( property )
 	return getProperty( self.scheme, property )
 end
 
-accessor( _M, "width" )
-accessor( _M, "height" )
+accessor( panel, "width" )
+accessor( panel, "height" )
 
-function _M:getSize()
+function panel:getSize()
 	return self:getWidth(), self:getHeight()
 end
 
-accessor( _M, "x" )
-accessor( _M, "y" )
+accessor( panel, "x" )
+accessor( panel, "y" )
 
-function _M:getPos()
+function panel:getPos()
 	return self:getX(), self:getY()
 end
 
@@ -242,7 +244,7 @@ local pointinrect = math.pointinrect
 local children    = nil
 local topChild    = nil
 
-function _M:getTopMostChildAtPos( x, y )
+function panel:getTopMostChildAtPos( x, y )
 	if ( not self:isVisible() ) then
 		return nil
 	end
@@ -266,7 +268,7 @@ function _M:getTopMostChildAtPos( x, y )
 	return self
 end
 
-function _M:invalidate()
+function panel:invalidate()
 	self.needsRedraw = true
 
 	local parent = self:getParent()
@@ -276,7 +278,7 @@ function _M:invalidate()
 	end
 end
 
-function _M:invalidateLayout()
+function panel:invalidateLayout()
 	local children = self:getChildren()
 	if ( children ) then
 		for _, v in ipairs( children ) do
@@ -287,11 +289,11 @@ function _M:invalidateLayout()
 	self:invalidate()
 end
 
-function _M:invalidateParent()
+function panel:invalidateParent()
 	self:getParent():invalidate()
 end
 
-function _M:isChildMousedOver()
+function panel:isChildMousedOver()
 	local panel = gui.topPanel
 	while ( panel ~= nil ) do
 		panel = panel:getParent()
@@ -303,7 +305,7 @@ function _M:isChildMousedOver()
 	return false
 end
 
-function _M:isTopMostChild()
+function panel:isTopMostChild()
 	local children = self:getChildren()
 	if ( children ) then
 		return children[ #children ] == self
@@ -312,30 +314,30 @@ function _M:isTopMostChild()
 	end
 end
 
-function _M:isVisible()
+function panel:isVisible()
 	return self.visible
 end
 
-function _M:joystickpressed( joystick, button )
+function panel:joystickpressed( joystick, button )
 	return cascadeInputToChildren( self, "joystickpressed", joystick, button )
 end
 
-function _M:joystickreleased( joystick, button )
+function panel:joystickreleased( joystick, button )
 	return cascadeInputToChildren( self, "joystickreleased", joystick, button )
 end
 
-function _M:keypressed( key, scancode, isrepeat )
+function panel:keypressed( key, scancode, isrepeat )
 	return cascadeInputToChildren( self, "keypressed", key, scancode, isrepeat )
 end
 
-function _M:keyreleased( key, scancode )
+function panel:keyreleased( key, scancode )
 	return cascadeInputToChildren( self, "keyreleased", key, scancode )
 end
 
 local posX, posY = 0, 0
 local parent     = nil
 
-function _M:localToScreen( x, y )
+function panel:localToScreen( x, y )
 	posX, posY = x or self:getX(), y or self:getY()
 	parent     = self:getParent()
 	while ( parent ~= nil ) do
@@ -347,11 +349,11 @@ function _M:localToScreen( x, y )
 	return posX, posY
 end
 
-function _M:mousepressed( x, y, button, istouch )
+function panel:mousepressed( x, y, button, istouch )
 	return cascadeInputToChildren( self, "mousepressed", x, y, button )
 end
 
-function _M:mousereleased( x, y, button, istouch )
+function panel:mousereleased( x, y, button, istouch )
 	if ( not self:isVisible() ) then
 		return
 	end
@@ -364,7 +366,7 @@ function _M:mousereleased( x, y, button, istouch )
 	end
 end
 
-function _M:moveToFront()
+function panel:moveToFront()
 	local parent   = self:getParent()
 	local children = nil
 	if ( parent ) then
@@ -393,7 +395,7 @@ function _M:moveToFront()
 	end
 end
 
-function _M:moveToBack()
+function panel:moveToBack()
 	local parent   = self:getParent()
 	local children = nil
 	if ( parent ) then
@@ -422,15 +424,15 @@ function _M:moveToBack()
 	end
 end
 
-function _M:onMouseLeave()
+function panel:onMouseLeave()
 end
 
-function _M:onRemove()
+function panel:onRemove()
 end
 
 local opacity = 1
 
-function _M:preDraw()
+function panel:preDraw()
 	if ( not self:isVisible() ) then
 		return
 	end
@@ -451,7 +453,7 @@ function _M:preDraw()
 	table.insert( opacityStack, opacity )
 end
 
-function _M:postDraw()
+function panel:postDraw()
 	if ( not self:isVisible() ) then
 		return
 	end
@@ -467,7 +469,7 @@ function _M:postDraw()
 	love.graphics.pop()
 end
 
-function _M:preDrawWorld()
+function panel:preDrawWorld()
 	local children = self:getChildren()
 	if ( children ) then
 		for _, v in ipairs( children ) do
@@ -476,7 +478,7 @@ function _M:preDrawWorld()
 	end
 end
 
-function _M:remove()
+function panel:remove()
 	if ( self:getChildren() ) then
 		self:removeChildren()
 	end
@@ -497,7 +499,7 @@ function _M:remove()
 	self:onRemove()
 end
 
-function _M:removeChildren()
+function panel:removeChildren()
 	local children = self:getChildren()
 	if ( children ) then
 		for i = #children, 1, -1 do
@@ -509,7 +511,7 @@ end
 
 local root = nil
 
-function _M:screenToLocal( x, y )
+function panel:screenToLocal( x, y )
 	posX, posY = 0, 0
 	root       = self
 	while ( root:getParent() ~= nil ) do
@@ -524,24 +526,24 @@ function _M:screenToLocal( x, y )
 	return x, y
 end
 
-function _M:setUseFullscreenFramebuffer( useFullscreenFramebuffer )
+function panel:setUseFullscreenFramebuffer( useFullscreenFramebuffer )
 	self.useFullscreenFramebuffer = useFullscreenFramebuffer and true or nil
 end
 
-function _M:setSuppressFramebufferWarnings( suppressFramebufferWarnings )
+function panel:setSuppressFramebufferWarnings( suppressFramebufferWarnings )
 	self.suppressFramebufferWarnings = suppressFramebufferWarnings
 end
 
-function _M:setNextThink( nextThink )
+function panel:setNextThink( nextThink )
 	self.nextThink = nextThink
 end
 
-function _M:setOpacity( opacity )
+function panel:setOpacity( opacity )
 	self.opacity = opacity
 	self:invalidate()
 end
 
-function _M:setParent( panel )
+function panel:setParent( panel )
 	local parent = self:getParent()
 	if ( parent ) then
 		local children = parent:getChildren()
@@ -563,74 +565,74 @@ function _M:setParent( panel )
 	self.parent = panel
 end
 
-function _M:setScale( scale )
+function panel:setScale( scale )
 	self.scale = scale
 	self:invalidate()
 end
 
-function _M:setScheme( name )
+function panel:setScheme( name )
 	if ( not scheme.isLoaded( name ) ) then
 		scheme.load( name )
 	end
 	self.scheme = name
 end
 
-function _M:setVisible( visible )
+function panel:setVisible( visible )
 	self.visible = visible
 	self:invalidate()
 end
 
-function _M:setWidth( width )
+function panel:setWidth( width )
 	self.width = math.round( width )
 	self:invalidate()
 end
 
-function _M:setHeight( height )
+function panel:setHeight( height )
 	self.height = math.round( height )
 	self:invalidate()
 end
 
-function _M:setSize( width, height )
+function panel:setSize( width, height )
 	self:setWidth( width )
 	self:setHeight( height )
 end
 
-function _M:setX( x )
+function panel:setX( x )
 	self.x = math.round( x )
 	if ( self:getParent() ) then
 		self:invalidateParent()
 	end
 end
 
-function _M:setY( y )
+function panel:setY( y )
 	self.y = math.round( y )
 	if ( self:getParent() ) then
 		self:invalidateParent()
 	end
 end
 
-function _M:setPos( x, y )
+function panel:setPos( x, y )
 	self:setX( x )
 	self:setY( y )
 end
 
-function _M:shouldUseFullscreenFramebuffer()
+function panel:shouldUseFullscreenFramebuffer()
 	return self.useFullscreenFramebuffer
 end
 
-function _M:shouldSuppressFramebufferWarnings()
+function panel:shouldSuppressFramebufferWarnings()
 	return self.suppressFramebufferWarnings
 end
 
-function _M:textinput( text )
+function panel:textinput( text )
 	return cascadeInputToChildren( self, "textinput", text )
 end
 
-function _M:textedited( text, start, length )
+function panel:textedited( text, start, length )
 	return cascadeInputToChildren( self, "textedited", text, start, length )
 end
 
-function _M:update( dt )
+function panel:update( dt )
 	if ( self.think and
 	     self.nextThink and
 	     self.nextThink <= love.timer.getTime() ) then
@@ -661,7 +663,7 @@ local eased      = 0
 local complete   = nil
 local len        = table.len
 
-function _M:updateAnimations( dt )
+function panel:updateAnimations( dt )
 	for _, animation in ipairs( self.animations ) do
 		if ( not animation.startTime ) then
 			animation.startTime = love.timer.getTime()
@@ -708,10 +710,10 @@ function _M:updateAnimations( dt )
 	end
 end
 
-function _M:wheelmoved( x, y )
+function panel:wheelmoved( x, y )
 	return cascadeInputToChildren( self, "wheelmoved", x, y )
 end
 
-function _M:__tostring()
+function panel:__tostring()
 	return "panel: \"" .. self.name .. "\" (" .. self.__type .. ")"
 end

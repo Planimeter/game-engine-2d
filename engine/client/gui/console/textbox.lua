@@ -9,7 +9,9 @@ local point = point
 
 class "gui.console.textbox" ( "gui.textbox" )
 
-function _M:textbox( parent, name )
+local textbox = gui.console.textbox
+
+function textbox:textbox( parent, name )
 	gui.textbox.textbox( self, parent, name, "" )
 
 	self:setEditable( false )
@@ -17,7 +19,7 @@ function _M:textbox( parent, name )
 	self:setScheme( "Console" )
 end
 
-function _M:draw()
+function textbox:draw()
 	if ( self:getHeight() == point( 1 ) ) then
 		return
 	end
@@ -31,7 +33,7 @@ function _M:draw()
 	self:drawForeground()
 end
 
-function _M:invalidateLayout()
+function textbox:invalidateLayout()
 	local parent         = self:getParent()
 	local margin         = point( 36 )
 	local titleBarHeight = point( 86 )

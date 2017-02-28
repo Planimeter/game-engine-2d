@@ -10,7 +10,9 @@ local table    = table
 
 class "gui.radiobuttongroup" ( "gui.panel" )
 
-function _M:radiobuttongroup( parent, name )
+local radiobuttongroup = gui.radiobuttongroup
+
+function radiobuttongroup:radiobuttongroup( parent, name )
 	gui.panel.panel( self, parent, name )
 	self.selectedId = 0
 	self.disabled   = false
@@ -18,14 +20,14 @@ function _M:radiobuttongroup( parent, name )
 	self:setSuppressFramebufferWarnings( true )
 end
 
-function _M:addItem( item )
+function radiobuttongroup:addItem( item )
 	self.items =  self.items or {}
 	item.id    = #self.items + 1
 	table.insert( self.items, item )
 	item.group = self
 end
 
-function _M:removeItem( item )
+function radiobuttongroup:removeItem( item )
 	local items = self:getItems()
 	for i, v in ipairs( items ) do
 		if ( v == item ) then
@@ -38,32 +40,32 @@ function _M:removeItem( item )
 	end
 end
 
-accessor( _M, "items" )
-accessor( _M, "selectedId" )
+accessor( radiobuttongroup, "items" )
+accessor( radiobuttongroup, "selectedId" )
 
-function _M:getSelectedItem()
+function radiobuttongroup:getSelectedItem()
 	local items = self:getItems()
 	if ( items ) then
 		return items[ self:getSelectedId() ]
 	end
 end
 
-function _M:getValue()
+function radiobuttongroup:getValue()
 	local item = self:getSelectedItem()
 	if ( item ) then
 		return item:getValue()
 	end
 end
 
-function _M:isDisabled()
+function radiobuttongroup:isDisabled()
 	return self.disabled
 end
 
-function _M:setDisabled( disabled )
+function radiobuttongroup:setDisabled( disabled )
 	self.disabled = disabled
 end
 
-function _M:setSelectedId( selectedId, default )
+function radiobuttongroup:setSelectedId( selectedId, default )
 	local oldSelectedId = self:getSelectedId()
 	local items         = self:getItems()
 	local oldSelection  = items[ oldSelectedId ]
@@ -82,5 +84,5 @@ function _M:setSelectedId( selectedId, default )
 	end
 end
 
-function _M:onValueChanged( oldValue, newValue )
+function radiobuttongroup:onValueChanged( oldValue, newValue )
 end

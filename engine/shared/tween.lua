@@ -11,7 +11,7 @@ class( "tween" )
 local pi  = math.pi
 local cos = math.cos
 
-easing = {
+tween.easing = {
 	linear = function( p )
 		return p
 	end,
@@ -25,7 +25,7 @@ easing = {
 	end
 }
 
-function _M:tween( target, duration, vars )
+function tween:tween( target, duration, vars )
 	self.target     = target
 	self.startTime  = nil
 	self.tweens     = {}
@@ -56,7 +56,7 @@ local endValue   = 0
 local eased      = 0
 local onComplete = nil
 
-function _M:update( dt )
+function tween:update( dt )
 	if ( not self.startTime ) then
 		self.startTime = love.timer.getTime()
 	end
