@@ -6,6 +6,8 @@
 
 class "gui.hudframe" ( "gui.frame" )
 
+local hudframe = gui.hudframe
+
 function hudframe:hudframe( parent, name, title )
 	gui.frame.frame( self, parent, name, title )
 
@@ -58,8 +60,8 @@ function hudframe:draw()
 end
 
 function hudframe:drawBackground()
-	if ( not gui.blurFramebuffer ) then
-		gui.frame.drawBackground( self )
+	if ( not gui._blurFramebuffer ) then
+		gui.panel.drawBackground( self, "frame.backgroundColor" )
 		return
 	end
 
@@ -67,20 +69,20 @@ function hudframe:drawBackground()
 end
 
 function hudframe:drawBlur()
-	if ( not gui.blurFramebuffer ) then
+	if ( not gui._blurFramebuffer ) then
 		return
 	end
 
 	love.graphics.push()
 		local x, y = self:localToScreen()
 		love.graphics.translate( -x, -y )
-		gui.blurFramebuffer:draw()
+		gui._blurFramebuffer:draw()
 	love.graphics.pop()
 end
 
 function hudframe:drawTitle()
 	local property = "frame.titleTextColor"
-	graphics.setColor( self:getScheme( property ) )
+	love.graphics.setColor( self:getScheme( property ) )
 	local font = self:getScheme( "titleFont" )
 	love.graphics.setFont( font )
 	local x = point( 36 )
@@ -89,11 +91,9 @@ function hudframe:drawTitle()
 end
 
 function hudframe:update( dt )
-	if ( gui.blurFramebuffer and self:isVisible() ) then
+	if ( gui._blurFramebuffer and self:isVisible() ) then
 		self:invalidate()
 	end
 
 	gui.frame.update( self, dt )
 end
-
-

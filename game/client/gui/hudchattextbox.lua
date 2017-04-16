@@ -6,6 +6,8 @@
 
 class "gui.hudchattextbox" ( "gui.textbox" )
 
+local hudchattextbox = gui.hudchattextbox
+
 function hudchattextbox:hudchattextbox( parent, name )
 	gui.textbox.textbox( self, parent, name, "" )
 	self.hudchat = parent
@@ -55,9 +57,9 @@ function hudchattextbox:drawForeground()
 	local height   = self:getHeight()
 	local color    = color( self:getScheme( property ) )
 	color[ 4 ]     = color[ 4 ] * self.borderOpacity
-	graphics.setColor( color )
-	graphics.setLineWidth( 1 )
-	graphics.rectangle( "line", 0, 0, width, height )
+	love.graphics.setColor( color )
+	love.graphics.setLineWidth( 1 )
+	love.graphics.rectangle( "line", 0, 0, width, height )
 end
 
 function hudchattextbox:getHideTime()
@@ -91,5 +93,3 @@ function hudchattextbox:update( dt )
 
 	gui.textbox.update( self, dt )
 end
-
-

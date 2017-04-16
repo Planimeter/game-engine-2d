@@ -4,9 +4,11 @@
 --
 --============================================================================--
 
+local utf8upper = string.utf8upper
+
 class "gui.tabbedframe" ( "gui.frame" )
 
-local utf8upper = string.utf8upper
+local tabbedframe = gui.tabbedframe
 
 function tabbedframe:tabbedframe( parent, name, title )
 	gui.frame.frame( self, parent, name, title )
@@ -61,8 +63,8 @@ function tabbedframe:drawBackground()
 	local height         = self:getHeight()
 
 	if ( not self.tabPanels:getChildren() ) then
-		graphics.setColor( self:getScheme( color ) )
-		graphics.rectangle(
+		love.graphics.setColor( self:getScheme( color ) )
+		love.graphics.rectangle(
 			"fill",
 			0,
 			titleBarHeight,
@@ -73,18 +75,18 @@ function tabbedframe:drawBackground()
 
 	-- Title Bar
 	color = "frametab.backgroundColor"
-	graphics.setColor( self:getScheme( color ) )
+	love.graphics.setColor( self:getScheme( color ) )
 	local padding    = point( 24 )
 	local font       = self:getScheme( "titleFont" )
 	local titleWidth = font:getWidth( utf8upper( self:getTitle() ) )
 	titleWidth       = 2 * padding + titleWidth
-	graphics.rectangle( "fill", 0, 0, titleWidth + point( 1 ), titleBarHeight )
+	love.graphics.rectangle( "fill", 0, 0, titleWidth + point( 1 ), titleBarHeight )
 
 	-- Title Bar Inner Shadow
 	color = "frametab.outlineColor"
-	graphics.setColor( self:getScheme( color ) )
+	love.graphics.setColor( self:getScheme( color ) )
 	local lineWidth = point( 1 )
-	graphics.setLineWidth( lineWidth )
+	love.graphics.setLineWidth( lineWidth )
 	local y = titleBarHeight - lineWidth / 2
 	love.graphics.line(
 		0,          y, -- Bottom-left
@@ -92,7 +94,7 @@ function tabbedframe:drawBackground()
 	)
 
 	-- Top Resize Bounds
-	graphics.setColor( self:getScheme( "frametab.backgroundColor" ) )
+	love.graphics.setColor( self:getScheme( "frametab.backgroundColor" ) )
 	local x = titleWidth + self.tabGroup:getWidth()
 	love.graphics.line(
 		titleWidth, lineWidth / 2, -- Top-left
@@ -100,11 +102,11 @@ function tabbedframe:drawBackground()
 	)
 
 	-- Remaining Title Bar
-	local r = self:getWidth() - titleWidth
-	graphics.rectangle( "fill", x, 0, r, titleBarHeight )
+	local r = self:getWidth() - x
+	love.graphics.rectangle( "fill", x, 0, r, titleBarHeight )
 
 	-- Remaining Title Bar Inner Shadow
-	graphics.setColor( self:getScheme( "frametab.outlineColor" ) )
+	love.graphics.setColor( self:getScheme( "frametab.outlineColor" ) )
 	love.graphics.line(
 		x,     y, -- Bottom-left
 		x + r, y  -- Bottom-right
@@ -116,7 +118,7 @@ function tabbedframe:drawTitle()
 	if ( not self.focus ) then
 		color = "frame.defocus.titleTextColor"
 	end
-	graphics.setColor( self:getScheme( color ) )
+	love.graphics.setColor( self:getScheme( color ) )
 	local font = self:getScheme( "titleFont" )
 	love.graphics.setFont( font )
 	local margin = point( 24 )
@@ -302,5 +304,3 @@ function tabbedframe:mousepressed( x, y, button, istouch )
 		end
 	end
 end
-
-

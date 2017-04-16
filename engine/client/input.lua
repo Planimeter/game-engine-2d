@@ -4,9 +4,9 @@
 --
 --============================================================================--
 
-module( "input" )
+local love = love
 
-_keyTrap = _keyTrap or nil
+module( "input" )
 
 function getKeyTrap()
 	return _keyTrap

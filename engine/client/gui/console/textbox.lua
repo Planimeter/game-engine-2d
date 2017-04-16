@@ -4,9 +4,6 @@
 --
 --============================================================================--
 
-local gui   = gui
-local point = point
-
 class "gui.console.textbox" ( "gui.textbox" )
 
 local textbox = gui.console.textbox

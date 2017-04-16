@@ -6,6 +6,8 @@
 
 class "gui.hudgamemenustats" ( "gui.panel" )
 
+local hudgamemenustats = gui.hudgamemenustats
+
 function hudgamemenustats:hudgamemenustats( parent )
 	gui.panel.panel( self, parent, "Stats" )
 	self:setScheme( "Default" )
@@ -102,5 +104,3 @@ function hudgamemenustats:hudgamemenustats( parent )
 	y                = y + stat:getHeight() + point( 20 )
 	stat:setPos( x, y )
 end
-
-

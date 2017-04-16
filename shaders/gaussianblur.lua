@@ -57,8 +57,8 @@ local function build_shader(sigma)
 end
 
 function gaussianblur:gaussianblur()
-	self.canvas_h = graphics.newFullscreenFramebuffer()
-	self.canvas_v = graphics.newFullscreenFramebuffer()
+	self.canvas_h = love.graphics.newCanvas()
+	self.canvas_v = love.graphics.newCanvas()
 	self.shader = build_shader(1)
 	self.shader:send("direction",{1.0,0.0})
 end
@@ -71,7 +71,7 @@ function gaussianblur:renderTo(func)
 	-- first pass (horizontal blur)
 	self.shader:send('direction', {1 / love.graphics.getWidth(), 0})
 	-- draw scene
-	self.canvas_h:clear()
+	-- self.canvas_h:clear()
 	self.canvas_h:renderTo(func)
 
 	local b = love.graphics.getBlendMode()
@@ -79,10 +79,10 @@ function gaussianblur:renderTo(func)
 
 	-- second pass (vertical blur)
 	self.shader:send('direction', {0, 1 / love.graphics.getHeight()})
-	self.canvas_v:clear()
-	self.canvas_v:renderTo(function() love.graphics.draw(self.canvas_h:getDrawable(), 0,0) end)
+	-- self.canvas_v:clear()
+	self.canvas_v:renderTo(function() love.graphics.clear() love.graphics.draw(self.canvas_h, 0,0) end)
 
-	-- love.graphics.draw(self.canvas_v:getDrawable(), 0,0)
+	-- love.graphics.draw(self.canvas_v, 0,0)
 
 	-- restore blendmode, shader and canvas
 	love.graphics.setBlendMode(b)
@@ -90,7 +90,8 @@ function gaussianblur:renderTo(func)
 end
 
 function gaussianblur:draw()
-	self.canvas_v:draw()
+	love.graphics.setColor( unpack( color.white ) )
+	love.graphics.draw( self.canvas_v )
 end
 
 function gaussianblur:set(key, value)

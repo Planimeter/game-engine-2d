@@ -4,6 +4,14 @@
 --
 --============================================================================--
 
+local love     = love
+local math     = math
+local select   = select
+local string   = string
+local table    = table
+local tostring = tostring
+local _G       = _G
+
 module( "chat" )
 
 function addText( ... )
@@ -12,7 +20,7 @@ function addText( ... )
 		args[ i ] = tostring( args[ i ] )
 	end
 
-	local chat = g_Chat.output
+	local chat = _G.g_Chat.output
 	local text = table.concat( args, "\t" )
 	chat:activate()
 	chat:insertText( text .. "\n" )

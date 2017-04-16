@@ -4,46 +4,55 @@
 --
 --============================================================================--
 
-module( "engineserver" )
+local engine    = engine
+local ipairs    = ipairs
+local require   = require
+local unrequire = unrequire
+local _G        = _G
+
+module( "engine.server" )
 
 function load( arg )
-	local initialized = network.initializeServer()
+	local initialized = engine.server.network.initializeServer()
 	if ( not initialized ) then return false end
 
 	require( "game" )
 
-	game.server = require( "game.server" )
-	game.server.load( arg )
+	require( "game.server" )
+	_G.game.server.load( arg )
 
 	return true
 end
 
 function quit()
-	if ( game and game.server ) then
+	local game = _G.game
+	if ( game ) then
 		 game.server.shutdown()
 		 game.server = nil
 	end
 
 	unrequire( "game" )
-	game = nil
+	_G.game = nil
 
-	network.shutdownServer()
+	engine.server.network.shutdownServer()
 
-	region.unloadAll()
+	_G.region.unloadAll()
 
 	unrequire( "engine.server.network" )
-	network = nil
+	engine.server.network = nil
+	unrequire( "engine.server.payloads" )
+	unrequire( "engine.server.handlers" )
 	unrequire( "engine.server" )
 	engine.server = nil
 end
 
 function update( dt )
-	local regions = region.getAll()
+	local regions = _G.region.getAll()
 	for _, region in ipairs( regions ) do
 		region:update( dt )
 	end
 
-	network.update( dt )
+	engine.server.network.update( dt )
 end
 
 local function error_printer(msg, layer)

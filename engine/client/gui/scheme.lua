@@ -6,7 +6,7 @@
 
 class( "scheme" )
 
-scheme.schemes = scheme.schemes or {}
+scheme._schemes = scheme._schemes or {}
 
 local properties = {}
 
@@ -20,7 +20,7 @@ function scheme.getProperty( name, property )
 		return cachedProperty
 	end
 
-	local value = scheme.schemes[ name ]
+	local value = scheme._schemes[ name ]
 	local type  = type( value )
 	if ( type ~= "scheme" ) then
 		error( "attempt to index scheme '" .. name .. "' " ..
@@ -41,7 +41,7 @@ function scheme.getProperty( name, property )
 end
 
 function scheme.isLoaded( name )
-	return scheme.schemes[ name ] ~= nil
+	return scheme._schemes[ name ] ~= nil
 end
 
 function scheme.load( name )
@@ -50,7 +50,7 @@ end
 
 function scheme:scheme( name )
 	self.name = name
-	scheme.schemes[ name ] = self
+	scheme._schemes[ name ] = self
 	scheme.clear( name )
 end
 

@@ -6,6 +6,8 @@
 
 class "gui.optionsitemgroup" ( "gui.dropdownlistitemgroup" )
 
+local optionsitemgroup = gui.optionsitemgroup
+
 function optionsitemgroup:optionsitemgroup( parent, name )
 	gui.dropdownlistitemgroup.dropdownlistitemgroup( self, parent, name )
 	-- UNDONE: The drop-down list field is reserved for the control responsible
@@ -42,5 +44,3 @@ function optionsitemgroup:invalidateLayout()
 		self:setHeight( y )
 	end
 end
-
-

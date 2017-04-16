@@ -6,6 +6,8 @@
 
 class "gui.optionsmenu" ( "gui.tabbedframe" )
 
+local optionsmenu = gui.optionsmenu
+
 function optionsmenu:optionsmenu( parent )
 	local name = "Options Menu"
 	gui.tabbedframe.tabbedframe( self, parent, name, "Options" )

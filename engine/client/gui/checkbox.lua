@@ -6,6 +6,8 @@
 
 class "gui.checkbox" ( "gui.button" )
 
+local checkbox = gui.checkbox
+
 function checkbox:checkbox( parent, name, text )
 	gui.button.button( self, parent, name, text )
 	self.height  = point( 24 )
@@ -33,7 +35,7 @@ function checkbox:drawCheck()
 		color = "checkbox.disabled.iconColor"
 	end
 
-	graphics.setColor( self:getScheme( color ) )
+	love.graphics.setColor( self:getScheme( color ) )
 
 	local height = self:getHeight()
 	local x      = height / 2 - self.icon:getWidth()  / 2
@@ -52,10 +54,17 @@ function checkbox:drawForeground()
 		end
 	end
 
-	graphics.setColor( self:getScheme( color ) )
-	graphics.setLineWidth( point( 1 ) )
+	love.graphics.setColor( self:getScheme( color ) )
+	local lineWidth = point( 1 )
+	love.graphics.setLineWidth( lineWidth )
 	local height = self:getHeight()
-	graphics.rectangle( "line", 0, 0, height, height )
+	love.graphics.rectangle(
+		"line",
+		lineWidth / 2,
+		lineWidth / 2,
+		height - lineWidth,
+		height - lineWidth
+	)
 end
 
 function checkbox:drawLabel()
@@ -65,7 +74,7 @@ function checkbox:drawLabel()
 		color = "checkbox.disabled.textColor"
 	end
 
-	graphics.setColor( self:getScheme( color ) )
+	love.graphics.setColor( self:getScheme( color ) )
 
 	local font = self:getScheme( "font" )
 	love.graphics.setFont( font )
@@ -117,5 +126,3 @@ function checkbox:setChecked( checked )
 	self:onCheckedChanged( self.checked )
 	self:invalidate()
 end
-
-

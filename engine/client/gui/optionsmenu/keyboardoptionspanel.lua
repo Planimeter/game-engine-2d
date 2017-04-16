@@ -10,6 +10,8 @@ require( "engine.client.gui.optionsmenu.keyboardoptionsadvancedframe" )
 
 class "gui.keyboardoptionspanel" ( "gui.frametabpanel" )
 
+local keyboardoptionspanel = gui.keyboardoptionspanel
+
 function keyboardoptionspanel:keyboardoptionspanel()
 	gui.frametabpanel.frametabpanel( self, nil, "Keyboard Options Panel" )
 
@@ -56,5 +58,3 @@ function keyboardoptionspanel:onCancel()
 end
 
 keyboardoptionspanel.onApply = keyboardoptionspanel.onOK
-
-

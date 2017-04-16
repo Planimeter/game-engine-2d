@@ -6,6 +6,8 @@
 
 class "gui.frametabgroup" ( "gui.radiobuttongroup" )
 
+local frametabgroup = gui.frametabgroup
+
 function frametabgroup:frametabgroup( parent, name )
 	gui.radiobuttongroup.radiobuttongroup( self, parent, name )
 	self.height = point( 61 )
@@ -29,9 +31,9 @@ function frametabgroup:addItem( tab )
 end
 
 function frametabgroup:draw()
-	graphics.setColor( self:getScheme( "frametab.outlineColor" ) )
+	love.graphics.setColor( self:getScheme( "frametab.outlineColor" ) )
 	local lineWidth = point( 1 )
-	graphics.setLineWidth( lineWidth )
+	love.graphics.setLineWidth( lineWidth )
 	love.graphics.line(
 		lineWidth / 2, 0,               -- Top-left
 		lineWidth / 2, self:getHeight() -- Bottom-left
@@ -58,5 +60,3 @@ function frametabgroup:onValueChanged( oldValue, newValue )
 	local tabPanels = self:getParent():getTabPanels()
 	tabPanels:setSelectedChild( newValue )
 end
-
-

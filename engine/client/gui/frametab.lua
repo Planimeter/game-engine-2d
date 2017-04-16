@@ -6,6 +6,8 @@
 
 class "gui.frametab" ( "gui.radiobutton" )
 
+local frametab = gui.frametab
+
 function frametab:frametab( parent, name, text )
 	gui.radiobutton.radiobutton( self, parent, name, text )
 	self.text     = text or "Frame Tab"
@@ -34,11 +36,11 @@ function frametab:drawBackground()
 		color = "frametab.mouseover.backgroundColor"
 	end
 
-	graphics.setColor( self:getScheme( color ) )
+	love.graphics.setColor( self:getScheme( color ) )
 
 	local selected  = self.mouseover or      self:isSelected()
 	local mouseover = self.mouseover and not self:isSelected()
-	graphics.rectangle(
+	love.graphics.rectangle(
 		"fill",
 		0,
 		0,
@@ -48,7 +50,7 @@ function frametab:drawBackground()
 
 	local lineWidth = point( 1 )
 	if ( selected ) then
-		graphics.setColor( self:getScheme( "frametab.backgroundColor" ) )
+		love.graphics.setColor( self:getScheme( "frametab.backgroundColor" ) )
 		love.graphics.line(
 			width - lineWidth / 2, 0,     -- Top-left
 			width - lineWidth / 2, height -- Bottom-left
@@ -56,7 +58,7 @@ function frametab:drawBackground()
 	end
 
 	selected = self:isSelected()
-	graphics.setColor( self:getScheme( "frametab.outlineColor" ) )
+	love.graphics.setColor( self:getScheme( "frametab.outlineColor" ) )
 	love.graphics.line(
 		width - lineWidth / 2, 0,
 		width - lineWidth / 2, height - ( selected and 0 or point( 1 ) )
@@ -90,5 +92,3 @@ function frametab:mousereleased( x, y, button, istouch )
 	self.mousedown = false
 	self:invalidate()
 end
-
-

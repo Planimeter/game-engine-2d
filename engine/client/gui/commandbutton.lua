@@ -6,6 +6,8 @@
 
 class "gui.commandbutton" ( "gui.button" )
 
+local commandbutton = gui.commandbutton
+
 function commandbutton:commandbutton( parent, name, text )
 	gui.button.button( self, parent, name, text )
 
@@ -36,12 +38,12 @@ function commandbutton:drawBackground()
 
 	if ( self.mousedown and self.mouseover ) then
 		color = "button.mousedown.backgroundColor"
-		graphics.setColor( self:getScheme( color ) )
-		graphics.rectangle( "fill", x, point( 1 ), width, height )
+		love.graphics.setColor( self:getScheme( color ) )
+		love.graphics.rectangle( "fill", x, point( 1 ), width, height )
 	elseif ( self.mousedown or self.mouseover ) then
 		color = "button.mouseover.backgroundColor"
-		graphics.setColor( self:getScheme( color ) )
-		graphics.rectangle( "fill", x, point( 1 ), width, height )
+		love.graphics.setColor( self:getScheme( color ) )
+		love.graphics.rectangle( "fill", x, point( 1 ), width, height )
 	end
 end
 
@@ -54,9 +56,9 @@ function commandbutton:drawForeground()
 	local width  = self:getWidth()
 	local height = self:getHeight()
 
-	graphics.setColor( self:getScheme( color ) )
+	love.graphics.setColor( self:getScheme( color ) )
 	local lineWidth = point( 1 )
-	graphics.setLineWidth( lineWidth )
+	love.graphics.setLineWidth( lineWidth )
 	love.graphics.line(
 		width - lineWidth / 2, 0,     -- Top-right
 		width - lineWidth / 2, height -- Bottom-right
@@ -77,5 +79,3 @@ function commandbutton:setParent( panel )
 	gui.panel.setParent( self, panel )
 	panel:invalidate()
 end
-
-

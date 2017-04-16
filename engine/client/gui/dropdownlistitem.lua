@@ -6,6 +6,8 @@
 
 class "gui.dropdownlistitem" ( "gui.radiobutton" )
 
+local dropdownlistitem = gui.dropdownlistitem
+
 function dropdownlistitem:dropdownlistitem( name, text )
 	gui.radiobutton.radiobutton( self, nil, name, text )
 	self.width  = point( 216 )
@@ -31,11 +33,11 @@ function dropdownlistitem:drawBackground()
 		color = "dropdownlistitem.mouseover.backgroundColor"
 	end
 
-	graphics.setColor( self:getScheme( color ) )
+	love.graphics.setColor( self:getScheme( color ) )
 
 	local selected = self.mouseover or self:isSelected()
 	local offset   = selected and point( 1 ) or 0
-	graphics.rectangle( "fill", offset, 0, width - 2 * offset, height )
+	love.graphics.rectangle( "fill", offset, 0, width - 2 * offset, height )
 
 	if ( selected ) then
 		color = "dropdownlistitem.backgroundColor"
@@ -50,8 +52,8 @@ function dropdownlistitem:drawBorders( color )
 	local lineWidth = point( 1 )
 	local width     = self:getWidth()
 	local height    = self:getHeight()
-	graphics.setColor( self:getScheme( color ) )
-	graphics.setLineWidth( lineWidth )
+	love.graphics.setColor( self:getScheme( color ) )
+	love.graphics.setLineWidth( lineWidth )
 	love.graphics.line(
 		lineWidth / 2,      0,        -- Top-left
 		lineWidth / 2,      height    -- Bottom-left
@@ -73,7 +75,7 @@ function dropdownlistitem:drawText()
 		color = "dropdownlistitem.mouseover.textColor"
 	end
 
-	graphics.setColor( self:getScheme( color ) )
+	love.graphics.setColor( self:getScheme( color ) )
 
 	local font = self:getScheme( "font" )
 	love.graphics.setFont( font )
@@ -102,5 +104,3 @@ function dropdownlistitem:mousepressed( x, y, button, istouch )
 		parentFrame:setFocusedFrame( true )
 	end
 end
-
-

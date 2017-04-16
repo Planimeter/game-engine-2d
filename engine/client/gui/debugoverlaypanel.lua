@@ -6,6 +6,8 @@
 
 class "gui.debugoverlaypanel" ( "gui.panel" )
 
+local debugoverlaypanel = gui.debugoverlaypanel
+
 function debugoverlaypanel:debugoverlaypanel( parent )
 	gui.panel.panel( self, parent, "Debug Overlay" )
 	self.width  = love.graphics.getWidth()
@@ -17,9 +19,9 @@ end
 
 local function rectangle( overlay )
 	return function()
-		graphics.setColor( overlay.color )
-		graphics.setLineWidth( 1 )
-		graphics.rectangle(
+		love.graphics.setColor( overlay.color )
+		love.graphics.setLineWidth( 1 )
+		love.graphics.rectangle(
 			"line",
 			0,
 			0,
@@ -89,5 +91,3 @@ function debugoverlaypanel:update( dt )
 		end
 	end
 end
-
-

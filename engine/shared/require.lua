@@ -1,22 +1,24 @@
---=========== Copyright © 2016, Planimeter, All rights reserved. =============--
+--=========== Copyright © 2017, Planimeter, All rights reserved. =============--
 --
--- Purpose: Require reimplementation
+-- Purpose: Extends the package library
 --
 --============================================================================--
 
-package.watched = package.watched or {}
+require( "package" )
 
 if ( not rawrequire ) then
 	rawrequire = require
 end
 
 local function getModuleFilename( modname )
-	local path = string.gsub( modname, "%.", "/" )
-	local filename = path .. ".lua"
-	if ( not love.filesystem.exists( filename ) ) then
-		filename = path .. "/init.lua"
+	local module = string.gsub( modname, "%.", "/" )
+	for path in string.gmatch( package.path, "(.-);" ) do
+		path = string.gsub( path, "%./", "" )
+		local filename = string.gsub( path, "?", module )
+		if ( love.filesystem.exists( filename ) ) then
+			return filename
+		end
 	end
-	return filename
 end
 
 function require( modname )
@@ -25,10 +27,14 @@ function require( modname )
 	end
 
 	local status, ret = pcall( rawrequire, modname )
-	if ( not status ) then error( ret, 2 ) end
+	if ( not status ) then
+		error( ret, 2 )
+	end
 
 	local filename = getModuleFilename( modname )
-	package.watched[ modname ] = love.filesystem.getLastModified( filename )
+	if ( filename ) then
+		package.watched[ modname ] = love.filesystem.getLastModified( filename )
+	end
 	return ret
 end
 
@@ -42,7 +48,9 @@ function unrequire( modname )
 	print( "Unloading " .. modname .. "..." )
 end
 
-local function update( modname, filename )
+package.watched = package.watched or {}
+
+local function reload( modname, filename )
 	unload( modname )
 	print( "Updating " .. modname .. "..." )
 
@@ -60,7 +68,7 @@ function package.update( dt )
 		local filename = getModuleFilename( k )
 		local modtime, errormsg = love.filesystem.getLastModified( filename )
 		if ( not errormsg and modtime ~= v ) then
-			update( k, filename )
+			reload( k, filename )
 		end
 	end
 end

@@ -4,11 +4,6 @@
 --
 --============================================================================--
 
-local accessor = accessor
-local gui      = gui
-local point    = point
-local print    = print
-
 class "gui.button" ( "gui.panel" )
 
 local button = gui.button
@@ -74,7 +69,7 @@ function button:drawText()
 		color = "button.disabled.textColor"
 	end
 
-	graphics.setColor( self:getScheme( color ) )
+	love.graphics.setColor( self:getScheme( color ) )
 
 	local font = self:getScheme( "font" )
 	love.graphics.setFont( font )

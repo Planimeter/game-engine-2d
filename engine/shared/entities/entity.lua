@@ -85,9 +85,9 @@ if ( _CLIENT ) then
 							      )
 							local width  = bottomRightX - topLeftX
 							local height = topLeftY - bottomRightY
-							graphics.setOpacity( 0.14 )
-							graphics.setColor( color.white )
-							graphics.setLineWidth( 1 )
+							-- graphics.setOpacity( 0.14 )
+							love.graphics.setColor( color.white )
+							love.graphics.setLineWidth( 1 )
 							love.graphics.line(
 								topLeftX,             topLeftY,
 								topLeftX + width,     topLeftY,
@@ -95,7 +95,7 @@ if ( _CLIENT ) then
 								topLeftX,         bottomRightY,
 								topLeftX,              topLeftY
 							)
-							graphics.setOpacity( 1 )
+							-- graphics.setOpacity( 1 )
 						end
 					end
 				end
@@ -113,15 +113,15 @@ if ( _CLIENT ) then
 
 						-- Draw shadow
 						love.graphics.push()
-							graphics.setOpacity( 0.14 )
-							graphics.setColor( color.black )
+							-- graphics.setOpacity( 0.14 )
+							love.graphics.setColor( color.black )
 
 							local sprite = v:getSprite()
 							local height = sprite:getHeight()
 							love.graphics.translate( sprite:getWidth() / 2, height )
 							love.graphics.scale( 1, -1 )
 								v:drawShadow()
-							graphics.setOpacity( 1 )
+							-- graphics.setOpacity( 1 )
 						love.graphics.pop()
 					love.graphics.pop()
 				end
@@ -135,7 +135,7 @@ if ( _CLIENT ) then
 					local x, y = v:getDrawPosition()
 					love.graphics.translate( x, y )
 
-					graphics.setColor( color.white )
+					love.graphics.setColor( color.white )
 					v:draw()
 				love.graphics.pop()
 			end
@@ -275,7 +275,7 @@ if ( _CLIENT ) then
 		if ( type( sprite ) == "sprite" ) then
 			sprite:draw()
 		else
-			love.graphics.draw( sprite:getDrawable() )
+			love.graphics.draw( sprite )
 		end
 	end
 
@@ -292,13 +292,13 @@ if ( _CLIENT ) then
 		local ky     = 0
 		if ( type( sprite ) == "sprite" ) then
 			love.graphics.draw(
-				sprite:getSpriteSheet():getDrawable(),
+				sprite:getSpriteSheet(),
 				sprite:getQuad(),
 				x, y, r, sx, sy, ox, oy, kx, ky
 			)
 		else
 			love.graphics.draw(
-				sprite:getDrawable(),
+				sprite,
 				x, y, r, sx, sy, ox, oy, kx, ky
 			)
 		end
@@ -306,9 +306,9 @@ if ( _CLIENT ) then
 end
 
 function entity:emitSound( filename )
-	require( "engine.client.sound" )
-	local sound = sound( filename )
-	sound:play()
+	-- require( "engine.client.sound" )
+	-- local sound = love.audio.newSource( filename )
+	-- love.audio.play( sound )
 end
 
 function entity:networkVar( name, initialValue )

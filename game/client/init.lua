@@ -6,25 +6,33 @@
 
 require( "engine.client.camera" )
 
+local camera    = camera
+local game      = game
+local gui       = gui
+local pcall     = pcall
+local region    = region
+local unrequire = unrequire
+local _G        = _G
+
 module( "game.client" )
 
 function createDefaultPanels()
 	-- Initialize speech balloons
-	local hudspeechballoons = gui.hudspeechballoons( g_Viewport )
+	local hudspeechballoons = gui.hudspeechballoons( _G.g_Viewport )
 
 	-- Initialize move indicator
-	local hudmoveindicator = gui.hudmoveindicator( g_Viewport )
+	local hudmoveindicator = gui.hudmoveindicator( _G.g_Viewport )
 
 	-- Initialize chat
-	local chat = gui.hudchat( g_Viewport )
+	local chat = gui.hudchat( _G.g_Viewport )
 	_G.g_Chat = chat
 
 	-- Initialize game menu
-	local gamemenu = gui.hudgamemenu( g_Viewport )
+	local gamemenu = gui.hudgamemenu( _G.g_Viewport )
 	_G.g_GameMenu = gamemenu
 
 	-- Initialize health
-	local hudhealth = gui.hudhealth( g_Viewport )
+	local hudhealth = gui.hudhealth( _G.g_Viewport )
 	_G.g_HudHealth = hudhealth
 end
 
@@ -41,8 +49,8 @@ function draw()
 end
 
 function load( arg )
-	_G.g_Viewport = gui.viewport( g_RootPanel )
-	_G.g_DebugOverlay = gui.debugoverlaypanel( g_Viewport )
+	_G.g_Viewport = gui.viewport( _G.g_RootPanel )
+	_G.g_DebugOverlay = gui.debugoverlaypanel( _G.g_Viewport )
 end
 
 function onMainMenuActivate()

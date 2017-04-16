@@ -4,23 +4,14 @@
 --
 --============================================================================--
 
-require( "common.color" )
-
-local class      = class
-local color      = color
-local concommand = concommand
-local graphics   = love.graphics
-local image      = love.image
-local ipairs     = ipairs
-local love       = love
-local math       = math
-local os         = os
-local require    = require
-local string     = string
-local table      = table
-local unpack     = unpack
-local window     = love.window
-local _G         = _G
+local graphics = love.graphics
+local ipairs   = ipairs
+local math     = math
+local require  = require
+local string   = string
+local table    = table
+local window   = love.window
+local _G       = _G
 
 local r_window_width      = convar( "r_window_width", 800, 800, nil,
                                     "Sets the width of the window on load" )
@@ -89,27 +80,11 @@ function getFullscreenModes( x, y )
 	return modes
 end
 
-local _opacity = 1
-
-function getOpacity()
-	return _opacity
-end
-
 function getAspectRatios()
 	w = graphics.getWidth()
 	h = graphics.getHeight()
 	r = gcd( w, h )
 	return w / r, h / r
-end
-
-function newFramebuffer( width, height )
-	require( "engine.client.framebuffer" )
-	return _G.framebuffer( width, height )
-end
-
-function newFullscreenFramebuffer()
-	require( "engine.client.framebuffer" )
-	return _G.fullscreenframebuffer()
 end
 
 local floor = math.floor
@@ -135,26 +110,4 @@ function print( text, x, y, r, sx, sy, ox, oy, kx, ky, tracking )
 	end
 
 	graphics.print( text, x, y, r, sx, sy, ox, oy, kx, ky )
-end
-
-local tempColor = color()
-
-function setBackgroundColor( color, multiplicative )
-	tempColor[ 1 ] = color[ 1 ] * ( multiplicative and _opacity or 1 )
-	tempColor[ 2 ] = color[ 2 ] * ( multiplicative and _opacity or 1 )
-	tempColor[ 3 ] = color[ 3 ] * ( multiplicative and _opacity or 1 )
-	tempColor[ 4 ] = color[ 4 ] * _opacity
-	graphics.setBackgroundColor( tempColor )
-end
-
-function setColor( color, multiplicative )
-	tempColor[ 1 ] = color[ 1 ] * ( multiplicative and _opacity or 1 )
-	tempColor[ 2 ] = color[ 2 ] * ( multiplicative and _opacity or 1 )
-	tempColor[ 3 ] = color[ 3 ] * ( multiplicative and _opacity or 1 )
-	tempColor[ 4 ] = color[ 4 ] * _opacity
-	graphics.setColor( tempColor )
-end
-
-function setOpacity( opacity )
-	_opacity = opacity
 end

@@ -6,6 +6,8 @@
 
 class "gui.bindlistheader" ( "gui.panel" )
 
+local bindlistheader = gui.bindlistheader
+
 function bindlistheader:bindlistheader( parent, name, text )
 	gui.panel.panel( self, parent, name )
 	self.width  = parent:getWidth()
@@ -16,7 +18,7 @@ function bindlistheader:bindlistheader( parent, name, text )
 end
 
 function bindlistheader:draw()
-	graphics.setColor( self:getScheme( "label.textColor" ) )
+	love.graphics.setColor( self:getScheme( "label.textColor" ) )
 	local font = self:getScheme( "fontBold" )
 	love.graphics.setFont( font )
 
@@ -29,15 +31,13 @@ function bindlistheader:draw()
 	x = self:getWidth() - font:getWidth( label ) - margin
 	graphics.print( label, x, y )
 
-	graphics.setColor( self:getScheme( 'bindlistheader.borderColor' ) )
+	love.graphics.setColor( self:getScheme( 'bindlistheader.borderColor' ) )
 	local paddingBottom = point( 6 )
 	y = self:getHeight() - paddingBottom
 	local width = self:getWidth() - 2 * margin
-	graphics.rectangle( "fill", margin, y, width, point( 1 ) )
+	love.graphics.rectangle( "fill", margin, y, width, point( 1 ) )
 
 	gui.panel.draw( self )
 end
 
 accessor( bindlistheader, "text" )
-
-

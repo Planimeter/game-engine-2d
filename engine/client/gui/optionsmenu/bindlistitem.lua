@@ -9,6 +9,8 @@ local trappedItem = gui.bindlistitem and gui.bindlistitem.trappedItem or nil
 
 class "gui.bindlistitem" ( "gui.button" )
 
+local bindlistitem = gui.bindlistitem
+
 bindlistitem.trappedItem = trappedItem
 
 function bindlistitem:bindlistitem( parent, name, text, key, concommand )
@@ -26,19 +28,19 @@ function bindlistitem:drawBackground()
 
 	if ( self:isDisabled() ) then
 		color = "button.disabled.backgroundColor"
-		graphics.setColor( self:getScheme( color ) )
-		graphics.rectangle( "fill", point( 1 ), 0, width - point( 2 ), height )
+		love.graphics.setColor( self:getScheme( color ) )
+		love.graphics.rectangle( "fill", point( 1 ), 0, width - point( 2 ), height )
 		return
 	end
 
 	if ( self.mousedown and self.mouseover ) then
 		color = "button.mousedown.backgroundColor"
-		graphics.setColor( self:getScheme( color ) )
-		graphics.rectangle( "fill", point( 1 ), 0, width - point( 2 ), height )
+		love.graphics.setColor( self:getScheme( color ) )
+		love.graphics.rectangle( "fill", point( 1 ), 0, width - point( 2 ), height )
 	elseif ( self.mousedown or self.mouseover ) then
 		color = "button.mouseover.backgroundColor"
-		graphics.setColor( self:getScheme( color ) )
-		graphics.rectangle( "fill", point( 1 ), 0, width - point( 2 ), height )
+		love.graphics.setColor( self:getScheme( color ) )
+		love.graphics.rectangle( "fill", point( 1 ), 0, width - point( 2 ), height )
 	end
 end
 
@@ -52,7 +54,7 @@ function bindlistitem:drawText()
 		color = "button.disabled.textColor"
 	end
 
-	graphics.setColor( self:getScheme( color ) )
+	love.graphics.setColor( self:getScheme( color ) )
 
 	local font = self:getScheme( "font" )
 	love.graphics.setFont( font )
@@ -94,5 +96,3 @@ function bindlistitem:setKey( key )
 	panel:getParent():onBindChange( item, key, oldKey, self:getConcommand() )
 	self:invalidate()
 end
-
-

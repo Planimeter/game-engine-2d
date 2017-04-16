@@ -4,10 +4,6 @@
 --
 --============================================================================--
 
-local accessor = accessor
-local gui      = gui
-local point    = point
-
 class "gui.label" ( "gui.panel" )
 
 local label = gui.label
@@ -23,7 +19,7 @@ function label:label( parent, name, text )
 end
 
 function label:draw()
-	graphics.setColor( self:getScheme( "label.textColor" ) )
+	love.graphics.setColor( self:getScheme( "label.textColor" ) )
 
 	local font = self:getFont()
 	love.graphics.setFont( font )

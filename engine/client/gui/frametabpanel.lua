@@ -6,6 +6,8 @@
 
 class "gui.frametabpanel" ( "gui.panel" )
 
+local frametabpanel = gui.frametabpanel
+
 function frametabpanel:frametabpanel( parent, name )
 	gui.panel.panel( self, parent, name )
 	self:setScheme( "Default" )
@@ -40,5 +42,3 @@ function frametabpanel:keypressed( key, scancode, isrepeat )
 
 	return gui.panel.keypressed( self, key, scancode, isrepeat )
 end
-
-

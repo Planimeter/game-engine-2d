@@ -4,6 +4,11 @@
 --
 --============================================================================--
 
+local pairs = pairs
+local pcall = pcall
+local print = print
+local table = table
+
 module( "hook" )
 
 _hooks        = _hooks        or {}

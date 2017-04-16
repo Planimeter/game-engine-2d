@@ -4,12 +4,6 @@
 --
 --============================================================================--
 
-local gui    = gui
-local love   = love
-local math   = math
-local point  = point
-local unpack = unpack
-
 class "gui.closebutton" ( "gui.button" )
 
 local closebutton = gui.closebutton

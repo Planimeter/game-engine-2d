@@ -4,11 +4,12 @@
 --
 --============================================================================--
 
+local game      = game
 local require   = require
 local unrequire = unrequire
 local _G        = _G
 
-module( "gameserver" )
+module( "game.server" )
 
 function getPlayerClass()
 	require( "game.shared.entities.vaplayer" )
@@ -36,7 +37,7 @@ end
 
 function quit()
 	unrequire( "game.server" )
-	_G.gameserver = nil
+	game.server = nil
 end
 
 shutdown = quit

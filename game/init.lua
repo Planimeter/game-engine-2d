@@ -4,12 +4,15 @@
 --
 --============================================================================--
 
-local _CLIENT     = _CLIENT
-local _SERVER     = _SERVER
 _VADVENTURE       = true
-local _VADVENTURE = _VADVENTURE
+
+local game        = {}
+_G.game           = game
 
 local hook        = hook
+local _CLIENT     = _CLIENT
+local _SERVER     = _SERVER
+local _VADVENTURE = _VADVENTURE
 local _G          = _G
 
 module( "game" )
@@ -24,9 +27,9 @@ function conf( c )
 end
 
 function call( universe, event, ... )
-	local interface = _G.game[ universe ]
+	local interface = game[ universe ]
 	if ( universe == "shared" ) then
-		interface = _G.game
+		interface = game
 	end
 
 	local values = { hook.call( universe, event, ... ) }
@@ -62,7 +65,7 @@ end
 
 function onPlayerInitialSpawn( player )
 	if ( _CLIENT ) then
-		client.createDefaultPanels()
+		game.client.createDefaultPanels()
 	end
 end
 

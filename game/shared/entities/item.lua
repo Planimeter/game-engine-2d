@@ -30,7 +30,7 @@ function item:item()
 	self:setNetworkVar( "name", self.data.name )
 
 	if ( _CLIENT ) then
-		local sprite = graphics.newImage( self.data.image )
+		local sprite = love.graphics.newImage( self.data.image )
 		self:setSprite( sprite )
 	end
 end

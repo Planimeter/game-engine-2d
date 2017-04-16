@@ -4,10 +4,6 @@
 --
 --============================================================================--
 
-local accessor = accessor
-local gui      = gui
-local table    = table
-
 class "gui.radiobuttongroup" ( "gui.panel" )
 
 local radiobuttongroup = gui.radiobuttongroup

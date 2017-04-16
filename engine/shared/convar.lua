@@ -8,15 +8,15 @@ require( "class" )
 
 class( "convar" )
 
-convar.config  = convar.config  or {}
-convar.convars = convar.convars or {}
+convar._config  = convar._config  or {}
+convar._convars = convar._convars or {}
 
 function convar.getConfig( name )
-	return convar.config[ name ]
+	return convar._config[ name ]
 end
 
 function convar.getConvar( name )
-	return convar.convars[ name ]
+	return convar._convars[ name ]
 end
 
 function convar.setConvar( name, value )
@@ -36,14 +36,14 @@ function convar.readConfig()
 
 	for line in love.filesystem.lines( "cfg/config.cfg" ) do
 		for k, v in string.gmatch( line, "(.+)%s(.+)" ) do
-			convar.config[ k ] = v
+			convar._config[ k ] = v
 		end
 	end
 end
 
 function convar.saveConfig()
 	local config = {}
-	for k, v in pairs( convar.convars ) do
+	for k, v in pairs( convar._convars ) do
 		table.insert( config, k .. " " .. tostring( v:getValue() ) )
 	end
 	table.insert( config, "" )
@@ -59,15 +59,15 @@ function convar.saveConfig()
 end
 
 function convar:convar( name, default, min, max, helpString, onValueChange, flags )
-	self.name              = name
-	self.default           = default
-	self.value             = convar.config[ name ] or default
-	self.min               = min
-	self.max               = max
-	self.helpString        = helpString
-	self.onValueChange     = onValueChange
-	self.flags             = flags
-	convar.convars[ name ] = self
+	self.name               = name
+	self.default            = default
+	self.value              = convar._config[ name ] or default
+	self.min                = min
+	self.max                = max
+	self.helpString         = helpString
+	self.onValueChange      = onValueChange
+	self.flags              = flags
+	convar._convars[ name ] = self
 end
 
 function convar:getBoolean()
@@ -111,7 +111,7 @@ function convar:onValueChange( oldValue, newValue )
 end
 
 function convar:remove()
-	convar.convars[ self:getName() ] = nil
+	convar._convars[ self:getName() ] = nil
 end
 
 function convar:setDefault( default )

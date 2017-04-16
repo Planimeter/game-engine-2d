@@ -6,6 +6,8 @@
 
 class "gui.hudgamemenustat" ( "gui.panel" )
 
+local hudgamemenustat = gui.hudgamemenustat
+
 function hudgamemenustat:hudgamemenustat( parent, name, stat )
 	gui.panel.panel( self, parent, name )
 	self.width        = point( 312 )
@@ -46,7 +48,7 @@ function hudgamemenustat:draw()
 	local property = "label.textColor"
 	local font     = self:getScheme( "font" )
 	local stat     = self:getStat()
-	graphics.setColor( self:getScheme( property ) )
+	love.graphics.setColor( self:getScheme( property ) )
 	love.graphics.setFont( font )
 	graphics.print( string.capitalize( stat ), 0, 0 )
 
@@ -55,7 +57,7 @@ function hudgamemenustat:draw()
 	local level = localplayer:getLevel( stat )
 	local label = "Level " .. level
 	local x     = self:getWidth() - font:getWidth( label )
-	graphics.setColor( self:getScheme( property ) )
+	love.graphics.setColor( self:getScheme( property ) )
 	love.graphics.setFont( font )
 	graphics.print( label, x, 0 )
 
@@ -65,7 +67,7 @@ function hudgamemenustat:draw()
 	local xp        = localplayer:getExperience( stat )
 	label           = xp  .. " / " .. nextLvlXp .. " XP"
 	x               = self:getWidth() - font:getWidth( label )
-	graphics.setColor( self:getScheme( property ) )
+	love.graphics.setColor( self:getScheme( property ) )
 	love.graphics.setFont( font )
 	graphics.print( label, x, point( 30 ) )
 
@@ -89,5 +91,3 @@ function hudgamemenustat:setWidth( width )
 	gui.panel.setWidth( self, width )
 	self.progressbar:setWidth( width )
 end
-
-

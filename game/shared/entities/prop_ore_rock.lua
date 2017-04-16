@@ -15,7 +15,7 @@ function prop_ore_rock:prop_ore_rock()
 	self:setNetworkVar( "name", "Ore Rock" )
 
 	if ( _CLIENT ) then
-		local sprite = graphics.newImage( "images/entities/prop_ore_rock.png" )
+		local sprite = love.graphics.newImage( "images/entities/prop_ore_rock.png" )
 		self:setSprite( sprite )
 	end
 end

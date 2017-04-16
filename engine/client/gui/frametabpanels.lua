@@ -6,6 +6,8 @@
 
 class "gui.frametabpanels" ( "gui.panel" )
 
+local frametabpanels = gui.frametabpanels
+
 function frametabpanels:frametabpanels( parent, name, text )
 	gui.panel.panel( self, parent, name )
 	self.width	= parent:getWidth()
@@ -27,5 +29,3 @@ function frametabpanels:setSelectedChild( i )
 		v:invalidate()
 	end
 end
-
-

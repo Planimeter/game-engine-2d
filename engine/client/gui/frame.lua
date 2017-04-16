@@ -4,14 +4,6 @@
 --
 --============================================================================--
 
-local accessor = accessor
-local gui      = gui
-local love     = love
-local math     = math
-local point    = point
-local string   = string
-local unpack   = unpack
-
 local gui_draw_frame_focus = convar( "gui_draw_frame_focus", "0", nil, nil,
                              "Draws bounds around the focused frame" )
 

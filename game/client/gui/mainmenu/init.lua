@@ -4,19 +4,9 @@
 --
 --============================================================================--
 
+require( "engine.shared.hook" )
 require( "game.client.gui.mainmenu.closebutton" )
 require( "game.client.gui.mainmenu.button" )
-
-local color  = color
-local engine = engine
-local gui    = gui
-local hook   = hook
-local ipairs = ipairs
-local love   = love
-local math   = math
-local point  = point
-local table  = table
-local unpack = unpack
 
 class "gui.mainmenu" ( "gui.panel" )
 
@@ -189,8 +179,8 @@ function mainmenu:draw()
 end
 
 function mainmenu:drawBlur()
-	if ( gui.blurFramebuffer ) then
-		gui.blurFramebuffer:draw()
+	if ( gui._blurFramebuffer ) then
+		gui._blurFramebuffer:draw()
 	end
 end
 
@@ -244,7 +234,7 @@ function mainmenu:remove()
 end
 
 function mainmenu:update( dt )
-	if ( gui.blurFramebuffer and self:isVisible() ) then
+	if ( gui._blurFramebuffer and self:isVisible() ) then
 		self:invalidate()
 	end
 

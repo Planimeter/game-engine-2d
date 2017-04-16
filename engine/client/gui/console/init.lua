@@ -7,15 +7,6 @@
 require( "engine.client.gui.console.textbox" )
 require( "engine.client.gui.console.textboxautocompleteitemgroup" )
 
-local concommand = concommand
-local convar     = convar
-local gui        = gui
-local point      = point
-local select     = select
-local table      = table
-local tostring   = tostring
-local _G         = _G
-
 class "gui.console" ( "gui.frame" )
 
 local console = gui.console
@@ -83,14 +74,14 @@ local function autocomplete( text )
 
 	local suggestions = {}
 
-	for command in pairs( concommand.concommands ) do
+	for command in pairs( concommand._concommands ) do
 		if ( string.find( command, text, 1, true ) == 1 and
 		     not table.hasvalue( gui.console.commandHistory, command ) ) then
 			table.insert( suggestions, command .. " " )
 		end
 	end
 
-	for command, convar in pairs( convar.convars ) do
+	for command, convar in pairs( convar._convars ) do
 		if ( string.find( command, text, 1, true ) == 1 ) then
 			table.insert( suggestions, command .. " " .. convar:getValue() )
 		end

@@ -7,33 +7,9 @@
 require( "common.color" )
 require( "engine.shared.tween" )
 
-local accessor = accessor
-local gui      = gui
-local ipairs   = ipairs
-local love     = love
-local math     = math
-local pairs    = pairs
-local point    = point
-local scheme   = scheme
-local table    = table
-local tween    = tween
-local type     = type
-local unpack   = unpack
-local _G       = _G
-
-local gui_draw_bounds = convar( "gui_draw_bounds", "0", nil, nil,
-                                "Draws the bounds of panels for debugging" )
-
 class( "gui.panel" )
 
 local panel = gui.panel
-
-panel.maskedPanel = panel.maskedPanel or nil
-
-function panel.drawMask()
-	local self = gui.panel.maskedPanel
-	love.graphics.rectangle( "fill", 0, 0, self:getWidth(), self:getHeight() )
-end
 
 function panel:panel( parent, name )
 	self.x       = 0
@@ -41,7 +17,7 @@ function panel:panel( parent, name )
 	self.width   = 0
 	self.height  = 0
 	self.name    = name or ""
-	self:setParent( parent or _G.g_RootPanel )
+	self:setParent( parent or g_RootPanel )
 	self.visible = true
 	self.scale   = 1
 	self.opacity = 1
@@ -57,7 +33,7 @@ function panel:animate( properties, duration, easing, complete )
 		self.animations = {}
 	end
 
-	local step
+	local step = nil
 
 	local options = duration
 	if ( type( options ) == "table" ) then
@@ -86,10 +62,7 @@ function panel:animate( properties, duration, easing, complete )
 end
 
 function panel:createFramebuffer()
-	local framebuffer = self.framebuffer
-	if ( framebuffer and not self.needsRedraw ) then
-		return
-	end
+	if ( self.framebuffer and not self.needsRedraw ) then return end
 
 	local width  = self:getWidth()
 	local height = self:getHeight()
@@ -103,38 +76,29 @@ function panel:createFramebuffer()
 		end
 	end
 
-	if ( not framebuffer ) then
-		local fullscreen = self:shouldUseFullscreenFramebuffer()
-		if ( fullscreen ) then
+	if ( not self.framebuffer ) then
+		if ( self:shouldUseFullscreenFramebuffer() ) then
 			self.framebuffer = love.graphics.newCanvas()
 		else
 			self.framebuffer = love.graphics.newCanvas( width, height )
 		end
 	end
 
-	framebuffer = self.framebuffer
-	-- if ( framebuffer:shouldAutoRedraw() ) then
-	-- 	framebuffer:setAutoRedraw( false )
-	-- end
-
-	framebuffer:renderTo( function()
+	local framebuffer = love.graphics.getCanvas()
+	love.graphics.setCanvas( self.framebuffer )
+		love.graphics.clear()
 		self:draw()
-	end )
+	love.graphics.setCanvas( framebuffer )
+
 	self.needsRedraw = nil
 end
 
-local opacityStack = { 1 }
-
 function panel:draw()
-	if ( not self:isVisible() ) then
-		return
-	end
+	if ( not self:isVisible() ) then return end
 
 	local children = self:getChildren()
 	if ( children ) then
-		for _, v in ipairs( children ) do
-			v:createFramebuffer()
-		end
+		for _, v in ipairs( children ) do v:createFramebuffer() end
 	end
 
 	if ( children ) then
@@ -155,55 +119,60 @@ end
 
 function panel:drawBounds()
 	love.graphics.setColor( unpack( color.red ) )
-	love.graphics.setLineWidth( point( 1 ) )
-	love.graphics.rectangle( "line", 0, 0, self:getWidth(), self:getHeight() )
+	local lineWidth = point( 1 )
+	love.graphics.setLineWidth( lineWidth )
+	love.graphics.rectangle(
+		"line",
+		lineWidth / 2,
+		lineWidth / 2,
+		self:getWidth()  - lineWidth,
+		self:getHeight() - lineWidth
+	)
 end
 
 function panel:drawForeground( color )
 	local width  = self:getWidth()
 	local height = self:getHeight()
 	love.graphics.setColor( unpack( self:getScheme( color ) ) )
-	love.graphics.setLineWidth( point( 1 ) )
-	love.graphics.rectangle( "line", 0, 0, width, height )
+	local lineWidth = point( 1 )
+	love.graphics.setLineWidth( lineWidth )
+	love.graphics.rectangle(
+		"line",
+		lineWidth / 2,
+		lineWidth / 2,
+		width  - lineWidth,
+		height - lineWidth
+	)
 end
 
 function panel:drawFramebuffer()
-	if ( not self:isVisible() ) then
-		return
-	end
+	if ( not self:isVisible() ) then return end
+	if ( not self.framebuffer ) then self:createFramebuffer() end
 
-	if ( not self.framebuffer ) then
-		self:createFramebuffer()
-	end
-
-	gui.panel.maskedPanel = self
-	love.graphics.stencil( gui.panel.drawMask )
-	love.graphics.setStencilTest( "greater", 0 )
+	love.graphics.push()
+		local b = love.graphics.getBlendMode()
+		love.graphics.setBlendMode( "alpha", "premultiplied" )
+		local a = self:getOpacity() * 255
+		love.graphics.setColor( a, a, a, a )
 		love.graphics.draw( self.framebuffer )
-	love.graphics.setStencilTest()
+		love.graphics.setBlendMode( b )
+	love.graphics.pop()
 end
 
 local filtered = function( panel, func, ... )
-	if ( not panel:isVisible() ) then
-		return
-	end
-
+	if ( not panel:isVisible() ) then return end
 	return panel[ func ]( panel, ... )
 end
 
 local function cascadeInputToChildren( self, func, ... )
-	if ( not self:isVisible() ) then
-		return
-	end
+	if ( not self:isVisible() ) then return end
 
 	local children = self:getChildren()
 	if ( children ) then
 		local value
 		for _, v in ipairs( children ) do
 			value = filtered( v, func, ... )
-			if ( value ~= nil ) then
-				return value
-			end
+			if ( value ~= nil ) then return value end
 		end
 	end
 end
@@ -245,23 +214,17 @@ local children    = nil
 local topChild    = nil
 
 function panel:getTopMostChildAtPos( x, y )
-	if ( not self:isVisible() ) then
-		return nil
-	end
+	if ( not self:isVisible() ) then return nil end
 
 	sx, sy = self:localToScreen()
 	w,  h  = self:getWidth(), self:getHeight()
-	if ( not pointinrect( x, y, sx, sy, w, h ) ) then
-		return nil
-	end
+	if ( not pointinrect( x, y, sx, sy, w, h ) ) then return nil end
 
 	children = self:getChildren()
 	if ( children ) then
 		for i = #children, 1, -1 do
 			topChild = children[ i ]:getTopMostChildAtPos( x, y )
-			if ( topChild ) then
-				return topChild
-			end
+			if ( topChild ) then return topChild end
 		end
 	end
 
@@ -281,9 +244,7 @@ end
 function panel:invalidateLayout()
 	local children = self:getChildren()
 	if ( children ) then
-		for _, v in ipairs( children ) do
-			v:invalidateLayout()
-		end
+		for _, v in ipairs( children ) do v:invalidateLayout() end
 	end
 
 	self:invalidate()
@@ -294,12 +255,10 @@ function panel:invalidateParent()
 end
 
 function panel:isChildMousedOver()
-	local panel = gui.topPanel
+	local panel = gui._topPanel
 	while ( panel ~= nil ) do
 		panel = panel:getParent()
-		if ( self == panel ) then
-			return true
-		end
+		if ( self == panel ) then return true end
 	end
 
 	return false
@@ -354,9 +313,7 @@ function panel:mousepressed( x, y, button, istouch )
 end
 
 function panel:mousereleased( x, y, button, istouch )
-	if ( not self:isVisible() ) then
-		return
-	end
+	if ( not self:isVisible() ) then return end
 
 	local children = self:getChildren()
 	if ( children ) then
@@ -371,28 +328,22 @@ function panel:moveToFront()
 	local children = nil
 	if ( parent ) then
 		children = parent:getChildren()
-		if ( self == children[ #children ] ) then
-			return
-		end
+		if ( self == children[ #children ] ) then return end
 	end
 
-	if ( gui.focusedPanel ) then
+	if ( gui._focusedPanel ) then
 		gui.setFocusedPanel( nil, false )
 	end
 
 	if ( parent ) then
 		for i, v in ipairs( children ) do
-			if ( v == self ) then
-				table.remove( children, i )
-			end
+			if ( v == self ) then table.remove( children, i ) end
 		end
 
 		children[ #children + 1 ] = self
 	end
 
-	if ( self:getParent() ) then
-		self:invalidateParent()
-	end
+	if ( self:getParent() ) then self:invalidateParent() end
 end
 
 function panel:moveToBack()
@@ -400,28 +351,22 @@ function panel:moveToBack()
 	local children = nil
 	if ( parent ) then
 		children = parent:getChildren()
-		if ( self == children[ 1 ] ) then
-			return
-		end
+		if ( self == children[ 1 ] ) then return end
 	end
 
-	if ( gui.focusedPanel ) then
+	if ( gui._focusedPanel ) then
 		gui.setFocusedPanel( nil, false )
 	end
 
 	if ( parent ) then
 		for i, v in ipairs( children ) do
-			if ( v == self ) then
-				table.remove( children, i )
-			end
+			if ( v == self ) then table.remove( children, i ) end
 		end
 
 		table.insert( children, 1, self )
 	end
 
-	if ( self:getParent() ) then
-		self:invalidateParent()
-	end
+	if ( self:getParent() ) then self:invalidateParent() end
 end
 
 function panel:onMouseLeave()
@@ -433,9 +378,7 @@ end
 local opacity = 1
 
 function panel:preDraw()
-	if ( not self:isVisible() ) then
-		return
-	end
+	if ( not self:isVisible() ) then return end
 
 	local scale  = self:getScale()
 	local width  = self:getWidth()
@@ -447,16 +390,13 @@ function panel:preDraw()
 		( width  / scale ) / 2 - width  / 2,
 		( height / scale ) / 2 - height / 2
 	)
-	opacity = opacityStack[ #opacityStack ]
-	opacity = opacity * self:getOpacity()
-	-- graphics.setOpacity( opacity )
-	table.insert( opacityStack, opacity )
 end
 
+local gui_draw_bounds = convar( "gui_draw_bounds", "0", nil, nil,
+                                "Draws the bounds of panels for debugging" )
+
 function panel:postDraw()
-	if ( not self:isVisible() ) then
-		return
-	end
+	if ( not self:isVisible() ) then return end
 
 	if ( gui_draw_bounds:getBoolean() ) then
 		if ( self.mouseover ) then
@@ -464,31 +404,23 @@ function panel:postDraw()
 		end
 	end
 
-	table.remove( opacityStack, #opacityStack )
-	-- graphics.setOpacity( opacityStack[ #opacityStack ] )
 	love.graphics.pop()
 end
 
 function panel:preDrawWorld()
 	local children = self:getChildren()
 	if ( children ) then
-		for _, v in ipairs( children ) do
-			v:preDrawWorld()
-		end
+		for _, v in ipairs( children ) do v:preDrawWorld() end
 	end
 end
 
 function panel:remove()
-	if ( self:getChildren() ) then
-		self:removeChildren()
-	end
+	if ( self:getChildren() ) then self:removeChildren() end
 
 	if ( self:getParent() ) then
 		local children = self:getParent():getChildren()
 		for i, v in ipairs( children ) do
-			if ( v == self ) then
-				table.remove( children, i )
-			end
+			if ( v == self ) then table.remove( children, i ) end
 		end
 
 		if ( #children == 0 ) then
@@ -502,9 +434,7 @@ end
 function panel:removeChildren()
 	local children = self:getChildren()
 	if ( children ) then
-		for i = #children, 1, -1 do
-			children[ i ]:remove()
-		end
+		for i = #children, 1, -1 do children[ i ]:remove() end
 	end
 	self:invalidate()
 end
@@ -548,17 +478,13 @@ function panel:setParent( panel )
 	if ( parent ) then
 		local children = parent:getChildren()
 		for i, v in ipairs( children ) do
-			if ( v == self ) then
-				table.remove( children, i )
-			end
+			if ( v == self ) then table.remove( children, i ) end
 		end
 	end
 
 	panel.children = panel.children or {}
 	for _, v in ipairs( panel.children ) do
-		if ( v == panel ) then
-			return
-		end
+		if ( v == panel ) then return end
 	end
 
 	table.insert( panel.children, self )
@@ -646,9 +572,7 @@ function panel:update( dt )
 
 	local children = self:getChildren()
 	if ( children ) then
-		for _, v in ipairs( children ) do
-			v:update( dt )
-		end
+		for _, v in ipairs( children ) do v:update( dt ) end
 	end
 end
 
@@ -692,9 +616,7 @@ function panel:updateAnimations( dt )
 
 		if ( percent == 1 ) then
 			complete = animation.complete
-			if ( complete ) then
-				complete()
-			end
+			if ( complete ) then complete() end
 			self:invalidate()
 		end
 	end

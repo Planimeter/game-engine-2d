@@ -4,8 +4,6 @@
 --
 --============================================================================--
 
-local gui = gui
-
 class "gui.console.textboxautocompleteitemgroup" ( "gui.textboxautocompleteitemgroup" )
 
 local textboxautocompleteitemgroup = gui.console.textboxautocompleteitemgroup

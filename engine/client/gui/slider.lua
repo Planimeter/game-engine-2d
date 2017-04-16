@@ -6,6 +6,8 @@
 
 class "gui.slider" ( "gui.scrollbar" )
 
+local slider = gui.slider
+
 function slider:slider( parent, name )
 	gui.scrollbar.scrollbar( self, parent, name )
 	self.width    = point( 216 )
@@ -30,7 +32,7 @@ function slider:drawLabels()
 		color = "slider.disabled.fontColor"
 	end
 
-	graphics.setColor( self:getScheme( color ) )
+	love.graphics.setColor( self:getScheme( color ) )
 	local font = self:getScheme( "fontSmall" )
 	love.graphics.setFont( font )
 	local minLabel = self:getMinLabel()
@@ -51,8 +53,8 @@ function slider:drawThumb()
 		color = "scrollbar.disabled.backgroundColor"
 	end
 
-	graphics.setColor( self:getScheme( color ) )
-	graphics.rectangle( "fill", self:getThumbPos(), y, point( 4 ), height / 2 )
+	love.graphics.setColor( self:getScheme( color ) )
+	love.graphics.rectangle( "fill", self:getThumbPos(), y, point( 4 ), height / 2 )
 end
 
 function slider:drawTrough()
@@ -64,8 +66,8 @@ function slider:drawTrough()
 		color = "slider.disabled.backgroundColor"
 	end
 
-	graphics.setColor( self:getScheme( color ) )
-	graphics.setLineWidth( point( 1 ) )
+	love.graphics.setColor( self:getScheme( color ) )
+	love.graphics.setLineWidth( point( 1 ) )
 	love.graphics.line( 0, height / 4, width, height / 4 )
 end
 
@@ -152,5 +154,3 @@ function slider:update( dt )
 	self.grabbedX = localX + ( deltaValue / range ) * self:getWidth()
 	self.grabbedY = localY
 end
-
-

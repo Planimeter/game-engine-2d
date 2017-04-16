@@ -6,6 +6,8 @@
 
 class "gui.keyboardoptionscommandbuttongroup" ( "gui.commandbuttongroup" )
 
+local keyboardoptionscommandbuttongroup = gui.keyboardoptionscommandbuttongroup
+
 function keyboardoptionscommandbuttongroup:keyboardoptionscommandbuttongroup( parent, name )
 	gui.commandbuttongroup.commandbuttongroup( self, parent, name )
 end
@@ -26,5 +28,3 @@ function keyboardoptionscommandbuttongroup:invalidateLayout()
 	self:setPos( margin, parent:getHeight() - self:getHeight() )
 	gui.panel.invalidateLayout( self )
 end
-
-

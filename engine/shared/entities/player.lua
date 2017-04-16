@@ -13,38 +13,38 @@ local _G       = _G
 
 class "player" ( "character" )
 
-players      = players      or {}
-lastPlayerId = lastPlayerId or 0
+player._players      = player._players      or {}
+player._lastPlayerId = player._lastPlayerId or 0
 
-function initialize( peer )
-	local player = _G.gameserver.getPlayerClass()()
+function player.initialize( peer )
+	local player = _G.game.server.getPlayerClass()()
 	player.peer  = peer
 	return player
 end
 
-function getAll()
-	return table.shallowcopy( players )
+function player.getAll()
+	return table.shallowcopy( player._players )
 end
 
-function getById( id )
-	for _, player in ipairs( players ) do
+function player.getById( id )
+	for _, player in ipairs( player._players ) do
 		if ( player:getNetworkVar( "id" ) == id ) then
 			return player
 		end
 	end
 end
 
-function getByPeer( peer )
-	for _, player in ipairs( players ) do
+function player.getByPeer( peer )
+	for _, player in ipairs( player._players ) do
 		if ( player.peer == peer ) then
 			return player
 		end
 	end
 end
 
-function getInOrNearRegion( region )
+function player.getInOrNearRegion( region )
 	local t = {}
-	for _, player in ipairs( players ) do
+	for _, player in ipairs( player._players ) do
 		local minA, maxA = player:getGraphicsBounds()
 
 		local x, y   = region:getX(), region:getY()
@@ -60,26 +60,26 @@ function getInOrNearRegion( region )
 	return #t > 0 and t or nil
 end
 
-function removeAll()
-	table.clear( player.players )
+function player.removeAll()
+	table.clear( player._players )
 end
 
 if ( _SERVER ) then
-	function sendTextAll( text )
+	function player.sendTextAll( text )
 		local payload = payload( "sayText" )
 		payload:set( "text", text )
-		networkserver.broadcast( payload )
+		engine.server.network.broadcast( payload )
 	end
 end
 
 function player:player()
 	character.character( self )
 
-	self:networkNumber( "id", player.lastPlayerId + 1 )
+	self:networkNumber( "id", player._lastPlayerId + 1 )
 	self:networkNumber( "moveSpeed", 0.5 )
 
 	if ( _SERVER ) then
-		player.lastPlayerId = self:getNetworkVar( "id" )
+		player._lastPlayerId = self:getNetworkVar( "id" )
 	end
 
 	if ( _CLIENT ) then
@@ -88,7 +88,7 @@ function player:player()
 		self:setSprite( sprite )
 	end
 
-	table.insert( player.players, self )
+	table.insert( player._players, self )
 end
 
 function player:getName()
@@ -222,9 +222,9 @@ end
 function player:onDisconnect()
 	game.call( "shared", "onPlayerDisconnect", self )
 
-	for i, player in ipairs( players ) do
+	for i, player in ipairs( player._players ) do
 		if ( player == self ) then
-			table.remove( players, i )
+			table.remove( player._players, i )
 			self:remove()
 			return
 		end
@@ -276,7 +276,7 @@ concommand( "say", "Display player message",
 			payload:set( "entity", player or nil )
 			payload:set( "message", argString )
 
-			networkserver.broadcast( payload )
+			engine.server.network.broadcast( payload )
 		end
 	end, { "network" }
 )
@@ -342,4 +342,7 @@ function player:__tostring()
 	return "player: " .. self:getName()
 end
 
+-- Preserve the player interface
+local class = player
 entities.linkToClassname( player, "player" )
+_G.player = class

@@ -5,7 +5,7 @@
 --============================================================================--
 
 if ( _CLIENT ) then
-require( "engine.client.debugoverlay" )
+	require( "engine.client.debugoverlay" )
 end
 
 local color    = color

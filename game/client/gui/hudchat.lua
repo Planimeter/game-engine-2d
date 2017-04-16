@@ -6,6 +6,8 @@
 
 class "gui.hudchat" ( "gui.hudframe" )
 
+local hudchat = gui.hudchat
+
 function hudchat:hudchat( parent )
 	local name = "HUD Chat"
 	gui.hudframe.hudframe( self, parent, name, name )

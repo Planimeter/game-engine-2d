@@ -4,11 +4,6 @@
 --
 --============================================================================--
 
-local accessor = accessor
-local gui      = gui
-local love     = love
-local point    = point
-
 class "gui.scrollbar" ( "gui.panel" )
 
 local scrollbar = gui.scrollbar

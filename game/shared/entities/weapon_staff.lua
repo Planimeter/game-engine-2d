@@ -8,7 +8,7 @@ require( "game.shared.entities.item" )
 require( "game" )
 
 if ( _CLIENT ) then
-require( "engine.client.chat" )
+	require( "engine.client.chat" )
 end
 
 class "weapon_staff" ( "item" )

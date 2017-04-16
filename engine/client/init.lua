@@ -10,8 +10,16 @@ require( "engine.client.gui" )
 require( "engine.client.sound" )
 require( "engine.shared.network.payload" )
 
-local require    = require
 local concommand = concommand
+local engine     = engine
+local gui        = gui
+local love       = love
+local payload    = payload
+local pcall      = pcall
+local print      = print
+local require    = require
+local tostring   = tostring
+local unrequire  = unrequire
 local _G         = _G
 
 module( "engine.client" )
@@ -23,13 +31,13 @@ function connect( address )
 	disconnect()
 
 	require( "engine.client.network" )
-	network.connect( address )
+	engine.client.network.connect( address )
 	connecting = true
 end
 
 function connectToListenServer()
 	require( "engine.client.network" )
-	network.connectToListenServer()
+	engine.client.network.connectToListenServer()
 	connecting = true
 end
 
@@ -46,23 +54,23 @@ concommand( "connect", "Connects to a server",
 
 function disconnect()
 	if ( not isConnected() ) then return end
-	if ( network ) then network.disconnect() end
+	if ( engine.client.network ) then engine.client.network.disconnect() end
 
 	connecting = false
 	connected  = false
 
-	g_MainMenu:activate()
+	_G.g_MainMenu:activate()
 
-	if ( entities ) then entities.shutdown() end
+	if ( _G.entities ) then _G.entities.shutdown() end
 
-	if ( game and game.client ) then
-		gui.viewportFramebuffer = nil
-		gui.blurFramebuffer = nil
-		game.client.shutdown()
-		game.client = nil
+	if ( _G.game and _G.game.client ) then
+		gui._viewportFramebuffer = nil
+		gui._blurFramebuffer = nil
+		_G.game.client.shutdown()
+		_G.game.client = nil
 	end
 
-	if ( region ) then region.shutdown() end
+	if ( _G.region ) then _G.region.shutdown() end
 
 	if ( engine ) then
 		if ( engine.server ) then
@@ -70,7 +78,7 @@ function disconnect()
 			engine.server = nil
 		end
 
-		if ( _SERVER ) then _SERVER = nil end
+		if ( _G._SERVER ) then _G._SERVER = nil end
 	end
 end
 
@@ -81,28 +89,28 @@ end )
 function download( filename )
 	local payload = payload( "download" )
 	payload:set( "filename", filename )
-	network.sendToServer( payload )
+	engine.client.network.sendToServer( payload )
 end
 
 function initializeServer()
-	if ( _SERVER ) then return false end
+	if ( _G._SERVER ) then return false end
 	if ( connecting ) then return false end
 
-	_SERVER = true
+	_G._SERVER = true
 	local status, err = pcall( require, "engine.server" )
 	if ( status ~= false ) then
 		if ( engine.server.load( args ) ) then
-			networkserver.onNetworkInitializedServer()
+			engine.server.network.onNetworkInitializedServer()
 		else
 			print( "Failed to initialize server!" )
 			connecting = false
 			connected  = false
 			disconnect()
-			_SERVER = nil
+			_G._SERVER = nil
 			return false
 		end
 	else
-		_SERVER = nil
+		_G._SERVER = nil
 		print( err )
 		return false
 	end
@@ -122,8 +130,8 @@ end
 
 function isInGame()
 	return isConnected() and
-	       game.client and
-	       game.client.playerInitialized
+	       _G.game.client and
+	       _G.game.client.playerInitialized
 end
 
 function onConnect( event )
@@ -131,14 +139,14 @@ function onConnect( event )
 	connected  = true
 	print( "Connected to server!" )
 
-	hook.call( "client", "onConnect", tostring( event.peer ) )
+	_G.hook.call( "client", "onConnect", tostring( event.peer ) )
 
 	-- Prepare to receive entitySpawned payloads
 	require( "engine.shared.entities" )
 end
 
 function onReceive( event )
-	local payload = payload.initializeFromData( event.data )
+	local payload = _G.payload.initializeFromData( event.data )
 	payload:setPeer( event.peer )
 	payload:dispatchToHandler()
 end
@@ -149,7 +157,7 @@ function onDisconnect( event )
 		disconnect()
 		connected     = false
 		disconnecting = false
-		hook.call( "client", "onDisconnect" )
+		_G.hook.call( "client", "onDisconnect" )
 
 		print( "Disconnected from server." )
 	else
@@ -158,12 +166,12 @@ function onDisconnect( event )
 	end
 
 	unrequire( "engine.client.network" )
-	network = nil
+	engine.client.network = nil
 end
 
 function sendClientInfo()
 	local payload = payload( "clientInfo" )
 	payload:set( "graphicsWidth",  love.graphics.getWidth() )
 	payload:set( "graphicsHeight", love.graphics.getHeight() )
-	network.sendToServer( payload )
+	engine.client.network.sendToServer( payload )
 end

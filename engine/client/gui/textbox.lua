@@ -4,20 +4,12 @@
 --
 --============================================================================--
 
-local accessor = accessor
-local gui      = gui
-local love     = love
-local math     = math
-local point    = point
-local string   = string
-local unpack   = unpack
-
 class "gui.textbox" ( "gui.panel" )
 
 local textbox = gui.textbox
 
-textbox.maskedTextbox = textbox.maskedTextbox or nil
-textbox.canFocus      = true
+textbox._maskedTextbox = textbox._maskedTextbox or nil
+textbox.canFocus       = true
 
 local function getInnerWidth( self )
 	return self:getWidth() - 2 * self.padding
@@ -28,7 +20,7 @@ local function getInnerHeight( self )
 end
 
 function textbox.drawMask()
-	local self   = gui.textbox.maskedTextbox
+	local self   = textbox._maskedTextbox
 	local width  = getInnerWidth( self )
 	local height = self:getHeight()
 	love.graphics.rectangle( "fill", self.padding, 0, width, height )
@@ -108,7 +100,7 @@ function textbox:drawCursor()
 	if ( self.focus ) then
 		-- local opacity = graphics.getOpacity()
 		-- graphics.setOpacity( opacity * abs( sin( 3 * love.timer.getTime() ) ) )
-		-- graphics.setColor( graphics.getColor() )
+		-- love.graphics.setColor( graphics.getColor() )
 			love.graphics.rectangle(
 				"fill",
 				getRelativeCursorPos( self ),
@@ -135,13 +127,20 @@ function textbox:drawForeground()
 	end
 
 	love.graphics.setColor( unpack( self:getScheme( property ) ) )
-	love.graphics.setLineWidth( point( 1 ) )
-	love.graphics.rectangle( "line", 0, 0, width, height )
+	local lineWidth = point( 1 )
+	love.graphics.setLineWidth( lineWidth )
+	love.graphics.rectangle(
+		"line",
+		lineWidth / 2,
+		lineWidth / 2,
+		width  - lineWidth,
+		height - lineWidth
+	)
 end
 
 function textbox:drawText()
-	gui.textbox.maskedTextbox = self
-	love.graphics.stencil( gui.textbox.drawMask )
+	textbox._maskedTextbox = self
+	love.graphics.stencil( textbox.drawMask )
 	love.graphics.setStencilTest( "greater", 0 )
 		local property = "textbox.textColor"
 		local text     = self.placeholder
@@ -395,7 +394,7 @@ function textbox:invalidateLayout()
 end
 
 function textbox:isChildMousedOver()
-	local panel = gui.topPanel
+	local panel = gui._topPanel
 	while ( panel ~= nil ) do
 		panel = panel:getParent()
 		if ( panel and panel == self.autocompleteItemGroup ) then

@@ -6,6 +6,8 @@
 
 class "gui.hudgamemenunavigation" ( "gui.radiobuttongroup" )
 
+local hudgamemenunavigation = gui.hudgamemenunavigation
+
 function hudgamemenunavigation:hudgamemenunavigation( parent )
 	gui.radiobuttongroup.radiobuttongroup( self, parent, "Game Menu Navigation" )
 	self:setScheme( "Default" )
@@ -38,8 +40,8 @@ function hudgamemenunavigation:draw()
 	local property  = "hudgamemenunavigation.backgroundColor"
 	local lineWidth = point( 1 )
 	local width     = self:getWidth()
-	graphics.setColor( self:getScheme( property ) )
-	graphics.setLineWidth( lineWidth )
+	love.graphics.setColor( self:getScheme( property ) )
+	love.graphics.setLineWidth( lineWidth )
 	love.graphics.line(
 		0,     lineWidth / 2, -- Top-left
 		width, lineWidth / 2  -- Top-right
@@ -71,5 +73,3 @@ function hudgamemenunavigation:onValueChanged( oldValue, newValue )
 		panel:invalidateLayout()
 	end
 end
-
-

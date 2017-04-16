@@ -8,10 +8,30 @@ require( "engine.shared.baselib" )
 require( "engine.shared.tablib" )
 require( "engine.shared.strlib" )
 require( "engine.shared.mathlib" )
-require( "engine.shared.addon" )
-require( "engine.shared.filesystem" )
-require( "engine.client.gui" )
-require( "engine.shared.region" )
+
+if ( _CLIENT ) then
+	require( "engine.client.gui" )
+end
+
+local engine     = {}
+_G.engine        = engine
+
+local concommand = concommand
+local gui        = gui
+local ipairs     = ipairs
+local love       = love
+local math       = math
+local os         = os
+local package    = package
+local pairs      = pairs
+local print      = print
+local require    = require
+local _DEBUG     = _DEBUG
+local _CLIENT    = _CLIENT
+local _SERVER    = _SERVER
+local _G         = _G
+
+module( "engine" )
 
 if ( _CLIENT ) then
 	require( "engine.client" )
@@ -32,46 +52,34 @@ for k in pairs( love.handlers ) do
 	end
 end
 
-local addon      = addon
-local concommand = concommand
-local server     = engine.server
-local client     = engine.client
-local gui        = gui
-local love       = love
-local math       = math
-local os         = os
-local print      = print
-local _CLIENT    = _CLIENT
-local _SERVER    = _SERVER
-local _G         = _G
-
-module( "engine" )
-
 function love.load( arg )
 	math.randomseed( os.time() )
 
-	if ( _SERVER ) then server.load( arg ) end
-	if ( _CLIENT ) then client.load( arg ) end
+	if ( _SERVER ) then engine.server.load( arg ) end
+	if ( _CLIENT ) then engine.client.load( arg ) end
 
 	print( "Grid Engine" )
 
-	addon.load( arg )
+	require( "engine.shared.addon" )
+	_G.addon.load( arg )
+
+	require( "engine.shared.region" )
 end
 
 function love.quit()
-	if ( _CLIENT and not love._quit ) then
-		return g_MainMenu:quit()
+	if ( _CLIENT and not love._shouldQuit ) then
+		return _G.g_MainMenu:quit()
 	end
 
-	if ( _CLIENT ) then client.disconnect() end
-	if ( _SERVER ) then server.quit() end
-	if ( _CLIENT ) then client.quit() end
+	if ( _CLIENT ) then engine.client.disconnect() end
+	if ( _SERVER ) then engine.server.quit() end
+	if ( _CLIENT ) then engine.client.quit() end
 
 	love.event.quit()
 end
 
 concommand( "exit", "Exits the game", function()
-	love._quit = true
+	love._shouldQuit = true
 	love.quit()
 end )
 
@@ -79,11 +87,15 @@ local timestep    = 1/33
 local accumulator = 0
 
 function love.update( dt )
-	if ( _DEBUG ) then love.filesystem.update( dt ) end
+	if ( _DEBUG ) then package.update( dt ) end
 
 	accumulator = accumulator + dt
 
 	while ( accumulator >= timestep ) do
+		local entity  = _G.entity
+		local _CLIENT = _CLIENT
+		local _SERVER = _SERVER or _G._SERVER
+
 		if ( entity ) then
 			local entities = entity.getAll()
 			for _, entity in ipairs( entities ) do
@@ -91,8 +103,8 @@ function love.update( dt )
 			end
 		end
 
-		if ( _SERVER ) then server.update( timestep ) end
-		if ( _CLIENT ) then client.update( timestep ) end
+		if ( _SERVER ) then engine.server.update( timestep ) end
+		if ( _CLIENT ) then engine.client.update( timestep ) end
 
 		accumulator = accumulator - timestep
 	end

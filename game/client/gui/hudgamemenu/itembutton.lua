@@ -28,7 +28,7 @@ function itembutton:drawIcon()
 		return
 	end
 
-	graphics.setColor( color.white )
+	love.graphics.setColor( color.white )
 	local icon = self:getIcon()
 	love.graphics.push()
 		local scale  = point( 2 )
@@ -60,7 +60,7 @@ function itembutton:drawCount()
 		property = "button.disabled.textColor"
 	end
 
-	graphics.setColor( self:getScheme( property ) )
+	love.graphics.setColor( self:getScheme( property ) )
 
 	local font = self:getScheme( "itemCountFont" )
 	love.graphics.setFont( font )
@@ -93,7 +93,7 @@ function itembutton:setItem( item )
 		local name = item.data.name
 		self.name  = name
 		self.text  = name
-		self.icon  = graphics.newImage( item.data.image )
+		self.icon  = love.graphics.newImage( item.data.image )
 	end
 end
 

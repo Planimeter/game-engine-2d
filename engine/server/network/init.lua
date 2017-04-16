@@ -14,33 +14,38 @@ local host_port        = convar( "host_port", "26015", nil, nil,
 local host_max_players = convar( "host_maxplayers", 1000, 0, 1000,
                                  "Host game server max number of players" )
 
-class( "networkserver" )
+local collectgarbage = collectgarbage
+local print          = print
+local type           = type
+local _G             = _G
 
-function networkserver.broadcast( data, channel, flag )
+module( "engine.server.network" )
+
+function broadcast( data, channel, flag )
 	if ( type( data ) == "payload" ) then
 		data = data:serialize()
 	end
-	networkserver.host:broadcast( data, channel, flag )
+	_host:broadcast( data, channel, flag )
 end
 
-function networkserver.initializeServer()
+function initializeServer()
 	local host_ip          = host_ip:getValue()
 	local host_port        = host_port:getNumber()
 	local host_address     = host_ip ~= "" and host_ip .. ":" .. host_port or
 	                         "*:" .. host_port
 	local host_max_players = host_max_players:getNumber()
-	networkserver.host = host( host_address, host_max_players, 1000 )
-	if ( not networkserver.host:isValid() ) then
-		networkserver.host = nil
+	_host = _G.host( host_address, host_max_players, 1000 )
+	if ( not _host:isValid() ) then
+		_host = nil
 		return false
 	end
 
-	networkserver.host:compress_with_range_coder()
+	_host:compress_with_range_coder()
 	return true
 end
 
-function networkserver.onNetworkInitializedServer()
-	if ( networkserver.host ) then
+function onNetworkInitializedServer()
+	if ( _host ) then
 		local host_ip          = host_ip:getValue()
 		local host_port        = host_port:getNumber()
 		local host_address     = host_ip ~= "" and host_ip .. ":" .. host_port or
@@ -53,39 +58,39 @@ function networkserver.onNetworkInitializedServer()
 	end
 end
 
-function networkserver.shutdownServer()
-	if ( not networkserver.host ) then return end
+function shutdownServer()
+	if ( not _host ) then return end
 
 	print( "Server shutting down..." )
-	local peerCount = g_localhost_enet_peer and networkserver.host:peer_count() - 1 or
-	                                            networkserver.host:peer_count()
+	local peerCount = g_localhost_enet_peer and _host:peer_count() - 1 or
+	                                            _host:peer_count()
 	for i = 1, peerCount do
-		local peer = networkserver.host:get_peer( i )
+		local peer = _host:get_peer( i )
 		peer:disconnect()
 	end
 
-	networkserver.host:flush()
-	networkserver.host = nil
+	_host:flush()
+	_host = nil
 	collectgarbage()
 end
 
-local timestep    = 1/20
-local accumulator = _accumulator
+local timestep = 1/20
+_accumulator   = _accumulator or 0
 
-function networkserver.update( dt )
-	if ( not networkserver.host ) then return end
+function update( dt )
+	if ( not _host ) then return end
 
-	-- accumulator = accumulator + dt
+	-- _accumulator = _accumulator + dt
 
-	-- while ( accumulator >= timestep ) do
-		networkserver.pollEvents()
+	-- while ( _accumulator >= timestep ) do
+		pollEvents()
 
-		-- accumulator = accumulator - timestep
+		-- _accumulator = _accumulator - timestep
 	-- end
 end
 
-function networkserver.pollEvents()
-	local event = networkserver.host:service()
+function pollEvents()
+	local event = _host:service()
 	while ( event ~= nil ) do
 		if ( event.type == "connect" ) then
 			peer = event.peer
@@ -96,6 +101,6 @@ function networkserver.pollEvents()
 			engine.server.onDisconnect( event )
 		end
 
-		event = networkserver.host:service()
+		event = _host:service()
 	end
 end

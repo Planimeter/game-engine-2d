@@ -9,6 +9,8 @@ require( "engine.client.gui.optionsmenu.bindlistitem" )
 
 class "gui.bindlistpanel" ( "gui.scrollablepanel" )
 
+local bindlistpanel = gui.bindlistpanel
+
 function bindlistpanel:bindlistpanel( parent, name )
 	gui.scrollablepanel.scrollablepanel( self, parent, name )
 	self.changedBinds = {}
@@ -121,5 +123,3 @@ function bindlistpanel:useDefaults()
 	innerPanel:removeChildren()
 	self:readBinds( defaultBinds )
 end
-
-

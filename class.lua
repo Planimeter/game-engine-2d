@@ -4,13 +4,17 @@
 -- Author: Andrew McWatters
 -------------------------------------------------------------------------------
 local setmetatable = setmetatable
+local package = package
 local type = type
 local error = error
 local pcall = pcall
 local unpack = unpack
+local newproxy = newproxy
+local string = string
 local rawget = rawget
-local getfenv = getfenv
 local ipairs = ipairs
+local module = module
+local _G = _G
 
 -------------------------------------------------------------------------------
 -- new()
@@ -23,6 +27,19 @@ local function new( metatable )
 	setmetatable( object, metatable )
 	return object
 end
+
+-------------------------------------------------------------------------------
+-- getbaseclass()
+-- Purpose: Get a base class
+-- Input: class - Class metatable
+-- Output: class
+-------------------------------------------------------------------------------
+local function getbaseclass( class )
+	local name = class.__base
+	return package.loaded[ name ]
+end
+
+_G.getbaseclass = getbaseclass
 
 -------------------------------------------------------------------------------
 -- eventnames
@@ -68,17 +85,21 @@ local function metamethod( class, eventname )
 end
 
 -------------------------------------------------------------------------------
--- getbaseclass()
--- Purpose: Get a base class
--- Input: class - Class metatable
--- Output: class
+-- setproxy()
+-- Purpose: Set a proxy for __gc
+-- Input: object
 -------------------------------------------------------------------------------
-local function getbaseclass( class )
-	local name = class.__base
-	return package.loaded[ name ]
+local function setproxy( object )
+	local __newproxy = newproxy( true )
+	local metatable = getmetatable( __newproxy )
+	metatable.__gc = function()
+		local metatable = getmetatable( object )
+		metatable.__gc( object )
+	end
+	object.__newproxy = __newproxy
 end
 
-_G.getbaseclass = getbaseclass
+_G.setproxy = setproxy
 
 -------------------------------------------------------------------------------
 -- package.class

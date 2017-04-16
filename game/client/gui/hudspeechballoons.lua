@@ -6,6 +6,8 @@
 
 class "gui.hudspeechballoons" ( "gui.panel" )
 
+local hudspeechballoons = gui.hudspeechballoons
+
 function hudspeechballoons:hudspeechballoons( parent )
 	gui.panel.panel( self, parent, "HUD Speech Balloons" )
 
@@ -39,7 +41,7 @@ end
 function hudspeechballoons:draw()
 	local font = self:getScheme( "fontBold" )
 	love.graphics.setFont( font )
-	graphics.setColor( self:getScheme( "hudspeechballoons.textColor" ) )
+	love.graphics.setColor( self:getScheme( "hudspeechballoons.textColor" ) )
 
 	if ( self.speechBalloons ) then
 		for player, balloon in pairs( self.speechBalloons ) do
@@ -77,5 +79,3 @@ function hudspeechballoons:update( dt )
 
 	self:invalidate()
 end
-
-

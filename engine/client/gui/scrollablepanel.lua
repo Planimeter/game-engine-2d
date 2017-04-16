@@ -6,6 +6,8 @@
 
 class "gui.scrollablepanel" ( "gui.panel" )
 
+local scrollablepanel = gui.scrollablepanel
+
 function scrollablepanel:scrollablepanel( parent, name )
 	gui.panel.panel( self, parent, name )
 	self.panel     = gui.panel( self, self:getName() .. " Inner Panel" )
@@ -82,5 +84,3 @@ function scrollablepanel:wheelmoved( x, y )
 
 	return gui.panel.wheelmoved( self, x, y )
 end
-
-

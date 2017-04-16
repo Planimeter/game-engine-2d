@@ -6,6 +6,8 @@
 
 class "gui.keyboardoptionsadvancedframe" ( "gui.frame" )
 
+local keyboardoptionsadvancedframe = gui.keyboardoptionsadvancedframe
+
 function keyboardoptionsadvancedframe:keyboardoptionsadvancedframe( parent )
 	local name = "Advanced Keyboard Options"
 	gui.frame.frame( self, parent, name .. " Frame", name )
@@ -24,5 +26,3 @@ function keyboardoptionsadvancedframe:keyboardoptionsadvancedframe( parent )
 	local titleBarHeight = point( 86 )
 	self.console:setPos( margin, titleBarHeight )
 end
-
-

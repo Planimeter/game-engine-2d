@@ -8,7 +8,7 @@ require( "engine.shared.entities.entity" )
 require( "game" )
 
 if ( _CLIENT ) then
-require( "engine.client.chat" )
+	require( "engine.client.chat" )
 end
 
 class "prop_worldgate_spawn" ( "entity" )
@@ -24,7 +24,7 @@ function prop_worldgate_spawn:prop_worldgate_spawn()
 	self:setNetworkVar( "name", "World Gate" )
 
 	if ( _CLIENT ) then
-		local sprite = graphics.newImage( "images/entities/prop_worldgate_spawn.png" )
+		local sprite = love.graphics.newImage( "images/entities/prop_worldgate_spawn.png" )
 		self:setSprite( sprite )
 	end
 end

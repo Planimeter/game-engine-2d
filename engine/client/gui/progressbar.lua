@@ -6,6 +6,8 @@
 
 class "gui.progressbar" ( "gui.panel" )
 
+local progressbar = gui.progressbar
+
 function progressbar:progressbar( parent, name )
 	gui.panel.panel( self, parent, name )
 	self.width    = point( 216 )
@@ -32,8 +34,8 @@ function progressbar:drawForeground()
 	local percent = math.remap( value, min, max, 0, 1 )
 	local width   = self:getWidth() * percent
 	local height  = self:getHeight()
-	graphics.setColor( self:getScheme( color ) )
-	graphics.rectangle( "fill", 0, 0, width, height )
+	love.graphics.setColor( self:getScheme( color ) )
+	love.graphics.rectangle( "fill", 0, 0, width, height )
 end
 
 accessor( progressbar, "min" )
@@ -54,5 +56,3 @@ function progressbar:setValue( value )
 	self.value = value
 	self:invalidate()
 end
-
-

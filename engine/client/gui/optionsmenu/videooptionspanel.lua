@@ -6,6 +6,8 @@
 
 class "gui.videooptionspanel" ( "gui.frametabpanel" )
 
+local videooptionspanel = gui.videooptionspanel
+
 function videooptionspanel:videooptionspanel()
 	gui.frametabpanel.frametabpanel( self, nil, "Video Options Panel" )
 	local options = {}
@@ -329,5 +331,3 @@ function videooptionspanel:updateResolutions()
 		self:clearCustomResolution()
 	end
 end
-
-

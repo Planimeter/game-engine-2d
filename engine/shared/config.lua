@@ -12,7 +12,7 @@ local tonumber = tonumber
 
 module( "config" )
 
-conf = nil
+_conf = nil
 
 function load( c )
 	love.filesystem.setIdentity( c.identity, c.appendidentity )
@@ -20,7 +20,7 @@ function load( c )
 	setWindow( c )
 	setSound( c )
 
-	conf = c
+	_conf = c
 end
 
 local function toboolean( v )
@@ -74,5 +74,5 @@ function setSound( c )
 end
 
 function getConfig()
-	return conf
+	return _conf
 end

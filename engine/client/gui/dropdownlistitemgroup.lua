@@ -4,11 +4,6 @@
 --
 --============================================================================--
 
-local gui    = gui
-local love   = love
-local point  = point
-local unpack = unpack
-
 class "gui.dropdownlistitemgroup" ( "gui.radiobuttongroup" )
 
 local dropdownlistitemgroup = gui.dropdownlistitemgroup
@@ -84,7 +79,7 @@ end
 function dropdownlistitemgroup:mousepressed( x, y, button, istouch )
 	if ( button == 1 ) then
 		local dropDownList = self:getDropDownList()
-		if ( dropDownList ~= gui.topPanel and
+		if ( dropDownList ~= gui._topPanel and
 		   ( not ( self.mouseover or self:isChildMousedOver() ) ) ) then
 			dropDownList:setActive( false )
 		end

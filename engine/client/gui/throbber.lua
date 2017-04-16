@@ -18,7 +18,7 @@ function throbber:draw()
 	gui.imagepanel.maskedImage = self
 	love.graphics.stencil( gui.imagepanel.drawMask )
 	love.graphics.setStencilTest( "greater", 0 )
-		graphics.setColor( self:getColor() )
+		love.graphics.setColor( self:getColor() )
 		local image  = self:getImage()
 		local width  = self:getWidth()
 		local height = self:getHeight()

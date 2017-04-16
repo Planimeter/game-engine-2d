@@ -8,7 +8,7 @@ require( "engine.shared.entities.entity" )
 require( "game" )
 
 if ( _CLIENT ) then
-require( "engine.client.chat" )
+	require( "engine.client.chat" )
 end
 
 class "prop_tree" ( "entity" )
@@ -19,7 +19,7 @@ function prop_tree:prop_tree()
 	self:setNetworkVar( "name", "Tree" )
 
 	if ( _CLIENT ) then
-		local sprite = graphics.newImage( "images/entities/prop_tree/1.png" )
+		local sprite = love.graphics.newImage( "images/entities/prop_tree/1.png" )
 		self:setSprite( sprite )
 	end
 end

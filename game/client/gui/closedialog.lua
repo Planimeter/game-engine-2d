@@ -32,7 +32,7 @@ function closedialog:closedialog( parent, name )
 		point( 86 ) + label:getHeight() + point( 18 )
 	)
 	buttonYes.onClick = function()
-		love._quit = true
+		love._shouldQuit = true
 		love.quit()
 	end
 

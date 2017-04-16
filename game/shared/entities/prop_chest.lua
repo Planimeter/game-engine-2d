@@ -15,7 +15,7 @@ function prop_chest:prop_chest()
 	self:setNetworkVar( "name", "Chest" )
 
 	if ( _CLIENT ) then
-		local sprite = graphics.newImage( "images/entities/prop_chest.png" )
+		local sprite = love.graphics.newImage( "images/entities/prop_chest.png" )
 		self:setSprite( sprite )
 	end
 end

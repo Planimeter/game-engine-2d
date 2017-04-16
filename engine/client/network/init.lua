@@ -6,10 +6,16 @@
 
 require( "enet" )
 
-module( "networkclient" )
+local collectgarbage = collectgarbage
+local enet           = enet
+local engine         = engine
+local string         = string
+local type           = type
+local print          = print
+local require        = require
+local _G             = _G
 
-_host   = _host   or nil
-_server = _server or nil
+module( "engine.client.network" )
 
 function connect( address )
 	if ( not string.find( address, ":" ) ) then
@@ -36,9 +42,9 @@ function connectToListenServer()
 	require( "engine.client.network.localhost_enet_peer" )
 	require( "engine.client.network.localhost_enet_server" )
 
-	_server = localhost_enet_server()
+	_server = _G.localhost_enet_server()
 	local event = {
-		peer = localhost_enet_peer(),
+		peer = _G.localhost_enet_peer(),
 		type = "connect",
 		data = 0,
 	}

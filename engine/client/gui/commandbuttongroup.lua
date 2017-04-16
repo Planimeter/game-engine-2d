@@ -6,6 +6,8 @@
 
 class "gui.commandbuttongroup" ( "gui.panel" )
 
+local commandbuttongroup = gui.commandbuttongroup
+
 function commandbuttongroup:commandbuttongroup( parent, name )
 	gui.panel.panel( self, parent, name )
 	self.height = point( 46 )
@@ -21,9 +23,9 @@ function commandbuttongroup:draw()
 	local width  = self:getWidth()
 	local height = self:getHeight()
 
-	graphics.setColor( self:getScheme( color ) )
+	love.graphics.setColor( self:getScheme( color ) )
 	local lineWidth = point( 1 )
-	graphics.setLineWidth( lineWidth )
+	love.graphics.setLineWidth( lineWidth )
 	love.graphics.line(
 		lineWidth / 2,         height,        -- Bottom-left
 		lineWidth / 2,         lineWidth / 2, -- Top-left
@@ -52,5 +54,3 @@ function commandbuttongroup:invalidateLayout()
 	)
 	gui.panel.invalidateLayout( self )
 end
-
-

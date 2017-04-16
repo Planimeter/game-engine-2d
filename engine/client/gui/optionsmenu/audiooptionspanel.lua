@@ -6,6 +6,8 @@
 
 class "gui.audiooptionspanel" ( "gui.frametabpanel" )
 
+local audiooptionspanel = gui.audiooptionspanel
+
 function audiooptionspanel:audiooptionspanel()
 	gui.frametabpanel.frametabpanel( self, nil, "Audio Options Panel" )
 	local options = {}
@@ -81,5 +83,3 @@ function audiooptionspanel:updateSound()
 	convar.setConvar( "snd_volume", options.masterVolume )
 	convar.setConvar( "snd_desktop", options.desktopSound and 1 or 0 )
 end
-
-

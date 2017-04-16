@@ -6,6 +6,8 @@
 
 class "gui.hudgamemenu" ( "gui.hudframe" )
 
+local hudgamemenu = gui.hudgamemenu
+
 function hudgamemenu:hudgamemenu( parent )
 	local name = "HUD Game Menu"
 	gui.hudframe.hudframe( self, parent, name, name )

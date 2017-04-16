@@ -6,6 +6,8 @@
 
 class "gui.radiobutton" ( "gui.button" )
 
+local radiobutton = gui.radiobutton
+
 function radiobutton:radiobutton( parent, name, text )
 	gui.button.button( self, parent, name, text )
 	self.height     = point( 24 )
@@ -37,15 +39,15 @@ function radiobutton:drawForeground()
 		end
 	end
 
-	graphics.setColor( self:getScheme( color ) )
+	love.graphics.setColor( self:getScheme( color ) )
 	love.graphics.draw( self.foreground, x, y )
 end
 
 function radiobutton:drawLabel()
 	if ( self:isDisabled() ) then
-		graphics.setColor( self:getScheme( "radiobutton.disabled.textColor" ) )
+		love.graphics.setColor( self:getScheme( "radiobutton.disabled.textColor" ) )
 	else
-		graphics.setColor( self:getScheme( "radiobutton.textColor" ) )
+		love.graphics.setColor( self:getScheme( "radiobutton.textColor" ) )
 	end
 
 	local font = self:getScheme( "font" )
@@ -63,9 +65,9 @@ function radiobutton:drawSelectionDot()
 	end
 
 	if ( self:isDisabled() ) then
-		graphics.setColor( self:getScheme( "radiobutton.disabled.iconColor" ) )
+		love.graphics.setColor( self:getScheme( "radiobutton.disabled.iconColor" ) )
 	else
-		graphics.setColor( self:getScheme( "radiobutton.iconColor" ) )
+		love.graphics.setColor( self:getScheme( "radiobutton.iconColor" ) )
 	end
 
 	local height = self:getHeight()
@@ -127,5 +129,3 @@ function radiobutton:setSelected( selected )
 	self.selected = selected
 	self:invalidate()
 end
-
-

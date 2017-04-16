@@ -6,6 +6,8 @@
 
 class "gui.dropdownlist" ( "gui.button" )
 
+local dropdownlist = gui.dropdownlist
+
 function dropdownlist:dropdownlist( parent, name )
 	gui.button.button( self, parent, name )
 	self.icon          = self:getScheme( "dropdownlist.icon" )
@@ -67,7 +69,7 @@ function dropdownlist:drawIcon()
 		color = "button.disabled.textColor"
 	end
 
-	graphics.setColor( self:getScheme( color ) )
+	love.graphics.setColor( self:getScheme( color ) )
 
 	local padding = point( 18 )
 	local x = self:getWidth() - self.icon:getWidth() - padding
@@ -82,7 +84,7 @@ function dropdownlist:drawText()
 		color = "button.disabled.textColor"
 	end
 
-	graphics.setColor( self:getScheme( color ) )
+	love.graphics.setColor( self:getScheme( color ) )
 
 	local font = self:getScheme( "font" )
 	love.graphics.setFont( font )
@@ -121,7 +123,7 @@ function dropdownlist:isActive()
 end
 
 function dropdownlist:isChildMousedOver()
-	local panel = gui.topPanel
+	local panel = gui._topPanel
 	while ( panel ~= nil ) do
 		panel = panel:getParent()
 		if ( self:getListItemGroup() == panel ) then
@@ -190,5 +192,3 @@ function dropdownlist:setActive( active )
 	self.active = active
 	gui.setFocusedPanel( self, active )
 end
-
-

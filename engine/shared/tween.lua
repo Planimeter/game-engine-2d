@@ -12,12 +12,8 @@ local pi  = math.pi
 local cos = math.cos
 
 tween.easing = {
-	linear = function( p )
-		return p
-	end,
-	swing = function( p )
-		return 0.5 - cos( p * pi ) / 2
-	end,
+	linear       = function( p ) return p end,
+	swing        = function( p ) return 0.5 - cos( p * pi ) / 2 end,
 	easeOutQuint = function ( x, t, b, c, d )
 		local temp = t / d - 1
 		t = t / d - 1
@@ -67,23 +63,19 @@ function tween:update( dt )
 	percent   = 1 - ( remaining / duration or 0 )
 	self.pos  = percent
 
-	for member, tween in pairs( self.tweens ) do
-		startValue = tween.startValue
-		endValue   = tween.endValue
-		eased      = easing[ self.easing ](
+	for member, t in pairs( self.tweens ) do
+		startValue = t.startValue
+		endValue   = t.endValue
+		eased      = tween.easing[ self.easing ](
 			percent, duration * percent, 0, 1, duration
 		)
 		self.target[ member ] = ( endValue - startValue ) * eased + startValue
 
-		if ( self.onUpdate ) then
-			self.onUpdate()
-		end
+		if ( self.onUpdate ) then self.onUpdate() end
 	end
 
 	if ( percent == 1 ) then
 		onComplete = self.onComplete
-		if ( onComplete ) then
-			onComplete()
-		end
+		if ( onComplete ) then onComplete() end
 	end
 end

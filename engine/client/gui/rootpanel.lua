@@ -6,8 +6,6 @@
 
 require( "engine.client.gui.panel" )
 
-local love = love
-
 class "gui.rootpanel" ( "gui.panel" )
 
 local rootpanel = gui.rootpanel
@@ -18,7 +16,6 @@ function rootpanel:rootpanel()
 	self.width    = love.graphics.getWidth()
 	self.height   = love.graphics.getHeight()
 	self.name     = "Root Panel"
-	self.zOrder   = -1
 	self.visible  = true
 	self.children = {}
 	self.scale    = 1

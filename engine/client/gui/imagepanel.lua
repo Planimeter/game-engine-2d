@@ -10,7 +10,7 @@ imagepanel.maskedImage = imagepanel.maskedImage or nil
 
 function imagepanel.drawMask()
 	local self = gui.imagepanel.maskedImage
-	graphics.rectangle( "fill", 0, 0, self:getWidth(), self:getHeight() )
+	love.graphics.rectangle( "fill", 0, 0, self:getWidth(), self:getHeight() )
 end
 
 function imagepanel:imagepanel( parent, name, image )
@@ -27,7 +27,7 @@ function imagepanel:draw()
 	gui.imagepanel.maskedImage = self
 	love.graphics.stencil( gui.imagepanel.drawMask )
 	love.graphics.setStencilTest( "greater", 0 )
-		graphics.setColor( self:getColor() )
+		love.graphics.setColor( self:getColor() )
 		love.graphics.draw( self:getImage(), self:getQuad() )
 	love.graphics.setStencilTest()
 
@@ -41,18 +41,18 @@ local opacity = 1
 
 function imagepanel:drawMissingImage()
 	opacity = graphics.getOpacity()
-	graphics.setOpacity( 0.42 )
-		graphics.setColor( color.red )
+	-- graphics.setOpacity( 0.42 )
+		love.graphics.setColor( color.red )
 		local lineWidth = 1
 		local width     = self:getWidth()
 		local height    = self:getHeight()
-		graphics.setLineWidth( lineWidth )
+		love.graphics.setLineWidth( lineWidth )
 		love.graphics.line(
 			width - lineWidth / 2, 0,                      -- Top-right
 			width - lineWidth / 2, height - lineWidth / 2, -- Bottom-right
 			0,                     height - lineWidth / 2  -- Bottom-left
 		)
-	graphics.setOpacity( opacity )
+	-- graphics.setOpacity( opacity )
 end
 
 accessor( imagepanel, "color" )
@@ -69,7 +69,7 @@ function imagepanel:setImage( image )
 	if ( type( image ) == "image" ) then
 		self.imageDatum = image
 	elseif ( image ~= nil and love.filesystem.exists( image ) ) then
-		self.imageDatum = graphics.newImage( image )
+		self.imageDatum = love.graphics.newImage( image )
 		self.imageDatum:setFilter( "linear", "linear" )
 	else
 		self.imageDatum = graphics.error
@@ -102,5 +102,3 @@ function imagepanel:updateQuad()
 		self.imageQuad:setViewport( 0, 0, w, h )
 	end
 end
-
-

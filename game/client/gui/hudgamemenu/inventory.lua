@@ -8,6 +8,8 @@ require( "game.client.gui.hudgamemenu.itemgrid" )
 
 class "gui.hudgamemenuinventory" ( "gui.panel" )
 
+local hudgamemenuinventory = gui.hudgamemenuinventory
+
 function hudgamemenuinventory:hudgamemenuinventory( parent )
 	gui.panel.panel( self, parent, "Inventory" )
 	self:setScheme( "Default" )
@@ -39,5 +41,3 @@ function hudgamemenuinventory:onRemove()
 	self:removeInventoryHook()
 	gui.panel.onRemove( self )
 end
-
-

@@ -6,11 +6,24 @@
 
 require( "common.vector" )
 
+local class      = class
+local concommand = concommand
+local ipairs     = ipairs
+local love       = love
+local math       = math
+local point      = point
+local table      = table
+local tween      = tween
+local vector     = vector
+local _G         = _G
+
 module( "camera" )
 
 _contexts = _contexts or {}
 
 class( "context" )
+
+local context = _G.context
 
 function context:context( worldIndex, x, y, func )
 	self.worldIndex = worldIndex
@@ -38,9 +51,7 @@ end
 
 function context:remove()
 	for i, v in ipairs( _contexts ) do
-		if ( v == self ) then
-			table.remove( _contexts, i )
-		end
+		if ( v == self ) then table.remove( _contexts, i ) end
 	end
 end
 
@@ -48,8 +59,6 @@ function drawToWorld( worldIndex, x, y, func )
 	local context = context( worldIndex, x, y, func )
 	table.insert( _contexts, context )
 end
-
-_entity = _entity or nil
 
 function getParentEntity()
 	return _entity
@@ -59,9 +68,7 @@ _position = _position or vector()
 
 function getPosition()
 	local entity = getParentEntity()
-	if ( entity ) then
-		return entity:getPosition()
-	end
+	if ( entity ) then return entity:getPosition() end
 
 	return _position
 end
@@ -109,15 +116,11 @@ function getZoom()
 	return _zoom
 end
 
-_tween = _tween or nil
-
 function resetZoom()
 	if ( not _tween ) then
 		_tween = tween( _M, nil, {
 			_zoom = point( 2 ),
-			onComplete = function()
-				_tween = nil
-			end
+			onComplete = function() _tween = nil end
 		} )
 	end
 
@@ -161,10 +164,7 @@ function setMaxZoom( maxZoom )
 end
 
 function setZoom( zoom )
-	if ( _tween ) then
-		return
-	end
-
+	if ( _tween ) then return end
 	_zoom = math.clamp( zoom, getMinZoom(), getMaxZoom() )
 end
 
@@ -179,7 +179,5 @@ concommand( "zoomout", "Zooms the camera out", function()
 end )
 
 function update( dt )
-	if ( _tween ) then
-		_tween:update( dt )
-	end
+	if ( _tween ) then _tween:update( dt ) end
 end

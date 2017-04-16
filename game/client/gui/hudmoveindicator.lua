@@ -6,6 +6,8 @@
 
 class "gui.hudmoveindicator" ( "gui.panel" )
 
+local hudmoveindicator = gui.hudmoveindicator
+
 function hudmoveindicator:hudmoveindicator( parent )
 	local name   = "HUD Move Indicator"
 	gui.panel.panel( self, parent, name )
@@ -67,7 +69,7 @@ function hudmoveindicator:drawEntityName()
 	end
 
 	local property = "hudmoveindicator.textColor"
-	graphics.setColor( self:getScheme( property ) )
+	love.graphics.setColor( self:getScheme( property ) )
 	local font = self:getScheme( "entityFont" )
 	love.graphics.setFont( font )
 	local name = self.entity:getName()
@@ -93,7 +95,7 @@ function hudmoveindicator:drawEntityInfo()
 	end
 
 	local property = "hudmoveindicator.smallTextColor"
-	graphics.setColor( self:getScheme( property ) )
+	love.graphics.setColor( self:getScheme( property ) )
 	local font = self:getScheme( "entityFont" )
 	local margin = gui.scale( 96 )
 	local lineHeight = font:getHeight()
@@ -127,7 +129,7 @@ function hudmoveindicator:drawMoveIndicators()
 		local x          = indicator.x - width / 2
 		local y          = indicator.y - height / 2
 		camera.drawToWorld( worldIndex, x, y, function()
-			graphics.setColor( color )
+			love.graphics.setColor( color )
 			indicator.sprite:draw()
 		end )
 	end
@@ -258,5 +260,3 @@ function hudmoveindicator:update( dt )
 
 	self:invalidate()
 end
-
-

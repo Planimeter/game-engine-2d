@@ -34,14 +34,14 @@ function payload.setHandler( func, struct )
 end
 
 function payload:payload( struct )
-	typelenvalues.typelenvalues( self, structs, struct )
+	typelenvalues.typelenvalues( self, payload.structs, struct )
 end
 
 function payload:dispatchToHandler()
 	local name = self:getStructName()
 	if ( not name ) then return end
 
-	local handler = handlers[ name ]
+	local handler = payload.handlers[ name ]
 	if ( handler ) then handler( self ) end
 end
 

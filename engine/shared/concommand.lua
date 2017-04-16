@@ -6,7 +6,7 @@
 
 class( "concommand" )
 
-concommand.concommands = concommand.concommands or {}
+concommand._concommands = concommand._concommands or {}
 
 local sv_cheats = convar( "sv_cheats", 0, nil, nil, "Allow cheats on server",
                           nil, { "notify" } )
@@ -68,7 +68,7 @@ if ( _CLIENT ) then
 end
 
 function concommand.getConcommand( name )
-	return concommand.concommands[ name ]
+	return concommand._concommands[ name ]
 end
 
 function concommand:concommand( name, helpString, callback, flags, autocomplete )
@@ -77,7 +77,7 @@ function concommand:concommand( name, helpString, callback, flags, autocomplete 
 	self.callback     = callback
 	self.flags        = flags
 	self.autocomplete = autocomplete
-	concommand.concommands[ name ] = self
+	concommand._concommands[ name ] = self
 end
 
 function concommand:callback( player, command, argString, argTable )
@@ -104,7 +104,7 @@ function concommand:getName()
 end
 
 function concommand:remove()
-	concommand.concommands[ self:getName() ] = nil
+	concommand._concommands[ self:getName() ] = nil
 end
 
 function concommand:setAutocomplete( autocomplete )

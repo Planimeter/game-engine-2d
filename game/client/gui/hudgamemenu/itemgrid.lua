@@ -6,6 +6,8 @@
 
 class "gui.itemgrid" ( "gui.panel" )
 
+local itemgrid = gui.itemgrid
+
 function itemgrid:itemgrid( parent, name )
 	gui.panel.panel( self, parent, name )
 	self.items   = {}
@@ -59,5 +61,3 @@ function itemgrid:invalidateLayout()
 	end
 	gui.panel.invalidateLayout( self )
 end
-
-

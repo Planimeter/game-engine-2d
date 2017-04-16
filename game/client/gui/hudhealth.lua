@@ -6,6 +6,8 @@
 
 class "gui.hudhealth" ( "gui.panel" )
 
+local hudhealth = gui.hudhealth
+
 function hudhealth:hudhealth( parent )
 	gui.panel.panel( self, parent, "HUD Health" )
 	self.width = point( 102 )
@@ -28,7 +30,7 @@ end
 
 function hudhealth:drawHealth()
 	local property = "hudmoveindicator.textColor"
-	graphics.setColor( self:getScheme( property ) )
+	love.graphics.setColor( self:getScheme( property ) )
 	local font = self:getScheme( "entityFont" )
 	love.graphics.setFont( font )
 	local health = localplayer:getNetworkVar( "health" )
@@ -49,7 +51,7 @@ end
 
 function hudhealth:drawLabel()
 	local property = "hudmoveindicator.smallTextColor"
-	graphics.setColor( self:getScheme( property ) )
+	love.graphics.setColor( self:getScheme( property ) )
 	local font = self:getScheme( "entityFont" )
 	local lineHeight = font:getHeight()
 	font = self:getScheme( "font" )
@@ -65,5 +67,3 @@ function hudhealth:invalidateLayout()
 
 	gui.panel.invalidateLayout( self )
 end
-
-

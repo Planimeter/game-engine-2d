@@ -6,6 +6,8 @@
 
 class "gui.viewport" ( "gui.panel" )
 
+local viewport = gui.viewport
+
 function viewport:viewport( parent )
 	gui.panel.panel( self, parent, "Viewport" )
 	self.width  = love.graphics.getWidth()
@@ -61,5 +63,3 @@ local function showViewport()
 end
 
 hook.set( "client", showViewport, "onMainMenuClose", "showViewport" )
-
-

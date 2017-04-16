@@ -65,7 +65,7 @@ end
 function textboxautocompleteitemgroup:mousepressed( x, y, button, istouch )
 	if ( button == 1 ) then
 		local textBox = self:getTextBox()
-		if ( textBox ~= gui.topPanel and
+		if ( textBox ~= gui._topPanel and
 		   ( not ( self.mouseover or self:isChildMousedOver() ) ) ) then
 			if ( self:getChildren() ) then
 				self:removeChildren()

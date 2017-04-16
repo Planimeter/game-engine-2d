@@ -10,9 +10,9 @@ local frame = gui.frame( nil, name, name )
 function frame:draw()
 	gui.frame.draw( self )
 
-	graphics.setColor( color.red )
+	love.graphics.setColor( color.red )
 	local lineWidth = point( 2 )
-	graphics.setLineWidth( lineWidth )
+	love.graphics.setLineWidth( lineWidth )
 
 	-- Horizontal Line
 	-- love.graphics.line(

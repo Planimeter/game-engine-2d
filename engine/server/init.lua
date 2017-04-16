@@ -7,7 +7,14 @@
 require( "engine.server.network" )
 require( "engine.shared.network.payload" )
 
-module( "engineserver" )
+local payload  = payload
+local print    = print
+local region   = region
+local require  = require
+local tostring = tostring
+local _G       = _G
+
+module( "engine.server" )
 
 require( "engine.server.handlers" )
 require( "engine.server.payloads" )
@@ -19,19 +26,19 @@ end
 
 function onPostConnect( event )
 	-- Initialize region
-	local regionName = game.initialRegion
+	local regionName = _G.game.initialRegion
 	region.load( regionName )
 
 	-- Initialize player
 	require( "engine.shared.entities.player" )
-	local player = player.initialize( event.peer )
+	local player = _G.player.initialize( event.peer )
 	player:setRegion( region.getByName( regionName ) )
 
 	player:onConnect()
 
 	-- Set spawn point
-	local spawnPoint = gameserver.getSpawnPoint( player )
-	local position = vector.origin + vector( 0, game.tileSize )
+	local spawnPoint = _G.game.server.getSpawnPoint( player )
+	local position = _G.vector.origin + _G.vector( 0, _G.game.tileSize )
 	if ( spawnPoint ) then
 		position = spawnPoint:getPosition()
 	end
@@ -42,13 +49,13 @@ function onPostConnect( event )
 end
 
 function onReceive( event )
-	local payload = payload.initializeFromData( event.data )
+	local payload = _G.payload.initializeFromData( event.data )
 	payload:setPeer( event.peer )
 	payload:dispatchToHandler()
 end
 
 function onDisconnect( event )
-	local player = player.getByPeer( event.peer )
+	local player = _G.player.getByPeer( event.peer )
 	if ( player ) then
 		player:onDisconnect()
 		player:remove()
@@ -59,7 +66,7 @@ end
 
 function sendServerInfo( player )
 	local payload = payload( "serverInfo" )
-	payload:set( "region", game.initialRegion )
+	payload:set( "region", _G.game.initialRegion )
 	player:send( payload )
 end
 

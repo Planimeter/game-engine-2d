@@ -8,7 +8,7 @@ class( "sprite" )
 
 function sprite:sprite( spriteSheet )
 	local data       = require( spriteSheet )
-	local image      = graphics.newImage( data[ "image" ] )
+	local image      = love.graphics.newImage( data[ "image" ] )
 	self.spriteSheet = image
 	self.width       = data[ "width" ]
 	self.height      = data[ "height" ]
@@ -22,7 +22,7 @@ end
 
 function sprite:draw()
 	local image = self:getSpriteSheet()
-	love.graphics.draw( image:getDrawable(), self:getQuad() )
+	love.graphics.draw( image, self:getQuad() )
 end
 
 accessor( sprite, "animation" )
@@ -60,13 +60,8 @@ function sprite:setAnimation( animation )
 	local animations = self:getAnimations()
 	local name = animation
 	animation  = animations[ name ]
-	if ( not animation ) then
-		return
-	end
-
-	if ( animation == self:getAnimation() ) then
-		return
-	end
+	if ( not animation ) then return end
+	if ( animation == self:getAnimation() ) then return end
 
 	self.animation     = animation
 	self.animationName = name
@@ -77,9 +72,7 @@ end
 
 function sprite:update( dt )
 	local animation = self:getAnimation()
-	if ( not animation ) then
-		return
-	end
+	if ( not animation ) then return end
 
 	self.curtime = self.curtime + dt
 
@@ -112,9 +105,7 @@ function sprite:updateFrame()
 
 	local events = self:getEvents()
 	local event  = events[ frame ]
-	if ( event ) then
-		self:onAnimationEvent( event )
-	end
+	if ( event ) then self:onAnimationEvent( event ) end
 end
 
 function sprite:__tostring()
