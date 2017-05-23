@@ -1,8 +1,8 @@
---=========== Copyright © 2016, Planimeter, All rights reserved. =============--
+--=========== Copyright © 2017, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: Bind List Panel class
 --
---============================================================================--
+--==========================================================================--
 
 require( "engine.client.gui.optionsmenu.bindlistheader" )
 require( "engine.client.gui.optionsmenu.bindlistitem" )

@@ -1,8 +1,8 @@
---=========== Copyright © 2016, Planimeter, All rights reserved. =============--
+--=========== Copyright © 2017, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: Keyboard Options Command Button Group class
 --
---============================================================================--
+--==========================================================================--
 
 class "gui.keyboardoptionscommandbuttongroup" ( "gui.commandbuttongroup" )
 

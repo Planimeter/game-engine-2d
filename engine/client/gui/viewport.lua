@@ -1,8 +1,8 @@
---=========== Copyright © 2016, Planimeter, All rights reserved. =============--
+--=========== Copyright © 2017, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: Viewport Panel class
 --
---============================================================================--
+--==========================================================================--
 
 class "gui.viewport" ( "gui.panel" )
 

@@ -1,8 +1,8 @@
---=========== Copyright © 2016, Planimeter, All rights reserved. =============--
+--=========== Copyright © 2017, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: Entities interface
 --
---============================================================================--
+--==========================================================================--
 
 -- These values are preserved during real-time scripting.
 local _entities = entities and entities.entities or {}

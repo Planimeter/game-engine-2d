@@ -1,8 +1,8 @@
---=========== Copyright © 2016, Planimeter, All rights reserved. =============--
+--=========== Copyright © 2017, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: Test line drawing
 --
---============================================================================--
+--==========================================================================--
 
 local name  = "Line Drawing Test"
 local frame = gui.frame( nil, name, name )

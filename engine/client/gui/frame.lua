@@ -1,8 +1,8 @@
---=========== Copyright © 2016, Planimeter, All rights reserved. =============--
+--=========== Copyright © 2017, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: Frame class
 --
---============================================================================--
+--==========================================================================--
 
 local gui_draw_frame_focus = convar( "gui_draw_frame_focus", "0", nil, nil,
                              "Draws bounds around the focused frame" )

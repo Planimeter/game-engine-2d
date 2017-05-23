@@ -1,8 +1,8 @@
---=========== Copyright © 2016, Planimeter, All rights reserved. =============--
+--=========== Copyright © 2017, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: Localhost ENet Server class
 --
---============================================================================--
+--==========================================================================--
 
 class "localhost_enet_server" ( "localhost_enet_peer" )
 

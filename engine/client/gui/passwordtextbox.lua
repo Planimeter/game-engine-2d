@@ -1,8 +1,8 @@
---=========== Copyright © 2016, Planimeter, All rights reserved. =============--
+--=========== Copyright © 2017, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: Password Text Box class
 --
---============================================================================--
+--==========================================================================--
 
 class "gui.passwordtextbox" ( "gui.textbox" )
 

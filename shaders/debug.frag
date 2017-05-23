@@ -1,8 +1,8 @@
-//=========== Copyright © 2016, Planimeter, All rights reserved. =============//
+//=========== Copyright © 2017, Planimeter, All rights reserved. ===========//
 //
 // Purpose: Debug pixel shader
 //
-//===========================================================================//
+//==========================================================================//
 
 vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords )
 {

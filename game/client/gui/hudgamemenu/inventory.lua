@@ -1,8 +1,8 @@
---=========== Copyright © 2016, Planimeter, All rights reserved. =============--
+--=========== Copyright © 2017, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: Game Menu Inventory class
 --
---============================================================================--
+--==========================================================================--
 
 require( "game.client.gui.hudgamemenu.itemgrid" )
 

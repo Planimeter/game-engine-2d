@@ -1,8 +1,8 @@
---=========== Copyright © 2016, Planimeter, All rights reserved. =============--
+--=========== Copyright © 2017, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: Engine client payload handlers
 --
---============================================================================--
+--==========================================================================--
 
 local function onReceivePlayerInitialized( payload )
 	localplayer = player.getById( payload:get( "id" ) )

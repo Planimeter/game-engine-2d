@@ -1,8 +1,8 @@
---=========== Copyright © 2016, Planimeter, All rights reserved. =============--
+--=========== Copyright © 2017, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: Network server interface
 --
---============================================================================--
+--==========================================================================--
 
 require( "engine.shared.convar" )
 require( "engine.server.network.host" )

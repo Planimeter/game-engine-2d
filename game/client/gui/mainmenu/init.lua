@@ -1,8 +1,8 @@
---=========== Copyright © 2016, Planimeter, All rights reserved. =============--
+--=========== Copyright © 2017, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: Main Menu class
 --
---============================================================================--
+--==========================================================================--
 
 require( "engine.shared.hook" )
 require( "game.client.gui.mainmenu.closebutton" )

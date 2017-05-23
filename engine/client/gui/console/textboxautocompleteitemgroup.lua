@@ -1,8 +1,8 @@
---=========== Copyright © 2016, Planimeter, All rights reserved. =============--
+--=========== Copyright © 2017, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: Console Text Box Autocomplete Item Group class
 --
---============================================================================--
+--==========================================================================--
 
 class "gui.console.textboxautocompleteitemgroup" ( "gui.textboxautocompleteitemgroup" )
 

@@ -1,8 +1,8 @@
---=========== Copyright © 2016, Planimeter, All rights reserved. =============--
+--=========== Copyright © 2017, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: Game Menu Stats class
 --
---============================================================================--
+--==========================================================================--
 
 class "gui.hudgamemenustats" ( "gui.panel" )
 

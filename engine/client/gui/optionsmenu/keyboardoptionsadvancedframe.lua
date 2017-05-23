@@ -1,8 +1,8 @@
---=========== Copyright © 2016, Planimeter, All rights reserved. =============--
+--=========== Copyright © 2017, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: Advanced Keyboard Options Frame class
 --
---============================================================================--
+--==========================================================================--
 
 class "gui.keyboardoptionsadvancedframe" ( "gui.frame" )
 

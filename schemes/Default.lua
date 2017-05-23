@@ -1,8 +1,8 @@
---=========== Copyright © 2016, Planimeter, All rights reserved. =============--
+--=========== Copyright © 2017, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: Default scheme
 --
---============================================================================--
+--==========================================================================--
 
 local t                       = scheme( "Default" )
 
