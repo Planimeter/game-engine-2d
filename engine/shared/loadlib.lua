@@ -33,8 +33,10 @@ function require( modname )
 
 	local filename = getModuleFilename( modname )
 	if ( filename ) then
-		package.watched[ modname ] = love.filesystem.getLastModified( filename )
+		local modtime, errormsg = love.filesystem.getLastModified( filename )
+		package.watched[ modname ] = modtime
 	end
+
 	return ret
 end
 
@@ -55,7 +57,9 @@ local function reload( modname, filename )
 	print( "Updating " .. modname .. "..." )
 
 	local status, err = pcall( require, modname )
-	if ( status ) then return end
+	if ( status ) then
+		return
+	end
 
 	print( err )
 

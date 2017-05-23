@@ -46,7 +46,7 @@ function love.conf( c )
 	end
 	c.identity = "grid"
 
-	require( "engine.shared.require" )
+	require( "engine.shared.loadlib" )
 	require( "engine.shared.config" )
 	config.load( c )
 end
