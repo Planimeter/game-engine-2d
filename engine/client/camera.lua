@@ -51,7 +51,9 @@ end
 
 function context:remove()
 	for i, v in ipairs( _contexts ) do
-		if ( v == self ) then table.remove( _contexts, i ) end
+		if ( v == self ) then
+			table.remove( _contexts, i )
+		end
 	end
 end
 
@@ -68,7 +70,9 @@ _position = _position or vector()
 
 function getPosition()
 	local entity = getParentEntity()
-	if ( entity ) then return entity:getPosition() end
+	if ( entity ) then
+		return entity:getPosition()
+	end
 
 	return _position
 end
@@ -120,7 +124,9 @@ function resetZoom()
 	if ( not _tween ) then
 		_tween = tween( _M, nil, {
 			_zoom = point( 2 ),
-			onComplete = function() _tween = nil end
+			onComplete = function()
+				_tween = nil
+			end
 		} )
 	end
 
@@ -164,7 +170,10 @@ function setMaxZoom( maxZoom )
 end
 
 function setZoom( zoom )
-	if ( _tween ) then return end
+	if ( _tween ) then
+		return
+	end
+
 	_zoom = math.clamp( zoom, getMinZoom(), getMaxZoom() )
 end
 
@@ -179,5 +188,7 @@ concommand( "zoomout", "Zooms the camera out", function()
 end )
 
 function update( dt )
-	if ( _tween ) then _tween:update( dt ) end
+	if ( _tween ) then
+		_tween:update( dt )
+	end
 end
