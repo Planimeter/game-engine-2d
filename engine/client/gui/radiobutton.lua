@@ -10,7 +10,7 @@ local radiobutton = gui.radiobutton
 
 function radiobutton:radiobutton( parent, name, text )
 	gui.button.button( self, parent, name, text )
-	self.height     = point( 24 )
+	self.height     = love.window.toPixels( 24 )
 	self.icon       = self:getScheme( "radiobutton.icon" )
 	self.foreground = self:getScheme( "radiobutton.foreground" )
 	self.text       = text or "Radio Button Label"
@@ -53,10 +53,10 @@ function radiobutton:drawLabel()
 	local font = self:getScheme( "font" )
 	love.graphics.setFont( font )
 	local height = self:getHeight()
-	local marginLeft = point( 9 )
+	local marginLeft = love.window.toPixels( 9 )
 	local x = height + marginLeft
 	local y = height / 2 - font:getHeight() / 2
-	graphics.print( self:getText(), x, y )
+	love.graphics.print( self:getText(), x, y )
 end
 
 function radiobutton:drawSelectionDot()

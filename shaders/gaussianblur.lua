@@ -90,7 +90,7 @@ function gaussianblur:renderTo(func)
 end
 
 function gaussianblur:draw()
-	love.graphics.setColor( unpack( color.white ) )
+	love.graphics.setColor( color.white )
 	love.graphics.draw( self.canvas_v )
 end
 

@@ -10,7 +10,7 @@ local hudhealth = gui.hudhealth
 
 function hudhealth:hudhealth( parent )
 	gui.panel.panel( self, parent, "HUD Health" )
-	self.width = point( 102 )
+	self.width = love.window.toPixels( 102 )
 
 	self:setScheme( "Default" )
 	local font = self:getScheme( "entityFont" )
@@ -34,7 +34,7 @@ function hudhealth:drawHealth()
 	local font = self:getScheme( "entityFont" )
 	love.graphics.setFont( font )
 	local health = localplayer:getNetworkVar( "health" )
-	graphics.print(
+	love.graphics.print(
 		health, -- text
 		0, -- x
 		0, -- y
@@ -56,7 +56,7 @@ function hudhealth:drawLabel()
 	local lineHeight = font:getHeight()
 	font = self:getScheme( "font" )
 	love.graphics.setFont( font )
-	graphics.print( "Health", 0, lineHeight )
+	love.graphics.print( "Health", 0, lineHeight )
 end
 
 function hudhealth:invalidateLayout()

@@ -11,15 +11,15 @@ local hudgamemenu = gui.hudgamemenu
 function hudgamemenu:hudgamemenu( parent )
 	local name = "HUD Game Menu"
 	gui.hudframe.hudframe( self, parent, name, name )
-	self.width  = point( 384 ) -- - point( 31 )
-	self.height = point( 480 )
+	self.width  = love.window.toPixels( 384 ) -- - love.window.toPixels( 31 )
+	self.height = love.window.toPixels( 480 )
 
 	require( "game.client.gui.hudgamemenu.navigation" )
 	require( "game.client.gui.hudgamemenu.navigationbutton" )
 	self.navigation = gui.hudgamemenunavigation( self )
-	self.navigation:setPos( point( 36 ), point( 86 ) )
-	self.navigation:setWidth( self.width - 2 * point( 36 ) )
-	self.navigation:setHeight( point( 31 ) )
+	self.navigation:setPos( love.window.toPixels( 36 ), love.window.toPixels( 86 ) )
+	self.navigation:setWidth( self.width - 2 * love.window.toPixels( 36 ) )
+	self.navigation:setHeight( love.window.toPixels( 31 ) )
 
 	require( "game.client.gui.hudgamemenu.inventory" )
 	self.inventory = gui.hudgamemenuinventory( self )
@@ -43,13 +43,11 @@ function hudgamemenu:getTitle()
 end
 
 function hudgamemenu:invalidateLayout()
-	local x = love.graphics.getWidth()  - self:getWidth()  - point( 18 )
-	local y = love.graphics.getHeight() - self:getHeight() - point( 18 )
+	local x = love.graphics.getWidth()  - self:getWidth()  - love.window.toPixels( 18 )
+	local y = love.graphics.getHeight() - self:getHeight() - love.window.toPixels( 18 )
 	self:setPos( x, y )
 	gui.frame.invalidateLayout( self )
 end
-
-
 
 concommand( "+gamemenu", "Opens the gamemenu", function()
 	local visible = _G.g_GameMenu:isVisible()

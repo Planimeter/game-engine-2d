@@ -26,7 +26,7 @@ function mainmenu:mainmenu()
 
 	self.closeButton = gui.mainmenu.closebutton( self )
 	local margin     = gui.scale( 96 )
-	self.closeButton:setPos( self.width - point( 32 ) - margin, margin )
+	self.closeButton:setPos( self.width - love.window.toPixels( 32 ) - margin, margin )
 	self.closeButton.onClick = function()
 		self.closeDialog:activate()
 	end
@@ -136,7 +136,7 @@ function mainmenu:invalidateLayout()
 
 	local margin = gui.scale( 96 )
 	local y      = margin
-	self.closeButton:setPos( self:getWidth() - point( 32 ) - margin, y )
+	self.closeButton:setPos( self:getWidth() - love.window.toPixels( 32 ) - margin, y )
 
 	self.closeDialog:moveToCenter()
 
@@ -156,14 +156,14 @@ function mainmenu:invalidateButtons()
 	local marginX   = math.round( gui.scale( 96 ) )
 	local marginY   = math.round( marginX * ( 2 / 3 ) )
 
-	if ( height <= point( 720 ) ) then
+	if ( height <= love.window.toPixels( 720 ) ) then
 		logo = self.logoSmall
 	end
 
 	local y = marginPhi + logo:getHeight() + marginY
 	for i, button in ipairs( self.buttons ) do
 		i = i - 1
-		button:setPos( marginX, y + i * button:getHeight() + i * point( 4.5 ) )
+		button:setPos( marginX, y + i * button:getHeight() + i * love.window.toPixels( 4.5 ) )
 	end
 end
 
@@ -187,16 +187,16 @@ end
 function mainmenu:drawLogo()
 	local logo      = self.logo
 	local height    = self:getHeight()
-	local scale     = height / point( 1080 )
+	local scale     = height / love.window.toPixels( 1080 )
 	local marginX   = math.round( gui.scale( 96 ) )
 	local marginPhi = math.round( height - height / math.phi )
 
-	if ( height <= point( 720 ) ) then
+	if ( height <= love.window.toPixels( 720 ) ) then
 		logo  = self.logoSmall
-		scale = height / point( 720 )
+		scale = height / love.window.toPixels( 720 )
 	end
 
-	love.graphics.setColor( unpack( color.white ) )
+	love.graphics.setColor( color.white )
 	love.graphics.draw( logo, marginX, marginPhi, 0, scale, scale )
 end
 

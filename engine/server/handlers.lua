@@ -14,7 +14,9 @@ module( "engine.server" )
 
 function load( arg )
 	local initialized = engine.server.network.initializeServer()
-	if ( not initialized ) then return false end
+	if ( not initialized ) then
+		return false
+	end
 
 	require( "game" )
 

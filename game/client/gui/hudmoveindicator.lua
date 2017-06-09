@@ -16,7 +16,7 @@ function hudmoveindicator:hudmoveindicator( parent )
 	self:setUseFullscreenFramebuffer( true )
 
 	self.options = gui.optionsitemgroup( self, name .. " Options Item Group" )
-	self.options:setWidth( point( 216 ) )
+	self.options:setWidth( love.window.toPixels( 216 ) )
 	self.optionsActive = false
 
 	self:setScheme( "Default" )
@@ -74,7 +74,7 @@ function hudmoveindicator:drawEntityName()
 	love.graphics.setFont( font )
 	local name = self.entity:getName()
 	local margin = gui.scale( 96 )
-	graphics.print(
+	love.graphics.print(
 		name or "unnamed",   -- text
 		margin, -- x
 		margin, -- y
@@ -104,14 +104,14 @@ function hudmoveindicator:drawEntityInfo()
 
 	if ( self.entity.getLevel ) then
 		local l = self.entity:getLevel()
-		graphics.print( "Level " .. l, margin, margin + lineHeight )
+		love.graphics.print( "Level " .. l, margin, margin + lineHeight )
 		lineHeight = lineHeight + font:getHeight()
 	end
 
 	if ( self.entity.getOptions ) then
 		local n = table.len( self.entity:getOptions() )
 		local plural = n > 1 and "s" or ""
-		graphics.print( n  .. " Option" .. plural, margin, margin + lineHeight )
+		love.graphics.print( n  .. " Option" .. plural, margin, margin + lineHeight )
 	end
 end
 
@@ -158,7 +158,7 @@ local getEntitiesAtMousePos = function( px, py )
 		local x, y   = camera.worldToScreen( entity:getDrawPosition() )
 		local sprite = entity:getSprite()
 		local scale  = camera.getZoom()
-		if ( sprite and sprite ~= graphics.error ) then
+		if ( sprite and sprite ~= nil --[[ graphics.error ]] ) then
 			local width  = sprite:getWidth()  * scale
 			local height = sprite:getHeight() * scale
 			if ( pointinrect( px, py, x, y, width, height ) ) then

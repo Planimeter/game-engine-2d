@@ -35,7 +35,7 @@ local function updateBlurFramebuffer( convar )
 	if ( enabled ) then
 		require( "shaders.gaussianblur" )
 		_blurFramebuffer = _G.shader.getShader( "gaussianblur" )
-		_blurFramebuffer:set( "sigma", _G.point( 12 ) )
+		_blurFramebuffer:set( "sigma", love.window.toPixels( 12 ) )
 	else
 		_blurFramebuffer = nil
 	end
@@ -49,7 +49,7 @@ function draw()
 		if ( not _blurFramebuffer ) then
 			require( "shaders.gaussianblur" )
 			_blurFramebuffer = _G.shader.getShader( "gaussianblur" )
-			_blurFramebuffer:set( "sigma", _G.point( 12 ) )
+			_blurFramebuffer:set( "sigma", love.window.toPixels( 12 ) )
 		end
 
 		local framebuffer = love.graphics.getCanvas()

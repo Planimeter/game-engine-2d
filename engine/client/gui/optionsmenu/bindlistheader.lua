@@ -11,7 +11,7 @@ local bindlistheader = gui.bindlistheader
 function bindlistheader:bindlistheader( parent, name, text )
 	gui.panel.panel( self, parent, name )
 	self.width  = parent:getWidth()
-	self.height = point( 46 )
+	self.height = love.window.toPixels( 46 )
 	self.text   = text or "Bind List Header"
 
 	self:setScheme( "Default" )
@@ -22,20 +22,22 @@ function bindlistheader:draw()
 	local font = self:getScheme( "fontBold" )
 	love.graphics.setFont( font )
 
-	local margin = point( 18 )
-	local x = margin
-	local y = self:getHeight() / 2 - font:getHeight() / 2
-	graphics.print( self:getText(), x, y )
+	local toPixels = love.window.toPixels
+	local margin   = toPixels( 18 )
+	local x        = margin
+	local y        = self:getHeight() / 2 - font:getHeight() / 2
+	love.graphics.print( self:getText(), x, y )
 
 	local label = "Key or Button"
-	x = self:getWidth() - font:getWidth( label ) - margin
-	graphics.print( label, x, y )
+	x = self:getWidth() - margin - font:getWidth( label )
+	love.graphics.print( label, x, y )
 
 	love.graphics.setColor( self:getScheme( 'bindlistheader.borderColor' ) )
-	local paddingBottom = point( 6 )
-	y = self:getHeight() - paddingBottom
-	local width = self:getWidth() - 2 * margin
-	love.graphics.rectangle( "fill", margin, y, width, point( 1 ) )
+	x            = margin
+	y            = self:getHeight() - toPixels( 6 ) -- Padding-bottom
+	local width  = self:getWidth() - 2 * margin
+	local height = toPixels( 1 )
+	love.graphics.rectangle( "fill", x, y, width, height )
 
 	gui.panel.draw( self )
 end

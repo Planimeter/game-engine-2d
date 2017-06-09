@@ -25,7 +25,9 @@ end
 
 function getKeyForBind( concommand )
 	for key, bind in pairs( getBinds() ) do
-		if ( bind == concommand ) then return key end
+		if ( bind == concommand ) then
+			return key
+		end
 	end
 end
 
@@ -73,7 +75,9 @@ end
 
 function readDefaultBinds()
 	local config = "cfg/binds_default.cfg"
-	if ( not love.filesystem.exists( config ) ) then return end
+	if ( not love.filesystem.exists( config ) ) then
+		return
+	end
 
 	local binds = {}
 	for line in love.filesystem.lines( config ) do
@@ -110,7 +114,9 @@ end
 
 function keyreleased( key, scancode )
 	local bind = getBind( key )
-	if ( not bind ) then return end
+	if ( not bind ) then
+		return
+	end
 
 	local isButtonCommand = string.find( bind, "+" ) == 1
 	if ( isButtonCommand ) then

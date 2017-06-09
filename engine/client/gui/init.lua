@@ -7,6 +7,7 @@
 require( "engine.client.gui.scheme" )
 
 local love    = love
+local math    = math
 local require = require
 local _G      = _G
 
@@ -24,7 +25,7 @@ function preDrawWorld()
 end
 
 function scale( n )
-	return n * ( love.graphics.getHeight() / 1080 )
+	return math.round( n * ( love.graphics.getHeight() / 1080 ) )
 end
 
 function setFocusedPanel( panel, focus )

@@ -79,7 +79,7 @@ function bindlistpanel:readBinds( binds )
 				local name, concommand = string.match( line, "\"(.+)\"%s(.+)" )
 				concommand = string.trim( concommand )
 
-				local key
+				local key = nil
 				if ( binds ) then
 					key = table.hasvalue( binds, concommand )
 				else

@@ -12,7 +12,7 @@ function label:label( parent, name, text )
 	gui.panel.panel( self, parent, name )
 	self:setScheme( "Default" )
 	self.font      = self:getScheme( "font" )
-	self.width     = point( 216 )
+	self.width     = love.window.toPixels( 216 )
 	self.height    = self.font:getHeight()
 	self.text      = text or "Label"
 	self.textAlign = "left"
@@ -37,7 +37,7 @@ function label:draw()
 		x = self:getWidth() - textWidth + font:getWidth( " " )
 	end
 
-	graphics.print( text, x, 0 )
+	love.graphics.print( text, x, 0 )
 
 	gui.panel.draw( self )
 end

@@ -102,31 +102,33 @@ function getWorldIndex()
 	return _worldIndex
 end
 
-_minZoom = _minZoom or point( 1 )
+_minZoom = _minZoom or 1 * love.window.getPixelScale()
 
 function getMinZoom()
 	return _minZoom
 end
 
-_maxZoom = _maxZoom or point( 4 )
+_maxZoom = _maxZoom or 4 * love.window.getPixelScale()
 
 function getMaxZoom()
 	return _maxZoom
 end
 
-_zoom = _zoom or point( 1 )
+_zoom = _zoom or 1 * love.window.getPixelScale()
 
 function getZoom()
 	return _zoom
 end
 
+local function resetTween()
+	_tween = nil
+end
+
 function resetZoom()
 	if ( not _tween ) then
 		_tween = tween( _M, nil, {
-			_zoom = point( 2 ),
-			onComplete = function()
-				_tween = nil
-			end
+			_zoom      = 2 * love.window.getPixelScale(),
+			onComplete = resetTween
 		} )
 	end
 

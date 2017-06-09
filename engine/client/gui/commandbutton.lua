@@ -12,16 +12,16 @@ function commandbutton:commandbutton( parent, name, text )
 	gui.button.button( self, parent, name, text )
 
 	if ( text ) then
-		local font    = self:getScheme( "font" )
-		local padding = point( 18 )
+		local font = self:getScheme( "font" )
+		local padding = love.window.toPixels( 18 )
 		self:setWidth( font:getWidth( text ) + 2 * padding )
 		parent:invalidateLayout()
 	end
 end
 
 function commandbutton:drawBackground()
-	local color  = "button.backgroundColor"
-	local width  = self:getWidth()
+	local color = "button.backgroundColor"
+	local width = self:getWidth()
 	local height = self:getHeight()
 
 	if ( self:isDisabled() ) then
@@ -32,18 +32,20 @@ function commandbutton:drawBackground()
 		gui.panel.drawBackground( self, color )
 	end
 
-	local x = self:isFirstChild() and point( 1 ) or 0
-	width   = self:isFirstChild() and width - point( 2 ) or width - point( 1 )
-	height  = height - point( 1 )
+	local isFirstChild = self:isFirstChild()
+	local toPixels = love.window.toPixels
+	local x = isFirstChild and toPixels( 1 ) or 0
+	width = isFirstChild and width - toPixels( 2 ) or width - toPixels( 1 )
+	height = height - toPixels( 1 )
 
 	if ( self.mousedown and self.mouseover ) then
 		color = "button.mousedown.backgroundColor"
 		love.graphics.setColor( self:getScheme( color ) )
-		love.graphics.rectangle( "fill", x, point( 1 ), width, height )
+		love.graphics.rectangle( "fill", x, toPixels( 1 ), width, height )
 	elseif ( self.mousedown or self.mouseover ) then
 		color = "button.mouseover.backgroundColor"
 		love.graphics.setColor( self:getScheme( color ) )
-		love.graphics.rectangle( "fill", x, point( 1 ), width, height )
+		love.graphics.rectangle( "fill", x, toPixels( 1 ), width, height )
 	end
 end
 
@@ -52,12 +54,12 @@ function commandbutton:drawForeground()
 		return
 	end
 
-	local color  = "commandbutton.outlineColor"
-	local width  = self:getWidth()
+	local color = "commandbutton.outlineColor"
+	local width = self:getWidth()
 	local height = self:getHeight()
 
 	love.graphics.setColor( self:getScheme( color ) )
-	local lineWidth = point( 1 )
+	local lineWidth = love.window.toPixels( 1 )
 	love.graphics.setLineWidth( lineWidth )
 	love.graphics.line(
 		width - lineWidth / 2, 0,     -- Top-right

@@ -12,9 +12,9 @@ function frametab:frametab( parent, name, text )
 	gui.radiobutton.radiobutton( self, parent, name, text )
 	self.text     = text or "Frame Tab"
 	local font    = self:getScheme( "font" )
-	local padding = point( 24 )
+	local padding = love.window.toPixels( 24 )
 	self.width    = font:getWidth( self:getText() ) + 2 * padding
-	self.height   = point( 61 )
+	self.height   = love.window.toPixels( 61 )
 end
 
 function frametab:draw()
@@ -44,11 +44,11 @@ function frametab:drawBackground()
 		"fill",
 		0,
 		0,
-		width  - ( selected  and point( 1 ) or 0 ),
-		height - ( mouseover and point( 1 ) or 0 )
+		width  - ( selected  and love.window.toPixels( 1 ) or 0 ),
+		height - ( mouseover and love.window.toPixels( 1 ) or 0 )
 	)
 
-	local lineWidth = point( 1 )
+	local lineWidth = love.window.toPixels( 1 )
 	if ( selected ) then
 		love.graphics.setColor( self:getScheme( "frametab.backgroundColor" ) )
 		love.graphics.line(
@@ -61,7 +61,7 @@ function frametab:drawBackground()
 	love.graphics.setColor( self:getScheme( "frametab.outlineColor" ) )
 	love.graphics.line(
 		width - lineWidth / 2, 0,
-		width - lineWidth / 2, height - ( selected and 0 or point( 1 ) )
+		width - lineWidth / 2, height - ( selected and 0 or love.window.toPixels( 1 ) )
 	)
 
 	if ( not selected ) then

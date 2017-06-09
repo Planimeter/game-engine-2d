@@ -4,17 +4,14 @@
 --
 --==========================================================================--
 
-local gui   = gui
-local point = point
-
 class "gui.closedialog" ( "gui.frame" )
 
 local closedialog = gui.closedialog
 
 function closedialog:closedialog( parent, name )
 	gui.frame.frame( self, parent, "Close Dialog", "Quit Game" )
-	self.width  = point( 546 )
-	self.height = point( 203 )
+	self.width  = love.window.toPixels( 546 )
+	self.height = love.window.toPixels( 203 )
 
 	self:doModal()
 
@@ -23,13 +20,13 @@ function closedialog:closedialog( parent, name )
 		"Close Dialog Label",
 		"Are you sure you want to quit the game?"
 	)
-	label:setPos( point( 36 ), point( 86 ) )
-	label:setWidth( point( 252 ) )
+	label:setPos( love.window.toPixels( 36 ), love.window.toPixels( 86 ) )
+	label:setWidth( love.window.toPixels( 252 ) )
 
 	local buttonYes = gui.button( self, "Close Dialog Yes Button", "Yes" )
 	buttonYes:setPos(
-		point( 36 ),
-		point( 86 ) + label:getHeight() + point( 18 )
+		love.window.toPixels( 36 ),
+		love.window.toPixels( 86 ) + label:getHeight() + love.window.toPixels( 18 )
 	)
 	buttonYes.onClick = function()
 		love._shouldQuit = true
@@ -38,8 +35,8 @@ function closedialog:closedialog( parent, name )
 
 	local buttonNo = gui.button( self, "Close Dialog No Button", "No" )
 	buttonNo:setPos(
-		point( 288 ),
-		point( 86 ) + label:getHeight() + point( 18 )
+		love.window.toPixels( 288 ),
+		love.window.toPixels( 86 ) + label:getHeight() + love.window.toPixels( 18 )
 	)
 	buttonNo.onClick = function()
 		self:close()

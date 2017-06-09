@@ -73,11 +73,15 @@ function hudframe:drawBlur()
 		return
 	end
 
-	love.graphics.push()
-		local x, y = self:localToScreen()
-		love.graphics.translate( -x, -y )
-		gui._blurFramebuffer:draw()
-	love.graphics.pop()
+	gui.panel._maskedPanel = self
+	love.graphics.stencil( gui.panel.drawMask )
+	love.graphics.setStencilTest( "greater", 0 )
+		love.graphics.push()
+			local x, y = self:localToScreen()
+			love.graphics.translate( -x, -y )
+			gui._blurFramebuffer:draw()
+		love.graphics.pop()
+	love.graphics.setStencilTest()
 end
 
 function hudframe:drawTitle()
@@ -85,9 +89,9 @@ function hudframe:drawTitle()
 	love.graphics.setColor( self:getScheme( property ) )
 	local font = self:getScheme( "titleFont" )
 	love.graphics.setFont( font )
-	local x = point( 36 )
-	local y = x - point( 4 )
-	graphics.print( string.utf8upper( self:getTitle() ), x, y )
+	local x = love.window.toPixels( 36 )
+	local y = x - love.window.toPixels( 4 )
+	love.graphics.print( string.utf8upper( self:getTitle() ), x, y )
 end
 
 function hudframe:update( dt )

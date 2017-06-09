@@ -106,18 +106,18 @@ function hudchat:invalidateLayout()
 	self.width  = math.round( gui.scale( 720 ) )
 	self.height = math.round( gui.scale( 404 ) )
 	self:setPos(
-		gui.scale( 96 ) - point( 36 ) - point( 18 ),
+		gui.scale( 96 ) - love.window.toPixels( 36 ) - love.window.toPixels( 18 ),
 		gui.scale( 494 )
 	)
 
 	if ( self.output ) then
 		if ( self:isVisible() or self.initializing ) then
 			self.initializing = false
-			self.output:setPos( point( 36 ), point( 36 ) )
+			self.output:setPos( love.window.toPixels( 36 ), love.window.toPixels( 36 ) )
 		else
 			local x, y = self:localToScreen(
-				gui.scale( 96 ) - point( 18 ),
-				point( 36 ) + gui.scale( 494 )
+				gui.scale( 96 ) - love.window.toPixels( 18 ),
+				love.window.toPixels( 36 ) + gui.scale( 494 )
 			)
 			self.output:setPos( x, y )
 		end
@@ -125,24 +125,22 @@ function hudchat:invalidateLayout()
 
 	if ( self.input ) then
 		self.input:setPos(
-			point( 36 ),
-			self:getHeight() - self.input:getHeight() - point( 36 )
+			love.window.toPixels( 36 ),
+			self:getHeight() - self.input:getHeight() - love.window.toPixels( 36 )
 		)
-		self.input:setWidth( self:getWidth() - 2 * point( 36 ) )
+		self.input:setWidth( self:getWidth() - 2 * love.window.toPixels( 36 ) )
 	end
 
 	gui.frame.invalidateLayout( self )
 end
 
-
-
 concommand( "chat", "Toggles the chat", function()
-	local visible = _G.g_Chat:isVisible()
+	local visible = g_Chat:isVisible()
 	if ( not visible ) then
-		_G.g_Chat:activate()
+		g_Chat:activate()
 	else
-		_G.g_Chat:close()
-		_G.g_Chat.output:hide()
+		g_Chat:close()
+		g_Chat.output:hide()
 	end
 end )
 

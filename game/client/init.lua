@@ -37,7 +37,7 @@ function createDefaultPanels()
 end
 
 function draw()
-	if ( not playerInitialized ) then
+	if ( not _playerInitialized ) then
 		return
 	end
 

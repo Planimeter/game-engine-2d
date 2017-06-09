@@ -20,8 +20,8 @@ function textboxautocompleteitemgroup:invalidateLayout()
 	local maxWidth  = 0
 	local listItems = self:getItems()
 	if ( listItems ) then
-		local y = 0
-		local padding = point( 18 )
+		local y       = 0
+		local padding = love.window.toPixels( 18 )
 		for _, listItem in ipairs( listItems ) do
 			listItem:setY( y )
 

@@ -10,9 +10,9 @@ local dropdownlist = gui.dropdownlist
 
 function dropdownlist:dropdownlist( parent, name )
 	gui.button.button( self, parent, name )
-	self.icon          = self:getScheme( "dropdownlist.icon" )
+	self.icon = self:getScheme( "dropdownlist.icon" )
 	self.listItemGroup = gui.dropdownlistitemgroup( self, name .. " Item Group" )
-	self.active        = false
+	self.active = false
 end
 
 function dropdownlist:addItem( item )
@@ -71,7 +71,7 @@ function dropdownlist:drawIcon()
 
 	love.graphics.setColor( self:getScheme( color ) )
 
-	local padding = point( 18 )
+	local padding = love.window.toPixels( 18 )
 	local x = self:getWidth() - self.icon:getWidth() - padding
 	local y = self:getHeight() / 2 - self.icon:getHeight() / 2
 	love.graphics.draw( self.icon, x, y )
@@ -90,9 +90,9 @@ function dropdownlist:drawText()
 	love.graphics.setFont( font )
 	local item = self:getListItemGroup():getSelectedItem()
 	local text = item and item:getText() or ""
-	local x    = point( 18 )
-	local y    = self:getHeight() / 2 - font:getHeight() / 2
-	graphics.print( text, x, y )
+	local x = love.window.toPixels( 18 )
+	local y = self:getHeight() / 2 - font:getHeight() / 2
+	love.graphics.print( text, x, y )
 end
 
 accessor( dropdownlist, "listItemGroup" )

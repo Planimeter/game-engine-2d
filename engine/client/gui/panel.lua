@@ -11,6 +11,11 @@ class( "gui.panel" )
 
 local panel = gui.panel
 
+function panel.drawMask()
+	local self = panel._maskedPanel
+	love.graphics.rectangle( "fill", 0, 0, self:getWidth(), self:getHeight() )
+end
+
 function panel:panel( parent, name )
 	self.x       = 0
 	self.y       = 0
@@ -22,11 +27,6 @@ function panel:panel( parent, name )
 	self.scale   = 1
 	self.opacity = 1
 end
-
-local cos = math.cos
-local pi  = math.pi
-
-local easing = tween.easing
 
 function panel:animate( properties, duration, easing, complete )
 	if ( not self.animations ) then
@@ -113,13 +113,13 @@ end
 function panel:drawBackground( color )
 	local width  = self:getWidth()
 	local height = self:getHeight()
-	love.graphics.setColor( unpack( self:getScheme( color ) ) )
+	love.graphics.setColor( self:getScheme( color ) )
 	love.graphics.rectangle( "fill", 0, 0, width, height )
 end
 
 function panel:drawBounds()
-	love.graphics.setColor( unpack( color.red ) )
-	local lineWidth = point( 1 )
+	love.graphics.setColor( color.red )
+	local lineWidth = love.window.toPixels( 1 )
 	love.graphics.setLineWidth( lineWidth )
 	love.graphics.rectangle(
 		"line",
@@ -133,8 +133,8 @@ end
 function panel:drawForeground( color )
 	local width  = self:getWidth()
 	local height = self:getHeight()
-	love.graphics.setColor( unpack( self:getScheme( color ) ) )
-	local lineWidth = point( 1 )
+	love.graphics.setColor( self:getScheme( color ) )
+	local lineWidth = love.window.toPixels( 1 )
 	love.graphics.setLineWidth( lineWidth )
 	love.graphics.rectangle(
 		"line",
@@ -187,10 +187,8 @@ accessor( panel, "opacity" )
 accessor( panel, "parent" )
 accessor( panel, "scale" )
 
-local getProperty = scheme.getProperty
-
 function panel:getScheme( property )
-	return getProperty( self.scheme, property )
+	return scheme.getProperty( self.scheme, property )
 end
 
 accessor( panel, "width" )
@@ -207,23 +205,17 @@ function panel:getPos()
 	return self:getX(), self:getY()
 end
 
-local sx, sy      = 0, 0
-local w,  h       = 0, 0
-local pointinrect = math.pointinrect
-local children    = nil
-local topChild    = nil
-
 function panel:getTopMostChildAtPos( x, y )
 	if ( not self:isVisible() ) then return nil end
 
-	sx, sy = self:localToScreen()
-	w,  h  = self:getWidth(), self:getHeight()
-	if ( not pointinrect( x, y, sx, sy, w, h ) ) then return nil end
+	local sx, sy = self:localToScreen()
+	local w,  h  = self:getWidth(), self:getHeight()
+	if ( not math.pointinrect( x, y, sx, sy, w, h ) ) then return nil end
 
-	children = self:getChildren()
+	local children = self:getChildren()
 	if ( children ) then
 		for i = #children, 1, -1 do
-			topChild = children[ i ]:getTopMostChildAtPos( x, y )
+			local topChild = children[ i ]:getTopMostChildAtPos( x, y )
 			if ( topChild ) then return topChild end
 		end
 	end
@@ -293,12 +285,9 @@ function panel:keyreleased( key, scancode )
 	return cascadeInputToChildren( self, "keyreleased", key, scancode )
 end
 
-local posX, posY = 0, 0
-local parent     = nil
-
 function panel:localToScreen( x, y )
-	posX, posY = x or self:getX(), y or self:getY()
-	parent     = self:getParent()
+	local posX, posY = x or self:getX(), y or self:getY()
+	local parent     = self:getParent()
 	while ( parent ~= nil ) do
 		posX = posX + parent:getX()
 		posY = posY + parent:getY()
@@ -374,8 +363,6 @@ end
 
 function panel:onRemove()
 end
-
-local opacity = 1
 
 function panel:preDraw()
 	if ( not self:isVisible() ) then return end
@@ -576,33 +563,22 @@ function panel:update( dt )
 	end
 end
 
-local startTime  = 0
-local duration   = 0
-local remaining  = 0
-local max        = math.max
-local percent    = 0
-local startValue = 0
-local endValue   = 0
-local eased      = 0
-local complete   = nil
-local len        = table.len
-
 function panel:updateAnimations( dt )
 	for _, animation in ipairs( self.animations ) do
 		if ( not animation.startTime ) then
 			animation.startTime = love.timer.getTime()
 		end
 
-		startTime     = animation.startTime
-		duration      = animation.duration
-		remaining     = max( 0, startTime + duration - love.timer.getTime() )
-		percent       = 1 - ( remaining / duration or 0 )
+		local startTime     = animation.startTime
+		local duration      = animation.duration
+		local remaining     = math.max( 0, startTime + duration - love.timer.getTime() )
+		local percent       = 1 - ( remaining / duration or 0 )
 		animation.pos = percent
 
 		for member, tween in pairs( animation.tweens ) do
-			startValue = tween.startValue
-			endValue   = tween.endValue
-			eased      = easing[ animation.easing ](
+			local startValue = tween.startValue
+			local endValue   = tween.endValue
+			local eased      = _G.tween.easing[ animation.easing ](
 				percent, duration * percent, 0, 1, duration
 			)
 			self[ member ] = ( endValue - startValue ) * eased + startValue
@@ -615,7 +591,7 @@ function panel:updateAnimations( dt )
 		end
 
 		if ( percent == 1 ) then
-			complete = animation.complete
+			local complete = animation.complete
 			if ( complete ) then complete() end
 			self:invalidate()
 		end
@@ -627,7 +603,7 @@ function panel:updateAnimations( dt )
 		end
 	end
 
-	if ( len( self.animations ) == 0 ) then
+	if ( table.len( self.animations ) == 0 ) then
 		self.animations = nil
 	end
 end

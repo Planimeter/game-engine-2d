@@ -10,7 +10,6 @@ local convar  = convar
 local engine  = engine
 local gui     = gui
 local love    = love
-local point   = point
 local require = require
 local scheme  = scheme
 local string  = string
@@ -109,8 +108,8 @@ local function updateDesktopSound( f )
 	end
 end
 
-function focus( f )
-	updateDesktopSound( f )
+function focus( focus )
+	updateDesktopSound( focus )
 end
 
 function quit()
@@ -142,15 +141,15 @@ local function drawFrameRate()
 	local height = love.graphics.getHeight()
 	local margin = gui.scale( 96 )
 	local x      = width  - font:getWidth( time ) - margin
-	local y      = height - font:getHeight()      - margin + point( 1 )
+	local y      = height - font:getHeight()      - margin + love.window.toPixels( 1 )
 	local color  = scheme( "Default", "mainmenubutton.dark.textColor" )
 	love.graphics.setColor( color )
-	love.graphics.print( time, x, y - point( 1 ) )
+	love.graphics.print( time, x, y - love.window.toPixels( 1 ) )
 end
 
 local r_draw_grid = convar( "r_draw_grid", "0", nil, nil,
                             "Draws a grid overlay" )
-local r_focus     = convar( "r_focus", "0", nil, nil,
+local r_focus     = convar( "r_focus", "1", nil, nil,
                             "Draw only when the engine has focus" )
 
 function draw()
@@ -167,7 +166,7 @@ function draw()
 			love.graphics.clear()
 			_G.game.client.draw()
 		love.graphics.setCanvas()
-		love.graphics.setColor( unpack( _G.color.white ) )
+		love.graphics.setColor( _G.color.white )
 		love.graphics.draw( gui._viewportFramebuffer )
 	end
 

@@ -16,8 +16,8 @@ function hudgamemenuinventory:hudgamemenuinventory( parent )
 	self:setSize( parent:getSize() )
 
 	self.grid = gui.itemgrid( self, "Inventory Item Grid" )
-	self.grid:setPos( point( 36 ), point( 86 + 31 + 18 ) )
-	self.grid:setSize( parent:getWidth() - 2 * point( 36 ), point( 314 ) )
+	self.grid:setPos( love.window.toPixels( 36 ), love.window.toPixels( 86 + 31 + 18 ) )
+	self.grid:setSize( parent:getWidth() - 2 * love.window.toPixels( 36 ), love.window.toPixels( 314 ) )
 	self.grid:setColumns( 4 )
 	self.grid:setRows( 7 )
 

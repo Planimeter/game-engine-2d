@@ -6,10 +6,8 @@
 
 class "gui.textbox" ( "gui.panel" )
 
-local textbox = gui.textbox
-
-textbox._maskedTextbox = textbox._maskedTextbox or nil
-textbox.canFocus       = true
+local textbox    = gui.textbox
+textbox.canFocus = true
 
 local function getInnerWidth( self )
 	return self:getWidth() - 2 * self.padding
@@ -20,7 +18,7 @@ local function getInnerHeight( self )
 end
 
 function textbox.drawMask()
-	local self   = textbox._maskedTextbox
+	local self   = textbox._maskedPanel
 	local width  = getInnerWidth( self )
 	local height = self:getHeight()
 	love.graphics.rectangle( "fill", self.padding, 0, width, height )
@@ -28,13 +26,13 @@ end
 
 function textbox:textbox( parent, name, placeholder )
 	gui.panel.panel( self, parent, name )
-	self.width          = point( 216 )
-	self.height         = point( 46 )
+	self.width          = love.window.toPixels( 216 )
+	self.height         = love.window.toPixels( 46 )
 	self.focus          = false
 	self.defocusOnEnter = false
 	self.placeholder    = placeholder or "Text Box"
 	self.text           = ""
-	self.padding        = point( 18 )
+	self.padding        = love.window.toPixels( 18 )
 	self.cursorPos      = 0
 	self.textOverflow   = 0
 	self.scrollOffset   = 0
@@ -65,7 +63,7 @@ local function getTextY( self )
 		                                           self.padding )
 	else
 		local font = self:getScheme( "font" )
-		return self:getHeight() / 2 - font:getHeight() / 2 - point( 2 )
+		return self:getHeight() / 2 - font:getHeight() / 2 - love.window.toPixels( 2 )
 	end
 end
 
@@ -98,17 +96,15 @@ function textbox:drawCursor()
 
 	local font = self:getScheme( "font" )
 	if ( self.focus ) then
-		-- local opacity = graphics.getOpacity()
-		-- graphics.setOpacity( opacity * abs( sin( 3 * love.timer.getTime() ) ) )
-		-- love.graphics.setColor( graphics.getColor() )
-			love.graphics.rectangle(
-				"fill",
-				getRelativeCursorPos( self ),
-				self:getHeight() / 2 - font:getHeight() / 2,
-				point( 1 ),
-				font:getHeight()
-			)
-		-- graphics.setOpacity( opacity )
+		local r, g, b = love.graphics.getColor()
+		love.graphics.setColor( color( r, g, b, 255 * abs( sin( 3 * love.timer.getTime() ) ) ) )
+		love.graphics.rectangle(
+			"fill",
+			getRelativeCursorPos( self ),
+			self:getHeight() / 2 - font:getHeight() / 2,
+			love.window.toPixels( 1 ),
+			font:getHeight()
+		)
 	end
 end
 
@@ -126,8 +122,8 @@ function textbox:drawForeground()
 		end
 	end
 
-	love.graphics.setColor( unpack( self:getScheme( property ) ) )
-	local lineWidth = point( 1 )
+	love.graphics.setColor( self:getScheme( property ) )
+	local lineWidth = love.window.toPixels( 1 )
 	love.graphics.setLineWidth( lineWidth )
 	love.graphics.rectangle(
 		"line",
@@ -139,7 +135,7 @@ function textbox:drawForeground()
 end
 
 function textbox:drawText()
-	textbox._maskedTextbox = self
+	textbox._maskedPanel = self
 	love.graphics.stencil( textbox.drawMask )
 	love.graphics.setStencilTest( "greater", 0 )
 		local property = "textbox.textColor"
@@ -160,7 +156,7 @@ function textbox:drawText()
 			end
 		end
 
-		love.graphics.setColor( unpack( self:getScheme( property ) ) )
+		love.graphics.setColor( self:getScheme( property ) )
 
 		local font = self:getScheme( "font" )
 		love.graphics.setFont( font )

@@ -12,27 +12,29 @@ class "gui.keyboardoptionspanel" ( "gui.frametabpanel" )
 
 local keyboardoptionspanel = gui.keyboardoptionspanel
 
-function keyboardoptionspanel:keyboardoptionspanel()
-	gui.frametabpanel.frametabpanel( self, nil, "Keyboard Options Panel" )
+function keyboardoptionspanel:keyboardoptionspanel( parent, name )
+	parent = parent or nil
+	name = name or "Keyboard Options Panel"
+	gui.frametabpanel.frametabpanel( self, parent, name )
 
 	self.bindList = gui.bindlistpanel( self )
-	local margin = point( 24 )
-	local height = point( 348 ) - margin
-	self.bindList:setSize( point( 640 ) - 2 * margin, height )
+	local margin = love.window.toPixels( 24 )
+	local height = love.window.toPixels( 348 ) - margin
+	self.bindList:setSize( love.window.toPixels( 640 ) - 2 * margin, height )
 	self.bindList:setPos( margin, margin )
 	self.bindList:readBinds()
 
-	local name      = "Keyboard Options"
+	local name = "Keyboard Options"
 	local groupName = name .. " Command Button Group"
-	local group     = gui.keyboardoptionscommandbuttongroup( self, groupName )
+	local group = gui.keyboardoptionscommandbuttongroup( self, groupName )
 
-	local buttonName       = name .. " Use Defaults Button"
+	local buttonName = name .. " Use Defaults Button"
 	self.useDefaultsButton = gui.commandbutton( group, buttonName, "Use Defaults" )
 	self.useDefaultsButton.onClick = function( commandbutton )
 		self.bindList:useDefaults()
 	end
-	buttonName                  = name .. " Advanced Button"
-	self.advancedButton         = gui.commandbutton( group, buttonName, "Advanced" )
+	buttonName = name .. " Advanced Button"
+	self.advancedButton = gui.commandbutton( group, buttonName, "Advanced" )
 	self.advancedButton.onClick = function( commandbutton )
 		if ( not self.advancedOptions ) then
 			self.advancedOptions = gui.keyboardoptionsadvancedframe( g_MainMenu )

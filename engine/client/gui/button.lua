@@ -12,8 +12,8 @@ button.canFocus = true
 
 function button:button( parent, name, text )
 	gui.panel.panel( self, parent, name )
-	self.width    = point( 216 )
-	self.height   = point( 46 )
+	self.width    = love.window.toPixels( 216 )
+	self.height   = love.window.toPixels( 46 )
 	self.text     = text or "Button"
 	self.disabled = false
 
@@ -76,7 +76,7 @@ function button:drawText()
 	local text = self:getText()
 	local x = self:getWidth() / 2 - font:getWidth( text ) / 2
 	local y = self:getHeight() / 2 - font:getHeight() / 2
-	graphics.print( text, x, y )
+	love.graphics.print( text, x, y )
 end
 
 accessor( button, "text" )

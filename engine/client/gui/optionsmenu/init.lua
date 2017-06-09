@@ -16,9 +16,9 @@ function optionsmenu:optionsmenu( parent )
 	local groupName = name .. " Command Button Group"
 	local group = gui.commandbuttongroup( self, groupName )
 
-	local buttonName  = nil
-	buttonName        = name .. " OK Button"
-	self.okButton     = gui.commandbutton( group, buttonName, "OK" )
+	local buttonName = nil
+	buttonName = name .. " OK Button"
+	self.okButton = gui.commandbutton( group, buttonName, "OK" )
 	self.okButton.onClick = function( commandbutton )
 		local panels = self:getTabPanels():getChildren()
 		for _, panel in ipairs( panels ) do
@@ -27,7 +27,7 @@ function optionsmenu:optionsmenu( parent )
 		convar.saveConfig()
 		self:close()
 	end
-	buttonName        = name .. " Cancel Button"
+	buttonName = name .. " Cancel Button"
 	self.cancelButton = gui.commandbutton( group, buttonName, "Cancel" )
 	self.cancelButton.onClick = function( commandbutton )
 		local panels = self:getTabPanels():getChildren()
@@ -36,8 +36,8 @@ function optionsmenu:optionsmenu( parent )
 		end
 		self:close()
 	end
-	buttonName        = name .. " Apply Button"
-	self.applyButton  = gui.commandbutton( group, buttonName, "Apply" )
+	buttonName = name .. " Apply Button"
+	self.applyButton = gui.commandbutton( group, buttonName, "Apply" )
 	self.applyButton.onClick = function( commandbutton )
 		local panels = self:getTabPanels():getChildren()
 		for _, panel in ipairs( panels ) do
@@ -69,15 +69,21 @@ function optionsmenu:invalidateLayout()
 	gui.tabbedframe.invalidateLayout( self )
 end
 
+local function restorePanel()
+	local mainmenu = g_MainMenu
+	if ( not mainmenu or not mainmenu.optionsMenu ) then
+		return
+	end
 
-
-if ( g_MainMenu and g_MainMenu.optionsMenu ) then
-	local visible = g_MainMenu.optionsMenu:isVisible()
-	g_MainMenu.optionsMenu:remove()
-	g_MainMenu.optionsMenu = nil
-	g_MainMenu.optionsMenu = gui.optionsmenu( g_MainMenu )
-	g_MainMenu.optionsMenu:moveToCenter()
+	local optionsMenu = mainmenu.optionsMenu
+	local visible = optionsMenu:isVisible()
+	optionsMenu:remove()
+	optionsMenu = gui.optionsmenu( mainmenu )
+	mainmenu.optionsMenu = optionsMenu
+	optionsMenu:moveToCenter()
 	if ( visible ) then
-		g_MainMenu.optionsMenu:activate()
+		optionsMenu:activate()
 	end
 end
+
+restorePanel()

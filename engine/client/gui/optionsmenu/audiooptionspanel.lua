@@ -8,15 +8,17 @@ class "gui.audiooptionspanel" ( "gui.frametabpanel" )
 
 local audiooptionspanel = gui.audiooptionspanel
 
-function audiooptionspanel:audiooptionspanel()
-	gui.frametabpanel.frametabpanel( self, nil, "Audio Options Panel" )
+function audiooptionspanel:audiooptionspanel( parent, name )
+	parent = parent or nil
+	name = name or "Audio Options Panel"
+	gui.frametabpanel.frametabpanel( self, parent, name )
 	local options = {}
 	self.options = options
 	local c = config.getConfig()
 
 	local name = "Master Volume"
 	local label = gui.label( self, name, name )
-	local margin = point( 36 )
+	local margin = love.window.toPixels( 36 )
 	local x = margin
 	local y = margin
 	label:setPos( x, y )
@@ -32,7 +34,7 @@ function audiooptionspanel:audiooptionspanel()
 		options.masterVolume = newValue
 		c.sound.volume = newValue
 	end
-	local marginBottom = point( 9 )
+	local marginBottom = love.window.toPixels( 9 )
 	y = y + label:getHeight() + marginBottom
 	masterVolume:setPos( x, y )
 

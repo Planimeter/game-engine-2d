@@ -8,11 +8,12 @@ class "gui.keyboardoptionsadvancedframe" ( "gui.frame" )
 
 local keyboardoptionsadvancedframe = gui.keyboardoptionsadvancedframe
 
-function keyboardoptionsadvancedframe:keyboardoptionsadvancedframe( parent )
-	local name = "Advanced Keyboard Options"
-	gui.frame.frame( self, parent, name .. " Frame", name )
-	self:setWidth( point( 480 ) )
-	self:setHeight( point( 147 ) )
+function keyboardoptionsadvancedframe:keyboardoptionsadvancedframe( parent, name, title )
+	name = name or "Advanced Keyboard Options Frame"
+	title = title or "Advanced Keyboard Options"
+	gui.frame.frame( self, parent, name, title )
+	self:setWidth( love.window.toPixels( 480 ) )
+	self:setHeight( love.window.toPixels( 147 ) )
 	self:setResizable( false )
 
 	name = "Developer Console"
@@ -22,7 +23,7 @@ function keyboardoptionsadvancedframe:keyboardoptionsadvancedframe( parent )
 		convar.setConvar( "con_enable", checked and "1" or "0" )
 	end
 
-	local margin = point( 36 )
-	local titleBarHeight = point( 86 )
+	local margin = love.window.toPixels( 36 )
+	local titleBarHeight = love.window.toPixels( 86 )
 	self.console:setPos( margin, titleBarHeight )
 end

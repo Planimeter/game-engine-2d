@@ -10,8 +10,8 @@ local progressbar = gui.progressbar
 
 function progressbar:progressbar( parent, name )
 	gui.panel.panel( self, parent, name )
-	self.width    = point( 216 )
-	self.height   = point( 2 )
+	self.width    = love.window.toPixels( 216 )
+	self.height   = love.window.toPixels( 2 )
 	self.min      = 0
 	self.max      = 1
 	self.value    = 0

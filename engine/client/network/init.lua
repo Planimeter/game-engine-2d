@@ -92,7 +92,9 @@ local timestep = 1/20
 _accumulator   = _accumulator or 0
 
 function update( dt )
-	if ( not _host ) then return end
+	if ( not _host ) then
+		return
+	end
 
 	-- _accumulator = _accumulator + dt
 

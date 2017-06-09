@@ -5,9 +5,7 @@
 --==========================================================================--
 
 require( "engine.client.bind" )
-require( "engine.client.graphics" )
 require( "engine.client.gui" )
-require( "engine.client.sound" )
 require( "engine.shared.network.payload" )
 
 local concommand = concommand
@@ -32,13 +30,13 @@ function connect( address )
 
 	require( "engine.client.network" )
 	engine.client.network.connect( address )
-	connecting = true
+	_connecting = true
 end
 
 function connectToListenServer()
 	require( "engine.client.network" )
 	engine.client.network.connectToListenServer()
-	connecting = true
+	_connecting = true
 end
 
 concommand( "connect", "Connects to a server",
@@ -53,15 +51,22 @@ concommand( "connect", "Connects to a server",
 )
 
 function disconnect()
-	if ( not isConnected() ) then return end
-	if ( engine.client.network ) then engine.client.network.disconnect() end
+	if ( not isConnected() ) then
+		return
+	end
 
-	connecting = false
-	connected  = false
+	if ( engine.client.network ) then
+		engine.client.network.disconnect()
+	end
+
+	_connecting = false
+	_connected  = false
 
 	_G.g_MainMenu:activate()
 
-	if ( _G.entities ) then _G.entities.shutdown() end
+	if ( _G.entities ) then
+		_G.entities.shutdown()
+	end
 
 	if ( _G.game and _G.game.client ) then
 		gui._viewportFramebuffer = nil
@@ -70,15 +75,17 @@ function disconnect()
 		_G.game.client = nil
 	end
 
-	if ( _G.region ) then _G.region.shutdown() end
+	if ( _G.region ) then
+		_G.region.shutdown()
+	end
 
-	if ( engine ) then
-		if ( engine.server ) then
-			engine.server.shutdown()
-			engine.server = nil
-		end
+	if ( engine.server ) then
+		engine.server.shutdown()
+		engine.server = nil
+	end
 
-		if ( _G._SERVER ) then _G._SERVER = nil end
+	if ( _G._SERVER ) then
+		_G._SERVER = nil
 	end
 end
 
@@ -93,8 +100,13 @@ function download( filename )
 end
 
 function initializeServer()
-	if ( _G._SERVER ) then return false end
-	if ( connecting ) then return false end
+	if ( _G._SERVER ) then
+		return false
+	end
+
+	if ( _connecting ) then
+		return false
+	end
 
 	_G._SERVER = true
 	local status, err = pcall( require, "engine.server" )
@@ -103,8 +115,8 @@ function initializeServer()
 			engine.server.network.onNetworkInitializedServer()
 		else
 			print( "Failed to initialize server!" )
-			connecting = false
-			connected  = false
+			_connecting = false
+			_connected  = false
 			disconnect()
 			_G._SERVER = nil
 			return false
@@ -118,25 +130,25 @@ function initializeServer()
 	return true
 end
 
-connected = false
+_connected = false
 
 function isConnected()
-	return connected or _G.engine.server ~= nil
+	return _connected or _G.engine.server ~= nil
 end
 
 function isDisconnecting()
-	return disconnecting
+	return _disconnecting
 end
 
 function isInGame()
 	return isConnected() and
 	       _G.game.client and
-	       _G.game.client.playerInitialized
+	       _G.game.client._playerInitialized
 end
 
 function onConnect( event )
-	connecting = false
-	connected  = true
+	_connecting = false
+	_connected  = true
 	print( "Connected to server!" )
 
 	_G.hook.call( "client", "onConnect", tostring( event.peer ) )
@@ -152,16 +164,16 @@ function onReceive( event )
 end
 
 function onDisconnect( event )
-	if ( connected ) then
-		disconnecting = true
+	if ( _connected ) then
+		_disconnecting = true
 		disconnect()
-		connected     = false
-		disconnecting = false
+		_connected     = false
+		_disconnecting = false
 		_G.hook.call( "client", "onDisconnect" )
 
 		print( "Disconnected from server." )
 	else
-		connecting = false
+		_connecting = false
 		print( "Failed to connect to server!" )
 	end
 

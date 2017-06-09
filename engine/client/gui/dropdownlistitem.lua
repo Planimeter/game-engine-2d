@@ -10,8 +10,8 @@ local dropdownlistitem = gui.dropdownlistitem
 
 function dropdownlistitem:dropdownlistitem( name, text )
 	gui.radiobutton.radiobutton( self, nil, name, text )
-	self.width  = point( 216 )
-	self.height = point( 46 )
+	self.width  = love.window.toPixels( 216 )
+	self.height = love.window.toPixels( 46 )
 	self.text   = text or "Drop-Down List Item"
 end
 
@@ -36,7 +36,7 @@ function dropdownlistitem:drawBackground()
 	love.graphics.setColor( self:getScheme( color ) )
 
 	local selected = self.mouseover or self:isSelected()
-	local offset   = selected and point( 1 ) or 0
+	local offset   = selected and love.window.toPixels( 1 ) or 0
 	love.graphics.rectangle( "fill", offset, 0, width - 2 * offset, height )
 
 	if ( selected ) then
@@ -49,7 +49,7 @@ function dropdownlistitem:drawBackground()
 end
 
 function dropdownlistitem:drawBorders( color )
-	local lineWidth = point( 1 )
+	local lineWidth = love.window.toPixels( 1 )
 	local width     = self:getWidth()
 	local height    = self:getHeight()
 	love.graphics.setColor( self:getScheme( color ) )
@@ -79,9 +79,9 @@ function dropdownlistitem:drawText()
 
 	local font = self:getScheme( "font" )
 	love.graphics.setFont( font )
-	local x = point( 18 )
+	local x = love.window.toPixels( 18 )
 	local y = self:getHeight() / 2 - font:getHeight() / 2
-	graphics.print( self:getText(), x, y )
+	love.graphics.print( self:getText(), x, y )
 end
 
 local function getParentFrame( self )

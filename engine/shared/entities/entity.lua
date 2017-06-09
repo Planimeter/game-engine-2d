@@ -85,8 +85,7 @@ if ( _CLIENT ) then
 							      )
 							local width  = bottomRightX - topLeftX
 							local height = topLeftY - bottomRightY
-							-- graphics.setOpacity( 0.14 )
-							love.graphics.setColor( color.white )
+							love.graphics.setColor( color( color.white, 255 * 0.14 ) )
 							love.graphics.setLineWidth( 1 )
 							love.graphics.line(
 								topLeftX,             topLeftY,
@@ -95,7 +94,6 @@ if ( _CLIENT ) then
 								topLeftX,         bottomRightY,
 								topLeftX,              topLeftY
 							)
-							-- graphics.setOpacity( 1 )
 						end
 					end
 				end
@@ -113,15 +111,12 @@ if ( _CLIENT ) then
 
 						-- Draw shadow
 						love.graphics.push()
-							-- graphics.setOpacity( 0.14 )
-							love.graphics.setColor( color.black )
-
+							love.graphics.setColor( color( color.black, 255 * 0.14 ) )
 							local sprite = v:getSprite()
 							local height = sprite:getHeight()
 							love.graphics.translate( sprite:getWidth() / 2, height )
 							love.graphics.scale( 1, -1 )
-								v:drawShadow()
-							-- graphics.setOpacity( 1 )
+							v:drawShadow()
 						love.graphics.pop()
 					love.graphics.pop()
 				end
@@ -134,7 +129,6 @@ if ( _CLIENT ) then
 				love.graphics.push()
 					local x, y = v:getDrawPosition()
 					love.graphics.translate( x, y )
-
 					love.graphics.setColor( color.white )
 					v:draw()
 				love.graphics.pop()
@@ -248,7 +242,7 @@ accessor( entity, "region" )
 
 if ( _CLIENT ) then
 	function entity:getSprite()
-		return self.sprite or graphics.error
+		return self.sprite or nil -- graphics.error
 	end
 end
 

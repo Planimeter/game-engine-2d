@@ -8,15 +8,56 @@ class "gui.videooptionspanel" ( "gui.frametabpanel" )
 
 local videooptionspanel = gui.videooptionspanel
 
-function videooptionspanel:videooptionspanel()
-	gui.frametabpanel.frametabpanel( self, nil, "Video Options Panel" )
+function videooptionspanel.getAspectRatios()
+	local modes = videooptionspanel.getFullscreenModes()
+	local r     = 1
+	for i, mode in ipairs( modes ) do
+		r = math.gcd( mode.width, mode.height )
+		mode.x = mode.width  / r
+		mode.y = mode.height / r
+		mode.width  = nil
+		mode.height = nil
+	end
+	table.sort( modes, function( a, b )
+		return a.x * a.y < b.x * b.y
+	end )
+	modes = table.unique( modes )
+	return modes
+end
+
+function videooptionspanel.getFullscreenModes( x, y )
+	local modes = love.window.getFullscreenModes()
+	for i = #modes, 1, -1 do
+		local mode = modes[ i ]
+		local w, h = mode.width, mode.height
+		if ( w >= 800 and h >= 600 ) then
+			local r  = math.gcd( w, h )
+			local mx = w / r
+			local my = h / r
+			if ( not ( mx == x and my == y ) ) then
+				table.remove( modes, i )
+			end
+		else
+			table.remove( modes, i )
+		end
+	end
+	table.sort( modes, function( a, b )
+		return a.width * a.height < b.width * b.height
+	end )
+	return modes
+end
+
+function videooptionspanel:videooptionspanel( parent, name )
+	parent = parent or nil
+	name = name or "Video Options Panel"
+	gui.frametabpanel.frametabpanel( self, parent, name )
 	local options = {}
 	self.options = options
 	local c = config.getConfig()
 
 	local name = "Aspect Ratio"
 	local label = gui.label( self, name, name )
-	local margin = point( 36 )
+	local margin = love.window.toPixels( 36 )
 	local x = margin
 	local y = margin
 	label:setPos( x, y )
@@ -29,7 +70,7 @@ function videooptionspanel:videooptionspanel()
 		options.aspectRatio = newValue
 		self:updateResolutions()
 	end
-	local marginBottom = point( 9 )
+	local marginBottom = love.window.toPixels( 9 )
 	y = y + label:getHeight() + marginBottom
 	aspectRatios:setPos( x, y )
 
@@ -139,7 +180,7 @@ function videooptionspanel:videooptionspanel()
 		options.borderless = checked
 		window.borderless = checked
 	end
-	y = y + 2 * fullscreen:getHeight() + point( 4 )
+	y = y + 2 * fullscreen:getHeight() + love.window.toPixels( 4 )
 	borderless:setPos( x, y )
 
 	name = "Vertical Synchronization"
@@ -151,7 +192,7 @@ function videooptionspanel:videooptionspanel()
 		options.vsync = checked
 		window.vsync = checked
 	end
-	y = y + 2 * borderless:getHeight() + point( 3 )
+	y = y + 2 * borderless:getHeight() + love.window.toPixels( 3 )
 	vsync:setPos( x, y )
 end
 
@@ -256,12 +297,12 @@ function videooptionspanel:updateAspectRatios()
 	local dropdownlistitem = nil
 	local name = "Aspect Ratio Drop-Down List Item"
 	local text = ""
-	local arx, ary = graphics.getAspectRatios()
+	local arx, ary = videooptionspanel.getAspectRatios()
 	for i, mode in ipairs( supportedAspectRatios ) do
-		local hasModes = #graphics.getFullscreenModes( mode.x, mode.y ) ~= 0
+		local hasModes = #videooptionspanel.getFullscreenModes( mode.x, mode.y ) ~= 0
 		-- HACKHACK: Include 683:384 when performing 16:9 lookups.
 		if ( mode.x == 16 and mode.y == 9 and not hasModes ) then
-			hasModes = #graphics.getFullscreenModes( 683, 384 ) ~= 0
+			hasModes = #videooptionspanel.getFullscreenModes( 683, 384 ) ~= 0
 		end
 
 		if ( hasModes ) then
@@ -295,10 +336,10 @@ function videooptionspanel:updateResolutions()
 	options.resolution = nil
 
 	local r = options.aspectRatio
-	local modes = graphics.getFullscreenModes( r.x, r.y )
+	local modes = videooptionspanel.getFullscreenModes( r.x, r.y )
 	-- HACKHACK: Include 683:384 when performing 16:9 lookups.
 	if ( r.x == 16 and r.y == 9 ) then
-		table.append( modes, graphics.getFullscreenModes( 683, 384 ) )
+		table.append( modes, videooptionspanel.getFullscreenModes( 683, 384 ) )
 		table.sort( modes, function( a, b )
 			return a.width * a.height < b.width * b.height
 		end )

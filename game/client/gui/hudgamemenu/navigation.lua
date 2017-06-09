@@ -38,7 +38,7 @@ function hudgamemenunavigation:draw()
 	gui.panel.draw( self )
 
 	local property  = "hudgamemenunavigation.backgroundColor"
-	local lineWidth = point( 1 )
+	local lineWidth = love.window.toPixels( 1 )
 	local width     = self:getWidth()
 	love.graphics.setColor( self:getScheme( property ) )
 	love.graphics.setLineWidth( lineWidth )
@@ -54,7 +54,7 @@ function hudgamemenunavigation:invalidateLayout()
 		local x = 0
 		for _, listItem in ipairs( listItems ) do
 			listItem:setX( x )
-			x = x + listItem:getWidth() + point( 18 )
+			x = x + listItem:getWidth() + love.window.toPixels( 18 )
 		end
 	end
 	gui.panel.invalidateLayout( self )

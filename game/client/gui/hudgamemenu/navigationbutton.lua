@@ -13,7 +13,7 @@ function hudgamemenunavigationbutton:hudgamemenunavigationbutton( parent, name )
 
 	local font = self:getScheme( "font" )
 	self:setWidth( font:getWidth( self:getText() ) )
-	self:setHeight( point( 45 ) )
+	self:setHeight( love.window.toPixels( 45 ) )
 	self:setValue( name )
 end
 
@@ -29,7 +29,7 @@ function hudgamemenunavigationbutton:drawBorder()
 	end
 
 	local property  = "hudgamemenunavigationbutton.borderColor"
-	local lineWidth = point( 1 )
+	local lineWidth = love.window.toPixels( 1 )
 	local width     = self:getWidth()
 	love.graphics.setColor( self:getScheme( property ) )
 	love.graphics.setLineWidth( lineWidth )
@@ -53,6 +53,6 @@ function hudgamemenunavigationbutton:drawLabel()
 	local font = self:getScheme( "font" )
 	love.graphics.setFont( font )
 	local x = 0
-	local y = self:getHeight() / 2 - font:getHeight() / 2 - point( 1 )
-	graphics.print( self.text, x, y )
+	local y = self:getHeight() / 2 - font:getHeight() / 2 - love.window.toPixels( 1 )
+	love.graphics.print( self.text, x, y )
 end

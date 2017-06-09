@@ -52,14 +52,20 @@ function hudchattextbox:hide()
 end
 
 function hudchattextbox:drawForeground()
-	local property = "textbox.outlineColor"
-	local width    = self:getWidth()
-	local height   = self:getHeight()
-	local color    = color( self:getScheme( property ) )
-	color[ 4 ]     = color[ 4 ] * self.borderOpacity
+	local width  = self:getWidth()
+	local height = self:getHeight()
+	local color  = color( self:getScheme( "textbox.outlineColor" ) )
+	color[ 4 ]   = color[ 4 ] * self.borderOpacity
 	love.graphics.setColor( color )
-	love.graphics.setLineWidth( 1 )
-	love.graphics.rectangle( "line", 0, 0, width, height )
+	local lineWidth = love.window.toPixels( 1 )
+	love.graphics.setLineWidth( lineWidth )
+	love.graphics.rectangle(
+		"line",
+		lineWidth / 2,
+		lineWidth / 2,
+		width  - lineWidth,
+		height - lineWidth
+	)
 end
 
 function hudchattextbox:getHideTime()
@@ -72,8 +78,8 @@ end
 
 function hudchattextbox:invalidateLayout()
 	local parent = self:getHudChat()
-	self:setWidth( parent:getWidth() - 2 * point( 36 ) )
-	self:setHeight( parent:getHeight() - point( 46 + 9 ) - 2 * point( 36 ) )
+	self:setWidth( parent:getWidth() - 2 * love.window.toPixels( 36 ) )
+	self:setHeight( parent:getHeight() - love.window.toPixels( 46 + 9 ) - 2 * love.window.toPixels( 36 ) )
 
 	gui.panel.invalidateLayout( self )
 end

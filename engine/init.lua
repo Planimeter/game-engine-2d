@@ -46,17 +46,45 @@ end
 -- Standard callback handlers
 for k in pairs( love.handlers ) do
 	love[ k ] = function( ... )
-		if ( not _CLIENT ) then return end
+		if ( not _CLIENT ) then
+			return
+		end
+
 		local v = engine.client[ k ]
-		if ( v ) then return v( ... ) end
+		if ( v ) then
+			return v( ... )
+		end
+	end
+end
+
+function love.focus( focus )
+	if ( focus ) then
+		local dt = love.timer.getDelta()
+		if ( _DEBUG ) then
+			package.update( dt )
+		end
+	end
+
+	if ( not _CLIENT ) then
+		return
+	end
+
+	local v = engine.client[ "focus" ]
+	if ( v ) then
+		return v( focus )
 	end
 end
 
 function love.load( arg )
 	math.randomseed( os.time() )
 
-	if ( _SERVER ) then engine.server.load( arg ) end
-	if ( _CLIENT ) then engine.client.load( arg ) end
+	if ( _SERVER ) then
+		engine.server.load( arg )
+	end
+
+	if ( _CLIENT ) then
+		engine.client.load( arg )
+	end
 
 	print( "Grid Engine" )
 
@@ -71,9 +99,17 @@ function love.quit()
 		return _G.g_MainMenu:quit()
 	end
 
-	if ( _CLIENT ) then engine.client.disconnect() end
-	if ( _SERVER ) then engine.server.quit() end
-	if ( _CLIENT ) then engine.client.quit() end
+	if ( _CLIENT ) then
+		engine.client.disconnect()
+	end
+
+	if ( _SERVER ) then
+		engine.server.quit()
+	end
+
+	if ( _CLIENT ) then
+		engine.client.quit()
+	end
 
 	love.event.quit()
 end
@@ -87,8 +123,6 @@ local timestep    = 1/33
 local accumulator = 0
 
 function love.update( dt )
-	if ( _DEBUG ) then package.update( dt ) end
-
 	accumulator = accumulator + dt
 
 	while ( accumulator >= timestep ) do
@@ -103,11 +137,18 @@ function love.update( dt )
 			end
 		end
 
-		if ( _SERVER ) then engine.server.update( timestep ) end
-		if ( _CLIENT ) then engine.client.update( timestep ) end
+		if ( _SERVER ) then
+			engine.server.update( timestep )
+		end
+
+		if ( _CLIENT ) then
+			engine.client.update( timestep )
+		end
 
 		accumulator = accumulator - timestep
 	end
 
-	if ( _CLIENT ) then gui.update( dt ) end
+	if ( _CLIENT ) then
+		gui.update( dt )
+	end
 end

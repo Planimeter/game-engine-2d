@@ -6,15 +6,6 @@
 
 require( "engine.shared.concommand" )
 
-if ( not rawdofile ) then
-	rawdofile = dofile
-
-	function dofile( filename )
-		local f = assert( love.filesystem.load( filename ) )
-		return f()
-	end
-end
-
 function accessor( class, member, key )
 	if ( type( class ) ~= "table" ) then
 		typerror( 1, "table", class )
@@ -26,6 +17,15 @@ function accessor( class, member, key )
 
 	class[ "get" .. string.capitalize( member ) ] = function( self )
 		return self[ key or member ]
+	end
+end
+
+if ( not rawdofile ) then
+	rawdofile = dofile
+
+	function dofile( filename )
+		local f = assert( love.filesystem.load( filename ) )
+		return f()
 	end
 end
 

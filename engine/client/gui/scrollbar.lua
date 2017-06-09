@@ -10,7 +10,7 @@ local scrollbar = gui.scrollbar
 
 function scrollbar:scrollbar( parent, name )
 	gui.panel.panel( self, parent, name )
-	self.width       = point( 4 )
+	self.width       = love.window.toPixels( 4 )
 	self.height      = parent:getHeight()
 	self.disabled    = false
 	self.min         = 0

@@ -11,11 +11,13 @@ local function onReceivePlayerInitialized( payload )
 
 	require( "engine.client.camera" )
 	camera.setParentEntity( localplayer )
-	camera.setZoom( point( 2 ) )
+	camera.setZoom( love.window.toPixels( 2 ) )
 
-	if ( not _SERVER ) then localplayer:initialSpawn() end
+	if ( not _SERVER ) then
+		localplayer:initialSpawn()
+	end
 
-	game.client.playerInitialized = true
+	game.client._playerInitialized = true
 end
 
 payload.setHandler( onReceivePlayerInitialized, "playerInitialized" )

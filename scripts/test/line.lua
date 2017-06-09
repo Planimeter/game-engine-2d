@@ -11,7 +11,7 @@ function frame:draw()
 	gui.frame.draw( self )
 
 	love.graphics.setColor( color.red )
-	local lineWidth = point( 2 )
+	local lineWidth = love.window.toPixels( 2 )
 	love.graphics.setLineWidth( lineWidth )
 
 	-- Horizontal Line

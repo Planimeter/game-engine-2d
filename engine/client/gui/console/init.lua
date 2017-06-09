@@ -16,7 +16,9 @@ function console.print( ... )
 	for i = 1, select( "#", ... ) do
 		args[ i ] = tostring( args[ i ] )
 	end
-	_G.g_Console.output:insertText( table.concat( args, "\t" ) .. "\n" )
+	local output = g_Console.output
+	local text   = table.concat( args, "\t" ) .. "\n"
+	output:insertText( text )
 end
 
 local function doConCommand( command, argString, argTable )
@@ -25,9 +27,9 @@ end
 
 local function doConVar( command, argString )
 	if ( argString ~= "" ) then
-		if ( string.utf8sub( argString,  1,  1 ) == "\"" and
-			 string.utf8sub( argString, -1, -1 ) == "\"" ) then
-			argString = string.utf8sub( argString, 2, -2 )
+		local quoted = string.match( argString, "^\"(.-)\"$" )
+		if ( quoted ) then
+			argString = quoted
 		end
 		convar.setConvar( command, argString )
 	else
@@ -44,7 +46,8 @@ local function doConVar( command, argString )
 end
 
 local function doCommand( self, input )
-	self.input:setText( "" )
+	local textbox = self.input
+	textbox:setText( "" )
 	print( "] " .. input )
 
 	local command = string.match( input, "^([^%s]+)" )
@@ -65,32 +68,36 @@ local function doCommand( self, input )
 	end
 end
 
-console.commandHistory = console.commandHistory or {}
+console._commandHistory = console._commandHistory or {}
 
 local function autocomplete( text )
 	if ( text == "" ) then
 		return nil
 	end
 
+	local history     = console._commandHistory
 	local suggestions = {}
 
 	for command in pairs( concommand._concommands ) do
-		if ( string.find( command, text, 1, true ) == 1 and
-		     not table.hasvalue( gui.console.commandHistory, command ) ) then
+		local match       = string.find( command, text, 1, true ) == 1
+		local isInHistory = table.hasvalue( history, command )
+		if ( match and not isInHistory ) then
 			table.insert( suggestions, command .. " " )
 		end
 	end
 
 	for command, convar in pairs( convar._convars ) do
-		if ( string.find( command, text, 1, true ) == 1 ) then
+		local match = string.find( command, text, 1, true ) == 1
+		if ( match ) then
 			table.insert( suggestions, command .. " " .. convar:getValue() )
 		end
 	end
 
 	table.sort( suggestions )
 
-	for i, history in ipairs( gui.console.commandHistory ) do
-		if ( string.find( history, text, 1, true ) == 1 ) then
+	for _, history in ipairs( history ) do
+		local match = string.find( history, text, 1, true ) == 1
+		if ( match ) then
 			table.insert( suggestions, 1, history )
 		end
 	end
@@ -99,18 +106,19 @@ local function autocomplete( text )
 	local command = concommand.getConcommand( name )
 	local shouldAutocomplete = string.find( text, name .. " ", 1, true )
 	if ( command and shouldAutocomplete ) then
-		local _, endPos = string.find( text, name, 1, true )
-		local argS = string.trim( string.utf8sub( text, endPos + 1 ) )
-		local argT = string.parseargs( argS )
+		local _, endPos    = string.find( text, name, 1, true )
+		local argS         = string.trim( string.utf8sub( text, endPos + 1 ) )
+		local argT         = string.parseargs( argS )
 		local autocomplete = command:getAutocomplete( argS, argT )
 		if ( autocomplete ) then
-			local t = autocomplete( argS, argTable )
+			local t = autocomplete( argS, argT )
 			if ( t ) then
 				table.prepend( suggestions, t )
 			end
 		end
 	end
 
+	suggestions = table.unique( suggestions )
 	return #suggestions > 0 and suggestions or nil
 end
 
@@ -121,10 +129,10 @@ local keypressed = function( itemGroup, key, isrepeat )
 
 	-- BUGBUG: We never get here anymore due to the introduction of
 	-- cascadeInputToChildren.
-	local commandHistory = gui.console.commandHistory
-	for i, history in ipairs( commandHistory ) do
-		if ( itemGroup:getValue() == history ) then
-			table.remove( commandHistory, i )
+	local history = console._commandHistory
+	for i, v in ipairs( history ) do
+		if ( itemGroup:getValue() == v ) then
+			table.remove( history, i )
 			local item = itemGroup:getSelectedItem()
 			itemGroup:removeItem( item )
 			return
@@ -132,28 +140,34 @@ local keypressed = function( itemGroup, key, isrepeat )
 	end
 end
 
-function console:console()
-	local name = "Console"
-	gui.frame.frame( self, g_MainMenu or g_RootPanel, name, "Console" )
-	self.width     = point( 661 )
-	self.minHeight = point( 178 )
+function console:console( parent, name, title )
+	parent = parent or g_MainMenu
+	name   = name or "Console"
+	title  = title or name
+	gui.frame.frame( self, parent, name, title )
+	self.width     = love.window.toPixels( 661 )
+	self.minHeight = love.window.toPixels( 178 )
 
-	self.output = gui.console.textbox( self, name .. " Output Text Box", "" )
+	self.output = console.textbox( self, name .. " Output Text Box", "" )
 	self.input  = gui.textbox( self, name .. " Input Text Box", "" )
 	self.input.onEnter = function( textbox, text )
 		text = string.trim( text )
 		doCommand( self, text )
 
-		local commandHistory = gui.console.commandHistory
-		if ( not table.hasvalue( commandHistory, text ) and text ~= "" ) then
-			table.insert( commandHistory, text )
+		if ( text == "" ) then
+			return
+		end
+
+		local history = console._commandHistory
+		if ( not table.hasvalue( history, text ) ) then
+			table.insert( history, text )
 		end
 	end
 
 	local input = self.input
 	input:setAutocomplete( autocomplete )
 	name = name .. " Autocomplete Item Group"
-	local autocompleteItemGroup = gui.console.textboxautocompleteitemgroup
+	local autocompleteItemGroup = console.textboxautocompleteitemgroup
 	input.autocompleteItemGroup = autocompleteItemGroup( self.input, name )
 	input.autocompleteItemGroup.keypressed = keypressed
 
@@ -167,21 +181,28 @@ function console:activate()
 end
 
 function console:invalidateLayout()
+	local parent = self:getParent()
+	local margin = gui.scale( 36 )
 	local width  = self:getWidth()
 	local height = self:getHeight()
-	local margin = gui.scale( 36 )
+	local x      = parent:getWidth() - margin - width
+	local y      = margin
 	if ( not self:isResizing() ) then
-		local parent = self:getParent()
-		self:setPos( parent:getWidth() - width - margin, margin )
+		self:setPos( x, y )
 	end
 
-	margin = point( 36 )
-	local titleBarHeight = point( 86 )
-	self.output:setPos( margin, titleBarHeight )
-	self.output:setWidth( width - 2 * margin )
+	local output = self.output
+	margin       = love.window.toPixels( 36 )
+	x            = margin
+	y            = love.window.toPixels( 86 ) -- Title Bar Height
+	width        = width - 2 * margin
+	output:setPos( x, y )
+	output:setWidth( width )
 
-	self.input:setPos( margin, height - self.input:getHeight() - margin )
-	self.input:setWidth( width - 2 * margin )
+	local input  = self.input
+	y            = height - margin - input:getHeight()
+	input:setPos( x, y )
+	input:setWidth( width )
 
 	gui.frame.invalidateLayout( self )
 end
@@ -192,29 +213,22 @@ local con_enable = convar( "con_enable", "0", nil, nil,
                            "Allows the console to be activated" )
 
 concommand( "toggleconsole", "Show/hide the console", function()
-	local mainmenu = g_MainMenu
-	local console  = _G.g_Console
-	if ( not mainmenu:isVisible() and
-	         console:isVisible()  and
-	         con_enable:getBoolean() ) then
-		mainmenu:activate()
-		console:activate()
+	local console = g_Console
+	if ( console:isVisible() ) then
+		console:close()
 		return
 	end
 
-	if ( console:isVisible() ) then
-		console:close()
-	else
-		if ( not con_enable:getBoolean() ) then
-			return
-		end
-
-		if ( not mainmenu:isVisible() ) then
-			mainmenu:activate()
-		end
-
-		console:activate()
+	if ( not con_enable:getBoolean() ) then
+		return
 	end
+
+	local mainmenu = g_MainMenu
+	if ( not mainmenu:isVisible() ) then
+		mainmenu:activate()
+	end
+
+	console:activate()
 end )
 
 concommand( "clear", "Clears the console", function()
@@ -225,8 +239,9 @@ concommand( "clear", "Clears the console", function()
 		os.execute( "clear" )
 	end
 
-	if ( _G.g_Console ) then
-		_G.g_Console.output:setText( "" )
+	if ( g_Console ) then
+		local output = g_Console.output
+		output:setText( "" )
 	end
 end )
 
@@ -255,14 +270,23 @@ concommand( "help", "Prints help info for the console command or variable",
 	end
 )
 
-if ( _G.g_Console ) then
-	local visible = _G.g_Console:isVisible()
-	local output  = _G.g_Console.output:getText()
-	_G.g_Console:remove()
-	_G.g_Console = nil
-	_G.g_Console = gui.console()
-	_G.g_Console.output:setText( output )
+local function restorePanel()
+	local console = g_Console
+	if ( not console ) then
+		return
+	end
+
+	local visible = console:isVisible()
+	local output  = console.output
+	local text    = output:getText()
+	console:remove()
+	console   = gui.console( g_MainMenu )
+	g_Console = console
+	output    = console.output
+	output:setText( text )
 	if ( visible ) then
-		_G.g_Console:activate()
+		console:activate()
 	end
 end
+
+restorePanel()

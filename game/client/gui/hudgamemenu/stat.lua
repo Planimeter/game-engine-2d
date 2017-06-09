@@ -10,14 +10,14 @@ local hudgamemenustat = gui.hudgamemenustat
 
 function hudgamemenustat:hudgamemenustat( parent, name, stat )
 	gui.panel.panel( self, parent, name )
-	self.width        = point( 312 )
-	self.height       = point( 42 )
+	self.width        = love.window.toPixels( 312 )
+	self.height       = love.window.toPixels( 42 )
 	self.stat         = stat
 
 	self:setScheme( "Default" )
 
 	local progressbar = gui.progressbar( self, "Stat Progress" )
-	progressbar:setY( point( 23 ) )
+	progressbar:setY( love.window.toPixels( 23 ) )
 	self.progressbar  = progressbar
 
 	self:addStatHook()
@@ -50,7 +50,7 @@ function hudgamemenustat:draw()
 	local stat     = self:getStat()
 	love.graphics.setColor( self:getScheme( property ) )
 	love.graphics.setFont( font )
-	graphics.print( string.capitalize( stat ), 0, 0 )
+	love.graphics.print( string.capitalize( stat ), 0, 0 )
 
 	property    = "colors.gold"
 	font        = self:getScheme( "fontBold" )
@@ -59,7 +59,7 @@ function hudgamemenustat:draw()
 	local x     = self:getWidth() - font:getWidth( label )
 	love.graphics.setColor( self:getScheme( property ) )
 	love.graphics.setFont( font )
-	graphics.print( label, x, 0 )
+	love.graphics.print( label, x, 0 )
 
 	property        = "label.textColor"
 	font            = self:getScheme( "fontSmall" )
@@ -69,7 +69,7 @@ function hudgamemenustat:draw()
 	x               = self:getWidth() - font:getWidth( label )
 	love.graphics.setColor( self:getScheme( property ) )
 	love.graphics.setFont( font )
-	graphics.print( label, x, point( 30 ) )
+	love.graphics.print( label, x, love.window.toPixels( 30 ) )
 
 	gui.panel.draw( self )
 end

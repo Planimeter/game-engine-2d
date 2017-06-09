@@ -8,15 +8,15 @@ class "gui.throbber" ( "gui.imagepanel" )
 
 function throbber:throbber( parent, name, image )
 	gui.imagepanel.imagepanel( self, parent, name, image or "images/gui/throbber.png" )
-	self:setSize( point( 16 ), point( 16 ) )
+	self:setSize( love.window.toPixels( 16 ), love.window.toPixels( 16 ) )
 	self:setOpacity( 0 )
 end
 
 local missingImage = false
 
 function throbber:draw()
-	gui.imagepanel.maskedImage = self
-	love.graphics.stencil( gui.imagepanel.drawMask )
+	gui.panel._maskedPanel = self
+	love.graphics.stencil( gui.panel.drawMask )
 	love.graphics.setStencilTest( "greater", 0 )
 		love.graphics.setColor( self:getColor() )
 		local image  = self:getImage()
@@ -34,7 +34,7 @@ function throbber:draw()
 		)
 	love.graphics.setStencilTest()
 
-	missingImage = image == graphics.error
+	missingImage = image == nil
 	if ( missingImage ) then
 		self:drawMissingImage()
 	end
@@ -67,5 +67,3 @@ function throbber:update( dt )
 		self:setOpacity( math.max( opacity - dt * ( 1 / 0.4 ), 0 ) )
 	end
 end
-
-

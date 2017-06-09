@@ -8,8 +8,8 @@ class "gui.itembutton" ( "gui.button" )
 
 function itembutton:itembutton( parent, item )
 	gui.button.button( self, parent )
-	self.width  = point( 44 )
-	self.height = point( 44 )
+	self.width  = love.window.toPixels( 44 )
+	self.height = love.window.toPixels( 44 )
 
 	self:setScheme( "Default" )
 	self:setItem( item )
@@ -31,7 +31,7 @@ function itembutton:drawIcon()
 	love.graphics.setColor( color.white )
 	local icon = self:getIcon()
 	love.graphics.push()
-		local scale  = point( 2 )
+		local scale  = love.window.toPixels( 2 )
 		local width  = icon:getWidth()
 		local height = icon:getHeight()
 		love.graphics.translate(
@@ -64,8 +64,8 @@ function itembutton:drawCount()
 
 	local font = self:getScheme( "itemCountFont" )
 	love.graphics.setFont( font )
-	local x = self:getWidth() - font:getWidth( self:getCount() ) - point( 4 )
-	graphics.print( self:getCount(), x, 0 )
+	local x = self:getWidth() - font:getWidth( self:getCount() ) - love.window.toPixels( 4 )
+	love.graphics.print( self:getCount(), x, 0 )
 end
 
 function itembutton:getCount()
@@ -96,5 +96,3 @@ function itembutton:setItem( item )
 		self.icon  = love.graphics.newImage( item.data.image )
 	end
 end
-
-

@@ -8,9 +8,9 @@ local _G = _G
 
 module( "debugoverlay" )
 
-function rectangle( x, y, width, height, color, duration )
+function rectangle( worldIndex, x, y, width, height, color, duration )
 	local g_DebugOverlay = _G.g_DebugOverlay
 	if ( g_DebugOverlay ) then
-		g_DebugOverlay:rectangle( x, y, width, height, color, duration )
+		g_DebugOverlay:rectangle( worldIndex, x, y, width, height, color, duration )
 	end
 end

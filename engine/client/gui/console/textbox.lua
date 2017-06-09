@@ -17,7 +17,7 @@ function textbox:textbox( parent, name )
 end
 
 function textbox:draw()
-	if ( self:getHeight() == point( 1 ) ) then
+	if ( self:getHeight() == love.window.toPixels( 1 ) ) then
 		return
 	end
 
@@ -32,10 +32,10 @@ end
 
 function textbox:invalidateLayout()
 	local parent         = self:getParent()
-	local margin         = point( 36 )
-	local titleBarHeight = point( 86 )
-	local textboxHeight  = point( 46 )
-	local marginBottom   = point( 9 )
+	local margin         = love.window.toPixels( 36 )
+	local titleBarHeight = love.window.toPixels( 86 )
+	local textboxHeight  = love.window.toPixels( 46 )
+	local marginBottom   = love.window.toPixels( 9 )
 	self:setWidth( parent:getWidth() - 2 * margin )
 	self:setHeight(
 		parent:getHeight() -

@@ -18,7 +18,9 @@ module( "gui" )
 setmetatable( _M, {
 	__index = function( t, k )
 		local privateMember = string.sub( k, 1, 1 ) == "_"
-		if ( privateMember ) then return end
+		if ( privateMember ) then
+			return
+		end
 
 		for _, module in ipairs( {
 			"game.client",
@@ -38,6 +40,8 @@ setmetatable( _M, {
 		end
 
 		local v = rawget( t, k )
-		if ( v ~= nil ) then return v end
+		if ( v ~= nil ) then
+			return v
+		end
 	end
 } )

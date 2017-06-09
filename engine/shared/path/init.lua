@@ -21,7 +21,7 @@ local _G       = _G
 
 module( "path" )
 
-local _directions = 4
+local _directions = 8
 
 function getDirections()
 	return _directions
@@ -37,9 +37,11 @@ local r_draw_path = convar( "r_draw_path", "0", nil, nil,
                             "Draws pathfinding" )
 
 local function drawPath( node, c )
+	local region = region.getAtPosition( node )
 	local tileSize = _G.game.tileSize
 	require( "engine.client.debugoverlay" )
 	_G.debugoverlay.rectangle(
+		region:getWorldIndex(),
 		node.x,
 		node.y - tileSize,
 		tileSize,
