@@ -3,7 +3,6 @@ aside p,
 aside li {
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .list-unstyled {
