@@ -9,6 +9,10 @@ aside li {
   width: 100%;
 }
 
+img {
+  max-width: 100%;
+}
+
 hr {
   border-bottom: 0;
   border-color: rgba(240, 246, 248, .07);
