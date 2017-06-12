@@ -1,16 +1,11 @@
-aside,
-aside p,
-aside li {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 .list-unstyled {
   list-style-type: none;
   padding-left: 0;
 }
 
 aside li {
+  overflow: hidden;
+  text-overflow: ellipsis;
   width: 100%;
 }
 
