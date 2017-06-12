@@ -9,6 +9,12 @@ aside {
   padding-left: 0;
 }
 
+aside li {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
 hr {
   border-bottom: 0;
   border-color: rgba(240, 246, 248, .07);
