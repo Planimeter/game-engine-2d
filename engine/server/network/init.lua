@@ -15,6 +15,7 @@ local host_max_players = convar( "host_maxplayers", 1000, 0, 1000,
                                  "Host game server max number of players" )
 
 local collectgarbage = collectgarbage
+local engine         = engine
 local print          = print
 local type           = type
 local _G             = _G
@@ -29,12 +30,11 @@ function broadcast( data, channel, flag )
 end
 
 function initializeServer()
-	local host_ip          = host_ip:getValue()
-	local host_port        = host_port:getNumber()
-	local host_address     = host_ip ~= "" and host_ip .. ":" .. host_port or
-	                         "*:" .. host_port
-	local host_max_players = host_max_players:getNumber()
-	_host = _G.host( host_address, host_max_players, 1000 )
+	local ip          = host_ip:getValue()
+	local port        = host_port:getNumber()
+	local address     = ip ~= "" and ip .. ":" .. port or "*:" .. port
+	local max_players = host_max_players:getNumber()
+	_host = _G.host( address, max_players, 1000 )
 	if ( not _host:isValid() ) then
 		_host = nil
 		return false
@@ -46,20 +46,21 @@ end
 
 function onNetworkInitializedServer()
 	if ( _host ) then
-		local host_ip          = host_ip:getValue()
-		local host_port        = host_port:getNumber()
-		local host_address     = host_ip ~= "" and host_ip .. ":" .. host_port or
-		                         "*:" .. host_port
-		local host_max_players = host_max_players:getNumber()
-		print( "Server initialized at " .. host_address .. " for " ..
-		       host_max_players .. " players..." )
+		local ip          = host_ip:getValue()
+		local port        = host_port:getNumber()
+		local address     = ip ~= "" and ip .. ":" .. port or "*:" .. port
+		local max_players = host_max_players:getNumber()
+		print( "Server initialized at " .. address .. " for " ..
+		       max_players .. " players..." )
 	else
 		print( "Failed to initialize server!" )
 	end
 end
 
 function shutdownServer()
-	if ( not _host ) then return end
+	if ( not _host ) then
+		return
+	end
 
 	print( "Server shutting down..." )
 	local peerCount = g_localhost_enet_peer and _host:peer_count() - 1 or
@@ -78,7 +79,9 @@ local timestep = 1/20
 _accumulator   = _accumulator or 0
 
 function update( dt )
-	if ( not _host ) then return end
+	if ( not _host ) then
+		return
+	end
 
 	-- _accumulator = _accumulator + dt
 

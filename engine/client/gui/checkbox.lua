@@ -80,8 +80,8 @@ function checkbox:drawLabel()
 	love.graphics.setFont( font )
 	local height = self:getHeight()
 	local marginLeft = love.window.toPixels( 9 )
-	local x = height + marginLeft
-	local y = height / 2 - font:getHeight() / 2
+	local x = math.round( height + marginLeft )
+	local y = math.round( height / 2 - font:getHeight() / 2 )
 	love.graphics.print( self:getText(), x, y )
 end
 

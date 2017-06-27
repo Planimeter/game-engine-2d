@@ -103,6 +103,10 @@ local function autocomplete( text )
 	end
 
 	local name = string.match( text, "^([^%s]+)" )
+	if ( not name ) then
+		return
+	end
+
 	local command = concommand.getConcommand( name )
 	local shouldAutocomplete = string.find( text, name .. " ", 1, true )
 	if ( command and shouldAutocomplete ) then
@@ -206,8 +210,6 @@ function console:invalidateLayout()
 
 	gui.frame.invalidateLayout( self )
 end
-
-
 
 local con_enable = convar( "con_enable", "0", nil, nil,
                            "Allows the console to be activated" )

@@ -115,8 +115,8 @@ function frame:drawTitle()
 	local font = self:getScheme( "titleFont" )
 	love.graphics.setFont( font )
 	local margin = love.window.toPixels( 36 )
-	local x = margin
-	local y = margin - love.window.toPixels( 4 )
+	local x = math.round( margin )
+	local y = math.round( margin - love.window.toPixels( 4 ) )
 	love.graphics.print( string.utf8upper( self:getTitle() ), x, y )
 end
 

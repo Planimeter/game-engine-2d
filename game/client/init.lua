@@ -74,9 +74,6 @@ function quit()
 	_G.g_DebugOverlay = nil
 	_G.g_Viewport:remove()
 	_G.g_Viewport = nil
-
-	unrequire( "game.client" )
-	game.client = nil
 end
 
 shutdown = quit

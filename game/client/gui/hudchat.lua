@@ -103,8 +103,8 @@ function hudchat:keypressed( key, scancode, isrepeat )
 end
 
 function hudchat:invalidateLayout()
-	self.width  = math.round( gui.scale( 720 ) )
-	self.height = math.round( gui.scale( 404 ) )
+	self.width = gui.scale( 720 )
+	self.height = gui.scale( 404 )
 	self:setPos(
 		gui.scale( 96 ) - love.window.toPixels( 36 ) - love.window.toPixels( 18 ),
 		gui.scale( 494 )

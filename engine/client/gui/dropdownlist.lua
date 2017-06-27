@@ -90,8 +90,8 @@ function dropdownlist:drawText()
 	love.graphics.setFont( font )
 	local item = self:getListItemGroup():getSelectedItem()
 	local text = item and item:getText() or ""
-	local x = love.window.toPixels( 18 )
-	local y = self:getHeight() / 2 - font:getHeight() / 2
+	local x = math.round( love.window.toPixels( 18 ) )
+	local y = math.round( self:getHeight() / 2 - font:getHeight() / 2 )
 	love.graphics.print( text, x, y )
 end
 

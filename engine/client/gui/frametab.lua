@@ -51,6 +51,8 @@ function frametab:drawBackground()
 	local lineWidth = love.window.toPixels( 1 )
 	if ( selected ) then
 		love.graphics.setColor( self:getScheme( "frametab.backgroundColor" ) )
+		love.graphics.setLineStyle( "rough" )
+		love.graphics.setLineWidth( lineWidth )
 		love.graphics.line(
 			width - lineWidth / 2, 0,     -- Top-left
 			width - lineWidth / 2, height -- Bottom-left
@@ -59,6 +61,8 @@ function frametab:drawBackground()
 
 	selected = self:isSelected()
 	love.graphics.setColor( self:getScheme( "frametab.outlineColor" ) )
+	love.graphics.setLineStyle( "rough" )
+	love.graphics.setLineWidth( lineWidth )
 	love.graphics.line(
 		width - lineWidth / 2, 0,
 		width - lineWidth / 2, height - ( selected and 0 or love.window.toPixels( 1 ) )

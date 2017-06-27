@@ -30,10 +30,10 @@ function button:draw()
 
 	local font = self:getScheme( "mainmenuFont" )
 	love.graphics.setFont( font )
-	local x =   self:getWidth()        / 2 - font:getWidth( self.text ) / 2
-	local y = ( self:getHeight() - 1 ) / 2 - font:getHeight()           / 2 - 1
+	local x = math.round(   self:getWidth()        / 2 - font:getWidth( self.text ) / 2 )
+	local y = math.round( ( self:getHeight() - 1 ) / 2 - font:getHeight()           / 2 - 1 )
 	love.graphics.setColor( self:getScheme( textColor ) )
-	love.graphics.print( ( self.text ), 0, y )
+	love.graphics.print( self.text, 0, y )
 
 	gui.panel.draw( self )
 end

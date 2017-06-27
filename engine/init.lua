@@ -10,6 +10,7 @@ require( "engine.shared.strlib" )
 require( "engine.shared.mathlib" )
 
 if ( _CLIENT ) then
+	require( "engine.client.graphics" )
 	require( "engine.client.gui" )
 end
 
@@ -62,6 +63,10 @@ function love.focus( focus )
 		local dt = love.timer.getDelta()
 		if ( _DEBUG ) then
 			package.update( dt )
+
+			if ( _G.sound ) then
+				_G.sound.update( dt )
+			end
 		end
 	end
 

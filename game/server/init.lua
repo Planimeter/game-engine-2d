@@ -36,8 +36,6 @@ function onPlayerSay( player, message )
 end
 
 function quit()
-	unrequire( "game.server" )
-	game.server = nil
 end
 
 shutdown = quit

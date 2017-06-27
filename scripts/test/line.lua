@@ -12,6 +12,7 @@ function frame:draw()
 
 	love.graphics.setColor( color.red )
 	local lineWidth = love.window.toPixels( 2 )
+	love.graphics.setLineStyle( "rough" )
 	love.graphics.setLineWidth( lineWidth )
 
 	-- Horizontal Line

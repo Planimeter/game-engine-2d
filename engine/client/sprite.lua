@@ -14,10 +14,10 @@ function sprite:sprite( spriteSheet )
 	self.height      = data[ "height" ]
 	self.frametime   = data[ "frametime" ]
 	self.animations  = data[ "animations" ] or {}
-	self.events      = data[ "events" ] or {}
+	self.events      = data[ "events" ]     or {}
 
-	self.curtime = 0
-	self.frame   = 0
+	self.curtime     = 0
+	self.frame       = 0
 end
 
 function sprite:draw()
@@ -60,8 +60,13 @@ function sprite:setAnimation( animation )
 	local animations = self:getAnimations()
 	local name = animation
 	animation  = animations[ name ]
-	if ( not animation ) then return end
-	if ( animation == self:getAnimation() ) then return end
+	if ( not animation ) then
+		return
+	end
+
+	if ( animation == self:getAnimation() ) then
+		return
+	end
 
 	self.animation     = animation
 	self.animationName = name
@@ -72,7 +77,9 @@ end
 
 function sprite:update( dt )
 	local animation = self:getAnimation()
-	if ( not animation ) then return end
+	if ( not animation ) then
+		return
+	end
 
 	self.curtime = self.curtime + dt
 
@@ -103,7 +110,9 @@ function sprite:updateFrame()
 
 	local events = self:getEvents()
 	local event  = events[ frame ]
-	if ( event ) then self:onAnimationEvent( event ) end
+	if ( event ) then
+		self:onAnimationEvent( event )
+	end
 end
 
 function sprite:__tostring()

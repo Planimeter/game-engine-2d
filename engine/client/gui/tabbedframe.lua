@@ -86,6 +86,7 @@ function tabbedframe:drawBackground()
 	-- Title Bar Inner Shadow
 	color = "frametab.outlineColor"
 	love.graphics.setColor( self:getScheme( color ) )
+	love.graphics.setLineStyle( "rough" )
 	local lineWidth = toPixels( 1 )
 	love.graphics.setLineWidth( lineWidth )
 	local y = titleBarHeight - lineWidth / 2
@@ -123,8 +124,8 @@ function tabbedframe:drawTitle()
 	local font = self:getScheme( "titleFont" )
 	love.graphics.setFont( font )
 	local margin = toPixels( 24 )
-	local x = margin
-	local y = margin - toPixels( 4 )
+	local x = math.round( margin )
+	local y = math.round( margin - toPixels( 4 ) )
 	love.graphics.print( utf8upper( self:getTitle() ), x, y )
 end
 

@@ -171,18 +171,6 @@ function videooptionspanel:videooptionspanel( parent, name )
 	y = margin + label:getHeight() + marginBottom
 	fullscreen:setPos( x, y )
 
-	name = "Borderless Window"
-	local borderless = gui.checkbox( self, name, name )
-	self.borderless = borderless
-	options.borderless = window.borderless
-	borderless:setChecked( window.borderless )
-	borderless.onCheckedChanged = function( checkbox, checked )
-		options.borderless = checked
-		window.borderless = checked
-	end
-	y = y + 2 * fullscreen:getHeight() + love.window.toPixels( 4 )
-	borderless:setPos( x, y )
-
 	name = "Vertical Synchronization"
 	local vsync = gui.checkbox( self, name, name )
 	self.vsync = vsync
@@ -192,8 +180,20 @@ function videooptionspanel:videooptionspanel( parent, name )
 		options.vsync = checked
 		window.vsync = checked
 	end
-	y = y + 2 * borderless:getHeight() + love.window.toPixels( 3 )
+	y = y + 2 * fullscreen:getHeight() + love.window.toPixels( 4 )
 	vsync:setPos( x, y )
+
+	name = "Borderless Window"
+	local borderless = gui.checkbox( self, name, name )
+	self.borderless = borderless
+	options.borderless = window.borderless
+	borderless:setChecked( window.borderless )
+	borderless.onCheckedChanged = function( checkbox, checked )
+		options.borderless = checked
+		window.borderless = checked
+	end
+	y = y + 2 * vsync:getHeight() + love.window.toPixels( 3 )
+	borderless:setPos( x, y )
 end
 
 function videooptionspanel:activate()
@@ -252,8 +252,8 @@ function videooptionspanel:saveControlStates()
 	controls.aspectRatios     = self.aspectRatios:getListItemGroup():getSelectedId()
 	controls.customResolution = self.customResolution:isChecked()
 	controls.fullscreen       = self.fullscreen:isChecked()
-	controls.borderless       = self.borderless:isChecked()
 	controls.vsync            = self.vsync:isChecked()
+	controls.borderless       = self.borderless:isChecked()
 end
 
 function videooptionspanel:resetControlStates()
@@ -261,8 +261,8 @@ function videooptionspanel:resetControlStates()
 	self.aspectRatios:getListItemGroup():setSelectedId( controls.aspectRatios )
 	self.customResolution:setChecked( controls.customResolution )
 	self.fullscreen:setChecked( controls.fullscreen )
-	self.borderless:setChecked( controls.borderless )
 	self.vsync:setChecked( controls.vsync )
+	self.borderless:setChecked( controls.borderless )
 	table.clear( controls )
 
 	self:clearCustomResolution()
@@ -275,14 +275,19 @@ function videooptionspanel:updateMode()
 		convar.setConvar( "r_window_width",      resolution.width )
 		convar.setConvar( "r_window_height",     resolution.height )
 		convar.setConvar( "r_window_fullscreen", options.fullscreen and 1 or 0 )
-		convar.setConvar( "r_window_borderless", options.borderless and 1 or 0 )
 		convar.setConvar( "r_window_vsync",      options.vsync      and 1 or 0 )
+		convar.setConvar( "r_window_borderless", options.borderless and 1 or 0 )
 
 		local flags  = table.copy( config.getConfig().window )
 		flags.width  = nil
 		flags.height = nil
 		flags.icon   = nil
 		love.window.setMode( resolution.width, resolution.height, flags )
+
+		if ( resolution.width  == love.graphics.getWidth() and
+		     resolution.height == love.graphics.getHeight() ) then
+			engine.client.resize( resolution.width, resolution.height )
+		end
 	end
 end
 

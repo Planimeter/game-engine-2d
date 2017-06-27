@@ -6,6 +6,8 @@
 
 class "gui.passwordtextbox" ( "gui.textbox" )
 
+local passwordtextbox = gui.passwordtextbox
+
 local function getInnerWidth( self )
 	return self:getWidth() - 2 * self.padding
 end
@@ -103,5 +105,3 @@ function passwordtextbox:setText( text )
 end
 
 passwordtextbox.setPassword = passwordtextbox.setText
-
-

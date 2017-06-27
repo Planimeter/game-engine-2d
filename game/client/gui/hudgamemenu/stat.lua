@@ -56,7 +56,7 @@ function hudgamemenustat:draw()
 	font        = self:getScheme( "fontBold" )
 	local level = localplayer:getLevel( stat )
 	local label = "Level " .. level
-	local x     = self:getWidth() - font:getWidth( label )
+	local x     = math.round( self:getWidth() - font:getWidth( label ) )
 	love.graphics.setColor( self:getScheme( property ) )
 	love.graphics.setFont( font )
 	love.graphics.print( label, x, 0 )
@@ -66,10 +66,10 @@ function hudgamemenustat:draw()
 	local nextLvlXp = vaplayer.levelToExperience( level + 1 )
 	local xp        = localplayer:getExperience( stat )
 	label           = xp  .. " / " .. nextLvlXp .. " XP"
-	x               = self:getWidth() - font:getWidth( label )
+	x               = math.round( self:getWidth() - font:getWidth( label ) )
 	love.graphics.setColor( self:getScheme( property ) )
 	love.graphics.setFont( font )
-	love.graphics.print( label, x, love.window.toPixels( 30 ) )
+	love.graphics.print( label, x, math.round( love.window.toPixels( 30 ) ) )
 
 	gui.panel.draw( self )
 end

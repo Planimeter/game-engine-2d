@@ -29,7 +29,9 @@ accessor( tileset, "tileWidth", "tilewidth" )
 accessor( tileset, "tileHeight", "tileheight" )
 
 function tileset:parse()
-	if ( not self.data ) then return end
+	if ( not self.data ) then
+		return
+	end
 
 	local data = self.data
 	self:setName( data[ "name" ] )

@@ -10,7 +10,10 @@ local directoryWhitelist = {
 
 local function onDownloadRequest( payload )
 	local filename = payload:get( "filename" )
-	if ( not filename ) then return end
+	if ( not filename ) then
+		return
+	end
+
 	filename   = string.fixslashes( filename )
 	local peer = payload:getPeer()
 
@@ -41,16 +44,22 @@ end
 
 payload.setHandler( onDownloadRequest, "download" )
 
+local function sendEntity( player, entity )
+	if ( entity == player ) then
+		return
+	end
+
+	local payload = payload( "entitySpawned" )
+	payload:set( "classname", entity:getClassname() )
+	payload:set( "entIndex", entity.entIndex )
+	payload:set( "networkVars", entity:getNetworkVarTypeLenValues() )
+	player:send( payload )
+end
+
 local function sendEntities( player )
 	local entities = entity.getAll()
 	for _, entity in ipairs( entities ) do
-		if ( entity ~= player ) then
-			local payload = payload( "entitySpawned" )
-			payload:set( "classname", entity:getClassname() )
-			payload:set( "entIndex", entity.entIndex )
-			payload:set( "networkVars", entity:getNetworkVarTypeLenValues() )
-			player:send( payload )
-		end
+		sendEntity( player, entity )
 	end
 end
 
@@ -69,7 +78,10 @@ local function onReceiveConcommand( payload )
 	local player    = payload:getPlayer()
 	local name      = payload:get( "name" )
 	local argString = payload:get( "argString" )
-	if ( player == localplayer ) then return end
+	if ( player == localplayer ) then
+		return
+	end
+
 	concommand.dispatch( player, name, argString, argTable )
 end
 

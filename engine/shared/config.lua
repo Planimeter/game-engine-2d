@@ -12,10 +12,12 @@ convar( "r_window_height", 600, 600, nil,
         "Sets the height of the window on load" )
 convar( "r_window_fullscreen", "0", nil, nil,
         "Toggles fullscreen mode" )
-convar( "r_window_borderless", "0", nil, nil,
-        "Toggles borderless mode" )
 convar( "r_window_vsync", "1", nil, nil,
         "Toggles vertical synchronization" )
+convar( "r_window_borderless", "0", nil, nil,
+        "Toggles borderless mode" )
+convar( "r_window_highdpi", "1", nil, nil,
+        "Toggles high-dpi mode" )
 
 local function updateVolume( convar )
 	local volume = convar:getNumber()
@@ -56,6 +58,7 @@ function setWindow( c )
 	local r_window_fullscreen = convar.getConfig( "r_window_fullscreen" )
 	local r_window_vsync      = convar.getConfig( "r_window_vsync" )
 	local r_window_borderless = convar.getConfig( "r_window_borderless" )
+	local r_window_highdpi    = convar.getConfig( "r_window_highdpi" )
 
 	if ( r_window_width ) then
 		c.window.width = tonumber( r_window_width )
@@ -75,6 +78,10 @@ function setWindow( c )
 
 	if ( r_window_borderless ) then
 		c.window.borderless = toboolean( r_window_borderless )
+	end
+
+	if ( r_window_highdpi ) then
+		c.window.highdpi = toboolean( r_window_highdpi )
 	end
 end
 

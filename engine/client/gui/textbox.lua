@@ -160,8 +160,8 @@ function textbox:drawText()
 
 		local font = self:getScheme( "font" )
 		love.graphics.setFont( font )
-		local x = getTextX( self )
-		local y = getTextY( self )
+		local x = math.round( getTextX( self ) )
+		local y = math.round( getTextY( self ) )
 		if ( not self:isMultiline() ) then
 			love.graphics.print( text, x, y )
 		else

@@ -24,6 +24,7 @@ function commandbuttongroup:draw()
 	local height = self:getHeight()
 
 	love.graphics.setColor( self:getScheme( color ) )
+	love.graphics.setLineStyle( "rough" )
 	local lineWidth = love.window.toPixels( 1 )
 	love.graphics.setLineWidth( lineWidth )
 	love.graphics.line(

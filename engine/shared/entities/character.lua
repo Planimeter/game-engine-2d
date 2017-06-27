@@ -4,7 +4,6 @@
 --
 --==========================================================================--
 
-require( "engine.shared.entities" )
 require( "engine.shared.entities.entity" )
 
 class "character" ( "entity" )

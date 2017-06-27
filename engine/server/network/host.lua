@@ -8,7 +8,13 @@ require( "enet" )
 
 class( "host" )
 
-function host:host( bind_address, peer_count, channel_count, in_bandwidth, out_bandwidth )
+function host:host(
+	bind_address,
+	peer_count,
+	channel_count,
+	in_bandwidth,
+	out_bandwidth
+)
 	self._host = enet.host_create(
 		bind_address,
 		peer_count    or 64,

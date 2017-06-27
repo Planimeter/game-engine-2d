@@ -288,12 +288,12 @@ t.bindlistheader              = {
     borderColor               = color(  15,  15,  15,         255 ),
 }
 
-t.mainmenuFont                = love.graphics.newFont( "fonts/SourceSansPro-Regular.otf", 24 )
-t.titleFont                   = love.graphics.newFont( "fonts/SourceSansPro-Bold.otf", 18 )
-t.font                        = love.graphics.newFont( "fonts/SourceSansPro-Regular.otf", 14 )
-t.fontBold                    = love.graphics.newFont( "fonts/SourceSansPro-Bold.otf", 14 )
-t.fontSmall                   = love.graphics.newFont( "fonts/SourceSansPro-Regular.otf", 12 )
-t.consoleFont                 = love.graphics.newFont( "fonts/SourceCodePro-Light.otf", 12 )
-t.chatFont                    = love.graphics.newFont( "fonts/SourceCodePro-Light.otf", 14 )
-t.entityFont                  = love.graphics.newFont( "fonts/SourceSansPro-Regular.otf", 24 )
-t.itemCountFont               = love.graphics.newFont( "fonts/SourceSansPro-Regular.otf", 12 )
+t.mainmenuFont                = love.graphics.newFont( "fonts/SourceSansPro-Regular.otf", math.floor( love.window.toPixels( 24 ) ) )
+t.titleFont                   = love.graphics.newFont( "fonts/SourceSansPro-Bold.otf", math.floor( love.window.toPixels( 18 ) ) )
+t.font                        = love.graphics.newFont( "fonts/SourceSansPro-Regular.otf", math.floor( love.window.toPixels( 14 ) ) )
+t.fontBold                    = love.graphics.newFont( "fonts/SourceSansPro-Bold.otf", math.floor( love.window.toPixels( 14 ) ) )
+t.fontSmall                   = love.graphics.newFont( "fonts/SourceSansPro-Regular.otf", math.floor( love.window.toPixels( 12 ) ) )
+t.consoleFont                 = love.graphics.newFont( "fonts/SourceCodePro-Light.otf", math.floor( love.window.toPixels( 12 ) ) )
+t.chatFont                    = love.graphics.newFont( "fonts/SourceCodePro-Light.otf", math.floor( love.window.toPixels( 14 ) ) )
+t.entityFont                  = love.graphics.newFont( "fonts/SourceSansPro-Regular.otf", math.floor( love.window.toPixels( 24 ) ) )
+t.itemCountFont               = love.graphics.newFont( "fonts/SourceSansPro-Regular.otf", math.floor( love.window.toPixels( 12 ) ) )

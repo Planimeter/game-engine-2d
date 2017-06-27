@@ -158,7 +158,7 @@ local getEntitiesAtMousePos = function( px, py )
 		local x, y   = camera.worldToScreen( entity:getDrawPosition() )
 		local sprite = entity:getSprite()
 		local scale  = camera.getZoom()
-		if ( sprite and sprite ~= nil --[[ graphics.error ]] ) then
+		if ( sprite ) then
 			local width  = sprite:getWidth()  * scale
 			local height = sprite:getHeight() * scale
 			if ( pointinrect( px, py, x, y, width, height ) ) then

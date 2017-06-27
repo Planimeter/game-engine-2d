@@ -34,6 +34,10 @@ function radiobuttongroup:removeItem( item )
 			self:invalidateLayout()
 		end
 	end
+
+	if ( #items == 0 ) then
+		self.items = nil
+	end
 end
 
 accessor( radiobuttongroup, "items" )

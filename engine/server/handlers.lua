@@ -18,8 +18,9 @@ function load( arg )
 		return false
 	end
 
-	require( "game" )
+	_G._SERVER = true
 
+	require( "game" )
 	require( "game.server" )
 	_G.game.server.load( arg )
 
@@ -29,8 +30,9 @@ end
 function quit()
 	local game = _G.game
 	if ( game ) then
-		 game.server.shutdown()
-		 game.server = nil
+		game.server.shutdown()
+		unrequire( "game.server" )
+		game.server = nil
 	end
 
 	unrequire( "game" )
@@ -38,14 +40,12 @@ function quit()
 
 	engine.server.network.shutdownServer()
 
-	_G.region.unloadAll()
-
 	unrequire( "engine.server.network" )
 	engine.server.network = nil
 	unrequire( "engine.server.payloads" )
 	unrequire( "engine.server.handlers" )
-	unrequire( "engine.server" )
-	engine.server = nil
+
+	_G._SERVER = nil
 end
 
 function update( dt )

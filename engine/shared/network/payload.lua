@@ -39,10 +39,14 @@ end
 
 function payload:dispatchToHandler()
 	local name = self:getStructName()
-	if ( not name ) then return end
+	if ( not name ) then
+		return
+	end
 
 	local handler = payload.handlers[ name ]
-	if ( handler ) then handler( self ) end
+	if ( handler ) then
+		handler( self )
+	end
 end
 
 accessor( payload, "peer" )

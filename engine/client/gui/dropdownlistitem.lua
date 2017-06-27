@@ -53,6 +53,7 @@ function dropdownlistitem:drawBorders( color )
 	local width     = self:getWidth()
 	local height    = self:getHeight()
 	love.graphics.setColor( self:getScheme( color ) )
+	love.graphics.setLineStyle( "rough" )
 	love.graphics.setLineWidth( lineWidth )
 	love.graphics.line(
 		lineWidth / 2,      0,        -- Top-left
@@ -79,8 +80,8 @@ function dropdownlistitem:drawText()
 
 	local font = self:getScheme( "font" )
 	love.graphics.setFont( font )
-	local x = love.window.toPixels( 18 )
-	local y = self:getHeight() / 2 - font:getHeight() / 2
+	local x = math.round( love.window.toPixels( 18 ) )
+	local y = math.round( self:getHeight() / 2 - font:getHeight() / 2 )
 	love.graphics.print( self:getText(), x, y )
 end
 

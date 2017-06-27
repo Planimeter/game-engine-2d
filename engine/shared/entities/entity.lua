@@ -4,22 +4,18 @@
 --
 --==========================================================================--
 
--- These values are preserved during real-time scripting.
-local entities     = entity and entity.entities     or {}
-local lastEntIndex = entity and entity.lastEntIndex or 0
-
 require( "common.vector" )
 require( "engine.shared.entities.networkvar" )
 
 class( "entity" )
 
-entity.entities     = entities
-entity.lastEntIndex = lastEntIndex
+entity._entities     = entity._entities     or {}
+entity._lastEntIndex = entity._lastEntIndex or 0
 
 function entity.create( classname )
-	_G.entities.requireEntity( classname )
+	entities.requireEntity( classname )
 
-	local classmap = _G.entities.getClassMap()
+	local classmap = entities.getClassMap()
 	if ( not classmap[ classname ] ) then
 		print( "Attempted to create unknown entity type " .. classname .. "!" )
 		return
@@ -30,12 +26,14 @@ function entity.create( classname )
 end
 
 if ( _CLIENT ) then
+	local renderables = {}
 	local clear       = table.clear
 	local append      = table.append
-	local renderables = {}
 
 	local shallowcopy = function( from, to )
-		for k, v in pairs( from ) do to[ k ] = v end
+		for k, v in pairs( from ) do
+			to[ k ] = v
+		end
 	end
 
 	local depthSort = function( t )
@@ -61,114 +59,158 @@ if ( _CLIENT ) then
 	local r_draw_shadows        = convar( "r_draw_shadows", "1", nil, nil,
 	                                      "Draws entity shadows" )
 
+	local r_draw_entities       = convar( "r_draw_entities", "1", nil, nil,
+	                                      "Draws entities" )
+
+	local function drawFixture( body, fixture )
+		love.graphics.setColor( color( color.white, 0.14 * 255 ) )
+		love.graphics.setLineStyle( "rough" )
+		local lineWidth = 1
+		love.graphics.setLineWidth( lineWidth )
+		local shape = fixture:getShape()
+		local topLeftX,
+			  topLeftY,
+			  bottomRightX,
+			  bottomRightY =
+			  body:getWorldPoints(
+				shape:computeAABB( 0, 0, 0 )
+			  )
+		local width  = bottomRightX - topLeftX
+		local height = topLeftY - bottomRightY
+		love.graphics.rectangle(
+			"line",
+			topLeftX          - lineWidth / 2,
+			topLeftY - height - lineWidth / 2,
+			width             + lineWidth,
+			height            + lineWidth
+		)
+	end
+
+	local function drawBoundingBox( renderable )
+		local worldIndex = camera.getWorldIndex()
+		if ( worldIndex ~= renderable:getWorldIndex() ) then
+			return
+		end
+
+		local isEntity = typeof( renderable, "entity" )
+		if ( not isEntity ) then
+			return
+		end
+
+		local body = renderable:getBody()
+		if ( not body ) then
+			return
+		end
+
+		local fixtures = body:getFixtureList()
+		for _, fixture in ipairs( fixtures ) do
+			drawFixture( body, fixture )
+		end
+	end
+
+	local function drawShadow( renderable )
+		local worldIndex = camera.getWorldIndex()
+		if ( worldIndex ~= renderable:getWorldIndex() ) then
+			return
+		end
+
+		local isEntity = typeof( renderable, "entity" )
+		if ( not isEntity ) then
+			return
+		end
+
+		love.graphics.push()
+			local x, y   = renderable:getDrawPosition()
+			local sprite = renderable:getSprite()
+			local height = sprite:getHeight()
+			love.graphics.translate( x, y )
+			love.graphics.setColor( color( color.black, 0.14 * 255 ) )
+			love.graphics.translate( sprite:getWidth() / 2, height )
+			love.graphics.scale( 1, -1 )
+			renderable:drawShadow()
+		love.graphics.pop()
+	end
+
+	local function drawEntity( renderable )
+		local worldIndex = camera.getWorldIndex()
+		if ( worldIndex ~= renderable:getWorldIndex() ) then
+			return
+		end
+
+		love.graphics.push()
+			local x, y = renderable:getDrawPosition()
+			love.graphics.translate( x, y )
+			love.graphics.setColor( color.white )
+			renderable:draw()
+		love.graphics.pop()
+	end
+
 	function entity.drawAll()
 		clear( renderables )
-		shallowcopy( entity.entities, renderables )
+		shallowcopy( entity._entities, renderables )
 		append( renderables, camera.getWorldContexts() )
 		depthSort( renderables )
 
 		-- Draw bounding boxes
-		local worldIndex = camera.getWorldIndex()
 		if ( r_draw_bounding_boxes:getBoolean() ) then
 			for _, v in ipairs( renderables ) do
-				local isEntity = typeof( v, "entity" )
-				if ( worldIndex == v:getWorldIndex() and isEntity ) then
-					local body = v:getBody()
-					if ( body ) then
-						local fixtures = body:getFixtureList()
-						for _, fixture in ipairs( fixtures ) do
-							local shape = fixture:getShape()
-							local topLeftX,     topLeftY,
-							      bottomRightX, bottomRightY =
-							      body:getWorldPoints(
-							      	shape:computeAABB( 0, 0, 0 )
-							      )
-							local width  = bottomRightX - topLeftX
-							local height = topLeftY - bottomRightY
-							love.graphics.setColor( color( color.white, 255 * 0.14 ) )
-							love.graphics.setLineWidth( 1 )
-							love.graphics.line(
-								topLeftX,             topLeftY,
-								topLeftX + width,     topLeftY,
-								bottomRightX,     bottomRightY,
-								topLeftX,         bottomRightY,
-								topLeftX,              topLeftY
-							)
-						end
-					end
-				end
+				drawBoundingBox( v )
 			end
 		end
 
 		-- Draw shadows
 		if ( r_draw_shadows:getBoolean() ) then
 			for _, v in ipairs( renderables ) do
-				local isEntity = typeof( v, "entity" )
-				if ( worldIndex == v:getWorldIndex() and isEntity ) then
-					love.graphics.push()
-						local x, y = v:getDrawPosition()
-						love.graphics.translate( x, y )
-
-						-- Draw shadow
-						love.graphics.push()
-							love.graphics.setColor( color( color.black, 255 * 0.14 ) )
-							local sprite = v:getSprite()
-							local height = sprite:getHeight()
-							love.graphics.translate( sprite:getWidth() / 2, height )
-							love.graphics.scale( 1, -1 )
-							v:drawShadow()
-						love.graphics.pop()
-					love.graphics.pop()
-				end
+				drawShadow( v )
 			end
 		end
 
 		-- Draw entities
-		for _, v in ipairs( renderables ) do
-			if ( worldIndex == v:getWorldIndex() ) then
-				love.graphics.push()
-					local x, y = v:getDrawPosition()
-					love.graphics.translate( x, y )
-					love.graphics.setColor( color.white )
-					v:draw()
-				love.graphics.pop()
+		if ( r_draw_entities:getBoolean() ) then
+			for _, v in ipairs( renderables ) do
+				drawEntity( v )
 			end
 		end
 	end
 end
 
-function entity.findByClassname( classname, region )
-	local t = {}
-	if ( region ) then
-		local entities = region:getEntities()
-		if ( entities ) then
-			for i, entity in ipairs( region:getEntities() ) do
-				if ( classname == entity:getClassname() ) then
-					table.insert( t, entity )
-				end
-			end
-		end
-	else
-		for i, region in ipairs( _G.region.getAll() ) do
-			local entities = region:getEntities()
-			if ( entities ) then
-				for j, entity in ipairs( entities ) do
-					if ( classname == entity:getClassname() ) then
-						table.insert( t, entity )
-					end
-				end
-			end
+local function findByClassnameInRegion( classname, region, t )
+	local entities = region:getEntities()
+	if ( not entities ) then
+		return
+	end
+
+	for i, entity in ipairs( entities ) do
+		if ( classname == entity:getClassname() ) then
+			table.insert( t, entity )
 		end
 	end
 	return #t > 0 and t or nil
 end
 
+local function findByClassname( classname )
+	local t = {}
+	for i, region in ipairs( region.getAll() ) do
+		findByClassnameInRegion( classname, region, t )
+	end
+	return #t > 0 and t or nil
+end
+
+function entity.findByClassname( classname, region )
+	if ( region ) then
+		local t = {}
+		return findByClassnameInRegion( classname, region, t )
+	else
+		return findByClassname( classname )
+	end
+end
+
 function entity.getAll()
-	return table.shallowcopy( entity.entities )
+	return table.shallowcopy( entity._entities )
 end
 
 function entity.getByEntIndex( entIndex )
-	for _, v in pairs( entity.entities ) do
+	for _, v in pairs( entity._entities ) do
 		if ( v.entIndex == entIndex ) then
 			return v
 		end
@@ -176,23 +218,23 @@ function entity.getByEntIndex( entIndex )
 end
 
 function entity.removeAll()
-	while ( #entity.entities > 0 ) do
-		entity.entities[ 1 ]:remove()
+	while ( #entity._entities > 0 ) do
+		entity._entities[ 1 ]:remove()
 	end
 end
 
 function entity:entity()
-	self.entIndex = entity.lastEntIndex + 1
+	self.entIndex = entity._lastEntIndex + 1
 
 	if ( _SERVER ) then
-		entity.lastEntIndex = self.entIndex
+		entity._lastEntIndex = self.entIndex
 	end
 
 	self:networkString( "name",       nil )
 	self:networkVector( "position",   vector() )
 	self:networkNumber( "worldIndex", 1 )
 
-	table.insert( entity.entities, self )
+	table.insert( entity._entities, self )
 end
 
 accessor( entity, "body" )
@@ -242,7 +284,7 @@ accessor( entity, "region" )
 
 if ( _CLIENT ) then
 	function entity:getSprite()
-		return self.sprite or nil -- graphics.error
+		return self.sprite
 	end
 end
 
@@ -300,9 +342,9 @@ if ( _CLIENT ) then
 end
 
 function entity:emitSound( filename )
-	-- require( "engine.client.sound" )
-	-- local sound = love.audio.newSource( filename )
-	-- love.audio.play( sound )
+	require( "engine.client.sound" )
+	local sound = sound( filename )
+	sound:play()
 end
 
 function entity:networkVar( name, initialValue )
@@ -338,7 +380,10 @@ do
 			end
 
 			if ( not keyExists ) then
-				table.insert( keys, { name = name, type = type } )
+				table.insert( keys, {
+					name = name,
+					type = type
+				} )
 			end
 
 			self:networkVar( name, initialValue )
@@ -430,7 +475,7 @@ if ( _CLIENT ) then
 end
 
 function entity:remove()
-	for i, v in pairs( entity.entities ) do
+	for i, v in pairs( entity._entities ) do
 		if ( v == self ) then
 			local body = self:getBody()
 			if ( body ) then
@@ -441,7 +486,7 @@ function entity:remove()
 			local region = self:getRegion()
 			region:removeEntity( self )
 
-			table.remove( entity.entities, i )
+			table.remove( entity._entities, i )
 		end
 	end
 
@@ -480,10 +525,10 @@ function entity:setCollisionBounds( min, max )
 	if ( body ) then
 		local dimensions = max - min
 		dimensions.y     = -dimensions.y
-		local width      =  dimensions.x - 2
-		local height     =  dimensions.y - 2
+		local width      =  dimensions.x - 1
+		local height     =  dimensions.y - 1
 		local x          =   width / 2 + 0.5
-		local y          = -height / 2 - 1.5
+		local y          = -height / 2 + 0.5
 		local shape      = love.physics.newRectangleShape( x, y, width, height )
 		love.physics.newFixture( body, shape )
 	end
@@ -586,8 +631,7 @@ function entity:update( dt )
 		end
 	end
 
-	-- TODO: Use engine.getCurrentTime()
-	if ( self.think and
+	if ( self.think     and
 	     self.nextThink and
 	     self.nextThink <= love.timer.getTime() ) then
 		self.nextThink = nil
@@ -608,13 +652,15 @@ end
 
 concommand( "ent_create", "Creates an entity where the player is looking",
 	function( self, player, command, argString, argTable )
-		if( _SERVER ) then
-			local entity = _G.entity.create( argString )
-			if ( entity ) then
-				local position = player:getPosition() + vector( 0, game.tileSize )
-				entity:setPosition( position )
-				entity:spawn()
-			end
+		if ( not _SERVER ) then
+			return
+		end
+
+		local entity = _G.entity.create( argString )
+		if ( entity ) then
+			local position = player:getPosition() + vector( 0, game.tileSize )
+			entity:setPosition( position )
+			entity:spawn()
 		end
 	end, { "network", "cheat" }
 )

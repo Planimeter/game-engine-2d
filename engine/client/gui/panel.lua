@@ -62,7 +62,9 @@ function panel:animate( properties, duration, easing, complete )
 end
 
 function panel:createFramebuffer()
-	if ( self.framebuffer and not self.needsRedraw ) then return end
+	if ( self.framebuffer and not self.needsRedraw ) then
+		return
+	end
 
 	local width  = self:getWidth()
 	local height = self:getHeight()
@@ -94,19 +96,23 @@ function panel:createFramebuffer()
 end
 
 function panel:draw()
-	if ( not self:isVisible() ) then return end
-
-	local children = self:getChildren()
-	if ( children ) then
-		for _, v in ipairs( children ) do v:createFramebuffer() end
+	if ( not self:isVisible() ) then
+		return
 	end
 
-	if ( children ) then
-		for _, v in ipairs( children ) do
-			v:preDraw()
-			v:drawFramebuffer()
-			v:postDraw()
-		end
+	local children = self:getChildren()
+	if ( not children ) then
+		return
+	end
+
+	for _, v in ipairs( children ) do
+		v:createFramebuffer()
+	end
+
+	for _, v in ipairs( children ) do
+		v:preDraw()
+		v:drawFramebuffer()
+		v:postDraw()
 	end
 end
 
@@ -146,8 +152,13 @@ function panel:drawForeground( color )
 end
 
 function panel:drawFramebuffer()
-	if ( not self:isVisible() ) then return end
-	if ( not self.framebuffer ) then self:createFramebuffer() end
+	if ( not self:isVisible() ) then
+		return
+	end
+
+	if ( not self.framebuffer ) then
+		self:createFramebuffer()
+	end
 
 	love.graphics.push()
 		local b = love.graphics.getBlendMode()
@@ -160,19 +171,28 @@ function panel:drawFramebuffer()
 end
 
 local filtered = function( panel, func, ... )
-	if ( not panel:isVisible() ) then return end
+	if ( not panel:isVisible() ) then
+		return
+	end
+
 	return panel[ func ]( panel, ... )
 end
 
 local function cascadeInputToChildren( self, func, ... )
-	if ( not self:isVisible() ) then return end
+	if ( not self:isVisible() ) then
+		return
+	end
 
 	local children = self:getChildren()
-	if ( children ) then
-		local value
-		for _, v in ipairs( children ) do
-			value = filtered( v, func, ... )
-			if ( value ~= nil ) then return value end
+	if ( not children ) then
+		return
+	end
+
+	local value = nil
+	for _, v in ipairs( children ) do
+		value = filtered( v, func, ... )
+		if ( value ~= nil ) then
+			return value
 		end
 	end
 end
@@ -206,17 +226,23 @@ function panel:getPos()
 end
 
 function panel:getTopMostChildAtPos( x, y )
-	if ( not self:isVisible() ) then return nil end
+	if ( not self:isVisible() ) then
+		return nil
+	end
 
 	local sx, sy = self:localToScreen()
 	local w,  h  = self:getWidth(), self:getHeight()
-	if ( not math.pointinrect( x, y, sx, sy, w, h ) ) then return nil end
+	if ( not math.pointinrect( x, y, sx, sy, w, h ) ) then
+		return nil
+	end
 
 	local children = self:getChildren()
 	if ( children ) then
 		for i = #children, 1, -1 do
 			local topChild = children[ i ]:getTopMostChildAtPos( x, y )
-			if ( topChild ) then return topChild end
+			if ( topChild ) then
+				return topChild
+			end
 		end
 	end
 
@@ -233,10 +259,26 @@ function panel:invalidate()
 	end
 end
 
+function panel:invalidateFramebuffer()
+	local children = self:getChildren()
+	if ( children ) then
+		for _, v in ipairs( children ) do
+			v:invalidateFramebuffer()
+		end
+	end
+
+	if ( self:shouldUseFullscreenFramebuffer() ) then
+		self.framebuffer = nil
+		self:createFramebuffer()
+	end
+end
+
 function panel:invalidateLayout()
 	local children = self:getChildren()
 	if ( children ) then
-		for _, v in ipairs( children ) do v:invalidateLayout() end
+		for _, v in ipairs( children ) do
+			v:invalidateLayout()
+		end
 	end
 
 	self:invalidate()
@@ -250,7 +292,9 @@ function panel:isChildMousedOver()
 	local panel = gui._topPanel
 	while ( panel ~= nil ) do
 		panel = panel:getParent()
-		if ( self == panel ) then return true end
+		if ( self == panel ) then
+			return true
+		end
 	end
 
 	return false
@@ -302,7 +346,9 @@ function panel:mousepressed( x, y, button, istouch )
 end
 
 function panel:mousereleased( x, y, button, istouch )
-	if ( not self:isVisible() ) then return end
+	if ( not self:isVisible() ) then
+		return
+	end
 
 	local children = self:getChildren()
 	if ( children ) then
@@ -317,7 +363,9 @@ function panel:moveToFront()
 	local children = nil
 	if ( parent ) then
 		children = parent:getChildren()
-		if ( self == children[ #children ] ) then return end
+		if ( self == children[ #children ] ) then
+			return
+		end
 	end
 
 	if ( gui._focusedPanel ) then
@@ -326,13 +374,17 @@ function panel:moveToFront()
 
 	if ( parent ) then
 		for i, v in ipairs( children ) do
-			if ( v == self ) then table.remove( children, i ) end
+			if ( v == self ) then
+				table.remove( children, i )
+			end
 		end
 
 		children[ #children + 1 ] = self
 	end
 
-	if ( self:getParent() ) then self:invalidateParent() end
+	if ( self:getParent() ) then
+		self:invalidateParent()
+	end
 end
 
 function panel:moveToBack()
@@ -340,7 +392,9 @@ function panel:moveToBack()
 	local children = nil
 	if ( parent ) then
 		children = parent:getChildren()
-		if ( self == children[ 1 ] ) then return end
+		if ( self == children[ 1 ] ) then
+			return
+		end
 	end
 
 	if ( gui._focusedPanel ) then
@@ -349,13 +403,17 @@ function panel:moveToBack()
 
 	if ( parent ) then
 		for i, v in ipairs( children ) do
-			if ( v == self ) then table.remove( children, i ) end
+			if ( v == self ) then
+				table.remove( children, i )
+			end
 		end
 
 		table.insert( children, 1, self )
 	end
 
-	if ( self:getParent() ) then self:invalidateParent() end
+	if ( self:getParent() ) then
+		self:invalidateParent()
+	end
 end
 
 function panel:onMouseLeave()
@@ -365,7 +423,9 @@ function panel:onRemove()
 end
 
 function panel:preDraw()
-	if ( not self:isVisible() ) then return end
+	if ( not self:isVisible() ) then
+		return
+	end
 
 	local scale  = self:getScale()
 	local width  = self:getWidth()
@@ -383,7 +443,9 @@ local gui_draw_bounds = convar( "gui_draw_bounds", "0", nil, nil,
                                 "Draws the bounds of panels for debugging" )
 
 function panel:postDraw()
-	if ( not self:isVisible() ) then return end
+	if ( not self:isVisible() ) then
+		return
+	end
 
 	if ( gui_draw_bounds:getBoolean() ) then
 		if ( self.mouseover ) then
@@ -397,21 +459,28 @@ end
 function panel:preDrawWorld()
 	local children = self:getChildren()
 	if ( children ) then
-		for _, v in ipairs( children ) do v:preDrawWorld() end
+		for _, v in ipairs( children ) do
+			v:preDrawWorld()
+		end
 	end
 end
 
 function panel:remove()
-	if ( self:getChildren() ) then self:removeChildren() end
+	if ( self:getChildren() ) then
+		self:removeChildren()
+	end
 
-	if ( self:getParent() ) then
-		local children = self:getParent():getChildren()
+	local parent = self:getParent()
+	if ( parent ) then
+		local children = parent:getChildren()
 		for i, v in ipairs( children ) do
-			if ( v == self ) then table.remove( children, i ) end
+			if ( v == self ) then
+				table.remove( children, i )
+			end
 		end
 
 		if ( #children == 0 ) then
-			self:getParent().children = nil
+			parent.children = nil
 		end
 	end
 
@@ -421,7 +490,9 @@ end
 function panel:removeChildren()
 	local children = self:getChildren()
 	if ( children ) then
-		for i = #children, 1, -1 do children[ i ]:remove() end
+		for i = #children, 1, -1 do
+			children[ i ]:remove()
+		end
 	end
 	self:invalidate()
 end
@@ -465,13 +536,15 @@ function panel:setParent( panel )
 	if ( parent ) then
 		local children = parent:getChildren()
 		for i, v in ipairs( children ) do
-			if ( v == self ) then table.remove( children, i ) end
+			if ( v == self ) then
+				table.remove( children, i )
+			end
 		end
 	end
 
 	panel.children = panel.children or {}
-	for _, v in ipairs( panel.children ) do
-		if ( v == panel ) then return end
+	if ( table.hasvalue( panel.children, panel ) ) then
+		return
 	end
 
 	table.insert( panel.children, self )
@@ -546,7 +619,7 @@ function panel:textedited( text, start, length )
 end
 
 function panel:update( dt )
-	if ( self.think and
+	if ( self.think     and
 	     self.nextThink and
 	     self.nextThink <= love.timer.getTime() ) then
 		self.nextThink = nil
@@ -558,8 +631,12 @@ function panel:update( dt )
 	end
 
 	local children = self:getChildren()
-	if ( children ) then
-		for _, v in ipairs( children ) do v:update( dt ) end
+	if ( not children ) then
+		return
+	end
+
+	for _, v in ipairs( children ) do
+		v:update( dt )
 	end
 end
 
@@ -592,7 +669,10 @@ function panel:updateAnimations( dt )
 
 		if ( percent == 1 ) then
 			local complete = animation.complete
-			if ( complete ) then complete() end
+			if ( complete ) then
+				complete()
+			end
+
 			self:invalidate()
 		end
 	end

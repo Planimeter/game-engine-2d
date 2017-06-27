@@ -82,7 +82,9 @@ function getTranslation()
 	local width  = love.graphics.getWidth()
 	local height = love.graphics.getHeight()
 	local scale  = getZoom()
-	if ( not pos ) then pos = vector.origin end
+	if ( not pos ) then
+		pos = vector.origin
+	end
 	return -pos.x + ( width  / 2 ) / scale,
 	       -pos.y + ( height / 2 ) / scale
 end
@@ -140,7 +142,9 @@ function screenToWorld( x, y )
 	local width  = love.graphics.getWidth()
 	local height = love.graphics.getHeight()
 	local scale  = getZoom()
-	if ( not pos ) then pos = vector.origin end
+	if ( not pos ) then
+		pos = vector.origin
+	end
 	return pos.x - ( width  / 2 ) / scale + x / scale,
 	       pos.y - ( height / 2 ) / scale + y / scale
 end
@@ -150,7 +154,9 @@ function worldToScreen( x, y )
 	local width  = love.graphics.getWidth()
 	local height = love.graphics.getHeight()
 	local scale  = getZoom()
-	if ( not pos ) then pos = vector.origin end
+	if ( not pos ) then
+		pos = vector.origin
+	end
 	return pos.x * -scale + ( width  / 2 ) + x * scale,
 	       pos.y * -scale + ( height / 2 ) + y * scale
 end

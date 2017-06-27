@@ -11,6 +11,7 @@ local enet           = enet
 local engine         = engine
 local string         = string
 local type           = type
+local pcall          = pcall
 local print          = print
 local require        = require
 local _G             = _G
@@ -29,7 +30,7 @@ function connect( address )
 	local status, ret = pcall( function()
 		return _host:connect( address, 1000 )
 	end )
-	if ( status ) then
+	if ( status == true ) then
 		_server = ret
 	else
 		print( string.match( ret, ".-: (.+)" ) )
@@ -116,7 +117,7 @@ function pollEvents()
 			engine.client.onDisconnect( event )
 		end
 
-		if ( host ) then
+		if ( _host ) then
 			event = _host:service()
 		else
 			event = nil

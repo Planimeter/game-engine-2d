@@ -32,7 +32,6 @@ local function onReceiveServerInfo( payload )
 		region.load( regionName )
 
 		require( "game" )
-
 		require( "game.client" )
 		game.client.load( args )
 

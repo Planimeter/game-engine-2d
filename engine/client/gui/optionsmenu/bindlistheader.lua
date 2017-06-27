@@ -24,12 +24,12 @@ function bindlistheader:draw()
 
 	local toPixels = love.window.toPixels
 	local margin   = toPixels( 18 )
-	local x        = margin
-	local y        = self:getHeight() / 2 - font:getHeight() / 2
+	local x        = math.round( margin )
+	local y        = math.round( self:getHeight() / 2 - font:getHeight() / 2 )
 	love.graphics.print( self:getText(), x, y )
 
 	local label = "Key or Button"
-	x = self:getWidth() - margin - font:getWidth( label )
+	x = math.round( self:getWidth() - margin - font:getWidth( label ) )
 	love.graphics.print( label, x, y )
 
 	love.graphics.setColor( self:getScheme( 'bindlistheader.borderColor' ) )

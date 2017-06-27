@@ -37,12 +37,12 @@ function love.conf( c )
 		c.modules.window = false
 		c.modules.video = false
 	else
-		c.window.highdpi = true
 		c.window.icon = "images/icon.png"
 		require( "love.system" )
 		if ( love.system.getOS() == "OS X" ) then
 			c.window.icon = "images/icon_osx.png"
 		end
+		c.window.resizable = true
 	end
 	c.identity = "grid"
 

@@ -27,7 +27,7 @@ function closebutton:draw()
 		iconColor = "mainmenuclosebutton.dark.mouseover.iconColor"
 	end
 
-	local x =   self:getWidth()                 / 2 - self.icon:getWidth()  / 2
+	local x =   self:getWidth()                                / 2 - self.icon:getWidth()  / 2
 	local y = ( self:getHeight() - love.window.toPixels( 1 ) ) / 2 - self.icon:getHeight() / 2
 	love.graphics.setColor( self:getScheme( iconColor ) )
 	love.graphics.draw( self.icon, x, y )

@@ -71,11 +71,15 @@ function tween:update( dt )
 		)
 		self.target[ member ] = ( endValue - startValue ) * eased + startValue
 
-		if ( self.onUpdate ) then self.onUpdate() end
+		if ( self.onUpdate ) then
+			self.onUpdate()
+		end
 	end
 
 	if ( percent == 1 ) then
 		onComplete = self.onComplete
-		if ( onComplete ) then onComplete() end
+		if ( onComplete ) then
+			onComplete()
+		end
 	end
 end

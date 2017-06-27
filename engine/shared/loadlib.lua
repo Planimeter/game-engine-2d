@@ -32,7 +32,7 @@ function require( modname )
 	end
 
 	local status, ret = pcall( rawrequire, modname )
-	if ( not status ) then
+	if ( status == false ) then
 		error( ret, 2 )
 	end
 
@@ -62,7 +62,14 @@ local function reload( modname, filename )
 	print( "Updating " .. modname .. "..." )
 
 	local status, err = pcall( require, modname )
-	if ( status ) then
+	if ( status == true ) then
+		if ( game ) then
+			game.call( "shared", "onReloadScript", modname )
+		else
+			require( "engine.shared.hook" )
+			hook.call( "shared", "onReloadScript", modname )
+		end
+
 		return
 	end
 
@@ -72,14 +79,20 @@ local function reload( modname, filename )
 	package.watched[ modname ] = modtime
 end
 
+local function update( k, v )
+	local filename = getModuleFilename( k )
+	if ( not filename ) then
+		return
+	end
+
+	local modtime, errormsg = love.filesystem.getLastModified( filename )
+	if ( not errormsg and modtime ~= v ) then
+		reload( k, filename )
+	end
+end
+
 function package.update( dt )
 	for k, v in pairs( package.watched ) do
-		local filename = getModuleFilename( k )
-		if ( filename ) then
-			local modtime, errormsg = love.filesystem.getLastModified( filename )
-			if ( not errormsg and modtime ~= v ) then
-				reload( k, filename )
-			end
-		end
+		update( k, v )
 	end
 end

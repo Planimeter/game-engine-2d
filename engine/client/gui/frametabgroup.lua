@@ -32,6 +32,7 @@ end
 
 function frametabgroup:draw()
 	love.graphics.setColor( self:getScheme( "frametab.outlineColor" ) )
+	love.graphics.setLineStyle( "rough" )
 	local lineWidth = love.window.toPixels( 1 )
 	love.graphics.setLineWidth( lineWidth )
 	love.graphics.line(

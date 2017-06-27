@@ -153,7 +153,7 @@ function mainmenu:invalidateButtons()
 	local logo      = self.logo
 	local height    = self:getHeight()
 	local marginPhi = height - height / math.phi
-	local marginX   = math.round( gui.scale( 96 ) )
+	local marginX   = gui.scale( 96 )
 	local marginY   = math.round( marginX * ( 2 / 3 ) )
 
 	if ( height <= love.window.toPixels( 720 ) ) then
@@ -188,7 +188,7 @@ function mainmenu:drawLogo()
 	local logo      = self.logo
 	local height    = self:getHeight()
 	local scale     = height / love.window.toPixels( 1080 )
-	local marginX   = math.round( gui.scale( 96 ) )
+	local marginX   = gui.scale( 96 )
 	local marginPhi = math.round( height - height / math.phi )
 
 	if ( height <= love.window.toPixels( 720 ) ) then

@@ -73,8 +73,8 @@ function bindlistitem:drawText()
 	local font = self:getScheme( "font" )
 	love.graphics.setFont( font )
 	local margin = love.window.toPixels( 18 )
-	local x = margin
-	local y = self:getHeight() / 2 - font:getHeight() / 2
+	local x = math.round( margin )
+	local y = math.round( self:getHeight() / 2 - font:getHeight() / 2 )
 	love.graphics.print( self:getText(), x, y )
 
 	local label = "Key or Button"
@@ -82,6 +82,7 @@ function bindlistitem:drawText()
 	x = self:getWidth() - margin
 	x = x - font:getWidth( label ) / 2
 	x = x - font:getWidth( key ) / 2
+	x = math.round( x )
 	love.graphics.print( key, x, y )
 end
 

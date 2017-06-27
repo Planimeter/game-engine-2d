@@ -128,7 +128,7 @@ function vaplayer:pickup( item )
 	if ( _CLIENT and not _SERVER ) then
 		local payload = payload( "playerPickup" )
 		payload:set( "item", item )
-		networkclient.sendToServer( payload )
+		engine.client.network.sendToServer( payload )
 	end
 end
 

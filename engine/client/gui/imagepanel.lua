@@ -6,6 +6,8 @@
 
 class "gui.imagepanel" ( "gui.panel" )
 
+local imagepanel = gui.imagepanel
+
 function imagepanel:imagepanel( parent, name, image )
 	gui.panel.panel( self, parent, name )
 	self.color      = color( 255, 255, 255, 255 )
@@ -14,24 +16,23 @@ function imagepanel:imagepanel( parent, name, image )
 	self:setImage( image )
 end
 
-local missingImage = false
-
 function imagepanel:draw()
-	gui.panel._maskedPanel = self
-	love.graphics.stencil( gui.panel.drawMask )
-	love.graphics.setStencilTest( "greater", 0 )
-		love.graphics.setColor( self:getColor() )
-		love.graphics.draw( self:getImage(), self:getQuad() )
-	love.graphics.setStencilTest()
-
-	missingImage = self:getImage() == nil
-	if ( missingImage ) then
+	local image = self:getImage()
+	if ( image ) then
+		gui.panel._maskedPanel = self
+		love.graphics.stencil( gui.panel.drawMask )
+		love.graphics.setStencilTest( "greater", 0 )
+			love.graphics.setColor( self:getColor() )
+			love.graphics.draw( image, self:getQuad() )
+		love.graphics.setStencilTest()
+	else
 		self:drawMissingImage()
 	end
 end
 
 function imagepanel:drawMissingImage()
 	love.graphics.setColor( color( color.red, 255 * 0.42 ) )
+	love.graphics.setLineStyle( "rough" )
 	local lineWidth = 1
 	local width     = self:getWidth()
 	local height    = self:getHeight()
@@ -76,14 +77,16 @@ function imagepanel:setHeight( height )
 	self:updateQuad()
 end
 
-local w, h, sw, sh = 0, 0, 0, 0
-
 function imagepanel:updateQuad()
-	missingImage = self:getImage() == nil
-	w  = self:getWidth()  - ( missingImage and love.window.toPixels( 1 ) or 0 )
-	h  = self:getHeight() - ( missingImage and love.window.toPixels( 1 ) or 0 )
-	sw = self.imageDatum:getWidth()
-	sh = self.imageDatum:getHeight()
+	local missingImage = self:getImage() == nil
+	if ( missingImage ) then
+		return
+	end
+
+	local w  = self:getWidth()  - ( missingImage and love.window.toPixels( 1 ) or 0 )
+	local h  = self:getHeight() - ( missingImage and love.window.toPixels( 1 ) or 0 )
+	local sw = self.imageDatum:getWidth()
+	local sh = self.imageDatum:getHeight()
 	if ( self.imageQuad == nil ) then
 		self.imageQuad = love.graphics.newQuad( 0, 0, w, h, sw, sh )
 	else

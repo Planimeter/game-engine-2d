@@ -56,7 +56,7 @@ function hudhealth:drawLabel()
 	local lineHeight = font:getHeight()
 	font = self:getScheme( "font" )
 	love.graphics.setFont( font )
-	love.graphics.print( "Health", 0, lineHeight )
+	love.graphics.print( "Health", 0, math.round( lineHeight ) )
 end
 
 function hudhealth:invalidateLayout()

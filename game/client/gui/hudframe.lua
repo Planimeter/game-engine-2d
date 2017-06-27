@@ -89,8 +89,8 @@ function hudframe:drawTitle()
 	love.graphics.setColor( self:getScheme( property ) )
 	local font = self:getScheme( "titleFont" )
 	love.graphics.setFont( font )
-	local x = love.window.toPixels( 36 )
-	local y = x - love.window.toPixels( 4 )
+	local x = math.round( love.window.toPixels( 36 ) )
+	local y = math.round( x - love.window.toPixels( 4 ) )
 	love.graphics.print( string.utf8upper( self:getTitle() ), x, y )
 end
 

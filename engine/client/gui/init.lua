@@ -18,6 +18,7 @@ require( "engine.client.gui.handlers" )
 
 function invalidateTree()
 	_rootPanel:invalidateLayout()
+	_rootPanel:invalidateFramebuffer()
 end
 
 function preDrawWorld()

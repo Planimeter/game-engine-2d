@@ -11,27 +11,38 @@ class( "region" )
 region._regions = region._regions or {}
 
 if ( _CLIENT ) then
+	local function drawRegion( region )
+		local worldIndex = camera.getWorldIndex()
+		if ( worldIndex ~= region:getWorldIndex() ) then
+			return
+		end
+
+		love.graphics.push()
+			local x, y = region:getX(), region:getY()
+			love.graphics.translate( x, y )
+			region:draw()
+		love.graphics.pop()
+	end
+
 	function region.drawWorld()
-		local r, g, b, a  = love.graphics.getBackgroundColor()
-		local width  = love.graphics.getWidth()
-		local height = love.graphics.getHeight()
+		local r, g, b, a = love.graphics.getBackgroundColor()
+		local width      = love.graphics.getWidth()
+		local height     = love.graphics.getHeight()
 		love.graphics.setColor( r, g, b, a )
 		love.graphics.rectangle( "fill", 0, 0, width, height )
 		love.graphics.push()
+			-- Setup camera
 			local scale = camera.getZoom()
 			love.graphics.scale( scale )
 			local x, y = camera.getTranslation()
 			love.graphics.translate( x, y )
-			local worldIndex = camera.getWorldIndex()
+
+			-- Draw regions
 			for _, region in ipairs( region._regions ) do
-				if ( worldIndex == region:getWorldIndex() ) then
-					love.graphics.push()
-						love.graphics.translate( region:getX(), region:getY() )
-						region:draw()
-					love.graphics.pop()
-				end
+				drawRegion( region )
 			end
 
+			-- Draw entities
 			entity.drawAll()
 		love.graphics.pop()
 	end
@@ -58,7 +69,9 @@ end
 
 function region.getByName( name )
 	for _, region in ipairs( region._regions ) do
-		if ( name == region:getName() ) then return region end
+		if ( name == region:getName() ) then
+			return region
+		end
 	end
 end
 
@@ -76,13 +89,17 @@ function region.getAtPosition( position, worldIndex )
 end
 
 function region.load( name, x, y, worldIndex )
-	if ( region.getByName( name ) ) then return end
+	if ( region.getByName( name ) ) then
+		return
+	end
 	local region = region( name, x, y, worldIndex )
 	table.insert( region._regions, region )
 end
 
 function region.reload( library )
-	if ( string.sub( library, 1, 8 ) ~= "regions." ) then return end
+	if ( string.sub( library, 1, 8 ) ~= "regions." ) then
+		return
+	end
 	local name = string.gsub( library, "regions.", "" )
 	local r = region.getByName( name )
 	local x = r:getX()
@@ -96,15 +113,21 @@ end
 hook.set( "shared", region.reload, "onReloadScript", "reloadRegion" )
 
 if ( _CLIENT ) then
+	local function initializeTiles( region )
+		for _, regionlayer in ipairs( region:getLayers() ) do
+			if ( regionlayer:getType() == "tilelayer" ) then
+				regionlayer:initializeTiles()
+			end
+		end
+	end
+
 	function region.reloadTiles( filename )
-		if ( not string.find( filename, "images/tilesets/" ) ) then return end
+		if ( not string.find( filename, "images/tilesets/" ) ) then
+			return
+		end
 
 		for _, region in ipairs( region._regions ) do
-			for _, regionlayer in ipairs( region:getLayers() ) do
-				if ( regionlayer:getType() == "tilelayer" ) then
-					regionlayer:initializeTiles()
-				end
-			end
+			initializeTiles( region )
 		end
 	end
 
@@ -218,11 +241,7 @@ if ( _CLIENT ) then
 
 		for _, layer in ipairs( layers ) do
 			if ( layer:isVisible() ) then
-				love.graphics.push()
-					-- graphics.setOpacity( layer:getOpacity() )
-					layer:draw()
-					-- graphics.setOpacity( 1 )
-				love.graphics.pop()
+				layer:draw()
 			end
 		end
 	end
@@ -230,7 +249,9 @@ end
 
 function region:cleanUp()
 	local entities = self:getEntities()
-	for _, entity in pairs( entities ) do entity:remove() end
+	for _, entity in pairs( entities ) do
+		entity:remove()
+	end
 end
 
 accessor( region, "entities" )
@@ -280,7 +301,9 @@ function region:getTileset( layer )
 	local gid = layer:getHighestTileGid()
 	local tileset = nil
 	for _, t in ipairs( self:getTilesets() ) do
-		if ( t:getFirstGid() <= gid ) then tileset = t end
+		if ( t:getFirstGid() <= gid ) then
+			tileset = t
+		end
 	end
 	return tileset
 end
@@ -324,7 +347,9 @@ function region:isTileWalkableAtPosition( position )
 			hasProperties = hasvalue( gids, tile.id + firstGid )
 			properties    = tile.properties
 			walkable      = hasProperties and properties.walkable
-			if ( hasProperties and walkable == "false" ) then return false end
+			if ( hasProperties and walkable == "false" ) then
+				return false
+			end
 		end
 	end
 
@@ -332,7 +357,9 @@ function region:isTileWalkableAtPosition( position )
 	px = position.x
 	py = position.y - game.tileSize
 	for _, entity in ipairs( self:getEntities() ) do
-		if ( entity:testPoint( px, py ) ) then return false end
+		if ( entity:testPoint( px, py ) ) then
+			return false
+		end
 	end
 
 	-- Check world bounds
@@ -340,13 +367,17 @@ function region:isTileWalkableAtPosition( position )
 	y      = self:getY()
 	width  = self:getPixelWidth()
 	height = self:getPixelHeight()
-	if ( not pointinrect( px, py, x, y, width, height ) ) then return false end
+	if ( not pointinrect( px, py, x, y, width, height ) ) then
+		return false
+	end
 
 	return true
 end
 
 function region:loadTilesets( tilesets )
-	if ( self.tilesets ) then return end
+	if ( self.tilesets ) then
+		return
+	end
 
 	self.tilesets = {}
 
@@ -358,7 +389,9 @@ function region:loadTilesets( tilesets )
 end
 
 function region:loadLayers( layers )
-	if ( self.layers ) then return end
+	if ( self.layers ) then
+		return
+	end
 
 	self.layers = {}
 
@@ -375,7 +408,9 @@ function region:loadLayers( layers )
 end
 
 function region:parse()
-	if ( not self.data ) then return end
+	if ( not self.data ) then
+		return
+	end
 
 	local data = self.data
 	self:setFormatVersion( data[ "version" ] )
@@ -395,13 +430,17 @@ end
 
 function region:remove()
 	local world = self:getWorld()
-	if ( world ) then world:destroy() end
+	if ( world ) then
+		world:destroy()
+	end
 end
 
 function region:removeEntity( entity )
 	local entities = self:getEntities()
 	for i, v in ipairs( entities ) do
-		if ( v == entity ) then table.remove( entities, i ) end
+		if ( v == entity ) then
+			table.remove( entities, i )
+		end
 	end
 end
 
@@ -412,7 +451,9 @@ end
 function region:update( dt )
 	if ( _SERVER ) then
 		local world = self:getWorld()
-		if ( world ) then world:update( dt ) end
+		if ( world ) then
+			world:update( dt )
+		end
 	end
 end
 

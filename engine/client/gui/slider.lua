@@ -39,9 +39,9 @@ function slider:drawLabels()
 	local maxLabel = self:getMaxLabel()
 	local height   = self:getHeight()
 	local width    = self:getWidth()
-	local x        = width - font:getWidth( maxLabel )
-	love.graphics.print( minLabel, 0, height / 2 + love.window.toPixels( 9 ) )
-	love.graphics.print( maxLabel, x, height / 2 + love.window.toPixels( 9 ) )
+	local x        = math.round( width - font:getWidth( maxLabel ) )
+	love.graphics.print( minLabel, 0, math.round( height / 2 + love.window.toPixels( 9 ) ) )
+	love.graphics.print( maxLabel, x, math.round( height / 2 + love.window.toPixels( 9 ) ) )
 end
 
 function slider:drawThumb()
@@ -68,6 +68,7 @@ function slider:drawTrough()
 
 	love.graphics.setColor( self:getScheme( color ) )
 	local lineWidth = love.window.toPixels( 1 )
+	love.graphics.setLineStyle( "rough" )
 	love.graphics.setLineWidth( lineWidth )
 	love.graphics.line( 0, height / 4, width, height / 4 )
 end

@@ -10,6 +10,7 @@ end
 
 local color    = color
 local convar   = convar
+local game     = game
 local math     = math
 local region   = region
 local require  = require
@@ -21,7 +22,7 @@ local _G       = _G
 
 module( "path" )
 
-local _directions = 8
+local _directions = 4
 
 function getDirections()
 	return _directions
@@ -38,7 +39,7 @@ local r_draw_path = convar( "r_draw_path", "0", nil, nil,
 
 local function drawPath( node, c )
 	local region = region.getAtPosition( node )
-	local tileSize = _G.game.tileSize
+	local tileSize = game.tileSize
 	require( "engine.client.debugoverlay" )
 	_G.debugoverlay.rectangle(
 		region:getWorldIndex(),

@@ -22,4 +22,4 @@ console.textbox      = {
     }
 }
 
-console.font         = love.graphics.newFont( "fonts/SourceCodePro-Light.otf", 12 )
+console.font         = love.graphics.newFont( "fonts/SourceCodePro-Light.otf", math.floor( love.window.toPixels( 12 ) ) )

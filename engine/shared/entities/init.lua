@@ -4,10 +4,6 @@
 --
 --==========================================================================--
 
--- These values are preserved during real-time scripting.
-local _entities = entities and entities.entities or {}
-local _classes  = entities and entities.classes  or {}
-
 local getfenv   = getfenv
 local ipairs    = ipairs
 local pairs     = pairs
@@ -22,8 +18,8 @@ local _G        = _G
 
 module( "entities" )
 
-entities = _entities
-classes  = _classes
+_entities = _entities or {}
+_classes  = _classes  or {}
 
 function initialize( region, regionEntities )
 	local t = {}
@@ -50,13 +46,11 @@ local modules = {
 local find = string.find
 
 function requireEntity( classname )
-	local library
-	local status, err
 	for i, module in ipairs( modules ) do
-		library = module .. ".entities." .. classname
-		status, err = pcall( require, library )
+		local library = module .. ".entities." .. classname
+		local status, err = pcall( require, library )
 		if ( status == true ) then
-			classes[ classname ] = library
+			_classes[ classname ] = library
 			return
 		elseif ( status == false and
 		         find( err, "module '" .. library .. "' not found:" ) ~= 1 ) then
@@ -69,12 +63,12 @@ function createFromRegionData( region, entityData )
 	local type = entityData.type
 	requireEntity( type )
 
-	if ( not entities[ type ] ) then
+	if ( not _entities[ type ] ) then
 		print( "Attempted to create unknown entity type " .. type .. "!" )
 		return nil
 	end
 
-	local entity = entities[ type ]()
+	local entity = _entities[ type ]()
 	if ( entityData.name and entityData.name ~= "" ) then
 		entity:setNetworkVar( "name", entityData.name )
 	end
@@ -102,12 +96,11 @@ function createFromRegionData( region, entityData )
 end
 
 function getClassMap()
-	return entities
+	return _entities
 end
 
 function linkToClassname( class, classname )
-	entities[ classname ] = class
-	getfenv( 2 )[ classname ] = nil
+	_entities[ classname ] = class
 end
 
 if ( _G._CLIENT ) then
@@ -119,12 +112,12 @@ if ( _G._CLIENT ) then
 		local classname = payload:get( "classname" )
 		requireEntity( classname )
 
-		if ( not entities[ classname ] ) then
+		if ( not _entities[ classname ] ) then
 			print( "Attempted to create unknown entity type " .. classname .. "!" )
 			return
 		end
 
-		local entity = entities[ classname ]()
+		local entity = _entities[ classname ]()
 		entity.entIndex = payload:get( "entIndex" )
 		entity:updateNetworkVars( payload )
 		local position = entity:getPosition()
@@ -151,14 +144,14 @@ end
 
 function shutdown()
 	_G.entity.removeAll()
-	_G.entity.lastEntIndex = 0
+	_G.entity._lastEntIndex = 0
 
 	if ( _G.player ) then
 		_G.player.removeAll()
-		_G.player.lastPlayerId = 0
+		_G.player._lastPlayerId = 0
 	end
 
-	for classname, module in pairs( classes ) do
+	for classname, module in pairs( _classes ) do
 		unrequire( module )
 	end
 end

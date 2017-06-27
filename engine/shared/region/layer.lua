@@ -15,7 +15,9 @@ end
 if ( _CLIENT ) then
 	function layer:createSpriteBatch()
 		local tileset = self:getTileset()
-		if ( not tileset ) then return end
+		if ( not tileset ) then
+			return
+		end
 
 		local image = tileset:getImage()
 		local count = self:getWidth() * self:getHeight()
@@ -23,15 +25,18 @@ if ( _CLIENT ) then
 	end
 
 	function layer:draw()
-		if ( self:getType() ~= "tilelayer" ) then return end
+		if ( self:getType() ~= "tilelayer" ) then
+			return
+		end
 
 		local spritebatch = self:getSpriteBatch()
-		if ( not spritebatch ) then return end
+		if ( not spritebatch ) then
+			return
+		end
 
 		love.graphics.push()
 			love.graphics.translate( self:getX(), self:getY() )
-			-- graphics.setOpacity( self:getOpacity() )
-			love.graphics.setColor( color.white )
+			love.graphics.setColor( color( color.white, self:getOpacity() * 255 ) )
 			love.graphics.draw( spritebatch )
 		love.graphics.pop()
 	end
@@ -42,7 +47,9 @@ accessor( layer, "data" )
 function layer:getHighestTileGid()
 	local highestTileGid = -1
 	for xy, gid in ipairs( self:getData() ) do
-		if ( gid >= highestTileGid ) then highestTileGid = gid end
+		if ( gid >= highestTileGid ) then
+			highestTileGid = gid
+		end
 	end
 	return highestTileGid
 end
@@ -68,7 +75,9 @@ if ( _CLIENT ) then
 		self:createSpriteBatch()
 
 		local spritebatch = self:getSpriteBatch()
-		if ( not spritebatch ) then return end
+		if ( not spritebatch ) then
+			return
+		end
 
 		local tileset  = self:getTileset()
 		local tileW    = tileset:getTileWidth()
@@ -106,7 +115,9 @@ function layer:isVisible()
 end
 
 function layer:parse()
-	if ( not self.data ) then return end
+	if ( not self.data ) then
+		return
+	end
 
 	local data = self.data
 	self:setType( data[ "type" ] )
@@ -123,7 +134,9 @@ function layer:parse()
 	if ( type == "tilelayer" ) then
 		self:setData( table.copy( data[ "data" ] ) )
 	elseif ( type == "objectgroup" ) then
-		if ( not self:isVisible() ) then return end
+		if ( not self:isVisible() ) then
+			return
+		end
 
 		if ( _SERVER ) then
 			require( "engine.shared.entities" )

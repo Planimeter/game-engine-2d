@@ -11,33 +11,22 @@ local label = gui.label
 function label:label( parent, name, text )
 	gui.panel.panel( self, parent, name )
 	self:setScheme( "Default" )
-	self.font      = self:getScheme( "font" )
-	self.width     = love.window.toPixels( 216 )
-	self.height    = self.font:getHeight()
-	self.text      = text or "Label"
-	self.textAlign = "left"
+	self.font   = self:getScheme( "font" )
+	self.width  = love.window.toPixels( 216 )
+	self.height = self.font:getHeight()
+	self.text   = text or "Label"
 end
 
 function label:draw()
 	love.graphics.setColor( self:getScheme( "label.textColor" ) )
 
-	local font = self:getFont()
+	local font  = self:getFont()
 	love.graphics.setFont( font )
 
-	local align     = self:getTextAlign()
-	local text      = self:getText()
-	local textWidth = font:getWidth( text )
-	local x         = 0
-
-	if ( align == "left" ) then
-		x = 0
-	elseif ( align == "center" ) then
-		x = self:getWidth() / 2 - textWidth / 2
-	elseif ( align == "right" ) then
-		x = self:getWidth() - textWidth + font:getWidth( " " )
-	end
-
-	love.graphics.print( text, x, 0 )
+	local text  = self:getText()
+	local limit = self:getWidth()
+	local align = self:getTextAlign()
+	love.graphics.printf( text, 0, 0, limit, align )
 
 	gui.panel.draw( self )
 end

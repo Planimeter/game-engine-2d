@@ -51,8 +51,8 @@ function hudspeechballoons:draw()
 			local scale  = camera.getZoom()
 			local width  = font:getWidth( balloon.message )
 			local height = font:getHeight()
-			x            = x + ( sprite:getWidth() * scale ) / 2 - width / 2
-			y            = y - font:getHeight()
+			x            = math.round( x + ( sprite:getWidth() * scale ) / 2 - width / 2 )
+			y            = math.round( y - font:getHeight() )
 			love.graphics.print( balloon.message, x, y + love.window.toPixels( -10 + 4 - 8 ) )
 		end
 	end

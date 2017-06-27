@@ -16,17 +16,44 @@ local _G      = _G
 
 module( "gui" )
 
+local function updateFramerate( convar )
+	local enabled = convar:getBoolean()
+	if ( enabled ) then
+		if ( _G.g_Framerate ) then
+			return
+		end
+
+		local framerate = gui.framerate()
+		_G.g_Framerate = framerate
+	else
+		_G.g_Framerate:remove()
+		_G.g_Framerate = nil
+	end
+end
+
+local perf_draw_frame_rate = convar( "perf_draw_frame_rate", "0", nil, nil,
+                                     "Draws the frame rate", updateFramerate )
+
 function load()
-	_rootPanel     = _M.rootpanel()
+	-- Initialize root panel
+	_rootPanel = _M.rootpanel()
 	_G.g_RootPanel = _rootPanel
 
+	-- Initialize main menu
+	local mainmenu = _M.mainmenu()
 	if ( not _G._DEDICATED ) then
-		_G.g_MainMenu = _M.mainmenu()
+		_G.g_MainMenu = mainmenu
 	end
 
-	_G.g_Console = _M.console()
+	-- Initialize console
+	local console = _M.console()
+	_G.g_Console = console
 	if ( _G._DEBUG or argv[ "--console" ] ) then
-		_G.g_Console:activate()
+		console:activate()
+	end
+
+	if ( perf_draw_frame_rate:getBoolean() ) then
+		updateFramerate( perf_draw_frame_rate )
 	end
 end
 

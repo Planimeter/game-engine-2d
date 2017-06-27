@@ -11,6 +11,7 @@ local dropdownlistitemgroup = gui.dropdownlistitemgroup
 function dropdownlistitemgroup:dropdownlistitemgroup( parent, name )
 	gui.radiobuttongroup.radiobuttongroup( self, nil, name )
 	self.width = parent:getWidth()
+	self:setUseFullscreenFramebuffer( true )
 	self.dropDownList = parent
 	self:setScheme( "Default" )
 end
@@ -27,6 +28,10 @@ function dropdownlistitemgroup:addItem( item, default )
 end
 
 function dropdownlistitemgroup:draw()
+	if ( not self:getItems() ) then
+		return
+	end
+
 	gui.panel.draw( self )
 
 	local property = "dropdownlistitem.backgroundColor"
@@ -40,6 +45,7 @@ function dropdownlistitemgroup:drawBorders( property )
 	local height    = self:getHeight()
 	local width     = self:getWidth()
 	love.graphics.setColor( self:getScheme( property ) )
+	love.graphics.setLineStyle( "rough" )
 	love.graphics.setLineWidth( lineWidth )
 	love.graphics.line(
 		0,     lineWidth / 2,          -- Top-left

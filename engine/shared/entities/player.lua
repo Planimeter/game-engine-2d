@@ -144,7 +144,7 @@ function player:moveTo( position, callback )
 	if ( _CLIENT and not _SERVER ) then
 		local payload = payload( "playerMove" )
 		payload:set( "position", position )
-		networkclient.sendToServer( payload )
+		engine.client.network.sendToServer( payload )
 	end
 
 	if ( _CLIENT ) then
@@ -267,17 +267,19 @@ end
 
 concommand( "say", "Display player message",
 	function( self, player, command, argString, argTable )
-		if( _SERVER ) then
-			if ( not game.call( "server", "onPlayerSay", player, argString ) ) then
-				return
-			end
-
-			local payload = payload( "chat" )
-			payload:set( "entity", player or nil )
-			payload:set( "message", argString )
-
-			engine.server.network.broadcast( payload )
+		if ( not _SERVER ) then
+			return
 		end
+
+		if ( not game.call( "server", "onPlayerSay", player, argString ) ) then
+			return
+		end
+
+		local payload = payload( "chat" )
+		payload:set( "entity", player or nil )
+		payload:set( "message", argString )
+
+		engine.server.network.broadcast( payload )
 	end, { "network" }
 )
 

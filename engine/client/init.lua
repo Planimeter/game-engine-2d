@@ -51,42 +51,11 @@ concommand( "connect", "Connects to a server",
 )
 
 function disconnect()
-	if ( not isConnected() ) then
+	if ( not isConnected() or isDisconnecting() ) then
 		return
 	end
 
-	if ( engine.client.network ) then
-		engine.client.network.disconnect()
-	end
-
-	_connecting = false
-	_connected  = false
-
-	_G.g_MainMenu:activate()
-
-	if ( _G.entities ) then
-		_G.entities.shutdown()
-	end
-
-	if ( _G.game and _G.game.client ) then
-		gui._viewportFramebuffer = nil
-		gui._blurFramebuffer = nil
-		_G.game.client.shutdown()
-		_G.game.client = nil
-	end
-
-	if ( _G.region ) then
-		_G.region.shutdown()
-	end
-
-	if ( engine.server ) then
-		engine.server.shutdown()
-		engine.server = nil
-	end
-
-	if ( _G._SERVER ) then
-		_G._SERVER = nil
-	end
+	engine.client.network.disconnect()
 end
 
 concommand( "disconnect", "Disconnects from the server", function()
@@ -108,9 +77,8 @@ function initializeServer()
 		return false
 	end
 
-	_G._SERVER = true
 	local status, err = pcall( require, "engine.server" )
-	if ( status ~= false ) then
+	if ( status == true ) then
 		if ( engine.server.load( args ) ) then
 			engine.server.network.onNetworkInitializedServer()
 		else
@@ -118,11 +86,9 @@ function initializeServer()
 			_connecting = false
 			_connected  = false
 			disconnect()
-			_G._SERVER = nil
 			return false
 		end
 	else
-		_G._SERVER = nil
 		print( err )
 		return false
 	end
@@ -130,7 +96,7 @@ function initializeServer()
 	return true
 end
 
-_connected = false
+_connected = _connected or false
 
 function isConnected()
 	return _connected or _G.engine.server ~= nil
@@ -141,7 +107,8 @@ function isDisconnecting()
 end
 
 function isInGame()
-	return isConnected() and
+	return isConnected()  and
+	       _G.game        and
 	       _G.game.client and
 	       _G.game.client._playerInitialized
 end
@@ -165,9 +132,37 @@ end
 
 function onDisconnect( event )
 	if ( _connected ) then
-		_disconnecting = true
-		disconnect()
+		_connecting    = false
 		_connected     = false
+		_disconnecting = true
+
+		-- Activate main menu
+		_G.g_MainMenu:activate()
+
+		-- Shutdown entities
+		_G.entities.shutdown()
+
+		-- Shutdown game
+		if ( _G.game and _G.game.client ) then
+			gui._viewportFramebuffer = nil
+			gui._blurFramebuffer = nil
+			_G.game.client.shutdown()
+			unrequire( "game.client" )
+			_G.game.client = nil
+		end
+
+		-- Shutdown server
+		if ( engine.server ) then
+			engine.server.shutdown()
+			unrequire( "engine.server" )
+			engine.server = nil
+		end
+
+		-- Shutdown regions
+		if ( _G.region ) then
+			_G.region.shutdown()
+		end
+
 		_disconnecting = false
 		_G.hook.call( "client", "onDisconnect" )
 

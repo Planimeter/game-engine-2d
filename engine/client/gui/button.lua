@@ -74,8 +74,8 @@ function button:drawText()
 	local font = self:getScheme( "font" )
 	love.graphics.setFont( font )
 	local text = self:getText()
-	local x = self:getWidth() / 2 - font:getWidth( text ) / 2
-	local y = self:getHeight() / 2 - font:getHeight() / 2
+	local x = math.round( self:getWidth() / 2 - font:getWidth( text ) / 2 )
+	local y = math.round( self:getHeight() / 2 - font:getHeight() / 2 )
 	love.graphics.print( text, x, y )
 end
 

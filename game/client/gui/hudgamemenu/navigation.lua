@@ -41,6 +41,7 @@ function hudgamemenunavigation:draw()
 	local lineWidth = love.window.toPixels( 1 )
 	local width     = self:getWidth()
 	love.graphics.setColor( self:getScheme( property ) )
+	love.graphics.setLineStyle( "rough" )
 	love.graphics.setLineWidth( lineWidth )
 	love.graphics.line(
 		0,     lineWidth / 2, -- Top-left
