@@ -45,14 +45,8 @@ function imagepanel:drawMissingImage()
 end
 
 accessor( imagepanel, "color" )
-
-function imagepanel:getQuad()
-	return self.imageQuad
-end
-
-function imagepanel:getImage()
-	return self.imageDatum
-end
+accessor( imagepanel, "quad",  "imageQuad" )
+accessor( imagepanel, "image", "imageDatum" )
 
 function imagepanel:setImage( image )
 	if ( type( image ) == "image" ) then

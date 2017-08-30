@@ -6,6 +6,7 @@
 
 local getfenv   = getfenv
 local ipairs    = ipairs
+local love      = love
 local pairs     = pairs
 local payload   = payload
 local pcall     = pcall
@@ -43,27 +44,37 @@ local modules = {
 	"game.client"
 }
 
-local find = string.find
-
 function requireEntity( classname )
-	for i, module in ipairs( modules ) do
+	if ( _classes[ classname ] ) then
+		return
+	end
+
+	for _, module in ipairs( modules ) do
 		local library = module .. ".entities." .. classname
 		local status, err = pcall( require, library )
 		if ( status == true ) then
 			_classes[ classname ] = library
-			return
-		elseif ( status == false and
-		         find( err, "module '" .. library .. "' not found:" ) ~= 1 ) then
+			break
+		end
+
+		local message = "module '" .. library .. "' not found:"
+		local notFound = string.find( err, message ) ~= 1
+		if ( notFound ) then
 			print( err )
 		end
 	end
+end
+
+function unrequireEntity( classname )
+	unrequire( _classes[ classname ] )
+	_classes[ classname ] = nil
 end
 
 function createFromRegionData( region, entityData )
 	local type = entityData.type
 	requireEntity( type )
 
-	if ( not _entities[ type ] ) then
+	if ( _entities[ type ] == nil ) then
 		print( "Attempted to create unknown entity type " .. type .. "!" )
 		return nil
 	end
@@ -73,7 +84,6 @@ function createFromRegionData( region, entityData )
 		entity:setNetworkVar( "name", entityData.name )
 	end
 
-	require( "common.vector" )
 	local x = region:getX() + entityData.x
 	local y = region:getY() + entityData.y + entityData.height
 	entity:setNetworkVar( "position", _G.vector( x, y ) )
@@ -95,6 +105,26 @@ function createFromRegionData( region, entityData )
 	return entity
 end
 
+function getAll()
+	local classnames = {}
+	for _, module in ipairs( modules ) do
+		module = module .. ".entities"
+		local dir = string.gsub( module, "%.", "/" )
+		local files = love.filesystem.getDirectoryItems( dir )
+		for _, v in ipairs( files ) do
+			if ( not love.filesystem.isDirectory( dir .. v ) and
+			     v ~= "init.lua" and
+			     v ~= "networkvar.lua" and
+			     string.fileextension( v ) == "lua" ) then
+				local classname = string.gsub( v, ".lua", "" )
+				table.insert( classnames, classname )
+			end
+		end
+	end
+
+	return classnames
+end
+
 function getClassMap()
 	return _entities
 end
@@ -112,7 +142,7 @@ if ( _G._CLIENT ) then
 		local classname = payload:get( "classname" )
 		requireEntity( classname )
 
-		if ( not _entities[ classname ] ) then
+		if ( _entities[ classname ] == nil ) then
 			print( "Attempted to create unknown entity type " .. classname .. "!" )
 			return
 		end
@@ -120,9 +150,6 @@ if ( _G._CLIENT ) then
 		local entity = _entities[ classname ]()
 		entity.entIndex = payload:get( "entIndex" )
 		entity:updateNetworkVars( payload )
-		local position = entity:getPosition()
-		local region = _G.region.getAtPosition( position )
-		entity:setRegion( region )
 		entity:spawn()
 	end
 
@@ -143,8 +170,10 @@ if ( _G._CLIENT ) then
 end
 
 function shutdown()
-	_G.entity.removeAll()
-	_G.entity._lastEntIndex = 0
+	if ( _G.entity ) then
+		_G.entity.removeAll()
+		_G.entity._lastEntIndex = 0
+	end
 
 	if ( _G.player ) then
 		_G.player.removeAll()
@@ -152,6 +181,6 @@ function shutdown()
 	end
 
 	for classname, module in pairs( _classes ) do
-		unrequire( module )
+		unrequireEntity( classname )
 	end
 end

@@ -138,17 +138,9 @@ function frame:invalidateLayout()
 	gui.panel.invalidateLayout( self )
 end
 
-function frame:isResizable()
-	return self.resizable
-end
-
-function frame:isResizing()
-	return self.resizing
-end
-
-function frame:isMovable()
-	return self.movable
-end
+accessor( frame, "resizable", nil, "is" )
+accessor( frame, "resizing",  nil, "is" )
+accessor( frame, "movable",   nil, "is" )
 
 local function getNextFocusedIndex( children, startpos, endpos, dir )
 	if ( dir == -1 ) then
@@ -180,7 +172,7 @@ function frame:moveFocus()
 					end
 				end
 
-				if ( not focusedIndex ) then
+				if ( focusedIndex == nil ) then
 					focusedIndex = next( children, 1, i - 1, dir )
 					if ( focusedIndex ) then
 						break
@@ -189,7 +181,7 @@ function frame:moveFocus()
 			end
 		end
 
-		if ( not focusedIndex ) then
+		if ( focusedIndex == nil ) then
 			focusedIndex = next( children, 1, #children, dir )
 		end
 
@@ -476,21 +468,7 @@ function frame:setMinSize( minWidth, minHeight )
 	self:setMinHeight( minHeight )
 end
 
-function frame:setMovable( movable )
-	self.movable = movable
-end
-
-function frame:setRemoveOnClose( removeOnClose )
-	self.removeOnClose = removeOnClose
-end
-
-function frame:setResizable( resizable )
-	self.resizable = resizable
-end
-
-function frame:shouldRemoveOnClose()
-	return self.removeOnClose
-end
+accessor( frame, "removeOnClose", nil, "should" )
 
 local mouseX, mouseY = 0, 0
 local getPosition    = love.mouse.getPosition

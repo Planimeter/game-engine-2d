@@ -1,6 +1,6 @@
 --=========== Copyright © 2017, Planimeter, All rights reserved. ===========--
 --
--- Purpose: Chat Textbox HUD
+-- Purpose: Chat Text Box HUD
 --
 --==========================================================================--
 
@@ -68,34 +68,42 @@ function hudchattextbox:drawForeground()
 	)
 end
 
-function hudchattextbox:getHideTime()
-	return self.hideTime
-end
-
-function hudchattextbox:getHudChat()
-	return self.hudchat
-end
+accessor( hudchattextbox, "hideTime" )
+accessor( hudchattextbox, "hudchat" )
 
 function hudchattextbox:invalidateLayout()
-	local parent = self:getHudChat()
-	self:setWidth( parent:getWidth() - 2 * love.window.toPixels( 36 ) )
-	self:setHeight( parent:getHeight() - love.window.toPixels( 46 + 9 ) - 2 * love.window.toPixels( 36 ) )
+	local parent        = self:getHudchat()
+	local margin        = love.window.toPixels( 36 )
+	local textboxHeight = love.window.toPixels( 46 )
+	local padding       = love.window.toPixels( 9 )
+	local width         = parent:getWidth()
+	width               = width - 2 * margin
+	local height        = parent:getHeight()
+	height              = height - textboxHeight - padding - 2 * margin
+	self:setWidth( width )
+	self:setHeight( height )
 
 	gui.panel.invalidateLayout( self )
 end
 
-function hudchattextbox:setHideTime( duration )
-	self.hideTime = duration
-end
-
 function hudchattextbox:update( dt )
-	local hudchat  = self:getHudChat()
+	local parent   = self:getHudchat()
 	local hideTime = self:getHideTime()
 	if ( hideTime and
 	     hideTime <= love.timer.getTime() and
-	     not hudchat:isVisible() ) then
+	     not parent:isVisible() ) then
 		self:hide()
 	end
 
 	gui.textbox.update( self, dt )
+end
+
+function hudchattextbox:updateCursor()
+	local hudchat = self:getHudchat()
+	if ( not hudchat:isVisible() ) then
+		love.mouse.setCursor()
+		return
+	end
+
+	gui.textbox.updateCursor( self )
 end

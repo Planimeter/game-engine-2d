@@ -57,13 +57,7 @@ function radiobuttongroup:getValue()
 	end
 end
 
-function radiobuttongroup:isDisabled()
-	return self.disabled
-end
-
-function radiobuttongroup:setDisabled( disabled )
-	self.disabled = disabled
-end
+accessor( radiobuttongroup, "disabled", nil, "is" )
 
 function radiobuttongroup:setSelectedId( selectedId, default )
 	local oldSelectedId = self:getSelectedId()

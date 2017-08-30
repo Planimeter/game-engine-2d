@@ -26,7 +26,7 @@ end
 
 function itembutton:drawIcon()
 	local item = self:getItemClass()
-	if ( not item ) then
+	if ( item == nil ) then
 		return
 	end
 
@@ -47,12 +47,12 @@ end
 
 function itembutton:drawCount()
 	local item = self:getItemClass()
-	if ( not item ) then
+	if ( item == nil ) then
 		return
 	end
 
 	local itemdata = item.data
-	if ( not itemdata or not itemdata.stackable ) then
+	if ( itemdata == nil or not itemdata.stackable ) then
 		return
 	end
 

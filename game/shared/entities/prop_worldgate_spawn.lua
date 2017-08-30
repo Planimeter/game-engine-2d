@@ -4,7 +4,7 @@
 --
 --==========================================================================--
 
-require( "engine.shared.entities.entity" )
+entities.requireEntity( "entity" )
 require( "game" )
 
 if ( _CLIENT ) then
@@ -50,6 +50,7 @@ function prop_worldgate_spawn:spawn()
 	local tileSize = game.tileSize
 	local min      = vector()
 	local max      = vector( tileSize, -tileSize )
+	self:initializePhysics()
 	self:setCollisionBounds( min, max )
 end
 

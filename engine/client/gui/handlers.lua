@@ -23,7 +23,7 @@ local function updateFramerate( convar )
 			return
 		end
 
-		local framerate = gui.framerate()
+		local framerate = gui.framerate( nil, "Frame Rate" )
 		_G.g_Framerate = framerate
 	else
 		_G.g_Framerate:remove()
@@ -33,6 +33,24 @@ end
 
 local perf_draw_frame_rate = convar( "perf_draw_frame_rate", "0", nil, nil,
                                      "Draws the frame rate", updateFramerate )
+
+local function updateNetGraph( convar )
+	local enabled = convar:getBoolean()
+	if ( enabled ) then
+		if ( _G.g_NetGraph ) then
+			return
+		end
+
+		local netgraph = gui.netgraph( nil, "Net Graph" )
+		_G.g_NetGraph = netgraph
+	else
+		_G.g_NetGraph:remove()
+		_G.g_NetGraph = nil
+	end
+end
+
+local perf_draw_net_graph = convar( "perf_draw_net_graph", "0", nil, nil,
+                                     "Draws the net graph", updateNetGraph )
 
 function load()
 	-- Initialize root panel
@@ -55,6 +73,10 @@ function load()
 	if ( perf_draw_frame_rate:getBoolean() ) then
 		updateFramerate( perf_draw_frame_rate )
 	end
+
+	if ( perf_draw_net_graph:getBoolean() ) then
+		updateNetGraph( perf_draw_net_graph )
+	end
 end
 
 local function updateBlurFramebuffer( convar )
@@ -73,13 +95,12 @@ local gui_draw_blur = convar( "gui_draw_blur", "1", nil, nil,
 
 function draw()
 	if ( _viewportFramebuffer and gui_draw_blur:getBoolean() ) then
-		if ( not _blurFramebuffer ) then
+		if ( _blurFramebuffer == nil ) then
 			require( "shaders.gaussianblur" )
 			_blurFramebuffer = _G.shader.getShader( "gaussianblur" )
 			_blurFramebuffer:set( "sigma", love.window.toPixels( 12 ) )
 		end
 
-		local framebuffer = love.graphics.getCanvas()
 		_blurFramebuffer:renderTo( function()
 			love.graphics.clear()
 			love.graphics.draw( _viewportFramebuffer )

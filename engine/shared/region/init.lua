@@ -203,9 +203,21 @@ if ( not _DEDICATED ) then
 	)
 end
 
+function region.roundToGrid( x, y )
+	local region = region.getAtPosition( vector( x, y ) )
+	if ( region == nil ) then
+		return x, y
+	end
+
+	local w, h = region:getTileSize()
+	x = x - x % w + math.nearestmult( x % w, w )
+	y = y - y % h + math.nearestmult( y % h, h )
+	return x, y
+end
+
 function region.snapToGrid( x, y )
 	local region = region.getAtPosition( vector( x, y ) )
-	if ( not region ) then
+	if ( region == nil ) then
 		return x, y
 	end
 
@@ -216,9 +228,8 @@ function region.snapToGrid( x, y )
 end
 
 function region:region( name, x, y, worldIndex )
-	self.name     = name
-	self.data     = require( "regions." .. name )
-	self.entities = {}
+	self.name = name
+	self.data = require( "regions." .. name )
 
 	self.x = x or 0
 	self.y = y or 0
@@ -227,15 +238,10 @@ function region:region( name, x, y, worldIndex )
 	self:parse()
 end
 
-function region:addEntity( entity )
-	table.insert( self.entities, entity )
-	entity:setRegion( self )
-end
-
 if ( _CLIENT ) then
 	function region:draw()
 		local layers = self:getLayers()
-		if ( not layers ) then
+		if ( layers == nil ) then
 			return
 		end
 
@@ -249,8 +255,10 @@ end
 
 function region:cleanUp()
 	local entities = self:getEntities()
-	for _, entity in pairs( entities ) do
-		entity:remove()
+	if ( entities ) then
+		for _, entity in pairs( entities ) do
+			entity:remove()
+		end
 	end
 end
 
@@ -357,7 +365,11 @@ function region:isTileWalkableAtPosition( position )
 	px = position.x
 	py = position.y - game.tileSize
 	for _, entity in ipairs( self:getEntities() ) do
-		if ( entity:testPoint( px, py ) ) then
+		local body = entity:getBody()
+		if ( entity:testPoint(
+			px + game.tileSize / 2,
+			py + game.tileSize / 2
+		) and ( body and body:getType() == "static" ) ) then
 			return false
 		end
 	end
@@ -408,7 +420,7 @@ function region:loadLayers( layers )
 end
 
 function region:parse()
-	if ( not self.data ) then
+	if ( self.data == nil ) then
 		return
 	end
 
@@ -437,9 +449,11 @@ end
 
 function region:removeEntity( entity )
 	local entities = self:getEntities()
-	for i, v in ipairs( entities ) do
-		if ( v == entity ) then
-			table.remove( entities, i )
+	if ( entities ) then
+		for i, v in ipairs( entities ) do
+			if ( v == entity ) then
+				table.remove( entities, i )
+			end
 		end
 	end
 end
@@ -449,11 +463,9 @@ function region:getTileSize()
 end
 
 function region:update( dt )
-	if ( _SERVER ) then
-		local world = self:getWorld()
-		if ( world ) then
-			world:update( dt )
-		end
+	local world = self:getWorld()
+	if ( world ) then
+		world:update( dt )
 	end
 end
 

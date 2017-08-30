@@ -15,6 +15,14 @@ function framerate:framerate( parent, name )
 end
 
 function framerate:update( dt )
+	-- HACKHACK: Fade this out for readability.
+	if ( ( g_MainMenu and not g_MainMenu:isVisible() ) and
+	     ( g_GameMenu and g_GameMenu:isVisible() ) ) then
+		self:setOpacity( 1 - g_GameMenu:getOpacity() )
+	else
+		self:setOpacity( 1 )
+	end
+
 	self:setText( self:getFramerate() )
 	self:invalidate()
 end

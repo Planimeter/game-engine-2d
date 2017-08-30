@@ -80,10 +80,7 @@ function button:drawText()
 end
 
 accessor( button, "text" )
-
-function button:isDisabled()
-	return self.disabled
-end
+accessor( button, "disabled", nil, "is" )
 
 function button:keypressed( key, scancode, isrepeat )
 	if ( not self.focus or self:isDisabled() ) then

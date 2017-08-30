@@ -16,7 +16,7 @@ function hudgamemenustats:hudgamemenustats( parent )
 	self:setSize( parent:getSize() )
 
 	local panel = gui.scrollablepanel( self, "Stats Scrollable Panel" )
-	panel:setSize( self:getWidth(), toPixels( 345 ) )
+	panel:setSize( self:getWidth(), self:getHeight() - toPixels( 135 ) )
 	panel:setInnerHeight( toPixels( 738 ) )
 	panel:setY( toPixels( 86 ) + toPixels( 31 ) + toPixels( 18 ) )
 	panel = panel:getInnerPanel()
@@ -24,7 +24,8 @@ function hudgamemenustats:hudgamemenustats( parent )
 	-- Soul
 	local name       = "Soul"
 	local label      = gui.label( panel, name, name )
-	local x          = toPixels( 36 )
+	local margin     = toPixels( 36 )
+	local x          = margin
 	local y          = 0
 	local fontBold   = self:getScheme( "fontBold" )
 	label:setPos( x, y )
@@ -33,14 +34,15 @@ function hudgamemenustats:hudgamemenustats( parent )
 	require( "game.client.gui.hudgamemenu.stat" )
 	name             = "Health"
 	local stat       = gui.hudgamemenustat( panel, name, "health" )
-	stat:setWidth( toPixels( 312 ) )
+	local statWidth  = self:getWidth() - 2 * margin
+	stat:setWidth( statWidth )
 	local lineHeight = fontBold:getHeight()
 	y                = y + lineHeight + toPixels( 17 )
 	stat:setPos( x, y )
 
 	name             = "Prayer"
 	local stat       = gui.hudgamemenustat( panel, name, "prayer" )
-	stat:setWidth( toPixels( 312 ) )
+	stat:setWidth( statWidth )
 	y                = y + stat:getHeight() + toPixels( 20 )
 	stat:setPos( x, y )
 
@@ -53,25 +55,25 @@ function hudgamemenustats:hudgamemenustats( parent )
 
 	name             = "Attack"
 	stat             = gui.hudgamemenustat( panel, name, "attack" )
-	stat:setWidth( toPixels( 312 ) )
+	stat:setWidth( statWidth )
 	y                = y + lineHeight + toPixels( 17 )
 	stat:setPos( x, y )
 
 	name             = "Defense"
 	stat             = gui.hudgamemenustat( panel, name, "defense" )
-	stat:setWidth( toPixels( 312 ) )
+	stat:setWidth( statWidth )
 	y                = y + stat:getHeight() + toPixels( 20 )
 	stat:setPos( x, y )
 
 	name             = "Range"
 	stat             = gui.hudgamemenustat( panel, name, "range" )
-	stat:setWidth( toPixels( 312 ) )
+	stat:setWidth( statWidth )
 	y                = y + stat:getHeight() + toPixels( 20 )
 	stat:setPos( x, y )
 
 	name             = "Magic"
 	stat             = gui.hudgamemenustat( panel, name, "magic" )
-	stat:setWidth( toPixels( 312 ) )
+	stat:setWidth( statWidth )
 	y                = y + stat:getHeight() + toPixels( 20 )
 	stat:setPos( x, y )
 
@@ -84,25 +86,25 @@ function hudgamemenustats:hudgamemenustats( parent )
 
 	name             = "Fishing"
 	stat             = gui.hudgamemenustat( panel, name, "fishing" )
-	stat:setWidth( toPixels( 312 ) )
+	stat:setWidth( statWidth )
 	y                = y + lineHeight + toPixels( 17 )
 	stat:setPos( x, y )
 
 	name             = "Cooking"
 	stat             = gui.hudgamemenustat( panel, name, "cooking" )
-	stat:setWidth( toPixels( 312 ) )
+	stat:setWidth( statWidth )
 	y                = y + stat:getHeight() + toPixels( 20 )
 	stat:setPos( x, y )
 
 	name             = "Mining"
 	stat             = gui.hudgamemenustat( panel, name, "mining" )
-	stat:setWidth( toPixels( 312 ) )
+	stat:setWidth( statWidth )
 	y                = y + stat:getHeight() + toPixels( 20 )
 	stat:setPos( x, y )
 
 	name             = "Smithing"
 	stat             = gui.hudgamemenustat( panel, name, "smithing" )
-	stat:setWidth( toPixels( 312 ) )
+	stat:setWidth( statWidth )
 	y                = y + stat:getHeight() + toPixels( 20 )
 	stat:setPos( x, y )
 end

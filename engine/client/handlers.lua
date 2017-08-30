@@ -9,8 +9,11 @@ local config  = config
 local convar  = convar
 local engine  = engine
 local gui     = gui
+local ipairs  = ipairs
 local love    = love
 local require = require
+local _CLIENT = _CLIENT
+local _SERVER = _SERVER
 local _G      = _G
 
 module( "engine.client" )
@@ -146,6 +149,16 @@ function resize( w, h )
 end
 
 function update( dt )
+	local _CLIENT = _CLIENT
+	local _SERVER = _SERVER or _G._SERVER
+
+	if ( _CLIENT and not _SERVER ) then
+		local regions = _G.region.getAll()
+		for _, region in ipairs( regions ) do
+			region:update( dt )
+		end
+	end
+
 	local game = _G.game and _G.game.client or nil
 	if ( game ) then
 		game.update( dt )
@@ -157,7 +170,7 @@ function update( dt )
 	end
 end
 
-local r_focus = convar( "r_focus", "1", nil, nil,
+local r_focus = convar( "r_focus", "0", nil, nil,
                         "Draw only when the engine has focus" )
 
 function draw()
@@ -166,14 +179,14 @@ function draw()
 	end
 
 	if ( isInGame() ) then
-		if ( not gui._viewportFramebuffer ) then
+		if ( gui._viewportFramebuffer == nil ) then
 			gui._viewportFramebuffer = love.graphics.newCanvas()
 		end
 
-		love.graphics.setCanvas( gui._viewportFramebuffer )
+		gui._viewportFramebuffer:renderTo( function()
 			love.graphics.clear()
 			_G.game.client.draw()
-		love.graphics.setCanvas()
+		end )
 
 		love.graphics.setColor( _G.color.white )
 		love.graphics.draw( gui._viewportFramebuffer )

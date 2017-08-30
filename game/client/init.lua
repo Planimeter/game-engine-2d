@@ -37,7 +37,7 @@ function createDefaultPanels()
 end
 
 function draw()
-	if ( not _playerInitialized ) then
+	if ( not _G.localplayer._initialized ) then
 		return
 	end
 
@@ -67,6 +67,9 @@ function onReloadImage( filename )
 end
 
 function onReloadSound( filename )
+end
+
+function onTick( timestep )
 end
 
 function quit()

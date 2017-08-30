@@ -72,9 +72,7 @@ function scrollbar:invalidateLayout()
 	self:setHeight( parent:getHeight() )
 end
 
-function scrollbar:isDisabled()
-	return self.disabled
-end
+accessor( scrollbar, "disabled", nil, "is" )
 
 local localX, localY = 0, 0
 

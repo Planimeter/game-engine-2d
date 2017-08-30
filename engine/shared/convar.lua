@@ -46,6 +46,7 @@ function convar.saveConfig()
 	for k, v in pairs( convar._convars ) do
 		table.insert( config, k .. " " .. tostring( v:getValue() ) )
 	end
+	table.sort( config )
 	table.insert( config, "" )
 	config = table.concat( config, "\r\n" )
 
@@ -59,9 +60,14 @@ function convar.saveConfig()
 end
 
 function convar:convar( name, default, min, max, helpString, onValueChange, flags )
+	local value = convar._config[ name ] or default
+	if ( convar._convars[ name ] ) then
+		value = convar._convars[ name ]:getValue()
+	end
+
 	self.name               = name
 	self.default            = default
-	self.value              = convar._config[ name ] or default
+	self.value              = value
 	self.min                = min
 	self.max                = max
 	self.helpString         = helpString

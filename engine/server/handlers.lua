@@ -4,15 +4,20 @@
 --
 --==========================================================================--
 
+local debug     = debug
 local engine    = engine
 local ipairs    = ipairs
+local love      = love
+local print     = print
 local require   = require
+local tostring  = tostring
 local unrequire = unrequire
 local _G        = _G
 
 module( "engine.server" )
 
 function load( arg )
+	require( "engine.server.network" )
 	local initialized = engine.server.network.initializeServer()
 	if ( not initialized ) then
 		return false
@@ -28,8 +33,9 @@ function load( arg )
 end
 
 function quit()
+	-- Shutdown game
 	local game = _G.game
-	if ( game ) then
+	if ( game and game.server ) then
 		game.server.shutdown()
 		unrequire( "game.server" )
 		game.server = nil
@@ -38,6 +44,7 @@ function quit()
 	unrequire( "game" )
 	_G.game = nil
 
+	-- Shutdown server
 	engine.server.network.shutdownServer()
 
 	unrequire( "engine.server.network" )
@@ -54,7 +61,15 @@ function update( dt )
 		region:update( dt )
 	end
 
-	engine.server.network.update( dt )
+	local game = _G.game and _G.game.server or nil
+	if ( game ) then
+		game.update( dt )
+	end
+
+	local network = engine.server.network
+	if ( network ) then
+		network.update( dt )
+	end
 end
 
 local function error_printer(msg, layer)
@@ -66,11 +81,5 @@ function errhand(msg)
 	msg = tostring(msg)
 
 	error_printer(msg, 2)
-
-	while true do
-		if love.timer then
-			love.timer.sleep(0.1)
-		end
-	end
 
 end

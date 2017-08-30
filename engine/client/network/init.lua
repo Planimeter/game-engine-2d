@@ -7,8 +7,11 @@
 require( "enet" )
 
 local collectgarbage = collectgarbage
+local convar         = convar
 local enet           = enet
 local engine         = engine
+local ipairs         = ipairs
+local love           = love
 local string         = string
 local type           = type
 local pcall          = pcall
@@ -89,21 +92,50 @@ function sendToServer( data, channel, flag )
 	_server:send( data, channel, flag )
 end
 
-local timestep = 1/20
-_accumulator   = _accumulator or 0
+local cl_updaterate = convar( "cl_updaterate", 20, nil, nil,
+                              "Sets the client tick rate" )
+
+-- local timestep = 1/20
+_accumulator      = _accumulator or 0
 
 function update( dt )
-	if ( not _host ) then
+	if ( _host == nil ) then
 		return
 	end
 
-	-- _accumulator = _accumulator + dt
+	local timestep = 1 / cl_updaterate:getNumber()
+	_accumulator   = _accumulator + dt
 
-	-- while ( _accumulator >= timestep ) do
+	while ( _accumulator >= timestep ) do
 		pollEvents()
 
-		-- _accumulator = _accumulator - timestep
-	-- end
+		local entity = _G.entity
+		if ( entity ) then
+			local entities = entity.getAll()
+			for _, entity in ipairs( entities ) do
+				entity:onTick( timestep )
+			end
+		end
+
+		engine.client.onTick( timestep )
+
+		_accumulator = _accumulator - timestep
+	end
+end
+
+function updateSentReceived()
+	if ( _sentRcvdUpdateTime and
+		 love.timer.getTime() < _sentRcvdUpdateTime ) then
+		return
+	end
+
+	_prevTotalSentData  = _totalSentData or 0
+	_prevTotalRcvdData  = _totalRcvdData or 0
+	_totalSentData      = _host:total_sent_data()
+	_totalRcvdData      = _host:total_received_data()
+	_avgSentData        = ( _totalSentData - _prevTotalSentData ) / 1000
+	_avgRcvdData        = ( _totalRcvdData - _prevTotalRcvdData ) / 1000
+	_sentRcvdUpdateTime = love.timer.getTime() + 1
 end
 
 function pollEvents()
@@ -123,4 +155,18 @@ function pollEvents()
 			event = nil
 		end
 	end
+
+	updateSentReceived()
+end
+
+_avgSentData = _avgSentData or 0
+
+function getAverageSentData()
+	return _avgSentData
+end
+
+_avgRcvdData = _avgRcvdData or 0
+
+function getAverageReceivedData()
+	return _avgRcvdData
 end

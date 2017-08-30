@@ -17,22 +17,41 @@ function debugoverlaypanel:debugoverlaypanel( parent )
 	self.overlays = {}
 end
 
+local function line( overlay )
+	return function()
+		love.graphics.setColor( overlay.color )
+		local lineWidth = 1
+		love.graphics.setLineWidth( lineWidth )
+		love.graphics.line( overlay.points )
+	end
+end
+
 local function rectangle( overlay )
 	return function()
 		love.graphics.setColor( overlay.color )
-		love.graphics.setLineWidth( 1 )
+		local lineWidth = 1
+		love.graphics.setLineWidth( lineWidth )
 		love.graphics.rectangle(
 			"line",
-			0,
-			0,
-			overlay.width,
-			overlay.height
+			lineWidth / 2,
+			lineWidth / 2,
+			overlay.width  - lineWidth,
+			overlay.height - lineWidth
 		)
 	end
 end
 
 function debugoverlaypanel:preDrawWorld()
 	for _, overlay in ipairs( self.overlays ) do
+		if ( overlay.type == "line" ) then
+			camera.drawToWorld(
+				overlay.worldIndex,
+				overlay.x,
+				overlay.y,
+				line( overlay )
+			)
+		end
+
 		if ( overlay.type == "rectangle" ) then
 			camera.drawToWorld(
 				overlay.worldIndex,
@@ -53,6 +72,19 @@ function debugoverlaypanel:invalidateLayout()
 	)
 
 	gui.panel.invalidateLayout( self )
+end
+
+function debugoverlaypanel:line( worldIndex, x, y, points, c, duration )
+	local overlay = {
+		type       = "line",
+		worldIndex = worldIndex,
+		x          = x,
+		y          = y,
+		points     = points,
+		color      = c,
+		duration   = duration
+	}
+	table.insert( self.overlays, overlay )
 end
 
 function debugoverlaypanel:rectangle(

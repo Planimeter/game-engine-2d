@@ -11,53 +11,68 @@ local hudspeechballoons = gui.hudspeechballoons
 function hudspeechballoons:hudspeechballoons( parent )
 	gui.panel.panel( self, parent, "HUD Speech Balloons" )
 
-	self.width  = love.graphics.getWidth()
-	self.height = love.graphics.getHeight()
-
 	self:setScheme( "Default" )
-
 	self:addChatHook()
+	self:invalidateLayout()
 end
 
-function hudspeechballoons:addChatHook()
-	local function addSpeechBalloon( player, message )
-		if ( not self.speechBalloons ) then
+local function addSpeechBalloon( self )
+	return function( player, message )
+		if ( self.speechBalloons == nil ) then
 			self.speechBalloons = {}
 		end
 
+		local readingtime = math.max( string.readingtime( message ), 5 )
 		self.speechBalloons[ player ] = {
 			player  = player,
-			message = message
+			message = message,
+			expire  = love.timer.getTime() + readingtime
 		}
 	end
+end
 
-	hook.set( "client", addSpeechBalloon, "onPlayerChat", "addSpeechBalloon" )
+function hudspeechballoons:addChatHook()
+	local event = "onPlayerChat"
+	local name  = "addSpeechBalloon"
+	hook.set( "client", addSpeechBalloon( self ), event, name )
 end
 
 function hudspeechballoons:removeChatHook()
-	hook.remove( "client", "onPlayerChat", "addSpeechBalloon" )
+	local event = "onPlayerChat"
+	local name  = "addSpeechBalloon"
+	hook.remove( "client", event, name )
 end
 
 function hudspeechballoons:draw()
+	self:drawBalloons()
+
+	gui.panel.draw( self )
+end
+
+function hudspeechballoons:drawBalloons()
+	if ( self.speechBalloons == nil ) then
+		return
+	end
+
 	local font = self:getScheme( "fontBold" )
 	love.graphics.setFont( font )
 	love.graphics.setColor( self:getScheme( "hudspeechballoons.textColor" ) )
 
-	if ( self.speechBalloons ) then
-		for player, balloon in pairs( self.speechBalloons ) do
-			local x, y   = player:getDrawPosition()
-			x, y         = camera.worldToScreen( x, y )
-			local sprite = player:getSprite()
-			local scale  = camera.getZoom()
-			local width  = font:getWidth( balloon.message )
-			local height = font:getHeight()
-			x            = math.round( x + ( sprite:getWidth() * scale ) / 2 - width / 2 )
-			y            = math.round( y - font:getHeight() )
-			love.graphics.print( balloon.message, x, y + love.window.toPixels( -10 + 4 - 8 ) )
-		end
+	for player, balloon in pairs( self.speechBalloons ) do
+		local x, y   = player:getDrawPosition()
+		x, y         = camera.worldToScreen( x, y )
+		local sprite = player:getSprite()
+		local scale  = camera.getZoom()
+		local width  = font:getWidth( balloon.message )
+		local height = font:getHeight()
+		x            = x + sprite:getWidth() * scale / 2
+		x            = x - width / 2
+		x            = math.round( x )
+		y            = y - font:getHeight()
+		y            = y - love.window.toPixels( 9 )
+		y            = math.round( y )
+		love.graphics.print( balloon.message, x, y )
 	end
-
-	gui.panel.draw( self )
 end
 
 function hudspeechballoons:invalidateLayout()
@@ -77,5 +92,18 @@ function hudspeechballoons:update( dt )
 		return
 	end
 
+	self:updateBalloons()
 	self:invalidate()
+end
+
+function hudspeechballoons:updateBalloons()
+	if ( self.speechBalloons == nil ) then
+		return
+	end
+
+	for player, balloon in pairs( self.speechBalloons ) do
+		if ( balloon.expire <= love.timer.getTime() ) then
+			self.speechBalloons[ player ] = nil
+		end
+	end
 end

@@ -50,9 +50,7 @@ function throbber:disable()
 	self.enabled = false
 end
 
-function throbber:isEnabled()
-	return self.enabled
-end
+accessor( throbber, "enabled", nil, "is" )
 
 function throbber:update( dt )
 	local opacity = self:getOpacity()

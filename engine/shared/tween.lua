@@ -14,7 +14,7 @@ local cos = math.cos
 tween.easing = {
 	linear       = function( p ) return p end,
 	swing        = function( p ) return 0.5 - cos( p * pi ) / 2 end,
-	easeOutQuint = function ( x, t, b, c, d )
+	easeOutQuint = function( x, t, b, c, d )
 		local temp = t / d - 1
 		t = t / d - 1
 		return c * ( ( temp ) * t * t * t * t + 1 ) + b
@@ -53,7 +53,7 @@ local eased      = 0
 local onComplete = nil
 
 function tween:update( dt )
-	if ( not self.startTime ) then
+	if ( self.startTime == nil ) then
 		self.startTime = love.timer.getTime()
 	end
 

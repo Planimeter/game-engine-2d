@@ -29,7 +29,7 @@ function panel:panel( parent, name )
 end
 
 function panel:animate( properties, duration, easing, complete )
-	if ( not self.animations ) then
+	if ( self.animations == nil ) then
 		self.animations = {}
 	end
 
@@ -78,7 +78,7 @@ function panel:createFramebuffer()
 		end
 	end
 
-	if ( not self.framebuffer ) then
+	if ( self.framebuffer == nil ) then
 		if ( self:shouldUseFullscreenFramebuffer() ) then
 			self.framebuffer = love.graphics.newCanvas()
 		else
@@ -101,7 +101,7 @@ function panel:draw()
 	end
 
 	local children = self:getChildren()
-	if ( not children ) then
+	if ( children == nil ) then
 		return
 	end
 
@@ -156,7 +156,7 @@ function panel:drawFramebuffer()
 		return
 	end
 
-	if ( not self.framebuffer ) then
+	if ( self.framebuffer == nil ) then
 		self:createFramebuffer()
 	end
 
@@ -184,7 +184,7 @@ local function cascadeInputToChildren( self, func, ... )
 	end
 
 	local children = self:getChildren()
-	if ( not children ) then
+	if ( children == nil ) then
 		return
 	end
 
@@ -300,6 +300,26 @@ function panel:isChildMousedOver()
 	return false
 end
 
+function panel:isSiblingMousedOver()
+	local parent = self:getParent()
+	if ( parent == nil ) then
+		return false
+	end
+
+	local children = parent:getChildren()
+	if ( children == nil ) then
+		return false
+	end
+
+	for _, v in ipairs( children ) do
+		if ( v ~= self and v.mouseover ) then
+			return true
+		end
+	end
+
+	return false
+end
+
 function panel:isTopMostChild()
 	local children = self:getChildren()
 	if ( children ) then
@@ -309,9 +329,7 @@ function panel:isTopMostChild()
 	end
 end
 
-function panel:isVisible()
-	return self.visible
-end
+accessor( panel, "visible", nil, "is" )
 
 function panel:joystickpressed( joystick, button )
 	return cascadeInputToChildren( self, "joystickpressed", joystick, button )
@@ -497,11 +515,9 @@ function panel:removeChildren()
 	self:invalidate()
 end
 
-local root = nil
-
 function panel:screenToLocal( x, y )
-	posX, posY = 0, 0
-	root       = self
+	local posX, posY = 0, 0
+	local root       = self
 	while ( root:getParent() ~= nil ) do
 		posX = posX + root:getX()
 		posY = posY + root:getY()
@@ -543,7 +559,7 @@ function panel:setParent( panel )
 	end
 
 	panel.children = panel.children or {}
-	if ( table.hasvalue( panel.children, panel ) ) then
+	if ( table.hasvalue( panel.children, self ) ) then
 		return
 	end
 
@@ -602,13 +618,8 @@ function panel:setPos( x, y )
 	self:setY( y )
 end
 
-function panel:shouldUseFullscreenFramebuffer()
-	return self.useFullscreenFramebuffer
-end
-
-function panel:shouldSuppressFramebufferWarnings()
-	return self.suppressFramebufferWarnings
-end
+accessor( panel, "useFullscreenFramebuffer",    nil, "should" )
+accessor( panel, "suppressFramebufferWarnings", nil, "should" )
 
 function panel:textinput( text )
 	return cascadeInputToChildren( self, "textinput", text )
@@ -631,7 +642,7 @@ function panel:update( dt )
 	end
 
 	local children = self:getChildren()
-	if ( not children ) then
+	if ( children == nil ) then
 		return
 	end
 
@@ -642,7 +653,7 @@ end
 
 function panel:updateAnimations( dt )
 	for _, animation in ipairs( self.animations ) do
-		if ( not animation.startTime ) then
+		if ( animation.startTime == nil ) then
 			animation.startTime = love.timer.getTime()
 		end
 

@@ -55,7 +55,7 @@ end
 local function getSuccessors( q )
 	local successors = {}
 	local region     = region.getAtPosition( q )
-	if ( not region ) then
+	if ( region == nil ) then
 		return successors
 	end
 
@@ -134,7 +134,7 @@ local function reconstructPath( node )
 		table.insert( path, 1, vector.copy( node ) )
 		node = node.parent
 	end
-	return path
+	return #path > 0 and path or nil
 end
 
 function getPath( start, goal )
@@ -145,7 +145,7 @@ function getPath( start, goal )
 	end
 
 	local region = region.getAtPosition( goal )
-	if ( not region ) then
+	if ( region == nil ) then
 		return
 	end
 

@@ -4,7 +4,7 @@
 --
 --==========================================================================--
 
-require( "engine.shared.entities.trigger" )
+entities.requireEntity( "trigger" )
 
 class "trigger_transition" ( "trigger" )
 
@@ -21,7 +21,7 @@ function trigger_transition:findRegionSpace()
 	local x = pos.x
 	local y = pos.y - game.tileSize - 1
 	local r = region.getAtPosition( vector( x, y ) )
-	if ( not r ) then
+	if ( r == nil ) then
 		return x, y, "north"
 	end
 
@@ -29,7 +29,7 @@ function trigger_transition:findRegionSpace()
 	x = pos.x + width
 	y = pos.y - length
 	r = region.getAtPosition( vector( x, y ) )
-	if ( not r and length > width ) then
+	if ( r == nil and length > width ) then
 		return x, y, "east"
 	end
 
@@ -37,7 +37,7 @@ function trigger_transition:findRegionSpace()
 	x = pos.x
 	y = pos.y
 	r = region.getAtPosition( vector( x, y ) )
-	if ( not r ) then
+	if ( r == nil ) then
 		return x, y, "south"
 	end
 
@@ -45,7 +45,7 @@ function trigger_transition:findRegionSpace()
 	x = pos.x
 	y = pos.y
 	r = region.getAtPosition( vector( x, y ) )
-	if ( not r and length > width ) then
+	if ( r == nil and length > width ) then
 		return x, y, "west"
 	end
 
@@ -54,7 +54,7 @@ end
 
 function trigger_transition:loadRegion()
 	local properties = self:getProperties()
-	if ( not properties ) then
+	if ( properties == nil ) then
 		return
 	end
 
@@ -81,7 +81,7 @@ function trigger_transition:removeRegion()
 		local r = region.getByName( name )
 		if ( r ) then
 			local players = player.getInOrNearRegion( r )
-			if ( not players ) then
+			if ( players == nil ) then
 				region.unload( name )
 			end
 		end

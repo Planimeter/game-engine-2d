@@ -14,7 +14,7 @@ if ( _CLIENT ) then
 	require( "engine.client.gui" )
 end
 
-local engine     = {}
+local engine     = engine or {}
 _G.engine        = engine
 
 local concommand = concommand
@@ -128,6 +128,10 @@ local timestep    = 1/33
 local accumulator = 0
 
 function love.update( dt )
+	if ( _DEBUG and _DEDICATED ) then
+		package.update( dt )
+	end
+
 	accumulator = accumulator + dt
 
 	while ( accumulator >= timestep ) do

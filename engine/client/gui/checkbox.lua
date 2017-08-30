@@ -85,9 +85,7 @@ function checkbox:drawLabel()
 	love.graphics.print( self:getText(), x, y )
 end
 
-function checkbox:isChecked()
-	return self.checked
-end
+accessor( checkbox, "checked", nil, "is" )
 
 function checkbox:keypressed( key, scancode, isrepeat )
 	if ( not self.focus or self:isDisabled() ) then

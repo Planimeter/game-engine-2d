@@ -36,7 +36,7 @@ function keyboardoptionspanel:keyboardoptionspanel( parent, name )
 	buttonName = name .. " Advanced Button"
 	self.advancedButton = gui.commandbutton( group, buttonName, "Advanced" )
 	self.advancedButton.onClick = function( commandbutton )
-		if ( not self.advancedOptions ) then
+		if ( self.advancedOptions == nil ) then
 			self.advancedOptions = gui.keyboardoptionsadvancedframe( g_MainMenu )
 			self.advancedOptions:activate()
 			self.advancedOptions:moveToCenter()

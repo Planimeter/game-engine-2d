@@ -16,9 +16,7 @@ module( "chat" )
 
 function addText( ... )
 	local args = { ... }
-	for i = 1, select( "#", ... ) do
-		args[ i ] = tostring( args[ i ] )
-	end
+	table.tostring( args )
 
 	local chat = _G.g_Chat.output
 	local text = table.concat( args, "\t" )

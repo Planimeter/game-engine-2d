@@ -16,7 +16,7 @@ local function copy( k )
 	sound[ k ] = function( self, ... )
 		local filename = self:getFilename()
 		local sound = sound._sounds[ filename ]
-		if ( not sound ) then
+		if ( sound == nil ) then
 			return
 		end
 
@@ -42,7 +42,6 @@ local function reload( filename )
 		if ( game ) then
 			game.call( "client", "onReloadSound", filename )
 		else
-			require( "engine.shared.hook" )
 			hook.call( "client", "onReloadSound", filename )
 		end
 	else
@@ -53,7 +52,7 @@ end
 function sound.update( dt )
 	for k, v in pairs( sound._sounds ) do
 		local modtime, errormsg = love.filesystem.getLastModified( k )
-		if ( not errormsg and modtime ~= v.modtime ) then
+		if ( errormsg == nil and modtime ~= v.modtime ) then
 			reload( k )
 		end
 	end
@@ -89,7 +88,7 @@ function sound:parse()
 	}
 
 	local data = self:getData()
-	if ( not data ) then
+	if ( data == nil ) then
 		return
 	end
 
@@ -101,7 +100,7 @@ end
 
 function sound:play()
 	local filename = self:getFilename()
-	if ( not sound._sounds[ filename ] ) then
+	if ( sound._sounds[ filename ] == nil ) then
 		self:parse()
 	end
 

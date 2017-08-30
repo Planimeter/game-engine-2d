@@ -29,9 +29,10 @@ accessor( sprite, "animation" )
 accessor( sprite, "animationName" )
 accessor( sprite, "animations" )
 accessor( sprite, "events" )
+accessor( sprite, "frametime" )
 
 function sprite:getQuad()
-	if ( not self.quad ) then
+	if ( self.quad == nil ) then
 		local image = self:getSpriteSheet()
 		self.quad = love.graphics.newQuad(
 			0,
@@ -60,7 +61,7 @@ function sprite:setAnimation( animation )
 	local animations = self:getAnimations()
 	local name = animation
 	animation  = animations[ name ]
-	if ( not animation ) then
+	if ( animation == nil ) then
 		return
 	end
 
@@ -77,7 +78,7 @@ end
 
 function sprite:update( dt )
 	local animation = self:getAnimation()
-	if ( not animation ) then
+	if ( animation == nil ) then
 		return
 	end
 

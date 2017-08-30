@@ -22,4 +22,4 @@ chat.textbox         = {
     }
 }
 
-chat.font            = love.graphics.newFont( "fonts/SourceSansPro-Regular.otf", 14 )
+chat.font            = love.graphics.newFont( "fonts/SourceSansPro-Regular.otf", math.floor( love.window.toPixels( 14 ) ) )

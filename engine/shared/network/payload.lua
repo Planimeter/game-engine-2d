@@ -39,7 +39,7 @@ end
 
 function payload:dispatchToHandler()
 	local name = self:getStructName()
-	if ( not name ) then
+	if ( name == nil ) then
 		return
 	end
 

@@ -84,8 +84,7 @@ function initializeServer()
 		else
 			print( "Failed to initialize server!" )
 			_connecting = false
-			_connected  = false
-			disconnect()
+			onDisconnect()
 			return false
 		end
 	else
@@ -108,9 +107,8 @@ end
 
 function isInGame()
 	return isConnected()  and
-	       _G.game        and
-	       _G.game.client and
-	       _G.game.client._playerInitialized
+	       _G.localplayer and
+	       _G.localplayer._initialized
 end
 
 function onConnect( event )
@@ -131,7 +129,7 @@ function onReceive( event )
 end
 
 function onDisconnect( event )
-	if ( _connected ) then
+	if ( _connected or event == nil ) then
 		_connecting    = false
 		_connected     = false
 		_disconnecting = true
@@ -139,8 +137,13 @@ function onDisconnect( event )
 		-- Activate main menu
 		_G.g_MainMenu:activate()
 
+		-- Remove localplayer
+		_G.localplayer = nil
+
 		-- Shutdown entities
-		_G.entities.shutdown()
+		if ( _G.entities ) then
+			_G.entities.shutdown()
+		end
 
 		-- Shutdown game
 		if ( _G.game and _G.game.client ) then
@@ -174,6 +177,13 @@ function onDisconnect( event )
 
 	unrequire( "engine.client.network" )
 	engine.client.network = nil
+end
+
+function onTick( timestep )
+	local game = _G.game and _G.game.client or nil
+	if ( game ) then
+		game.onTick( timestep )
+	end
 end
 
 function sendClientInfo()

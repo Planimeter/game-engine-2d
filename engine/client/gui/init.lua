@@ -19,6 +19,8 @@ require( "engine.client.gui.handlers" )
 function invalidateTree()
 	_rootPanel:invalidateLayout()
 	_rootPanel:invalidateFramebuffer()
+	_viewportFramebuffer = nil
+	_blurFramebuffer     = nil
 end
 
 function preDrawWorld()

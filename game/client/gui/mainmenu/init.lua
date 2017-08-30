@@ -102,7 +102,7 @@ function mainmenu:createButtons()
 
 	local options = gui.mainmenu.button( self, "Options" )
 	options.onClick = function()
-		if ( not self.optionsMenu ) then
+		if ( self.optionsMenu == nil ) then
 			self.optionsMenu = gui.optionsmenu( self )
 			self.optionsMenu:activate()
 			self.optionsMenu:moveToCenter()

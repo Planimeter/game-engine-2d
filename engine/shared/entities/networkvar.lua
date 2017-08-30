@@ -32,5 +32,9 @@ function networkvar:setValue( value )
 end
 
 function networkvar:__tostring()
-	return "networkvar: " .. self.name .. " = \"" .. tostring( self.value ) .. "\""
+	local value = "\"" .. tostring( self.value ) .. "\""
+	if ( self.value == nil ) then
+		value = "nil"
+	end
+	return "networkvar: " .. self.name .. " = " .. value
 end

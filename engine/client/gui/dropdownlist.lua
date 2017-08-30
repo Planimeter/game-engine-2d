@@ -118,9 +118,7 @@ function dropdownlist:invalidateLayout()
 	gui.panel.invalidateLayout( self )
 end
 
-function dropdownlist:isActive()
-	return self.active
-end
+accessor( dropdownlist, "active", nil, "is" )
 
 function dropdownlist:isChildMousedOver()
 	local panel = gui._topPanel

@@ -60,7 +60,7 @@ function hudframe:draw()
 end
 
 function hudframe:drawBackground()
-	if ( not gui._blurFramebuffer ) then
+	if ( gui._blurFramebuffer == nil ) then
 		gui.panel.drawBackground( self, "frame.backgroundColor" )
 		return
 	end
@@ -69,7 +69,7 @@ function hudframe:drawBackground()
 end
 
 function hudframe:drawBlur()
-	if ( not gui._blurFramebuffer ) then
+	if ( gui._blurFramebuffer == nil ) then
 		return
 	end
 

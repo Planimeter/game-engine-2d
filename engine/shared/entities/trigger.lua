@@ -4,7 +4,7 @@
 --
 --==========================================================================--
 
-require( "engine.shared.entities.entity" )
+entities.requireEntity( "entity" )
 
 class "trigger" ( "entity" )
 

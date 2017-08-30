@@ -4,8 +4,7 @@
 --
 --==========================================================================--
 
-require( "common.vector" )
-
+local accessor   = accessor
 local class      = class
 local concommand = concommand
 local ipairs     = ipairs
@@ -41,13 +40,8 @@ function context:getDrawPosition()
 	return position.x, position.y
 end
 
-function context:getPosition()
-	return self.position
-end
-
-function context:getWorldIndex()
-	return self.worldIndex
-end
+accessor( context, "position" )
+accessor( context, "worldIndex" )
 
 function context:remove()
 	for i, v in ipairs( _contexts ) do
@@ -82,7 +76,7 @@ function getTranslation()
 	local width  = love.graphics.getWidth()
 	local height = love.graphics.getHeight()
 	local scale  = getZoom()
-	if ( not pos ) then
+	if ( pos == nil ) then
 		pos = vector.origin
 	end
 	return -pos.x + ( width  / 2 ) / scale,
@@ -127,7 +121,7 @@ local function resetTween()
 end
 
 function resetZoom()
-	if ( not _tween ) then
+	if ( _tween == nil ) then
 		_tween = tween( _M, nil, {
 			_zoom      = 2 * love.window.getPixelScale(),
 			onComplete = resetTween
@@ -142,7 +136,7 @@ function screenToWorld( x, y )
 	local width  = love.graphics.getWidth()
 	local height = love.graphics.getHeight()
 	local scale  = getZoom()
-	if ( not pos ) then
+	if ( pos == nil ) then
 		pos = vector.origin
 	end
 	return pos.x - ( width  / 2 ) / scale + x / scale,
@@ -154,7 +148,7 @@ function worldToScreen( x, y )
 	local width  = love.graphics.getWidth()
 	local height = love.graphics.getHeight()
 	local scale  = getZoom()
-	if ( not pos ) then
+	if ( pos == nil ) then
 		pos = vector.origin
 	end
 	return pos.x * -scale + ( width  / 2 ) + x * scale,

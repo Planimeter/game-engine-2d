@@ -4,7 +4,7 @@
 --
 --==========================================================================--
 
-require( "engine.shared.entities.entity" )
+entities.requireEntity( "entity" )
 require( "game" )
 
 class "prop_ore_rock" ( "entity" )

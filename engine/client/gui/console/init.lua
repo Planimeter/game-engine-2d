@@ -13,9 +13,7 @@ local console = gui.console
 
 function console.print( ... )
 	local args = { ... }
-	for i = 1, select( "#", ... ) do
-		args[ i ] = tostring( args[ i ] )
-	end
+	table.tostring( args )
 	local output = g_Console.output
 	local text   = table.concat( args, "\t" ) .. "\n"
 	output:insertText( text )
@@ -51,7 +49,7 @@ local function doCommand( self, input )
 	print( "] " .. input )
 
 	local command = string.match( input, "^([^%s]+)" )
-	if ( not command ) then
+	if ( command == nil ) then
 		return
 	end
 
@@ -103,7 +101,7 @@ local function autocomplete( text )
 	end
 
 	local name = string.match( text, "^([^%s]+)" )
-	if ( not name ) then
+	if ( name == nil ) then
 		return
 	end
 
@@ -216,6 +214,15 @@ local con_enable = convar( "con_enable", "0", nil, nil,
 
 concommand( "toggleconsole", "Show/hide the console", function()
 	local console = g_Console
+	if ( con_enable:getBoolean() ) then
+		local mainmenu = g_MainMenu
+		if ( not mainmenu:isVisible() ) then
+			mainmenu:activate()
+			console:activate()
+			return
+		end
+	end
+
 	if ( console:isVisible() ) then
 		console:close()
 		return
@@ -223,11 +230,6 @@ concommand( "toggleconsole", "Show/hide the console", function()
 
 	if ( not con_enable:getBoolean() ) then
 		return
-	end
-
-	local mainmenu = g_MainMenu
-	if ( not mainmenu:isVisible() ) then
-		mainmenu:activate()
 	end
 
 	console:activate()
@@ -274,7 +276,7 @@ concommand( "help", "Prints help info for the console command or variable",
 
 local function restorePanel()
 	local console = g_Console
-	if ( not console ) then
+	if ( console == nil ) then
 		return
 	end
 

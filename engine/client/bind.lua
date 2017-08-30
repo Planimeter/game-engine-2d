@@ -114,7 +114,7 @@ end
 
 function keyreleased( key, scancode )
 	local bind = getBind( key )
-	if ( not bind ) then
+	if ( bind == nil ) then
 		return
 	end
 

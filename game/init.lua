@@ -4,9 +4,11 @@
 --
 --==========================================================================--
 
+require( "engine.shared.hook" )
+
 _VADVENTURE       = true
 
-local game        = {}
+local game        = game or {}
 _G.game           = game
 
 local hook        = hook

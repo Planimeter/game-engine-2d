@@ -28,7 +28,7 @@ function dropdownlistitemgroup:addItem( item, default )
 end
 
 function dropdownlistitemgroup:draw()
-	if ( not self:getItems() ) then
+	if ( self:getItems() == nil ) then
 		return
 	end
 
@@ -57,9 +57,7 @@ function dropdownlistitemgroup:drawBorders( property )
 	)
 end
 
-function dropdownlistitemgroup:getDropDownList()
-	return self.dropDownList
-end
+accessor( dropdownlistitemgroup, "dropDownList" )
 
 function dropdownlistitemgroup:invalidateLayout()
 	self:updatePos()

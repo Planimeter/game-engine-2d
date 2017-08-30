@@ -4,12 +4,7 @@
 --
 --==========================================================================--
 
-require( "engine.shared.entities.character" )
-
-local accessor = accessor
-local ipairs   = ipairs
-local table    = table
-local _G       = _G
+entities.requireEntity( "character" )
 
 class "player" ( "character" )
 
@@ -76,7 +71,7 @@ function player:player()
 	character.character( self )
 
 	self:networkNumber( "id", player._lastPlayerId + 1 )
-	self:networkNumber( "moveSpeed", 0.5 )
+	self:networkNumber( "moveSpeed", 1 )
 
 	if ( _SERVER ) then
 		player._lastPlayerId = self:getNetworkVar( "id" )
@@ -111,10 +106,10 @@ function player:getGraphicsSize()
 end
 
 function player:initialSpawn()
-	if ( self.initialized ) then
+	if ( self._initialized ) then
 		return
 	else
-		self.initialized = true
+		self._initialized = true
 	end
 
 	if ( _SERVER ) then
@@ -206,12 +201,32 @@ end, { "game" } )
 
 
 if ( _CLIENT ) then
-	function player:onAnimationEvent( event )
+	local function updateStepSound( self, event )
+		if ( event ~= "leftfootstep" and
+		     event ~= "rightfootstep" ) then
+			return
+		end
+
+		if ( self._stepSoundTime and
+		     love.timer.getTime() < self._stepSoundTime ) then
+			return
+		end
+
 		if ( event == "leftfootstep" ) then
 			self:emitSound( "sounds.footsteps.grassleft" )
-		elseif ( event == "rightfootstep" ) then
+		end
+
+		if ( event == "rightfootstep" ) then
 			self:emitSound( "sounds.footsteps.grassright" )
 		end
+
+		local sprite = self:getSprite()
+		local frametime = sprite:getFrametime()
+		self._stepSoundTime = love.timer.getTime() + frametime
+	end
+
+	function player:onAnimationEvent( event )
+		updateStepSound( self, event )
 	end
 end
 
@@ -248,11 +263,9 @@ local function updateMovement( self, position )
 end
 
 function player:onMoveTo( position )
-	if ( not _CLIENT ) then
-		return
+	if ( _CLIENT ) then
+		updateMovement( self, position )
 	end
-
-	updateMovement( self, position )
 end
 
 function player:onNetworkVarChanged( networkvar )
@@ -260,9 +273,9 @@ function player:onNetworkVarChanged( networkvar )
 		if ( g_HudHealth ) then
 			g_HudHealth:invalidateLayout()
 		end
-	else
-		character.onNetworkVarChanged( self, networkvar )
 	end
+
+	entity.onNetworkVarChanged( self, networkvar )
 end
 
 concommand( "say", "Display player message",
@@ -271,7 +284,8 @@ concommand( "say", "Display player message",
 			return
 		end
 
-		if ( not game.call( "server", "onPlayerSay", player, argString ) ) then
+		local canSay = game.call( "server", "onPlayerSay", player, argString )
+		if ( canSay == false ) then
 			return
 		end
 
@@ -329,7 +343,7 @@ function player:update( dt )
 
 	if ( _CLIENT ) then
 		local body = self:getBody()
-		if ( not body ) then
+		if ( body == nil ) then
 			return
 		end
 
@@ -343,8 +357,3 @@ end
 function player:__tostring()
 	return "player: " .. self:getName()
 end
-
--- Preserve the player interface
-local class = player
-entities.linkToClassname( player, "player" )
-_G.player = class

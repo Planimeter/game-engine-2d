@@ -6,7 +6,7 @@
 
 require( "package" )
 
-if ( not rawrequire ) then
+if ( rawrequire == nil ) then
 	rawrequire = require
 end
 
@@ -19,7 +19,7 @@ local function getModuleFilename( modname )
 		for path in paths do
 			path = string.gsub( path, "%.[\\/]", "" )
 			local filename = string.gsub( path, "?", module )
-			if ( love.filesystem.exists( filename ) ) then
+			if ( path ~= "" and love.filesystem.exists( filename ) ) then
 				return filename
 			end
 		end
@@ -66,7 +66,6 @@ local function reload( modname, filename )
 		if ( game ) then
 			game.call( "shared", "onReloadScript", modname )
 		else
-			require( "engine.shared.hook" )
 			hook.call( "shared", "onReloadScript", modname )
 		end
 
@@ -81,12 +80,12 @@ end
 
 local function update( k, v )
 	local filename = getModuleFilename( k )
-	if ( not filename ) then
+	if ( filename == nil ) then
 		return
 	end
 
 	local modtime, errormsg = love.filesystem.getLastModified( filename )
-	if ( not errormsg and modtime ~= v ) then
+	if ( errormsg == nil and modtime ~= v ) then
 		reload( k, filename )
 	end
 end

@@ -15,7 +15,7 @@ end
 if ( _CLIENT ) then
 	function layer:createSpriteBatch()
 		local tileset = self:getTileset()
-		if ( not tileset ) then
+		if ( tileset == nil ) then
 			return
 		end
 
@@ -30,7 +30,7 @@ if ( _CLIENT ) then
 		end
 
 		local spritebatch = self:getSpriteBatch()
-		if ( not spritebatch ) then
+		if ( spritebatch == nil ) then
 			return
 		end
 
@@ -75,7 +75,7 @@ if ( _CLIENT ) then
 		self:createSpriteBatch()
 
 		local spritebatch = self:getSpriteBatch()
-		if ( not spritebatch ) then
+		if ( spritebatch == nil ) then
 			return
 		end
 
@@ -110,12 +110,10 @@ if ( _CLIENT ) then
 	end
 end
 
-function layer:isVisible()
-	return self.visible
-end
+accessor( layer, "visible", nil, "is" )
 
 function layer:parse()
-	if ( not self.data ) then
+	if ( self.data == nil ) then
 		return
 	end
 
@@ -143,7 +141,7 @@ function layer:parse()
 			local region   = self:getRegion()
 			local entities = entities.initialize( region, data[ "objects" ] )
 			for _, entity in ipairs( entities ) do
-				region:addEntity( entity )
+				entity:setRegion( region )
 			end
 		end
 	end

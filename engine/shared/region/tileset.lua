@@ -29,7 +29,7 @@ accessor( tileset, "tileWidth", "tilewidth" )
 accessor( tileset, "tileHeight", "tileheight" )
 
 function tileset:parse()
-	if ( not self.data ) then
+	if ( self.data == nil ) then
 		return
 	end
 

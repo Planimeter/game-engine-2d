@@ -118,6 +118,10 @@ function table.hasvalue( t, value )
 end
 
 function table.len( t )
+	if ( type( t ) ~= "table" ) then
+		typerror( 1, "table", t )
+	end
+
 	local c = 0
 	for _ in pairs( t ) do
 		c = c + 1
@@ -175,6 +179,12 @@ end
 
 function table.irandom( t )
 	return t[ math.random( #t ) ]
+end
+
+function table.tostring( t )
+	for i, v in ipairs( t ) do
+		t[ i ] = tostring( v )
+	end
 end
 
 function table.unique( t )

@@ -88,9 +88,7 @@ function radiobutton:isDisabled()
 	return gui.button.isDisabled( self )
 end
 
-function radiobutton:isSelected()
-	return self.selected
-end
+accessor( radiobutton, "selected", nil, "is" )
 
 function radiobutton:mousereleased( x, y, button, istouch )
 	if ( ( self.mousedown and self.mouseover ) and not self:isDisabled() ) then

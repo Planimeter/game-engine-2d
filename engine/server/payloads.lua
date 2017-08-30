@@ -10,7 +10,7 @@ local directoryWhitelist = {
 
 local function onDownloadRequest( payload )
 	local filename = payload:get( "filename" )
-	if ( not filename ) then
+	if ( filename == nil ) then
 		return
 	end
 
@@ -31,7 +31,7 @@ local function onDownloadRequest( payload )
 	end
 
 	local directory = string.match( filename, "(.-)/" )
-	if ( not directory or
+	if ( directory == nil or
 	     not table.hasvalue( directoryWhitelist, directory ) ) then
 		print( tostring( peer ) ..
 		       " requested file outside of directory whitelist (" ..

@@ -16,7 +16,7 @@ function entity.create( classname )
 	entities.requireEntity( classname )
 
 	local classmap = entities.getClassMap()
-	if ( not classmap[ classname ] ) then
+	if ( classmap[ classname ] == nil ) then
 		print( "Attempted to create unknown entity type " .. classname .. "!" )
 		return
 	end
@@ -62,27 +62,24 @@ if ( _CLIENT ) then
 	local r_draw_entities       = convar( "r_draw_entities", "1", nil, nil,
 	                                      "Draws entities" )
 
-	local function drawFixture( body, fixture )
+	local function drawFixture( i, fixture )
 		love.graphics.setColor( color( color.white, 0.14 * 255 ) )
 		love.graphics.setLineStyle( "rough" )
 		local lineWidth = 1
 		love.graphics.setLineWidth( lineWidth )
-		local shape = fixture:getShape()
 		local topLeftX,
 			  topLeftY,
 			  bottomRightX,
 			  bottomRightY =
-			  body:getWorldPoints(
-				shape:computeAABB( 0, 0, 0 )
-			  )
+			  fixture:getBoundingBox( i )
 		local width  = bottomRightX - topLeftX
-		local height = topLeftY - bottomRightY
+		local height = bottomRightY - topLeftY
 		love.graphics.rectangle(
 			"line",
-			topLeftX          - lineWidth / 2,
-			topLeftY - height - lineWidth / 2,
-			width             + lineWidth,
-			height            + lineWidth
+			topLeftX + lineWidth / 2,
+			topLeftY + lineWidth / 2,
+			width    - lineWidth,
+			height   - lineWidth
 		)
 	end
 
@@ -98,13 +95,13 @@ if ( _CLIENT ) then
 		end
 
 		local body = renderable:getBody()
-		if ( not body ) then
+		if ( body == nil ) then
 			return
 		end
 
 		local fixtures = body:getFixtureList()
-		for _, fixture in ipairs( fixtures ) do
-			drawFixture( body, fixture )
+		for i, fixture in ipairs( fixtures ) do
+			drawFixture( i, fixture )
 		end
 	end
 
@@ -176,7 +173,7 @@ end
 
 local function findByClassnameInRegion( classname, region, t )
 	local entities = region:getEntities()
-	if ( not entities ) then
+	if ( entities == nil ) then
 		return
 	end
 
@@ -233,85 +230,52 @@ function entity:entity()
 	self:networkString( "name",       nil )
 	self:networkVector( "position",   vector() )
 	self:networkNumber( "worldIndex", 1 )
+	self:networkString( "animation",  nil )
 
 	table.insert( entity._entities, self )
 end
 
 accessor( entity, "body" )
 
-function entity:getClassname()
-	return self.__type
-end
-
-function entity:getCollisionBounds()
-	return self.boundsMin, self.boundsMax
-end
-
 if ( _CLIENT ) then
-	function entity:getDrawPosition()
-		local position = self:getPosition()
-		local x = position.x
-		local y = position.y
+	local function drawPosition( self )
+		love.graphics.push()
+			-- Transformations
+			local localPosition = self:getLocalPosition()
+			if ( localPosition ) then
+				local dx, dy = localPosition.x, localPosition.y
+				love.graphics.translate( -dx, -dy )
+			end
 
-		local sprite = self:getSprite()
-		local height = sprite:getHeight()
-		y = y - height
+			love.graphics.scale( 1 / camera.getZoom() )
 
-		local localPosition = self:getLocalPosition()
-		if ( localPosition ) then
-			x = x + localPosition.x
-			y = y + localPosition.y
-		end
+			-- Set color
+			local color = color( color.white, 0.14 * 255 )
+			love.graphics.setColor( color )
 
-		return x, y
+			-- Set font
+			local font = scheme.getProperty( "Default", "fontSmall" )
+			love.graphics.setFont( font )
+
+			-- Print text
+			local position = tostring( self:getPosition() )
+			local sprite   = self:getSprite()
+			local height   = sprite:getHeight()
+			local y        = ( height + 1 ) * camera.getZoom()
+			love.graphics.print( position, 0, y )
+		love.graphics.pop()
 	end
 
-	function entity:getLocalPosition()
-		return self.localPosition
-	end
-end
-
-function entity:getName()
-	return self:getNetworkVar( "name" )
-end
-
-function entity:getPosition()
-	return self:getNetworkVar( "position" )
-end
-
-accessor( entity, "properties" )
-accessor( entity, "region" )
-
-if ( _CLIENT ) then
-	function entity:getSprite()
-		return self.sprite
-	end
-end
-
-function entity:getWorldIndex()
-	return self:getNetworkVar( "worldIndex" )
-end
-
-function entity:initializePhysics( type )
-	local region   = self:getRegion()
-	local world    = region:getWorld()
-	local position = self:getPosition()
-	local x        = position.x
-	local y        = position.y
-	self.body      = love.physics.newBody( world, x, y, type )
-	self.body:setUserData( self )
-	self.body:setFixedRotation( true )
-	self.body:setLinearDamping( 16 )
-	return self.body
-end
-
-if ( _CLIENT ) then
 	function entity:draw()
 		local sprite = self:getSprite()
 		if ( type( sprite ) == "sprite" ) then
 			sprite:draw()
 		else
 			love.graphics.draw( sprite )
+		end
+
+		if ( convar.getConvar( "r_draw_position" ):getBoolean() ) then
+			drawPosition( self )
 		end
 	end
 
@@ -341,10 +305,87 @@ if ( _CLIENT ) then
 	end
 end
 
-function entity:emitSound( filename )
-	require( "engine.client.sound" )
-	local sound = sound( filename )
-	sound:play()
+if ( _CLIENT ) then
+	function entity:getAnimation()
+		local sprite = self:getSprite()
+		if ( type( sprite ) ~= "sprite" ) then
+			return
+		end
+
+		return sprite:getAnimationName()
+	end
+end
+
+accessor( entity, "classname", "__type" )
+
+function entity:getCollisionBounds()
+	return self.boundsMin, self.boundsMax
+end
+
+if ( _CLIENT ) then
+	function entity:getDrawPosition()
+		local position = self:getPosition()
+		local x = position.x
+		local y = position.y
+
+		local sprite = self:getSprite()
+		local height = sprite:getHeight()
+		y = y - height
+
+		local localPosition = self:getLocalPosition()
+		if ( localPosition ) then
+			x = x + localPosition.x
+			y = y + localPosition.y
+		end
+
+		return x, y
+	end
+
+	accessor( entity, "localPosition" )
+end
+
+function entity:getName()
+	return self:getNetworkVar( "name" )
+end
+
+function entity:getPosition()
+	local body = self:getBody()
+	if ( body ) then
+		return vector( body:getPosition() )
+	end
+	return self:getNetworkVar( "position" )
+end
+
+accessor( entity, "properties" )
+accessor( entity, "region" )
+
+if ( _CLIENT ) then
+	accessor( entity, "sprite" )
+end
+
+function entity:getWorldIndex()
+	return self:getNetworkVar( "worldIndex" )
+end
+
+function entity:initializePhysics( type )
+	local region   = self:getRegion()
+	local world    = region:getWorld()
+	local position = self:getPosition()
+	local x        = position.x
+	local y        = position.y
+	self.body      = love.physics.newBody( world, x, y, type )
+	self.body:setUserData( self )
+	self.body:setFixedRotation( true )
+	self.body:setLinearDamping( 16 )
+	return self.body
+end
+
+if ( _CLIENT ) then
+	function entity:emitSound( filename )
+		require( "engine.client.sound" )
+		local sound = sound( filename )
+		sound:play()
+	end
 end
 
 function entity:networkVar( name, initialValue )
@@ -392,7 +433,7 @@ do
 end
 
 function entity:setNetworkVar( name, value )
-	if ( not self.networkVars or self.networkVars[ name ] == nil ) then
+	if ( self.networkVars == nil or not self:hasNetworkVar( name ) ) then
 		error( "attempt to set nonexistent networkvar '" .. name .. "'", 2 )
 	end
 
@@ -400,7 +441,7 @@ function entity:setNetworkVar( name, value )
 end
 
 function entity:getNetworkVar( name )
-	if ( self.networkVars[ name ] == nil ) then
+	if ( not self:hasNetworkVar( name ) ) then
 		return nil
 	end
 
@@ -412,19 +453,15 @@ function entity:hasNetworkVar( name )
 end
 
 function entity:getNetworkVarsStruct()
-	if ( not self.networkVarsStruct ) then
+	local class = getmetatable( self )
+	local keys  = rawget( class, "networkVarKeys" ) or {}
+	if ( self.networkVarsStruct == nil or
+	    #self.networkVarsStruct.keys ~= #keys ) then
 		local struct = {
 			keys = {}
 		}
-		local class = getmetatable( self )
-		while ( getbaseclass( class ) ) do
-			local keys = rawget( class, "networkVarKeys" )
-			if ( keys ) then
-				for i, key in ipairs( keys ) do
-					table.insert( struct.keys, key )
-				end
-			end
-			class = getbaseclass( class )
+		for i, key in ipairs( keys ) do
+			table.insert( struct.keys, key )
 		end
 		self.networkVarsStruct = struct
 	end
@@ -440,16 +477,48 @@ function entity:getNetworkVarTypeLenValues()
 	return networkVars
 end
 
+local cl_interpolate = convar( "cl_interpolate", "1", nil, nil,
+                               "Perform client-side interpolation" )
+
+local cl_predict = convar( "cl_predict", "1", nil, nil,
+                          "Perform client-side prediction" )
+
 function entity:onNetworkVarChanged( networkvar )
-	if ( _SERVER ) then
-		if ( networkvar:getName() == "position" ) then
+	if ( networkvar:getName() == "position" ) then
+		if ( _CLIENT and not _SERVER and
+		    cl_interpolate:getBoolean() and self ~= localplayer ) then
+			if ( self._positionBuffer == nil ) then
+				self._positionBuffer = {}
+			end
+
+			table.insert( self._positionBuffer, {
+				value = vector.copy( networkvar:getValue() ),
+				time = love.timer.getTime()
+			} )
+		else
+			if ( _CLIENT and not _SERVER ) then
+				if ( self._positionBuffer ) then
+					self._positionBuffer = nil
+				end
+
+				if ( self._interpolationBuffer ) then
+					self._interpolationBuffer = nil
+				end
+			end
+
 			local body = self:getBody()
 			if ( body ) then
 				local position = networkvar:getValue()
 				body:setPosition( position.x, position.y )
 			end
 		end
+	end
 
+	if ( _CLIENT and networkvar:getName() == "animation" ) then
+		self:setAnimation( networkvar:getValue() )
+	end
+
+	if ( _SERVER ) then
 		local payload = payload( "networkVarChanged" )
 		payload:set( "entity", self )
 
@@ -474,6 +543,25 @@ if ( _CLIENT ) then
 	end
 end
 
+function entity:onTick( timestep )
+	if ( _SERVER ) then
+		return
+	end
+
+	local positions = self._positionBuffer
+	if ( positions == nil ) then
+		return
+	end
+
+	if ( self._interpolationBuffer == nil ) then
+		self._interpolationBuffer = {}
+	end
+
+	local lastPosition = positions[ #positions ]
+	table.insert( self._interpolationBuffer, lastPosition )
+	self._positionBuffer = nil
+end
+
 function entity:remove()
 	for i, v in pairs( entity._entities ) do
 		if ( v == self ) then
@@ -490,7 +578,7 @@ function entity:remove()
 		end
 	end
 
-	if ( _SERVER and not _CLIENT ) then
+	if ( _SERVER ) then
 		local payload = payload( "entityRemoved" )
 		payload:set( "entity", self )
 		engine.server.network.broadcast( payload )
@@ -506,14 +594,20 @@ if ( _CLIENT ) then
 	end
 
 	payload.setHandler( onEntityRemoved, "entityRemoved" )
+end
 
-	function entity:setAnimation( animation )
+function entity:setAnimation( animation )
+	if ( _CLIENT ) then
 		local sprite = self:getSprite()
 		if ( type( sprite ) ~= "sprite" ) then
 			return
 		end
 
 		sprite:setAnimation( animation )
+	end
+
+	if ( _SERVER ) then
+		self:setNetworkVar( "animation", animation )
 	end
 end
 
@@ -522,16 +616,27 @@ function entity:setCollisionBounds( min, max )
 	self.boundsMax = max
 
 	local body = self:getBody()
-	if ( body ) then
-		local dimensions = max - min
-		dimensions.y     = -dimensions.y
-		local width      =  dimensions.x - 1
-		local height     =  dimensions.y - 1
-		local x          =   width / 2 + 0.5
-		local y          = -height / 2 + 0.5
-		local shape      = love.physics.newRectangleShape( x, y, width, height )
-		love.physics.newFixture( body, shape )
+	if ( body == nil ) then
+		return
 	end
+
+	local fixtures = body:getFixtureList()
+	local fixture  = fixtures[ 1 ]
+	if ( fixture ) then
+		fixture:destroy()
+	end
+
+	-- BUGBUG: We use magic numbers here to shrink the bounding box of the
+	-- fixture.
+	local dimensions = max - min
+	dimensions.y     = -dimensions.y
+	local width      =  dimensions.x - 0.6
+	local height     =  dimensions.y - 0.6
+	local x          =   width / 2   + 0.3
+	local y          = -height / 2   - 0.3
+	local shape      = love.physics.newRectangleShape( x, y, width, height )
+	local fixture    = love.physics.newFixture( body, shape )
+	fixture:setFilterData( 1 --[[ COLLISION_GROUP_NONE ]], 0, 0 )
 end
 
 if ( _CLIENT ) then
@@ -546,6 +651,30 @@ end
 
 function entity:setPosition( position )
 	self:setNetworkVar( "position", position )
+end
+
+function entity:setRegion( region )
+	local currentRegion = self:getRegion()
+	if ( currentRegion ) then
+		local entities = currentRegion:getEntities()
+		for i, v in ipairs( entities ) do
+			if ( v == self ) then
+				table.remove( entities, i )
+			end
+		end
+	end
+
+	if ( region == nil ) then
+		return
+	end
+
+	region.entities = region.entities or {}
+	if ( table.hasvalue( region.entities, self ) ) then
+		return
+	end
+
+	table.insert( region.entities, self )
+	self.region = region
 end
 
 if ( _CLIENT ) then
@@ -566,10 +695,10 @@ end
 
 function entity:spawn()
 	local region = self:getRegion()
-	if ( not region ) then
+	if ( region == nil ) then
 		local position = self:getPosition()
 		region = _G.region.getAtPosition( position )
-		region:addEntity( self )
+		self:setRegion( region )
 	end
 
 	if ( _SERVER ) then
@@ -623,12 +752,51 @@ function entity:updateNetworkVars( payload )
 	end
 end
 
+local function updatePosition( self )
+	if ( self == localplayer ) then
+		return
+	end
+
+	local buffer = self._interpolationBuffer
+	if ( buffer == nil ) then
+		return
+	end
+
+	local body = self:getBody()
+	if ( body == nil ) then
+		return
+	end
+
+	local cl_updaterate = convar.getConvar( "cl_updaterate" )
+	local now = love.timer.getTime()
+	local renderTimestamp = now - ( 1 / cl_updaterate:getNumber() )
+
+	while ( #buffer >= 2 and buffer[ 2 ].time <= renderTimestamp ) do
+		table.remove( buffer, 1 )
+	end
+
+	if ( #buffer >= 2 and
+	    buffer[ 1 ].time <= renderTimestamp and
+	    renderTimestamp <= buffer[ 2 ].time ) then
+		local p1 = buffer[ 1 ].value
+		local p2 = buffer[ 2 ].value
+		local t1 = buffer[ 1 ].time
+		local t2 = buffer[ 2 ].time
+		local dt = ( renderTimestamp - t1 ) / ( t2 - t1 )
+		local x  = math.lerp( p1.x, p2.x, dt )
+		local y  = math.lerp( p1.y, p2.y, dt )
+		body:setPosition( x, y )
+	end
+end
+
 function entity:update( dt )
-	if ( _SERVER ) then
-		local body = self:getBody()
-		if ( body ) then
-			self:setPosition( vector( body:getPosition() ) )
-		end
+	if ( _CLIENT and not _SERVER and cl_interpolate:getBoolean() ) then
+		updatePosition( self )
+	end
+
+	local body = self:getBody()
+	if ( body ) then
+		self:setNetworkVar( "position", vector( body:getPosition() ) )
 	end
 
 	if ( self.think     and
@@ -662,5 +830,22 @@ concommand( "ent_create", "Creates an entity where the player is looking",
 			entity:setPosition( position )
 			entity:spawn()
 		end
-	end, { "network", "cheat" }
+	end,
+
+	{ "network", "cheat" },
+
+	function( argS )
+		local autocomplete = {}
+		local entities = entities.getAll()
+		for _, classname in pairs( entities ) do
+			local cmd = "ent_create " .. classname
+			if ( string.find( cmd, "ent_create " .. argS, 1, true ) ) then
+				table.insert( autocomplete, cmd )
+			end
+		end
+
+		table.sort( autocomplete )
+
+		return autocomplete
+	end
 )

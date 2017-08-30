@@ -128,13 +128,20 @@ function testframe:createTestPanels()
 	self:addTab( "Tab", tab, true )
 end
 
-if ( g_MainMenu and g_MainMenu.testFrame ) then
-	local visible = g_MainMenu.testFrame:isVisible()
-	g_MainMenu.testFrame:remove()
-	g_MainMenu.testFrame = nil
-	g_MainMenu.testFrame = gui.testframe( g_MainMenu )
-	g_MainMenu.testFrame:moveToCenter()
+local function restorePanel()
+	local testFrame = g_MainMenu and g_MainMenu.testFrame
+	if ( testFrame == nil ) then
+		return
+	end
+
+	local visible = testFrame:isVisible()
+	testFrame:remove()
+	testFrame = gui.testframe( g_MainMenu )
+	g_MainMenu.testFrame = testFrame
+	testFrame:moveToCenter()
 	if ( visible ) then
-		g_MainMenu.testFrame:activate()
+		gamemenu:activate()
 	end
 end
+
+restorePanel()

@@ -201,7 +201,7 @@ local function updateAutocomplete( self, suggestions )
 		self.autocompleteItemGroup:removeChildren()
 	end
 
-	if ( not suggestions ) then
+	if ( suggestions == nil ) then
 		return
 	end
 
@@ -303,7 +303,7 @@ local gsub = string.gsub
 
 local function doPaste( self )
 	local clipboardText = love.system.getClipboardText()
-	if ( not clipboardText ) then
+	if ( clipboardText == nil ) then
 		return
 	end
 
@@ -401,17 +401,9 @@ function textbox:isChildMousedOver()
 	return false
 end
 
-function textbox:isDisabled()
-	return self.disabled
-end
-
-function textbox:isEditable()
-	return self.editable
-end
-
-function textbox:isMultiline()
-	return self.multiline
-end
+accessor( textbox, "disabled",  nil, "is" )
+accessor( textbox, "editable",  nil, "is" )
+accessor( textbox, "multiline", nil, "is" )
 
 local function updateScrollOffset( self )
 	local pos, overflow = getRelativeCursorPos( self )
@@ -473,7 +465,7 @@ local function nextWord( self, dir )
 end
 
 local function selectSuggestion( self, dir )
-	if ( not self.autocompleteItemGroup:getChildren() ) then
+	if ( self.autocompleteItemGroup:getChildren() == nil ) then
 		return
 	end
 
@@ -552,7 +544,9 @@ function textbox:keypressed( key, scancode, isrepeat )
 		end
 	elseif ( key == "return"
 	      or key == "kpenter" ) then
-		if ( not self:isMultiline() ) then
+		if ( self:isMultiline() ) then
+			self:insertText( "\n" )
+		else
 			if ( self.autocompleteItemGroup and
 			     self.autocompleteItemGroup:getSelectedItem() ) then
 				self.autocompleteItemGroup:getSelectedItem():onClick()
@@ -589,11 +583,9 @@ function textbox:keyreleased( key, scancode )
 	return true
 end
 
-local posX, posY = 0, 0
-
 function textbox:mousepressed( x, y, button, istouch )
 	if ( self.mouseover and not self:isDisabled() ) then
-		posX, posY = self:screenToLocal( x, y )
+		local posX, posY = self:screenToLocal( x, y )
 		if ( button == 1 ) then
 			self.mousedown = true
 			self:onClick( posX, posY )
@@ -754,21 +746,12 @@ function textbox:textinput( text )
 	return true
 end
 
-local function updateCursor( self )
-	if ( not self.mouseover or self:isDisabled() ) then
-		return
-	end
-
-	local cursor = love.mouse.getSystemCursor( "ibeam" )
-	love.mouse.setCursor( cursor )
-end
-
 function textbox:update( dt )
 	if ( not self:isVisible() ) then
 		return
 	end
 
-	updateCursor( self )
+	self:updateCursor()
 
 	if ( self.focus ) then
 		self:invalidate()
@@ -777,20 +760,25 @@ function textbox:update( dt )
 	gui.panel.update( self, dt )
 end
 
+function textbox:updateCursor()
+	if ( not self.mouseover or self:isDisabled() ) then
+		return
+	end
+
+	local cursor = love.mouse.getSystemCursor( "ibeam" )
+	love.mouse.setCursor( cursor )
+end
+
 function textbox:wheelmoved( x, y )
-	if ( self.mouseover and not self:isDisabled() ) then
+	if ( self.scrollbar and self.mouseover and not self:isDisabled() ) then
 		if ( y < 0 ) then
-			if ( self.scrollbar ) then
-				local font = self:getScheme( "font" )
-				self.scrollbar:scrollDown( 3 * font:getHeight() )
-				return true
-			end
+			local font = self:getScheme( "font" )
+			self.scrollbar:scrollDown( 3 * font:getHeight() )
+			return true
 		elseif ( y > 0 ) then
-			if ( self.scrollbar ) then
-				local font = self:getScheme( "font" )
-				self.scrollbar:scrollUp( 3 * font:getHeight() )
-				return true
-			end
+			local font = self:getScheme( "font" )
+			self.scrollbar:scrollUp( 3 * font:getHeight() )
+			return true
 		end
 	end
 

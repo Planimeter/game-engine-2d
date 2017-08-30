@@ -4,7 +4,7 @@
 --
 --==========================================================================--
 
-require( "engine.shared.entities.entity" )
+entities.requireEntity( "entity" )
 
 class "character" ( "entity" )
 
@@ -13,7 +13,7 @@ function character:character()
 end
 
 function character:addTask( task, name )
-	if ( not self.tasks ) then
+	if ( self.tasks == nil ) then
 		self.tasks = {}
 	end
 
@@ -24,7 +24,7 @@ function character:addTask( task, name )
 end
 
 function character:move()
-	if ( not self.path or #self.path == 0 ) then
+	if ( self.path == nil ) then
 		return
 	end
 
@@ -33,6 +33,9 @@ function character:move()
 	local next      = self.path[ 1 ]
 	local direction = ( next - start )
 	direction:normalizeInPlace()
+
+	-- Start animating
+	self:updateAnimation( direction )
 
 	-- Apply move speed to directional vector
 	direction = direction * math.round( self:getNetworkVar( "moveSpeed" ) )
@@ -56,9 +59,13 @@ function character:move()
 		self:onMoveTo( newPosition )
 
 		if ( self.nextPosition ) then
-			self.path = path.getPath( newPosition, self.nextPosition )
+			local path = path.getPath( newPosition, self.nextPosition )
+			if ( path ) then
+				self.path = path
+				applyLinearImpulse = false
+			end
+
 			self.nextPosition = nil
-			applyLinearImpulse = false
 		end
 	end
 
@@ -67,37 +74,31 @@ function character:move()
 	if ( body ) then
 		if ( applyLinearImpulse ) then
 			local velocity = vector( body:getLinearVelocity() )
-			local delta    = 60 * direction - velocity
+			local delta    = direction - velocity
 			local mass     = body:getMass()
 			body:applyLinearImpulse( delta.x * mass, delta.y * mass )
 		else
 			body:setLinearVelocity( 0, 0 )
 		end
-	end
 
-	self:setNetworkVar( "position", newPosition )
+		body:setPosition( newPosition.x, newPosition.y )
+	end
 
 	-- We've reached our goal
 	if ( self.path and #self.path == 0 ) then
 		local body = self:getBody()
 		if ( body ) then
 			body:setLinearVelocity( 0, 0 )
+			body:setPosition( newPosition.x, newPosition.y )
 		end
 
 		self.path = nil
-
-		if ( self.moveCallback ) then
-			self.moveCallback()
-			self.moveCallback = nil
-		end
+		self:onFinishMove()
 	end
 end
 
-local cl_predict = convar( "cl_predict", "1", nil, nil,
-                           "Perform client-side prediction" )
-local snapToGrid = region.snapToGrid
-
 function character:moveTo( position, callback )
+	local cl_predict = convar.getConvar( "cl_predict" )
 	if ( _CLIENT and not _SERVER and not cl_predict:getBoolean() ) then
 		return
 	end
@@ -108,10 +109,11 @@ function character:moveTo( position, callback )
 	local fromY  = from.y
 	local toX    = to.x
 	local toY    = to.y
-	fromX, fromY = snapToGrid( fromX, fromY )
-	toX, toY     = snapToGrid( toX, toY )
+	fromX, fromY = region.snapToGrid( fromX, fromY )
+	toX, toY     = region.snapToGrid( toX, toY )
 	if ( fromX == toX and fromY == toY ) then
 		self.moveCallback = callback
+		self:onFinishMove()
 		return false
 	end
 
@@ -125,25 +127,20 @@ function character:nextTask()
 	table.remove( tasks, 1 )
 
 	if ( #tasks == 0 ) then
-		self.tasks = nil
+		self:removeTasks()
+	end
+end
+
+function character:onFinishMove()
+	self:setAnimation( "idle" )
+
+	if ( self.moveCallback ) then
+		self.moveCallback()
+		self.moveCallback = nil
 	end
 end
 
 function character:onMoveTo( position )
-end
-
-function character:onNetworkVarChanged( networkvar )
-	if ( _CLIENT and networkvar:getName() == "position" ) then
-		local oldValue  = self.lastPosition or networkvar:getValue()
-		entity.onNetworkVarChanged( self, networkvar )
-
-		local value     = networkvar:getValue()
-		local direction = oldValue - value
-		direction:normalizeInPlace()
-		self:updateAnimation( direction )
-	else
-		entity.onNetworkVarChanged( self, networkvar )
-	end
 end
 
 function character:removeTasks()
@@ -158,55 +155,49 @@ function character:update( dt )
 end
 
 function character:updateAnimation( direction )
-	local angle = math.deg( direction:toAngle() )
-	if ( angle == 90 ) then
+	if ( direction == vector.origin ) then
+		return
+	end
+
+	local angle = math.nearestmult( math.deg( direction:toAngle() ), 45 )
+	if ( angle == -90 ) then
 		self:setAnimation( "walknorth" )
-	elseif ( angle == 135 ) then
-		self:setAnimation( "walknortheast" )
-	elseif ( angle == 180 ) then
-		self:setAnimation( "walkeast" )
-	elseif ( angle == -135 ) then
-		self:setAnimation( "walksoutheast" )
-	elseif ( angle == -90 ) then
-		self:setAnimation( "walksouth" )
 	elseif ( angle == -45 ) then
-		self:setAnimation( "walksouthwest" )
+		self:setAnimation( "walknortheast" )
 	elseif ( angle == 0 ) then
-		self:setAnimation( "walkwest" )
+		self:setAnimation( "walkeast" )
 	elseif ( angle == 45 ) then
+		self:setAnimation( "walksoutheast" )
+	elseif ( angle == 90 ) then
+		self:setAnimation( "walksouth" )
+	elseif ( angle == 135 ) then
+		self:setAnimation( "walksouthwest" )
+	elseif ( angle == 180 or angle == -180 ) then
+		self:setAnimation( "walkwest" )
+	elseif ( angle == -135 ) then
 		self:setAnimation( "walknorthwest" )
 	end
 end
 
 function character:updateMovement()
-	if ( _CLIENT ) then
-		self.lastPosition = self:getPosition()
-	end
-
 	if ( self.path ) then
 		self:move()
-	else
-		if ( self.nextPosition ) then
-			require( "engine.shared.path" )
-			self.path = path.getPath( self:getPosition(), self.nextPosition )
-			self.nextPosition = nil
-			self:move()
-		else
-			if ( _CLIENT ) then
-				self:setAnimation( "idle" )
-			end
+		return
+	end
 
-			if ( self.moveCallback ) then
-				self.moveCallback()
-				self.moveCallback = nil
-			end
+	if ( self.nextPosition ) then
+		require( "engine.shared.path" )
+		local path = path.getPath( self:getPosition(), self.nextPosition )
+		if ( path ) then
+			self.path = path
 		end
+		self.nextPosition = nil
 	end
 end
 
 function character:updateTasks()
 	local tasks = self.tasks
-	if ( not tasks ) then
+	if ( tasks == nil ) then
 		return
 	end
 

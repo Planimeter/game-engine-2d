@@ -4,7 +4,7 @@
 --
 --==========================================================================--
 
-require( "engine.shared.entities.entity" )
+entities.requireEntity( "entity" )
 
 class "item" ( "entity" )
 
@@ -32,5 +32,20 @@ function item:item()
 	if ( _CLIENT ) then
 		local sprite = love.graphics.newImage( self.data.image )
 		self:setSprite( sprite )
+	end
+end
+
+function item:setCollisionBounds( min, max )
+	entity.setCollisionBounds( self, min, max )
+
+	local body = self:getBody()
+	if ( body == nil ) then
+		return
+	end
+
+	local fixtures = body:getFixtureList()
+	local fixture  = fixtures[ 1 ]
+	if ( fixture ) then
+		fixture:setMask( 6 --[[ COLLISION_GROUP_PLAYER ]] )
 	end
 end

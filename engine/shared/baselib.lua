@@ -6,7 +6,7 @@
 
 require( "engine.shared.concommand" )
 
-function accessor( class, member, key )
+function accessor( class, member, key, verb )
 	if ( type( class ) ~= "table" ) then
 		typerror( 1, "table", class )
 	end
@@ -15,12 +15,12 @@ function accessor( class, member, key )
 		self[ key or member ] = value
 	end
 
-	class[ "get" .. string.capitalize( member ) ] = function( self )
+	class[ ( verb or "get" ) .. string.capitalize( member ) ] = function( self )
 		return self[ key or member ]
 	end
 end
 
-if ( not rawdofile ) then
+if ( rawdofile == nil ) then
 	rawdofile = dofile
 
 	function dofile( filename )
@@ -29,7 +29,7 @@ if ( not rawdofile ) then
 	end
 end
 
-if ( not rawprint and not rawtype ) then
+if ( rawprint == nil and rawtype == nil ) then
 	rawprint           = print
 	rawtype            = type
 
@@ -91,10 +91,10 @@ concommand( "lua_dofile", "Loads and runs the given file",
 			return
 		end
 
-		local success, ret = pcall( love.filesystem.load, argString )
-		if ( success ) then
-			success, ret = pcall( ret )
-			if ( not success ) then
+		local status, ret = pcall( love.filesystem.load, argString )
+		if ( status == true ) then
+			status, ret = pcall( ret )
+			if ( status == false ) then
 				print( ret )
 			end
 		else
@@ -134,8 +134,8 @@ concommand( "lua_dostring", "Loads and runs the given string",
 
 		local f, err = loadstring( argString )
 		if ( f ) then
-			local success, err = pcall( f )
-			if ( not success ) then
+			local status, err = pcall( f )
+			if ( status == false ) then
 				print( err )
 			end
 		else

@@ -11,8 +11,8 @@ local hudgamemenu = gui.hudgamemenu
 function hudgamemenu:hudgamemenu( parent )
 	local name = "HUD Game Menu"
 	gui.hudframe.hudframe( self, parent, name, name )
-	self.width  = love.window.toPixels( 384 ) -- - love.window.toPixels( 31 )
-	self.height = love.window.toPixels( 480 )
+	self.width  = love.window.toPixels( 320 ) -- - love.window.toPixels( 31 )
+	self.height = love.window.toPixels( 432 )
 
 	require( "game.client.gui.hudgamemenu.navigation" )
 	require( "game.client.gui.hudgamemenu.navigationbutton" )
@@ -34,7 +34,7 @@ function hudgamemenu:hudgamemenu( parent )
 end
 
 function hudgamemenu:getTitle()
-	if ( not self.navigation ) then
+	if ( self.navigation == nil ) then
 		return "Game Menu"
 	end
 
@@ -63,12 +63,19 @@ concommand( "-gamemenu", "Closes the gamemenu", function()
 	end
 end, { "game" } )
 
-if ( g_GameMenu ) then
-	local visible = g_GameMenu:isVisible()
-	g_GameMenu:remove()
-	g_GameMenu = nil
-	g_GameMenu = gui.hudgamemenu( g_Viewport )
+local function restorePanel()
+	local gamemenu = g_GameMenu
+	if ( gamemenu == nil ) then
+		return
+	end
+
+	local visible = gamemenu:isVisible()
+	gamemenu:remove()
+	gamemenu = gui.hudgamemenu( g_Viewport )
+	g_GameMenu = gamemenu
 	if ( visible ) then
-		g_GameMenu:activate()
+		gamemenu:activate()
 	end
 end
+
+restorePanel()

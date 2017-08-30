@@ -18,7 +18,7 @@ _hooks.shared = _hooks.shared or {}
 
 function call( universe, event, ... )
 	local eventHooks = _hooks[ universe ][ event ]
-	if ( not eventHooks ) then
+	if ( eventHooks == nil ) then
 		return
 	end
 

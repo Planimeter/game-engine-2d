@@ -22,23 +22,33 @@ function hudmoveindicator:hudmoveindicator( parent )
 	self:setScheme( "Default" )
 end
 
+local function updateSprites( self, sprite, i, v )
+	if ( v.sprite ~= sprite ) then
+		return
+	end
+
+	table.remove( self.sprites, i )
+
+	if ( #self.sprites == 0 ) then
+		self.sprites = nil
+	end
+end
+
+local function onAnimationEnd( self )
+	return function( sprite )
+		for i, v in ipairs( self.sprites ) do
+			updateSprites( self, sprite, i, v )
+		end
+	end
+end
+
 function hudmoveindicator:createMoveIndicator( worldIndex, x, y )
-	if ( not self.sprites ) then
+	if ( self.sprites == nil ) then
 		self.sprites = {}
 	end
 
 	local sprite = sprite( "images.moveindicator" )
-	sprite.onAnimationEnd = function( sprite )
-		for i, v in ipairs( self.sprites ) do
-			if ( v.sprite == sprite ) then
-				table.remove( self.sprites, i )
-
-				if ( #self.sprites == 0 ) then
-					self.sprites = nil
-				end
-			end
-		end
-	end
+	sprite.onAnimationEnd = onAnimationEnd( self )
 
 	local indicator = {
 		sprite     = sprite,
@@ -50,8 +60,15 @@ function hudmoveindicator:createMoveIndicator( worldIndex, x, y )
 	table.insert( self.sprites, indicator )
 end
 
+local r_draw_position = convar( "r_draw_position", "0", nil, nil,
+                                "Draws position" )
+
 function hudmoveindicator:preDrawWorld()
 	self:drawMoveIndicators()
+
+	if ( r_draw_position:getBoolean() and love.window.hasFocus() ) then
+		self:drawPosition()
+	end
 
 	gui.panel.preDrawWorld( self )
 end
@@ -63,8 +80,63 @@ function hudmoveindicator:draw()
 	gui.panel.draw( self )
 end
 
+local function drawPosition( self, x, y, drawLabel )
+	if ( drawLabel == nil ) then
+		drawLabel = true
+	end
+
+	return function()
+		love.graphics.setColor( color( color.white, 0.14 * 255 ) )
+		local lineWidth = 1
+		love.graphics.setLineWidth( lineWidth )
+		local size = game.tileSize
+		love.graphics.rectangle(
+			"line",
+			lineWidth / 2,
+			lineWidth / 2,
+			size - lineWidth,
+			size - lineWidth
+		)
+		if ( not drawLabel ) then
+			return
+		end
+		love.graphics.push()
+			love.graphics.scale( 1 / camera.getZoom() )
+			local font = self:getScheme( "fontSmall" )
+			love.graphics.setFont( font )
+			local position = vector( x, y ) + vector( 0, game.tileSize )
+			y = ( size + 1 ) * camera.getZoom()
+			love.graphics.print( tostring( position ), 0, y )
+		love.graphics.pop()
+	end
+end
+
+function hudmoveindicator:drawPosition()
+	local worldIndex = localplayer:getWorldIndex()
+	local x, y = love.mouse.getPosition()
+	x, y = camera.screenToWorld( x, y )
+	local rx, ry = 0, 0
+	if ( r_draw_position:getNumber() == 1 ) then
+		rx, ry = region.snapToGrid( x, y )
+	elseif ( r_draw_position:getNumber() == 2 ) then
+		rx, ry = region.roundToGrid( x, y )
+	end
+
+	local drawLabel = r_draw_position:getNumber() == 1
+	camera.drawToWorld(
+		worldIndex,
+		rx,
+		ry,
+		drawPosition( self, rx, ry, drawLabel )
+	)
+
+	if ( r_draw_position:getNumber() == 2 ) then
+		camera.drawToWorld( worldIndex, x, y, drawPosition( self, x, y ) )
+	end
+end
+
 function hudmoveindicator:drawEntityName()
-	if ( not self.entity ) then
+	if ( self.entity == nil ) then
 		return
 	end
 
@@ -89,8 +161,24 @@ function hudmoveindicator:drawEntityName()
 	)
 end
 
+local function drawLevel( self, x, y )
+	local l = self.entity:getLevel()
+	love.graphics.print( "Level " .. l, x, y )
+end
+
+local function drawOptions( self, x, y )
+	local options = self.entity:getOptions()
+	local n = options and table.len( options ) or 0
+	if ( n == 0 ) then
+		return
+	end
+
+	local plural = n > 1 and "s" or ""
+	love.graphics.print( n  .. " Option" .. plural, x, y )
+end
+
 function hudmoveindicator:drawEntityInfo()
-	if ( not self.entity ) then
+	if ( self.entity == nil ) then
 		return
 	end
 
@@ -103,20 +191,17 @@ function hudmoveindicator:drawEntityInfo()
 	love.graphics.setFont( font )
 
 	if ( self.entity.getLevel ) then
-		local l = self.entity:getLevel()
-		love.graphics.print( "Level " .. l, margin, margin + lineHeight )
+		drawLevel( self, margin, margin + lineHeight )
 		lineHeight = lineHeight + font:getHeight()
 	end
 
 	if ( self.entity.getOptions ) then
-		local n = table.len( self.entity:getOptions() )
-		local plural = n > 1 and "s" or ""
-		love.graphics.print( n  .. " Option" .. plural, margin, margin + lineHeight )
+		drawOptions( self, margin, margin + lineHeight )
 	end
 end
 
 function hudmoveindicator:drawMoveIndicators()
-	if ( not self.sprites ) then
+	if ( self.sprites == nil ) then
 		return
 	end
 
@@ -144,9 +229,7 @@ function hudmoveindicator:invalidateLayout()
 	gui.panel.invalidateLayout( self )
 end
 
-function hudmoveindicator:isActive()
-	return self.optionsActive
-end
+accessor( hudmoveindicator, "active", "optionsActive", "is" )
 
 local t = {}
 local pointinrect = math.pointinrect
@@ -170,7 +253,7 @@ local getEntitiesAtMousePos = function( px, py )
 end
 
 local function onLeftClick( self, x, y )
-	if ( self.mouseover ) then
+	if ( self.mouseover or self:isSiblingMousedOver() ) then
 		self.mousedown = true
 		self:invalidate()
 		self:setActive( false )
@@ -220,13 +303,13 @@ local function onRightClick( self, x, y )
 end
 
 function hudmoveindicator:mousepressed( x, y, button, istouch )
-	if ( self.mouseover and button == 1 ) then
+	if ( button == 1 ) then
 		if ( onLeftClick( self, x, y ) ) then
 			return
 		end
 	end
 
-	if ( self.mouseover and button == 2 ) then
+	if ( button == 2 ) then
 		if ( onRightClick( self, x, y ) ) then
 			return
 		end
@@ -243,13 +326,10 @@ function hudmoveindicator:setActive( active )
 	gui.setFocusedPanel( self, active )
 end
 
-local mouseX, mouseY = 0, 0
-local getPosition    = love.mouse.getPosition
-
 function hudmoveindicator:update( dt )
-	mouseX, mouseY = getPosition()
-	local entity   = getEntitiesAtMousePos( mouseX, mouseY )[ 1 ]
-	self.entity    = entity
+	local mx, my = love.mouse.getPosition()
+	local entity = getEntitiesAtMousePos( mx, my )[ 1 ]
+	self.entity  = entity
 
 	local sprites = self.sprites
 	if ( sprites ) then

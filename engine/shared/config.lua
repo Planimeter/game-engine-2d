@@ -6,43 +6,47 @@
 
 require( "engine.shared.convar" )
 
-convar( "r_window_width", 800, 800, nil,
-        "Sets the width of the window on load" )
-convar( "r_window_height", 600, 600, nil,
-        "Sets the height of the window on load" )
-convar( "r_window_fullscreen", "0", nil, nil,
-        "Toggles fullscreen mode" )
-convar( "r_window_vsync", "1", nil, nil,
-        "Toggles vertical synchronization" )
-convar( "r_window_borderless", "0", nil, nil,
-        "Toggles borderless mode" )
-convar( "r_window_highdpi", "1", nil, nil,
-        "Toggles high-dpi mode" )
-
-local function updateVolume( convar )
-	local volume = convar:getNumber()
-	love.audio.setVolume( volume )
-end
-
-convar( "snd_volume", 1, 0, 1,
-        "Sets the master volume",
-        updateVolume )
-convar( "snd_desktop", "1", nil, nil,
-        "Toggles playing sound from the desktop" )
-
 local convar   = convar
 local love     = love
 local tonumber = tonumber
 
 module( "config" )
 
-_conf = nil
+_conf = _conf or nil
+
+local function createConvars()
+	convar( "r_window_width", 800, 800, nil,
+	        "Sets the width of the window on load" )
+	convar( "r_window_height", 600, 600, nil,
+	        "Sets the height of the window on load" )
+	convar( "r_window_fullscreen", "0", nil, nil,
+	        "Toggles fullscreen mode" )
+	convar( "r_window_vsync", "1", nil, nil,
+	        "Toggles vertical synchronization" )
+	convar( "r_window_borderless", "0", nil, nil,
+	        "Toggles borderless mode" )
+	convar( "r_window_highdpi", "1", nil, nil,
+	        "Toggles high-dpi mode" )
+
+	local function updateVolume( convar )
+		local volume = convar:getNumber()
+		love.audio.setVolume( volume )
+	end
+
+	convar( "snd_volume", 1, 0, 1,
+	        "Sets the master volume",
+	        updateVolume )
+	convar( "snd_desktop", "1", nil, nil,
+	        "Toggles playing sound from the desktop" )
+end
 
 function load( c )
 	love.filesystem.setIdentity( c.identity, c.appendidentity )
 	convar.readConfig()
 	setWindow( c )
 	setSound( c )
+
+	createConvars()
 
 	_conf = c
 end

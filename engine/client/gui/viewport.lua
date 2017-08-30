@@ -45,7 +45,7 @@ function viewport:show()
 end
 
 local function hideViewport()
-	if ( not g_Viewport ) then
+	if ( g_Viewport == nil ) then
 		return
 	end
 
@@ -55,7 +55,7 @@ end
 hook.set( "client", hideViewport, "onMainMenuActivate", "hideViewport" )
 
 local function showViewport()
-	if ( not g_Viewport ) then
+	if ( g_Viewport == nil ) then
 		return
 	end
 

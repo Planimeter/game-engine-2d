@@ -13,7 +13,7 @@ local sv_cheats = convar( "sv_cheats", 0, nil, nil, "Allow cheats on server",
 
 function concommand.dispatch( player, name, argString, argTable )
 	local concommand = concommand.getConcommand( name )
-	if ( not concommand ) then
+	if ( concommand == nil ) then
 		return false
 	end
 
@@ -54,7 +54,7 @@ end
 if ( _CLIENT ) then
 	function concommand.run( name )
 		local command = string.match( name, "^([^%s]+)" )
-		if ( not command ) then
+		if ( command == nil ) then
 			return
 		end
 

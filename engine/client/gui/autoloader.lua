@@ -28,15 +28,15 @@ function metatable.__index( t, k )
 		"engine.client"
 	} ) do
 		local library = module .. ".gui." .. k
-		local success, err = pcall( require, library )
-		if ( success ) then
+		local status, err = pcall( require, library )
+		if ( status == true ) then
 			break
-		else
-			local message = "module '" .. library .. "' not found:"
-			local notFound = string.find( err, message ) ~= 1
-			if ( notFound ) then
-				error( err, 2 )
-			end
+		end
+
+		local message = "module '" .. library .. "' not found:"
+		local notFound = string.find( err, message ) ~= 1
+		if ( notFound ) then
+			error( err, 2 )
 		end
 	end
 

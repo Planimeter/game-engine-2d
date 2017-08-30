@@ -67,9 +67,7 @@ end
 function passwordtextbox:getAutocomplete()
 end
 
-function passwordtextbox:getPassword()
-	return self.password
-end
+accessor( passwordtextbox, "password" )
 
 function passwordtextbox:insertText( text )
 	local buffer = {}

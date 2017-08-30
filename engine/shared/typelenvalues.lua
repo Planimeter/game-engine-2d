@@ -123,7 +123,7 @@ local concat = table.concat
 
 function typelenvalues:serialize()
 	local struct = self:getStruct()
-	if ( not struct ) then
+	if ( struct == nil ) then
 		return ""
 	end
 
@@ -185,7 +185,7 @@ function typelenvalues:deserialize()
 
 	-- Get struct by id
 	local index = 1
-	if ( not self.struct ) then
+	if ( self.struct == nil ) then
 		local id = byte( data )
 		for name, struct in pairs( self:getDefinitions() ) do
 			if ( struct.id == id ) then
@@ -195,7 +195,7 @@ function typelenvalues:deserialize()
 		index = index + 1
 	end
 
-	if ( not self.struct ) then
+	if ( self.struct == nil ) then
 		return
 	end
 
@@ -243,7 +243,6 @@ function typelenvalues:deserialize()
 			elseif ( key.type == "string" ) then
 				self.data[ key.name ] = bytes
 			elseif ( key.type == "vector" ) then
-				require( "common.vector" )
 				self.data[ key.name ] = vector(
 					typelenvalues.bytesToNumber( sub( bytes, 1, 8 ) ), --x
 					typelenvalues.bytesToNumber( sub( bytes, 8, 16 ) ) --y
@@ -254,7 +253,7 @@ function typelenvalues:deserialize()
 				self.data[ key.name ] = tlvs
 			elseif ( key.type == "entity" ) then
 				local entIndex = typelenvalues.bytesToNumber( bytes )
-				require( "engine.shared.entities.entity" )
+				entities.requireEntity( "entity" )
 				self.data[ key.name ] = entity.getByEntIndex( entIndex )
 			end
 			index = index + size

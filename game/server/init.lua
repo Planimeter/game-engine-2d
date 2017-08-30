@@ -4,15 +4,12 @@
 --
 --==========================================================================--
 
-local game      = game
-local require   = require
-local unrequire = unrequire
-local _G        = _G
+local _G = _G
 
 module( "game.server" )
 
 function getPlayerClass()
-	require( "game.shared.entities.vaplayer" )
+	_G.entities.requireEntity( "vaplayer" )
 	local classmap = _G.entities.getClassMap()
 	local vaplayer = classmap[ "vaplayer" ]
 	return vaplayer
@@ -33,6 +30,9 @@ end
 
 function onPlayerSay( player, message )
 	return true
+end
+
+function onTick( timestep )
 end
 
 function quit()

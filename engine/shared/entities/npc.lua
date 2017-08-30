@@ -4,14 +4,14 @@
 --
 --==========================================================================--
 
-require( "engine.shared.entities.character" )
+entities.requireEntity( "character" )
 
 class "npc" ( "character" )
 
 function npc:npc()
 	character.character( self )
 
-	self:networkNumber( "moveSpeed", 0.5 )
+	self:networkNumber( "moveSpeed", 1 )
 
 	if ( _CLIENT ) then
 		require( "engine.client.sprite" )

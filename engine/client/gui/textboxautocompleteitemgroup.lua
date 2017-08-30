@@ -16,7 +16,7 @@ function textboxautocompleteitemgroup:textboxautocompleteitemgroup( parent, name
 	-- for the drop-down list item group. The control does not necessarily have
 	-- to be a dropdownlist.
 	-- self.dropDownList = nil
-	self.textBox         = parent
+	self.textbox         = parent
 
 	self:setSuppressFramebufferWarnings( true )
 end
@@ -28,20 +28,18 @@ function textboxautocompleteitemgroup:addItem( item )
 	item.onClick = function( item )
 		local value = item:getValue()
 		self:removeChildren()
-		local textBox = self:getTextBox()
-		textBox:setText( value )
+		local textbox = self:getTextbox()
+		textbox:setText( value )
 	end
 
 	self:invalidateLayout()
 end
 
-function textboxautocompleteitemgroup:getTextBox()
-	return self.textBox
-end
+accessor( textboxautocompleteitemgroup, "textbox" )
 
 function textboxautocompleteitemgroup:invalidateLayout()
 	self:updatePos()
-	self:setWidth( self:getTextBox():getWidth() )
+	self:setWidth( self:getTextbox():getWidth() )
 
 	local listItems = self:getItems()
 	if ( listItems ) then
@@ -56,16 +54,16 @@ function textboxautocompleteitemgroup:invalidateLayout()
 end
 
 function textboxautocompleteitemgroup:isVisible()
-	local textBox     = self:getTextBox()
+	local textbox     = self:getTextbox()
 	local children    = self:getChildren()
 	local hasChildren = children and #children > 0
-	return textBox:isVisible() and textBox.focus and hasChildren
+	return textbox:isVisible() and textbox.focus and hasChildren
 end
 
 function textboxautocompleteitemgroup:mousepressed( x, y, button, istouch )
 	if ( button == 1 ) then
-		local textBox = self:getTextBox()
-		if ( textBox ~= gui._topPanel and
+		local textbox = self:getTextbox()
+		if ( textbox ~= gui._topPanel and
 		   ( not ( self.mouseover or self:isChildMousedOver() ) ) ) then
 			if ( self:getChildren() ) then
 				self:removeChildren()
@@ -82,9 +80,9 @@ end
 local sx, sy = 0, 0
 
 function textboxautocompleteitemgroup:updatePos()
-	local textBox = self:getTextBox()
-	if ( textBox ) then
-		sx, sy = textBox:localToScreen()
-		self:setPos( sx, sy + textBox:getHeight() )
+	local textbox = self:getTextbox()
+	if ( textbox ) then
+		sx, sy = textbox:localToScreen()
+		self:setPos( sx, sy + textbox:getHeight() )
 	end
 end

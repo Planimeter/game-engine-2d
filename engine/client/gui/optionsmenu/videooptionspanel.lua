@@ -8,6 +8,13 @@ class "gui.videooptionspanel" ( "gui.frametabpanel" )
 
 local videooptionspanel = gui.videooptionspanel
 
+function videooptionspanel.getAspectRatio()
+	local w = love.graphics.getWidth()
+	local h = love.graphics.getHeight()
+	local r = math.gcd( w, h )
+	return w / r, h / r
+end
+
 function videooptionspanel.getAspectRatios()
 	local modes = videooptionspanel.getFullscreenModes()
 	local r     = 1
@@ -127,7 +134,7 @@ function videooptionspanel:videooptionspanel( parent, name )
 	customWidth:setDefocusOnEnter( true )
 	customWidth.onLostFocus = function( textbox )
 		local width = tonumber( textbox:getText() )
-		if ( not width ) then
+		if ( width == nil ) then
 			return
 		elseif ( width < 800 ) then
 			width = 800
@@ -145,7 +152,7 @@ function videooptionspanel:videooptionspanel( parent, name )
 	customHeight:setDefocusOnEnter( true )
 	customHeight.onLostFocus = function( textbox )
 		local height = tonumber( textbox:getText() )
-		if ( not height ) then
+		if ( height == nil ) then
 			return
 		elseif ( height < 600 ) then
 			height = 600
@@ -202,7 +209,7 @@ end
 
 function videooptionspanel:clearCustomResolution()
 	local customResolution = self.customResolution
-	if ( not customResolution ) then
+	if ( customResolution == nil ) then
 		return
 	end
 
@@ -284,8 +291,10 @@ function videooptionspanel:updateMode()
 		flags.icon   = nil
 		love.window.setMode( resolution.width, resolution.height, flags )
 
-		if ( resolution.width  == love.graphics.getWidth() and
-		     resolution.height == love.graphics.getHeight() ) then
+		local width  = resolution.width  * love.window.getPixelScale()
+		local height = resolution.height * love.window.getPixelScale()
+		if ( width  == love.graphics.getWidth() and
+		     height == love.graphics.getHeight() ) then
 			engine.client.resize( resolution.width, resolution.height )
 		end
 	end
@@ -302,7 +311,7 @@ function videooptionspanel:updateAspectRatios()
 	local dropdownlistitem = nil
 	local name = "Aspect Ratio Drop-Down List Item"
 	local text = ""
-	local arx, ary = videooptionspanel.getAspectRatios()
+	local arx, ary = videooptionspanel.getAspectRatio()
 	for i, mode in ipairs( supportedAspectRatios ) do
 		local hasModes = #videooptionspanel.getFullscreenModes( mode.x, mode.y ) ~= 0
 		-- HACKHACK: Include 683:384 when performing 16:9 lookups.
@@ -319,7 +328,7 @@ function videooptionspanel:updateAspectRatios()
 			if ( mode.x == arx and mode.y == ary ) then
 				dropdownlistitem:setDefault( true )
 				options.aspectRatio = mode
-			elseif ( not options.aspectRatio ) then
+			elseif ( options.aspectRatio == nil ) then
 				options.aspectRatio = mode
 			end
 		end
@@ -365,7 +374,7 @@ function videooptionspanel:updateResolutions()
 			dropdownlistitem:setDefault( true )
 			foundMode = true
 		end
-		if ( not options.resolution ) then
+		if ( options.resolution == nil ) then
 			options.resolution = mode
 		end
 	end

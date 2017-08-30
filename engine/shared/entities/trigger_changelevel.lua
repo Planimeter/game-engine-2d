@@ -4,7 +4,7 @@
 --
 --==========================================================================--
 
-require( "engine.shared.entities.trigger" )
+entities.requireEntity( "trigger" )
 
 class "trigger_changelevel" ( "trigger" )
 
@@ -14,7 +14,7 @@ end
 
 function trigger_changelevel:loadRegion()
 	local properties = self:getProperties()
-	if ( not properties ) then
+	if ( properties == nil ) then
 		return
 	end
 
@@ -34,7 +34,7 @@ function trigger_changelevel:removeRegion()
 		local r = region.getByName( name )
 		if ( r ) then
 			local players = player.getInOrNearRegion( r )
-			if ( not players ) then
+			if ( players == nil ) then
 				region.unload( name )
 			end
 		end

@@ -16,12 +16,14 @@ function hudchat:hudchat( parent )
 
 	self.output = gui.hudchattextbox( self, name .. " Output Text Box", "" )
 	self.input  = gui.textbox( self, name .. " Input Text Box", "" )
+	self.input:setPlaceholder( "Chat" )
 	self.input.onEnter = function( textbox, text )
 		if ( string.trim( text ) == "" ) then
 			return
 		end
 
 		self:close()
+		self.output:updateCursor()
 		concommand.run( "say " .. text )
 		self.input:setText( "" )
 	end
@@ -103,32 +105,32 @@ function hudchat:keypressed( key, scancode, isrepeat )
 end
 
 function hudchat:invalidateLayout()
-	self.width = gui.scale( 720 )
-	self.height = gui.scale( 404 )
-	self:setPos(
-		gui.scale( 96 ) - love.window.toPixels( 36 ) - love.window.toPixels( 18 ),
-		gui.scale( 494 )
-	)
+	self.width           = gui.scale( 720 )
+	self.height          = gui.scale( 404 )
+	local margin         = gui.scale( 96 )
+	local padding        = love.window.toPixels( 36 )
+	local textboxPadding = love.window.toPixels( 18 )
+	local x              = margin - padding - textboxPadding
+	local y              = gui.scale( 494 )
+	self:setPos( x, y )
 
 	if ( self.output ) then
 		if ( self:isVisible() or self.initializing ) then
 			self.initializing = false
-			self.output:setPos( love.window.toPixels( 36 ), love.window.toPixels( 36 ) )
+			self.output:setPos( padding, padding )
 		else
-			local x, y = self:localToScreen(
-				gui.scale( 96 ) - love.window.toPixels( 18 ),
-				love.window.toPixels( 36 ) + gui.scale( 494 )
-			)
+			local x, y = margin - textboxPadding, y + padding
+			x, y       = self:localToScreen( x, y )
 			self.output:setPos( x, y )
 		end
 	end
 
 	if ( self.input ) then
-		self.input:setPos(
-			love.window.toPixels( 36 ),
-			self:getHeight() - self.input:getHeight() - love.window.toPixels( 36 )
-		)
-		self.input:setWidth( self:getWidth() - 2 * love.window.toPixels( 36 ) )
+		local x     = padding
+		local y     = self:getHeight() - self.input:getHeight() - padding
+		local width = self:getWidth() - 2 * padding
+		self.input:setPos( x, y )
+		self.input:setWidth( width )
 	end
 
 	gui.frame.invalidateLayout( self )
@@ -144,12 +146,13 @@ concommand( "chat", "Toggles the chat", function()
 	end
 end )
 
-function onChatReceived( payload )
+local function onChatReceived( payload )
 	local entity  = payload:get( "entity" )
 	local message = payload:get( "message" )
 	require( "engine.client.chat" )
 	if ( entity ) then
-		if ( not game.call( "client", "onPlayerChat", entity, message ) ) then
+		local addText = game.call( "client", "onPlayerChat", entity, message )
+		if ( addText == false ) then
 			return
 		end
 
@@ -161,15 +164,23 @@ end
 
 payload.setHandler( onChatReceived, "chat" )
 
-if ( g_Chat ) then
-	local visible = g_Chat:isVisible()
-	local output  = g_Chat.output:getText()
-	g_Chat.output:remove()
-	g_Chat:remove()
-	g_Chat = nil
-	g_Chat = gui.hudchat( g_Viewport )
-	g_Chat.output:setText( output )
+local function restorePanel()
+	local chat = g_Chat
+	if ( chat == nil ) then
+		return
+	end
+
+	local visible = chat:isVisible()
+	local output  = chat.output
+	local text    = output:getText()
+	chat:remove()
+	chat   = gui.hudchat( g_Viewport )
+	g_Chat = chat
+	output = chat.output
+	output:setText( text )
 	if ( visible ) then
-		g_Chat:activate()
+		chat:activate()
 	end
 end
+
+restorePanel()

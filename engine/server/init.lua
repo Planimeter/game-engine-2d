@@ -4,7 +4,6 @@
 --
 --==========================================================================--
 
-require( "engine.server.network" )
 require( "engine.shared.network.payload" )
 
 local payload  = payload
@@ -27,12 +26,13 @@ end
 function onPostConnect( event )
 	-- Initialize region
 	local regionName = _G.game.initialRegion
-	region.load( regionName )
+	require( "engine.shared.region" )
+	_G.region.load( regionName )
 
 	-- Initialize player
-	require( "engine.shared.entities.player" )
+	_G.entities.requireEntity( "player" )
 	local player = _G.player.initialize( event.peer )
-	player:setRegion( region.getByName( regionName ) )
+	player:setRegion( _G.region.getByName( regionName ) )
 
 	player:onConnect()
 
@@ -62,6 +62,13 @@ function onDisconnect( event )
 	end
 
 	print( tostring( event.peer ) .. " has disconnected." )
+end
+
+function onTick( timestep )
+	local game = _G.game and _G.game.server or nil
+	if ( game ) then
+		game.onTick( timestep )
+	end
 end
 
 function sendServerInfo( player )

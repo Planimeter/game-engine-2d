@@ -4,7 +4,7 @@
 --
 --==========================================================================--
 
-require( "engine.shared.entities.entity" )
+entities.requireEntity( "entity" )
 require( "game" )
 
 class "prop_chest" ( "entity" )
@@ -25,7 +25,7 @@ if ( _CLIENT ) then
 		return {
 			{
 				name  = "Open",
-				value = self.open
+				value = function() self:open() end
 			},
 			{
 				name  = "Examine",
@@ -36,6 +36,9 @@ if ( _CLIENT ) then
 end
 
 function prop_chest:open()
+	if ( _CLIENT ) then
+		localplayer:moveTo( self:getPosition() + vector( 0, game.tileSize ) )
+	end
 end
 
 function prop_chest:examine()

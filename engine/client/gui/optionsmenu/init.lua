@@ -71,7 +71,7 @@ end
 
 local function restorePanel()
 	local mainmenu = g_MainMenu
-	if ( not mainmenu or not mainmenu.optionsMenu ) then
+	if ( mainmenu == nil or not mainmenu.optionsMenu ) then
 		return
 	end
 

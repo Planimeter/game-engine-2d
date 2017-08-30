@@ -4,7 +4,7 @@
 --
 --==========================================================================--
 
-require( "engine.shared.entities.player" )
+entities.requireEntity( "player" )
 
 class "vaplayer" ( "player" )
 
@@ -24,6 +24,33 @@ function vaplayer.experienceToLevel( xp )
 		levelXp = vaplayer.levelToExperience( level )
 	until ( levelXp > xp )
 	return level - 1
+end
+
+if ( _CLIENT ) then
+	function vaplayer:getOptions()
+		if ( self == localplayer ) then
+			return
+		end
+
+		return {
+			{
+				name  = "Trade",
+				value = function() self:trade() end
+			},
+			{
+				name  = "Examine",
+				value = self.examine
+			}
+		}
+	end
+end
+
+function vaplayer:trade()
+	chat.addText( "Nothing interesting happens." )
+end
+
+function vaplayer:examine()
+	chat.addText( "Filthy casual." )
 end
 
 function vaplayer:vaplayer()
@@ -63,16 +90,22 @@ function vaplayer:getExperience( stat )
 	return self.stats[ stat ]
 end
 
-function vaplayer:getInventory()
-	return self.inventory
-end
+accessor( vaplayer, "inventory" )
 
 function vaplayer:getLevel( stat )
 	if ( stat ) then
 		return vaplayer.experienceToLevel( self:getExperience( stat ) )
 	end
 
-	return -1
+	local melee = self:getLevel( "attack" )
+	local range = math.floor( 1.5 * self:getLevel( "range" ) )
+	local magic = math.floor( 1.5 * self:getLevel( "magic" ) )
+	local high  = math.max( melee, range, magic )
+
+	local combat = math.floor( 1.3 * high )  +
+	               self:getLevel( "health" ) +
+	               math.floor( self:getLevel( "prayer" ) / 2 )
+	return math.floor( combat / 3 )
 end
 
 function vaplayer:give( item, count )
@@ -142,7 +175,4 @@ if ( _SERVER ) then
 	payload.setHandler( onPlayerPickup, "playerPickup" )
 end
 
--- Preserve the vaplayer interface
-local class = vaplayer
 entities.linkToClassname( vaplayer, "vaplayer" )
-_G.vaplayer = class
