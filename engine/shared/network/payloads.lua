@@ -89,6 +89,12 @@ structs[ "playerMove" ] = {
     }
 }
 
+structs[ "usercmd" ] = {
+    keys = {
+        { name = "buttons",        type = "number" },
+    }
+}
+
 -- if ( _G._VADVENTURE ) then
     structs[ "playerPickup" ] = {
         keys = {

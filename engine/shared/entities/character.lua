@@ -13,24 +13,24 @@ function character:character()
 end
 
 function character:addTask( task, name )
-	if ( self.tasks == nil ) then
-		self.tasks = {}
+	if ( self._tasks == nil ) then
+		self._tasks = {}
 	end
 
-	table.insert( self.tasks, {
+	table.insert( self._tasks, {
 		task = task,
 		name = name
 	} )
 end
 
-function character:move()
-	if ( self.path == nil ) then
+function character:move( dt )
+	if ( self._path == nil ) then
 		return
 	end
 
 	-- Get direction to move
 	local start     = self:getPosition()
-	local next      = self.path[ 1 ]
+	local next      = self._path[ 1 ]
 	local direction = ( next - start )
 	direction:normalizeInPlace()
 
@@ -38,34 +38,32 @@ function character:move()
 	self:updateAnimation( direction )
 
 	-- Apply move speed to directional vector
-	direction = direction * math.round( self:getNetworkVar( "moveSpeed" ) )
-
-	-- Snap to pixel grid
-	direction.x = math.round( direction.x )
-	direction.y = math.round( direction.y )
+	local velocity = ( self:getNetworkVar( "moveSpeed" ) * dt ) * direction
 
 	-- Where we'll move to
-	local newPosition = start + direction
+	local newPosition = start + velocity
 
 	-- If we change direction, don't apply linear impulse
 	local applyLinearImpulse = true
 
 	-- Ensure we're not passing the next tile by comparing the
 	-- distance traveled to the distance to the next tile
-	if ( direction:length() >= ( next - start ):length() ) then
+	if ( velocity:length() >= ( next - start ):length() ) then
 		newPosition = next
-		table.remove( self.path, 1 )
+		table.remove( self._path, 1 )
 
 		self:onMoveTo( newPosition )
 
-		if ( self.nextPosition ) then
-			local path = path.getPath( newPosition, self.nextPosition )
+		-- If we're holding down a movement key, or we clicked-to-move,
+		-- `self._nextPosition` was set
+		if ( self._nextPosition ) then
+			local path = path.getPath( newPosition, self._nextPosition )
 			if ( path ) then
-				self.path = path
+				self._path = path
 				applyLinearImpulse = false
 			end
 
-			self.nextPosition = nil
+			self._nextPosition = nil
 		end
 	end
 
@@ -73,9 +71,9 @@ function character:move()
 	local body = self:getBody()
 	if ( body ) then
 		if ( applyLinearImpulse ) then
-			local velocity = vector( body:getLinearVelocity() )
-			local delta    = direction - velocity
-			local mass     = body:getMass()
+			local initialVelocity = vector( body:getLinearVelocity() )
+			local delta = velocity - initialVelocity
+			local mass = body:getMass()
 			body:applyLinearImpulse( delta.x * mass, delta.y * mass )
 		else
 			body:setLinearVelocity( 0, 0 )
@@ -85,14 +83,14 @@ function character:move()
 	end
 
 	-- We've reached our goal
-	if ( self.path and #self.path == 0 ) then
+	if ( self._path and #self._path == 0 ) then
 		local body = self:getBody()
 		if ( body ) then
 			body:setLinearVelocity( 0, 0 )
 			body:setPosition( newPosition.x, newPosition.y )
 		end
 
-		self.path = nil
+		self._path = nil
 		self:onFinishMove()
 	end
 end
@@ -112,18 +110,18 @@ function character:moveTo( position, callback )
 	fromX, fromY = region.snapToGrid( fromX, fromY )
 	toX, toY     = region.snapToGrid( toX, toY )
 	if ( fromX == toX and fromY == toY ) then
-		self.moveCallback = callback
+		self._moveCallback = callback
 		self:onFinishMove()
 		return false
 	end
 
-	self.nextPosition = position
-	self.moveCallback = callback
+	self._nextPosition = position
+	self._moveCallback = callback
 	return true
 end
 
 function character:nextTask()
-	local tasks = self.tasks
+	local tasks = self._tasks
 	table.remove( tasks, 1 )
 
 	if ( #tasks == 0 ) then
@@ -134,9 +132,9 @@ end
 function character:onFinishMove()
 	self:setAnimation( "idle" )
 
-	if ( self.moveCallback ) then
-		self.moveCallback()
-		self.moveCallback = nil
+	if ( self._moveCallback ) then
+		self._moveCallback()
+		self._moveCallback = nil
 	end
 end
 
@@ -144,12 +142,12 @@ function character:onMoveTo( position )
 end
 
 function character:removeTasks()
-	self.tasks = nil
+	self._tasks = nil
 end
 
 function character:update( dt )
 	self:updateTasks()
-	self:updateMovement()
+	self:updateMovement( dt )
 
 	entity.update( self, dt )
 end
@@ -179,24 +177,24 @@ function character:updateAnimation( direction )
 	end
 end
 
-function character:updateMovement()
-	if ( self.path ) then
-		self:move()
+function character:updateMovement( dt )
+	if ( self._path ) then
+		self:move( dt )
 		return
 	end
 
-	if ( self.nextPosition ) then
+	if ( self._nextPosition ) then
 		require( "engine.shared.path" )
-		local path = path.getPath( self:getPosition(), self.nextPosition )
+		local path = path.getPath( self:getPosition(), self._nextPosition )
 		if ( path ) then
-			self.path = path
+			self._path = path
 		end
-		self.nextPosition = nil
+		self._nextPosition = nil
 	end
 end
 
 function character:updateTasks()
-	local tasks = self.tasks
+	local tasks = self._tasks
 	if ( tasks == nil ) then
 		return
 	end

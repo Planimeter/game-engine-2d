@@ -11,7 +11,7 @@ class "npc" ( "character" )
 function npc:npc()
 	character.character( self )
 
-	self:networkNumber( "moveSpeed", 1 )
+	self:networkNumber( "moveSpeed", 66 )
 
 	if ( _CLIENT ) then
 		require( "engine.client.sprite" )

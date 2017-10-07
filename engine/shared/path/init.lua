@@ -39,6 +39,10 @@ local r_draw_path = convar( "r_draw_path", "0", nil, nil,
 
 local function drawPath( node, c )
 	local region = region.getAtPosition( node )
+	if ( region == nil ) then
+		return
+	end
+
 	local tileSize = game.tileSize
 	require( "engine.client.debugoverlay" )
 	_G.debugoverlay.rectangle(
@@ -118,7 +122,7 @@ local heuristics = {
 	end
 }
 
-local _heuristic = "euclidean"
+local _heuristic = "manhattan"
 
 function getHeuristic()
 	return _heuristic

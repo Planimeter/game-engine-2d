@@ -6,6 +6,8 @@
 
 class "gui.throbber" ( "gui.imagepanel" )
 
+local throbber = gui.throbber
+
 function throbber:throbber( parent, name, image )
 	gui.imagepanel.imagepanel( self, parent, name, image or "images/gui/throbber.png" )
 	self:setSize( love.window.toPixels( 16 ), love.window.toPixels( 16 ) )

@@ -10,6 +10,7 @@ local pairs      = pairs
 local print      = print
 local string     = string
 local table      = table
+local _G         = _G
 
 module( "bind" )
 
@@ -107,7 +108,7 @@ end
 
 function keypressed( key, scancode, isrepeat )
 	local bind = getBind( key )
-	if ( bind and not concommand.dispatch( localplayer, bind ) ) then
+	if ( bind and not concommand.dispatch( _G.localplayer, bind ) ) then
 		print( "'" .. bind .. "' is not recognized as a command." )
 	end
 end
@@ -121,7 +122,7 @@ function keyreleased( key, scancode )
 	local isButtonCommand = string.find( bind, "+" ) == 1
 	if ( isButtonCommand ) then
 		bind = string.gsub( bind, "%+", "-" )
-		if ( not concommand.dispatch( localplayer, bind ) ) then
+		if ( not concommand.dispatch( _G.localplayer, bind ) ) then
 			print( "'" .. bind .. "' is not recognized as a command." )
 		end
 	end

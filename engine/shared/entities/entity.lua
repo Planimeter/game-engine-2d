@@ -259,10 +259,20 @@ if ( _CLIENT ) then
 
 			-- Print text
 			local position = tostring( self:getPosition() )
+			position       = string.gsub( position, "vector", "position" )
+			local velocity = nil
+			local body     = self:getBody()
+			if ( body ) then
+				velocity = tostring( vector( body:getLinearVelocity() ) )
+				velocity = string.gsub( velocity, "vector", "velocity" )
+			end
 			local sprite   = self:getSprite()
 			local height   = sprite:getHeight()
 			local y        = ( height + 1 ) * camera.getZoom()
 			love.graphics.print( position, 0, y )
+			if ( velocity ) then
+				love.graphics.print( velocity, 0, y + font:getHeight() )
+			end
 		love.graphics.pop()
 	end
 
@@ -378,6 +388,15 @@ function entity:initializePhysics( type )
 	self.body:setFixedRotation( true )
 	self.body:setLinearDamping( 16 )
 	return self.body
+end
+
+function entity:isMoving()
+	local body = self:getBody()
+	if ( body == nil ) then
+		return
+	end
+
+	return ( vector( body:getLinearVelocity() ) ):lengthSqr() ~= 0
 end
 
 if ( _CLIENT ) then

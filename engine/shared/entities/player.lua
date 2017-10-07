@@ -4,6 +4,8 @@
 --
 --==========================================================================--
 
+require( "engine.shared.buttons" )
+
 entities.requireEntity( "character" )
 
 class "player" ( "character" )
@@ -71,11 +73,13 @@ function player:player()
 	character.character( self )
 
 	self:networkNumber( "id", player._lastPlayerId + 1 )
-	self:networkNumber( "moveSpeed", 1 )
+	self:networkNumber( "moveSpeed", 66 )
 
 	if ( _SERVER ) then
 		player._lastPlayerId = self:getNetworkVar( "id" )
 	end
+
+	self._buttons = 0
 
 	if ( _CLIENT ) then
 		require( "engine.client.sprite" )
@@ -124,6 +128,10 @@ function player:initialSpawn()
 	game.call( "shared", "onPlayerInitialSpawn", self )
 end
 
+function player:isKeyDown( button )
+	return bit.band( self._buttons, button ) ~= 0
+end
+
 if ( _SERVER ) then
 	function player:kick( message )
 		local payload = payload( "kick" )
@@ -156,47 +164,42 @@ if ( _SERVER ) then
 	local function onPlayerMove( payload )
 		local player   = payload:getPlayer()
 		local position = payload:get( "position" )
-		player.nextPosition = position
+		player._nextPosition = position
 	end
 
 	payload.setHandler( onPlayerMove, "playerMove" )
 end
 
-local in_forward = false
-local in_back    = false
-local in_left    = false
-local in_right   = false
-
-concommand( "+forward", "Start moving player forward", function()
-	in_forward = true
+concommand( "+forward", "Start moving player forward", function( _, player )
+	player._buttons = bit.bor( player._buttons, _E.IN_FORWARD )
 end, { "game" } )
 
-concommand( "-forward", "Stop moving player forward", function()
-	in_forward = false
+concommand( "-forward", "Stop moving player forward", function( _, player )
+	player._buttons = bit.band( player._buttons, bit.bnot( _E.IN_FORWARD ) )
 end, { "game" } )
 
-concommand( "+back", "Start moving player backward", function()
-	in_back = true
+concommand( "+back", "Start moving player backward", function( _, player )
+	player._buttons = bit.bor( player._buttons, _E.IN_BACK )
 end, { "game" } )
 
-concommand( "-back", "Stop moving player backward", function()
-	in_back = false
+concommand( "-back", "Stop moving player backward", function( _, player )
+	player._buttons = bit.band( player._buttons, bit.bnot( _E.IN_BACK ) )
 end, { "game" } )
 
-concommand( "+left", "Start moving player left", function()
-	in_left = true
+concommand( "+left", "Start moving player left", function( _, player )
+	player._buttons = bit.bor( player._buttons, _E.IN_LEFT )
 end, { "game" } )
 
-concommand( "-left", "Stop moving player left", function()
-	in_left = false
+concommand( "-left", "Stop moving player left", function( _, player )
+	player._buttons = bit.band( player._buttons, bit.bnot( _E.IN_LEFT ) )
 end, { "game" } )
 
-concommand( "+right", "Start moving player right", function()
-	in_right = true
+concommand( "+right", "Start moving player right", function( _, player )
+	player._buttons = bit.bor( player._buttons, _E.IN_RIGHT )
 end, { "game" } )
 
-concommand( "-right", "Stop moving player right", function()
-	in_right = false
+concommand( "-right", "Stop moving player right", function( _, player )
+	localplayer._buttons = bit.band( localplayer._buttons, bit.bnot( _E.IN_RIGHT ) )
 end, { "game" } )
 
 
@@ -225,8 +228,13 @@ if ( _CLIENT ) then
 		self._stepSoundTime = love.timer.getTime() + frametime
 	end
 
+	local cl_footsteps = convar( "cl_footsteps", 0, nil, nil,
+	                             "Plays footstep sounds for players" )
+
 	function player:onAnimationEvent( event )
-		updateStepSound( self, event )
+		if ( cl_footsteps:getBoolean() ) then
+			updateStepSound( self, event )
+		end
 	end
 end
 
@@ -251,15 +259,32 @@ local function updateMovement( self, position )
 		return
 	end
 
-	if ( in_forward ) then
-		localplayer:moveTo( position + vector( 0, -game.tileSize ) )
-	elseif ( in_back ) then
-		localplayer:moveTo( position + vector( 0,  game.tileSize ) )
-	elseif ( in_left ) then
-		localplayer:moveTo( position + vector( -game.tileSize, 0 ) )
-	elseif ( in_right ) then
-		localplayer:moveTo( position + vector(  game.tileSize, 0 ) )
+	if ( _CLIENT and not _SERVER ) then
+		local payload = payload( "usercmd" )
+		payload:set( "buttons", self._buttons )
+		engine.client.network.sendToServer( payload )
 	end
+
+	if ( self:isKeyDown( _E.IN_FORWARD ) ) then
+		localplayer:moveTo( position + vector( 0, -1 ) )
+	elseif ( self:isKeyDown( _E.IN_BACK ) ) then
+		localplayer:moveTo( position + vector( 0,  game.tileSize + 1 ) )
+	elseif ( self:isKeyDown( _E.IN_LEFT ) ) then
+		localplayer:moveTo( position + vector( -1, 0 ) )
+	elseif ( self:isKeyDown( _E.IN_RIGHT ) ) then
+		localplayer:moveTo( position + vector(  game.tileSize + 1, 0 ) )
+	end
+end
+
+if ( _SERVER ) then
+	local function onUserCmd( payload )
+		local player    = payload:getPlayer()
+		local buttons   = payload:get( "buttons" )
+		player._buttons = buttons
+		updateMovement( player, player:getPosition() )
+	end
+
+	payload.setHandler( onUserCmd, "usercmd" )
 end
 
 function player:onMoveTo( position )
@@ -347,7 +372,10 @@ function player:update( dt )
 			return
 		end
 
-		if ( ( in_forward or in_back or in_left or in_right ) and
+		if ( ( self:isKeyDown( _E.IN_FORWARD ) or
+		       self:isKeyDown( _E.IN_BACK )    or
+		       self:isKeyDown( _E.IN_LEFT )    or
+		       self:isKeyDown( _E.IN_RIGHT ) ) and
 		     ( vector( body:getLinearVelocity() ) ):lengthSqr() == 0 ) then
 			updateMovement( self, self:getPosition() )
 		end

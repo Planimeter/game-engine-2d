@@ -4,10 +4,13 @@
 --
 --==========================================================================--
 
-local love   = love
-local string = string
-local table  = table
-local ipairs = ipairs
+local hook    = hook
+local love    = love
+local print   = print
+local require = require
+local string  = string
+local table   = table
+local ipairs  = ipairs
 
 module( "addon" )
 

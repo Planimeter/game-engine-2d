@@ -18,6 +18,7 @@ local engine     = engine or {}
 _G.engine        = engine
 
 local concommand = concommand
+local convar     = convar
 local gui        = gui
 local ipairs     = ipairs
 local love       = love
@@ -30,6 +31,7 @@ local require    = require
 local _DEBUG     = _DEBUG
 local _CLIENT    = _CLIENT
 local _SERVER    = _SERVER
+local _DEDICATED = _DEDICATED
 local _G         = _G
 
 module( "engine" )
@@ -124,10 +126,13 @@ concommand( "exit", "Exits the game", function()
 	love.quit()
 end )
 
-local timestep    = 1/33
-local accumulator = 0
+local host_timescale = convar( "host_timescale", "1", nil, nil,
+                               "Prescales the clock by this amount" )
+local timestep       = 1/100
+local accumulator    = 0
 
 function love.update( dt )
+	dt = host_timescale:getNumber() * dt
 	if ( _DEBUG and _DEDICATED ) then
 		package.update( dt )
 	end

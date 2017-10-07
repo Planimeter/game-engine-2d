@@ -105,8 +105,10 @@ local function drawPosition( self, x, y, drawLabel )
 			local font = self:getScheme( "fontSmall" )
 			love.graphics.setFont( font )
 			local position = vector( x, y ) + vector( 0, game.tileSize )
+			position = tostring( position )
+			position = string.gsub( position, "vector", "position" )
 			y = ( size + 1 ) * camera.getZoom()
-			love.graphics.print( tostring( position ), 0, y )
+			love.graphics.print( position, 0, y )
 		love.graphics.pop()
 	end
 end
