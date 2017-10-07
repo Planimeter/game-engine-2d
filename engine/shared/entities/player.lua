@@ -199,7 +199,7 @@ concommand( "+right", "Start moving player right", function( _, player )
 end, { "game" } )
 
 concommand( "-right", "Stop moving player right", function( _, player )
-	localplayer._buttons = bit.band( localplayer._buttons, bit.bnot( _E.IN_RIGHT ) )
+	player._buttons = bit.band( player._buttons, bit.bnot( _E.IN_RIGHT ) )
 end, { "game" } )
 
 
