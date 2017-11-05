@@ -79,7 +79,8 @@ function player:player()
 		player._lastPlayerId = self:getNetworkVar( "id" )
 	end
 
-	self._buttons = 0
+	self._commandNumber = 0
+	self._buttons       = 0
 
 	if ( _CLIENT ) then
 		require( "engine.client.sprite" )
@@ -254,43 +255,46 @@ function player:onDisconnect()
 	end
 end
 
-local function updateMovement( self, position )
-	if ( self ~= localplayer ) then
+local function updateMovement( self )
+	if ( _CLIENT and self ~= localplayer ) then
 		return
 	end
 
 	if ( _CLIENT and not _SERVER ) then
 		local payload = payload( "usercmd" )
+		self._commandNumber = self._commandNumber + 1
+		payload:set( "commandNumber", self._commandNumber )
 		payload:set( "buttons", self._buttons )
 		engine.client.network.sendToServer( payload )
 	end
 
+	local position = self:getPosition()
 	if ( self:isKeyDown( _E.IN_FORWARD ) ) then
-		localplayer:moveTo( position + vector( 0, -1 ) )
+		self:moveTo( position + vector( 0, -1 ) )
 	elseif ( self:isKeyDown( _E.IN_BACK ) ) then
-		localplayer:moveTo( position + vector( 0,  game.tileSize + 1 ) )
+		self:moveTo( position + vector( 0,  game.tileSize + 1 ) )
 	elseif ( self:isKeyDown( _E.IN_LEFT ) ) then
-		localplayer:moveTo( position + vector( -1, 0 ) )
+		self:moveTo( position + vector( -1, 0 ) )
 	elseif ( self:isKeyDown( _E.IN_RIGHT ) ) then
-		localplayer:moveTo( position + vector(  game.tileSize + 1, 0 ) )
+		self:moveTo( position + vector(  game.tileSize + 1, 0 ) )
 	end
 end
 
 if ( _SERVER ) then
 	local function onUserCmd( payload )
-		local player    = payload:getPlayer()
-		local buttons   = payload:get( "buttons" )
-		player._buttons = buttons
-		updateMovement( player, player:getPosition() )
+		local player          = payload:getPlayer()
+		local commandNumber   = payload:get( "commandNumber" )
+		local buttons         = payload:get( "buttons" )
+		player._commandNumber = commandNumber
+		player._buttons       = buttons
+		updateMovement( player )
 	end
 
 	payload.setHandler( onUserCmd, "usercmd" )
 end
 
 function player:onMoveTo( position )
-	if ( _CLIENT ) then
-		updateMovement( self, position )
-	end
+	updateMovement( self )
 end
 
 function player:onNetworkVarChanged( networkvar )
@@ -364,22 +368,8 @@ function player:spawn()
 end
 
 function player:update( dt )
+	updateMovement( self )
 	character.update( self, dt )
-
-	if ( _CLIENT ) then
-		local body = self:getBody()
-		if ( body == nil ) then
-			return
-		end
-
-		if ( ( self:isKeyDown( _E.IN_FORWARD ) or
-		       self:isKeyDown( _E.IN_BACK )    or
-		       self:isKeyDown( _E.IN_LEFT )    or
-		       self:isKeyDown( _E.IN_RIGHT ) ) and
-		     ( vector( body:getLinearVelocity() ) ):lengthSqr() == 0 ) then
-			updateMovement( self, self:getPosition() )
-		end
-	end
 end
 
 function player:__tostring()

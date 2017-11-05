@@ -91,7 +91,8 @@ structs[ "playerMove" ] = {
 
 structs[ "usercmd" ] = {
     keys = {
-        { name = "buttons",        type = "number" },
+        { name = "commandNumber",  type = "number" },
+        { name = "buttons",        type = "number" }
     }
 }
 
