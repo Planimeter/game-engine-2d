@@ -7,8 +7,6 @@ body {
 
 main {
   flex: 1;
-  margin-top: 0;
-  margin-bottom: 0;
 }
 
 header,
@@ -26,6 +24,11 @@ footer {
 }
 
 header {
+  margin-bottom: 0;
+}
+
+main {
+  margin-top: 0;
   margin-bottom: 0;
 }
 
