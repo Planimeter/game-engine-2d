@@ -1,12 +1,8 @@
---=========== Copyright © 2017, Planimeter, All rights reserved. ===========--
+--=========== Copyright © 2018, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: Pathfinding interface
 --
 --==========================================================================--
-
-if ( _CLIENT ) then
-	require( "engine.client.debugoverlay" )
-end
 
 local color    = color
 local convar   = convar
@@ -28,6 +24,10 @@ function getDirections()
 	return _directions
 end
 
+local function roundToGrid( v )
+	return vector( region.roundToGrid( v.x, v.y ) )
+end
+
 local function snapToGrid( v )
 	return vector( region.snapToGrid( v.x, v.y ) )
 end
@@ -38,6 +38,10 @@ local r_draw_path = convar( "r_draw_path", "0", nil, nil,
                             "Draws pathfinding" )
 
 local function drawPath( node, c )
+	if ( not _CLIENT ) then
+		return
+	end
+
 	local region = region.getAtPosition( node )
 	if ( region == nil ) then
 		return
@@ -58,13 +62,13 @@ end
 
 local function getSuccessors( q )
 	local successors = {}
-	local region     = region.getAtPosition( q )
-	if ( region == nil ) then
+	local r = region.getAtPosition( q )
+	if ( r == nil ) then
 		return successors
 	end
 
 	local x, y = q.x, q.y
-	local w, h = region:getTileSize()
+	local w, h = r:getTileSize()
 
 	require( "engine.shared.path.node" )
 	local node = _G.node
@@ -87,10 +91,11 @@ local function getSuccessors( q )
 
 	for i = 1, 8, 8 / numDirections do
 		local position = directions[ i ]
-		if ( region:isTileWalkableAtPosition( position ) ) then
+		r = region.getAtPosition( position )
+		if ( r and r:isTileWalkableAtPosition( position ) ) then
 			table.insert( successors, position )
 		else
-			if ( r_draw_path:getBoolean() ) then
+			if ( _CLIENT and r_draw_path:getBoolean() ) then
 				local red = color( color.red, 0.14 * 255 )
 				drawPath( position, red )
 			end
@@ -142,7 +147,7 @@ local function reconstructPath( node )
 end
 
 function getPath( start, goal )
-	start = snapToGrid( start )
+	start = roundToGrid( start )
 	goal  = snapToGrid( goal )
 	if ( start == goal ) then
 		return
@@ -169,7 +174,7 @@ function getPath( start, goal )
 	start.h       = getDistance( start, goal )
 	heap.insert( open, start )
 
-	if ( r_draw_path:getBoolean() ) then
+	if ( _CLIENT and r_draw_path:getBoolean() ) then
 		drawPath( start )
 	end
 
@@ -180,12 +185,12 @@ function getPath( start, goal )
 		local successors = getSuccessors( q )
 		for i = 1, #successors do
 			local successor = successors[ i ]
-			if ( r_draw_path:getBoolean() ) then
+			if ( _CLIENT and r_draw_path:getBoolean() ) then
 				drawPath( successor )
 			end
 
 			if ( successor == goal ) then
-				if ( r_draw_path:getBoolean() ) then
+				if ( _CLIENT and r_draw_path:getBoolean() ) then
 					local gold = scheme.getProperty( "Default", "colors.gold" )
 					drawPath( successor, gold )
 				end

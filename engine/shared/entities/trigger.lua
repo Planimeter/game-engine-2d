@@ -1,4 +1,4 @@
---=========== Copyright © 2017, Planimeter, All rights reserved. ===========--
+--=========== Copyright © 2018, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: Trigger class
 --
@@ -16,7 +16,7 @@ function trigger:trigger()
 end
 
 function trigger:isVisibleToPlayer( player )
-	local minA, maxA = player:getViewportBounds()
+	local minA, maxA = player:getGraphicsBounds()
 	local width      = self:getNetworkVar( "width" )
 	local height     = self:getNetworkVar( "height" )
 	local minB       = self:localToWorld( vector() )

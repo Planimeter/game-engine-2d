@@ -1,4 +1,4 @@
---=========== Copyright © 2017, Planimeter, All rights reserved. ===========--
+--=========== Copyright © 2018, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: Player class
 --
@@ -74,15 +74,18 @@ function player:player()
 
 	self:networkNumber( "id", player._lastPlayerId + 1 )
 	self:networkNumber( "moveSpeed", 66 )
+	self:networkNumber( "lastCommandNumber", 0 )
 
 	if ( _SERVER ) then
 		player._lastPlayerId = self:getNetworkVar( "id" )
 	end
 
-	self._commandNumber = 0
-	self._buttons       = 0
+	self._commandNumber   = 0
+	self._buttons         = 0
 
 	if ( _CLIENT ) then
+		self._pendingCommands = {}
+
 		require( "engine.client.sprite" )
 		local sprite = sprite( "images.player" )
 		self:setSprite( sprite )
@@ -101,6 +104,8 @@ accessor( player, "graphicsHeight" )
 function player:getGraphicsBounds()
 	local width  = self:getGraphicsWidth()  or 0
 	local height = self:getGraphicsHeight() or 0
+	width        = width  / 2
+	height       = height / 2
 	local min    = self:localToWorld( vector( -width / 2,  height / 2 ) )
 	local max    = self:localToWorld( vector(  width / 2, -height / 2 ) )
 	return min, max
@@ -131,6 +136,15 @@ end
 
 function player:isKeyDown( button )
 	return bit.band( self._buttons, button ) ~= 0
+end
+
+function player:isMoveKeyDown()
+	return self:isKeyDown( bit.bor(
+		_E.IN_FORWARD,
+		_E.IN_BACK,
+		_E.IN_LEFT,
+		_E.IN_RIGHT
+	) )
 end
 
 if ( _SERVER ) then
@@ -255,6 +269,10 @@ function player:onDisconnect()
 	end
 end
 
+local cl_server_reconciliation = convar( "cl_server_reconciliation", "1", nil,
+                                         nil,
+                                         "Perform server reconciliation" )
+
 local function updateMovement( self )
 	if ( _CLIENT and self ~= localplayer ) then
 		return
@@ -268,15 +286,28 @@ local function updateMovement( self )
 		engine.client.network.sendToServer( payload )
 	end
 
-	local position = self:getPosition()
+	if ( not self:isMoveKeyDown() ) then
+		return
+	end
+
+	local position = vector.copy( self:getPosition() )
+	position.x, position.y = region.roundToGrid( position.x, position.y )
 	if ( self:isKeyDown( _E.IN_FORWARD ) ) then
-		self:moveTo( position + vector( 0, -1 ) )
+		position = position + vector(  0, -game.tileSize )
 	elseif ( self:isKeyDown( _E.IN_BACK ) ) then
-		self:moveTo( position + vector( 0,  game.tileSize + 1 ) )
+		position = position + vector(  0,  game.tileSize )
 	elseif ( self:isKeyDown( _E.IN_LEFT ) ) then
-		self:moveTo( position + vector( -1, 0 ) )
+		position = position + vector( -game.tileSize, 0 )
 	elseif ( self:isKeyDown( _E.IN_RIGHT ) ) then
-		self:moveTo( position + vector(  game.tileSize + 1, 0 ) )
+		position = position + vector(  game.tileSize, 0 )
+	end
+
+	self:moveTo( position )
+
+	if ( _CLIENT ) then
+		local commandNumber = self._commandNumber
+		local buttons       = self._buttons
+		table.insert( self._pendingCommands, { commandNumber, buttons } )
 	end
 end
 

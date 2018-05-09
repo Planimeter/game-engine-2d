@@ -1,4 +1,4 @@
---=========== Copyright © 2017, Planimeter, All rights reserved. ===========--
+--=========== Copyright © 2018, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: trigger_transition
 --
@@ -12,44 +12,72 @@ function trigger_transition:trigger_transition()
 	trigger.trigger( self )
 end
 
+function trigger_transition:getDirection()
+	local position = self:getPosition()
+	local north    = vector( 0, -game.tileSize )
+	local width    = self:getNetworkVar( "width" )
+	local length   = self:getNetworkVar( "height" )
+	if ( region.getAtPosition( position + north ) == nil and
+	     width > length ) then
+		return "north"
+	end
+
+	local east  = vector( width, 0 )
+	if ( region.getAtPosition( position + east ) == nil and
+	     length > width ) then
+		return "east"
+	end
+
+	local south  = vector( 0, length )
+	if ( region.getAtPosition( position + south ) == nil and
+	     width > length ) then
+		return "south"
+	end
+
+	local west = vector( -game.tileSize, 0 )
+	if ( region.getAtPosition( position + west ) == nil and
+	     length > width ) then
+		return "west"
+	end
+end
+
 function trigger_transition:findRegionSpace()
-	local pos    = self:getPosition()
-	local width  = self:getNetworkVar( "width" )
-	local length = self:getNetworkVar( "height" )
-
-	-- Find region space north
-	local x = pos.x
-	local y = pos.y - game.tileSize - 1
-	local r = region.getAtPosition( vector( x, y ) )
-	if ( r == nil ) then
-		return x, y, "north"
+	local direction  = self:getDirection()
+	if ( direction == nil ) then
+		return
 	end
 
-	-- Find region space east
-	x = pos.x + width
-	y = pos.y - length
-	r = region.getAtPosition( vector( x, y ) )
-	if ( r == nil and length > width ) then
-		return x, y, "east"
+	local x, y       = 0, 0
+	local position   = self:getPosition()
+	local width      = self:getNetworkVar( "width" )
+	local length     = self:getNetworkVar( "height" )
+	local properties = self:getProperties()
+	local offsetx    = properties and properties[ "offsetx" ] or 0
+	local offsety    = properties and properties[ "offsety" ] or 0
+
+	if ( direction == "north" ) then
+		x = position.x          + offsetx
+		y = position.y - length + offsety
+		return x, y, direction
 	end
 
-	-- Find region space south
-	x = pos.x
-	y = pos.y
-	r = region.getAtPosition( vector( x, y ) )
-	if ( r == nil ) then
-		return x, y, "south"
+	if ( direction == "east" ) then
+		x = position.x + width                  + offsetx
+		y = position.y - length + game.tileSize + offsety
+		return x, y, direction
 	end
 
-	-- Find region space west
-	x = pos.x
-	y = pos.y
-	r = region.getAtPosition( vector( x, y ) )
-	if ( r == nil and length > width ) then
-		return x, y, "west"
+	if ( direction == "south" ) then
+		x = position.x + offsetx
+		y = position.y + offsety
+		return x, y, direction
 	end
 
-	return pos.x, pos.y
+	if ( direction == "south" ) then
+		x = position.x          + offsetx
+		y = position.y - length + offsety
+		return x, y, direction
+	end
 end
 
 function trigger_transition:loadRegion()
@@ -64,11 +92,28 @@ function trigger_transition:loadRegion()
 	end
 
 	local x, y, direction = self:findRegionSpace()
+	if ( direction == nil ) then
+		-- Prevent loading regions twice
+		return
+	end
+
+	-- local currentRegion = self:getRegion()
+	-- print( "Loading " .. name .. " " .. direction .. " of " ..
+	--        currentRegion:getName() .. " at " .. tostring( vector( x, y ) ) )
+
 	if ( direction == "north" ) then
 		-- Find region length
 		local regionData = require( "regions." .. name )
-		local length     = regionData.height * game.tileSize
-		y = y - length + 1
+		local length     = self:getNetworkVar( "height" )
+		local height     = regionData.height * game.tileSize
+		y = y - height
+	end
+
+	if ( direction == "west" ) then
+		-- Find region width
+		local regionData = require( "regions." .. name )
+		local width      = regionData.width * game.tileSize
+		x = x - width
 	end
 
 	region.load( name, x, y )

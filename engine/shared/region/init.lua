@@ -1,4 +1,4 @@
---=========== Copyright © 2017, Planimeter, All rights reserved. ===========--
+--=========== Copyright © 2018, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: Region class
 --
@@ -49,6 +49,7 @@ if ( _CLIENT ) then
 end
 
 function region.exists( name )
+	name = string.gsub( name, "%.", "/" )
 	return love.filesystem.exists( "regions/" .. name .. ".lua" )
 end
 
@@ -82,13 +83,19 @@ function region.getAtPosition( position, worldIndex )
 		local x,  y  = region:getX(), region:getY()
 		local width  = region:getPixelWidth()
 		local height = region:getPixelHeight()
-		if ( math.pointinrect( px, py, x, y, width, height ) ) then
+		if ( region.pointinrect( px, py, x, y, width, height ) ) then
 			return region
 		end
 	end
 end
 
+function region.getWorld()
+	return region._world
+end
+
 function region.load( name, x, y, worldIndex )
+	x = x or 0
+	y = y or 0
 	if ( region.getByName( name ) ) then
 		return
 	end
@@ -105,7 +112,7 @@ function region.reload( library )
 	local x = r:getX()
 	local y = r:getY()
 	local worldIndex = r:getWorldIndex()
-	r:cleanUp()
+	-- TODO: Move players to new region.
 	region.unload( name )
 	region.load( name, x, y, worldIndex )
 end
@@ -203,6 +210,13 @@ if ( not _DEDICATED ) then
 	)
 end
 
+function region.pointinrect( px, py, x, y, width, height )
+	return px >= x and
+	       py  > y and
+	       px  < x + width and
+	       py <= y + height
+end
+
 function region.roundToGrid( x, y )
 	local region = region.getAtPosition( vector( x, y ) )
 	if ( region == nil ) then
@@ -253,10 +267,15 @@ if ( _CLIENT ) then
 	end
 end
 
-function region:cleanUp()
+function region:cleanup()
 	local entities = self:getEntities()
-	if ( entities ) then
-		for _, entity in pairs( entities ) do
+	if ( entities == nil ) then
+		return
+	end
+
+	for i = #entities, 1, -1 do
+		local entity = entities[ i ]
+		if ( not typeof( entity, "player" ) ) then
 			entity:remove()
 		end
 	end
@@ -265,7 +284,7 @@ end
 accessor( region, "entities" )
 
 function region:getFilename()
-	return self.name .. ".lua"
+	return string.gsub( self.name, "%.", "/" ) .. ".lua"
 end
 
 accessor( region, "formatVersion" )
@@ -274,9 +293,13 @@ local data = {}
 local gid  = 0
 
 function region:getGidsAtPosition( position )
+	-- Convert to local positions
+	position         = vector.copy( position )
+	position.x       = position.x - self:getX()
+	position.y       = position.y - self:getY()
+
 	local tileWidth  = self:getTileWidth()
 	local tileHeight = self:getTileHeight()
-	position         = vector.copy( position )
 	position.y       = position.y - tileHeight
 
 	local x    = ( position.x / tileWidth )  + 1
@@ -321,15 +344,25 @@ accessor( region, "tileWidth" )
 accessor( region, "tileHeight" )
 accessor( region, "width" )
 accessor( region, "height" )
-accessor( region, "world" )
 accessor( region, "worldIndex" )
 accessor( region, "x" )
 accessor( region, "y" )
 
-function region:initializeWorld()
-	self.world = love.physics.newWorld()
+function region.initializeWorld()
+	if ( region._world ) then
+		return
+	end
+
+	region._world = love.physics.newWorld()
 end
 
+local px            = 0
+local py            = 0
+local x             = 0
+local y             = 0
+local width         = 0
+local height        = 0
+local pointinrect   = region.pointinrect
 local gids          = {}
 local firstGid      = 0
 local tiles         = {}
@@ -337,15 +370,27 @@ local hasvalue      = table.hasvalue
 local hasProperties = false
 local properties    = {}
 local walkable      = nil
-local px            = 0
-local py            = 0
-local x             = 0
-local y             = 0
-local width         = 0
-local height        = 0
-local pointinrect   = math.pointinrect
 
 function region:isTileWalkableAtPosition( position )
+	-- Check world bounds
+	px     = position.x
+	py     = position.y
+	x      = self:getX()
+	y      = self:getY()
+	width  = self:getPixelWidth()
+	height = self:getPixelHeight()
+	if ( not pointinrect( px, py, x, y, width, height ) ) then
+		-- No, but check nearby region
+		local tilePosition = vector( px, py )
+		local worldIndex   = self:getWorldIndex()
+		local region       = region.getAtPosition( tilePosition, worldIndex )
+		if ( region ) then
+			return region:isTileWalkableAtPosition( position )
+		else
+			return false
+		end
+	end
+
 	-- Check world collisions
 	gids = self:getGidsAtPosition( position )
 	for _, tileset in ipairs( self:getTilesets() ) do
@@ -355,32 +400,25 @@ function region:isTileWalkableAtPosition( position )
 			hasProperties = hasvalue( gids, tile.id + firstGid )
 			properties    = tile.properties
 			walkable      = hasProperties and properties.walkable
-			if ( hasProperties and walkable == "false" ) then
+			if ( hasProperties and walkable == false ) then
 				return false
 			end
 		end
 	end
 
 	-- Check entity collisions
-	px = position.x
-	py = position.y - game.tileSize
-	for _, entity in ipairs( self:getEntities() ) do
-		local body = entity:getBody()
-		if ( entity:testPoint(
-			px + game.tileSize / 2,
-			py + game.tileSize / 2
-		) and ( body and body:getType() == "static" ) ) then
-			return false
+	py = py - game.tileSize
+	local entities = self:getEntities()
+	if ( entities ) then
+		for _, entity in ipairs( entities ) do
+			local body = entity:getBody()
+			if ( entity:testPoint(
+				px + game.tileSize / 2,
+				py + game.tileSize / 2
+			) and ( body and body:getType() == "static" ) ) then
+				return false
+			end
 		end
-	end
-
-	-- Check world bounds
-	x      = self:getX()
-	y      = self:getY()
-	width  = self:getPixelWidth()
-	height = self:getPixelHeight()
-	if ( not pointinrect( px, py, x, y, width, height ) ) then
-		return false
 	end
 
 	return true
@@ -395,7 +433,7 @@ function region:loadTilesets( tilesets )
 
 	require( "engine.shared.region.tileset" )
 	for _, tilesetData in ipairs( tilesets ) do
-		local tileset = region.tileset( tilesetData )
+		local tileset = region.tileset( self, tilesetData )
 		table.insert( self.tilesets, tileset )
 	end
 end
@@ -433,7 +471,7 @@ function region:parse()
 	self:setTileHeight( data[ "tileheight" ] )
 	self:setProperties( table.copy( data[ "properties" ] ) )
 
-	self:initializeWorld()
+	region.initializeWorld()
 	self:loadTilesets( data[ "tilesets" ] )
 	self:loadLayers( data[ "layers" ] )
 
@@ -441,9 +479,12 @@ function region:parse()
 end
 
 function region:remove()
+	self:cleanup()
+
 	local world = self:getWorld()
-	if ( world ) then
+	if ( world and #region._regions == 1 ) then
 		world:destroy()
+		region._world = nil
 	end
 end
 
@@ -462,8 +503,8 @@ function region:getTileSize()
 	return self:getTileWidth(), self:getTileHeight()
 end
 
-function region:update( dt )
-	local world = self:getWorld()
+function region.update( dt )
+	local world = region.getWorld()
 	if ( world ) then
 		world:update( dt )
 	end

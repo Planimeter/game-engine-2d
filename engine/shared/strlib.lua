@@ -1,4 +1,4 @@
---=========== Copyright © 2017, Planimeter, All rights reserved. ===========--
+--=========== Copyright © 2018, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: Extends the string library
 --
@@ -89,6 +89,24 @@ function string.split( s, separator )
 		table.insert( t, token )
 	end
 	return t
+end
+
+function string.stripdotdir( path )
+	path       = string.fixslashes( path )
+	path       = gsub( path, "$%./", "" )
+	path       = gsub( path, "/%./", "/" )
+	local i    = 1
+	local dirs = string.split( path, "/" )
+	repeat
+		if ( i > 1 and dirs[ i ] == ".." ) then
+			table.remove( dirs, i )
+			table.remove( dirs, i - 1 )
+			i = 1
+		else
+			i = i + 1
+		end
+	until ( i == #dirs )
+	return table.concat( dirs, "/" )
 end
 
 function string.stripfilename( path )

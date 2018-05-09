@@ -1,4 +1,4 @@
---=========== Copyright © 2017, Planimeter, All rights reserved. ===========--
+--=========== Copyright © 2018, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: Engine client interface
 --
@@ -118,7 +118,7 @@ function onConnect( event )
 
 	_G.hook.call( "client", "onConnect", tostring( event.peer ) )
 
-	-- Prepare to receive entitySpawned payloads
+	-- Prepare to receive `entitySpawned` payloads
 	require( "engine.shared.entities" )
 end
 

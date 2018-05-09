@@ -1,4 +1,4 @@
---=========== Copyright © 2017, Planimeter, All rights reserved. ===========--
+--=========== Copyright © 2018, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: vaplayer
 --
@@ -62,7 +62,7 @@ function vaplayer:vaplayer()
 		attack   = 0,
 		defense  = 0,
 		range    = 0,
-		magic    = 0,
+		magic    = 1154,
 		fishing  = 0,
 		cooking  = 0,
 		mining   = 0,
@@ -71,6 +71,9 @@ function vaplayer:vaplayer()
 
 	local xp = self:getExperience( "health" )
 	self:networkNumber( "health", vaplayer.experienceToLevel( xp ) )
+
+	xp = self:getExperience( "magic" )
+	self:networkNumber( "mana", vaplayer.experienceToLevel( xp ) )
 
 	self.inventory = {}
 end

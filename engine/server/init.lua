@@ -1,4 +1,4 @@
---=========== Copyright © 2017, Planimeter, All rights reserved. ===========--
+--=========== Copyright © 2018, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: Engine server interface
 --
@@ -30,6 +30,7 @@ function onPostConnect( event )
 	_G.region.load( regionName )
 
 	-- Initialize player
+	require( "engine.shared.entities" )
 	_G.entities.requireEntity( "player" )
 	local player = _G.player.initialize( event.peer )
 	player:setRegion( _G.region.getByName( regionName ) )

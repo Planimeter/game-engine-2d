@@ -1,4 +1,4 @@
---=========== Copyright © 2017, Planimeter, All rights reserved. ===========--
+--=========== Copyright © 2018, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: Region Tileset class
 --
@@ -8,7 +8,8 @@ class( "region.tileset" )
 
 local tileset = region.tileset
 
-function tileset:tileset( tilesetData )
+function tileset:tileset( region, tilesetData )
+	self:setRegion( region )
 	self.data = tilesetData
 	self:parse()
 end
@@ -20,6 +21,7 @@ accessor( tileset, "imageWidth", "imagewidth" )
 accessor( tileset, "imageHeight", "imageheight" )
 accessor( tileset, "name" )
 accessor( tileset, "properties" )
+accessor( tileset, "region" )
 accessor( tileset, "spacing" )
 accessor( tileset, "margin" )
 accessor( tileset, "tileCount", "tilecount" )
@@ -42,7 +44,13 @@ function tileset:parse()
 	self:setSpacing( data[ "spacing" ] )
 	self:setMargin( data[ "margin" ] )
 	if ( _CLIENT ) then
-		self:setImage( string.sub( data[ "image" ], 4 ) )
+		local regionsDir = "regions/"
+		local region     = self:getRegion()
+		local path       = string.stripfilename( region:getFilename() )
+		regionsDir       = regionsDir .. path
+		path             = regionsDir .. data[ "image" ]
+		path             = string.stripdotdir( path )
+		self:setImage( path )
 	end
 	self:setImageWidth( data[ "imagewidth" ] )
 	self:setImageHeight( data[ "imageheight" ] )

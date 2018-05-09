@@ -1,4 +1,4 @@
---=========== Copyright © 2017, Planimeter, All rights reserved. ===========--
+--=========== Copyright © 2018, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: Engine server handlers
 --
@@ -56,10 +56,7 @@ function quit()
 end
 
 function update( dt )
-	local regions = _G.region.getAll()
-	for _, region in ipairs( regions ) do
-		region:update( dt )
-	end
+	_G.region.update( dt )
 
 	local game = _G.game and _G.game.server or nil
 	if ( game ) then

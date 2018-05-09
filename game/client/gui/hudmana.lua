@@ -1,41 +1,41 @@
 --=========== Copyright © 2018, Planimeter, All rights reserved. ===========--
 --
--- Purpose: Health HUD
+-- Purpose: Mana HUD
 --
 --==========================================================================--
 
-class "gui.hudhealth" ( "gui.panel" )
+class "gui.hudmana" ( "gui.panel" )
 
-local hudhealth = gui.hudhealth
+local hudmana = gui.hudmana
 
-function hudhealth:hudhealth( parent )
-	gui.panel.panel( self, parent, "HUD Health" )
+function hudmana:hudmana( parent )
+	gui.panel.panel( self, parent, "HUD Mana" )
 
 	self:setScheme( "Default" )
 	local font = self:getScheme( "entityFont" )
 	self.height = font:getHeight()
 	font = self:getScheme( "font" )
-	self.width = font:getWidth( "Health" )
+	self.width = font:getWidth( "Mana" )
 	self.height = self.height + font:getHeight()
 
 	self:invalidateLayout()
 end
 
-function hudhealth:draw()
+function hudmana:draw()
 	self:drawLabel()
-	self:drawHealth()
+	self:drawMana()
 
 	gui.panel.draw( self )
 end
 
-function hudhealth:drawHealth()
+function hudmana:drawMana()
 	local property = "hudmoveindicator.textColor"
 	love.graphics.setColor( self:getScheme( property ) )
 	local font = self:getScheme( "entityFont" )
 	love.graphics.setFont( font )
-	local health = localplayer:getNetworkVar( "health" )
+	local mana = localplayer:getNetworkVar( "mana" )
 	love.graphics.print(
-		health, -- text
+		mana, -- text
 		0, -- x
 		0, -- y
 		0, -- r
@@ -49,21 +49,24 @@ function hudhealth:drawHealth()
 	)
 end
 
-function hudhealth:drawLabel()
+function hudmana:drawLabel()
 	local property = "hudmoveindicator.smallTextColor"
 	love.graphics.setColor( self:getScheme( property ) )
 	local font = self:getScheme( "entityFont" )
 	local lineHeight = font:getHeight()
 	font = self:getScheme( "font" )
 	love.graphics.setFont( font )
-	love.graphics.print( "Health", 0, math.round( lineHeight ) )
+	love.graphics.print( "Mana", 0, math.round( lineHeight ) )
 end
 
-function hudhealth:invalidateLayout()
+function hudmana:invalidateLayout()
 	local margin = gui.scale( 96 )
 	local graphicsHeight = love.graphics.getHeight()
 	local height = self:getHeight()
-	self:setPos( margin, graphicsHeight - margin - height )
+	self:setPos(
+		margin + g_HudHealth:getWidth() + margin / 2,
+		graphicsHeight - margin - height
+	)
 
 	gui.panel.invalidateLayout( self )
 end

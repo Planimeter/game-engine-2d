@@ -1,4 +1,4 @@
---=========== Copyright © 2017, Planimeter, All rights reserved. ===========--
+--=========== Copyright © 2018, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: Game client interface
 --
@@ -22,6 +22,7 @@ function createDefaultPanels()
 
 	-- Initialize move indicator
 	local hudmoveindicator = gui.hudmoveindicator( _G.g_Viewport )
+	_G.g_HudMoveIndicator = hudmoveindicator
 
 	-- Initialize chat
 	local chat = gui.hudchat( _G.g_Viewport )
@@ -34,6 +35,10 @@ function createDefaultPanels()
 	-- Initialize health
 	local hudhealth = gui.hudhealth( _G.g_Viewport )
 	_G.g_HudHealth = hudhealth
+
+	-- Initialize mana
+	local hudmana = gui.hudmana( _G.g_Viewport )
+	_G.g_HudMana = hudmana
 end
 
 function draw()

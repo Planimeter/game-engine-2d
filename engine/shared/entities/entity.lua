@@ -1,4 +1,4 @@
---=========== Copyright © 2017, Planimeter, All rights reserved. ===========--
+--=========== Copyright © 2018, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: Entity class
 --
@@ -53,8 +53,8 @@ if ( _CLIENT ) then
 		end )
 	end
 
-	local r_draw_bounding_boxes = convar( "r_draw_bounding_boxes", "0", nil, nil,
-	                                      "Draws entity bounding boxes" )
+	local r_draw_bounding_boxes = convar( "r_draw_bounding_boxes", "0", nil,
+	                                      nil, "Draws entity bounding boxes" )
 
 	local r_draw_shadows        = convar( "r_draw_shadows", "1", nil, nil,
 	                                      "Draws entity shadows" )
@@ -111,8 +111,9 @@ if ( _CLIENT ) then
 			return
 		end
 
-		local isEntity = typeof( renderable, "entity" )
-		if ( not isEntity ) then
+		local isEntity  = typeof( renderable, "entity" )
+		local isTrigger = typeof( renderable, "trigger" )
+		if ( not isEntity or isTrigger ) then
 			return
 		end
 
@@ -131,6 +132,11 @@ if ( _CLIENT ) then
 	local function drawEntity( renderable )
 		local worldIndex = camera.getWorldIndex()
 		if ( worldIndex ~= renderable:getWorldIndex() ) then
+			return
+		end
+
+		local isTrigger = typeof( renderable, "trigger" )
+		if ( isTrigger ) then
 			return
 		end
 
@@ -262,7 +268,7 @@ if ( _CLIENT ) then
 			position       = string.gsub( position, "vector", "position" )
 			local velocity = nil
 			local body     = self:getBody()
-			if ( body ) then
+			if ( body and not body:isDestroyed() ) then
 				velocity = tostring( vector( body:getLinearVelocity() ) )
 				velocity = string.gsub( velocity, "vector", "velocity" )
 			end
@@ -360,12 +366,13 @@ end
 
 function entity:getPosition()
 	local body = self:getBody()
-	if ( body ) then
+	if ( body and not body:isDestroyed() ) then
 		return vector( body:getPosition() )
 	end
 	return self:getNetworkVar( "position" )
 end
 
+accessor( entity, "predicted", nil, "is" )
 accessor( entity, "properties" )
 accessor( entity, "region" )
 
@@ -378,8 +385,7 @@ function entity:getWorldIndex()
 end
 
 function entity:initializePhysics( type )
-	local region   = self:getRegion()
-	local world    = region:getWorld()
+	local world    = region.getWorld()
 	local position = self:getPosition()
 	local x        = position.x
 	local y        = position.y
@@ -397,6 +403,11 @@ function entity:isMoving()
 	end
 
 	return ( vector( body:getLinearVelocity() ) ):lengthSqr() ~= 0
+end
+
+function entity:isOnTile()
+	local position = self:getPosition()
+	return vector( region.snapToGrid( position.x, position.y ) ) == position
 end
 
 if ( _CLIENT ) then
@@ -500,7 +511,7 @@ local cl_interpolate = convar( "cl_interpolate", "1", nil, nil,
                                "Perform client-side interpolation" )
 
 local cl_predict = convar( "cl_predict", "1", nil, nil,
-                          "Perform client-side prediction" )
+                           "Perform client-side prediction" )
 
 function entity:onNetworkVarChanged( networkvar )
 	if ( networkvar:getName() == "position" ) then
@@ -585,10 +596,10 @@ function entity:remove()
 	for i, v in pairs( entity._entities ) do
 		if ( v == self ) then
 			local body = self:getBody()
-			if ( body ) then
+			if ( body and not body:isDestroyed() ) then
 				body:destroy()
-				self.body = nil
 			end
+			self.body = nil
 
 			local region = self:getRegion()
 			region:removeEntity( self )
@@ -732,7 +743,7 @@ end
 
 function entity:testPoint( x, y )
 	local body = self:getBody()
-	if ( body ) then
+	if ( body and not body:isDestroyed() ) then
 		local fixtures = body:getFixtureList()
 		for _, fixture in ipairs( fixtures ) do
 			local shape = fixture:getShape()
@@ -753,7 +764,7 @@ function entity:testPoint( x, y )
 		y            = max.y
 		local width  = max.x - min.x
 		local height = min.y - max.y
-		if ( math.pointinrect( px, py, x, y, width, height ) ) then
+		if ( region.pointinrect( px, py, x, y, width, height ) ) then
 			return true
 		end
 	end
@@ -814,8 +825,14 @@ function entity:update( dt )
 	end
 
 	local body = self:getBody()
-	if ( body ) then
+	if ( body and not body:isDestroyed() ) then
 		self:setNetworkVar( "position", vector( body:getPosition() ) )
+	end
+
+	local currentRegion = self:getRegion()
+	local region        = region.getAtPosition( self:getPosition() )
+	if ( currentRegion and currentRegion ~= region ) then
+		self:setRegion( region )
 	end
 
 	if ( self.think     and

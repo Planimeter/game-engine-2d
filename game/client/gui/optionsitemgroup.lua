@@ -1,4 +1,4 @@
---=========== Copyright © 2017, Planimeter, All rights reserved. ===========--
+--=========== Copyright © 2018, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: Options Item Group class
 --
@@ -43,4 +43,21 @@ function optionsitemgroup:invalidateLayout()
 		end
 		self:setHeight( y )
 	end
+
+	self:updatePos()
+end
+
+local x, y = 0, 0
+
+function optionsitemgroup:updatePos()
+	local parent = self:getParent()
+	local x, y = self:getPos()
+	local width, height = self:getSize()
+	if ( x + width > parent:getWidth() ) then
+		x = parent:getWidth() - width
+	end
+	if ( y + height > parent:getHeight() ) then
+		y = parent:getHeight() - height
+	end
+	self:setPos( x, y )
 end

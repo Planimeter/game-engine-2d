@@ -1,4 +1,4 @@
---=========== Copyright © 2017, Planimeter, All rights reserved. ===========--
+--=========== Copyright © 2018, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: Extends the package library
 --
@@ -40,8 +40,11 @@ function require( modname )
 	if ( filename ) then
 		local modtime, errormsg = love.filesystem.getLastModified( filename )
 		package.watched[ modname ] = modtime
+	else
+		package.watched[ modname ] = -1
 	end
 
+	-- print( "Loaded " .. modname )
 	return ret
 end
 
@@ -52,7 +55,7 @@ end
 
 function unrequire( modname )
 	unload( modname )
-	print( "Unloading " .. modname .. "..." )
+	-- print( "Unloaded " .. modname )
 end
 
 package.watched = package.watched or {}
@@ -79,6 +82,10 @@ local function reload( modname, filename )
 end
 
 local function update( k, v )
+	if ( v == -1 ) then
+		return
+	end
+
 	local filename = getModuleFilename( k )
 	if ( filename == nil ) then
 		return
@@ -91,7 +98,7 @@ local function update( k, v )
 end
 
 function package.update( dt )
-	for k, v in pairs( package.watched ) do
-		update( k, v )
+	for modname, modtime in pairs( package.watched ) do
+		update( modname, modtime )
 	end
 end

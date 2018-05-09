@@ -1,4 +1,4 @@
---=========== Copyright © 2017, Planimeter, All rights reserved. ===========--
+--=========== Copyright © 2018, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: Character class
 --
@@ -34,9 +34,6 @@ function character:move( dt )
 	local direction = ( next - start )
 	direction:normalizeInPlace()
 
-	-- Start animating
-	self:updateAnimation( direction )
-
 	-- Apply move speed to directional vector
 	local velocity = ( self:getNetworkVar( "moveSpeed" ) * dt ) * direction
 
@@ -69,7 +66,7 @@ function character:move( dt )
 
 	-- Move
 	local body = self:getBody()
-	if ( body ) then
+	if ( body and not body:isDestroyed() ) then
 		if ( applyLinearImpulse ) then
 			local initialVelocity = vector( body:getLinearVelocity() )
 			local delta = velocity - initialVelocity
@@ -107,8 +104,8 @@ function character:moveTo( position, callback )
 	local fromY  = from.y
 	local toX    = to.x
 	local toY    = to.y
-	fromX, fromY = region.snapToGrid( fromX, fromY )
-	toX, toY     = region.snapToGrid( toX, toY )
+	fromX, fromY = region.roundToGrid( fromX, fromY )
+	toX, toY     = region.roundToGrid( toX, toY )
 	if ( fromX == toX and fromY == toY ) then
 		self._moveCallback = callback
 		self:onFinishMove()
@@ -130,8 +127,6 @@ function character:nextTask()
 end
 
 function character:onFinishMove()
-	self:setAnimation( "idle" )
-
 	if ( self._moveCallback ) then
 		self._moveCallback()
 		self._moveCallback = nil
@@ -141,6 +136,22 @@ end
 function character:onMoveTo( position )
 end
 
+function character:onTick( dt )
+	entity.onTick( self )
+
+	-- Don't animate if we can't calculate directional velocity
+	local body = self:getBody()
+	if ( body == nil or body:isDestroyed() ) then
+		self._lastDirection = nil
+		return
+	end
+
+	-- Remember our last direction for determining "idle" animation
+	local currentDirection = vector( body:getLinearVelocity() )
+	currentDirection:normalizeInPlace()
+	self._lastDirection = currentDirection
+end
+
 function character:removeTasks()
 	self._tasks = nil
 end
@@ -148,32 +159,53 @@ end
 function character:update( dt )
 	self:updateTasks()
 	self:updateMovement( dt )
+	self:updateAnimation()
 
 	entity.update( self, dt )
 end
 
-function character:updateAnimation( direction )
-	if ( direction == vector.origin ) then
+function character:updateAnimation()
+	local cl_predict = convar.getConvar( "cl_predict" )
+	if ( _CLIENT and not _SERVER and not cl_predict:getBoolean() ) then
 		return
 	end
 
+	-- Don't animate if we can't calculate directional velocity
+	local body = self:getBody()
+	if ( body == nil or body:isDestroyed() ) then
+		return
+	end
+
+	-- Set "idle" animation if we haven't moved for two frames
+	local direction = self._lastDirection or vector.origin
+	local currentDirection = vector( body:getLinearVelocity() )
+	currentDirection:normalizeInPlace()
+	if ( direction == vector.origin and
+	     currentDirection == vector.origin ) then
+		self:setAnimation( "idle" )
+	end
+
+	-- Find our nearest animation direction then set it
 	local angle = math.nearestmult( math.deg( direction:toAngle() ), 45 )
-	if ( angle == -90 ) then
-		self:setAnimation( "walknorth" )
-	elseif ( angle == -45 ) then
-		self:setAnimation( "walknortheast" )
-	elseif ( angle == 0 ) then
-		self:setAnimation( "walkeast" )
-	elseif ( angle == 45 ) then
-		self:setAnimation( "walksoutheast" )
-	elseif ( angle == 90 ) then
-		self:setAnimation( "walksouth" )
-	elseif ( angle == 135 ) then
-		self:setAnimation( "walksouthwest" )
-	elseif ( angle == 180 or angle == -180 ) then
-		self:setAnimation( "walkwest" )
-	elseif ( angle == -135 ) then
-		self:setAnimation( "walknorthwest" )
+	local moving = direction:lengthSqr() ~= 0
+	if ( moving ) then
+		if ( angle == -90 ) then
+			self:setAnimation( "walknorth" )
+		elseif ( angle == -45 ) then
+			self:setAnimation( "walknortheast" )
+		elseif ( angle == 0 ) then
+			self:setAnimation( "walkeast" )
+		elseif ( angle == 45 ) then
+			self:setAnimation( "walksoutheast" )
+		elseif ( angle == 90 ) then
+			self:setAnimation( "walksouth" )
+		elseif ( angle == 135 ) then
+			self:setAnimation( "walksouthwest" )
+		elseif ( angle == 180 or angle == -180 ) then
+			self:setAnimation( "walkwest" )
+		elseif ( angle == -135 ) then
+			self:setAnimation( "walknorthwest" )
+		end
 	end
 end
 

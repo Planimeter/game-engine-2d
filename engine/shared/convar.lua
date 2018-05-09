@@ -1,4 +1,4 @@
---=========== Copyright © 2017, Planimeter, All rights reserved. ===========--
+--=========== Copyright © 2018, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: Convar class
 --
@@ -59,7 +59,15 @@ function convar.saveConfig()
 	end
 end
 
-function convar:convar( name, default, min, max, helpString, onValueChange, flags )
+function convar:convar(
+	name,
+	default,
+	min,
+	max,
+	helpString,
+	onValueChange,
+	flags
+)
 	local value = convar._config[ name ] or default
 	if ( convar._convars[ name ] ) then
 		value = convar._convars[ name ]:getValue()
@@ -156,7 +164,8 @@ function convar:setValue( value )
 			local notify = table.hasvalue( flags, "notify" )
 			if ( notify ) then
 				local name = self:getName()
-				local text = "Server cvar " .. name .. " changed to " .. self.value
+				local text = "Server cvar " .. name .. " changed to " ..
+				             self.value
 				player.sendTextAll( text )
 				return true
 			end

@@ -1,4 +1,4 @@
---=========== Copyright © 2017, Planimeter, All rights reserved. ===========--
+--=========== Copyright © 2018, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: Engine client handlers
 --
@@ -153,10 +153,7 @@ function update( dt )
 	local _SERVER = _SERVER or _G._SERVER
 
 	if ( _CLIENT and not _SERVER ) then
-		local regions = _G.region.getAll()
-		for _, region in ipairs( regions ) do
-			region:update( dt )
-		end
+		_G.region.update( dt )
 	end
 
 	local game = _G.game and _G.game.client or nil

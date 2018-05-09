@@ -1,4 +1,4 @@
---=========== Copyright © 2017, Planimeter, All rights reserved. ===========--
+--=========== Copyright © 2018, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: Move Indicator HUD
 --
@@ -86,7 +86,7 @@ local function drawPosition( self, x, y, drawLabel )
 	end
 
 	return function()
-		love.graphics.setColor( color( color.white, 0.14 * 255 ) )
+		love.graphics.setColor( color.red )
 		local lineWidth = 1
 		love.graphics.setLineWidth( lineWidth )
 		local size = game.tileSize
@@ -240,18 +240,29 @@ local getEntitiesAtMousePos = function( px, py )
 	table.clear( t )
 	local entities = entity.getAll()
 	for _, entity in ipairs( entities ) do
-		local x, y   = camera.worldToScreen( entity:getDrawPosition() )
-		local sprite = entity:getSprite()
-		local scale  = camera.getZoom()
-		if ( sprite ) then
-			local width  = sprite:getWidth()  * scale
-			local height = sprite:getHeight() * scale
-			if ( pointinrect( px, py, x, y, width, height ) ) then
-				table.insert( t, entity )
+		if ( not typeof( entity, "trigger" ) ) then
+			local x, y   = camera.worldToScreen( entity:getDrawPosition() )
+			local sprite = entity:getSprite()
+			local scale  = camera.getZoom()
+			if ( sprite ) then
+				local width  = sprite:getWidth()  * scale
+				local height = sprite:getHeight() * scale
+				if ( pointinrect( px, py, x, y, width, height ) ) then
+					table.insert( t, entity )
+				end
 			end
 		end
 	end
 	return t
+end
+
+local function moveTo( self, x, y )
+	local player     = localplayer
+	local worldIndex = player:getWorldIndex()
+	local position   = vector( x, y )
+	self:createMoveIndicator( worldIndex, position.x, position.y )
+	position.x, position.y = region.snapToGrid( position.x, position.y )
+	player:moveTo( position + vector( 0, game.tileSize ) )
 end
 
 local function onLeftClick( self, x, y )
@@ -260,11 +271,8 @@ local function onLeftClick( self, x, y )
 		self:invalidate()
 		self:setActive( false )
 
-		local player     = localplayer
-		local worldIndex = player:getWorldIndex()
-		local position   = vector( camera.screenToWorld( x, y ) )
-		self:createMoveIndicator( worldIndex, position.x, position.y )
-		player:moveTo( position + vector( 0, game.tileSize ) )
+		x, y = camera.screenToWorld( x, y )
+		moveTo( self, x, y )
 
 		return true
 	else
@@ -280,10 +288,16 @@ local function getOptionsFromEntities( x, y )
 	for _, entity in ipairs( entities ) do
 		local options = entity.getOptions and entity:getOptions() or nil
 		if ( options ) then
-			table.append( t, options )
+			table.insert( t, {
+				entity  = entity,
+				options = options
+			} )
 		end
 	end
 	return t
+end
+
+local function noop()
 end
 
 local function onRightClick( self, x, y )
@@ -292,16 +306,35 @@ local function onRightClick( self, x, y )
 	options:setPos( x, y )
 	self:setActive( true )
 
-	local opts             = getOptionsFromEntities( x, y )
-	local dropdownlistitem = nil
-	local name             = "Option Drop-Down List Item"
-	for i, option in pairs( opts ) do
-		dropdownlistitem = gui.dropdownlistitem( name .. " " .. i, option.name )
-		dropdownlistitem:setValue( option.value )
-		options:addItem( dropdownlistitem )
+	local opts        = getOptionsFromEntities( x, y )
+	local optionsitem = nil
+	local name        = "Option Item"
+	local n           = 1
+	for i, entity in pairs( opts ) do
+		for j, option in pairs( entity.options ) do
+			local panelName = name .. " " .. n
+			optionsitem = gui.optionsitem( panelName, option.name )
+			optionsitem:setEntity( entity.entity )
+			optionsitem:setValue( option.value )
+			options:addItem( optionsitem )
+			n = n + 1
+		end
 	end
 
-	return #opts > 0
+	x, y = camera.screenToWorld( x, y )
+	optionsitem = gui.optionsitem( name .. " " .. n, "Walk here" )
+	optionsitem:setValue( function()
+		moveTo( self, x, y )
+	end )
+	options:addItem( optionsitem )
+	n = n + 1
+
+	optionsitem = gui.optionsitem( name .. " " .. n, "Cancel" )
+	optionsitem:setValue( noop )
+	options:addItem( optionsitem )
+	n = n + 1
+
+	return n > 1
 end
 
 function hudmoveindicator:mousepressed( x, y, button, istouch )

@@ -1,4 +1,4 @@
---=========== Copyright © 2017, Planimeter, All rights reserved. ===========--
+--=========== Copyright © 2018, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: prop_chest
 --
@@ -42,6 +42,7 @@ function prop_chest:open()
 end
 
 function prop_chest:examine()
+	chat.addText( "I wonder what's inside." )
 end
 
 function prop_chest:spawn()
