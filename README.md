@@ -1,5 +1,4 @@
 # <img src="/images/gui/logo_dark@2x.png?raw=true" width="169" height="49" title="Grid">  
-[![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/Planimeter/grid-sdk?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Discord](https://img.shields.io/badge/chat-on%20discord-brightgreen.svg)](https://discord.gg/Gbj4jnv?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## Create a Project
