@@ -27,6 +27,12 @@
 
     <title>Grid</title>
     <base href="/grid-sdk/">
+    <script>
+      if (location.hostname === "127.0.0.1") {
+        var base = document.querySelector("base");
+        base.href = "/"
+      }
+    </script>
   </head>
   <body>
     <header>
