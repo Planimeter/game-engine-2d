@@ -14,12 +14,8 @@ header > a {
   margin-bottom: 0.5in;
 }
 
-nav ol {
-  border-color: rgba(240, 246, 248, .07);
-}
-
-nav li.active {
-  border-color: rgba(155, 140, 103, 1);
+nav li a.active {
+  opacity: .65;
 }
 
 h1,
