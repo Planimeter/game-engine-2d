@@ -7,7 +7,7 @@ nav li {
 }
 
 nav li a {
-  color: inherit;
+  /* color: inherit; */
 }
 
 nav li:not(:last-child) {
