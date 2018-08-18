@@ -91,6 +91,7 @@ function Article() {
     if (this.status >= 200 && this.status < 400) {
      var markdown = this.response;
      set(markdown);
+     viewSourceLink.classList.remove('d-hidden');
     } else {
       onerror();
     }
