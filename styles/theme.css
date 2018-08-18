@@ -9,7 +9,7 @@ a {
   color: #a18c6b;
 }
 
-nav li a.active {
+nav li.active a {
   opacity: .65;
 }
 
