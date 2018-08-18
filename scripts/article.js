@@ -23,19 +23,19 @@ function Article() {
 
   renderer.em = function (text) {
     if (text === 'Client') {
-      return '<span class="label label-client">Client</span>';
+      return '<span class="badge badge-client">Client</span>';
     }
 
     if (text === 'Server') {
-      return '<span class="label label-server">Server</span>';
+      return '<span class="badge badge-server">Server</span>';
     }
 
     if (text === 'Shared') {
-      return '<span class="label label-shared">Shared</span>';
+      return '<span class="badge badge-shared">Shared</span>';
     }
 
     if (text === 'Unimplemented') {
-      return '<span class="label label-danger">Unimplemented</span>';
+      return '<span class="badge badge-danger">Unimplemented</span>';
     }
 
     return '<em>' + text + '</em>';
@@ -84,7 +84,7 @@ function Article() {
       '# Cannot GET /' + article + '.md\r\n' +
       '[New Page](' + wikiHref + article + ')'
     );
-    viewSourceLink.classList.add('hidden-xs-up');
+    viewSourceLink.classList.add('d-hidden');
   }
 
   request.onload = function() {

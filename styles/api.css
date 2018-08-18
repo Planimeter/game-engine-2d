@@ -31,71 +31,25 @@ hr {
   color: #8a6d3b;
 }
 
-.alert {
-  border: 1px solid transparent;
-  border-radius: .25em;
-  margin-bottom: 1em;
-  padding: 1em;
+.badge-client {
+  background-color: rgba(168, 168, 123, 1);
+  color: #fff;
 }
 
-.pull-right {
-  float: right;
+.badge-server {
+  background-color: rgba(123, 158, 168, 1);
+  color: #fff;
 }
 
-.label {
-  border-radius: .25em;
-  border-style: solid;
-  border-width: 1px;
-  display: inline-block;
-  font-size: 75%;
-  font-weight: 300;
-  line-height: 1;
-  padding: .25em .4em;
-  white-space: nowrap;
-}
-
-.label-client {
-  border-color: rgba(168, 168, 123, 1);
-  color: rgba(168, 168, 123, 1);
-}
-
-.label-server {
-  border-color: rgba(123, 158, 168, 1);
-  color: rgba(123, 158, 168, 1);
-}
-
-.label-shared {
-  border-color: rgba(132, 168, 123, 1);
-  color: rgba(132, 168, 123, 1);
+.badge-shared {
+  background-color: rgba(132, 168, 123, 1);
+  color: #fff;
 }
 
 .table {
-  border-collapse: collapse;
-  max-width: 100%;
   table-layout: fixed;
-  width: 100%;
-}
-
-.table thead th {
-  border-bottom: 2px solid rgba(240, 246, 248, .07);
-  vertical-align: bottom;
-}
-
-.table td,
-.table th {
-  border-top: 1px solid rgba(240, 246, 248, .07);
-  padding: 1em;
-  vertical-align: top;
-}
-
-th {
-  text-align: left;
 }
 
 p:empty {
-  display: none;
-}
-
-.hidden-xs-up {
   display: none;
 }
