@@ -10,18 +10,29 @@
 
       gtag('config', 'UA-108356826-1');
     </script>
+    <!-- Required meta tags -->
     <meta charset="utf-8">
-    <title>Grid</title>
-    <base href="/grid-sdk/">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Custom styles for this template -->
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/styles/default.min.css">
     <link href="styles/main.css" rel="stylesheet">
-    <link href="styles/font-stack.css" rel="stylesheet">
     <link href="styles/theme.css" rel="stylesheet">
     <link href="styles/nav.css" rel="stylesheet">
-    <link href="styles/grid.css" rel="stylesheet">
     <link href="styles/api.css" rel="stylesheet">
+
+    <title>Grid</title>
+    <base href="/grid-sdk/">
+    <script>
+      if (location.hostname === "127.0.0.1") {
+        var base = document.querySelector("base");
+        base.href = "/"
+      }
+    </script>
   </head>
   <body>
     <header>
@@ -46,17 +57,25 @@
           </li>
         </ol>
       </nav>
-      <h3>
-        <small id="nav-title">Grid Engine</small>
-      </h3>
     </header>
-    <main data-view>
-      Loading...
+
+    <main role="main" data-view>
     </main>
-    <footer>
-      Copyright © 2017 Planimeter
+
+    <footer class="footer">
+      <div class="row">
+        <div class="col">
+          <span class="text-muted">Copyright &copy; 2018 Planimeter. All
+          rights reserved.</span>
+        </div>
+      </div>
     </footer>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js"></script>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/languages/lua.min.js"></script>
     <script src="https://rawgit.com/andrewmcwatters/route.js/master/route.min.js"></script>
     <script src="https://rawgit.com/andrewmcwatters/include.js/master/include.min.js"></script>
