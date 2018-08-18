@@ -11,15 +11,9 @@
         (href !== '.' && routeName.lastIndexOf(href, 0) === 0) ||
         (routeName === '/' && href === '.')) {
       // set active nav link
-      element.classList.add('active');
-
-      // set nav title
-      var navTitle = document.getElementById('nav-title');
-      if (navTitle) {
-        navTitle.textContent = link.title;
-      }
+      link.classList.add('active');
     } else {
-      element.classList.remove('active');
+      link.classList.remove('active');
     }
   }
 

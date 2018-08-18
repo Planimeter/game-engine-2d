@@ -11,7 +11,7 @@ a:hover {
   color: #75644a;
 }
 
-nav li.active a {
+nav li a.active {
   opacity: .65;
 }
 
