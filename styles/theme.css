@@ -9,11 +9,6 @@ a {
   color: #a18c6b;
 }
 
-header > a {
-  display: inline-block;
-  margin-bottom: 0.5in;
-}
-
 nav li a.active {
   opacity: .65;
 }
