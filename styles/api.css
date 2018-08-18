@@ -8,12 +8,6 @@ img {
   max-width: 100%;
 }
 
-.alert-warning {
-  background-color: #fcf8e3;
-  border-color: #faf2cc;
-  color: #8a6d3b;
-}
-
 .badge-client {
   background-color: rgba(168, 168, 123, 1);
   color: #fff;
