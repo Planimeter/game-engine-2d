@@ -1,21 +1,13 @@
-nav ol,
-nav li {
-  border-top-style: solid;
-  border-top-width: 1px;
-}
-
 nav ol {
-  list-style-type: none;
   margin: 0;
-  padding-left: 0;
 }
 
 nav li {
-  border-top-color: transparent;
   display: inline-block;
-  padding-top: 24px;
-  position: relative;
-  top: -1px;
+}
+
+nav li a {
+  color: inherit;
 }
 
 nav li:not(:last-child) {
