@@ -1,4 +1,4 @@
---=========== Copyright © 2018, Planimeter, All rights reserved. ===========--
+--=========== Copyright © 2019, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: Sprite class
 --
