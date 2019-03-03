@@ -4,13 +4,15 @@
 --
 --==========================================================================--
 
-class "gui.scrollbar" ( "gui.panel" )
+class "gui.scrollbar" ( "gui.box" )
 
 local scrollbar = gui.scrollbar
 
 function scrollbar:scrollbar( parent, name )
-	gui.panel.panel( self, parent, name )
-	self.width       = love.window.toPixels( 4 )
+	gui.box.box( self, parent, name )
+	self:setDisplay( "block" )
+	self:setPosition( "absolute" )
+	self.width       = 4
 	self.height      = parent:getHeight()
 	self.disabled    = false
 	self.min         = 0
@@ -28,18 +30,18 @@ function scrollbar:draw()
 		return
 	end
 
-	local color = "scrollbar.backgroundColor"
+	local color = self:getScheme( "scrollbar.backgroundColor" )
 	local width = self:getWidth()
 	local x     = 0
 
 	if ( self:isDisabled() ) then
-		color = "scrollbar.disabled.backgroundColor"
+		color = self:getScheme( "scrollbar.disabled.backgroundColor" )
 	end
 
-	love.graphics.setColor( self:getScheme( color ) )
+	love.graphics.setColor( color )
 	love.graphics.rectangle( "fill", x, self:getThumbPos(), width, length )
 
-	gui.panel.draw( self )
+	gui.box.draw( self )
 end
 
 accessor( scrollbar, "min" )
@@ -72,7 +74,7 @@ function scrollbar:invalidateLayout()
 	self:setHeight( parent:getHeight() )
 end
 
-accessor( scrollbar, "disabled", nil, "is" )
+gui.accessor( scrollbar, "disabled", "is" )
 
 local localX, localY = 0, 0
 
@@ -129,11 +131,6 @@ end
 
 function scrollbar:scrollToTop()
 	self:setValue( self:getMin() )
-end
-
-function scrollbar:setDisabled( disabled )
-	self.disabled = disabled
-	self:invalidate()
 end
 
 local min, max = 0, 0

@@ -11,7 +11,7 @@ local frametabpanels = gui.frametabpanels
 function frametabpanels:frametabpanels( parent, name, text )
 	gui.panel.panel( self, parent, name )
 	self.width	= parent:getWidth()
-	self.height = parent:getHeight() - love.window.toPixels( 62 )
+	self.height = parent:getHeight() - 62
 end
 
 function frametabpanels:addPanel( frametabpanel, default )

@@ -1,12 +1,12 @@
 --=========== Copyright © 2018, Planimeter, All rights reserved. ===========--
 --
--- Purpose: Region Layer class
+-- Purpose: Map Layer class
 --
 --==========================================================================--
 
-class( "region.layer" )
+class( "map.layer" )
 
-local layer = region.layer
+local layer = map.layer
 
 function layer:layer( layerData )
 	self.data = layerData
@@ -57,10 +57,10 @@ end
 accessor( layer, "name" )
 accessor( layer, "opacity" )
 accessor( layer, "properties" )
-accessor( layer, "region" )
+accessor( layer, "map" )
 
 if ( _CLIENT ) then
-	accessor( layer, "spriteBatch", "spritebatch" )
+	accessor( layer, "spriteBatch", nil, "spritebatch" )
 end
 
 accessor( layer, "tileset" )
@@ -95,22 +95,24 @@ if ( _CLIENT ) then
 		local y        = 0
 		local width    = self:getWidth()
 		local height   = self:getHeight()
-		for xy, gid in ipairs( self:getData() ) do
-			if ( gid ~= 0 ) then
-				id    = gid - firstgid
-				tileX =      ( id * tileW % imgW )
-				tileY = floor( id * tileW / imgW ) * tileH
-				quad:setViewport( tileX, tileY, tileW, tileH )
-
-				x =      ( ( xy - 1 ) % width ) * tileW
-				y = floor( ( xy - 1 ) / width ) * tileH
-				spritebatch:add( quad, self:getX() + x, self:getY() + y )
+		table.foreachi( self:getData(), function( xy, gid )
+			if ( gid == 0 ) then
+				return
 			end
-		end
+
+			id    = gid - firstgid
+			tileX =      ( id * tileW % imgW )
+			tileY = floor( id * tileW / imgW ) * tileH
+			quad:setViewport( tileX, tileY, tileW, tileH )
+
+			x =      ( ( xy - 1 ) % width ) * tileW
+			y = floor( ( xy - 1 ) / width ) * tileH
+			spritebatch:add( quad, self:getX() + x, self:getY() + y )
+		end )
 	end
 end
 
-accessor( layer, "visible", nil, "is" )
+accessor( layer, "visible", "is" )
 
 function layer:parse()
 	if ( self.data == nil ) then
@@ -131,19 +133,24 @@ function layer:parse()
 	local type = self:getType()
 	if ( type == "tilelayer" ) then
 		self:setData( table.copy( data[ "data" ] ) )
-	elseif ( type == "objectgroup" ) then
+		return
+	end
+
+	if ( type == "objectgroup" ) then
 		if ( not self:isVisible() ) then
 			return
 		end
 
 		if ( _SERVER ) then
 			require( "engine.shared.entities" )
-			local region   = self:getRegion()
-			local entities = entities.initialize( region, data[ "objects" ] )
+			local map = self:getMap()
+			local entities = entities.initialize( map, data[ "objects" ] )
 			for _, entity in ipairs( entities ) do
-				entity:setRegion( region )
+				entity:setMap( map )
 			end
 		end
+
+		return
 	end
 
 	-- self.data = nil

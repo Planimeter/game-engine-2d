@@ -17,7 +17,7 @@ function sprite:sprite( spriteSheet )
 	self.events      = data[ "events" ]     or {}
 
 	self.curtime     = 0
-	self.frame       = 0
+	self.frame       = 1
 end
 
 function sprite:draw()
@@ -30,6 +30,11 @@ accessor( sprite, "animationName" )
 accessor( sprite, "animations" )
 accessor( sprite, "events" )
 accessor( sprite, "frametime" )
+
+function sprite:setFilter( ... )
+	local image = self:getSpriteSheet()
+	image:setFilter( ... )
+end
 
 function sprite:getQuad()
 	if ( self.quad == nil ) then
@@ -100,7 +105,7 @@ end
 
 function sprite:updateFrame()
 	local quad       = self:getQuad()
-	local frame      = self.frame == 1 and 0 or self.frame
+	local frame      = self.frame - 1
 	local width      = self:getWidth()
 	local height     = self:getHeight()
 	local image      = self:getSpriteSheet()

@@ -26,71 +26,71 @@ function dropdownlist:draw()
 
 	gui.panel.draw( self )
 
-	self:drawForeground()
+	self:drawBorder()
 end
 
 function dropdownlist:drawBackground()
 	if ( self:isDisabled() ) then
-		gui.panel.drawBackground( self, "button.disabled.backgroundColor" )
+		gui.panel.drawBackground( self, self:getScheme( "button.disabled.backgroundColor" ) )
 		return
 	else
-		gui.panel.drawBackground( self, "button.backgroundColor" )
+		gui.panel.drawBackground( self, self:getScheme( "button.backgroundColor" ) )
 	end
 
 	if ( ( self.mousedown and self.mouseover ) or self:isActive() ) then
-		gui.panel.drawBackground( self, "button.mousedown.backgroundColor" )
+		gui.panel.drawBackground( self, self:getScheme( "button.mousedown.backgroundColor" ) )
 	elseif ( self.mousedown or self.mouseover ) then
-		gui.panel.drawBackground( self, "button.mouseover.backgroundColor" )
+		gui.panel.drawBackground( self, self:getScheme( "button.mouseover.backgroundColor" ) )
 	end
 end
 
-function dropdownlist:drawForeground()
-	local color = "button.outlineColor"
+function dropdownlist:drawBorder()
+	local color = self:getScheme( "button.borderColor" )
 
 	if ( self:isDisabled() ) then
-		color = "button.disabled.outlineColor"
-		gui.panel.drawForeground( self, color )
+		color = self:getScheme( "button.disabled.borderColor" )
+		gui.panel.drawBorder( self, color )
 		return
 	end
 
 	if ( ( self.mousedown and self.mouseover ) or self:isActive() ) then
-		color = "button.mousedown.outlineColor"
+		color = self:getScheme( "button.mousedown.borderColor" )
 	elseif ( self.mousedown or self.mouseover or self.focus ) then
-		color = "button.mouseover.outlineColor"
+		color = self:getScheme( "button.mouseover.borderColor" )
 	end
 
-	gui.panel.drawForeground( self, color )
+	gui.panel.drawBorder( self, color )
 end
 
 function dropdownlist:drawIcon()
-	local color = "button.textColor"
+	local color = self:getScheme( "button.textColor" )
 
 	if ( self:isDisabled() ) then
-		color = "button.disabled.textColor"
+		color = self:getScheme( "button.disabled.textColor" )
 	end
 
-	love.graphics.setColor( self:getScheme( color ) )
+	love.graphics.setColor( color )
 
-	local padding = love.window.toPixels( 18 )
+	local padding = 18
 	local x = self:getWidth() - self.icon:getWidth() - padding
 	local y = self:getHeight() / 2 - self.icon:getHeight() / 2
 	love.graphics.draw( self.icon, x, y )
 end
 
 function dropdownlist:drawText()
-	local color = "button.textColor"
+	local color = self:getScheme( "button.textColor" )
 
 	if ( self:isDisabled() ) then
-		color = "button.disabled.textColor"
+		color = self:getScheme( "button.disabled.textColor" )
 	end
 
-	love.graphics.setColor( self:getScheme( color ) )
+	love.graphics.setColor( color )
 
 	local font = self:getScheme( "font" )
 	love.graphics.setFont( font )
 	local item = self:getListItemGroup():getSelectedItem()
 	local text = item and item:getText() or ""
-	local x = math.round( love.window.toPixels( 18 ) )
+	local x = math.round( 18 )
 	local y = math.round( self:getHeight() / 2 - font:getHeight() / 2 )
 	love.graphics.print( text, x, y )
 end
@@ -118,7 +118,7 @@ function dropdownlist:invalidateLayout()
 	gui.panel.invalidateLayout( self )
 end
 
-accessor( dropdownlist, "active", nil, "is" )
+accessor( dropdownlist, "active", "is" )
 
 function dropdownlist:isChildMousedOver()
 	local panel = gui._topPanel

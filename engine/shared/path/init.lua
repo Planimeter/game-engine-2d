@@ -8,12 +8,13 @@ local color    = color
 local convar   = convar
 local game     = game
 local math     = math
-local region   = region
+local map      = map
 local require  = require
 local scheme   = scheme
 local table    = table
 local tostring = tostring
 local vector   = vector
+local _CLIENT  = _CLIENT
 local _G       = _G
 
 module( "path" )
@@ -25,11 +26,11 @@ function getDirections()
 end
 
 local function roundToGrid( v )
-	return vector( region.roundToGrid( v.x, v.y ) )
+	return vector( map.roundToGrid( v.x, v.y ) )
 end
 
 local function snapToGrid( v )
-	return vector( region.snapToGrid( v.x, v.y ) )
+	return vector( map.snapToGrid( v.x, v.y ) )
 end
 
 local merge = table.merge
@@ -42,15 +43,15 @@ local function drawPath( node, c )
 		return
 	end
 
-	local region = region.getAtPosition( node )
-	if ( region == nil ) then
+	local map = map.getAtPosition( node )
+	if ( map == nil ) then
 		return
 	end
 
 	local tileSize = game.tileSize
 	require( "engine.client.debugoverlay" )
 	_G.debugoverlay.rectangle(
-		region:getWorldIndex(),
+		map:getWorldIndex(),
 		node.x,
 		node.y - tileSize,
 		tileSize,
@@ -62,7 +63,7 @@ end
 
 local function getSuccessors( q )
 	local successors = {}
-	local r = region.getAtPosition( q )
+	local r = map.getAtPosition( q )
 	if ( r == nil ) then
 		return successors
 	end
@@ -91,7 +92,7 @@ local function getSuccessors( q )
 
 	for i = 1, 8, 8 / numDirections do
 		local position = directions[ i ]
-		r = region.getAtPosition( position )
+		r = map.getAtPosition( position )
 		if ( r and r:isTileWalkableAtPosition( position ) ) then
 			table.insert( successors, position )
 		else
@@ -148,17 +149,17 @@ end
 
 function getPath( start, goal )
 	start = roundToGrid( start )
-	goal  = snapToGrid( goal )
+	goal  = roundToGrid( goal )
 	if ( start == goal ) then
 		return
 	end
 
-	local region = region.getAtPosition( goal )
-	if ( region == nil ) then
+	local map = map.getAtPosition( goal )
+	if ( map == nil ) then
 		return
 	end
 
-	if ( not region:isTileWalkableAtPosition( goal ) ) then
+	if ( not map:isTileWalkableAtPosition( goal ) ) then
 		return
 	end
 
@@ -174,7 +175,8 @@ function getPath( start, goal )
 	start.h       = getDistance( start, goal )
 	heap.insert( open, start )
 
-	if ( _CLIENT and r_draw_path:getBoolean() ) then
+	local shouldDrawPath = _CLIENT and r_draw_path:getBoolean()
+	if ( shouldDrawPath ) then
 		drawPath( start )
 	end
 
@@ -185,12 +187,12 @@ function getPath( start, goal )
 		local successors = getSuccessors( q )
 		for i = 1, #successors do
 			local successor = successors[ i ]
-			if ( _CLIENT and r_draw_path:getBoolean() ) then
+			if ( shouldDrawPath ) then
 				drawPath( successor )
 			end
 
 			if ( successor == goal ) then
-				if ( _CLIENT and r_draw_path:getBoolean() ) then
+				if ( shouldDrawPath ) then
 					local gold = scheme.getProperty( "Default", "colors.gold" )
 					drawPath( successor, gold )
 				end

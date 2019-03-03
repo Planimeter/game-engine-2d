@@ -4,7 +4,7 @@
 --
 --==========================================================================--
 
-entities.requireEntity( "entity" )
+entities.require( "entity" )
 require( "game" )
 
 if ( _CLIENT ) then
@@ -19,7 +19,9 @@ function prop_tree:prop_tree()
 	self:setNetworkVar( "name", "Tree" )
 
 	if ( _CLIENT ) then
-		local sprite = love.graphics.newImage( "images/entities/prop_tree/1.png" )
+		local filename = "images/entities/prop_tree/1.png"
+		local sprite   = love.graphics.newImage( filename )
+		sprite:setFilter( "nearest", "nearest" )
 		self:setSprite( sprite )
 	end
 end
@@ -27,24 +29,18 @@ end
 if ( _CLIENT ) then
 	function prop_tree:getOptions()
 		return {
-			{
-				name  = "Chop Down",
-				value = self.chopDown
-			},
-			{
-				name  = "Examine",
-				value = self.examine
-			}
+			{ name = "Chop Down", value = function() self:chopDown() end },
+			{ name = "Examine",   value = function() self:examine()  end }
 		}
 	end
-end
 
-function prop_tree:chopDown()
-	chat.addText( "Your hands alone really aren't going to cut it." )
-end
+	function prop_tree:chopDown()
+		chat.addText( "Your hands alone really aren't going to cut it." )
+	end
 
-function prop_tree:examine()
-	chat.addText( "Looks like a tree." )
+	function prop_tree:examine()
+		chat.addText( "Looks like a tree." )
+	end
 end
 
 function prop_tree:spawn()

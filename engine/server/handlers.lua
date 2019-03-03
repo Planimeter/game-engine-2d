@@ -18,7 +18,9 @@ module( "engine.server" )
 
 function load( arg )
 	require( "engine.server.network" )
-	local initialized = engine.server.network.initializeServer()
+
+	local network = engine.server.network
+	local initialized = network.initializeServer()
 	if ( not initialized ) then
 		return false
 	end
@@ -27,25 +29,28 @@ function load( arg )
 
 	require( "game" )
 	require( "game.server" )
-	_G.game.server.load( arg )
+
+	local game = _G.game.server
+	game.load( arg )
 
 	return true
 end
 
 function quit()
 	-- Shutdown game
-	local game = _G.game
-	if ( game and game.server ) then
-		game.server.shutdown()
+	local game = _G.game and _G.game.server or nil
+	if ( game ) then
+		game.shutdown()
 		unrequire( "game.server" )
-		game.server = nil
+		_G.game.server = nil
 	end
 
 	unrequire( "game" )
 	_G.game = nil
 
 	-- Shutdown server
-	engine.server.network.shutdownServer()
+	local network = engine.server.network
+	network.shutdownServer()
 
 	unrequire( "engine.server.network" )
 	engine.server.network = nil
@@ -56,7 +61,7 @@ function quit()
 end
 
 function update( dt )
-	_G.region.update( dt )
+	_G.map.update( dt )
 
 	local game = _G.game and _G.game.server or nil
 	if ( game ) then

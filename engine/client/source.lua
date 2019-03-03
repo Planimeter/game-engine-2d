@@ -1,26 +1,26 @@
 --=========== Copyright © 2018, Planimeter, All rights reserved. ===========--
 --
--- Purpose: Sound class
+-- Purpose: Source class
 --
 --==========================================================================--
 
-class( "sound" )
+class( "source" )
 
-sound._sounds = sound._sounds or {}
+source._sources = source._sources or {}
 
 local function copy( k )
 	if ( string.find( k, "__" ) == 1 ) then
 		return
 	end
 
-	sound[ k ] = function( self, ... )
+	source[ k ] = function( self, ... )
 		local filename = self:getFilename()
-		local sound = sound._sounds[ filename ]
-		if ( sound == nil ) then
+		local source = source._sources[ filename ]
+		if ( source == nil ) then
 			return
 		end
 
-		local self = sound.sound
+		local self = source.source
 		return self[ k ]( self, ... )
 	end
 end
@@ -33,11 +33,11 @@ end
 local function reload( filename )
 	print( "Updating " .. filename .. "..." )
 
-	local status, ret = pcall( love.audio.newSource, filename )
+	local status, ret = pcall( love.audio.newSource, filename, "stream" )
 	if ( status == true ) then
-		local modtime, errormsg = love.filesystem.getLastModified( filename )
-		sound._sounds[ filename ].sound   = ret
-		sound._sounds[ filename ].modtime = modtime
+		local info = love.filesystem.getInfo( filename )
+		source._sources[ filename ].source  = ret
+		source._sources[ filename ].modtime = info.modtime
 
 		if ( game ) then
 			game.call( "client", "onReloadSound", filename )
@@ -49,42 +49,42 @@ local function reload( filename )
 	end
 end
 
-function sound.update( dt )
-	for k, v in pairs( sound._sounds ) do
-		local modtime, errormsg = love.filesystem.getLastModified( k )
-		if ( errormsg == nil and modtime ~= v.modtime ) then
+function source.update( dt )
+	for k, v in pairs( source._sources ) do
+		local info = love.filesystem.getInfo( k )
+		if ( info.modtime ~= v.modtime ) then
 			reload( k )
 		end
 	end
 end
 
-function sound.reload( library )
+function source.reload( library )
 	if ( string.sub( library, 1, 7 ) ~= "sounds." ) then
 		return
 	end
 	-- TODO: Reload soundscript.
 end
 
-hook.set( "client", sound.reload, "onReloadScript", "reloadSound" )
+hook.set( "client", source.reload, "onReloadScript", "reloadSound" )
 
-function sound:sound( filename )
+function source:source( filename )
 	local status, ret = pcall( require, filename )
 	if ( status == true ) then
 		self.data     = ret
-		self.filename = self.data[ "sound" ]
+		self.filename = self.data[ "source" ]
 	else
 		self.filename = filename
 	end
 end
 
-accessor( sound, "data" )
-accessor( sound, "filename" )
+accessor( source, "data" )
+accessor( source, "filename" )
 
-function sound:parse()
+function source:parse()
 	local filename = self:getFilename()
-	sound._sounds[ filename ] = {
-		sound   = love.audio.newSource( filename ),
-		modtime = love.filesystem.getLastModified( filename )
+	source._sources[ filename ] = {
+		source  = love.audio.newSource( filename, "stream" ),
+		modtime = love.filesystem.getInfo( filename ).modtime
 	}
 
 	local data = self:getData()
@@ -98,25 +98,25 @@ function sound:parse()
 	end
 end
 
-function sound:play()
+function source:play()
 	local filename = self:getFilename()
-	if ( sound._sounds[ filename ] == nil ) then
+	if ( source._sources[ filename ] == nil ) then
 		self:parse()
 	end
 
-	local sound = sound._sounds[ filename ].sound
-	if ( sound:isPlaying() ) then
-		sound = sound:clone()
-		sound:rewind()
+	local source = source._sources[ filename ].source
+	if ( source:isPlaying() ) then
+		source = source:clone()
+		source:seek( 0 )
 	end
 
-	love.audio.play( sound )
+	love.audio.play( source )
 end
 
-function sound:__tostring()
+function source:__tostring()
 	local t = getmetatable( self )
 	setmetatable( self, {} )
-	local s = string.gsub( tostring( self ), "table", "sound" )
+	local s = string.gsub( tostring( self ), "table", "source" )
 	setmetatable( self, t )
 	return s
 end

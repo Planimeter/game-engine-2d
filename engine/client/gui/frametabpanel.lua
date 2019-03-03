@@ -14,7 +14,7 @@ function frametabpanel:frametabpanel( parent, name )
 end
 
 function frametabpanel:draw()
-	gui.panel.drawBackground( self, "frame.backgroundColor" )
+	gui.panel.drawBackground( self, self:getScheme( "frame.backgroundColor" ) )
 	gui.panel.draw( self )
 end
 

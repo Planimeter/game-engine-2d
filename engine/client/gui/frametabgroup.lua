@@ -10,7 +10,7 @@ local frametabgroup = gui.frametabgroup
 
 function frametabgroup:frametabgroup( parent, name )
 	gui.radiobuttongroup.radiobuttongroup( self, parent, name )
-	self.height = love.window.toPixels( 61 )
+	self.height = 61
 	self:setScheme( "Default" )
 end
 
@@ -31,9 +31,9 @@ function frametabgroup:addItem( tab )
 end
 
 function frametabgroup:draw()
-	love.graphics.setColor( self:getScheme( "frametab.outlineColor" ) )
+	love.graphics.setColor( self:getScheme( "frametab.borderColor" ) )
 	love.graphics.setLineStyle( "rough" )
-	local lineWidth = love.window.toPixels( 1 )
+	local lineWidth = 1
 	love.graphics.setLineWidth( lineWidth )
 	love.graphics.line(
 		lineWidth / 2, 0,               -- Top-left
@@ -46,7 +46,7 @@ end
 function frametabgroup:invalidateLayout()
 	local tabs = self:getItems()
 	if ( tabs ) then
-		local x = love.window.toPixels( 1 )
+		local x = 1
 		for _, tab in ipairs( tabs ) do
 			tab:setX( x )
 			x = x + tab:getWidth()

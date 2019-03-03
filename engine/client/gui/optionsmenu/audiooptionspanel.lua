@@ -18,7 +18,7 @@ function audiooptionspanel:audiooptionspanel( parent, name )
 
 	local name = "Master Volume"
 	local label = gui.label( self, name, name )
-	local margin = love.window.toPixels( 36 )
+	local margin = 36
 	local x = margin
 	local y = margin
 	label:setPos( x, y )
@@ -34,7 +34,7 @@ function audiooptionspanel:audiooptionspanel( parent, name )
 		options.masterVolume = newValue
 		c.sound.volume = newValue
 	end
-	local marginBottom = love.window.toPixels( 9 )
+	local marginBottom = 9
 	y = y + label:getHeight() + marginBottom
 	masterVolume:setPos( x, y )
 

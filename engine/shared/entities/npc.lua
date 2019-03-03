@@ -4,7 +4,7 @@
 --
 --==========================================================================--
 
-entities.requireEntity( "character" )
+entities.require( "character" )
 
 class "npc" ( "character" )
 
@@ -16,6 +16,7 @@ function npc:npc()
 	if ( _CLIENT ) then
 		require( "engine.client.sprite" )
 		local sprite = sprite( "images.player" )
+		sprite:setFilter( "nearest", "nearest" )
 		self:setSprite( sprite )
 	end
 end

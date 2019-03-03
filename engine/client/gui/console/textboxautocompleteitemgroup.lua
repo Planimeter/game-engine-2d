@@ -20,9 +20,10 @@ function textboxautocompleteitemgroup:invalidateLayout()
 	local maxWidth  = 0
 	local listItems = self:getItems()
 	if ( listItems ) then
-		local y       = 0
-		local padding = love.window.toPixels( 18 )
+		local y       = 1
+		local padding = 18
 		for _, listItem in ipairs( listItems ) do
+			listItem:setX( 1 )
 			listItem:setY( y )
 
 			itemWidth = font:getWidth( listItem:getText() ) + 2 * padding
@@ -32,11 +33,11 @@ function textboxautocompleteitemgroup:invalidateLayout()
 			y = y + listItem:getHeight()
 		end
 
-		self:setWidth( maxWidth )
+		self:setWidth( maxWidth + 2 )
 		for _, listItem in ipairs( listItems ) do
 			listItem:setWidth( maxWidth )
 		end
 
-		self:setHeight( y )
+		self:setHeight( y + 1 )
 	end
 end

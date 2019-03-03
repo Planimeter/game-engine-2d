@@ -64,7 +64,7 @@ function videooptionspanel:videooptionspanel( parent, name )
 
 	local name = "Aspect Ratio"
 	local label = gui.label( self, name, name )
-	local margin = love.window.toPixels( 36 )
+	local margin = 36
 	local x = margin
 	local y = margin
 	label:setPos( x, y )
@@ -77,7 +77,7 @@ function videooptionspanel:videooptionspanel( parent, name )
 		options.aspectRatio = newValue
 		self:updateResolutions()
 	end
-	local marginBottom = love.window.toPixels( 9 )
+	local marginBottom = 9
 	y = y + label:getHeight() + marginBottom
 	aspectRatios:setPos( x, y )
 
@@ -187,7 +187,7 @@ function videooptionspanel:videooptionspanel( parent, name )
 		options.vsync = checked
 		window.vsync = checked
 	end
-	y = y + 2 * fullscreen:getHeight() + love.window.toPixels( 4 )
+	y = y + 2 * fullscreen:getHeight() + 4
 	vsync:setPos( x, y )
 
 	name = "Borderless Window"
@@ -199,8 +199,30 @@ function videooptionspanel:videooptionspanel( parent, name )
 		options.borderless = checked
 		window.borderless = checked
 	end
-	y = y + 2 * vsync:getHeight() + love.window.toPixels( 3 )
+	y = y + 2 * vsync:getHeight() + 3
 	borderless:setPos( x, y )
+
+	name = "High-DPI"
+	local highdpi = gui.checkbox( self, name, name )
+	self.highdpi = highdpi
+	options.highdpi = window.highdpi
+	highdpi:setChecked( window.highdpi )
+	highdpi.onCheckedChanged = function( checkbox, checked )
+		options.highdpi = checked
+		window.highdpi = checked
+	end
+	y = customResolution:getY()
+	highdpi:setPos( x, y )
+
+	name = "High-DPI Label"
+	local text = "Changing high-DPI requires restarting the game."
+	label = gui.label( self, name, text )
+	local marginTop = marginBottom
+	y = y + highdpi:getHeight() + marginTop
+	label:setPos( x, y )
+	local font = self:getScheme( "fontSmall" )
+	label:setFont( font )
+	label:setWidth( font:getWidth( text ) )
 end
 
 function videooptionspanel:activate()
@@ -261,6 +283,7 @@ function videooptionspanel:saveControlStates()
 	controls.fullscreen       = self.fullscreen:isChecked()
 	controls.vsync            = self.vsync:isChecked()
 	controls.borderless       = self.borderless:isChecked()
+	controls.highdpi          = self.highdpi:isChecked()
 end
 
 function videooptionspanel:resetControlStates()
@@ -270,6 +293,7 @@ function videooptionspanel:resetControlStates()
 	self.fullscreen:setChecked( controls.fullscreen )
 	self.vsync:setChecked( controls.vsync )
 	self.borderless:setChecked( controls.borderless )
+	self.highdpi:setChecked( controls.highdpi )
 	table.clear( controls )
 
 	self:clearCustomResolution()
@@ -278,25 +302,28 @@ end
 function videooptionspanel:updateMode()
 	local options    = self.options
 	local resolution = options.resolution
-	if ( resolution ) then
-		convar.setConvar( "r_window_width",      resolution.width )
-		convar.setConvar( "r_window_height",     resolution.height )
-		convar.setConvar( "r_window_fullscreen", options.fullscreen and 1 or 0 )
-		convar.setConvar( "r_window_vsync",      options.vsync      and 1 or 0 )
-		convar.setConvar( "r_window_borderless", options.borderless and 1 or 0 )
+	if ( resolution == nil ) then
+		return
+	end
 
-		local flags  = table.copy( config.getConfig().window )
-		flags.width  = nil
-		flags.height = nil
-		flags.icon   = nil
-		love.window.setMode( resolution.width, resolution.height, flags )
+	convar.setConvar( "r_window_width",      resolution.width )
+	convar.setConvar( "r_window_height",     resolution.height )
+	convar.setConvar( "r_window_fullscreen", options.fullscreen and 1 or 0 )
+	convar.setConvar( "r_window_vsync",      options.vsync      and 1 or 0 )
+	convar.setConvar( "r_window_borderless", options.borderless and 1 or 0 )
+	convar.setConvar( "r_window_highdpi",    options.highdpi    and 1 or 0 )
 
-		local width  = resolution.width  * love.window.getPixelScale()
-		local height = resolution.height * love.window.getPixelScale()
-		if ( width  == love.graphics.getWidth() and
-		     height == love.graphics.getHeight() ) then
-			engine.client.resize( resolution.width, resolution.height )
-		end
+	local flags  = table.copy( config.getConfig().window )
+	flags.width  = nil
+	flags.height = nil
+	flags.icon   = nil
+	love.window.setMode( resolution.width, resolution.height, flags )
+
+	local rw, rh = resolution.width, resolution.height
+	local ww, wh = love.window.getMode()
+	if ( rw == ww and rh == wh ) then
+		engine.client.resize( resolution.width, resolution.height )
+		self:updateResolutions()
 	end
 end
 
@@ -362,11 +389,12 @@ function videooptionspanel:updateResolutions()
 	local name = "Resolution Drop-Down List Item"
 	local text = ""
 	local foundMode = false
-	local pixelScale = love.window.getPixelScale()
-	local width = love.graphics.getWidth() / pixelScale
-	local height = love.graphics.getHeight() / pixelScale
+	local scale = love.window.getDPIScale()
+	local width = love.graphics.getWidth() / scale
+	local height = love.graphics.getHeight() / scale
 	for i, mode in ipairs( modes ) do
-		text = mode.width .. " × " .. mode.height
+		text = scale > 1 and "Looks like " or ""
+		text = text .. mode.width .. " × " .. mode.height
 		dropdownlistitem = gui.dropdownlistitem( name .. " " .. i, text )
 		dropdownlistitem:setValue( mode )
 		resolutions:addItem( dropdownlistitem )

@@ -44,7 +44,7 @@ function concommand.dispatch( player, name, argString, argTable )
 			local payload = payload( "concommand" )
 			payload:set( "name", name )
 			payload:set( "argString", argString )
-			engine.client.network.sendToServer( payload )
+			payload:sendToServer()
 		end
 	end
 

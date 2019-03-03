@@ -6,15 +6,18 @@
 
 class( "shader" )
 
-shader.shaders = shader.shaders or {}
+shader._shaders = shader._shaders or {}
 
-function shader.getShader( name )
-	return shader.shaders[ name ]()
+function shader.getShader( name, width, height )
+	return shader._shaders[ name ]( width, height )
 end
 
 function shader.register( class, name )
-	shader.shaders[ name ] = class
+	shader._shaders[ name ] = class
 	getfenv( 2 )[ name ] = nil
+end
+
+function shader:shader( width, height )
 end
 
 function shader:renderTo( func )

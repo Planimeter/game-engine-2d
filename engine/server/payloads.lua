@@ -5,7 +5,7 @@
 --==========================================================================--
 
 local directoryWhitelist = {
-	"regions"
+	"maps"
 }
 
 local function onDownloadRequest( payload )
@@ -25,7 +25,7 @@ local function onDownloadRequest( payload )
 		return
 	end
 
-	if ( not love.filesystem.exists( filename ) ) then
+	if ( love.filesystem.getInfo( filename ) == nil ) then
 		print( filename .. " does not exist!" )
 		return
 	end

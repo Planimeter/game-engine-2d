@@ -55,9 +55,9 @@ concommand( "bind", "Binds a key",
 
 function readBinds()
 	local config = "cfg/binds.cfg"
-	if ( not love.filesystem.exists( config ) ) then
+	if ( love.filesystem.getInfo( config ) == nil ) then
 		config = "cfg/binds_default.cfg"
-		if ( love.filesystem.exists( config ) ) then
+		if ( love.filesystem.getInfo( config ) ~= nil ) then
 			love.filesystem.write(
 				"cfg/binds.cfg",
 				love.filesystem.read( config )
@@ -76,14 +76,17 @@ end
 
 function readDefaultBinds()
 	local config = "cfg/binds_default.cfg"
-	if ( not love.filesystem.exists( config ) ) then
+	if ( love.filesystem.getInfo( config ) == nil ) then
 		return
 	end
 
 	local binds = {}
 	for line in love.filesystem.lines( config ) do
 		for k, v in string.gmatch( line, "(.+)%s(.+)" ) do
-			setBind( string.trim( k ), string.trim( v ) )
+			local key     = string.trim( k )
+			local command = string.trim( v )
+			binds[ key ] = command
+			setBind( key, command )
 		end
 	end
 	return binds

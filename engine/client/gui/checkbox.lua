@@ -10,7 +10,7 @@ local checkbox = gui.checkbox
 
 function checkbox:checkbox( parent, name, text )
 	gui.button.button( self, parent, name, text )
-	self.height  = love.window.toPixels( 24 )
+	self.height  = 24
 	self.icon    = self:getScheme( "checkbox.icon" )
 	self.text    = text or "Checkbox Label"
 	self.checked = false
@@ -18,7 +18,7 @@ end
 
 function checkbox:draw()
 	self:drawCheck()
-	self:drawForeground()
+	self:drawBorder()
 	self:drawLabel()
 
 	gui.panel.draw( self )
@@ -29,13 +29,13 @@ function checkbox:drawCheck()
 		return
 	end
 
-	local color = "checkbox.iconColor"
+	local color = self:getScheme( "checkbox.iconColor" )
 
 	if ( self:isDisabled() ) then
-		color = "checkbox.disabled.iconColor"
+		color = self:getScheme( "checkbox.disabled.iconColor" )
 	end
 
-	love.graphics.setColor( self:getScheme( color ) )
+	love.graphics.setColor( color )
 
 	local height = self:getHeight()
 	local x = height / 2 - self.icon:getWidth() / 2
@@ -43,19 +43,19 @@ function checkbox:drawCheck()
 	love.graphics.draw( self.icon, x, y )
 end
 
-function checkbox:drawForeground()
-	local color = "checkbox.outlineColor"
+function checkbox:drawBorder()
+	local color = self:getScheme( "checkbox.borderColor" )
 
 	if ( not self:isDisabled() ) then
 		if ( self.mousedown and self.mouseover ) then
-			color = "checkbox.mousedown.outlineColor"
+			color = self:getScheme( "checkbox.mousedown.borderColor" )
 		elseif ( self.mousedown or self.mouseover or self.focus ) then
-			color = "checkbox.mouseover.outlineColor"
+			color = self:getScheme( "checkbox.mouseover.borderColor" )
 		end
 	end
 
-	love.graphics.setColor( self:getScheme( color ) )
-	local lineWidth = love.window.toPixels( 1 )
+	love.graphics.setColor( color )
+	local lineWidth = 1
 	love.graphics.setLineWidth( lineWidth )
 	local height = self:getHeight()
 	love.graphics.rectangle(
@@ -68,24 +68,24 @@ function checkbox:drawForeground()
 end
 
 function checkbox:drawLabel()
-	local color = "checkbox.textColor"
+	local color = self:getScheme( "checkbox.textColor" )
 
 	if ( self:isDisabled() ) then
-		color = "checkbox.disabled.textColor"
+		color = self:getScheme( "checkbox.disabled.textColor" )
 	end
 
-	love.graphics.setColor( self:getScheme( color ) )
+	love.graphics.setColor( color )
 
 	local font = self:getScheme( "font" )
 	love.graphics.setFont( font )
 	local height = self:getHeight()
-	local marginLeft = love.window.toPixels( 9 )
+	local marginLeft = 9
 	local x = math.round( height + marginLeft )
 	local y = math.round( height / 2 - font:getHeight() / 2 )
 	love.graphics.print( self:getText(), x, y )
 end
 
-accessor( checkbox, "checked", nil, "is" )
+accessor( checkbox, "checked", "is" )
 
 function checkbox:keypressed( key, scancode, isrepeat )
 	if ( not self.focus or self:isDisabled() ) then

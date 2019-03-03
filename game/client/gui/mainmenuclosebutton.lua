@@ -8,18 +8,18 @@ local gui    = gui
 local love   = love
 local unpack = unpack
 
-class "gui.mainmenu.closebutton" ( "gui.closebutton" )
+class "gui.mainmenuclosebutton" ( "gui.closebutton" )
 
-local closebutton = gui.mainmenu.closebutton
+local mainmenuclosebutton = gui.mainmenuclosebutton
 
-function closebutton:closebutton( parent )
+function mainmenuclosebutton:mainmenuclosebutton( parent )
 	gui.closebutton.closebutton( self, parent, "Main Menu Close Button" )
-	self.width  = love.window.toPixels( 32 )
-	self.height = self.width + love.window.toPixels( 1 )
-	self.icon   = self:getScheme( "mainmenuclosebutton.icon" )
+	self.width  = 32
+	self.height = self.width + 1
+	self.icon   = self:getScheme( "icon" )
 end
 
-function closebutton:draw()
+function mainmenuclosebutton:draw()
 	local iconColor = "mainmenuclosebutton.dark.iconColor"
 	if ( self.mousedown and self.mouseover ) then
 		iconColor = "mainmenuclosebutton.dark.mousedown.iconColor"
@@ -27,8 +27,8 @@ function closebutton:draw()
 		iconColor = "mainmenuclosebutton.dark.mouseover.iconColor"
 	end
 
-	local x =   self:getWidth()                                / 2 - self.icon:getWidth()  / 2
-	local y = ( self:getHeight() - love.window.toPixels( 1 ) ) / 2 - self.icon:getHeight() / 2
+	local x =   self:getWidth()        / 2 - self.icon:getWidth()  / 2
+	local y = ( self:getHeight() - 1 ) / 2 - self.icon:getHeight() / 2
 	love.graphics.setColor( self:getScheme( iconColor ) )
 	love.graphics.draw( self.icon, x, y )
 

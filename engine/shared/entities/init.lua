@@ -4,30 +4,29 @@
 --
 --==========================================================================--
 
-local getfenv   = getfenv
-local ipairs    = ipairs
-local love      = love
-local pairs     = pairs
-local payload   = payload
-local pcall     = pcall
-local print     = print
-local require   = require
-local string    = string
-local table     = table
-local unrequire = unrequire
-local _G        = _G
+local ipairs     = ipairs
+local love       = love
+local pairs      = pairs
+local payload    = payload
+local pcall      = pcall
+local print      = print
+local _require   = require
+local string     = string
+local table      = table
+local _unrequire = unrequire
+local _G         = _G
 
 module( "entities" )
 
 _entities = _entities or {}
 _classes  = _classes  or {}
 
-function initialize( region, regionEntities )
+function initialize( map, mapEntities )
 	local t = {}
-	for i, entityData in ipairs( regionEntities ) do
-		local entity = createFromRegionData( region, entityData )
+	for i, entityData in ipairs( mapEntities ) do
+		local entity = createFromMapData( map, entityData )
 		if ( entity ) then
-			entity:setRegion( region )
+			entity:setMap( map )
 			entity:spawn()
 			table.insert( t, entity )
 		end
@@ -44,14 +43,14 @@ local modules = {
 	"game.client"
 }
 
-function requireEntity( classname )
+function require( classname )
 	if ( _classes[ classname ] ) then
 		return
 	end
 
 	for _, module in ipairs( modules ) do
 		local library = module .. ".entities." .. classname
-		local status, err = pcall( require, library )
+		local status, err = pcall( _require, library )
 		if ( status == true ) then
 			_classes[ classname ] = library
 			break
@@ -65,14 +64,14 @@ function requireEntity( classname )
 	end
 end
 
-function unrequireEntity( classname )
-	unrequire( _classes[ classname ] )
+function unrequire( classname )
+	_unrequire( _classes[ classname ] )
 	_classes[ classname ] = nil
 end
 
-function createFromRegionData( region, entityData )
+function createFromMapData( map, entityData )
 	local type = entityData.type
-	requireEntity( type )
+	require( type )
 
 	if ( _entities[ type ] == nil ) then
 		print( "Attempted to create unknown entity type " .. type .. "!" )
@@ -84,8 +83,8 @@ function createFromRegionData( region, entityData )
 		entity:setNetworkVar( "name", entityData.name )
 	end
 
-	local x = region:getX() + entityData.x
-	local y = region:getY() + entityData.y + entityData.height
+	local x = map:getX() + entityData.x
+	local y = map:getY() + entityData.y + entityData.height
 	entity:setNetworkVar( "position", _G.vector( x, y ) )
 
 	local hasWidth = entity:hasNetworkVar( "width" )
@@ -112,7 +111,9 @@ function getAll()
 		local dir = string.gsub( module, "%.", "/" )
 		local files = love.filesystem.getDirectoryItems( dir )
 		for _, v in ipairs( files ) do
-			if ( not love.filesystem.isDirectory( dir .. v ) and
+			local info = love.filesystem.getInfo( dir .. v )
+			local isDirectory = info and info.type == "directory" or false
+			if ( not isDirectory and
 			     v ~= "init.lua" and
 			     v ~= "networkvar.lua" and
 			     string.fileextension( v ) == "lua" ) then
@@ -140,10 +141,11 @@ if ( _G._CLIENT ) then
 		end
 
 		local classname = payload:get( "classname" )
-		requireEntity( classname )
+		require( classname )
 
 		if ( _entities[ classname ] == nil ) then
-			print( "Attempted to create unknown entity type " .. classname .. "!" )
+			print( "Attempted to create unknown entity type " .. classname ..
+			       "!" )
 			return
 		end
 
@@ -171,6 +173,7 @@ end
 
 function shutdown()
 	if ( _G.entity ) then
+		_G.entity._shadowFramebuffer = nil
 		_G.entity.removeAll()
 		_G.entity._lastEntIndex = 0
 	end
@@ -181,6 +184,6 @@ function shutdown()
 	end
 
 	for classname, module in pairs( _classes ) do
-		unrequireEntity( classname )
+		unrequire( classname )
 	end
 end

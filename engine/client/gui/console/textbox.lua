@@ -17,25 +17,25 @@ function textbox:textbox( parent, name )
 end
 
 function textbox:draw()
-	if ( self:getHeight() == love.window.toPixels( 1 ) ) then
+	if ( self:getHeight() == 1 ) then
 		return
 	end
 
-	self:drawBackground( "textbox.backgroundColor" )
+	gui.panel.drawBackground( self, self:getScheme( "textbox.backgroundColor" ) )
 	self:drawText()
 	self:drawCursor()
 
 	gui.panel.draw( self )
 
-	self:drawForeground()
+	self:drawBorder()
 end
 
 function textbox:invalidateLayout()
 	local parent         = self:getParent()
-	local margin         = love.window.toPixels( 36 )
-	local titleBarHeight = love.window.toPixels( 86 )
-	local textboxHeight  = love.window.toPixels( 46 )
-	local marginBottom   = love.window.toPixels( 9 )
+	local margin         = 36
+	local titleBarHeight = 86
+	local textboxHeight  = 46
+	local marginBottom   = 9
 	self:setWidth( parent:getWidth() - 2 * margin )
 	self:setHeight(
 		parent:getHeight() -

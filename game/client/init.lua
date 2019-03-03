@@ -10,7 +10,7 @@ local camera    = camera
 local game      = game
 local gui       = gui
 local pcall     = pcall
-local region    = region
+local map       = map
 local unrequire = unrequire
 local _G        = _G
 
@@ -23,6 +23,9 @@ function createDefaultPanels()
 	-- Initialize move indicator
 	local hudmoveindicator = gui.hudmoveindicator( _G.g_Viewport )
 	_G.g_HudMoveIndicator = hudmoveindicator
+
+	-- Initialize about
+	local hudabout = gui.hudabout( _G.g_Viewport )
 
 	-- Initialize chat
 	local chat = gui.hudchat( _G.g_Viewport )
@@ -39,6 +42,10 @@ function createDefaultPanels()
 	-- Initialize mana
 	local hudmana = gui.hudmana( _G.g_Viewport )
 	_G.g_HudMana = hudmana
+
+	-- Initialize dialogue
+	-- local dialogue = gui.huddialogue( _G.g_Viewport )
+	-- _G.g_Dialogue = dialogue
 end
 
 function draw()
@@ -50,7 +57,7 @@ function draw()
 	gui.preDrawWorld()
 
 	-- Draw world
-	region.drawWorld()
+	map.drawWorld()
 end
 
 function load( arg )

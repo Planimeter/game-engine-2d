@@ -22,7 +22,7 @@ end
 
 function love.conf( c )
 	c.title = "Grid Engine"
-	c.version = "0.10.2"
+	c.version = "11.1"
 	if ( _DEDICATED ) then
 		c.modules.keyboard = false
 		c.modules.mouse = false

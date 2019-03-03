@@ -4,9 +4,6 @@
 --
 --==========================================================================--
 
-local toPixels  = love.window.toPixels
-local utf8upper = string.utf8upper
-
 class "gui.tabbedframe" ( "gui.frame" )
 
 local tabbedframe = gui.tabbedframe
@@ -14,24 +11,24 @@ local tabbedframe = gui.tabbedframe
 function tabbedframe:tabbedframe( parent, name, title )
 	gui.frame.frame( self, parent, name, title )
 
-	local padding   = toPixels( 24 )
-	local iconWidth = toPixels( 16 )
+	local padding   = 24
+	local iconWidth = 16
 	local x         = self.width - 2 * padding - iconWidth
-	local y         = toPixels( 1 )
+	local y         = 1
 	self.closeButton:setPos( x, y )
 
-	local width     = 2 * padding + iconWidth - toPixels( 1 ) - toPixels( 8 )
-	local height    = 2 * padding + iconWidth - toPixels( 3 )
+	local width     = 2 * padding + iconWidth - 1 - 8
+	local height    = 2 * padding + iconWidth - 3
 	self.closeButton:setSize( width, height )
 
 	local font             = self:getScheme( "titleFont" )
-	local titleWidth       = font:getWidth( utf8upper( self.title ) )
+	local titleWidth       = font:getWidth( self.title )
 	local closeButtonWidth = self.closeButton:getWidth()
 	self.minWidth  = 2 * padding + titleWidth + closeButtonWidth
-	self.minHeight = toPixels( 62 )
+	self.minHeight = 62
 
 	self.tabGroup  = gui.frametabgroup( self, name .. " Frame Tab Group" )
-	self.tabGroup:setPos( 2 * padding + titleWidth, toPixels( 1 ) )
+	self.tabGroup:setPos( 2 * padding + titleWidth, 1 )
 
 	self.tabPanels = gui.frametabpanels( self, name .. " Frame Tab Panels" )
 	self.tabPanels:setY( self.minHeight )
@@ -41,9 +38,9 @@ function tabbedframe:addTab( tabName, tabPanel, default )
 	self.tabGroup:addTab( tabName, default )
 	self.tabPanels:addPanel( tabPanel, default )
 
-	local padding          = toPixels( 24 )
+	local padding          = 24
 	local font             = self:getScheme( "titleFont" )
-	local titleWidth       = font:getWidth( utf8upper( self.title ) )
+	local titleWidth       = font:getWidth( self.title )
 	local closeButtonWidth = self.closeButton:getWidth()
 	local tabGroupWidth    = self.tabGroup:getWidth()
 	self:setMinWidth(
@@ -51,20 +48,20 @@ function tabbedframe:addTab( tabName, tabPanel, default )
 		  + titleWidth
 		  + tabGroupWidth
 		  + closeButtonWidth
-		  + toPixels( 1 )
-		  + toPixels( 8 )
+		  + 1
+		  + 8
 	)
 	tabPanel:invalidateLayout()
 end
 
 function tabbedframe:drawBackground()
-	local color          = "frame.backgroundColor"
-	local titleBarHeight = toPixels( 62 )
+	local color          = self:getScheme( "frame.backgroundColor" )
+	local titleBarHeight = 62
 	local width          = self:getWidth()
 	local height         = self:getHeight()
 
 	if ( not self.tabPanels:getChildren() ) then
-		love.graphics.setColor( self:getScheme( color ) )
+		love.graphics.setColor( color )
 		love.graphics.rectangle(
 			"fill",
 			0,
@@ -75,19 +72,19 @@ function tabbedframe:drawBackground()
 	end
 
 	-- Title Bar
-	color = "frametab.backgroundColor"
-	love.graphics.setColor( self:getScheme( color ) )
-	local padding    = toPixels( 24 )
+	color = self:getScheme( "frametab.backgroundColor" )
+	love.graphics.setColor( color )
+	local padding    = 24
 	local font       = self:getScheme( "titleFont" )
-	local titleWidth = font:getWidth( utf8upper( self:getTitle() ) )
+	local titleWidth = font:getWidth( self:getTitle() )
 	titleWidth       = 2 * padding + titleWidth
-	love.graphics.rectangle( "fill", 0, 0, titleWidth + toPixels( 1 ), titleBarHeight )
+	love.graphics.rectangle( "fill", 0, 0, titleWidth + 1, titleBarHeight )
 
 	-- Title Bar Inner Shadow
-	color = "frametab.outlineColor"
-	love.graphics.setColor( self:getScheme( color ) )
+	color = self:getScheme( "frametab.borderColor" )
+	love.graphics.setColor( color )
 	love.graphics.setLineStyle( "rough" )
-	local lineWidth = toPixels( 1 )
+	local lineWidth = 1
 	love.graphics.setLineWidth( lineWidth )
 	local y = titleBarHeight - lineWidth / 2
 	love.graphics.line(
@@ -108,7 +105,7 @@ function tabbedframe:drawBackground()
 	love.graphics.rectangle( "fill", x, 0, r, titleBarHeight )
 
 	-- Remaining Title Bar Inner Shadow
-	love.graphics.setColor( self:getScheme( "frametab.outlineColor" ) )
+	love.graphics.setColor( self:getScheme( "frametab.borderColor" ) )
 	love.graphics.line(
 		x,     y, -- Bottom-left
 		x + r, y  -- Bottom-right
@@ -116,34 +113,34 @@ function tabbedframe:drawBackground()
 end
 
 function tabbedframe:drawTitle()
-	local color = "frame.titleTextColor"
+	local color = self:getScheme( "frame.titleTextColor" )
 	if ( not self.focus ) then
-		color = "frame.defocus.titleTextColor"
+		color = self:getScheme( "frame.defocus.titleTextColor" )
 	end
-	love.graphics.setColor( self:getScheme( color ) )
+	love.graphics.setColor( color )
 	local font = self:getScheme( "titleFont" )
 	love.graphics.setFont( font )
-	local margin = toPixels( 24 )
+	local margin = 24
 	local x = math.round( margin )
-	local y = math.round( margin - toPixels( 4 ) )
-	love.graphics.print( utf8upper( self:getTitle() ), x, y )
+	local y = math.round( margin - 4 )
+	love.graphics.print( self:getTitle(), x, y )
 end
 
 accessor( tabbedframe, "tabGroup" )
 accessor( tabbedframe, "tabPanels" )
 
 function tabbedframe:invalidateLayout()
-	local padding   = toPixels( 24 )
-	local iconWidth = toPixels( 16 )
+	local padding   = 24
+	local iconWidth = 16
 	if ( self.closeButton ) then
 		self.closeButton:setX( self:getWidth() - 2 * padding - iconWidth )
 	end
 
 	local font       = self:getScheme( "titleFont" )
-	local titleWidth = font:getWidth( utf8upper( self.title ) )
+	local titleWidth = font:getWidth( self.title )
 
-	self.tabGroup:setPos( 2 * padding + titleWidth, toPixels( 1 ) )
-	self.tabPanels:setSize( self:getWidth(), self:getHeight() - toPixels( 62 ) )
+	self.tabGroup:setPos( 2 * padding + titleWidth, 1 )
+	self.tabPanels:setSize( self:getWidth(), self:getHeight() - 62 )
 
 	gui.panel.invalidateLayout( self )
 end
@@ -174,7 +171,7 @@ function tabbedframe:mousepressed( x, y, button, istouch )
 		self.grabbedY  = localY
 
 		if ( self:isResizable() ) then
-			local borderWidth = toPixels( 8 )
+			local borderWidth = 8
 			local width       = self:getWidth()
 			local height      = self:getHeight()
 
@@ -292,7 +289,7 @@ function tabbedframe:mousepressed( x, y, button, istouch )
 		end
 
 		-- Title Bar Resize Bounds
-		local titleBarHeight = toPixels( 62 )
+		local titleBarHeight = 62
 		mouseIntersects = pointinrect(
 			localX,
 			localY,

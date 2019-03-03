@@ -17,8 +17,6 @@ function textboxautocompleteitemgroup:textboxautocompleteitemgroup( parent, name
 	-- to be a dropdownlist.
 	-- self.dropDownList = nil
 	self.textbox         = parent
-
-	self:setSuppressFramebufferWarnings( true )
 end
 
 function textboxautocompleteitemgroup:addItem( item )
@@ -77,12 +75,10 @@ end
 function textboxautocompleteitemgroup:onValueChanged( oldValue, newValue )
 end
 
-local sx, sy = 0, 0
-
 function textboxautocompleteitemgroup:updatePos()
 	local textbox = self:getTextbox()
 	if ( textbox ) then
-		sx, sy = textbox:localToScreen()
+		local sx, sy = textbox:localToScreen()
 		self:setPos( sx, sy + textbox:getHeight() )
 	end
 end

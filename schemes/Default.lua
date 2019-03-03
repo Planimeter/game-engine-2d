@@ -15,22 +15,22 @@ t.colors                      = {
 
 t.button                      = {
     backgroundColor           = color( t.colors.black, 0.27 * 255 ),
-    outlineColor              = color( t.colors.gray,  0.42 * 255 ),
+    borderColor               = color( t.colors.gray,  0.42 * 255 ),
     textColor                 = color( 163, 167, 168,         255 ),
 
     mouseover                 = {
         backgroundColor       = color( t.colors.gold,  0.27 * 255 ),
-        outlineColor          = color( t.colors.gold,  0.42 * 255 )
+        borderColor           = color( t.colors.gold,  0.42 * 255 )
     },
 
     mousedown                 = {
         backgroundColor       = color( t.colors.gold,  0.14 * 255 ),
-        outlineColor          = color( t.colors.gold,  0.27 * 255 )
+        borderColor           = color( t.colors.gold,  0.27 * 255 )
     },
 
     disabled                  = {
         backgroundColor       = color( t.colors.black, 0.14 * 255 ),
-        outlineColor          = color( t.colors.black, 0.14 * 255 ),
+        borderColor           = color( t.colors.black, 0.14 * 255 ),
         textColor             = t.colors.gray
     }
 }
@@ -38,15 +38,15 @@ t.button                      = {
 t.checkbox                    = {
     icon                      = love.graphics.newImage( "images/gui/check.png" ),
     iconColor                 = color( 163, 167, 168,         255 ),
-    outlineColor              = color( t.colors.gray,  0.66 * 255 ),
+    borderColor               = color( t.colors.gray,  0.66 * 255 ),
     textColor                 = color( 163, 167, 168,         255 ),
 
     mouseover                 = {
-        outlineColor          = color( t.colors.gold,  0.42 * 255 )
+        borderColor           = color( t.colors.gold,  0.42 * 255 )
     },
 
     mousedown                 = {
-        outlineColor          = color( t.colors.gold,  0.27 * 255 )
+        borderColor           = color( t.colors.gold,  0.27 * 255 )
     },
 
     disabled                  = {
@@ -70,11 +70,11 @@ t.closebutton                 = {
 
 t.commandbutton               = {
     backgroundColor           = color(  67,  68,  69,  0.86 * 255 ),
-    outlineColor              = color(  17,  18,  18,  0.14 * 255 )
+    borderColor               = color(  17,  18,  18,  0.14 * 255 )
 }
 
 t.commandbuttongroup          = {
-    outlineColor              = color(  17,  18,  18,  0.14 * 255 )
+    borderColor               = color(  17,  18,  18,  0.14 * 255 )
 }
 
 t.dropdownlist                = {
@@ -83,7 +83,7 @@ t.dropdownlist                = {
 
 t.dropdownlistitem            = {
     backgroundColor           = color(  67,  68,  69,  0.97 * 255 ),
-    outlineColor              = color( t.colors.gold,  0.97 * 255 ),
+    borderColor               = color( t.colors.gold,  0.97 * 255 ),
 
     mouseover                 = {
         backgroundColor       = color( t.colors.gold,  0.97 * 255 ),
@@ -98,7 +98,7 @@ t.dropdownlistitem            = {
 
 t.frame                       = {
     backgroundColor           = color(  67,  68,  69,  0.97 * 255 ),
-    outlineColor              = color( 240, 246, 247,  0.07 * 255 ),
+    borderColor               = color( 240, 246, 247,  0.07 * 255 ),
     titleTextColor            = t.colors.white,
 
     defocus                   = {
@@ -108,7 +108,7 @@ t.frame                       = {
 
 t.frametab                    = {
     backgroundColor           = color(  59,  61,  61,  0.93 * 255 ),
-    outlineColor              = color(  17,  18,  18,  0.14 * 255 ),
+    borderColor               = color(  17,  18,  18,  0.14 * 255 ),
 
     mouseover                 = {
         backgroundColor       = color( t.colors.gold,  0.27 * 255 )
@@ -120,7 +120,7 @@ t.frametab                    = {
 }
 
 t.hudframe                    = {
-    backgroundColor           = color( t.colors.black, 0.27 * 255 )
+    backgroundColor           = color( t.colors.black, 0.70 * 255 )
 }
 
 t.hudgamemenunavigation       = {
@@ -145,6 +145,10 @@ t.hudmoveindicator            = {
     smallTextColor            = t.colors.gray,
  -- indicatorColor            = color( 157, 168,  57,         255 )
     indicatorColor            = t.colors.gold
+}
+
+t.itembutton                  = {
+    textColor                 = t.colors.gold
 }
 
 t.label                       = {
@@ -224,15 +228,15 @@ t.radiobutton                 = {
     foreground                = love.graphics.newImage( "images/gui/radiobutton_foreground.png" ),
     icon                      = love.graphics.newImage( "images/gui/selection_dot.png" ),
     iconColor                 = color( 163, 167, 168,         255 ),
-    outlineColor              = color( t.colors.gray,  0.86 * 255 ),
+    borderColor               = color( t.colors.gray,  0.86 * 255 ),
     textColor                 = color( 163, 167, 168,         255 ),
 
     mouseover                 = {
-        outlineColor          = color( t.colors.gold,  0.42 * 255 )
+        borderColor           = color( t.colors.gold,  0.42 * 255 )
     },
 
     mousedown                 = {
-        outlineColor          = color( t.colors.gold,  0.27 * 255 )
+        borderColor           = color( t.colors.gold,  0.27 * 255 )
     },
 
     disabled                  = {
@@ -260,17 +264,17 @@ t.slider                      = {
 }
 
 t.textbox                     = {
-    outlineColor              = color( t.colors.gray,  0.66 * 255 ),
+    borderColor               = color( t.colors.gray,  0.66 * 255 ),
     textColor                 = t.colors.gray,
     selectionColor            = color( t.colors.gold,  0.42 * 255 ),
 
     mouseover                 = {
-        outlineColor          = color( t.colors.gold,  0.42 * 255 ),
+        borderColor           = color( t.colors.gold,  0.42 * 255 ),
         textColor             = color( 163, 167, 168,         255 )
     },
 
     focus                     = {
-        outlineColor          = color( t.colors.gold,  0.27 * 255 ),
+        borderColor           = color( t.colors.gold,  0.27 * 255 ),
         textColor             = color( 163, 167, 168,         255 )
     },
 
@@ -281,19 +285,19 @@ t.textbox                     = {
 
 t.bindlistpanel               = {
     backgroundColor           = color( t.colors.black, 0.66 * 255 ),
-    outlineColor              = color( t.colors.gray,  0.66 * 255 )
+    borderColor               = color( t.colors.gray,  0.66 * 255 )
 }
 
 t.bindlistheader              = {
     borderColor               = color(  15,  15,  15,         255 ),
 }
 
-t.mainmenuFont                = love.graphics.newFont( "fonts/SourceSansPro-Regular.otf", math.floor( love.window.toPixels( 24 ) ) )
-t.titleFont                   = love.graphics.newFont( "fonts/SourceSansPro-Bold.otf", math.floor( love.window.toPixels( 18 ) ) )
-t.font                        = love.graphics.newFont( "fonts/SourceSansPro-Regular.otf", math.floor( love.window.toPixels( 14 ) ) )
-t.fontBold                    = love.graphics.newFont( "fonts/SourceSansPro-Bold.otf", math.floor( love.window.toPixels( 14 ) ) )
-t.fontSmall                   = love.graphics.newFont( "fonts/SourceSansPro-Regular.otf", math.floor( love.window.toPixels( 12 ) ) )
-t.consoleFont                 = love.graphics.newFont( "fonts/SourceCodePro-Light.otf", math.floor( love.window.toPixels( 12 ) ) )
-t.chatFont                    = love.graphics.newFont( "fonts/SourceCodePro-Light.otf", math.floor( love.window.toPixels( 14 ) ) )
-t.entityFont                  = love.graphics.newFont( "fonts/SourceSansPro-Regular.otf", math.floor( love.window.toPixels( 24 ) ) )
-t.itemCountFont               = love.graphics.newFont( "fonts/SourceSansPro-Regular.otf", math.floor( love.window.toPixels( 12 ) ) )
+t.mainmenuFont                = love.graphics.newFont( "fonts/SourceSansPro-Regular.otf", 24 )
+t.titleFont                   = love.graphics.newFont( "fonts/SourceSansPro-Bold.otf", 18 )
+t.font                        = love.graphics.newFont( "fonts/SourceSansPro-Regular.otf", 14 )
+t.fontBold                    = love.graphics.newFont( "fonts/SourceSansPro-Bold.otf", 14 )
+t.fontSmall                   = love.graphics.newFont( "fonts/SourceSansPro-Regular.otf", 12 )
+t.consoleFont                 = love.graphics.newFont( "fonts/SourceCodePro-Light.otf", 12 )
+t.chatFont                    = love.graphics.newFont( "fonts/SourceCodePro-Light.otf", 14 )
+t.entityFont                  = love.graphics.newFont( "fonts/SourceSansPro-Regular.otf", 24 )
+t.itemCountFont               = love.graphics.newFont( "fonts/SourceSansPro-Regular.otf", 12 )

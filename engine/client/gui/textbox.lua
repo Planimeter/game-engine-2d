@@ -4,7 +4,7 @@
 --
 --==========================================================================--
 
-class "gui.textbox" ( "gui.panel" )
+class "gui.textbox" ( "gui.box" )
 
 local textbox    = gui.textbox
 textbox.canFocus = true
@@ -25,14 +25,17 @@ function textbox.drawMask()
 end
 
 function textbox:textbox( parent, name, placeholder )
-	gui.panel.panel( self, parent, name )
-	self.width          = love.window.toPixels( 216 )
-	self.height         = love.window.toPixels( 46 )
+	gui.box.box( self, parent, name )
+	self:setDisplay( "block" )
+	self:setPosition( "absolute" )
+
+	self.width          = 216
+	self.height         = 46
 	self.focus          = false
 	self.defocusOnEnter = false
 	self.placeholder    = placeholder or "Text Box"
 	self.text           = ""
-	self.padding        = love.window.toPixels( 18 )
+	self.padding        = 18
 	self.cursorPos      = 0
 	self.textOverflow   = 0
 	self.scrollOffset   = 0
@@ -50,7 +53,7 @@ function textbox:draw()
 
 	gui.panel.draw( self )
 
-	self:drawForeground()
+	self:drawBorder()
 end
 
 local function getTextX( self )
@@ -63,7 +66,7 @@ local function getTextY( self )
 		                                           self.padding )
 	else
 		local font = self:getScheme( "font" )
-		return self:getHeight() / 2 - font:getHeight() / 2 - love.window.toPixels( 2 )
+		return self:getHeight() / 2 - font:getHeight() / 2
 	end
 end
 
@@ -97,33 +100,37 @@ function textbox:drawCursor()
 	local font = self:getScheme( "font" )
 	if ( self.focus ) then
 		local r, g, b = love.graphics.getColor()
-		love.graphics.setColor( color( r, g, b, 255 * abs( sin( 3 * love.timer.getTime() ) ) ) )
+		love.graphics.setColor( color(
+			r * 255,
+			g * 255,
+			b * 255,
+			abs( sin( 3 * love.timer.getTime() ) ) * 255 ) )
 		love.graphics.rectangle(
 			"fill",
 			getRelativeCursorPos( self ),
 			self:getHeight() / 2 - font:getHeight() / 2,
-			love.window.toPixels( 1 ),
+			1,
 			font:getHeight()
 		)
 	end
 end
 
-function textbox:drawForeground()
-	local property = "textbox.outlineColor"
+function textbox:drawBorder()
+	local property = "textbox.borderColor"
 	local width    = self:getWidth()
 	local height   = self:getHeight()
 
 	if ( self:isEditable() ) then
 		local selected = self.mousedown or self.mouseover
 		if ( self.focus ) then
-			property = "textbox.focus.outlineColor"
+			property = "textbox.focus.borderColor"
 		elseif ( selected and not self:isDisabled() ) then
-			property = "textbox.mouseover.outlineColor"
+			property = "textbox.mouseover.borderColor"
 		end
 	end
 
 	love.graphics.setColor( self:getScheme( property ) )
-	local lineWidth = love.window.toPixels( 1 )
+	local lineWidth = 1
 	love.graphics.setLineWidth( lineWidth )
 	love.graphics.rectangle(
 		"line",
@@ -401,9 +408,9 @@ function textbox:isChildMousedOver()
 	return false
 end
 
-accessor( textbox, "disabled",  nil, "is" )
-accessor( textbox, "editable",  nil, "is" )
-accessor( textbox, "multiline", nil, "is" )
+accessor( textbox, "disabled",  "is" )
+accessor( textbox, "editable",  "is" )
+accessor( textbox, "multiline", "is" )
 
 local function updateScrollOffset( self )
 	local pos, overflow = getRelativeCursorPos( self )

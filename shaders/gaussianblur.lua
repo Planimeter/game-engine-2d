@@ -56,9 +56,15 @@ local function build_shader(sigma)
 	return love.graphics.newShader(table.concat(code))
 end
 
+local gaussianblur = gaussianblur or shader._shaders[ "gaussianblur" ]
+
 function gaussianblur:gaussianblur()
-	self.canvas_h = love.graphics.newCanvas()
-	self.canvas_v = love.graphics.newCanvas()
+	local width, height = love.graphics.getDimensions()
+	self.scale = 1 / 2
+	width  = width  * self.scale
+	height = height * self.scale
+	self.canvas_h = love.graphics.newCanvas( width, height, { dpiscale = 1 } )
+	self.canvas_v = love.graphics.newCanvas( width, height, { dpiscale = 1 } )
 	self.shader = build_shader(1)
 	self.shader:send("direction",{1.0,0.0})
 end
@@ -72,7 +78,12 @@ function gaussianblur:renderTo(func)
 	self.shader:send('direction', {1 / love.graphics.getWidth(), 0})
 	-- draw scene
 	-- self.canvas_h:clear()
-	self.canvas_h:renderTo(func)
+	self.canvas_h:renderTo( function()
+		love.graphics.push()
+			love.graphics.scale( self.scale, self.scale )
+			func()
+		love.graphics.pop()
+	end )
 
 	local b = love.graphics.getBlendMode()
 	love.graphics.setBlendMode('alpha', 'premultiplied')
@@ -91,10 +102,12 @@ end
 
 function gaussianblur:draw()
 	love.graphics.setColor( color.white )
-	love.graphics.draw( self.canvas_v )
+	love.graphics.draw( self.canvas_v, 0, 0, 0, 1 / self.scale )
 end
 
 function gaussianblur:set(key, value)
+	-- Disable blur
+	-- value = 0
 	if key == "sigma" then
 		self.shader = build_shader(tonumber(value))
 	else

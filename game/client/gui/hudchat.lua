@@ -108,8 +108,8 @@ function hudchat:invalidateLayout()
 	self.width           = gui.scale( 720 )
 	self.height          = gui.scale( 404 )
 	local margin         = gui.scale( 96 )
-	local padding        = love.window.toPixels( 36 )
-	local textboxPadding = love.window.toPixels( 18 )
+	local padding        = 36
+	local textboxPadding = 18
 	local x              = margin - padding - textboxPadding
 	local y              = gui.scale( 494 )
 	self:setPos( x, y )
@@ -164,7 +164,7 @@ end
 
 payload.setHandler( onChatReceived, "chat" )
 
-local function restorePanel()
+local function onReloadScript()
 	local chat = g_Chat
 	if ( chat == nil ) then
 		return
@@ -183,4 +183,4 @@ local function restorePanel()
 	end
 end
 
-restorePanel()
+onReloadScript()

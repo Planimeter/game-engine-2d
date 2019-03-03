@@ -69,7 +69,7 @@ function optionsmenu:invalidateLayout()
 	gui.tabbedframe.invalidateLayout( self )
 end
 
-local function restorePanel()
+local function onReloadScript()
 	local mainmenu = g_MainMenu
 	if ( mainmenu == nil or not mainmenu.optionsMenu ) then
 		return
@@ -86,4 +86,4 @@ local function restorePanel()
 	end
 end
 
-restorePanel()
+onReloadScript()

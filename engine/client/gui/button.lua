@@ -4,16 +4,19 @@
 --
 --==========================================================================--
 
-class "gui.button" ( "gui.panel" )
+class "gui.button" ( "gui.box" )
 
 local button = gui.button
 
 button.canFocus = true
 
 function button:button( parent, name, text )
-	gui.panel.panel( self, parent, name )
-	self.width    = love.window.toPixels( 216 )
-	self.height   = love.window.toPixels( 46 )
+	gui.box.box( self, parent, name )
+	self:setDisplay( "block" )
+	self:setPosition( "absolute" )
+	self:setBorderWidth( 1 )
+	self.width    = 216
+	self.height   = 46
 	self.text     = text or "Button"
 	self.disabled = false
 
@@ -24,52 +27,35 @@ function button:draw()
 	self:drawBackground()
 	self:drawText()
 
-	gui.panel.draw( self )
-
-	self:drawForeground()
+	gui.box.draw( self )
 end
 
-function button:drawBackground()
-	if ( self:isDisabled() ) then
-		gui.panel.drawBackground( self, "button.disabled.backgroundColor" )
-		return
-	else
-		gui.panel.drawBackground( self, "button.backgroundColor" )
-	end
-
-	if ( self.mousedown and self.mouseover ) then
-		gui.panel.drawBackground( self, "button.mousedown.backgroundColor" )
-	elseif ( self.mousedown or self.mouseover ) then
-		gui.panel.drawBackground( self, "button.mouseover.backgroundColor" )
-	end
-end
-
-function button:drawForeground()
-	local color = "button.outlineColor"
+function button:drawBorder()
+	local color = self:getScheme( "button.borderColor" )
 
 	if ( self:isDisabled() ) then
-		color = "button.disabled.outlineColor"
-		gui.panel.drawForeground( self, color )
+		color = self:getScheme( "button.disabled.borderColor" )
+		gui.box.drawBorder( self, color )
 		return
 	end
 
-	if ( self.mousedown and self.mouseover ) then
-		color = "button.mousedown.outlineColor"
-	elseif ( self.mousedown or self.mouseover or self.focus ) then
-		color = "button.mouseover.outlineColor"
+	if ( self.mousedown and ( self.mouseover or self:isChildMousedOver() ) ) then
+		color = self:getScheme( "button.mousedown.borderColor" )
+	elseif ( self.mousedown or ( self.mouseover or self:isChildMousedOver() ) or self.focus ) then
+		color = self:getScheme( "button.mouseover.borderColor" )
 	end
 
-	gui.panel.drawForeground( self, color )
+	gui.box.drawBorder( self, color )
 end
 
 function button:drawText()
-	local color = "button.textColor"
+	local color = self:getScheme( "button.textColor" )
 
 	if ( self:isDisabled() ) then
-		color = "button.disabled.textColor"
+		color = self:getScheme( "button.disabled.textColor" )
 	end
 
-	love.graphics.setColor( self:getScheme( color ) )
+	love.graphics.setColor( color )
 
 	local font = self:getScheme( "font" )
 	love.graphics.setFont( font )
@@ -79,8 +65,8 @@ function button:drawText()
 	love.graphics.print( text, x, y )
 end
 
-accessor( button, "text" )
-accessor( button, "disabled", nil, "is" )
+gui.accessor( button, "text" )
+gui.accessor( button, "disabled", "is" )
 
 function button:keypressed( key, scancode, isrepeat )
 	if ( not self.focus or self:isDisabled() ) then
@@ -95,14 +81,14 @@ function button:keypressed( key, scancode, isrepeat )
 end
 
 function button:mousepressed( x, y, button, istouch )
-	if ( self.mouseover and button == 1 ) then
+	if ( ( self.mouseover or self:isChildMousedOver() ) and button == 1 ) then
 		self.mousedown = true
 		self:invalidate()
 	end
 end
 
 function button:mousereleased( x, y, button, istouch )
-	if ( ( self.mousedown and self.mouseover ) and not self:isDisabled() ) then
+	if ( ( self.mousedown and ( self.mouseover or self:isChildMousedOver() ) ) and not self:isDisabled() ) then
 		self:onClick()
 	end
 
@@ -115,12 +101,19 @@ end
 function button:onClick()
 end
 
-function button:setDisabled( disabled )
-	self.disabled = disabled
+function button:setText( text )
+	if ( type( self.text ) ~= "string" ) then
+		self.text:setText( text )
+	else
+		self.text = text
+	end
 	self:invalidate()
 end
 
-function button:setText( text )
-	self.text = text
-	self:invalidate()
+function button:getText()
+	if ( type( self.text ) ~= "string" ) then
+		return self.text:getText()
+	else
+		return self.text
+	end
 end

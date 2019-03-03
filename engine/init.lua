@@ -17,6 +17,7 @@ end
 local engine     = engine or {}
 _G.engine        = engine
 
+local arg        = arg
 local concommand = concommand
 local convar     = convar
 local gui        = gui
@@ -60,14 +61,68 @@ for k in pairs( love.handlers ) do
 	end
 end
 
+local fps_max = convar( "fps_max", "300", nil, nil, "Frame rate limiter" )
+
+function love.run()
+	if love.load then love.load(love.arg.parseGameArguments(arg), arg) end
+
+	-- We don't want the first frame's dt to include time taken by love.load.
+	if love.timer then love.timer.step() end
+
+	local dt = 0
+	local startTime = 0
+	local endTime = 0
+	local duration = 0
+	local remaining = 0
+
+	-- Main loop time.
+	return function()
+		if love.timer then startTime = love.timer.getTime() end
+
+		-- Process events.
+		if love.event then
+			love.event.pump()
+			for name, a,b,c,d,e,f in love.event.poll() do
+				if name == "quit" then
+					if not love.quit or not love.quit() then
+						return a or 0
+					end
+				end
+				love.handlers[name](a,b,c,d,e,f)
+			end
+		end
+
+		-- Update dt, as we'll be passing it to update
+		if love.timer then dt = love.timer.step() end
+
+		-- Call update and draw
+		if love.update then love.update(dt) end -- will pass 0 if love.timer is disabled
+
+		if love.graphics and love.graphics.isActive() then
+			love.graphics.origin()
+			love.graphics.clear(love.graphics.getBackgroundColor())
+
+			if love.draw then love.draw() end
+
+			love.graphics.present()
+		end
+
+		if love.timer then endTime = love.timer.getTime() end
+		duration = endTime - startTime
+		remaining = math.max( 0, 1 / fps_max:getNumber() - duration )
+		if love.timer and remaining > 0 then love.timer.sleep(remaining) end
+	end
+
+end
+
 function love.focus( focus )
 	if ( focus ) then
 		local dt = love.timer.getDelta()
 		if ( _DEBUG ) then
 			package.update( dt )
 
-			if ( _G.sound ) then
-				_G.sound.update( dt )
+			if ( _G.source ) then
+				_G.source.update( dt )
 			end
 		end
 	end
@@ -93,12 +148,13 @@ function love.load( arg )
 		engine.client.load( arg )
 	end
 
-	print( "Grid Engine" )
+	print( "Grid Engine 8" )
+	print( "Made by Planimeter in Arizona" )
 
 	require( "engine.shared.addon" )
 	_G.addon.load( arg )
 
-	require( "engine.shared.region" )
+	require( "engine.shared.map" )
 end
 
 function love.quit()

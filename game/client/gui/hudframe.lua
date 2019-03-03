@@ -55,21 +55,21 @@ function hudframe:close()
 end
 
 function hudframe:draw()
-	self:drawBlur()
+	self:drawTranslucency()
 	gui.frame.draw( self )
 end
 
 function hudframe:drawBackground()
-	if ( gui._blurFramebuffer == nil ) then
-		gui.panel.drawBackground( self, "frame.backgroundColor" )
+	if ( gui._translucencyFramebuffer == nil ) then
+		gui.panel.drawBackground( self, self:getScheme( "frame.backgroundColor" ) )
 		return
 	end
 
-	gui.panel.drawBackground( self, "hudframe.backgroundColor" )
+	gui.box.drawBackground( self )
 end
 
-function hudframe:drawBlur()
-	if ( gui._blurFramebuffer == nil ) then
+function hudframe:drawTranslucency()
+	if ( gui._translucencyFramebuffer == nil ) then
 		return
 	end
 
@@ -79,7 +79,7 @@ function hudframe:drawBlur()
 		love.graphics.push()
 			local x, y = self:localToScreen()
 			love.graphics.translate( -x, -y )
-			gui._blurFramebuffer:draw()
+			gui._translucencyFramebuffer:draw()
 		love.graphics.pop()
 	love.graphics.setStencilTest()
 end
@@ -89,13 +89,13 @@ function hudframe:drawTitle()
 	love.graphics.setColor( self:getScheme( property ) )
 	local font = self:getScheme( "titleFont" )
 	love.graphics.setFont( font )
-	local x = math.round( love.window.toPixels( 36 ) )
-	local y = math.round( x - love.window.toPixels( 4 ) )
-	love.graphics.print( string.utf8upper( self:getTitle() ), x, y )
+	local x = math.round( 36 )
+	local y = math.round( x - 4 )
+	love.graphics.print( self:getTitle(), x, y )
 end
 
 function hudframe:update( dt )
-	if ( gui._blurFramebuffer and self:isVisible() ) then
+	if ( gui._translucencyFramebuffer and self:isVisible() ) then
 		self:invalidate()
 	end
 

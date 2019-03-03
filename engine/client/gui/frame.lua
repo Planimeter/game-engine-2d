@@ -7,14 +7,20 @@
 local gui_draw_frame_focus = convar( "gui_draw_frame_focus", "0", nil, nil,
                              "Draws bounds around the focused frame" )
 
-class "gui.frame" ( "gui.panel" )
+class "gui.frame" ( "gui.box" )
 
 local frame = gui.frame
 
 function frame:frame( parent, name, title )
-	gui.panel.panel( self, parent, name )
-	self.width         = love.window.toPixels( 640 )
-	self.height        = love.window.toPixels( 480 )
+	gui.box.box( self, parent, name )
+	self:setBorderWidth( 1 )
+	self:setPadding( 36 )
+	self:setDisplay( "block" )
+	self:setPosition( "absolute" )
+	self:setBackgroundColor( self:getScheme( "backgroundColor" ) )
+
+	self.width         = 640
+	self.height        = 480
 	self.title         = title or "Frame"
 	self.visible       = false
 	self.removeOnClose = false
@@ -22,20 +28,19 @@ function frame:frame( parent, name, title )
 	self.movable       = true
 
 	self.closeButton = gui.closebutton( self, name .. " Close Button" )
-	local margin     = love.window.toPixels( 36 )
+	local margin     = 36
 	self.closeButton:setPos(
-		self.width - 2 * margin - love.window.toPixels( 16 ),
-		love.window.toPixels( 1 )
+		self.width - 2 * margin - 16,
+		1
 	)
 
 	self:setScheme( "Default" )
 
 	local font             = self:getScheme( "titleFont" )
-	local utf8upper        = string.utf8upper
-	local titleWidth       = font:getWidth( utf8upper( self:getTitle() ) )
+	local titleWidth       = font:getWidth( self:getTitle() )
 	local closeButtonWidth = self.closeButton:getWidth()
 	self.minWidth          = 2 * margin + titleWidth + closeButtonWidth
-	local titleBarHeight   = love.window.toPixels( 86 )
+	local titleBarHeight   = 86
 	self.minHeight         = titleBarHeight
 
 	self:setUseFullscreenFramebuffer( true )
@@ -94,30 +99,30 @@ function frame:doModal()
 end
 
 function frame:draw()
-	self:drawBackground( "frame.backgroundColor" )
+	self:drawBackground()
 
 	gui.panel.draw( self )
 
 	self:drawTitle()
-	self:drawForeground( "frame.outlineColor" )
+	self:drawBorder( self:getScheme( "borderColor" ) )
 
 	if ( gui_draw_frame_focus:getBoolean() and self.focus ) then
-		self:drawBounds()
+		self:drawSelection()
 	end
 end
 
 function frame:drawTitle()
-	local color = "frame.titleTextColor"
+	local color = self:getScheme( "titleTextColor" )
 	if ( not self.focus ) then
-		color = "frame.defocus.titleTextColor"
+		color = self:getScheme( "defocus.titleTextColor" )
 	end
-	love.graphics.setColor( self:getScheme( color ) )
+	love.graphics.setColor( color )
 	local font = self:getScheme( "titleFont" )
 	love.graphics.setFont( font )
-	local margin = love.window.toPixels( 36 )
+	local margin = 36
 	local x = math.round( margin )
-	local y = math.round( margin - love.window.toPixels( 4 ) )
-	love.graphics.print( string.utf8upper( self:getTitle() ), x, y )
+	local y = math.round( margin - 4 )
+	love.graphics.print( self:getTitle(), x, y )
 end
 
 accessor( frame, "minWidth" )
@@ -131,16 +136,15 @@ accessor( frame, "title" )
 
 function frame:invalidateLayout()
 	if ( self.closeButton ) then
-		local toPixels = love.window.toPixels
-		self.closeButton:setX( self:getWidth() - 2 * toPixels( 36 ) - toPixels( 16 ) )
+		self.closeButton:setX( self:getWidth() - 2 * 36 - 16 )
 	end
 
 	gui.panel.invalidateLayout( self )
 end
 
-accessor( frame, "resizable", nil, "is" )
-accessor( frame, "resizing",  nil, "is" )
-accessor( frame, "movable",   nil, "is" )
+accessor( frame, "resizable", "is" )
+accessor( frame, "resizing",  "is" )
+accessor( frame, "movable",   "is" )
 
 local function getNextFocusedIndex( children, startpos, endpos, dir )
 	if ( dir == -1 ) then
@@ -241,7 +245,7 @@ function frame:mousepressed( x, y, button, istouch )
 		self.grabbedY  = localY
 
 		if ( self:isResizable() ) then
-			local borderWidth = love.window.toPixels( 8 )
+			local borderWidth = 8
 			local width       = self:getWidth()
 			local height      = self:getHeight()
 
@@ -359,7 +363,7 @@ function frame:mousepressed( x, y, button, istouch )
 		end
 
 		-- Title Bar Resize Bounds
-		local titleBarHeight = love.window.toPixels( 86 )
+		local titleBarHeight = 86
 		mouseIntersects = pointinrect(
 			localX,
 			localY,
@@ -468,7 +472,7 @@ function frame:setMinSize( minWidth, minHeight )
 	self:setMinHeight( minHeight )
 end
 
-accessor( frame, "removeOnClose", nil, "should" )
+accessor( frame, "removeOnClose", "should" )
 
 local mouseX, mouseY = 0, 0
 local getPosition    = love.mouse.getPosition
@@ -552,7 +556,7 @@ function frame:updateCursor( mouseX, mouseY )
 	end
 
 	localX, localY    = self:screenToLocal( mouseX, mouseY )
-	local borderWidth = love.window.toPixels( 8 )
+	local borderWidth = 8
 	local width       = self:getWidth()
 	local height      = self:getHeight()
 

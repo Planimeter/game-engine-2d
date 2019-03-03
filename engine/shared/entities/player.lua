@@ -6,7 +6,7 @@
 
 require( "engine.shared.buttons" )
 
-entities.requireEntity( "character" )
+entities.require( "character" )
 
 class "player" ( "character" )
 
@@ -39,14 +39,14 @@ function player.getByPeer( peer )
 	end
 end
 
-function player.getInOrNearRegion( region )
+function player.getInOrNearMap( map )
 	local t = {}
 	for _, player in ipairs( player._players ) do
 		local minA, maxA = player:getGraphicsBounds()
 
-		local x, y   = region:getX(), region:getY()
-		local width  = region:getPixelWidth()
-		local height = region:getPixelHeight()
+		local x, y   = map:getX(), map:getY()
+		local width  = map:getPixelWidth()
+		local height = map:getPixelHeight()
 		local minB   = vector( x, y + height )
 		local maxB   = vector( x + width, y )
 
@@ -65,7 +65,7 @@ if ( _SERVER ) then
 	function player.sendTextAll( text )
 		local payload = payload( "sayText" )
 		payload:set( "text", text )
-		engine.server.network.broadcast( payload )
+		payload:broadcast()
 	end
 end
 
@@ -82,12 +82,14 @@ function player:player()
 
 	self._commandNumber   = 0
 	self._buttons         = 0
+	self._lastButtons     = 0
+	self._buttonsPressed  = 0
+	self._buttonsReleased = 0
 
 	if ( _CLIENT ) then
-		self._pendingCommands = {}
-
 		require( "engine.client.sprite" )
 		local sprite = sprite( "images.player" )
+		sprite:setFilter( "nearest", "nearest" )
 		self:setSprite( sprite )
 	end
 
@@ -143,8 +145,17 @@ function player:isMoveKeyDown()
 		_E.IN_FORWARD,
 		_E.IN_BACK,
 		_E.IN_LEFT,
-		_E.IN_RIGHT
+		_E.IN_RIGHT,
+		_E.IN_SPEED
 	) )
+end
+
+function player:isKeyPressed( button )
+	return bit.band( self._buttonsPressed, button ) ~= 0
+end
+
+function player:isKeyReleased( button )
+	return bit.band( self._buttonsReleased, button ) ~= 0
 end
 
 if ( _SERVER ) then
@@ -162,12 +173,13 @@ function player:moveTo( position, callback )
 	if ( _CLIENT and not _SERVER ) then
 		local payload = payload( "playerMove" )
 		payload:set( "position", position )
-		engine.client.network.sendToServer( payload )
+		payload:sendToServer()
 	end
 
 	if ( _CLIENT ) then
 		require( "engine.client.camera" )
 		if ( moving and camera.getParentEntity() == self ) then
+			-- TODO: Reset on the client if we moved from the server.
 			camera.resetZoom()
 		end
 	end
@@ -179,7 +191,8 @@ if ( _SERVER ) then
 	local function onPlayerMove( payload )
 		local player   = payload:getPlayer()
 		local position = payload:get( "position" )
-		player._nextPosition = position
+		player:removeTasks()
+		player:moveTo( position )
 	end
 
 	payload.setHandler( onPlayerMove, "playerMove" )
@@ -217,6 +230,21 @@ concommand( "-right", "Stop moving player right", function( _, player )
 	player._buttons = bit.band( player._buttons, bit.bnot( _E.IN_RIGHT ) )
 end, { "game" } )
 
+concommand( "+speed", "Start sprinting", function( _, player )
+	player._buttons = bit.bor( player._buttons, _E.IN_SPEED )
+end, { "game" } )
+
+concommand( "-speed", "Stop sprinting", function( _, player )
+	player._buttons = bit.band( player._buttons, bit.bnot( _E.IN_SPEED ) )
+end, { "game" } )
+
+concommand( "+use", "Start using an entity", function( _, player )
+	player._buttons = bit.bor( player._buttons, _E.IN_USE )
+end, { "game" } )
+
+concommand( "-use", "Stop using an entity", function( _, player )
+	player._buttons = bit.band( player._buttons, bit.bnot( _E.IN_USE ) )
+end, { "game" } )
 
 if ( _CLIENT ) then
 	local function updateStepSound( self, event )
@@ -244,7 +272,8 @@ if ( _CLIENT ) then
 	end
 
 	local cl_footsteps = convar( "cl_footsteps", 0, nil, nil,
-	                             "Plays footstep sounds for players" )
+	                             "Plays footstep sounds for players", nil,
+	                             { "archive" } )
 
 	function player:onAnimationEvent( event )
 		if ( cl_footsteps:getBoolean() ) then
@@ -283,7 +312,7 @@ local function updateMovement( self )
 		self._commandNumber = self._commandNumber + 1
 		payload:set( "commandNumber", self._commandNumber )
 		payload:set( "buttons", self._buttons )
-		engine.client.network.sendToServer( payload )
+		payload:sendToServer()
 	end
 
 	if ( not self:isMoveKeyDown() ) then
@@ -291,7 +320,7 @@ local function updateMovement( self )
 	end
 
 	local position = vector.copy( self:getPosition() )
-	position.x, position.y = region.roundToGrid( position.x, position.y )
+	position.x, position.y = map.roundToGrid( position.x, position.y )
 	if ( self:isKeyDown( _E.IN_FORWARD ) ) then
 		position = position + vector(  0, -game.tileSize )
 	elseif ( self:isKeyDown( _E.IN_BACK ) ) then
@@ -303,12 +332,6 @@ local function updateMovement( self )
 	end
 
 	self:moveTo( position )
-
-	if ( _CLIENT ) then
-		local commandNumber = self._commandNumber
-		local buttons       = self._buttons
-		table.insert( self._pendingCommands, { commandNumber, buttons } )
-	end
 end
 
 if ( _SERVER ) then
@@ -317,15 +340,11 @@ if ( _SERVER ) then
 		local commandNumber   = payload:get( "commandNumber" )
 		local buttons         = payload:get( "buttons" )
 		player._commandNumber = commandNumber
-		player._buttons       = buttons
+		player:updateButtonState( buttons )
 		updateMovement( player )
 	end
 
 	payload.setHandler( onUserCmd, "usercmd" )
-end
-
-function player:onMoveTo( position )
-	updateMovement( self )
 end
 
 function player:onNetworkVarChanged( networkvar )
@@ -352,8 +371,7 @@ concommand( "say", "Display player message",
 		local payload = payload( "chat" )
 		payload:set( "entity", player or nil )
 		payload:set( "message", argString )
-
-		engine.server.network.broadcast( payload )
+		payload:broadcast()
 	end, { "network" }
 )
 
@@ -401,6 +419,35 @@ end
 function player:update( dt )
 	updateMovement( self )
 	character.update( self, dt )
+end
+
+function player:updateButtonState( buttons )
+	self._lastButtons     = self._buttons
+
+	self._buttons         = buttons
+	local buttonsChanged  = bit.bxor( self._lastButtons, self._buttons )
+
+	self._buttonsPressed  = bit.band( buttonsChanged, buttons )
+	self._buttonsReleased = bit.band( buttonsChanged, bit.bnot( buttons ) )
+end
+
+if ( _SERVER ) then
+	local function onPlayerUse( payload )
+		local entity    = payload:get( "entity" )
+		local activator = payload:getPlayer()
+		local value     = payload:get( "value" )
+
+		local canUse = game.call(
+			"server", "onPlayerUse", activator, entity, value
+		)
+		if ( canUse == false ) then
+			return
+		end
+
+		entity:use( activator, value )
+	end
+
+	payload.setHandler( onPlayerUse, "playerUse" )
 end
 
 function player:__tostring()

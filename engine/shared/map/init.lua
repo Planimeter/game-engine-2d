@@ -1,30 +1,30 @@
 --=========== Copyright © 2018, Planimeter, All rights reserved. ===========--
 --
--- Purpose: Region class
+-- Purpose: Map class
 --
 --==========================================================================--
 
 require( "engine.shared.hook" )
 
-class( "region" )
+class( "map" )
 
-region._regions = region._regions or {}
+map._maps = map._maps or {}
 
 if ( _CLIENT ) then
-	local function drawRegion( region )
+	local function drawMap( map )
 		local worldIndex = camera.getWorldIndex()
-		if ( worldIndex ~= region:getWorldIndex() ) then
+		if ( worldIndex ~= map:getWorldIndex() ) then
 			return
 		end
 
 		love.graphics.push()
-			local x, y = region:getX(), region:getY()
+			local x, y = map:getX(), map:getY()
 			love.graphics.translate( x, y )
-			region:draw()
+			map:draw()
 		love.graphics.pop()
 	end
 
-	function region.drawWorld()
+	function map.drawWorld()
 		local r, g, b, a = love.graphics.getBackgroundColor()
 		local width      = love.graphics.getWidth()
 		local height     = love.graphics.getHeight()
@@ -37,9 +37,9 @@ if ( _CLIENT ) then
 			local x, y = camera.getTranslation()
 			love.graphics.translate( x, y )
 
-			-- Draw regions
-			for _, region in ipairs( region._regions ) do
-				drawRegion( region )
+			-- Draw maps
+			for _, map in ipairs( map._maps ) do
+				drawMap( map )
 			end
 
 			-- Draw entities
@@ -48,15 +48,15 @@ if ( _CLIENT ) then
 	end
 end
 
-function region.exists( name )
+function map.exists( name )
 	name = string.gsub( name, "%.", "/" )
-	return love.filesystem.exists( "regions/" .. name .. ".lua" )
+	return love.filesystem.getInfo( "maps/" .. name .. ".lua" ) ~= nil
 end
 
-function region.findNextWorldIndex()
+function map.findNextWorldIndex()
 	local worldIndex = 1
-	for _, region in ipairs( region._regions ) do
-		if ( worldIndex == region:getWorldIndex() ) then
+	for _, map in ipairs( map._maps ) do
+		if ( worldIndex == map:getWorldIndex() ) then
 			worldIndex = worldIndex + 1
 		end
 	end
@@ -64,115 +64,115 @@ function region.findNextWorldIndex()
 	return worldIndex
 end
 
-function region.getAll()
-	return table.shallowcopy( region._regions )
+function map.getAll()
+	return table.shallowcopy( map._maps )
 end
 
-function region.getByName( name )
-	for _, region in ipairs( region._regions ) do
-		if ( name == region:getName() ) then
-			return region
+function map.getByName( name )
+	for _, map in ipairs( map._maps ) do
+		if ( name == map:getName() ) then
+			return map
 		end
 	end
 end
 
-function region.getAtPosition( position, worldIndex )
+function map.getAtPosition( position, worldIndex )
 	worldIndex = worldIndex or 1
-	for _, region in ipairs( region._regions ) do
+	for _, map in ipairs( map._maps ) do
 		local px, py = position.x, position.y
-		local x,  y  = region:getX(), region:getY()
-		local width  = region:getPixelWidth()
-		local height = region:getPixelHeight()
-		if ( region.pointinrect( px, py, x, y, width, height ) ) then
-			return region
+		local x,  y  = map:getX(), map:getY()
+		local width  = map:getPixelWidth()
+		local height = map:getPixelHeight()
+		if ( map.pointinrect( px, py, x, y, width, height ) ) then
+			return map
 		end
 	end
 end
 
-function region.getWorld()
-	return region._world
+function map.getWorld()
+	return map._world
 end
 
-function region.load( name, x, y, worldIndex )
+function map.load( name, x, y, worldIndex )
 	x = x or 0
 	y = y or 0
-	if ( region.getByName( name ) ) then
+	if ( map.getByName( name ) ) then
 		return
 	end
-	local region = region( name, x, y, worldIndex )
-	table.insert( region._regions, region )
+	local map = map( name, x, y, worldIndex )
+	table.insert( map._maps, map )
 end
 
-function region.reload( library )
-	if ( string.sub( library, 1, 8 ) ~= "regions." ) then
+function map.reload( library )
+	if ( string.sub( library, 1, 8 ) ~= "maps." ) then
 		return
 	end
-	local name = string.gsub( library, "regions.", "" )
-	local r = region.getByName( name )
+	local name = string.gsub( library, "maps.", "" )
+	local r = map.getByName( name )
 	local x = r:getX()
 	local y = r:getY()
 	local worldIndex = r:getWorldIndex()
-	-- TODO: Move players to new region.
-	region.unload( name )
-	region.load( name, x, y, worldIndex )
+	-- TODO: Move players to new map.
+	map.unload( name )
+	map.load( name, x, y, worldIndex )
 end
 
-hook.set( "shared", region.reload, "onReloadScript", "reloadRegion" )
+hook.set( "shared", map.reload, "onReloadScript", "reloadMap" )
 
 if ( _CLIENT ) then
-	local function initializeTiles( region )
-		for _, regionlayer in ipairs( region:getLayers() ) do
-			if ( regionlayer:getType() == "tilelayer" ) then
-				regionlayer:initializeTiles()
+	local function initializeTiles( map )
+		for _, maplayer in ipairs( map:getLayers() ) do
+			if ( maplayer:getType() == "tilelayer" ) then
+				maplayer:initializeTiles()
 			end
 		end
 	end
 
-	function region.reloadTiles( filename )
+	function map.reloadTiles( filename )
 		if ( not string.find( filename, "images/tilesets/" ) ) then
 			return
 		end
 
-		for _, region in ipairs( region._regions ) do
-			initializeTiles( region )
+		for _, map in ipairs( map._maps ) do
+			initializeTiles( map )
 		end
 	end
 
 	hook.set( "client", reloadTiles, "onReloadImage", "reloadTiles" )
 end
 
-function region.unload( name )
-	unrequire( "regions." .. name )
+function map.unload( name )
+	unrequire( "maps." .. name )
 
-	for i, region in ipairs( region._regions ) do
-		if ( name == region:getName() ) then
-			region:remove()
-			table.remove( region._regions, i )
+	for i, map in ipairs( map._maps ) do
+		if ( name == map:getName() ) then
+			map:remove()
+			table.remove( map._maps, i )
 			return
 		end
 	end
 end
 
-function region.unloadAll()
-	for i = #region._regions, 1, -1 do
-		local region = region._regions[ i ]
-		unrequire( "regions." .. region:getName() )
-		table.remove( region._regions, i )
+function map.unloadAll()
+	for i = #map._maps, 1, -1 do
+		local map = map._maps[ i ]
+		unrequire( "maps." .. map:getName() )
+		table.remove( map._maps, i )
 	end
 end
 
-region.shutdown = region.unloadAll
+map.shutdown = map.unloadAll
 
 if ( not _DEDICATED ) then
-	concommand( "region", "Loads the specified region",
+	concommand( "map", "Loads the specified map",
 		function( _, _, _, _, argT )
 			local name = argT[ 1 ]
 			if ( name == nil ) then
-				print( "region <region name>" )
+				print( "map <map name>" )
 				return
 			end
 
-			if ( not region.exists( name ) ) then
+			if ( not map.exists( name ) ) then
 				print( name .. " does not exist." )
 				return
 			end
@@ -183,7 +183,7 @@ if ( not _DEDICATED ) then
 				return
 			end
 
-			game.initialRegion = name
+			game.initialMap = name
 
 			engine.client.connectToListenServer()
 		end,
@@ -192,12 +192,12 @@ if ( not _DEDICATED ) then
 
 		function( argS )
 			local autocomplete = {}
-			local files = love.filesystem.getDirectoryItems( "regions" )
+			local files = love.filesystem.getDirectoryItems( "maps" )
 			for _, v in ipairs( files ) do
 				if ( string.fileextension( v ) == "lua" ) then
 					local name  = string.gsub( v, ".lua", "" )
-					local cmd   = "region " .. name
-					if ( string.find( cmd, "region " .. argS, 1, true ) ) then
+					local cmd   = "map " .. name
+					if ( string.find( cmd, "map " .. argS, 1, true ) ) then
 						table.insert( autocomplete, cmd )
 					end
 				end
@@ -210,64 +210,88 @@ if ( not _DEDICATED ) then
 	)
 end
 
-function region.pointinrect( px, py, x, y, width, height )
+function map.pointinrect( px, py, x, y, width, height )
 	return px >= x and
 	       py  > y and
 	       px  < x + width and
 	       py <= y + height
 end
 
-function region.roundToGrid( x, y )
-	local region = region.getAtPosition( vector( x, y ) )
-	if ( region == nil ) then
+function map.roundToGrid( x, y )
+	local map = map.getAtPosition( vector( x, y ) )
+	if ( map == nil ) then
 		return x, y
 	end
 
-	local w, h = region:getTileSize()
+	local w, h = map:getTileSize()
 	x = x - x % w + math.nearestmult( x % w, w )
 	y = y - y % h + math.nearestmult( y % h, h )
 	return x, y
 end
 
-function region.snapToGrid( x, y )
-	local region = region.getAtPosition( vector( x, y ) )
-	if ( region == nil ) then
+function map.snapToGrid( x, y )
+	local map = map.getAtPosition( vector( x, y ) )
+	if ( map == nil ) then
 		return x, y
 	end
 
-	local w, h = region:getTileSize()
+	local w, h = map:getTileSize()
 	x = x - x % w
 	y = y - y % h
 	return x, y
 end
 
-function region:region( name, x, y, worldIndex )
+function map:map( name, x, y, worldIndex )
 	self.name = name
-	self.data = require( "regions." .. name )
+	self.data = require( "maps." .. name )
 
 	self.x = x or 0
 	self.y = y or 0
 	self.worldIndex = worldIndex or 1
 
 	self:parse()
+
+	require( "engine.client.canvas" )
+	local width  = self:getPixelWidth()
+	local height = self:getPixelHeight()
+	self.canvas  = canvas( width, height )
+	self.canvas:setFilter( "nearest", "nearest" )
+
+	self.needsRedraw = true
 end
 
 if ( _CLIENT ) then
-	function region:draw()
+	function map:draw()
 		local layers = self:getLayers()
 		if ( layers == nil ) then
 			return
 		end
 
-		for _, layer in ipairs( layers ) do
-			if ( layer:isVisible() ) then
-				layer:draw()
-			end
+		local canvas = self:getCanvas()
+		if ( self.needsRedraw ) then
+			love.graphics.push()
+			canvas:renderTo( function()
+				love.graphics.origin()
+				love.graphics.clear()
+				for _, layer in ipairs( layers ) do
+					if ( layer:isVisible() ) then
+						layer:draw()
+					end
+				end
+			end )
+			love.graphics.pop()
+
+			self.needsRedraw = false
 		end
+
+		love.graphics.setColor( color.white )
+		canvas:draw()
 	end
+
+	accessor( map, "canvas" )
 end
 
-function region:cleanup()
+function map:cleanup()
 	local entities = self:getEntities()
 	if ( entities == nil ) then
 		return
@@ -281,18 +305,18 @@ function region:cleanup()
 	end
 end
 
-accessor( region, "entities" )
+accessor( map, "entities" )
 
-function region:getFilename()
+function map:getFilename()
 	return string.gsub( self.name, "%.", "/" ) .. ".lua"
 end
 
-accessor( region, "formatVersion" )
+accessor( map, "formatVersion" )
 
 local data = {}
 local gid  = 0
 
-function region:getGidsAtPosition( position )
+function map:getGidsAtPosition( position )
 	-- Convert to local positions
 	position         = vector.copy( position )
 	position.x       = position.x - self:getX()
@@ -314,21 +338,21 @@ function region:getGidsAtPosition( position )
 	return gids
 end
 
-accessor( region, "layers" )
-accessor( region, "name" )
-accessor( region, "orientation" )
+accessor( map, "layers" )
+accessor( map, "name" )
+accessor( map, "orientation" )
 
-function region:getPixelWidth()
+function map:getPixelWidth()
 	return self:getTileWidth() * self:getWidth()
 end
 
-function region:getPixelHeight()
+function map:getPixelHeight()
 	return self:getTileHeight() * self:getHeight()
 end
 
-accessor( region, "properties" )
+accessor( map, "properties" )
 
-function region:getTileset( layer )
+function map:getTileset( layer )
 	local gid = layer:getHighestTileGid()
 	local tileset = nil
 	for _, t in ipairs( self:getTilesets() ) do
@@ -339,21 +363,21 @@ function region:getTileset( layer )
 	return tileset
 end
 
-accessor( region, "tilesets" )
-accessor( region, "tileWidth" )
-accessor( region, "tileHeight" )
-accessor( region, "width" )
-accessor( region, "height" )
-accessor( region, "worldIndex" )
-accessor( region, "x" )
-accessor( region, "y" )
+accessor( map, "tilesets" )
+accessor( map, "tileWidth" )
+accessor( map, "tileHeight" )
+accessor( map, "width" )
+accessor( map, "height" )
+accessor( map, "worldIndex" )
+accessor( map, "x" )
+accessor( map, "y" )
 
-function region.initializeWorld()
-	if ( region._world ) then
+function map.initializeWorld()
+	if ( map._world ) then
 		return
 	end
 
-	region._world = love.physics.newWorld()
+	map._world = love.physics.newWorld()
 end
 
 local px            = 0
@@ -362,7 +386,7 @@ local x             = 0
 local y             = 0
 local width         = 0
 local height        = 0
-local pointinrect   = region.pointinrect
+local pointinrect   = map.pointinrect
 local gids          = {}
 local firstGid      = 0
 local tiles         = {}
@@ -371,7 +395,7 @@ local hasProperties = false
 local properties    = {}
 local walkable      = nil
 
-function region:isTileWalkableAtPosition( position )
+function map:isTileWalkableAtPosition( position )
 	-- Check world bounds
 	px     = position.x
 	py     = position.y
@@ -380,12 +404,12 @@ function region:isTileWalkableAtPosition( position )
 	width  = self:getPixelWidth()
 	height = self:getPixelHeight()
 	if ( not pointinrect( px, py, x, y, width, height ) ) then
-		-- No, but check nearby region
+		-- No, but check nearby map
 		local tilePosition = vector( px, py )
 		local worldIndex   = self:getWorldIndex()
-		local region       = region.getAtPosition( tilePosition, worldIndex )
-		if ( region ) then
-			return region:isTileWalkableAtPosition( position )
+		local map          = map.getAtPosition( tilePosition, worldIndex )
+		if ( map ) then
+			return map:isTileWalkableAtPosition( position )
 		else
 			return false
 		end
@@ -399,7 +423,7 @@ function region:isTileWalkableAtPosition( position )
 		for _, tile in ipairs( tiles ) do
 			hasProperties = hasvalue( gids, tile.id + firstGid )
 			properties    = tile.properties
-			walkable      = hasProperties and properties.walkable
+			walkable      = hasProperties and properties and properties.walkable
 			if ( hasProperties and walkable == false ) then
 				return false
 			end
@@ -424,31 +448,31 @@ function region:isTileWalkableAtPosition( position )
 	return true
 end
 
-function region:loadTilesets( tilesets )
+function map:loadTilesets( tilesets )
 	if ( self.tilesets ) then
 		return
 	end
 
 	self.tilesets = {}
 
-	require( "engine.shared.region.tileset" )
+	require( "engine.shared.map.tileset" )
 	for _, tilesetData in ipairs( tilesets ) do
-		local tileset = region.tileset( self, tilesetData )
+		local tileset = map.tileset( self, tilesetData )
 		table.insert( self.tilesets, tileset )
 	end
 end
 
-function region:loadLayers( layers )
+function map:loadLayers( layers )
 	if ( self.layers ) then
 		return
 	end
 
 	self.layers = {}
 
-	require( "engine.shared.region.layer" )
+	require( "engine.shared.map.layer" )
 	for _, layerData in ipairs( layers ) do
-		local layer = region.layer( layerData )
-		layer:setRegion( self )
+		local layer = map.layer( layerData )
+		layer:setMap( self )
 		layer:parse()
 
 		local tileset = self:getTileset( layer )
@@ -457,7 +481,7 @@ function region:loadLayers( layers )
 	end
 end
 
-function region:parse()
+function map:parse()
 	if ( self.data == nil ) then
 		return
 	end
@@ -471,45 +495,47 @@ function region:parse()
 	self:setTileHeight( data[ "tileheight" ] )
 	self:setProperties( table.copy( data[ "properties" ] ) )
 
-	region.initializeWorld()
+	map.initializeWorld()
 	self:loadTilesets( data[ "tilesets" ] )
 	self:loadLayers( data[ "layers" ] )
 
 	self.data = nil
 end
 
-function region:remove()
+function map:remove()
 	self:cleanup()
 
 	local world = self:getWorld()
-	if ( world and #region._regions == 1 ) then
+	if ( world and #map._maps == 1 ) then
 		world:destroy()
-		region._world = nil
+		map._world = nil
 	end
 end
 
-function region:removeEntity( entity )
+function map:removeEntity( entity )
 	local entities = self:getEntities()
-	if ( entities ) then
-		for i, v in ipairs( entities ) do
-			if ( v == entity ) then
-				table.remove( entities, i )
-			end
+	if ( entities == nil ) then
+		return
+	end
+
+	for i, v in ipairs( entities ) do
+		if ( v == entity ) then
+			table.remove( entities, i )
 		end
 	end
 end
 
-function region:getTileSize()
+function map:getTileSize()
 	return self:getTileWidth(), self:getTileHeight()
 end
 
-function region.update( dt )
-	local world = region.getWorld()
+function map.update( dt )
+	local world = map.getWorld()
 	if ( world ) then
 		world:update( dt )
 	end
 end
 
-function region:__tostring()
-	return "region: \"" .. self:getFilename() .. "\""
+function map:__tostring()
+	return "map: \"" .. self:getFilename() .. "\""
 end

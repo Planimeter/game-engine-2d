@@ -10,17 +10,20 @@ local hudgamemenunavigationbutton = gui.hudgamemenunavigationbutton
 
 function hudgamemenunavigationbutton:hudgamemenunavigationbutton( parent, name )
 	gui.radiobutton.radiobutton( self, parent, name, name )
+	self:setDisplay( "inline" )
+	self:setPosition( "static" )
+	self:setMarginRight( 18 )
 
 	local font = self:getScheme( "font" )
 	self:setWidth( font:getWidth( self:getText() ) )
-	self:setHeight( love.window.toPixels( 45 ) )
+	self:setHeight( 45 )
 	self:setValue( name )
 end
 
 function hudgamemenunavigationbutton:draw()
 	self:drawBorder()
 	self:drawLabel()
-	gui.panel.draw( self )
+	gui.box.draw( self )
 end
 
 function hudgamemenunavigationbutton:drawBorder()
@@ -29,7 +32,7 @@ function hudgamemenunavigationbutton:drawBorder()
 	end
 
 	local property  = "hudgamemenunavigationbutton.borderColor"
-	local lineWidth = love.window.toPixels( 1 )
+	local lineWidth = 1
 	local width     = self:getWidth()
 	love.graphics.setColor( self:getScheme( property ) )
 	love.graphics.setLineStyle( "rough" )
@@ -54,6 +57,6 @@ function hudgamemenunavigationbutton:drawLabel()
 	local font = self:getScheme( "font" )
 	love.graphics.setFont( font )
 	local x = 0
-	local y = math.round( self:getHeight() / 2 - font:getHeight() / 2 - love.window.toPixels( 1 ) )
-	love.graphics.print( self.text, x, y )
+	local y = math.round( self:getHeight() / 2 - font:getHeight() / 2 - 1 )
+	love.graphics.print( self:getText(), x, y )
 end

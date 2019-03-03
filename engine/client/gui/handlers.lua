@@ -58,8 +58,8 @@ function load()
 	_G.g_RootPanel = _rootPanel
 
 	-- Initialize main menu
-	local mainmenu = _M.mainmenu()
 	if ( not _G._DEDICATED ) then
+		local mainmenu = _M.mainmenu()
 		_G.g_MainMenu = mainmenu
 	end
 
@@ -79,31 +79,32 @@ function load()
 	end
 end
 
-local function updateBlurFramebuffer( convar )
+local function updateTranslucencyFramebuffer( convar )
 	local enabled = convar:getBoolean()
 	if ( enabled ) then
 		require( "shaders.gaussianblur" )
-		_blurFramebuffer = _G.shader.getShader( "gaussianblur" )
-		_blurFramebuffer:set( "sigma", love.window.toPixels( 12 ) )
+		_translucencyFramebuffer = _G.shader.getShader( "gaussianblur" )
+		_translucencyFramebuffer:set( "sigma", love.window.toPixels( 20 ) )
 	else
-		_blurFramebuffer = nil
+		_translucencyFramebuffer = nil
 	end
 end
 
-local gui_draw_blur = convar( "gui_draw_blur", "1", nil, nil,
-                              "Toggles gui blur", updateBlurFramebuffer )
+local gui_draw_translucency = convar( "gui_draw_translucency", "1", nil, nil,
+                                      "Toggles gui translucency",
+                                      updateTranslucencyFramebuffer )
 
 function draw()
-	if ( _viewportFramebuffer and gui_draw_blur:getBoolean() ) then
-		if ( _blurFramebuffer == nil ) then
+	if ( _viewportFramebuffer and gui_draw_translucency:getBoolean() ) then
+		if ( _translucencyFramebuffer == nil ) then
 			require( "shaders.gaussianblur" )
-			_blurFramebuffer = _G.shader.getShader( "gaussianblur" )
-			_blurFramebuffer:set( "sigma", love.window.toPixels( 12 ) )
+			_translucencyFramebuffer = _G.shader.getShader( "gaussianblur" )
+			_translucencyFramebuffer:set( "sigma", love.window.toPixels( 12 ) )
 		end
 
-		_blurFramebuffer:renderTo( function()
+		_translucencyFramebuffer:renderTo( function()
 			love.graphics.clear()
-			love.graphics.draw( _viewportFramebuffer )
+			_viewportFramebuffer:draw()
 		end )
 	end
 
@@ -142,21 +143,23 @@ end
 local function updateMouseOver()
 	local mx, my = love.mouse.getPosition()
 	local panel = _rootPanel:getTopMostChildAtPos( mx, my )
-	if ( panel ~= _topPanel ) then
-		if ( _topPanel ) then
-			local oldPanel = nil
-			oldPanel, _topPanel = _topPanel, nil
-			oldPanel.mouseover = false
-			oldPanel:onMouseLeave()
-			oldPanel:invalidate()
-		end
+	if ( panel == _topPanel ) then
+		return
+	end
 
-		_topPanel = panel
+	if ( _topPanel ) then
+		local oldPanel = nil
+		oldPanel, _topPanel = _topPanel, nil
+		oldPanel.mouseover = false
+		oldPanel:onMouseLeave()
+		oldPanel:invalidate()
+	end
 
-		if ( _topPanel ) then
-			_topPanel.mouseover = true
-			_topPanel:invalidate()
-		end
+	_topPanel = panel
+
+	if ( _topPanel ) then
+		_topPanel.mouseover = true
+		_topPanel:invalidate()
 	end
 end
 

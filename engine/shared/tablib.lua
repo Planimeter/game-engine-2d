@@ -129,6 +129,14 @@ function table.len( t )
 	return c
 end
 
+function table.map( t, callback )
+	local copy = {}
+	for k, v in pairs( t ) do
+		copy[ k ] = callback( k, v )
+	end
+	return copy
+end
+
 function table.merge( a, b )
 	for k, v in pairs( b ) do
 		a[ k ] = v

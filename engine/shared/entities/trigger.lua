@@ -4,7 +4,7 @@
 --
 --==========================================================================--
 
-entities.requireEntity( "entity" )
+entities.require( "entity" )
 
 class "trigger" ( "entity" )
 

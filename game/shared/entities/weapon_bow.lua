@@ -7,10 +7,6 @@
 require( "game.shared.entities.item" )
 require( "game" )
 
-if ( _CLIENT ) then
-	require( "engine.client.chat" )
-end
-
 class "weapon_bow" ( "item" )
 
 weapon_bow.data = {
@@ -23,26 +19,17 @@ function weapon_bow:weapon_bow()
 end
 
 if ( _CLIENT ) then
-	function weapon_bow:getOptions()
-		return {
-			{
-				name  = "Pickup",
-				value = function() self:pickup() end
-			},
-			{
-				name  = "Examine",
-				value = function() self:examine() end
-			}
-		}
+	function weapon_bow:pickup()
+		localplayer:pickup( self )
 	end
-end
 
-function weapon_bow:pickup()
-	localplayer:pickup( self )
-end
+	function weapon_bow:drop()
+		localplayer:drop( self.__type )
+	end
 
-function weapon_bow:examine()
-	chat.addText( "It's a bow. What else did you expect?" )
+	function weapon_bow:examine()
+		chat.addText( "It's a bow. What else did you expect?" )
+	end
 end
 
 function weapon_bow:spawn()

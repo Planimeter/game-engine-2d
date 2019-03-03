@@ -69,7 +69,7 @@ function hudspeechballoons:drawBalloons()
 		x            = x - width / 2
 		x            = math.round( x )
 		y            = y - font:getHeight()
-		y            = y - love.window.toPixels( 9 )
+		y            = y - 9
 		y            = math.round( y )
 		love.graphics.print( balloon.message, x, y )
 	end

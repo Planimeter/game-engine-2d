@@ -4,15 +4,16 @@
 --
 --==========================================================================--
 
-class "gui.label" ( "gui.panel" )
+class "gui.label" ( "gui.box" )
 
 local label = gui.label
 
 function label:label( parent, name, text )
-	gui.panel.panel( self, parent, name )
-	self:setScheme( "Default" )
+	gui.box.box( self, parent, name )
+	self:setPosition( "absolute" )
+
 	self.font   = self:getScheme( "font" )
-	self.width  = love.window.toPixels( 216 )
+	self.width  = 216
 	self.height = self.font:getHeight()
 	self.text   = text or "Label"
 end
@@ -28,24 +29,9 @@ function label:draw()
 	local align = self:getTextAlign()
 	love.graphics.printf( text, 0, 0, limit, align )
 
-	gui.panel.draw( self )
+	gui.box.draw( self )
 end
 
-accessor( label, "font" )
-accessor( label, "text" )
-accessor( label, "textAlign" )
-
-function label:setFont( font )
-	self.font = font
-	self:invalidate()
-end
-
-function label:setText( text )
-	self.text = text
-	self:invalidate()
-end
-
-function label:setTextAlign( textAlign )
-	self.textAlign = textAlign
-	self:invalidate()
-end
+gui.accessor( label, "font" )
+gui.accessor( label, "text" )
+gui.accessor( label, "textAlign" )

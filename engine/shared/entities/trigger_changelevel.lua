@@ -4,7 +4,7 @@
 --
 --==========================================================================--
 
-entities.requireEntity( "trigger" )
+entities.require( "trigger" )
 
 class "trigger_changelevel" ( "trigger" )
 
@@ -12,30 +12,30 @@ function trigger_changelevel:trigger_changelevel()
 	trigger.trigger( self )
 end
 
-function trigger_changelevel:loadRegion()
+function trigger_changelevel:loadMap()
 	local properties = self:getProperties()
 	if ( properties == nil ) then
 		return
 	end
 
-	local name = properties[ "region" ]
-	if ( region.getByName( name ) ) then
+	local name = properties[ "map" ]
+	if ( map.getByName( name ) ) then
 		return
 	end
 
-	local worldIndex = region.findNextWorldIndex()
-	region.load( name, nil, nil, worldIndex )
+	local worldIndex = map.findNextWorldIndex()
+	map.load( name, nil, nil, worldIndex )
 end
 
-function trigger_changelevel:removeRegion()
+function trigger_changelevel:removeMap()
 	local properties = self:getProperties()
 	if ( properties ) then
-		local name = properties[ "region" ]
-		local r = region.getByName( name )
+		local name = properties[ "map" ]
+		local r = map.getByName( name )
 		if ( r ) then
-			local players = player.getInOrNearRegion( r )
+			local players = player.getInOrNearMap( r )
 			if ( players == nil ) then
-				region.unload( name )
+				map.unload( name )
 			end
 		end
 	end
@@ -45,12 +45,12 @@ function trigger_changelevel:update( dt )
 	for _, player in ipairs( player.getAll() ) do
 		if ( self:isVisibleToPlayer( player ) ) then
 			if ( not self.loaded ) then
-				self:loadRegion()
+				self:loadMap()
 				self.loaded = true
 			end
 		else
 			if ( self.loaded ) then
-				self:removeRegion()
+				self:removeMap()
 				self.loaded = false
 			end
 		end

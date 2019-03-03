@@ -10,6 +10,11 @@ local dropdownlistitemgroup = gui.dropdownlistitemgroup
 
 function dropdownlistitemgroup:dropdownlistitemgroup( parent, name )
 	gui.radiobuttongroup.radiobuttongroup( self, nil, name )
+	self.height = nil
+	self:setBorderWidth( 1 )
+	self:setBorderColor( self:getScheme( "dropdownlistitem.borderColor" ) )
+	self:setDisplay( "block" )
+	self:setPosition( "absolute" )
 	self.width = parent:getWidth()
 	self:setUseFullscreenFramebuffer( true )
 	self.dropDownList = parent
@@ -32,29 +37,7 @@ function dropdownlistitemgroup:draw()
 		return
 	end
 
-	gui.panel.draw( self )
-
-	local property = "dropdownlistitem.backgroundColor"
-	self:drawBorders( property )
-	property = "dropdownlistitem.outlineColor"
-	self:drawBorders( property )
-end
-
-function dropdownlistitemgroup:drawBorders( property )
-	local lineWidth = love.window.toPixels( 1 )
-	local height    = self:getHeight()
-	local width     = self:getWidth()
-	love.graphics.setColor( self:getScheme( property ) )
-	love.graphics.setLineStyle( "rough" )
-	love.graphics.setLineWidth( lineWidth )
-	love.graphics.line(
-		0,     lineWidth / 2,          -- Top-left
-		width, lineWidth / 2           -- Top-right
-	)
-	love.graphics.line(
-		0,     height - lineWidth / 2, -- Bottom-left
-		width, height - lineWidth / 2  -- Bottom-right
-	)
+	gui.box.draw( self )
 end
 
 accessor( dropdownlistitemgroup, "dropDownList" )
@@ -62,17 +45,6 @@ accessor( dropdownlistitemgroup, "dropDownList" )
 function dropdownlistitemgroup:invalidateLayout()
 	self:updatePos()
 	self:setWidth( self:getDropDownList():getWidth() )
-
-	local listItems = self:getItems()
-	if ( listItems ) then
-		local y = 0
-		for _, listItem in ipairs( listItems ) do
-			listItem:setY( y )
-			listItem:setWidth( self:getWidth() )
-			y = y + listItem:getHeight()
-		end
-		self:setHeight( y )
-	end
 end
 
 function dropdownlistitemgroup:isVisible()
@@ -98,12 +70,25 @@ function dropdownlistitemgroup:onValueChanged( oldValue, newValue )
 	dropDownList:onValueChanged( oldValue, newValue )
 end
 
-local x, y = 0, 0
-
 function dropdownlistitemgroup:updatePos()
 	local dropDownList = self:getDropDownList()
-	if ( dropDownList ) then
-		x, y = dropDownList:localToScreen()
-		self:setPos( x, y + dropDownList:getHeight() )
+	if ( dropDownList == nil ) then
+		return
 	end
+
+	local x, y = dropDownList:localToScreen()
+	y = y + dropDownList:getHeight()
+
+	local windowPadding = 4
+	local overflow = y + self:getHeight() + windowPadding
+	if ( overflow > love.graphics.getHeight() ) then
+		overflow = overflow - love.graphics.getHeight()
+		y = y - overflow
+	end
+
+	if ( y < windowPadding ) then
+		y = windowPadding
+	end
+
+	self:setPos( x, y )
 end

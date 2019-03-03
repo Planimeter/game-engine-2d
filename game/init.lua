@@ -19,8 +19,8 @@ local _G          = _G
 
 module( "game" )
 
-tileSize      = 16
-initialRegion = "test_01"
+tileSize   = 16
+initialMap = "test_01"
 
 function conf( c )
 	c.title  = "Vertex Adventure"
@@ -52,9 +52,15 @@ function onNPCSpawn( npc )
 end
 
 function onPlayerConnect( player )
+	if ( _SERVER ) then
+		_G.player.sendTextAll( player:getName() .. " has joined the game." )
+	end
 end
 
 function onPlayerDisconnect( player )
+	if ( _SERVER ) then
+		_G.player.sendTextAll( player:getName() .. " has disconnected." )
+	end
 end
 
 if ( _VADVENTURE ) then
@@ -63,10 +69,13 @@ if ( _VADVENTURE ) then
 
 	function onPlayerGotItem( player, item, count )
 	end
+
+	function onPlayerRemovedItem( player, item, count )
+	end
 end
 
 function onPlayerInitialSpawn( player )
-	if ( _CLIENT ) then
+	if ( _CLIENT and player == _G.localplayer ) then
 		game.client.createDefaultPanels()
 	end
 end

@@ -7,10 +7,6 @@
 require( "game.shared.entities.item" )
 require( "game" )
 
-if ( _CLIENT ) then
-	require( "engine.client.chat" )
-end
-
 class "weapon_staff" ( "item" )
 
 weapon_staff.data = {
@@ -23,26 +19,17 @@ function weapon_staff:weapon_staff()
 end
 
 if ( _CLIENT ) then
-	function weapon_staff:getOptions()
-		return {
-			{
-				name  = "Pickup",
-				value = function() self:pickup() end
-			},
-			{
-				name  = "Examine",
-				value = function() self:examine() end
-			}
-		}
+	function weapon_staff:pickup()
+		localplayer:pickup( self )
 	end
-end
 
-function weapon_staff:pickup()
-	localplayer:pickup( self )
-end
+	function weapon_staff:drop()
+		localplayer:drop( self.__type )
+	end
 
-function weapon_staff:examine()
-	chat.addText( "Brown and sticky." )
+	function weapon_staff:examine()
+		chat.addText( "Brown and sticky." )
+	end
 end
 
 function weapon_staff:spawn()

@@ -12,28 +12,26 @@ closebutton.canFocus = false
 
 function closebutton:closebutton( parent, name )
 	gui.button.button( self, parent, name )
-	local toPixels = love.window.toPixels
-	local margin = toPixels( 36 )
-	self.width = 2 * margin + toPixels( 8 ) - toPixels( 1 )
-	self.height = 2 * margin + toPixels( 16 ) - toPixels( 2 )
-	self.icon = self:getScheme( "closebutton.icon" )
+	local margin = 36
+	self.width = 2 * margin + 8 - 1
+	self.height = 2 * margin + 16 - 2
+	self.icon = self:getScheme( "icon" )
 end
 
 function closebutton:draw()
-	local color = "closebutton.iconColor"
+	local color = self:getScheme( "closebutton.iconColor" )
 
 	if ( self.mousedown and self.mouseover ) then
-		color = "closebutton.mousedown.iconColor"
+		color = self:getScheme( "closebutton.mousedown.iconColor" )
 	elseif ( self.mousedown or self.mouseover or self.focus ) then
-		color = "closebutton.mouseover.iconColor"
+		color = self:getScheme( "closebutton.mouseover.iconColor" )
 	end
 
-	love.graphics.setColor( self:getScheme( color ) )
+	love.graphics.setColor( color )
 
 	local width = self:getWidth()
 	local height = self:getHeight()
-	local toPixels = love.window.toPixels
-	local x = math.round( width / 2 - self.icon:getWidth() / 2 + toPixels( 4 ) )
+	local x = math.round( width / 2 - self.icon:getWidth() / 2 + 4 )
 	local y = math.round( height / 2 - self.icon:getHeight() / 2 )
 	love.graphics.draw( self.icon, x, y )
 

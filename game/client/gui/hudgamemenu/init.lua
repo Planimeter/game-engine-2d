@@ -11,19 +11,20 @@ local hudgamemenu = gui.hudgamemenu
 function hudgamemenu:hudgamemenu( parent )
 	local name = "HUD Game Menu"
 	gui.hudframe.hudframe( self, parent, name, name )
-	self.width  = love.window.toPixels( 320 ) -- - love.window.toPixels( 31 )
-	self.height = love.window.toPixels( 432 )
+	self.width  = 320 -- - 31
+	self.height = 432
 
 	require( "game.client.gui.hudgamemenu.navigation" )
 	require( "game.client.gui.hudgamemenu.navigationbutton" )
 	self.navigation = gui.hudgamemenunavigation( self )
-	self.navigation:setPos( love.window.toPixels( 36 ), love.window.toPixels( 86 ) )
-	self.navigation:setWidth( self.width - 2 * love.window.toPixels( 36 ) )
-	self.navigation:setHeight( love.window.toPixels( 31 ) )
+	self.navigation:setPos( 36, 86 )
+	self.navigation:setWidth( self.width - 2 * 36 )
+	self.navigation:setHeight( 31 )
 
 	require( "game.client.gui.hudgamemenu.inventory" )
 	self.inventory = gui.hudgamemenuinventory( self )
 	self.inventory:moveToBack()
+	_G.g_Inventory = self.inventory
 
 	require( "game.client.gui.hudgamemenu.stats" )
 	self.stats = gui.hudgamemenustats( self )
@@ -43,10 +44,15 @@ function hudgamemenu:getTitle()
 end
 
 function hudgamemenu:invalidateLayout()
-	local x = love.graphics.getWidth()  - self:getWidth()  - love.window.toPixels( 18 )
-	local y = love.graphics.getHeight() - self:getHeight() - love.window.toPixels( 18 )
+	local x = love.graphics.getWidth()  - self:getWidth()  - 18
+	local y = love.graphics.getHeight() - self:getHeight() - 18
 	self:setPos( x, y )
 	gui.frame.invalidateLayout( self )
+end
+
+function hudgamemenu:onRemove()
+	_G.g_Inventory = nil
+	gui.panel.onRemove( self )
 end
 
 concommand( "+gamemenu", "Opens the gamemenu", function()
@@ -63,7 +69,7 @@ concommand( "-gamemenu", "Closes the gamemenu", function()
 	end
 end, { "game" } )
 
-local function restorePanel()
+local function onReloadScript()
 	local gamemenu = g_GameMenu
 	if ( gamemenu == nil ) then
 		return
@@ -78,4 +84,4 @@ local function restorePanel()
 	end
 end
 
-restorePanel()
+onReloadScript()

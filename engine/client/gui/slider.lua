@@ -10,8 +10,8 @@ local slider = gui.slider
 
 function slider:slider( parent, name )
 	gui.scrollbar.scrollbar( self, parent, name )
-	self.width    = love.window.toPixels( 216 )
-	self.height   = love.window.toPixels( 46 )
+	self.width    = 216
+	self.height   = 46
 	self.minLabel = "Min"
 	self.maxLabel = "Max"
 	self:setMax( 100 )
@@ -26,13 +26,13 @@ function slider:draw()
 end
 
 function slider:drawLabels()
-	local color = "slider.fontColor"
+	local color = self:getScheme( "slider.fontColor" )
 
 	if ( self:isDisabled() ) then
-		color = "slider.disabled.fontColor"
+		color = self:getScheme( "slider.disabled.fontColor" )
 	end
 
-	love.graphics.setColor( self:getScheme( color ) )
+	love.graphics.setColor( color )
 	local font = self:getScheme( "fontSmall" )
 	love.graphics.setFont( font )
 	local minLabel = self:getMinLabel()
@@ -40,66 +40,56 @@ function slider:drawLabels()
 	local height   = self:getHeight()
 	local width    = self:getWidth()
 	local x        = math.round( width - font:getWidth( maxLabel ) )
-	love.graphics.print( minLabel, 0, math.round( height / 2 + love.window.toPixels( 9 ) ) )
-	love.graphics.print( maxLabel, x, math.round( height / 2 + love.window.toPixels( 9 ) ) )
+	love.graphics.print( minLabel, 0, math.round( height / 2 + 9 ) )
+	love.graphics.print( maxLabel, x, math.round( height / 2 + 9 ) )
 end
 
 function slider:drawThumb()
-	local color  = "scrollbar.backgroundColor"
+	local color  = self:getScheme( "scrollbar.backgroundColor" )
 	local height = self:getHeight()
 	local y      = 0
 
 	if ( self:isDisabled() ) then
-		color = "scrollbar.disabled.backgroundColor"
+		color = self:getScheme( "scrollbar.disabled.backgroundColor" )
 	end
 
-	love.graphics.setColor( self:getScheme( color ) )
-	love.graphics.rectangle( "fill", self:getThumbPos(), y, love.window.toPixels( 4 ), height / 2 )
+	love.graphics.setColor( color )
+	love.graphics.rectangle( "fill", self:getThumbPos(), y, 4, height / 2 )
 end
 
 function slider:drawTrough()
-	local color  = "slider.backgroundColor"
+	local color  = self:getScheme( "slider.backgroundColor" )
 	local height = self:getHeight()
 	local width  = self:getWidth()
 
 	if ( self:isDisabled() ) then
-		color = "slider.disabled.backgroundColor"
+		color = self:getScheme( "slider.disabled.backgroundColor" )
 	end
 
-	love.graphics.setColor( self:getScheme( color ) )
-	local lineWidth = love.window.toPixels( 1 )
+	love.graphics.setColor( color )
+	local lineWidth = 1
 	love.graphics.setLineStyle( "rough" )
 	love.graphics.setLineWidth( lineWidth )
 	love.graphics.line( 0, height / 4, width, height / 4 )
 end
 
-accessor( slider, "minLabel" )
-accessor( slider, "maxLabel" )
+gui.accessor( slider, "minLabel" )
+gui.accessor( slider, "maxLabel" )
 
 function slider:getThumbLength()
 	local range = self:getMax() - self:getMin()
 	local size  = self:getRangeWindow() / range
-	return size * ( self:getWidth() - love.window.toPixels( 4 ) )
+	return size * ( self:getWidth() - 4 )
 end
 
 function slider:getThumbPos()
 	local min     = self:getMin()
 	local range   = self:getMax() - min
 	local percent = ( self:getValue() + min ) / range
-	return percent * ( self:getWidth() - love.window.toPixels( 4 ) )
+	return percent * ( self:getWidth() - 4 )
 end
 
 slider.invalidateLayout = gui.panel.invalidateLayout
-
-function slider:setMinLabel( minLabel )
-	self.minLabel = minLabel
-	self:invalidate()
-end
-
-function slider:setMaxLabel( maxLabel )
-	self.maxLabel = maxLabel
-	self:invalidate()
-end
 
 local localX, localY = 0, 0
 
@@ -114,7 +104,7 @@ function slider:mousepressed( x, y, button, istouch )
 		if ( localX < self:getThumbPos() ) then
 			self:pageUp()
 			return
-		elseif ( localX > self:getThumbPos() + love.window.toPixels( 4 ) ) then
+		elseif ( localX > self:getThumbPos() + 4 ) then
 			self:pageDown()
 			return
 		end

@@ -5,28 +5,26 @@
 --==========================================================================--
 
 require( "engine.shared.hook" )
-require( "game.client.gui.mainmenu.closebutton" )
-require( "game.client.gui.mainmenu.button" )
 
-class "gui.mainmenu" ( "gui.panel" )
+class "gui.mainmenu" ( "gui.box" )
 
 local mainmenu = gui.mainmenu
 
 function mainmenu:mainmenu()
-	gui.panel.panel( self, g_RootPanel, "Main Menu" )
+	gui.box.box( self, g_RootPanel, "Main Menu" )
+	self:setDisplay( "block" )
+	self:setPosition( "absolute" )
+
 	self.width       = love.graphics.getWidth()
 	self.height      = love.graphics.getHeight()
-	self:setScheme( "Default" )
 	self:setUseFullscreenFramebuffer( true )
 
-	self.logo        = self:getScheme( "mainmenu.logo" )
-	self.logoSmall   = self:getScheme( "mainmenu.logoSmall" )
-	self.logo:setFilter( "linear", "linear" )
-	self.logoSmall:setFilter( "linear", "linear" )
+	self.logo      = self:getScheme( "logo" )
+	self.logoSmall = self:getScheme( "logoSmall" )
 
-	self.closeButton = gui.mainmenu.closebutton( self )
+	self.closeButton = gui.mainmenuclosebutton( self )
 	local margin     = gui.scale( 96 )
-	self.closeButton:setPos( self.width - love.window.toPixels( 32 ) - margin, margin )
+	self.closeButton:setPos( self.width - 32 - margin, margin )
 	self.closeButton.onClick = function()
 		self.closeDialog:activate()
 	end
@@ -84,7 +82,7 @@ end
 function mainmenu:createButtons()
 	self.buttons = {}
 
-	self.joinLeaveServer = gui.mainmenu.button( self, "Join Server" )
+	self.joinLeaveServer = gui.mainmenubutton( self, "Join Server" )
 	self.joinLeaveServer:setDisabled( true )
 	self.joinLeaveServer.onClick = function()
 		if ( not engine.client.isConnected() ) then
@@ -97,10 +95,9 @@ function mainmenu:createButtons()
 	end
 	table.insert( self.buttons, self.joinLeaveServer )
 
-	local blankButton = gui.mainmenu.button( self )
-	table.insert( self.buttons, blankButton )
+	table.insert( self.buttons, gui.mainmenubutton( self ) )
 
-	local options = gui.mainmenu.button( self, "Options" )
+	local options = gui.mainmenubutton( self, "Options" )
 	options.onClick = function()
 		if ( self.optionsMenu == nil ) then
 			self.optionsMenu = gui.optionsmenu( self )
@@ -136,7 +133,7 @@ function mainmenu:invalidateLayout()
 
 	local margin = gui.scale( 96 )
 	local y      = margin
-	self.closeButton:setPos( self:getWidth() - love.window.toPixels( 32 ) - margin, y )
+	self.closeButton:setPos( self:getWidth() - 32 - margin, y )
 
 	self.closeDialog:moveToCenter()
 
@@ -156,21 +153,21 @@ function mainmenu:invalidateButtons()
 	local marginX   = gui.scale( 96 )
 	local marginY   = math.round( marginX * ( 2 / 3 ) )
 
-	if ( height <= love.window.toPixels( 720 ) ) then
+	if ( height <= 720 ) then
 		logo = self.logoSmall
 	end
 
 	local y = marginPhi + logo:getHeight() + marginY
 	for i, button in ipairs( self.buttons ) do
 		i = i - 1
-		button:setPos( marginX, y + i * button:getHeight() + i * love.window.toPixels( 4.5 ) )
+		button:setPos( marginX, y + i * button:getHeight() + i * 4.5 )
 	end
 end
 
 function mainmenu:draw()
 	if ( engine.client.isInGame() ) then
-		self:drawBlur()
-		self:drawBackground( "mainmenu.backgroundColor" )
+		self:drawTranslucency()
+		self:drawBackground()
 	end
 
 	self:drawLogo()
@@ -178,22 +175,22 @@ function mainmenu:draw()
 	gui.panel.draw( self )
 end
 
-function mainmenu:drawBlur()
-	if ( gui._blurFramebuffer ) then
-		gui._blurFramebuffer:draw()
+function mainmenu:drawTranslucency()
+	if ( gui._translucencyFramebuffer ) then
+		gui._translucencyFramebuffer:draw()
 	end
 end
 
 function mainmenu:drawLogo()
 	local logo      = self.logo
 	local height    = self:getHeight()
-	local scale     = height / love.window.toPixels( 1080 )
+	local scale     = height / 1080
 	local marginX   = gui.scale( 96 )
 	local marginPhi = math.round( height - height / math.phi )
 
-	if ( height <= love.window.toPixels( 720 ) ) then
+	if ( height <= 720 ) then
 		logo  = self.logoSmall
-		scale = height / love.window.toPixels( 720 )
+		scale = height / 720
 	end
 
 	love.graphics.setColor( color.white )
@@ -234,7 +231,7 @@ function mainmenu:remove()
 end
 
 function mainmenu:update( dt )
-	if ( gui._blurFramebuffer and self:isVisible() ) then
+	if ( gui._translucencyFramebuffer and self:isVisible() ) then
 		self:invalidate()
 	end
 
@@ -247,3 +244,25 @@ function mainmenu:quit()
 
 	return true
 end
+
+local function onReloadScript()
+	local oldmenu = g_MainMenu
+	if ( oldmenu == nil ) then
+		return
+	end
+
+	local visible = oldmenu:isVisible()
+
+	-- Initialize main menu
+	local newmenu = gui.mainmenu()
+	_G.g_MainMenu = newmenu
+
+	g_Console:setParent( newmenu )
+	oldmenu:remove()
+
+	if ( visible ) then
+		newmenu:activate()
+	end
+end
+
+onReloadScript()

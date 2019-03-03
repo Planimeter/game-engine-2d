@@ -17,9 +17,9 @@ function bindlistpanel:bindlistpanel( parent, name )
 end
 
 function bindlistpanel:draw()
-	self:drawBackground( "bindlistpanel.backgroundColor" )
+	self:drawBackground( self:getScheme( "bindlistpanel.backgroundColor" ) )
 	gui.panel.draw( self )
-	self:drawForeground( "bindlistpanel.outlineColor" )
+	self:drawBorder( self:getScheme( "bindlistpanel.borderColor" ) )
 end
 
 local function getLastY( self )
@@ -60,7 +60,7 @@ function bindlistpanel:onBindChange( item, key, oldKey, concommand )
 end
 
 function bindlistpanel:readBinds( binds )
-	if ( not love.filesystem.exists( "cfg/binds.lst" ) ) then
+	if ( love.filesystem.getInfo( "cfg/binds.lst" ) == nil ) then
 		return
 	end
 

@@ -13,14 +13,12 @@ local panel = gui.panel
 
 function panel.drawMask()
 	local self = panel._maskedPanel
-	love.graphics.rectangle( "fill", 0, 0, self:getWidth(), self:getHeight() )
+	love.graphics.rectangle( "fill", 0, 0, self:getSize() )
 end
 
 function panel:panel( parent, name )
 	self.x       = 0
 	self.y       = 0
-	self.width   = 0
-	self.height  = 0
 	self.name    = name or ""
 	self:setParent( parent or g_RootPanel )
 	self.visible = true
@@ -61,38 +59,38 @@ function panel:animate( properties, duration, easing, complete )
 	table.insert( self.animations, animation )
 end
 
-function panel:createFramebuffer()
+function panel:createFramebuffer( width, height )
+	if ( width == nil and height == nil ) then
+		width, height = self:getSize()
+	end
+
+	if ( width == 0 or height == 0 ) then
+		width, height = nil, nil
+	end
+
 	if ( self.framebuffer and not self.needsRedraw ) then
 		return
 	end
 
-	local width  = self:getWidth()
-	local height = self:getHeight()
-	if ( width == 0 or height == 0 ) then
-		width  = nil
-		height = nil
-		if ( not self:shouldSuppressFramebufferWarnings() ) then
-			local panel = tostring( self )
-			print( "Attempt to create framebuffer for " .. panel ..
-			       " with a size of 0!" )
-		end
-	end
-
 	if ( self.framebuffer == nil ) then
+		require( "engine.client.canvas" )
 		if ( self:shouldUseFullscreenFramebuffer() ) then
-			self.framebuffer = love.graphics.newCanvas()
+			self.framebuffer = fullscreencanvas()
 		else
-			self.framebuffer = love.graphics.newCanvas( width, height )
+			self.framebuffer = canvas( width, height )
 		end
 	end
 
-	local framebuffer = love.graphics.getCanvas()
-	love.graphics.setCanvas( self.framebuffer )
+	if ( self.framebuffer:shouldAutoRedraw() ) then
+		self.framebuffer:setAutoRedraw( false )
+	end
+
+	self.framebuffer:renderTo( function()
 		love.graphics.clear()
 		self:draw()
-	love.graphics.setCanvas( framebuffer )
+	end )
 
-	self.needsRedraw = nil
+	self.needsRedraw = false
 end
 
 function panel:draw()
@@ -117,15 +115,14 @@ function panel:draw()
 end
 
 function panel:drawBackground( color )
-	local width  = self:getWidth()
-	local height = self:getHeight()
-	love.graphics.setColor( self:getScheme( color ) )
+	local width, height = self:getSize()
+	love.graphics.setColor( color )
 	love.graphics.rectangle( "fill", 0, 0, width, height )
 end
 
-function panel:drawBounds()
+function panel:drawSelection()
 	love.graphics.setColor( color.red )
-	local lineWidth = love.window.toPixels( 1 )
+	local lineWidth = 1
 	love.graphics.setLineWidth( lineWidth )
 	love.graphics.rectangle(
 		"line",
@@ -136,18 +133,29 @@ function panel:drawBounds()
 	)
 end
 
-function panel:drawForeground( color )
-	local width  = self:getWidth()
-	local height = self:getHeight()
-	love.graphics.setColor( self:getScheme( color ) )
-	local lineWidth = love.window.toPixels( 1 )
+function panel:drawName()
+	local font   = scheme.getProperty( "Default", "font" )
+	love.graphics.setFont( font )
+	local text   = self:getName()
+	local width  = font:getWidth( text )
+	local height = font:getHeight()
+	love.graphics.setColor( color.red )
+	love.graphics.rectangle( "fill", 0, 0, width + 6, height + 2 )
+
+	love.graphics.setColor( color.white )
+	love.graphics.print( text, 3, 1 )
+end
+
+function panel:drawBorder( color )
+	love.graphics.setColor( color )
+	local lineWidth = 1
 	love.graphics.setLineWidth( lineWidth )
 	love.graphics.rectangle(
 		"line",
 		lineWidth / 2,
 		lineWidth / 2,
-		width  - lineWidth,
-		height - lineWidth
+		self:getWidth()  - lineWidth,
+		self:getHeight() - lineWidth
 	)
 end
 
@@ -163,9 +171,9 @@ function panel:drawFramebuffer()
 	love.graphics.push()
 		local b = love.graphics.getBlendMode()
 		love.graphics.setBlendMode( "alpha", "premultiplied" )
-		local a = self:getOpacity() * 255
+		local a = self:getOpacity()
 		love.graphics.setColor( a, a, a, a )
-		love.graphics.draw( self.framebuffer )
+		self.framebuffer:draw()
 		love.graphics.setBlendMode( b )
 	love.graphics.pop()
 end
@@ -203,7 +211,7 @@ end
 
 accessor( panel, "children" )
 accessor( panel, "name" )
-accessor( panel, "opacity" )
+gui.accessor( panel, "opacity" )
 accessor( panel, "parent" )
 accessor( panel, "scale" )
 
@@ -211,8 +219,8 @@ function panel:getScheme( property )
 	return scheme.getProperty( self.scheme, property )
 end
 
-accessor( panel, "width" )
-accessor( panel, "height" )
+gui.accessor( panel, "width",  nil, nil, 0 )
+gui.accessor( panel, "height", nil, nil, 0 )
 
 function panel:getSize()
 	return self:getWidth(), self:getHeight()
@@ -231,7 +239,7 @@ function panel:getTopMostChildAtPos( x, y )
 	end
 
 	local sx, sy = self:localToScreen()
-	local w,  h  = self:getWidth(), self:getHeight()
+	local w,  h  = self:getSize()
 	if ( not math.pointinrect( x, y, sx, sy, w, h ) ) then
 		return nil
 	end
@@ -329,7 +337,7 @@ function panel:isTopMostChild()
 	end
 end
 
-accessor( panel, "visible", nil, "is" )
+gui.accessor( panel, "visible", "is" )
 
 function panel:joystickpressed( joystick, button )
 	return cascadeInputToChildren( self, "joystickpressed", joystick, button )
@@ -445,9 +453,8 @@ function panel:preDraw()
 		return
 	end
 
-	local scale  = self:getScale()
-	local width  = self:getWidth()
-	local height = self:getHeight()
+	local scale = self:getScale()
+	local width, height = self:getSize()
 	love.graphics.push()
 	love.graphics.translate( self:getX(), self:getY() )
 	love.graphics.scale( scale )
@@ -457,17 +464,23 @@ function panel:preDraw()
 	)
 end
 
-local gui_draw_bounds = convar( "gui_draw_bounds", "0", nil, nil,
-                                "Draws the bounds of panels for debugging" )
+local gui_element_selection = convar(
+	"gui_element_selection",
+	"0",
+	nil,
+	nil,
+	"Start element selection"
+)
 
 function panel:postDraw()
 	if ( not self:isVisible() ) then
 		return
 	end
 
-	if ( gui_draw_bounds:getBoolean() ) then
+	if ( gui_element_selection:getBoolean() ) then
 		if ( self.mouseover ) then
-			self:drawBounds()
+			self:drawSelection()
+			self:drawName()
 		end
 	end
 
@@ -517,11 +530,11 @@ end
 
 function panel:screenToLocal( x, y )
 	local posX, posY = 0, 0
-	local root       = self
-	while ( root:getParent() ~= nil ) do
-		posX = posX + root:getX()
-		posY = posY + root:getY()
-		root = root:getParent()
+	local panel      = self
+	while ( panel:getParent() ~= nil ) do
+		posX = posX + panel:getX()
+		posY = posY + panel:getY()
+		panel = panel:getParent()
 	end
 
 	x = x - posX
@@ -534,17 +547,8 @@ function panel:setUseFullscreenFramebuffer( useFullscreenFramebuffer )
 	self.useFullscreenFramebuffer = useFullscreenFramebuffer and true or nil
 end
 
-function panel:setSuppressFramebufferWarnings( suppressFramebufferWarnings )
-	self.suppressFramebufferWarnings = suppressFramebufferWarnings
-end
-
 function panel:setNextThink( nextThink )
 	self.nextThink = nextThink
-end
-
-function panel:setOpacity( opacity )
-	self.opacity = opacity
-	self:invalidate()
 end
 
 function panel:setParent( panel )
@@ -577,11 +581,6 @@ function panel:setScheme( name )
 		scheme.load( name )
 	end
 	self.scheme = name
-end
-
-function panel:setVisible( visible )
-	self.visible = visible
-	self:invalidate()
 end
 
 function panel:setWidth( width )
@@ -618,8 +617,7 @@ function panel:setPos( x, y )
 	self:setY( y )
 end
 
-accessor( panel, "useFullscreenFramebuffer",    nil, "should" )
-accessor( panel, "suppressFramebufferWarnings", nil, "should" )
+accessor( panel, "useFullscreenFramebuffer", "should" )
 
 function panel:textinput( text )
 	return cascadeInputToChildren( self, "textinput", text )
@@ -657,11 +655,12 @@ function panel:updateAnimations( dt )
 			animation.startTime = love.timer.getTime()
 		end
 
-		local startTime     = animation.startTime
-		local duration      = animation.duration
-		local remaining     = math.max( 0, startTime + duration - love.timer.getTime() )
-		local percent       = 1 - ( remaining / duration or 0 )
-		animation.pos = percent
+		local startTime = animation.startTime
+		local duration  = animation.duration
+		local remaining = startTime + duration - love.timer.getTime()
+		remaining       = math.max( 0, remaining )
+		local percent   = 1 - ( remaining / duration or 0 )
+		animation.pos   = percent
 
 		for member, tween in pairs( animation.tweens ) do
 			local startValue = tween.startValue

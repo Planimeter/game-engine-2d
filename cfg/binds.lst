@@ -5,10 +5,12 @@ Movement
 "Move back" +back
 "Move left" +left
 "Move right" +right
+"Sprint" +speed
 
 Player
 ======
 
+"Use" +use
 "Game Menu" +gamemenu
 "Zoom In" zoomin
 "Zoom Out" zoomout

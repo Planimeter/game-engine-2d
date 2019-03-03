@@ -4,19 +4,24 @@
 --
 --==========================================================================--
 
-class "gui.hudmoveindicator" ( "gui.panel" )
+class "gui.hudmoveindicator" ( "gui.box" )
 
 local hudmoveindicator = gui.hudmoveindicator
 
 function hudmoveindicator:hudmoveindicator( parent )
 	local name   = "HUD Move Indicator"
-	gui.panel.panel( self, parent, name )
+	gui.box.box( self, parent, name )
 	self.width   = love.graphics.getWidth()
 	self.height  = love.graphics.getHeight()
 	self:setUseFullscreenFramebuffer( true )
 
+	self:setPadding( gui.scale( 96 ) )
+	self:setDisplay( "block" )
+	self:setPosition( "absolute" )
+
 	self.options = gui.optionsitemgroup( self, name .. " Options Item Group" )
-	self.options:setWidth( love.window.toPixels( 216 ) )
+	self.options:setParent( self )
+	self.options:setWidth( 216 )
 	self.optionsActive = false
 
 	self:setScheme( "Default" )
@@ -27,27 +32,28 @@ local function updateSprites( self, sprite, i, v )
 		return
 	end
 
-	table.remove( self.sprites, i )
+	table.remove( self._sprites, i )
 
-	if ( #self.sprites == 0 ) then
-		self.sprites = nil
+	if ( #self._sprites == 0 ) then
+		self._sprites = nil
 	end
 end
 
 local function onAnimationEnd( self )
 	return function( sprite )
-		for i, v in ipairs( self.sprites ) do
+		for i, v in ipairs( self._sprites ) do
 			updateSprites( self, sprite, i, v )
 		end
 	end
 end
 
 function hudmoveindicator:createMoveIndicator( worldIndex, x, y )
-	if ( self.sprites == nil ) then
-		self.sprites = {}
+	if ( self._sprites == nil ) then
+		self._sprites = {}
 	end
 
 	local sprite = sprite( "images.moveindicator" )
+	sprite:setFilter( "nearest", "nearest" )
 	sprite.onAnimationEnd = onAnimationEnd( self )
 
 	local indicator = {
@@ -57,7 +63,7 @@ function hudmoveindicator:createMoveIndicator( worldIndex, x, y )
 		y          = y
 	}
 	indicator.sprite:setAnimation( "click" )
-	table.insert( self.sprites, indicator )
+	table.insert( self._sprites, indicator )
 end
 
 local r_draw_position = convar( "r_draw_position", "0", nil, nil,
@@ -80,15 +86,33 @@ function hudmoveindicator:draw()
 	gui.panel.draw( self )
 end
 
-local function drawPosition( self, x, y, drawLabel )
-	if ( drawLabel == nil ) then
-		drawLabel = true
-	end
+local function drawLabel( self, x, y )
+	love.graphics.push()
+	love.graphics.scale( 1 / camera.getZoom() )
+
+	local font = self:getScheme( "fontSmall" )
+	love.graphics.setFont( font )
+
+	local position = vector( x, y ) + vector( 0, game.tileSize )
+	position = tostring( position )
+	position = string.gsub( position, "vector", "position" )
+
+	local size = game.tileSize
+	y = ( size + 1 ) * camera.getZoom()
+
+	love.graphics.print( position, 0, y )
+	love.graphics.pop()
+end
+
+local function drawPosition( self, x, y, shouldDrawLabel )
+	shouldDrawLabel = shouldDrawLabel or true
 
 	return function()
 		love.graphics.setColor( color.red )
+
 		local lineWidth = 1
 		love.graphics.setLineWidth( lineWidth )
+
 		local size = game.tileSize
 		love.graphics.rectangle(
 			"line",
@@ -97,19 +121,10 @@ local function drawPosition( self, x, y, drawLabel )
 			size - lineWidth,
 			size - lineWidth
 		)
-		if ( not drawLabel ) then
-			return
+
+		if ( shouldDrawLabel ) then
+			drawLabel( self, x, y )
 		end
-		love.graphics.push()
-			love.graphics.scale( 1 / camera.getZoom() )
-			local font = self:getScheme( "fontSmall" )
-			love.graphics.setFont( font )
-			local position = vector( x, y ) + vector( 0, game.tileSize )
-			position = tostring( position )
-			position = string.gsub( position, "vector", "position" )
-			y = ( size + 1 ) * camera.getZoom()
-			love.graphics.print( position, 0, y )
-		love.graphics.pop()
 	end
 end
 
@@ -117,19 +132,20 @@ function hudmoveindicator:drawPosition()
 	local worldIndex = localplayer:getWorldIndex()
 	local x, y = love.mouse.getPosition()
 	x, y = camera.screenToWorld( x, y )
+
 	local rx, ry = 0, 0
 	if ( r_draw_position:getNumber() == 1 ) then
-		rx, ry = region.snapToGrid( x, y )
+		rx, ry = map.snapToGrid( x, y )
 	elseif ( r_draw_position:getNumber() == 2 ) then
-		rx, ry = region.roundToGrid( x, y )
+		rx, ry = map.roundToGrid( x, y )
 	end
 
-	local drawLabel = r_draw_position:getNumber() == 1
+	local shouldDrawLabel = r_draw_position:getNumber() == 1
 	camera.drawToWorld(
 		worldIndex,
 		rx,
 		ry,
-		drawPosition( self, rx, ry, drawLabel )
+		drawPosition( self, rx, ry, shouldDrawLabel )
 	)
 
 	if ( r_draw_position:getNumber() == 2 ) then
@@ -138,18 +154,29 @@ function hudmoveindicator:drawPosition()
 end
 
 function hudmoveindicator:drawEntityName()
-	if ( self.entity == nil ) then
+	if ( self._entity == nil ) then
 		return
 	end
 
 	local property = "hudmoveindicator.textColor"
 	love.graphics.setColor( self:getScheme( property ) )
+
 	local font = self:getScheme( "entityFont" )
 	love.graphics.setFont( font )
-	local name = self.entity:getName()
+
+	-- "Use" mode
+	local text = self._entity:getName() or "unnamed"
+	local item = g_Inventory:getSelectedItem()
+	if ( item ) then
+		item = item:getItemClass()
+
+		local name = item.data.name
+		text = "Use " .. name .. " with " .. text
+	end
+
 	local margin = gui.scale( 96 )
 	love.graphics.print(
-		name or "unnamed",   -- text
+		text,   -- text
 		margin, -- x
 		margin, -- y
 		0,      -- r
@@ -164,12 +191,12 @@ function hudmoveindicator:drawEntityName()
 end
 
 local function drawLevel( self, x, y )
-	local l = self.entity:getLevel()
+	local l = self._entity:getLevel()
 	love.graphics.print( "Level " .. l, x, y )
 end
 
 local function drawOptions( self, x, y )
-	local options = self.entity:getOptions()
+	local options = self._entity:getOptions()
 	local n = options and table.len( options ) or 0
 	if ( n == 0 ) then
 		return
@@ -180,36 +207,37 @@ local function drawOptions( self, x, y )
 end
 
 function hudmoveindicator:drawEntityInfo()
-	if ( self.entity == nil ) then
+	if ( self._entity == nil ) then
 		return
 	end
 
 	local property = "hudmoveindicator.smallTextColor"
 	love.graphics.setColor( self:getScheme( property ) )
+
 	local font = self:getScheme( "entityFont" )
 	local margin = gui.scale( 96 )
 	local lineHeight = font:getHeight()
 	font = self:getScheme( "font" )
 	love.graphics.setFont( font )
 
-	if ( self.entity.getLevel ) then
+	if ( self._entity.getLevel ) then
 		drawLevel( self, margin, margin + lineHeight )
 		lineHeight = lineHeight + font:getHeight()
 	end
 
-	if ( self.entity.getOptions ) then
+	if ( self._entity.getOptions ) then
 		drawOptions( self, margin, margin + lineHeight )
 	end
 end
 
 function hudmoveindicator:drawMoveIndicators()
-	if ( self.sprites == nil ) then
+	if ( self._sprites == nil ) then
 		return
 	end
 
 	local property = "hudmoveindicator.indicatorColor"
 	local color    = self:getScheme( property )
-	for _, indicator in ipairs( self.sprites ) do
+	for _, indicator in ipairs( self._sprites ) do
 		local width      = indicator.sprite:getWidth()
 		local height     = indicator.sprite:getHeight()
 		local worldIndex = indicator.worldIndex
@@ -231,28 +259,33 @@ function hudmoveindicator:invalidateLayout()
 	gui.panel.invalidateLayout( self )
 end
 
-accessor( hudmoveindicator, "active", "optionsActive", "is" )
+accessor( hudmoveindicator, "active", "is", "optionsActive" )
 
 local t = {}
 local pointinrect = math.pointinrect
 
 local getEntitiesAtMousePos = function( px, py )
 	table.clear( t )
+
 	local entities = entity.getAll()
-	for _, entity in ipairs( entities ) do
-		if ( not typeof( entity, "trigger" ) ) then
-			local x, y   = camera.worldToScreen( entity:getDrawPosition() )
-			local sprite = entity:getSprite()
-			local scale  = camera.getZoom()
-			if ( sprite ) then
-				local width  = sprite:getWidth()  * scale
-				local height = sprite:getHeight() * scale
-				if ( pointinrect( px, py, x, y, width, height ) ) then
-					table.insert( t, entity )
-				end
-			end
+	table.foreachi( entities, function( _, entity )
+		if ( typeof( entity, "trigger" ) ) then
+			return
 		end
-	end
+
+		local x, y   = camera.worldToScreen( entity:getDrawPosition() )
+		local sprite = entity:getSprite()
+		local scale  = camera.getZoom()
+		if ( sprite == nil ) then
+			return
+		end
+
+		local width  = sprite:getWidth()  * scale
+		local height = sprite:getHeight() * scale
+		if ( pointinrect( px, py, x, y, width, height ) ) then
+			table.insert( t, entity )
+		end
+	end )
 	return t
 end
 
@@ -261,7 +294,8 @@ local function moveTo( self, x, y )
 	local worldIndex = player:getWorldIndex()
 	local position   = vector( x, y )
 	self:createMoveIndicator( worldIndex, position.x, position.y )
-	position.x, position.y = region.snapToGrid( position.x, position.y )
+
+	position.x, position.y = map.snapToGrid( position.x, position.y )
 	player:moveTo( position + vector( 0, game.tileSize ) )
 end
 
@@ -283,17 +317,19 @@ local function onLeftClick( self, x, y )
 end
 
 local function getOptionsFromEntities( x, y )
-	local entities = getEntitiesAtMousePos( x, y )
 	local t = {}
-	for _, entity in ipairs( entities ) do
+	local entities = getEntitiesAtMousePos( x, y )
+	table.foreachi( entities, function( _, entity )
 		local options = entity.getOptions and entity:getOptions() or nil
-		if ( options ) then
-			table.insert( t, {
-				entity  = entity,
-				options = options
-			} )
+		if ( options == nil ) then
+			return
 		end
-	end
+
+		table.insert( t, {
+			entity  = entity,
+			options = options
+		} )
+	end )
 	return t
 end
 
@@ -301,6 +337,10 @@ local function noop()
 end
 
 local function onRightClick( self, x, y )
+	if ( not self.mouseover ) then
+		return
+	end
+
 	local options = self.options
 	options:removeChildren()
 	options:setPos( x, y )
@@ -364,9 +404,9 @@ end
 function hudmoveindicator:update( dt )
 	local mx, my = love.mouse.getPosition()
 	local entity = getEntitiesAtMousePos( mx, my )[ 1 ]
-	self.entity  = entity
+	self._entity  = entity
 
-	local sprites = self.sprites
+	local sprites = self._sprites
 	if ( sprites ) then
 		for _, indicator in ipairs( sprites ) do
 			indicator.sprite:update( dt )

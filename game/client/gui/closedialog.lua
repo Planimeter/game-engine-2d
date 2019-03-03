@@ -10,34 +10,30 @@ local closedialog = gui.closedialog
 
 function closedialog:closedialog( parent, name )
 	gui.frame.frame( self, parent, "Close Dialog", "Quit Game" )
-	self.width  = love.window.toPixels( 546 )
-	self.height = love.window.toPixels( 203 )
+	self.width  = 546
+	self.height = 203
 
 	self:doModal()
 
+	local text  = "Are you sure you want to quit the game?"
 	local label = gui.label(
 		self,
 		"Close Dialog Label",
-		"Are you sure you want to quit the game?"
+		text
 	)
-	label:setPos( love.window.toPixels( 36 ), love.window.toPixels( 86 ) )
-	label:setWidth( love.window.toPixels( 252 ) )
+	label:setPos( 36, 86 )
+	local font = self:getScheme( "font" )
+	label:setWidth( font:getWidth( text ) )
 
 	local buttonYes = gui.button( self, "Close Dialog Yes Button", "Yes" )
-	buttonYes:setPos(
-		love.window.toPixels( 36 ),
-		love.window.toPixels( 86 ) + label:getHeight() + love.window.toPixels( 18 )
-	)
+	buttonYes:setPos( 36, 86 + label:getHeight() + 18 )
 	buttonYes.onClick = function()
 		love._shouldQuit = true
 		love.quit()
 	end
 
 	local buttonNo = gui.button( self, "Close Dialog No Button", "No" )
-	buttonNo:setPos(
-		love.window.toPixels( 288 ),
-		love.window.toPixels( 86 ) + label:getHeight() + love.window.toPixels( 18 )
-	)
+	buttonNo:setPos( 288, 86 + label:getHeight() + 18 )
 	buttonNo.onClick = function()
 		self:close()
 	end

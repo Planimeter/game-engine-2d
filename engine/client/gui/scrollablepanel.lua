@@ -20,7 +20,7 @@ function scrollablepanel:scrollablepanel( parent, name )
 end
 
 accessor( scrollablepanel, "innerHeight" )
-accessor( scrollablepanel, "innerPanel", "panel" )
+accessor( scrollablepanel, "innerPanel", nil, "panel" )
 accessor( scrollablepanel, "scrollbar" )
 
 function scrollablepanel:invalidateLayout()

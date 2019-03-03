@@ -18,8 +18,9 @@ function load( arg )
 	local addons = love.filesystem.getDirectoryItems( "addons" )
 	for i = #addons, -1, 1 do
 		local v = addons[ i ]
-		if ( string.fileextension( v ) ~= "zip" or
-		     not love.filesystem.isDirectory( v ) ) then
+		local info = love.filesystem.getInfo( v )
+		local isDirectory = info and info.type == "directory" or false
+		if ( string.fileextension( v ) ~= "zip" or not isDirectory ) then
 			table.remove( addons, i )
 		end
 	end

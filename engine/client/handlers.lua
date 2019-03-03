@@ -19,8 +19,7 @@ local _G      = _G
 module( "engine.client" )
 
 function load( arg )
-	love.graphics.setBackgroundColor( 31, 35, 36, 255 )
-	love.graphics.setDefaultFilter( "nearest", "nearest" )
+	love.graphics.setBackgroundColor( 31 / 255, 35 / 255, 36 / 255, 1 )
 	gui.load()
 
 	local c = config.getConfig()
@@ -145,6 +144,10 @@ function quit()
 end
 
 function resize( w, h )
+	if ( _G.canvas ) then
+		_G.canvas.invalidateCanvases()
+	end
+
 	gui.invalidateTree()
 end
 
@@ -153,7 +156,7 @@ function update( dt )
 	local _SERVER = _SERVER or _G._SERVER
 
 	if ( _CLIENT and not _SERVER ) then
-		_G.region.update( dt )
+		_G.map.update( dt )
 	end
 
 	local game = _G.game and _G.game.client or nil
@@ -167,7 +170,7 @@ function update( dt )
 	end
 end
 
-local r_focus = convar( "r_focus", "0", nil, nil,
+local r_focus = convar( "r_focus", "1", nil, nil,
                         "Draw only when the engine has focus" )
 
 function draw()
@@ -177,7 +180,8 @@ function draw()
 
 	if ( isInGame() ) then
 		if ( gui._viewportFramebuffer == nil ) then
-			gui._viewportFramebuffer = love.graphics.newCanvas()
+			require( "engine.client.canvas" )
+			gui._viewportFramebuffer = _G.fullscreencanvas()
 		end
 
 		gui._viewportFramebuffer:renderTo( function()
@@ -186,7 +190,7 @@ function draw()
 		end )
 
 		love.graphics.setColor( _G.color.white )
-		love.graphics.draw( gui._viewportFramebuffer )
+		gui._viewportFramebuffer:draw()
 	end
 
 	gui.draw()

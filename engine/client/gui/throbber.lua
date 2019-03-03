@@ -10,7 +10,7 @@ local throbber = gui.throbber
 
 function throbber:throbber( parent, name, image )
 	gui.imagepanel.imagepanel( self, parent, name, image or "images/gui/throbber.png" )
-	self:setSize( love.window.toPixels( 16 ), love.window.toPixels( 16 ) )
+	self:setSize( 16, 16 )
 	self:setOpacity( 0 )
 end
 
@@ -52,7 +52,7 @@ function throbber:disable()
 	self.enabled = false
 end
 
-accessor( throbber, "enabled", nil, "is" )
+accessor( throbber, "enabled", "is" )
 
 function throbber:update( dt )
 	local opacity = self:getOpacity()

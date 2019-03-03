@@ -4,8 +4,12 @@
 --
 --==========================================================================--
 
-entities.requireEntity( "entity" )
+entities.require( "entity" )
 require( "game" )
+
+if ( _CLIENT ) then
+	require( "engine.client.chat" )
+end
 
 class "prop_ore_rock" ( "entity" )
 
@@ -15,31 +19,30 @@ function prop_ore_rock:prop_ore_rock()
 	self:setNetworkVar( "name", "Ore Rock" )
 
 	if ( _CLIENT ) then
-		local sprite = love.graphics.newImage( "images/entities/prop_ore_rock.png" )
+		local filename = "images/entities/prop_ore_rock.png"
+		local sprite   = love.graphics.newImage( filename )
+		sprite:setFilter( "nearest", "nearest" )
 		self:setSprite( sprite )
 	end
+
+	self:setDrawShadow( false )
 end
 
 if ( _CLIENT ) then
 	function prop_ore_rock:getOptions()
 		return {
-			{
-				name  = "Pick",
-				value = function() self:pick() end
-			},
-			{
-				name  = "Examine",
-				value = self.examine
-			}
+			{ name = "Pick",    value = function() self:pick()    end },
+			{ name = "Examine", value = function() self:examine() end }
 		}
 	end
-end
 
-function prop_ore_rock:pick()
-end
+	function prop_ore_rock:pick()
+		chat.addText( "Nothing interesting happens." )
+	end
 
-function prop_ore_rock:examine()
-	chat.addText( "This rock contains ore." )
+	function prop_ore_rock:examine()
+		chat.addText( "This rock contains ore." )
+	end
 end
 
 function prop_ore_rock:spawn()

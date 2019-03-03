@@ -10,79 +10,48 @@ local dropdownlistitem = gui.dropdownlistitem
 
 function dropdownlistitem:dropdownlistitem( name, text )
 	gui.radiobutton.radiobutton( self, nil, name, text )
-	self.width  = love.window.toPixels( 216 )
-	self.height = love.window.toPixels( 46 )
-	self.text   = text or "Drop-Down List Item"
+	self:setPadding( 15, 18, 14 )
+	self:setDisplay( "block" )
+	self:setPosition( "static" )
+	self.width  = 214
+	self.height = nil
+	self.text   = gui.text( self, name .. " Text Node", text or "Drop-Down List Item" )
 end
 
 function dropdownlistitem:draw()
 	self:drawBackground()
 	self:drawText()
 
-	gui.panel.draw( self )
+	gui.box.draw( self )
 end
 
 function dropdownlistitem:drawBackground()
-	local color  = "dropdownlistitem.backgroundColor"
+	local color  = self:getScheme( "dropdownlistitem.backgroundColor" )
 	local width  = self:getWidth()
 	local height = self:getHeight()
 
 	if ( self:isSelected() ) then
-		color = "dropdownlistitem.selected.backgroundColor"
-	elseif ( self.mouseover ) then
-		color = "dropdownlistitem.mouseover.backgroundColor"
+		color = self:getScheme( "dropdownlistitem.selected.backgroundColor" )
+	elseif ( ( self.mouseover or self:isChildMousedOver() ) ) then
+		color = self:getScheme( "dropdownlistitem.mouseover.backgroundColor" )
 	end
 
-	love.graphics.setColor( self:getScheme( color ) )
-
-	local selected = self.mouseover or self:isSelected()
-	local offset   = selected and love.window.toPixels( 1 ) or 0
-	love.graphics.rectangle( "fill", offset, 0, width - 2 * offset, height )
-
-	if ( selected ) then
-		color = "dropdownlistitem.backgroundColor"
-		self:drawBorders( color )
-	end
-
-	color = "dropdownlistitem.outlineColor"
-	self:drawBorders( color )
-end
-
-function dropdownlistitem:drawBorders( color )
-	local lineWidth = love.window.toPixels( 1 )
-	local width     = self:getWidth()
-	local height    = self:getHeight()
-	love.graphics.setColor( self:getScheme( color ) )
-	love.graphics.setLineStyle( "rough" )
-	love.graphics.setLineWidth( lineWidth )
-	love.graphics.line(
-		lineWidth / 2,      0,        -- Top-left
-		lineWidth / 2,      height    -- Bottom-left
-	)
-	love.graphics.line(
-		width - lineWidth / 2, 0,     -- Top-right
-		width - lineWidth / 2, height -- Bottom-right
-	)
+	love.graphics.setColor( color )
+	love.graphics.rectangle( "fill", 0, 0, width, height )
 end
 
 function dropdownlistitem:drawText()
-	local color = "button.textColor"
+	local color = self:getScheme( "button.textColor" )
 
 	if ( self:isDisabled() ) then
-		color = "button.disabled.textColor"
+		color = self:getScheme( "button.disabled.textColor" )
 	elseif ( self:isSelected() ) then
-		color = "dropdownlistitem.selected.textColor"
-	elseif ( self.mouseover ) then
-		color = "dropdownlistitem.mouseover.textColor"
+		color = self:getScheme( "dropdownlistitem.selected.textColor" )
+	elseif ( ( self.mouseover or self:isChildMousedOver() ) ) then
+		color = self:getScheme( "dropdownlistitem.mouseover.textColor" )
 	end
 
-	love.graphics.setColor( self:getScheme( color ) )
-
-	local font = self:getScheme( "font" )
-	love.graphics.setFont( font )
-	local x = math.round( love.window.toPixels( 18 ) )
-	local y = math.round( self:getHeight() / 2 - font:getHeight() / 2 )
-	love.graphics.print( self:getText(), x, y )
+	self.text:setColor( color )
 end
 
 local function getParentFrame( self )
@@ -96,7 +65,7 @@ local function getParentFrame( self )
 end
 
 function dropdownlistitem:mousepressed( x, y, button, istouch )
-	if ( self.mouseover and button == 1 ) then
+	if ( ( self.mouseover or self:isChildMousedOver() ) and button == 1 ) then
 		self.mousedown = true
 	end
 

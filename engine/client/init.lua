@@ -29,13 +29,15 @@ function connect( address )
 	disconnect()
 
 	require( "engine.client.network" )
-	engine.client.network.connect( address )
+	local network = engine.client.network
+	network.connect( address )
 	_connecting = true
 end
 
 function connectToListenServer()
 	require( "engine.client.network" )
-	engine.client.network.connectToListenServer()
+	local network = engine.client.network
+	network.connectToListenServer()
 	_connecting = true
 end
 
@@ -55,7 +57,8 @@ function disconnect()
 		return
 	end
 
-	engine.client.network.disconnect()
+	local network = engine.client.network
+	network.disconnect()
 end
 
 concommand( "disconnect", "Disconnects from the server", function()
@@ -65,7 +68,7 @@ end )
 function download( filename )
 	local payload = payload( "download" )
 	payload:set( "filename", filename )
-	engine.client.network.sendToServer( payload )
+	payload:sendToServer()
 end
 
 function initializeServer()
@@ -80,7 +83,8 @@ function initializeServer()
 	local status, err = pcall( require, "engine.server" )
 	if ( status == true ) then
 		if ( engine.server.load( args ) ) then
-			engine.server.network.onNetworkInitializedServer()
+			local network = engine.server.network
+			network.onNetworkInitializedServer()
 		else
 			print( "Failed to initialize server!" )
 			_connecting = false
@@ -123,7 +127,7 @@ function onConnect( event )
 end
 
 function onReceive( event )
-	local payload = _G.payload.initializeFromData( event.data )
+	local payload = payload.initializeFromData( event.data )
 	payload:setPeer( event.peer )
 	payload:dispatchToHandler()
 end
@@ -146,10 +150,11 @@ function onDisconnect( event )
 		end
 
 		-- Shutdown game
-		if ( _G.game and _G.game.client ) then
+		local game = _G.game and _G.game.client or nil
+		if ( game ) then
 			gui._viewportFramebuffer = nil
-			gui._blurFramebuffer = nil
-			_G.game.client.shutdown()
+			gui._translucencyFramebuffer = nil
+			game.shutdown()
 			unrequire( "game.client" )
 			_G.game.client = nil
 		end
@@ -161,9 +166,9 @@ function onDisconnect( event )
 			engine.server = nil
 		end
 
-		-- Shutdown regions
-		if ( _G.region ) then
-			_G.region.shutdown()
+		-- Shutdown maps
+		if ( _G.map ) then
+			_G.map.shutdown()
 		end
 
 		_disconnecting = false
@@ -190,5 +195,5 @@ function sendClientInfo()
 	local payload = payload( "clientInfo" )
 	payload:set( "graphicsWidth",  love.graphics.getWidth() )
 	payload:set( "graphicsHeight", love.graphics.getHeight() )
-	engine.client.network.sendToServer( payload )
+	payload:sendToServer()
 end

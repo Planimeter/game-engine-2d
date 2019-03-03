@@ -4,7 +4,7 @@
 --
 --==========================================================================--
 
-entities.requireEntity( "entity" )
+entities.require( "entity" )
 
 class "character" ( "entity" )
 
@@ -98,14 +98,18 @@ function character:moveTo( position, callback )
 		return
 	end
 
+	if ( self._nextPosition ) then
+		return false
+	end
+
 	local from   = self:getPosition()
 	local to     = position
 	local fromX  = from.x
 	local fromY  = from.y
 	local toX    = to.x
 	local toY    = to.y
-	fromX, fromY = region.roundToGrid( fromX, fromY )
-	toX, toY     = region.roundToGrid( toX, toY )
+	fromX, fromY = map.roundToGrid( fromX, fromY )
+	toX, toY     = map.roundToGrid( toX, toY )
 	if ( fromX == toX and fromY == toY ) then
 		self._moveCallback = callback
 		self:onFinishMove()
@@ -143,13 +147,17 @@ function character:onTick( dt )
 	local body = self:getBody()
 	if ( body == nil or body:isDestroyed() ) then
 		self._lastDirection = nil
+		self._lastVelocity = nil
 		return
 	end
 
-	-- Remember our last direction for determining "idle" animation
-	local currentDirection = vector( body:getLinearVelocity() )
-	currentDirection:normalizeInPlace()
-	self._lastDirection = currentDirection
+	-- Remember our last velocity for determining "idle" animation
+	local currentVelocity = vector( body:getLinearVelocity() )
+	local moving = currentVelocity:lengthSqr() ~= 0
+	if ( moving ) then
+		self._lastDirection = currentVelocity:normalize()
+	end
+	self._lastVelocity = currentVelocity
 end
 
 function character:removeTasks()
@@ -177,17 +185,27 @@ function character:updateAnimation()
 	end
 
 	-- Set "idle" animation if we haven't moved for two frames
-	local direction = self._lastDirection or vector.origin
-	local currentDirection = vector( body:getLinearVelocity() )
-	currentDirection:normalizeInPlace()
-	if ( direction == vector.origin and
-	     currentDirection == vector.origin ) then
-		self:setAnimation( "idle" )
+	local lastVelocity = self._lastVelocity or vector.origin
+	local currentVelocity = vector( body:getLinearVelocity() )
+	if ( lastVelocity == vector.origin and
+	     currentVelocity == vector.origin ) then
+		-- Find our nearest animation direction then set it
+		local direction = self._lastDirection or vector( 0, -1 )
+		local angle = math.nearestmult( math.deg( direction:toAngle() ), 90 )
+		if ( angle == -90 ) then
+			self:setAnimation( "idlenorth" )
+		elseif ( angle == 0 ) then
+			self:setAnimation( "idleeast" )
+		elseif ( angle == 90 ) then
+			self:setAnimation( "idlesouth" )
+		elseif ( angle == 180 or angle == -180 ) then
+			self:setAnimation( "idlewest" )
+		end
 	end
 
 	-- Find our nearest animation direction then set it
-	local angle = math.nearestmult( math.deg( direction:toAngle() ), 45 )
-	local moving = direction:lengthSqr() ~= 0
+	local angle = math.nearestmult( math.deg( currentVelocity:toAngle() ), 45 )
+	local moving = currentVelocity:lengthSqr() ~= 0
 	if ( moving ) then
 		if ( angle == -90 ) then
 			self:setAnimation( "walknorth" )

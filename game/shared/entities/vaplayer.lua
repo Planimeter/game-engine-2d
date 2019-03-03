@@ -4,7 +4,11 @@
 --
 --==========================================================================--
 
-entities.requireEntity( "player" )
+entities.require( "player" )
+
+if ( _CLIENT ) then
+	require( "engine.client.chat" )
+end
 
 class "vaplayer" ( "player" )
 
@@ -33,24 +37,23 @@ if ( _CLIENT ) then
 		end
 
 		return {
-			{
-				name  = "Trade",
-				value = function() self:trade() end
-			},
-			{
-				name  = "Examine",
-				value = self.examine
-			}
+			{ name = "Trade",   value = function() self:trade()   end },
+			{ name = "Examine", value = function() self:examine() end }
 		}
 	end
-end
 
-function vaplayer:trade()
-	chat.addText( "Nothing interesting happens." )
-end
+	function vaplayer:trade( character )
+		local payload = payload( "playerTradeRequest" )
+		payload:set( "player", character )
+		payload:set( "request", "initiate" )
+		payload:sendToServer()
 
-function vaplayer:examine()
-	chat.addText( "Filthy casual." )
+		chat.addText( "Nothing interesting happens." )
+	end
+
+	function vaplayer:examine()
+		chat.addText( "Filthy casual." )
+	end
 end
 
 function vaplayer:vaplayer()
@@ -111,16 +114,37 @@ function vaplayer:getLevel( stat )
 	return math.floor( combat / 3 )
 end
 
-function vaplayer:give( item, count )
+function vaplayer:giveItem( item, count )
 	count = count or 1
 	self.inventory[ item ] = ( self.inventory[ item ] or 0 ) + count
 	game.call( "shared", "onPlayerGotItem", self, item, count )
+
+	if ( _SERVER ) then
+		local payload = payload( "playerGotItem" )
+		payload:set( "item", item )
+		payload:set( "count", count )
+		self:send( payload )
+	end
+end
+
+if ( _CLIENT ) then
+	local function onPlayerGotItem( payload )
+		if ( _SERVER ) then
+			return
+		end
+
+		local item  = payload:get( "item" )
+		local count = payload:get( "count" )
+		localplayer:giveItem( item, count )
+	end
+
+	payload.setHandler( onPlayerGotItem, "playerGotItem" )
 end
 
 function vaplayer:hasInventorySpace()
 	local total = 0
 	for item, count in pairs( self:getInventory() ) do
-		local itemdata = _G.item.getData( item )
+		local itemdata = _G.item.getClass( item ).data
 		if ( not itemdata.stackable ) then
 			total = total + count
 		else
@@ -128,6 +152,45 @@ function vaplayer:hasInventorySpace()
 		end
 	end
 	return total < 28
+end
+
+function vaplayer:hasItem( item )
+	return ( self.inventory[ item ] or 0 ) > 0
+end
+
+function vaplayer:removeItem( item, count )
+	count = count or 1
+
+	if ( not self:hasItem( item ) ) then
+		return
+	end
+
+	self.inventory[ item ] = ( self.inventory[ item ] or 0 ) - count
+
+	if ( self.inventory[ item ] <= 0 ) then
+		self.inventory[ item ] = nil
+	end
+
+	game.call( "shared", "onPlayerRemovedItem", self, item, count )
+
+	if ( _SERVER ) then
+		local payload = payload( "playerRemovedItem" )
+		payload:set( "item", item )
+		self:send( payload )
+	end
+end
+
+if ( _CLIENT ) then
+	local function onPlayerRemovedItem( payload )
+		if ( _SERVER ) then
+			return
+		end
+
+		local item = payload:get( "item" )
+		localplayer:removeItem( item )
+	end
+
+	payload.setHandler( onPlayerRemovedItem, "playerRemovedItem" )
 end
 
 local function moveTo( position )
@@ -147,7 +210,7 @@ local function pickup( item )
 
 			local classname = item:getClassname()
 			item:remove()
-			vaplayer:give( classname )
+			vaplayer:giveItem( classname )
 		end
 
 		next()
@@ -155,6 +218,10 @@ local function pickup( item )
 end
 
 function vaplayer:pickup( item )
+	if ( item == nil ) then
+		return
+	end
+
 	self:removeTasks()
 
 	local position = item:getPosition()
@@ -164,7 +231,7 @@ function vaplayer:pickup( item )
 	if ( _CLIENT and not _SERVER ) then
 		local payload = payload( "playerPickup" )
 		payload:set( "item", item )
-		engine.client.network.sendToServer( payload )
+		payload:sendToServer()
 	end
 end
 
@@ -176,6 +243,74 @@ if ( _SERVER ) then
 	end
 
 	payload.setHandler( onPlayerPickup, "playerPickup" )
+end
+
+function vaplayer:drop( item )
+	if ( not self:hasItem( item ) ) then
+		return
+	end
+
+	self:removeTasks()
+
+	if ( _SERVER ) then
+		self:removeItem( item )
+	end
+
+	if ( _CLIENT and not _SERVER ) then
+		local payload = payload( "playerDrop" )
+		payload:set( "item", item )
+		payload:sendToServer()
+	end
+
+	if ( _SERVER ) then
+		local entity = _G.entity.create( item )
+		if ( entity ) then
+			local position = self:getPosition()
+			entity:setPosition( position )
+			entity:spawn()
+		end
+	end
+end
+
+if ( _SERVER ) then
+	local function onPlayerDrop( payload )
+		local player = payload:getPlayer()
+		local item   = payload:get( "item" )
+		player:drop( item )
+	end
+
+	payload.setHandler( onPlayerDrop, "playerDrop" )
+end
+
+function vaplayer:useItem( item, value )
+	if ( not self:hasItem( item ) ) then
+		return
+	end
+
+	if ( _CLIENT and not _SERVER ) then
+		local payload = payload( "playerUseItem" )
+		payload:set( "item",  item )
+		payload:set( "value", nil )
+		payload:sendToServer()
+	end
+
+	-- Use item
+	local item     = _G.item.getClass( item )
+	local itemSelf = item
+	local useItem  = item.__index( itemSelf, "useItem" )
+
+	-- item:useItem( self )
+	useItem( itemSelf, self, value )
+end
+
+if ( _SERVER ) then
+	local function onPlayerUseItem( payload )
+		local player = payload:getPlayer()
+		local item   = payload:get( "item" )
+		player:useItem( item )
+	end
+
+	payload.setHandler( onPlayerUseItem, "playerUseItem" )
 end
 
 entities.linkToClassname( vaplayer, "vaplayer" )

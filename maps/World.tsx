@@ -3,32 +3,32 @@
  <image source="../images/tilesets/world.png" width="256" height="256"/>
  <tile id="8">
   <properties>
-   <property name="walkable" value="false"/>
+   <property name="walkable" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="9">
   <properties>
-   <property name="walkable" value="false"/>
+   <property name="walkable" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="10">
   <properties>
-   <property name="walkable" value="false"/>
+   <property name="walkable" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="11">
   <properties>
-   <property name="walkable" value="false"/>
+   <property name="walkable" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="25">
   <properties>
-   <property name="walkable" value="false"/>
+   <property name="walkable" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="26">
   <properties>
-   <property name="walkable" value="false"/>
+   <property name="walkable" type="bool" value="false"/>
   </properties>
  </tile>
 </tileset>

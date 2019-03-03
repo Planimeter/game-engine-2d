@@ -9,16 +9,21 @@ local _G = _G
 module( "game.server" )
 
 function getPlayerClass()
-	_G.entities.requireEntity( "vaplayer" )
-	local classmap = _G.entities.getClassMap()
-	local vaplayer = classmap[ "vaplayer" ]
-	return vaplayer
+	-- Vertex Adventure's player class is `vaplayer`. In a class-based
+	-- multiplayer game, you might want to change this.
+	local entities = _G.entities
+	entities.require( "vaplayer" )
+
+	-- Return the class
+	local classmap = entities.getClassMap()
+	return classmap[ "vaplayer" ]
 end
 
 function getSpawnPoint( player )
-	local class       = "prop_worldgate_spawn"
-	local region      = player:getRegion()
-	local spawnPoints = _G.entity.findByClassname( class, region )
+	-- Find the first `prop_worldgate_spawn` in the player's current map
+	local map         = player:getMap()
+	local entity      = _G.entity
+	local spawnPoints = entity.findByClassname( "prop_worldgate_spawn", map )
 	return spawnPoints and spawnPoints[ 1 ] or nil
 end
 
@@ -30,6 +35,25 @@ end
 
 function onPlayerSay( player, message )
 	return true
+end
+
+function onPlayerUse( player, entity, value )
+	return true
+end
+
+if ( _VADVENTURE ) then
+	function onNPCTalkTo( npc, player, dialogue )
+		-- Check if the player is too far away
+		local pos1     = npc:getPosition()
+		local pos2     = player:getPosition()
+		local dist     = pos1 - pos2
+		local tileSize = _G.game.tileSize
+		if ( dist:lengthSqr() > tileSize * tileSize ) then
+			player:sendText( "You can't reach that." )
+			return false
+		end
+		return true
+	end
 end
 
 function onTick( timestep )

@@ -27,16 +27,16 @@ function scheme.getProperty( name, property )
 		       "(a " .. type .. " value)", 3 )
 	end
 
-	for key in string.gmatch( property .. ".", "(.-)%." ) do
+	for key in string.gmatch( property .. ".", "(%w-)%." ) do
 		if ( value and value[ key ] ) then
 			value = value[ key ]
-			properties[ name ][ property ] = value
 		else
 			error( "attempt to index property '" .. property .. "' " ..
 			       "(a nil value)", 3 )
 		end
 	end
 
+	properties[ name ][ property ] = value
 	return value
 end
 

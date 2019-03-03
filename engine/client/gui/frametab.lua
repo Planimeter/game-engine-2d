@@ -10,11 +10,12 @@ local frametab = gui.frametab
 
 function frametab:frametab( parent, name, text )
 	gui.radiobutton.radiobutton( self, parent, name, text )
+	self:setDisplay( "inline-block" )
 	self.text     = text or "Frame Tab"
 	local font    = self:getScheme( "font" )
-	local padding = love.window.toPixels( 24 )
+	local padding = 24
 	self.width    = font:getWidth( self:getText() ) + 2 * padding
-	self.height   = love.window.toPixels( 61 )
+	self.height   = 61
 end
 
 function frametab:draw()
@@ -25,18 +26,18 @@ function frametab:draw()
 end
 
 function frametab:drawBackground()
-	local color  = "frametab.backgroundColor"
+	local color  = self:getScheme( "frametab.backgroundColor" )
 	local width  = self:getWidth()
 	local height = self:getHeight()
 
 	if ( self:isSelected() ) then
-		color = "frametab.selected.backgroundColor"
+		color = self:getScheme( "frametab.selected.backgroundColor" )
 	elseif ( self.mouseover ) then
 		gui.panel.drawBackground( self, color )
-		color = "frametab.mouseover.backgroundColor"
+		color = self:getScheme( "frametab.mouseover.backgroundColor" )
 	end
 
-	love.graphics.setColor( self:getScheme( color ) )
+	love.graphics.setColor( color )
 
 	local selected  = self.mouseover or      self:isSelected()
 	local mouseover = self.mouseover and not self:isSelected()
@@ -44,11 +45,11 @@ function frametab:drawBackground()
 		"fill",
 		0,
 		0,
-		width  - ( selected  and love.window.toPixels( 1 ) or 0 ),
-		height - ( mouseover and love.window.toPixels( 1 ) or 0 )
+		width  - ( selected  and 1 or 0 ),
+		height - ( mouseover and 1 or 0 )
 	)
 
-	local lineWidth = love.window.toPixels( 1 )
+	local lineWidth = 1
 	if ( selected ) then
 		love.graphics.setColor( self:getScheme( "frametab.backgroundColor" ) )
 		love.graphics.setLineStyle( "rough" )
@@ -60,12 +61,12 @@ function frametab:drawBackground()
 	end
 
 	selected = self:isSelected()
-	love.graphics.setColor( self:getScheme( "frametab.outlineColor" ) )
+	love.graphics.setColor( self:getScheme( "frametab.borderColor" ) )
 	love.graphics.setLineStyle( "rough" )
 	love.graphics.setLineWidth( lineWidth )
 	love.graphics.line(
 		width - lineWidth / 2, 0,
-		width - lineWidth / 2, height - ( selected and 0 or love.window.toPixels( 1 ) )
+		width - lineWidth / 2, height - ( selected and 0 or 1 )
 	)
 
 	if ( not selected ) then

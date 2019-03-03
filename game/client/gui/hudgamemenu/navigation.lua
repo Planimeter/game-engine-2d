@@ -35,10 +35,10 @@ function hudgamemenunavigation:addItem( item, default )
 end
 
 function hudgamemenunavigation:draw()
-	gui.panel.draw( self )
+	gui.box.draw( self )
 
 	local property  = "hudgamemenunavigation.backgroundColor"
-	local lineWidth = love.window.toPixels( 1 )
+	local lineWidth = 1
 	local width     = self:getWidth()
 	love.graphics.setColor( self:getScheme( property ) )
 	love.graphics.setLineStyle( "rough" )
@@ -55,7 +55,7 @@ function hudgamemenunavigation:invalidateLayout()
 		local x = 0
 		for _, listItem in ipairs( listItems ) do
 			listItem:setX( x )
-			x = x + listItem:getWidth() + love.window.toPixels( 18 )
+			x = x + listItem:getWidth() + 18
 		end
 	end
 	gui.panel.invalidateLayout( self )

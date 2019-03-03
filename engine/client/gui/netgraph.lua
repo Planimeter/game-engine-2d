@@ -4,16 +4,18 @@
 --
 --==========================================================================--
 
-class "gui.netgraph" ( "gui.panel" )
+class "gui.netgraph" ( "gui.box" )
 
 local netgraph = gui.netgraph
 
 function netgraph:netgraph( parent, name )
-	gui.panel.panel( self, parent, name )
-	self:setScheme( "Default" )
+	gui.box.box( self, parent, name )
+	self:setDisplay( "block" )
+	self:setPosition( "absolute" )
+
 	self.font   = self:getScheme( "font" )
-	self.width  = love.window.toPixels( 216 )
-	self.height = 2 * self.font:getHeight()
+	self.width  = 216
+	self.height = 3 * self.font:getHeight()
 	self:invalidateLayout()
 end
 
@@ -32,7 +34,7 @@ end
 function netgraph:draw()
 	self:drawSentReceived()
 
-	gui.panel.draw( self )
+	gui.box.draw( self )
 end
 
 function netgraph:drawSentReceived()
@@ -44,6 +46,7 @@ function netgraph:drawSentReceived()
 
 	local font = self:getFont()
 	love.graphics.setFont( font )
+	local text = ""
 
 	local network = engine.client.network
 
@@ -51,12 +54,36 @@ function netgraph:drawSentReceived()
 		network = engine.server.network
 	end
 
-	local sent     = network.getAverageSentData() or 0
+	-- Ping
+	if ( not _SERVER ) then
+		local ping = network._server:round_trip_time()
+		text = text .. "Ping: " .. ping .. " ms\n"
+	else
+		text = text .. "\n"
+	end
+
+	-- Send
+	local sent = network.getAverageSentData() or 0
+	local rate = "B/s"
+	if ( sent >= 1024 ) then
+		sent = sent / 1024
+		sent = string.format( "%.2f", sent )
+		rate = "kB/s"
+	end
+	text = text .. "Data sent/sec: " .. sent .. " " .. rate .. "\n"
+
+	-- Receive
 	local received = network.getAverageReceivedData() or 0
-	local text     = "Data sent/sec: " .. sent .. " kB/s\n" ..
-	                 "Data received/sec: " .. received .. " kB/s"
-	local limit    = self:getWidth()
-	local align    = "right"
+	local rate = "B/s"
+	if ( received >= 1024 ) then
+		received = received / 1024
+		received = string.format( "%.2f", received )
+		rate = "kB/s"
+	end
+
+	text = text .. "Data received/sec: " .. received .. " " .. rate
+	local limit = self:getWidth()
+	local align = "right"
 	love.graphics.printf( text, 0, 0, limit, align )
 end
 

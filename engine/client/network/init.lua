@@ -4,11 +4,9 @@
 --
 --==========================================================================--
 
-require( "enet" )
-
 local collectgarbage = collectgarbage
 local convar         = convar
-local enet           = enet
+local enet           = require( "enet" )
 local engine         = engine
 local ipairs         = ipairs
 local love           = love
@@ -133,8 +131,8 @@ function updateSentReceived()
 	_prevTotalRcvdData  = _totalRcvdData or 0
 	_totalSentData      = _host:total_sent_data()
 	_totalRcvdData      = _host:total_received_data()
-	_avgSentData        = ( _totalSentData - _prevTotalSentData ) / 1000
-	_avgRcvdData        = ( _totalRcvdData - _prevTotalRcvdData ) / 1000
+	_avgSentData        = ( _totalSentData - _prevTotalSentData )
+	_avgRcvdData        = ( _totalRcvdData - _prevTotalRcvdData )
 	_sentRcvdUpdateTime = love.timer.getTime() + 1
 end
 

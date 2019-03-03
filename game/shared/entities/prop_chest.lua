@@ -4,8 +4,12 @@
 --
 --==========================================================================--
 
-entities.requireEntity( "entity" )
+entities.require( "entity" )
 require( "game" )
+
+if ( _CLIENT ) then
+	require( "engine.client.chat" )
+end
 
 class "prop_chest" ( "entity" )
 
@@ -15,34 +19,55 @@ function prop_chest:prop_chest()
 	self:setNetworkVar( "name", "Chest" )
 
 	if ( _CLIENT ) then
-		local sprite = love.graphics.newImage( "images/entities/prop_chest.png" )
+		local filename = "images/entities/prop_chest.png"
+		local sprite   = love.graphics.newImage( filename )
+		sprite:setFilter( "nearest", "nearest" )
 		self:setSprite( sprite )
 	end
+
+	self.inventory = {}
 end
 
 if ( _CLIENT ) then
 	function prop_chest:getOptions()
 		return {
-			{
-				name  = "Open",
-				value = function() self:open() end
-			},
-			{
-				name  = "Examine",
-				value = self.examine
-			}
+			{ name = "Search",  value = function() self:search()  end },
+			{ name = "Examine", value = function() self:examine() end }
 		}
 	end
-end
 
-function prop_chest:open()
-	if ( _CLIENT ) then
-		localplayer:moveTo( self:getPosition() + vector( 0, game.tileSize ) )
+	local function moveTo( position )
+		return function( character, next )
+			character:moveTo( position, next )
+		end
 	end
-end
 
-function prop_chest:examine()
-	chat.addText( "I wonder what's inside." )
+	local function use( entity )
+		return function( player, next )
+			local payload = payload( "playerUse" )
+			payload:set( "entity", entity )
+			payload:set( "value",  nil )
+			payload:sendToServer()
+
+			next()
+		end
+	end
+
+	function prop_chest:search()
+		-- Stop everything
+		localplayer:removeTasks()
+
+		-- Walk to the front of the chest
+		local position = self:getPosition() + vector( 0, game.tileSize )
+		localplayer:addTask( moveTo( position ) )
+
+		-- Use it
+		localplayer:addTask( use( self ) )
+	end
+
+	function prop_chest:examine()
+		chat.addText( "I wonder what's inside." )
+	end
 end
 
 function prop_chest:spawn()
@@ -53,6 +78,10 @@ function prop_chest:spawn()
 	local max      = vector( tileSize, -tileSize )
 	self:initializePhysics()
 	self:setCollisionBounds( min, max )
+end
+
+function prop_chest:use( activator, value )
+	activator:sendText( "You search the chest but find nothing." )
 end
 
 entities.linkToClassname( prop_chest, "prop_chest" )

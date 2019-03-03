@@ -253,7 +253,7 @@ function typelenvalues:deserialize()
 				self.data[ key.name ] = tlvs
 			elseif ( key.type == "entity" ) then
 				local entIndex = typelenvalues.bytesToNumber( bytes )
-				entities.requireEntity( "entity" )
+				entities.require( "entity" )
 				self.data[ key.name ] = entity.getByEntIndex( entIndex )
 			end
 			index = index + size

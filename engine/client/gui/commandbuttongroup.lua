@@ -4,28 +4,28 @@
 --
 --==========================================================================--
 
-class "gui.commandbuttongroup" ( "gui.panel" )
+class "gui.commandbuttongroup" ( "gui.box" )
 
 local commandbuttongroup = gui.commandbuttongroup
 
 function commandbuttongroup:commandbuttongroup( parent, name )
-	gui.panel.panel( self, parent, name )
-	self.height = love.window.toPixels( 46 )
+	gui.box.box( self, parent, name )
+	self:setDisplay( "block" )
+	self:setPosition( "absolute" )
 
-	self:setScheme( "Default" )
 	self:invalidateLayout()
 end
 
 function commandbuttongroup:draw()
-	gui.panel.draw( self )
+	gui.box.draw( self )
 
-	local color  = "commandbuttongroup.outlineColor"
+	local color  = self:getScheme( "commandbuttongroup.borderColor" )
 	local width  = self:getWidth()
 	local height = self:getHeight()
 
-	love.graphics.setColor( self:getScheme( color ) )
+	love.graphics.setColor( color )
 	love.graphics.setLineStyle( "rough" )
-	local lineWidth = love.window.toPixels( 1 )
+	local lineWidth = 1
 	love.graphics.setLineWidth( lineWidth )
 	love.graphics.line(
 		lineWidth / 2,         height,        -- Bottom-left
@@ -47,9 +47,7 @@ function commandbuttongroup:invalidateLayout()
 	self:setWidth( width )
 
 	local parent   = self:getParent()
-	local toPixels = love.window.toPixels
-	local margin   = typeof( parent, "tabbedframe" ) and toPixels( 24 )
-	                                                  or toPixels( 36 )
+	local margin   = typeof( parent, "tabbedframe" ) and 24 or 36
 	self:setPos(
 		parent:getWidth()  - self:getWidth() - margin,
 		parent:getHeight() - self:getHeight()

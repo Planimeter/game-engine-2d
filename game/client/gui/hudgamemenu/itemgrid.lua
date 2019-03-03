@@ -4,27 +4,27 @@
 --
 --==========================================================================--
 
-class "gui.itemgrid" ( "gui.panel" )
+class "gui.itemgrid" ( "gui.box" )
 
 local itemgrid = gui.itemgrid
 
 function itemgrid:itemgrid( parent, name )
-	gui.panel.panel( self, parent, name )
+	gui.box.box( self, parent, name )
+	self:setDisplay( "block" )
+	self:setPosition( "absolute" )
+
 	self.items   = {}
 	self.columns = 0
 	self.rows    = 0
-
-	self:setScheme( "Default" )
 end
 
 function itemgrid:addItem( item, count )
-	local itemdata   = _G.item.getData( item )
-	local itembutton = self:hasItem( item )
-	if ( not itemdata.stackable or not itembutton ) then
+	local itemdata = _G.item.getClass( item ).data
+	local hasItem  = self:hasItem( item )
+	if ( not itemdata.stackable or not hasItem ) then
 		require( "game.client.gui.hudgamemenu.itembutton" )
-		item = gui.itembutton( self, item )
-		item:setSource( self:getSource() )
-		table.insert( self:getItems(), item )
+		local itembutton = gui.itembutton( self, item )
+		table.insert( self:getItems(), itembutton )
 	end
 
 	self:invalidateLayout()
@@ -33,11 +33,10 @@ end
 accessor( itemgrid, "columns" )
 accessor( itemgrid, "rows" )
 accessor( itemgrid, "items" )
-accessor( itemgrid, "source" )
 
 function itemgrid:hasItem( item )
 	local items = self:getItems()
-	for _, v in pairs( items ) do
+	for _, v in ipairs( items ) do
 		if ( item == v:getItem() ) then
 			return v
 		end
@@ -49,15 +48,28 @@ function itemgrid:invalidateLayout()
 	local items     =   self:getItems()
 	local columns   =   self:getColumns()
 	local rows      =   self:getRows()
-	local columnGap = ( self:getWidth()  - columns * love.window.toPixels( 44 ) ) / ( columns - 1 )
-	local rowGap    = ( self:getHeight() - rows    * love.window.toPixels( 44 ) ) / ( rows    - 1 )
+	local columnGap = ( self:getWidth()  - columns * 44 ) / ( columns - 1 )
+	local rowGap    = ( self:getHeight() - rows    * 44 ) / ( rows    - 1 )
 	for n, v in pairs( items ) do
 		n = n - 1
 		local x  =             n % columns
 		local y  = math.floor( n / columns )
 		local xm = x * columnGap
 		local ym = y * rowGap
-		v:setPos( x * love.window.toPixels( 44 ) + xm, y * love.window.toPixels( 44 ) + ym )
+		v:setPos( x * 44 + xm, y * 44 + ym )
 	end
 	gui.panel.invalidateLayout( self )
+end
+
+function itemgrid:removeItem( item )
+	local items = self:getItems()
+	for i, v in ipairs( items ) do
+		if ( item == v:getItem() ) then
+			table.remove( items, i )
+			v:remove()
+			break
+		end
+	end
+
+	self:invalidateLayout()
 end

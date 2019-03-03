@@ -4,59 +4,36 @@
 --
 --==========================================================================--
 
-class "gui.hudmana" ( "gui.panel" )
+class "gui.hudmana" ( "gui.box" )
 
 local hudmana = gui.hudmana
 
 function hudmana:hudmana( parent )
-	gui.panel.panel( self, parent, "HUD Mana" )
+	local name = "HUD Mana"
+	gui.box.box( self, parent, name )
+	self:setDisplay( "block" )
+	self:setPosition( "absolute" )
 
-	self:setScheme( "Default" )
-	local font = self:getScheme( "entityFont" )
-	self.height = font:getHeight()
-	font = self:getScheme( "font" )
-	self.width = font:getWidth( "Mana" )
-	self.height = self.height + font:getHeight()
+	self.text = gui.text( self, name .. " Text Node", "" )
+	self.text:setDisplay( "block" )
+	self.text:setColor( self:getScheme( "hudmoveindicator.textColor" ) )
+	self.text:setFont( self:getScheme( "entityFont" ) )
+
+	local label = gui.text( self, name .. " Text Node", "Mana" )
+	label:setColor( self:getScheme( "hudmoveindicator.smallTextColor" ) )
 
 	self:invalidateLayout()
 end
 
 function hudmana:draw()
-	self:drawLabel()
 	self:drawMana()
 
-	gui.panel.draw( self )
+	gui.box.draw( self )
 end
 
 function hudmana:drawMana()
-	local property = "hudmoveindicator.textColor"
-	love.graphics.setColor( self:getScheme( property ) )
-	local font = self:getScheme( "entityFont" )
-	love.graphics.setFont( font )
 	local mana = localplayer:getNetworkVar( "mana" )
-	love.graphics.print(
-		mana, -- text
-		0, -- x
-		0, -- y
-		0, -- r
-		1, -- sx
-		1, -- sy
-		0, -- ox
-		0, -- oy
-		0, -- kx
-		0, -- ky
-		2  -- tracking
-	)
-end
-
-function hudmana:drawLabel()
-	local property = "hudmoveindicator.smallTextColor"
-	love.graphics.setColor( self:getScheme( property ) )
-	local font = self:getScheme( "entityFont" )
-	local lineHeight = font:getHeight()
-	font = self:getScheme( "font" )
-	love.graphics.setFont( font )
-	love.graphics.print( "Mana", 0, math.round( lineHeight ) )
+	self.text:setText( mana )
 end
 
 function hudmana:invalidateLayout()

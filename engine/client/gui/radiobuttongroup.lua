@@ -4,16 +4,16 @@
 --
 --==========================================================================--
 
-class "gui.radiobuttongroup" ( "gui.panel" )
+class "gui.radiobuttongroup" ( "gui.box" )
 
 local radiobuttongroup = gui.radiobuttongroup
 
 function radiobuttongroup:radiobuttongroup( parent, name )
-	gui.panel.panel( self, parent, name )
+	gui.box.box( self, parent, name )
+	self:setDisplay( "block" )
+	self:setPosition( "absolute" )
 	self.selectedId = 0
 	self.disabled   = false
-
-	self:setSuppressFramebufferWarnings( true )
 end
 
 function radiobuttongroup:addItem( item )
@@ -57,7 +57,7 @@ function radiobuttongroup:getValue()
 	end
 end
 
-accessor( radiobuttongroup, "disabled", nil, "is" )
+accessor( radiobuttongroup, "disabled", "is" )
 
 function radiobuttongroup:setSelectedId( selectedId, default )
 	local oldSelectedId = self:getSelectedId()

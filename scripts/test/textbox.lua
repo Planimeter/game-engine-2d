@@ -15,13 +15,13 @@ function textboxtestframe:textboxtestframe( parent, name, title )
 
 	local textbox = gui.textbox( self )
 
-	local margin = love.window.toPixels( 36 )
+	local margin = 36
 	local minHeight = self:getMinHeight()
 	minHeight = minHeight + textbox:getHeight()
 	self:setMinHeight( minHeight + margin )
 
 	local x       = margin
-	local y       = love.window.toPixels( 86 ) -- Title Bar Height
+	local y       = 86 -- Title Bar Height
 	local width   = self:getWidth()
 	local height  = self:getHeight()
 	width         = width - 2 * margin
@@ -37,8 +37,8 @@ end
 
 function textboxtestframe:invalidateLayout()
 	local textbox = self.textbox
-	local margin  = love.window.toPixels( 36 )
-	local y       = love.window.toPixels( 86 ) -- Title Bar Height
+	local margin  = 36
+	local y       = 86 -- Title Bar Height
 	local width   = self:getWidth()
 	local height  = self:getHeight()
 	width         = width - 2 * margin

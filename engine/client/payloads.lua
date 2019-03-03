@@ -11,7 +11,7 @@ local function onReceivePlayerInitialized( payload )
 
 	require( "engine.client.camera" )
 	camera.setParentEntity( localplayer )
-	camera.setZoom( 2 * love.window.getPixelScale() )
+	camera.setZoom( 2 )
 
 	if ( not _SERVER ) then
 		localplayer:initialSpawn()
@@ -21,13 +21,13 @@ end
 payload.setHandler( onReceivePlayerInitialized, "playerInitialized" )
 
 local function onReceiveServerInfo( payload )
-	local regionName = payload:get( "region" )
+	local mapName = payload:get( "map" )
 
-	require( "engine.shared.region" )
-	if ( not region.exists( regionName ) ) then
-		engine.client.download( "regions/" .. regionName .. ".lua" )
+	require( "engine.shared.map" )
+	if ( not map.exists( mapName ) ) then
+		engine.client.download( "maps/" .. mapName .. ".lua" )
 	else
-		region.load( regionName )
+		map.load( mapName )
 
 		require( "game" )
 		require( "game.client" )

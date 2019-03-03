@@ -15,8 +15,7 @@ function optionsitemgroup:optionsitemgroup( parent, name )
 	-- to be a dropdownlist.
 	-- self.dropDownList = nil
 
-	self:setSuppressFramebufferWarnings( true )
-	self:setParent( parent )
+	-- self:setParent( parent )
 end
 
 function optionsitemgroup:addItem( item )
@@ -25,7 +24,6 @@ function optionsitemgroup:addItem( item )
 
 	item.onClick = function( item )
 		local value = item:getValue()
-		self:removeChildren()
 		value()
 	end
 
@@ -33,31 +31,27 @@ function optionsitemgroup:addItem( item )
 end
 
 function optionsitemgroup:invalidateLayout()
-	local listItems = self:getItems()
-	if ( listItems ) then
-		local y = 0
-		for _, listItem in ipairs( listItems ) do
-			listItem:setY( y )
-			listItem:setWidth( self:getWidth() )
-			y = y + listItem:getHeight()
-		end
-		self:setHeight( y )
-	end
-
 	self:updatePos()
 end
-
-local x, y = 0, 0
 
 function optionsitemgroup:updatePos()
 	local parent = self:getParent()
 	local x, y = self:getPos()
 	local width, height = self:getSize()
+	local windowPadding = 4
 	if ( x + width > parent:getWidth() ) then
-		x = parent:getWidth() - width
+		x = x - width
 	end
-	if ( y + height > parent:getHeight() ) then
-		y = parent:getHeight() - height
+
+	local overflow = y + height
+	if ( overflow > parent:getHeight() - windowPadding ) then
+		overflow = overflow - parent:getHeight() + windowPadding
+		y = y - overflow
 	end
+
+	if ( y < windowPadding ) then
+		y = windowPadding
+	end
+
 	self:setPos( x, y )
 end

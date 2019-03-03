@@ -8,7 +8,7 @@ require( "engine.shared.network.payload" )
 
 local payload  = payload
 local print    = print
-local region   = region
+local map      = map
 local require  = require
 local tostring = tostring
 local _G       = _G
@@ -24,16 +24,16 @@ function onConnect( event )
 end
 
 function onPostConnect( event )
-	-- Initialize region
-	local regionName = _G.game.initialRegion
-	require( "engine.shared.region" )
-	_G.region.load( regionName )
+	-- Initialize map
+	local mapName = _G.game.initialMap
+	require( "engine.shared.map" )
+	_G.map.load( mapName )
 
 	-- Initialize player
 	require( "engine.shared.entities" )
-	_G.entities.requireEntity( "player" )
+	_G.entities.require( "player" )
 	local player = _G.player.initialize( event.peer )
-	player:setRegion( _G.region.getByName( regionName ) )
+	player:setMap( _G.map.getByName( mapName ) )
 
 	player:onConnect()
 
@@ -74,7 +74,7 @@ end
 
 function sendServerInfo( player )
 	local payload = payload( "serverInfo" )
-	payload:set( "region", _G.game.initialRegion )
+	payload:set( "map", _G.game.initialMap )
 	player:send( payload )
 end
 

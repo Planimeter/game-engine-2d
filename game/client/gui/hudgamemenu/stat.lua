@@ -4,21 +4,23 @@
 --
 --==========================================================================--
 
-class "gui.hudgamemenustat" ( "gui.panel" )
+class "gui.hudgamemenustat" ( "gui.box" )
 
 local hudgamemenustat = gui.hudgamemenustat
 
 function hudgamemenustat:hudgamemenustat( parent, name, stat )
 	gui.panel.panel( self, parent, name )
-	self.width        = love.window.toPixels( 312 )
-	self.height       = love.window.toPixels( 42 )
-	self.stat         = stat
+	self:setDisplay( "block" )
+	self:setPosition( "absolute" )
+	self.width = 312
+	self.height = 42
+	self.stat = stat
 
 	self:setScheme( "Default" )
 
 	local progressbar = gui.progressbar( self, "Stat Progress" )
-	progressbar:setY( love.window.toPixels( 23 ) )
-	self.progressbar  = progressbar
+	progressbar:setY( 23 )
+	self.progressbar = progressbar
 
 	self:addStatHook()
 end
@@ -69,9 +71,9 @@ function hudgamemenustat:draw()
 	x               = math.round( self:getWidth() - font:getWidth( label ) )
 	love.graphics.setColor( self:getScheme( property ) )
 	love.graphics.setFont( font )
-	love.graphics.print( label, x, math.round( love.window.toPixels( 30 ) ) )
+	love.graphics.print( label, x, math.round( 30 ) )
 
-	gui.panel.draw( self )
+	gui.box.draw( self )
 end
 
 accessor( hudgamemenustat, "stat" )

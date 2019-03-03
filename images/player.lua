@@ -4,63 +4,75 @@ return {
 	height = 32,
 	frametime = 0.2,
 	animations = {
-		idle = {
+		idlenorth = {
 			from = 1,
 			to = 1
 		},
-		walknorth = {
-			from = 32,
-			to = 35
+		idleeast = {
+			from = 2,
+			to = 2
 		},
-		walknortheast = {
-			from = 64,
-			to = 67,
+		idlesouth = {
+			from = 3,
+			to = 3
+		},
+		idlewest = {
+			from = 4,
+			to = 4
+		},
+		walknorth = {
+			from = 33,
+			to = 36
 		},
 		walkeast = {
-			from = 96,
-			to = 99,
-		},
-		walksoutheast = {
-			from = 128,
-			to = 131,
+			from = 65,
+			to = 68,
 		},
 		walksouth = {
-			from = 160,
-			to = 163,
-		},
-		walksouthwest = {
-			from = 192,
-			to = 195,
+			from = 97,
+			to = 100,
 		},
 		walkwest = {
-			from = 224,
-			to = 227,
+			from = 129,
+			to = 132,
+		},
+		walknortheast = {
+			from = 161,
+			to = 164,
+		},
+		walksoutheast = {
+			from = 193,
+			to = 196,
+		},
+		walksouthwest = {
+			from = 225,
+			to = 228,
 		},
 		walknorthwest = {
-			from = 256,
-			to = 259,
+			from = 257,
+			to = 260,
 		}
 	},
 	events = {
 		-- walknorth
 		[ 33 ] = "rightfootstep",
 		[ 35 ] = "leftfootstep",
-		-- walknortheast
+		-- walkeast
 		[ 65 ] = "rightfootstep",
 		[ 67 ] = "leftfootstep",
-		-- walkeast
+		-- walksouth
 		[ 96 ] = "rightfootstep",
 		[ 98 ] = "leftfootstep",
-		-- walksoutheast
+		-- walkwest
 		[ 129 ] = "leftfootstep",
 		[ 131 ] = "rightfootstep",
-		-- walksouth
+		-- walknortheast
 		[ 161 ] = "rightfootstep",
 		[ 163 ] = "leftfootstep",
-		-- walksouthwest
+		-- walksoutheast
 		[ 193 ] = "rightfootstep",
 		[ 195 ] = "leftfootstep",
-		-- walkwest
+		-- walksouthwest
 		[ 224 ] = "leftfootstep",
 		[ 226 ] = "rightfootstep",
 		-- walknorthwest

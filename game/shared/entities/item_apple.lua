@@ -7,10 +7,6 @@
 require( "game.shared.entities.item" )
 require( "game" )
 
-if ( _CLIENT ) then
-	require( "engine.client.chat" )
-end
-
 class "item_apple" ( "item" )
 
 item_apple.data = {
@@ -23,42 +19,27 @@ function item_apple:item_apple()
 end
 
 if ( _CLIENT ) then
-	function item_apple:getOptions()
-		return {
-			{
-				name  = "Pickup",
-				value = function() self:pickup() end
-			},
-			{
-				name  = "Examine",
-				value = self.examine
-			}
-		}
-	end
-
 	function item_apple:getInventoryOptions()
 		return {
+			{ name = "Eat",     value = function() self:eat()        end },
 			{
-				name  = "Eat",
-				value = function() self:eat() end
+				name  = "Use",
+				value = function()
+					g_Inventory:select( self.__type )
+				end
 			},
-			{
-				name  = "Examine",
-				value = self.examine
-			}
+			{ name = "Drop",    value = function() item.drop( self ) end },
+			{ name = "Examine", value = function() self:examine()    end }
 		}
 	end
-end
 
-function item_apple:pickup()
-	localplayer:pickup( self )
-end
+	function item_apple:examine()
+		chat.addText( "Looks like an apple." )
+	end
 
-function item_apple:examine()
-	chat.addText( "Looks like an apple." )
-end
-
-function item_apple:eat()
+	function item_apple:eat()
+		localplayer:useItem( self.__type )
+	end
 end
 
 function item_apple:spawn()
@@ -69,6 +50,18 @@ function item_apple:spawn()
 	local max      = vector( tileSize, -tileSize )
 	self:initializePhysics( "dynamic" )
 	self:setCollisionBounds( min, max )
+end
+
+function item_apple:useItem( activator, value )
+	-- Give health
+	local health = activator:getNetworkVar( "health" )
+	activator:setNetworkVar( "health", health + 3 )
+
+	-- Notify player
+	activator:sendText( "The apple gives you some health." )
+
+	-- Remove from inventory
+	activator:removeItem( self.__type )
 end
 
 entities.linkToClassname( item_apple, "item_apple" )

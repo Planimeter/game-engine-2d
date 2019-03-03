@@ -30,7 +30,7 @@ function convar.setConvar( name, value )
 end
 
 function convar.readConfig()
-	if ( not love.filesystem.exists( "cfg/config.cfg" ) ) then
+	if ( love.filesystem.getInfo( "cfg/config.cfg" ) == nil ) then
 		return
 	end
 
@@ -44,7 +44,9 @@ end
 function convar.saveConfig()
 	local config = {}
 	for k, v in pairs( convar._convars ) do
-		table.insert( config, k .. " " .. tostring( v:getValue() ) )
+		if ( v:isFlagSet( "archive" ) ) then
+			table.insert( config, k .. " " .. tostring( v:getValue() ) )
+		end
 	end
 	table.sort( config )
 	table.insert( config, "" )
@@ -121,6 +123,15 @@ function convar:getValue()
 	return self.value
 end
 
+function convar:isFlagSet( flag )
+	local flags = self:getFlags()
+	if ( flags ) then
+		return table.hasvalue( flags, flag ) ~= nil
+	end
+
+	return false
+end
+
 function convar:onValueChange( oldValue, newValue )
 end
 
@@ -159,16 +170,12 @@ function convar:setValue( value )
 	end
 
 	if ( _SERVER ) then
-		local flags = self:getFlags()
-		if ( flags ) then
-			local notify = table.hasvalue( flags, "notify" )
-			if ( notify ) then
-				local name = self:getName()
-				local text = "Server cvar " .. name .. " changed to " ..
-				             self.value
-				player.sendTextAll( text )
-				return true
-			end
+		local shouldNotify = self:isFlagSet( "notify" )
+		if ( shouldNotify ) then
+			local name = self:getName()
+			local text = "Server cvar " .. name .. " changed to " .. self.value
+			player.sendTextAll( text )
+			return true
 		end
 	end
 

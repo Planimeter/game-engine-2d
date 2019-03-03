@@ -18,9 +18,9 @@ function keyboardoptionspanel:keyboardoptionspanel( parent, name )
 	gui.frametabpanel.frametabpanel( self, parent, name )
 
 	self.bindList = gui.bindlistpanel( self )
-	local margin = love.window.toPixels( 24 )
-	local height = love.window.toPixels( 348 ) - margin
-	self.bindList:setSize( love.window.toPixels( 640 ) - 2 * margin, height )
+	local margin = 24
+	local height = 348 - margin
+	self.bindList:setSize( 640 - 2 * margin, height )
 	self.bindList:setPos( margin, margin )
 	self.bindList:readBinds()
 

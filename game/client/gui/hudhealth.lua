@@ -4,59 +4,36 @@
 --
 --==========================================================================--
 
-class "gui.hudhealth" ( "gui.panel" )
+class "gui.hudhealth" ( "gui.box" )
 
 local hudhealth = gui.hudhealth
 
 function hudhealth:hudhealth( parent )
-	gui.panel.panel( self, parent, "HUD Health" )
+	local name = "HUD Health"
+	gui.box.box( self, parent, name )
+	self:setDisplay( "block" )
+	self:setPosition( "absolute" )
 
-	self:setScheme( "Default" )
-	local font = self:getScheme( "entityFont" )
-	self.height = font:getHeight()
-	font = self:getScheme( "font" )
-	self.width = font:getWidth( "Health" )
-	self.height = self.height + font:getHeight()
+	self.text = gui.text( self, name .. " Text Node", "" )
+	self.text:setDisplay( "block" )
+	self.text:setColor( self:getScheme( "hudmoveindicator.textColor" ) )
+	self.text:setFont( self:getScheme( "entityFont" ) )
+
+	local label = gui.text( self, name .. " Text Node", "Health" )
+	label:setColor( self:getScheme( "hudmoveindicator.smallTextColor" ) )
 
 	self:invalidateLayout()
 end
 
 function hudhealth:draw()
-	self:drawLabel()
 	self:drawHealth()
 
-	gui.panel.draw( self )
+	gui.box.draw( self )
 end
 
 function hudhealth:drawHealth()
-	local property = "hudmoveindicator.textColor"
-	love.graphics.setColor( self:getScheme( property ) )
-	local font = self:getScheme( "entityFont" )
-	love.graphics.setFont( font )
 	local health = localplayer:getNetworkVar( "health" )
-	love.graphics.print(
-		health, -- text
-		0, -- x
-		0, -- y
-		0, -- r
-		1, -- sx
-		1, -- sy
-		0, -- ox
-		0, -- oy
-		0, -- kx
-		0, -- ky
-		2  -- tracking
-	)
-end
-
-function hudhealth:drawLabel()
-	local property = "hudmoveindicator.smallTextColor"
-	love.graphics.setColor( self:getScheme( property ) )
-	local font = self:getScheme( "entityFont" )
-	local lineHeight = font:getHeight()
-	font = self:getScheme( "font" )
-	love.graphics.setFont( font )
-	love.graphics.print( "Health", 0, math.round( lineHeight ) )
+	self.text:setText( health )
 end
 
 function hudhealth:invalidateLayout()

@@ -6,7 +6,7 @@
 
 require( "engine.shared.concommand" )
 
-function accessor( class, member, key, verb )
+function accessor( class, member, verb, key, default )
 	if ( type( class ) ~= "table" ) then
 		typerror( 1, "table", class )
 	end
@@ -16,7 +16,7 @@ function accessor( class, member, key, verb )
 	end
 
 	class[ ( verb or "get" ) .. string.capitalize( member ) ] = function( self )
-		return self[ key or member ]
+		return self[ key or member ] or default
 	end
 end
 
@@ -109,10 +109,11 @@ concommand( "lua_dofile", "Loads and runs the given file",
 		local dir = string.stripfilename( argS )
 		local files = love.filesystem.getDirectoryItems( dir )
 		for _, v in ipairs( files ) do
-			if ( love.filesystem.isDirectory( dir .. v ) or
-			     string.fileextension( v ) == "lua" ) then
+			local info = love.filesystem.getInfo( dir .. v )
+			local isDirectory = info and info.type == "directory" or false
+			if ( isDirectory or string.fileextension( v ) == "lua" ) then
 				local filename = ( dir ~= "" and dir or "" ) .. v
-				local cmd      = "lua_dofile " .. filename
+				local cmd = "lua_dofile " .. filename
 				if ( string.find( cmd, "lua_dofile " .. argS, 1, true ) ) then
 					table.insert( autocomplete, cmd )
 				end

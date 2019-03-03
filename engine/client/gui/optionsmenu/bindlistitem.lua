@@ -11,68 +11,67 @@ local bindlistitem = gui.bindlistitem
 function bindlistitem:bindlistitem( parent, name, text, key, concommand )
 	gui.button.button( self, parent, name, text )
 	self.width      = parent:getWidth()
-	self.height     = love.window.toPixels( 30 )
+	self.height     = 30
 	self.key        = key
 	self.concommand = concommand
 end
 
 function bindlistitem:drawBackground()
-	local color    = "button.backgroundColor"
-	local toPixels = love.window.toPixels
+	local color    = self:getScheme( "button.backgroundColor" )
 	local width    = self:getWidth()
 	local height   = self:getHeight()
 
 	if ( self:isDisabled() ) then
-		color = "button.disabled.backgroundColor"
-		love.graphics.setColor( self:getScheme( color ) )
+		color = self:getScheme( "button.disabled.backgroundColor" )
+		love.graphics.setColor( color )
 		love.graphics.rectangle(
 			"fill",
-			toPixels( 1 ),
+			1,
 			0,
-			width - toPixels( 2 ),
+			width - 2,
 			height
 		)
 		return
 	end
 
 	if ( self.mousedown and self.mouseover ) then
-		color = "button.mousedown.backgroundColor"
-		love.graphics.setColor( self:getScheme( color ) )
+		color = self:getScheme( "button.mousedown.backgroundColor" )
+		love.graphics.setColor( color )
 		love.graphics.rectangle(
 			"fill",
-			toPixels( 1 ),
+			1,
 			0,
-			width - toPixels( 2 ),
+			width - 2,
 			height
 		)
 	elseif ( self.mousedown or self.mouseover ) then
-		color = "button.mouseover.backgroundColor"
-		love.graphics.setColor( self:getScheme( color ) )
+		color = self:getScheme( "button.mouseover.backgroundColor" )
+		love.graphics.setColor( color )
 		love.graphics.rectangle(
 			"fill",
-			toPixels( 1 ),
+			1,
 			0,
-			width - toPixels( 2 ),
+			width - 2,
 			height
 		)
 	end
 end
 
-function bindlistitem:drawForeground()
+function bindlistitem:drawBorder()
 end
 
 function bindlistitem:drawText()
-	local color = "button.textColor"
+	local color = self:getScheme( "button.textColor" )
 
 	if ( self:isDisabled() ) then
-		color = "button.disabled.textColor"
+		color = self:getScheme( "button.disabled.textColor" )
 	end
 
-	love.graphics.setColor( self:getScheme( color ) )
+	love.graphics.setColor( color )
 
 	local font = self:getScheme( "font" )
 	love.graphics.setFont( font )
-	local margin = love.window.toPixels( 18 )
+	local margin = 18
 	local x = math.round( margin )
 	local y = math.round( self:getHeight() / 2 - font:getHeight() / 2 )
 	love.graphics.print( self:getText(), x, y )

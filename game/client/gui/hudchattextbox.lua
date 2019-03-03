@@ -51,13 +51,13 @@ function hudchattextbox:hide()
 	end )
 end
 
-function hudchattextbox:drawForeground()
+function hudchattextbox:drawBorder()
 	local width  = self:getWidth()
 	local height = self:getHeight()
-	local color  = color( self:getScheme( "textbox.outlineColor" ) )
+	local color  = color( self:getScheme( "textbox.borderColor" ) )
 	color[ 4 ]   = color[ 4 ] * self.borderOpacity
 	love.graphics.setColor( color )
-	local lineWidth = love.window.toPixels( 1 )
+	local lineWidth = 1
 	love.graphics.setLineWidth( lineWidth )
 	love.graphics.rectangle(
 		"line",
@@ -73,9 +73,9 @@ accessor( hudchattextbox, "hudchat" )
 
 function hudchattextbox:invalidateLayout()
 	local parent        = self:getHudchat()
-	local margin        = love.window.toPixels( 36 )
-	local textboxHeight = love.window.toPixels( 46 )
-	local padding       = love.window.toPixels( 9 )
+	local margin        = 36
+	local textboxHeight = 46
+	local padding       = 9
 	local width         = parent:getWidth()
 	width               = width - 2 * margin
 	local height        = parent:getHeight()

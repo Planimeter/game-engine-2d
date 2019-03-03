@@ -4,13 +4,15 @@
 --
 --==========================================================================--
 
-class "gui.imagepanel" ( "gui.panel" )
+class "gui.imagepanel" ( "gui.box" )
 
 local imagepanel = gui.imagepanel
 
 function imagepanel:imagepanel( parent, name, image )
-	gui.panel.panel( self, parent, name )
-	self.color      = color( 255, 255, 255, 255 )
+	gui.box.box( self, parent, name )
+	self:setDisplay( "block" )
+	self:setPosition( "absolute" )
+
 	self.imageDatum = nil
 	self.imageQuad  = nil
 	self:setImage( image )
@@ -31,7 +33,7 @@ function imagepanel:draw()
 end
 
 function imagepanel:drawMissingImage()
-	love.graphics.setColor( color( color.red, 255 * 0.42 ) )
+	love.graphics.setColor( color( color.red, 0.42 * 255 ) )
 	love.graphics.setLineStyle( "rough" )
 	local lineWidth = 1
 	local width     = self:getWidth()
@@ -44,16 +46,14 @@ function imagepanel:drawMissingImage()
 	)
 end
 
-accessor( imagepanel, "color" )
-accessor( imagepanel, "quad",  "imageQuad" )
-accessor( imagepanel, "image", "imageDatum" )
+gui.accessor( imagepanel, "quad",  nil, "imageQuad" )
+gui.accessor( imagepanel, "image", nil, "imageDatum" )
 
 function imagepanel:setImage( image )
 	if ( type( image ) == "image" ) then
 		self.imageDatum = image
-	elseif ( image ~= nil and love.filesystem.exists( image ) ) then
+	elseif ( image ~= nil and love.filesystem.getInfo( image ) ~= nil ) then
 		self.imageDatum = love.graphics.newImage( image )
-		self.imageDatum:setFilter( "linear", "linear" )
 	else
 		self.imageDatum = nil
 	end
@@ -77,8 +77,8 @@ function imagepanel:updateQuad()
 		return
 	end
 
-	local w  = self:getWidth()  - ( missingImage and love.window.toPixels( 1 ) or 0 )
-	local h  = self:getHeight() - ( missingImage and love.window.toPixels( 1 ) or 0 )
+	local w  = self:getWidth()  - ( missingImage and 1 or 0 )
+	local h  = self:getHeight() - ( missingImage and 1 or 0 )
 	local sw = self.imageDatum:getWidth()
 	local sh = self.imageDatum:getHeight()
 	if ( self.imageQuad == nil ) then

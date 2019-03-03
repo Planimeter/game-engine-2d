@@ -10,7 +10,8 @@ local radiobutton = gui.radiobutton
 
 function radiobutton:radiobutton( parent, name, text )
 	gui.button.button( self, parent, name, text )
-	self.height     = love.window.toPixels( 24 )
+	self:setBorderWidth( 0 )
+	self.height     = 24
 	self.icon       = self:getScheme( "radiobutton.icon" )
 	self.foreground = self:getScheme( "radiobutton.foreground" )
 	self.text       = text or "Radio Button Label"
@@ -22,24 +23,24 @@ end
 
 function radiobutton:draw()
 	self:drawSelectionDot()
-	self:drawForeground()
+	self:drawOutline()
 	self:drawLabel()
 
 	gui.panel.draw( self )
 end
 
-function radiobutton:drawForeground()
-	local color = "radiobutton.outlineColor"
+function radiobutton:drawOutline()
+	local color = self:getScheme( "radiobutton.borderColor" )
 
 	if ( not self:isDisabled() ) then
 		if ( self.mousedown and self.mouseover ) then
-			color = "radiobutton.mousedown.outlineColor"
+			color = self:getScheme( "radiobutton.mousedown.borderColor" )
 		elseif ( self.mousedown or self.mouseover ) then
-			color = "radiobutton.mouseover.outlineColor"
+			color = self:getScheme( "radiobutton.mouseover.borderColor" )
 		end
 	end
 
-	love.graphics.setColor( self:getScheme( color ) )
+	love.graphics.setColor( color )
 	love.graphics.draw( self.foreground, x, y )
 end
 
@@ -53,7 +54,7 @@ function radiobutton:drawLabel()
 	local font = self:getScheme( "font" )
 	love.graphics.setFont( font )
 	local height = self:getHeight()
-	local marginLeft = love.window.toPixels( 9 )
+	local marginLeft = 9
 	local x = math.round( height + marginLeft )
 	local y = math.round( height / 2 - font:getHeight() / 2 )
 	love.graphics.print( self:getText(), x, y )
@@ -88,10 +89,10 @@ function radiobutton:isDisabled()
 	return gui.button.isDisabled( self )
 end
 
-accessor( radiobutton, "selected", nil, "is" )
+gui.accessor( radiobutton, "selected", "is" )
 
 function radiobutton:mousereleased( x, y, button, istouch )
-	if ( ( self.mousedown and self.mouseover ) and not self:isDisabled() ) then
+	if ( ( self.mousedown and ( self.mouseover or self:isChildMousedOver() ) ) and not self:isDisabled() ) then
 		local radiobuttongroup = self:getGroup()
 		if ( radiobuttongroup ) then
 			radiobuttongroup:setSelectedId( self.id )
@@ -121,9 +122,4 @@ function radiobutton:setDefault( default )
 	if ( default and radiobuttongroup ) then
 		radiobuttongroup:setSelectedId( self.id, default )
 	end
-end
-
-function radiobutton:setSelected( selected )
-	self.selected = selected
-	self:invalidate()
 end

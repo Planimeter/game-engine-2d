@@ -4,7 +4,7 @@
 --
 --==========================================================================--
 
-entities.requireEntity( "entity" )
+entities.require( "entity" )
 require( "game" )
 
 if ( _CLIENT ) then
@@ -22,15 +22,15 @@ if ( _CLIENT ) then
 		return {
 			{
 				name  = "Examine",
-				value = self.examine
+				value = function() self:examine() end
 			}
 		}
 	end
-end
 
-function func_examine:examine()
-	local properties = self:getProperties()
-	chat.addText( properties[ "text" ] )
+	function func_examine:examine()
+		local properties = self:getProperties()
+		chat.addText( properties[ "text" ] )
+	end
 end
 
 function func_examine:spawn()

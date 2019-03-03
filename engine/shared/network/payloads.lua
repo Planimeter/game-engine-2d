@@ -17,7 +17,7 @@ structs[ "kick" ] = {
 
 structs[ "serverInfo" ] = {
     keys = {
-        { name = "region",         type = "string" }
+        { name = "map",            type = "string" }
     }
 }
 
@@ -58,7 +58,7 @@ structs[ "playerInitialized" ] = {
 
 structs[ "entityRemoved" ] = {
     keys = {
-        { name = "entity",         type = "entity" },
+        { name = "entity",         type = "entity" }
     }
 }
 
@@ -66,6 +66,12 @@ structs[ "chat" ] = {
     keys = {
         { name = "entity",         type = "entity" },
         { name = "message",        type = "string" }
+    }
+}
+
+structs[ "sayText" ] = {
+    keys = {
+        { name = "text",           type = "string" }
     }
 }
 
@@ -85,7 +91,7 @@ structs[ "concommand" ] = {
 
 structs[ "playerMove" ] = {
     keys = {
-        { name = "position",       type = "vector" },
+        { name = "position",       type = "vector" }
     }
 }
 
@@ -96,16 +102,64 @@ structs[ "usercmd" ] = {
     }
 }
 
+structs[ "playerUse" ] = {
+    keys = {
+        { name = "entity",         type = "entity" },
+        { name = "value",          type = "string" }
+    }
+}
+
 -- if ( _G._VADVENTURE ) then
     structs[ "playerPickup" ] = {
         keys = {
-            { name = "item",       type = "entity" },
+            { name = "item",       type = "entity" }
+        }
+    }
+
+    structs[ "playerGotItem" ] = {
+        keys = {
+            { name = "item",       type = "string" },
+            { name = "count",      type = "number" }
+        }
+    }
+
+    structs[ "playerDrop" ] = {
+        keys = {
+            { name = "item",       type = "string" }
+        }
+    }
+
+    structs[ "playerRemovedItem" ] = {
+        keys = {
+            { name = "item",       type = "string" }
+        }
+    }
+
+    structs[ "playerUseItem" ] = {
+        keys = {
+            { name = "item",       type = "string" },
+            { name = "value",      type = "string" }
+        }
+    }
+
+    structs[ "playerUseItemWithEntity" ] = {
+        keys = {
+            { name = "item",       type = "string" },
+            { name = "entity",     type = "entity" }
+        }
+    }
+
+    structs[ "npcTalkTo" ] = {
+        keys = {
+            { name = "npc",        type = "entity" },
+            { name = "dialogue",   type = "string" }
+        }
+    }
+
+    structs[ "playerTradeRequest" ] = {
+        keys = {
+            { name = "player",     type = "entity" },
+            { name = "request",    type = "string" }
         }
     }
 -- end
-
-structs[ "sayText" ] = {
-    keys = {
-        { name = "text",           type = "string" }
-    }
-}

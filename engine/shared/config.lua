@@ -16,17 +16,17 @@ _conf = _conf or nil
 
 local function createConvars()
 	convar( "r_window_width", 800, 800, nil,
-	        "Sets the width of the window on load" )
+	        "Sets the width of the window on load", nil, { "archive" } )
 	convar( "r_window_height", 600, 600, nil,
-	        "Sets the height of the window on load" )
+	        "Sets the height of the window on load", nil, { "archive" } )
 	convar( "r_window_fullscreen", "0", nil, nil,
-	        "Toggles fullscreen mode" )
+	        "Toggles fullscreen mode", nil, { "archive" } )
 	convar( "r_window_vsync", "1", nil, nil,
-	        "Toggles vertical synchronization" )
+	        "Toggles vertical synchronization", nil, { "archive" } )
 	convar( "r_window_borderless", "0", nil, nil,
-	        "Toggles borderless mode" )
+	        "Toggles borderless mode", nil, { "archive" } )
 	convar( "r_window_highdpi", "1", nil, nil,
-	        "Toggles high-dpi mode" )
+	        "Toggles high-dpi mode", nil, { "archive" } )
 
 	local function updateVolume( convar )
 		local volume = convar:getNumber()
@@ -35,9 +35,9 @@ local function createConvars()
 
 	convar( "snd_volume", 1, 0, 1,
 	        "Sets the master volume",
-	        updateVolume )
+	        updateVolume, { "archive" } )
 	convar( "snd_desktop", "1", nil, nil,
-	        "Toggles playing sound from the desktop" )
+	        "Toggles playing sound from the desktop", nil, { "archive" } )
 end
 
 function load( c )

@@ -147,8 +147,8 @@ function console:console( parent, name, title )
 	name   = name or "Console"
 	title  = title or name
 	gui.frame.frame( self, parent, name, title )
-	self.width     = love.window.toPixels( 661 )
-	self.minHeight = love.window.toPixels( 178 )
+	self.width     = 661
+	self.minHeight = 178
 
 	self.output = console.textbox( self, name .. " Output Text Box", "" )
 	self.input  = gui.textbox( self, name .. " Input Text Box", "" )
@@ -194,9 +194,9 @@ function console:invalidateLayout()
 	end
 
 	local output = self.output
-	margin       = love.window.toPixels( 36 )
+	margin       = 36
 	x            = margin
-	y            = love.window.toPixels( 86 ) -- Title Bar Height
+	y            = 86 -- Title Bar Height
 	width        = width - 2 * margin
 	output:setPos( x, y )
 	output:setWidth( width )
@@ -274,7 +274,7 @@ concommand( "help", "Prints help info for the console command or variable",
 	end
 )
 
-local function restorePanel()
+local function onReloadScript()
 	local console = g_Console
 	if ( console == nil ) then
 		return
@@ -293,4 +293,4 @@ local function restorePanel()
 	end
 end
 
-restorePanel()
+onReloadScript()

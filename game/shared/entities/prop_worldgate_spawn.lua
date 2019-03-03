@@ -4,7 +4,7 @@
 --
 --==========================================================================--
 
-entities.requireEntity( "entity" )
+entities.require( "entity" )
 require( "game" )
 
 if ( _CLIENT ) then
@@ -24,7 +24,9 @@ function prop_worldgate_spawn:prop_worldgate_spawn()
 	self:setNetworkVar( "name", "World Gate" )
 
 	if ( _CLIENT ) then
-		local sprite = love.graphics.newImage( "images/entities/prop_worldgate_spawn.png" )
+		local filename = "images/entities/prop_worldgate_spawn.png"
+		local sprite   = love.graphics.newImage( filename )
+		sprite:setFilter( "nearest", "nearest" )
 		self:setSprite( sprite )
 	end
 end
@@ -34,14 +36,14 @@ if ( _CLIENT ) then
 		return {
 			{
 				name  = "Examine",
-				value = self.examine
+				value = function() self:examine() end
 			}
 		}
 	end
-end
 
-function prop_worldgate_spawn:examine()
-	chat.addText( "Rather tall and ominous." )
+	function prop_worldgate_spawn:examine()
+		chat.addText( "Rather tall and ominous." )
+	end
 end
 
 function prop_worldgate_spawn:spawn()
