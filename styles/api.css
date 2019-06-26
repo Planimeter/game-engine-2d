@@ -11,16 +11,19 @@ img {
 .badge-client {
   background-color: rgba(168, 168, 123, 1);
   color: #fff;
+  font-family: var(--font-family-monospace);
 }
 
 .badge-server {
   background-color: rgba(123, 158, 168, 1);
   color: #fff;
+  font-family: var(--font-family-monospace);
 }
 
 .badge-shared {
   background-color: rgba(132, 168, 123, 1);
   color: #fff;
+  font-family: var(--font-family-monospace);
 }
 
 .table {
