@@ -1,6 +1,9 @@
 # <img src="/images/gui/logo_dark@2x.png?raw=true" width="169" height="49" title="Grid">  
 [![Discord](https://img.shields.io/badge/chat-on%20discord-brightgreen.svg)](https://discord.gg/Gbj4jnv?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+Grid is a game engine for Lua built by [Planimeter.](https://www.planimeter.org/)  
+It was designed for multiplayer-first game experiences.
+
 ## Create a Project
 [Getting Started](http://www.planimeter.org/grid-sdk/tutorials/Getting_Started)  
 [API Documentation](http://www.planimeter.org/grid-sdk/api/Home)
