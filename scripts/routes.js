@@ -5,6 +5,9 @@ route
     templateUrl: 'views/main.html',
     handler: Main
   })
+  .when('/features', {
+    templateUrl: 'views/features.html'
+  })
   .when('/tutorials', {
     redirectTo: '/tutorials/Getting_Started'
   })
