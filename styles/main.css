@@ -29,6 +29,10 @@ header {
   margin-bottom: 0;
 }
 
+.pointer-none {
+  pointer-events: none;
+}
+
 main {
   margin-top: 0;
   margin-bottom: 0;
