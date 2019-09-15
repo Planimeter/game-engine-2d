@@ -22,7 +22,7 @@ automation.
 Voice chat bindings and engine calls have been added. Networking is in-progress.
 Opus support is planned.
 
-## Box-model gui update
+## Box-model GUI update
 <span class="badge badge-warning">In-progress</span>
 
 Updates to `gui.box`, `gui.createElement`, and other box-model calls for the GUI
