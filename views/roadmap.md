@@ -33,5 +33,7 @@ Product Roadmap
 ## Box-model GUI update
 <span class="badge badge-warning">In-progress</span>
 
-Updates to `gui.box`, `gui.createElement`, and other box-model calls for the GUI
-subsystem have been added. Stylesheets are being designed.
+<p class="mb-5">
+  Updates to `gui.box`, `gui.createElement`, and other box-model calls for the
+  GUI subsystem have been added. Stylesheets are being designed.
+</p>
