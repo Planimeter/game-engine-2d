@@ -23,7 +23,7 @@ It was designed for multiplayer-first game experiences.
 * Retina support
 * Soundscripts
 * Spritesheet animations
-* [Tiled](http://www.mapeditor.org/ "Tiled")-based region system
+* [Tiled](http://www.mapeditor.org/ "Tiled")-based maps
 * Tweening
 
 ## License
