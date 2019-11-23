@@ -17,7 +17,6 @@ It was designed for multiplayer-first game experiences.
 * GUI
 * Level streaming
 * Live reloadable assets
-* Massively multiplayer
 * Pathfinding
 * Real-time scripting
 * Retina support
