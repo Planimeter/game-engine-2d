@@ -78,5 +78,14 @@ function radiobuttongroup:setSelectedId( selectedId, default )
 	end
 end
 
+function radiobuttongroup:setValue( value )
+	local items = self:getItems()
+	for i, v in ipairs( items ) do
+		if ( v:getValue() == value ) then
+			self:setSelectedId( i )
+		end
+	end
+end
+
 function radiobuttongroup:onValueChanged( oldValue, newValue )
 end

@@ -10,8 +10,11 @@ local bindlistitem = gui.bindlistitem
 
 function bindlistitem:bindlistitem( parent, name, text, key, concommand )
 	gui.button.button( self, parent, name, text )
+	self:setPosition( "static" )
 	self.width      = parent:getWidth()
-	self.height     = 30
+	self.height     = nil
+	self:setPadding( 7, 18 )
+	self:setBorderWidth( 0 )
 	self.key        = key
 	self.concommand = concommand
 end
@@ -34,7 +37,8 @@ function bindlistitem:drawBackground()
 		return
 	end
 
-	if ( self.mousedown and self.mouseover ) then
+	local mouseover = self.mouseover or self:isChildMousedOver()
+	if ( self.mousedown and mouseover ) then
 		color = self:getScheme( "button.mousedown.backgroundColor" )
 		love.graphics.setColor( color )
 		love.graphics.rectangle(
@@ -44,7 +48,7 @@ function bindlistitem:drawBackground()
 			width - 2,
 			height
 		)
-	elseif ( self.mousedown or self.mouseover ) then
+	elseif ( self.mousedown or mouseover ) then
 		color = self:getScheme( "button.mouseover.backgroundColor" )
 		love.graphics.setColor( color )
 		love.graphics.rectangle(
@@ -68,13 +72,13 @@ function bindlistitem:drawText()
 	end
 
 	love.graphics.setColor( color )
+	self.text:setColor( color )
 
 	local font = self:getScheme( "font" )
 	love.graphics.setFont( font )
 	local margin = 18
 	local x = math.round( margin )
 	local y = math.round( self:getHeight() / 2 - font:getHeight() / 2 )
-	love.graphics.print( self:getText(), x, y )
 
 	local label = "Key or Button"
 	local key = self:getKey()

@@ -10,13 +10,12 @@ local hudgamemenunavigationbutton = gui.hudgamemenunavigationbutton
 
 function hudgamemenunavigationbutton:hudgamemenunavigationbutton( parent, name )
 	gui.radiobutton.radiobutton( self, parent, name, name )
-	self:setDisplay( "inline" )
+	self.width  = nil
+	self.height = nil
+	self:setDisplay( "inline-block" )
 	self:setPosition( "static" )
 	self:setMarginRight( 18 )
-
-	local font = self:getScheme( "font" )
-	self:setWidth( font:getWidth( self:getText() ) )
-	self:setHeight( 45 )
+	self:setPaddingTop( 13 )
 	self:setValue( name )
 end
 
@@ -45,18 +44,12 @@ end
 
 function hudgamemenunavigationbutton:drawLabel()
 	if ( self:isDisabled() ) then
-		love.graphics.setColor( self:getScheme( "radiobutton.disabled.textColor" ) )
+		self.text:setColor( self:getScheme( "radiobutton.disabled.textColor" ) )
 	elseif ( self:isSelected() ) then
-		love.graphics.setColor( self:getScheme( "hudgamemenunavigationbutton.borderColor" ) )
-	elseif ( self.mouseover ) then
-		love.graphics.setColor( self:getScheme( "hudgamemenunavigationbutton.mouseover.textColor" ) )
+		self.text:setColor( self:getScheme( "hudgamemenunavigationbutton.borderColor" ) )
+	elseif ( self.mouseover or self:isChildMousedOver() ) then
+		self.text:setColor( self:getScheme( "hudgamemenunavigationbutton.mouseover.textColor" ) )
 	else
-		love.graphics.setColor( self:getScheme( "hudgamemenunavigationbutton.textColor" ) )
+		self.text:setColor( self:getScheme( "hudgamemenunavigationbutton.textColor" ) )
 	end
-
-	local font = self:getScheme( "font" )
-	love.graphics.setFont( font )
-	local x = 0
-	local y = math.round( self:getHeight() / 2 - font:getHeight() / 2 - 1 )
-	love.graphics.print( self:getText(), x, y )
 end

@@ -15,6 +15,7 @@ function hudchat:hudchat( parent )
 	self.height = gui.scale( 404 )
 
 	self.output = gui.hudchattextbox( self, name .. " Output Text Box", "" )
+	self.output:setMaxLength( 127 * 100 )
 	self.input  = gui.textbox( self, name .. " Input Text Box", "" )
 	self.input:setPlaceholder( "Chat" )
 	self.input.onEnter = function( textbox, text )
@@ -30,7 +31,7 @@ function hudchat:hudchat( parent )
 
 	self.initializing = true
 	self:invalidateLayout()
-	self:setUseFullscreenFramebuffer( true )
+	self:setUseFullscreenCanvas( true )
 	self:dock()
 end
 

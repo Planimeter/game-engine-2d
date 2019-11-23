@@ -13,6 +13,7 @@ function netgraph:netgraph( parent, name )
 	self:setDisplay( "block" )
 	self:setPosition( "absolute" )
 
+	self:setScheme( "Console" )
 	self.font   = self:getScheme( "font" )
 	self.width  = 216
 	self.height = 3 * self.font:getHeight()
@@ -42,6 +43,7 @@ function netgraph:drawSentReceived()
 		return
 	end
 
+	self:setScheme( "Default" )
 	love.graphics.setColor( self:getScheme( "label.textColor" ) )
 
 	local font = self:getFont()

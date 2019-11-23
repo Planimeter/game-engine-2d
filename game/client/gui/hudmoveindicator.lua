@@ -13,7 +13,7 @@ function hudmoveindicator:hudmoveindicator( parent )
 	gui.box.box( self, parent, name )
 	self.width   = love.graphics.getWidth()
 	self.height  = love.graphics.getHeight()
-	self:setUseFullscreenFramebuffer( true )
+	self:setUseFullscreenCanvas( true )
 
 	self:setPadding( gui.scale( 96 ) )
 	self:setDisplay( "block" )
@@ -90,7 +90,7 @@ local function drawLabel( self, x, y )
 	love.graphics.push()
 	love.graphics.scale( 1 / camera.getZoom() )
 
-	local font = self:getScheme( "fontSmall" )
+	local font = scheme.getProperty( "Console", "font" )
 	love.graphics.setFont( font )
 
 	local position = vector( x, y ) + vector( 0, game.tileSize )
@@ -353,25 +353,22 @@ local function onRightClick( self, x, y )
 	for i, entity in pairs( opts ) do
 		for j, option in pairs( entity.options ) do
 			local panelName = name .. " " .. n
-			optionsitem = gui.optionsitem( panelName, option.name )
+			optionsitem = gui.optionsitem( options, panelName, option.name )
 			optionsitem:setEntity( entity.entity )
 			optionsitem:setValue( option.value )
-			options:addItem( optionsitem )
 			n = n + 1
 		end
 	end
 
 	x, y = camera.screenToWorld( x, y )
-	optionsitem = gui.optionsitem( name .. " " .. n, "Walk here" )
+	optionsitem = gui.optionsitem( options, name .. " " .. n, "Walk here" )
 	optionsitem:setValue( function()
 		moveTo( self, x, y )
 	end )
-	options:addItem( optionsitem )
 	n = n + 1
 
-	optionsitem = gui.optionsitem( name .. " " .. n, "Cancel" )
+	optionsitem = gui.optionsitem( options, name .. " " .. n, "Cancel" )
 	optionsitem:setValue( noop )
-	options:addItem( optionsitem )
 	n = n + 1
 
 	return n > 1
@@ -404,14 +401,21 @@ end
 function hudmoveindicator:update( dt )
 	local mx, my = love.mouse.getPosition()
 	local entity = getEntitiesAtMousePos( mx, my )[ 1 ]
-	self._entity  = entity
+	local needsRedraw = false
+	if ( self._entity ~= entity ) then
+		self._entity = entity
+		needsRedraw = true
+	end
 
 	local sprites = self._sprites
 	if ( sprites ) then
 		for _, indicator in ipairs( sprites ) do
 			indicator.sprite:update( dt )
 		end
+		needsRedraw = true
 	end
 
-	self:invalidate()
+	if ( needsRedraw ) then
+		self:invalidate()
+	end
 end

@@ -28,9 +28,9 @@ function frame:frame( parent, name, title )
 	self.movable       = true
 
 	self.closeButton = gui.closebutton( self, name .. " Close Button" )
-	local margin     = 36
+	local t, r, b, l = self:getPadding()
 	self.closeButton:setPos(
-		self.width - 2 * margin - 16,
+		self.width - 2 * r - 16,
 		1
 	)
 
@@ -39,11 +39,11 @@ function frame:frame( parent, name, title )
 	local font             = self:getScheme( "titleFont" )
 	local titleWidth       = font:getWidth( self:getTitle() )
 	local closeButtonWidth = self.closeButton:getWidth()
-	self.minWidth          = 2 * margin + titleWidth + closeButtonWidth
+	self.minWidth          = 2 * l + titleWidth + closeButtonWidth
 	local titleBarHeight   = 86
 	self.minHeight         = titleBarHeight
 
-	self:setUseFullscreenFramebuffer( true )
+	self:setUseFullscreenCanvas( true )
 end
 
 local FRAME_ANIM_SCALE = 0.93
@@ -119,9 +119,9 @@ function frame:drawTitle()
 	love.graphics.setColor( color )
 	local font = self:getScheme( "titleFont" )
 	love.graphics.setFont( font )
-	local margin = 36
-	local x = math.round( margin )
-	local y = math.round( margin - 4 )
+	local t, r, b, l = self:getPadding()
+	local x = math.round( l )
+	local y = math.round( t - 4 )
 	love.graphics.print( self:getTitle(), x, y )
 end
 
@@ -136,7 +136,10 @@ accessor( frame, "title" )
 
 function frame:invalidateLayout()
 	if ( self.closeButton ) then
-		self.closeButton:setX( self:getWidth() - 2 * 36 - 16 )
+		local r = self:getPaddingRight()
+		self.closeButton:setX(
+			self:getWidth() - self.closeButton:getWidth() - 8
+		)
 	end
 
 	gui.panel.invalidateLayout( self )

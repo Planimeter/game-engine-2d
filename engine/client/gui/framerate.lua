@@ -10,6 +10,12 @@ local framerate = gui.framerate
 
 function framerate:framerate( parent, name )
 	gui.label.label( self, parent, name, text )
+
+	self:setScheme( "Console" )
+	self.font   = self:getScheme( "font" )
+	self.height = self.font:getHeight()
+
+	self:setScheme( "Default" )
 	self:setTextAlign( "right" )
 	self:invalidateLayout()
 end
@@ -23,8 +29,12 @@ function framerate:update( dt )
 		self:setOpacity( 1 )
 	end
 
-	self:setText( self:getFramerate() )
-	self:invalidate()
+	local framerate = self:getFramerate()
+	local text      = self:getText()
+	if ( text ~= framerate ) then
+		self:setText( self:getFramerate() )
+		self:invalidate()
+	end
 end
 
 function framerate:getFramerate()

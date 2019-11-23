@@ -10,9 +10,14 @@ local checkbox = gui.checkbox
 
 function checkbox:checkbox( parent, name, text )
 	gui.button.button( self, parent, name, text )
-	self.height  = 24
+	self.width  = nil
+	self.height = nil
+	self:setPadding( 4, 0, 3 )
+	self:setBorderWidth( 0 )
+	self.text:setDisplay( "inline-block" )
+	self.text:set( text )
+	self.text:setMarginLeft( 34 )
 	self.icon    = self:getScheme( "checkbox.icon" )
-	self.text    = text or "Checkbox Label"
 	self.checked = false
 end
 
@@ -21,7 +26,7 @@ function checkbox:draw()
 	self:drawBorder()
 	self:drawLabel()
 
-	gui.panel.draw( self )
+	gui.box.draw( self )
 end
 
 function checkbox:drawCheck()
@@ -38,18 +43,19 @@ function checkbox:drawCheck()
 	love.graphics.setColor( color )
 
 	local height = self:getHeight()
-	local x = height / 2 - self.icon:getWidth() / 2
-	local y = height / 2 - self.icon:getHeight() / 2
+	local x = math.round( height / 2 - self.icon:getWidth() / 2 )
+	local y = math.round( height / 2 - self.icon:getHeight() / 2 )
 	love.graphics.draw( self.icon, x, y )
 end
 
 function checkbox:drawBorder()
+	local mouseover = ( self.mouseover or self:isChildMousedOver() )
 	local color = self:getScheme( "checkbox.borderColor" )
 
 	if ( not self:isDisabled() ) then
-		if ( self.mousedown and self.mouseover ) then
+		if ( self.mousedown and mouseover ) then
 			color = self:getScheme( "checkbox.mousedown.borderColor" )
-		elseif ( self.mousedown or self.mouseover or self.focus ) then
+		elseif ( self.mousedown or mouseover or self.focus ) then
 			color = self:getScheme( "checkbox.mouseover.borderColor" )
 		end
 	end
@@ -74,15 +80,7 @@ function checkbox:drawLabel()
 		color = self:getScheme( "checkbox.disabled.textColor" )
 	end
 
-	love.graphics.setColor( color )
-
-	local font = self:getScheme( "font" )
-	love.graphics.setFont( font )
-	local height = self:getHeight()
-	local marginLeft = 9
-	local x = math.round( height + marginLeft )
-	local y = math.round( height / 2 - font:getHeight() / 2 )
-	love.graphics.print( self:getText(), x, y )
+	self.text:setColor( color )
 end
 
 accessor( checkbox, "checked", "is" )
@@ -95,15 +93,16 @@ function checkbox:keypressed( key, scancode, isrepeat )
 	if ( key == "return"
 	  or key == "kpenter"
 	  or key == "space" ) then
-		self:onClick()
 		self:setChecked( not self:isChecked() )
+		self:onClick()
 	end
 end
 
 function checkbox:mousereleased( x, y, button, istouch )
-	if ( ( self.mousedown and self.mouseover ) and not self:isDisabled() ) then
-		self:onClick()
+	local mouseover = ( self.mouseover or self:isChildMousedOver() )
+	if ( ( self.mousedown and mouseover ) and not self:isDisabled() ) then
 		self:setChecked( not self:isChecked() )
+		self:onClick()
 	end
 
 	if ( self.mousedown ) then

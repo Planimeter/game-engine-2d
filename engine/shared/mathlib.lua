@@ -13,10 +13,25 @@ function math.aabbsintersect( minA, maxA, minB, maxB )
 	       minA.y >= maxB.y
 end
 
+math.fepsilon = 1e-5
+
+function math.approximately( a, b )
+	-- Calculate the difference.
+	local diff = math.abs( a - b )
+	a = math.abs( a )
+	b = math.abs( b )
+	-- Find the largest
+	local largest = ( b > a ) and b or a
+
+	if ( diff <= largest * math.fepsilon ) then
+		return true
+	end
+
+	return false
+end
+
 function math.clamp( n, l, u )
-	return n < l and ( l ) or
-	                 ( n > u and ( u ) or
-	                             ( n ) )
+	return n < l and l or ( n > u and u or n )
 end
 
 function math.gcd( a, b )
@@ -48,6 +63,30 @@ function math.pointinrect( px, py, x, y, width, height )
 	       py >= y and
 	       px < x + width and
 	       py < y + height
+end
+
+function math.pointonline( x1, y1, x2, y2, px, py )
+	local m = ( y2 - y1 ) / ( x2 - x1 )
+	local b = y1 - m * x1
+	return py == m * px + b
+end
+
+function math.pointonlinesegment( x1, y1, x2, y2, px, py )
+	-- Test x out of bounds
+	if ( x2 > x1 and px > x2 ) then
+		return false
+	elseif ( x2 < x1 and px < x2 ) then
+		return false
+	end
+
+	-- Test y out of bounds
+	if ( y2 > y1 and py > y2 ) then
+		return false
+	elseif ( y2 < y1 and py < y2 ) then
+		return false
+	end
+
+	return math.pointonline( x1, y1, x2, y2, px, py )
 end
 
 function math.remap( n, inMin, inMax, outMin, outMax )

@@ -161,13 +161,16 @@ end
 
 function convar:setValue( value )
 	local oldValue = self.value
-	self.value     = value
-
-	local numberValue = tonumber( self.value )
-	if ( ( type( self.value ) == "number" or numberValue ) and
-	     ( self.min and self.max ) ) then
-		self.value = math.min( self.max, math.max( self.min, numberValue ) )
+	local numValue = tonumber( value )
+	local isNumber = type( value ) == "number" or numValue
+	local min, max = self:getMin(), self:getMax()
+	if ( isNumber and min and max ) then
+		self.value = math.clamp( numValue, min, max )
+	else
+		self.value = value
 	end
+
+	self:onValueChange( oldValue, self.value )
 
 	if ( _SERVER ) then
 		local shouldNotify = self:isFlagSet( "notify" )
@@ -175,11 +178,8 @@ function convar:setValue( value )
 			local name = self:getName()
 			local text = "Server cvar " .. name .. " changed to " .. self.value
 			player.sendTextAll( text )
-			return true
 		end
 	end
-
-	self:onValueChange( oldValue, value )
 end
 
 function convar:__tostring()

@@ -193,6 +193,16 @@ if ( _CLIENT ) then
 	payload.setHandler( onPlayerRemovedItem, "playerRemovedItem" )
 end
 
+function vaplayer:onNetworkVarChanged( networkvar )
+	entity.onNetworkVarChanged( self, networkvar )
+
+	if ( networkvar:getName() == "health" ) then
+		if ( _CLIENT and g_HudHealth ) then
+			g_HudHealth:invalidateLayout()
+		end
+	end
+end
+
 local function moveTo( position )
 	return function( character, next )
 		character:moveTo( position, next )

@@ -14,7 +14,7 @@ function radiobutton:radiobutton( parent, name, text )
 	self.height     = 24
 	self.icon       = self:getScheme( "radiobutton.icon" )
 	self.foreground = self:getScheme( "radiobutton.foreground" )
-	self.text       = text or "Radio Button Label"
+	self.text:set( text )
 	self.value      = nil
 	self.selected   = false
 	self.id         = -1
@@ -92,7 +92,8 @@ end
 gui.accessor( radiobutton, "selected", "is" )
 
 function radiobutton:mousereleased( x, y, button, istouch )
-	if ( ( self.mousedown and ( self.mouseover or self:isChildMousedOver() ) ) and not self:isDisabled() ) then
+	local mouseover = ( self.mouseover or self:isChildMousedOver() )
+	if ( ( self.mousedown and mouseover ) and not self:isDisabled() ) then
 		local radiobuttongroup = self:getGroup()
 		if ( radiobuttongroup ) then
 			radiobuttongroup:setSelectedId( self.id )

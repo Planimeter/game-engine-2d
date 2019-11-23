@@ -17,9 +17,9 @@ function bindlistpanel:bindlistpanel( parent, name )
 end
 
 function bindlistpanel:draw()
-	self:drawBackground( self:getScheme( "bindlistpanel.backgroundColor" ) )
-	gui.panel.draw( self )
-	self:drawBorder( self:getScheme( "bindlistpanel.borderColor" ) )
+	gui.panel.drawBackground( self, self:getScheme( "backgroundColor" ) )
+	gui.box.draw( self )
+	gui.panel.drawBorder( self, self:getScheme( "borderColor" ) )
 end
 
 local function getLastY( self )
@@ -39,7 +39,6 @@ function bindlistpanel:addHeader( label )
 	local name  = label .. " Bind List Header"
 	local y     = getLastY( panel )
 	local label = gui.bindlistheader( panel, name, label )
-	label:setY( y )
 	self:setInnerHeight( getLastY( panel ) )
 end
 
@@ -48,7 +47,6 @@ function bindlistpanel:addBinding( text, key, concommand )
 	local name    = text .. " Bind List Item"
 	local y       = getLastY( panel )
 	local binding = gui.bindlistitem( panel, name, text, key, concommand )
-	binding:setY( y )
 	self:setInnerHeight( getLastY( panel ) )
 end
 

@@ -8,14 +8,20 @@ class "gui.dropdownlistitem" ( "gui.radiobutton" )
 
 local dropdownlistitem = gui.dropdownlistitem
 
-function dropdownlistitem:dropdownlistitem( name, text )
+function dropdownlistitem:dropdownlistitem( parent, name, text )
 	gui.radiobutton.radiobutton( self, nil, name, text )
 	self:setPadding( 15, 18, 14 )
 	self:setDisplay( "block" )
 	self:setPosition( "static" )
-	self.width  = 214
-	self.height = nil
-	self.text   = gui.text( self, name .. " Text Node", text or "Drop-Down List Item" )
+
+	parent:addItem( self )
+
+	local parent = self:getParent()
+	self.width   = nil
+	self.height  = nil
+	self.text:set( text )
+
+	self:invalidateLayout()
 end
 
 function dropdownlistitem:draw()
@@ -73,4 +79,11 @@ function dropdownlistitem:mousepressed( x, y, button, istouch )
 	if ( parentFrame ) then
 		parentFrame:setFocusedFrame( true )
 	end
+end
+
+function dropdownlistitem:invalidateLayout()
+	local parent = self:getParent()
+	local t, r, b, l = parent:getBorderWidth()
+	self:setWidth( parent:getWidth() - r - l )
+	gui.panel.invalidateLayout( self )
 end

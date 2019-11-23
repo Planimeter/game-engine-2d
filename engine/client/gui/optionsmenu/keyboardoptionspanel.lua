@@ -13,15 +13,14 @@ class "gui.keyboardoptionspanel" ( "gui.frametabpanel" )
 local keyboardoptionspanel = gui.keyboardoptionspanel
 
 function keyboardoptionspanel:keyboardoptionspanel( parent, name )
-	parent = parent or nil
 	name = name or "Keyboard Options Panel"
 	gui.frametabpanel.frametabpanel( self, parent, name )
 
 	self.bindList = gui.bindlistpanel( self )
 	local margin = 24
 	local height = 348 - margin
-	self.bindList:setSize( 640 - 2 * margin, height )
-	self.bindList:setPos( margin, margin )
+	self.bindList:setDimensions( 640 - 2 * margin, height )
+	self.bindList:setMargin( margin )
 	self.bindList:readBinds()
 
 	local name = "Keyboard Options"

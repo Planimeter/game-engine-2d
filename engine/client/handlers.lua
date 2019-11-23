@@ -156,12 +156,19 @@ function update( dt )
 	local _SERVER = _SERVER or _G._SERVER
 
 	if ( _CLIENT and not _SERVER ) then
-		_G.map.update( dt )
-	end
+		local game   = _G.game and _G.game.client or nil
+		local entity = _G.entity
 
-	local game = _G.game and _G.game.client or nil
-	if ( game ) then
-		game.update( dt )
+		if ( game ) then
+			game.update( dt )
+
+			if ( entity ) then
+				local entities = entity.getAll()
+				for _, entity in ipairs( entities ) do
+					entity:update( dt )
+				end
+			end
+		end
 	end
 
 	local network = engine.client.network
@@ -179,18 +186,21 @@ function draw()
 	end
 
 	if ( isInGame() ) then
-		if ( gui._viewportFramebuffer == nil ) then
+		if ( gui._viewportCanvas == nil ) then
 			require( "engine.client.canvas" )
-			gui._viewportFramebuffer = _G.fullscreencanvas()
+			gui._viewportCanvas = _G.fullscreencanvas( nil, nil, {
+				dpiscale = 1
+			} )
+			gui._viewportCanvas:setFilter( "nearest", "nearest" )
 		end
 
-		gui._viewportFramebuffer:renderTo( function()
+		gui._viewportCanvas:renderTo( function()
 			love.graphics.clear()
 			_G.game.client.draw()
 		end )
 
 		love.graphics.setColor( _G.color.white )
-		gui._viewportFramebuffer:draw()
+		gui._viewportCanvas:draw()
 	end
 
 	gui.draw()

@@ -10,15 +10,15 @@ local dropdownlistitemgroup = gui.dropdownlistitemgroup
 
 function dropdownlistitemgroup:dropdownlistitemgroup( parent, name )
 	gui.radiobuttongroup.radiobuttongroup( self, nil, name )
+	self:setParent( parent:getRootPanel() )
 	self.height = nil
 	self:setBorderWidth( 1 )
 	self:setBorderColor( self:getScheme( "dropdownlistitem.borderColor" ) )
 	self:setDisplay( "block" )
 	self:setPosition( "absolute" )
 	self.width = parent:getWidth()
-	self:setUseFullscreenFramebuffer( true )
+	self:setUseFullscreenCanvas( true )
 	self.dropDownList = parent
-	self:setScheme( "Default" )
 end
 
 function dropdownlistitemgroup:addItem( item, default )
@@ -45,6 +45,7 @@ accessor( dropdownlistitemgroup, "dropDownList" )
 function dropdownlistitemgroup:invalidateLayout()
 	self:updatePos()
 	self:setWidth( self:getDropDownList():getWidth() )
+	gui.panel.invalidateLayout( self )
 end
 
 function dropdownlistitemgroup:isVisible()

@@ -10,7 +10,7 @@ local throbber = gui.throbber
 
 function throbber:throbber( parent, name, image )
 	gui.imagepanel.imagepanel( self, parent, name, image or "images/gui/throbber.png" )
-	self:setSize( 16, 16 )
+	self:setDimensions( 16, 16 )
 	self:setOpacity( 0 )
 end
 

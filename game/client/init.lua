@@ -46,6 +46,10 @@ function createDefaultPanels()
 	-- Initialize dialogue
 	-- local dialogue = gui.huddialogue( _G.g_Viewport )
 	-- _G.g_Dialogue = dialogue
+
+	-- Initialize profiler
+	local profiler = gui.hudprofiler( _G.g_Viewport )
+	_G.g_Profiler = profiler
 end
 
 function draw()
@@ -81,7 +85,7 @@ end
 function onReloadSound( filename )
 end
 
-function onTick( timestep )
+function tick( timestep )
 end
 
 function quit()

@@ -14,6 +14,7 @@ local function onReceivePlayerInitialized( payload )
 	camera.setZoom( 2 )
 
 	if ( not _SERVER ) then
+		localplayer:setGraphicsSize( love.graphics.getDimensions() )
 		localplayer:initialSpawn()
 	end
 end

@@ -121,6 +121,12 @@ local function autocomplete( text )
 	end
 
 	suggestions = table.unique( suggestions )
+
+	local limit = 5
+	while ( #suggestions > limit ) do
+		table.remove( suggestions, limit + 1 )
+	end
+
 	return #suggestions > 0 and suggestions or nil
 end
 
@@ -129,15 +135,13 @@ local keypressed = function( itemGroup, key, isrepeat )
 		return
 	end
 
-	-- BUGBUG: We never get here anymore due to the introduction of
-	-- cascadeInputToChildren.
 	local history = console._commandHistory
 	for i, v in ipairs( history ) do
 		if ( itemGroup:getValue() == v ) then
 			table.remove( history, i )
 			local item = itemGroup:getSelectedItem()
-			itemGroup:removeItem( item )
-			return
+			item:remove()
+			return true
 		end
 	end
 end
@@ -147,10 +151,11 @@ function console:console( parent, name, title )
 	name   = name or "Console"
 	title  = title or name
 	gui.frame.frame( self, parent, name, title )
-	self.width     = 661
+	self.width     = 668
 	self.minHeight = 178
 
 	self.output = console.textbox( self, name .. " Output Text Box", "" )
+	self.output:setMaxLength( 80 * 50 )
 	self.input  = gui.textbox( self, name .. " Input Text Box", "" )
 	self.input.onEnter = function( textbox, text )
 		text = string.trim( text )
@@ -237,7 +242,7 @@ end )
 
 concommand( "clear", "Clears the console", function()
 	if ( love.system.getOS() == "Windows" ) then
-		-- This breaks the LOVE console. :(
+		-- This breaks the LOVE console.
 		-- os.execute( "cls" )
 	else
 		os.execute( "clear" )

@@ -32,11 +32,9 @@ function concommand.dispatch( player, name, argString, argTable )
 				return true
 			end
 		end
-
-		concommand:callback( player, name, argString, argTable )
-	else
-		concommand:callback( player, name, argString, argTable )
 	end
+
+	concommand:callback( player, name, argString, argTable )
 
 	if ( flags ) then
 		local networked = table.hasvalue( flags, "network" )
@@ -55,7 +53,7 @@ if ( _CLIENT ) then
 	function concommand.run( name )
 		local command = string.match( name, "^([^%s]+)" )
 		if ( command == nil ) then
-			return
+			return false
 		end
 
 		local _, endPos = string.find( name, command, 1, true )
@@ -63,7 +61,16 @@ if ( _CLIENT ) then
 		local argTable  = string.parseargs( argString )
 		if ( concommand.getConcommand( command ) ) then
 			concommand.dispatch( localplayer, command, argString, argTable )
+			return true
 		end
+
+		local convar = convar.getConvar( command )
+		if ( convar ) then
+			convar:setValue( argString )
+			return true
+		end
+
+		return false
 	end
 end
 

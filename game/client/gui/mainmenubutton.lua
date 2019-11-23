@@ -14,7 +14,7 @@ function mainmenubutton:mainmenubutton( parent, text )
 	self:setBorderWidth( 0 )
 
 	local font  = self:getScheme( "mainmenuFont" )
-	self.text   = gui.text( self, name .. " Text Node", text or "" )
+	self.text:set( text )
 	self.text:setFont( font )
 
 	self.height = font:getHeight()
@@ -22,11 +22,12 @@ end
 
 function mainmenubutton:draw()
 	local textColor = "mainmenubutton.dark.textColor"
+	local mouseover = ( self.mouseover or self:isChildMousedOver() )
 	if ( self:isDisabled() ) then
 		textColor = "mainmenubutton.dark.disabled.textColor"
-	elseif ( self.mousedown and ( self.mouseover or self:isChildMousedOver() ) ) then
+	elseif ( self.mousedown and mouseover ) then
 		textColor = "mainmenubutton.dark.mousedown.textColor"
-	elseif ( self.mousedown or ( self.mouseover or self:isChildMousedOver() ) or self.focus ) then
+	elseif ( self.mousedown or mouseover or self.focus ) then
 		textColor = "mainmenubutton.dark.mouseover.textColor"
 	end
 

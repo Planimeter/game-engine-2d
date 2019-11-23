@@ -93,8 +93,7 @@ end
 local cl_updaterate = convar( "cl_updaterate", 20, nil, nil,
                               "Sets the client tick rate" )
 
--- local timestep = 1/20
-_accumulator      = _accumulator or 0
+_accumulator = _accumulator or 0
 
 function update( dt )
 	if ( _host == nil ) then
@@ -102,21 +101,11 @@ function update( dt )
 	end
 
 	local timestep = 1 / cl_updaterate:getNumber()
-	_accumulator   = _accumulator + dt
+	_accumulator = _accumulator + dt
 
 	while ( _accumulator >= timestep ) do
+		engine.client.tick( timestep )
 		pollEvents()
-
-		local entity = _G.entity
-		if ( entity ) then
-			local entities = entity.getAll()
-			for _, entity in ipairs( entities ) do
-				entity:onTick( timestep )
-			end
-		end
-
-		engine.client.onTick( timestep )
-
 		_accumulator = _accumulator - timestep
 	end
 end
@@ -131,8 +120,8 @@ function updateSentReceived()
 	_prevTotalRcvdData  = _totalRcvdData or 0
 	_totalSentData      = _host:total_sent_data()
 	_totalRcvdData      = _host:total_received_data()
-	_avgSentData        = ( _totalSentData - _prevTotalSentData )
-	_avgRcvdData        = ( _totalRcvdData - _prevTotalRcvdData )
+	_avgSentData        = _totalSentData - _prevTotalSentData
+	_avgRcvdData        = _totalRcvdData - _prevTotalRcvdData
 	_sentRcvdUpdateTime = love.timer.getTime() + 1
 end
 

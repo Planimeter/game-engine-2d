@@ -1,8 +1,11 @@
---=========== Copyright © 2018, Planimeter, All rights reserved. ===========--
+--=========== Copyright © 2019, Planimeter, All rights reserved. ===========--
 --
 -- Purpose:
 --
 --==========================================================================--
+
+require( "engine.shared.profile" )
+profile.push( "load" )
 
 argv = {}
 for _, v in ipairs( arg ) do argv[ v ] = true end
@@ -22,7 +25,7 @@ end
 
 function love.conf( c )
 	c.title = "Grid Engine"
-	c.version = "11.1"
+	c.version = "11.3"
 	if ( _DEDICATED ) then
 		c.modules.keyboard = false
 		c.modules.mouse = false

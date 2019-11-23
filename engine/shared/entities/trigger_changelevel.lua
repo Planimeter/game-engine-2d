@@ -41,7 +41,7 @@ function trigger_changelevel:removeMap()
 	end
 end
 
-function trigger_changelevel:update( dt )
+function trigger_changelevel:tick( timestep )
 	for _, player in ipairs( player.getAll() ) do
 		if ( self:isVisibleToPlayer( player ) ) then
 			if ( not self.loaded ) then

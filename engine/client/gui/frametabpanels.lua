@@ -4,23 +4,27 @@
 --
 --==========================================================================--
 
-class "gui.frametabpanels" ( "gui.panel" )
+class "gui.frametabpanels" ( "gui.box" )
 
 local frametabpanels = gui.frametabpanels
 
 function frametabpanels:frametabpanels( parent, name, text )
-	gui.panel.panel( self, parent, name )
+	gui.box.box( self, parent, name )
+	self:setDisplay( "block" )
+	self:setPosition( "absolute" )
 	self.width	= parent:getWidth()
 	self.height = parent:getHeight() - 62
 end
 
 function frametabpanels:addPanel( frametabpanel, default )
-	frametabpanel:setSize( self:getSize() )
-	frametabpanel:setParent( self )
+	local panel = frametabpanel( self )
+	panel:setDimensions( self:getDimensions() )
 
 	if ( not default and #self:getChildren() ~= 1 ) then
-		frametabpanel:setVisible( false )
+		panel:setVisible( false )
 	end
+
+	return panel
 end
 
 function frametabpanels:setSelectedChild( i )

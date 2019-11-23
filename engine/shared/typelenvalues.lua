@@ -19,7 +19,6 @@ function typelenvalues.bytesToNumber( bytes )
 	for i = 6, 1, -1 do
 		mantissa = mantissa * 256 + byte( bytes, i )
 	end
-
 	if ( byte( bytes, 8 ) > 127 ) then
 		sign = -1
 	end
@@ -34,6 +33,42 @@ function typelenvalues.bytesToNumber( bytes )
 	return ldexp( mantissa, exponent - 1023 )
 end
 
+function typelenvalues.bytesToFloat( bytes )
+	bytes = reverse( bytes )
+
+	local sign     = 1
+	local mantissa = byte( bytes, 3 ) % 128
+	for i = 2, 1, -1 do
+		mantissa = mantissa * 256 + byte( bytes, i )
+	end
+	if ( byte( bytes, 4 ) > 127 ) then
+		sign = -1
+	end
+
+	local exponent = ( byte( bytes, 4 ) % 128 ) * 2 +
+	            floor( byte( bytes, 3 )         / 128 )
+	if ( exponent == 0 ) then
+		return 0
+	end
+
+	mantissa = sign * ( ldexp( mantissa, -23 ) + 1 )
+	return ldexp( mantissa, exponent - 127 )
+end
+
+function typelenvalues.bytesToShort( bytes )
+	bytes = reverse( bytes )
+
+	local number = 0
+	number = number + byte( bytes, 1 )
+	number = number + byte( bytes, 2 ) * ( 2 ^ 8 )
+
+	if ( number >= 2 ^ ( 2 * 8 - 1 ) ) then
+		number = number - 2 ^ ( 2 * 8 )
+	end
+
+	return number
+end
+
 local char = string.char
 
 local function getByte( v )
@@ -44,7 +79,6 @@ local frexp = math.frexp
 
 function typelenvalues.numberToBytes( number )
 	local sign = 0
-
 	if ( number < 0 ) then
 		sign   = 1
 		number = -number
@@ -59,20 +93,61 @@ function typelenvalues.numberToBytes( number )
 		exponent = exponent + 1022
 	end
 
-	local v    = ""
-	local byte = 0
-	number     = mantissa
+	local bytes = ""
+	local byte  = 0
+	number      = mantissa
 	for i = 1, 6 do
 		number, byte = getByte( number )
-		v = v .. byte
+		bytes = bytes .. byte
 	end
 
 	number, byte = getByte( exponent * 16 + number )
-	v = v .. byte
+	bytes = bytes .. byte
 
 	number, byte = getByte( sign * 128 + number )
-	v = v .. byte
-	return reverse( v )
+	bytes = bytes .. byte
+	return reverse( bytes )
+end
+
+function typelenvalues.floatToBytes( number )
+	local sign = 0
+	if ( number < 0 ) then
+		sign   = 1
+		number = -number
+	end
+
+	local mantissa, exponent = frexp( number )
+	if ( number == 0 ) then
+		mantissa = 0
+		exponent = 0
+	else
+		mantissa = ( mantissa * 2 - 1 ) * ldexp( 0.5, 24 )
+		exponent = exponent + 126
+	end
+
+	local bytes = ""
+	local byte  = 0
+	number, byte = getByte( mantissa )
+	bytes = bytes .. byte
+
+	number, byte = getByte( number )
+	bytes = bytes .. byte
+
+	number, byte = getByte( exponent * 128 + number )
+	bytes = bytes .. byte
+
+	number, byte = getByte( sign * 128 + number )
+	bytes = bytes .. byte
+	return reverse( bytes )
+end
+
+function typelenvalues.shortToBytes( number )
+	number      = floor( number )
+
+	local bytes = char( number % ( 2 ^ 8 ) )
+	number      = floor( number / ( 2 ^ 8 ) )
+	bytes       = bytes .. char( number % ( 2 ^ 8 ) )
+	return reverse( bytes )
 end
 
 local pairs = pairs
@@ -146,26 +221,28 @@ function typelenvalues:serialize()
 			-- Insert length if necessary
 			if ( key.type == "string" ) then
 				local size = len( value )
-				insert( data, typelenvalues.numberToBytes( size ) )
+				insert( data, typelenvalues.shortToBytes( size ) )
 			elseif ( key.type == "typelenvalues" ) then
 				local size = len( value:serialize() )
-				insert( data, typelenvalues.numberToBytes( size ) )
+				insert( data, typelenvalues.shortToBytes( size ) )
 			end
 
 			-- Insert data
 			if ( key.type == "boolean" ) then
 				insert( data, char( value and 1 or 0 ) )
-			elseif ( key.type == "number" ) then
-				insert( data, typelenvalues.numberToBytes( value ) )
+			elseif ( key.type == "float" ) then
+				insert( data, typelenvalues.floatToBytes( value ) )
+			elseif ( key.type == "short" ) then
+				insert( data, typelenvalues.shortToBytes( value ) )
 			elseif ( key.type == "string" ) then
 				insert( data, value )
 			elseif ( key.type == "vector" ) then
-				insert( data, typelenvalues.numberToBytes( value.x ) )
-				insert( data, typelenvalues.numberToBytes( value.y ) )
+				insert( data, typelenvalues.floatToBytes( value.x ) )
+				insert( data, typelenvalues.floatToBytes( value.y ) )
 			elseif ( key.type == "typelenvalues" ) then
 				insert( data, value:serialize() )
 			elseif ( key.type == "entity" ) then
-				insert( data, typelenvalues.numberToBytes( value and value.entIndex or 0 ) )
+				insert( data, typelenvalues.shortToBytes( value and value.entIndex or 0 ) )
 			else
 				print( "Can't serialize " .. key.type .. " for " ..
 				       self:getStructName() .. "!" )
@@ -220,39 +297,43 @@ function typelenvalues:deserialize()
 		if ( key ) then
 			if ( key.type == "boolean" ) then
 				size = 1
-			elseif ( key.type == "number" ) then
-				size = 8
+			elseif ( key.type == "float" ) then
+				size = 4
+			elseif ( key.type == "short" ) then
+				size = 2
 			elseif ( key.type == "string" ) then
-				size  = typelenvalues.bytesToNumber( sub( data, index, index + 7 ) )
-				index = index + 8
+				size  = typelenvalues.bytesToShort( sub( data, index, index + 1 ) )
+				index = index + 2
 			elseif ( key.type == "vector" ) then
-				size = 2 * 8
+				size = 2 * 4
 			elseif ( key.type == "typelenvalues" ) then
-				size  = typelenvalues.bytesToNumber( sub( data, index, index + 7 ) )
-				index = index + 8
+				size  = typelenvalues.bytesToShort( sub( data, index, index + 1 ) )
+				index = index + 2
 			elseif ( key.type == "entity" ) then
-				size = 8
+				size = 2
 			end
 
 			-- Get data
 			bytes = sub( data, index, index + size - 1 )
 			if ( key.type == "boolean" ) then
 				self.data[ key.name ] = byte( bytes ) ~= 0
-			elseif ( key.type == "number" ) then
-				self.data[ key.name ] = typelenvalues.bytesToNumber( bytes )
+			elseif ( key.type == "float" ) then
+				self.data[ key.name ] = typelenvalues.bytesToFloat( bytes )
+			elseif ( key.type == "short" ) then
+				self.data[ key.name ] = typelenvalues.bytesToShort( bytes )
 			elseif ( key.type == "string" ) then
 				self.data[ key.name ] = bytes
 			elseif ( key.type == "vector" ) then
 				self.data[ key.name ] = vector(
-					typelenvalues.bytesToNumber( sub( bytes, 1, 8 ) ), --x
-					typelenvalues.bytesToNumber( sub( bytes, 8, 16 ) ) --y
+					typelenvalues.bytesToFloat( sub( bytes, 1, 4 ) ), --x
+					typelenvalues.bytesToFloat( sub( bytes, 4, 8 ) )  --y
 				)
 			elseif ( key.type == "typelenvalues" ) then
 				local tlvs = typelenvalues()
 				tlvs.data  = bytes
 				self.data[ key.name ] = tlvs
 			elseif ( key.type == "entity" ) then
-				local entIndex = typelenvalues.bytesToNumber( bytes )
+				local entIndex = typelenvalues.bytesToShort( bytes )
 				entities.require( "entity" )
 				self.data[ key.name ] = entity.getByEntIndex( entIndex )
 			end

@@ -19,6 +19,7 @@ function hudgamemenustat:hudgamemenustat( parent, name, stat )
 	self:setScheme( "Default" )
 
 	local progressbar = gui.progressbar( self, "Stat Progress" )
+	progressbar:setPosition( "absolute" )
 	progressbar:setY( 23 )
 	self.progressbar = progressbar
 

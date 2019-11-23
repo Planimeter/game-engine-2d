@@ -4,12 +4,12 @@
 --
 --==========================================================================--
 
-class "gui.hudspeechballoons" ( "gui.panel" )
+class "gui.hudspeechballoons" ( "gui.box" )
 
 local hudspeechballoons = gui.hudspeechballoons
 
 function hudspeechballoons:hudspeechballoons( parent )
-	gui.panel.panel( self, parent, "HUD Speech Balloons" )
+	gui.box.box( self, parent, "HUD Speech Balloons" )
 
 	self:setScheme( "Default" )
 	self:addChatHook()
@@ -46,7 +46,7 @@ end
 function hudspeechballoons:draw()
 	self:drawBalloons()
 
-	gui.panel.draw( self )
+	gui.box.draw( self )
 end
 
 function hudspeechballoons:drawBalloons()
@@ -93,7 +93,10 @@ function hudspeechballoons:update( dt )
 	end
 
 	self:updateBalloons()
-	self:invalidate()
+
+	if ( self.speechBalloons ~= nil ) then
+		self:invalidate()
+	end
 end
 
 function hudspeechballoons:updateBalloons()
@@ -105,5 +108,9 @@ function hudspeechballoons:updateBalloons()
 		if ( balloon.expire <= love.timer.getTime() ) then
 			self.speechBalloons[ player ] = nil
 		end
+	end
+
+	if ( table.count( self.speechBalloons ) == 0 ) then
+		self.speechBalloons = nil
 	end
 end

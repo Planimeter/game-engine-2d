@@ -13,8 +13,6 @@ function textboxautocompleteitemgroup:textboxautocompleteitemgroup( parent, name
 end
 
 function textboxautocompleteitemgroup:invalidateLayout()
-	self:updatePos()
-
 	local itemWidth = 0
 	local font      = self:getScheme( "font" )
 	local maxWidth  = 0
@@ -37,7 +35,7 @@ function textboxautocompleteitemgroup:invalidateLayout()
 		for _, listItem in ipairs( listItems ) do
 			listItem:setWidth( maxWidth )
 		end
-
-		self:setHeight( y + 1 )
 	end
+
+	self:updatePos()
 end

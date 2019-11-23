@@ -40,6 +40,11 @@ function weapon_bow:spawn()
 	local max      = vector( tileSize, -tileSize )
 	self:initializePhysics( "dynamic" )
 	self:setCollisionBounds( min, max )
+
+	local body = self:getBody()
+	if ( body ) then
+		body:setMass( 1.81437 )
+	end
 end
 
 entities.linkToClassname( weapon_bow, "weapon_bow" )

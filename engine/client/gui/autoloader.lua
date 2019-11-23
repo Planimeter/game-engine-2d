@@ -16,17 +16,23 @@ local _G           = _G
 module( "gui" )
 
 local metatable = {}
+local panelDirectories = {
+	"game.client",
+	"engine.client"
+}
 
 function metatable.__index( t, k )
+	-- Ignore private members.
 	local privateMember = string.sub( k, 1, 1 ) == "_"
 	if ( privateMember ) then
 		return
 	end
 
-	for _, module in ipairs( {
-		"game.client",
-		"engine.client"
-	} ) do
+	-- Look in `/game/client/gui` and `/engine/client/gui` for
+	-- panels not yet required and require them.
+	--
+	-- Otherwise, return a standard Lua error.
+	for _, module in ipairs( panelDirectories ) do
 		local library = module .. ".gui." .. k
 		local status, err = pcall( require, library )
 		if ( status == true ) then
@@ -40,6 +46,7 @@ function metatable.__index( t, k )
 		end
 	end
 
+	-- Return pass-through.
 	local v = rawget( t, k )
 	if ( v ~= nil ) then
 		return v

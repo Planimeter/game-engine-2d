@@ -32,12 +32,13 @@ end
 
 function optionsitemgroup:invalidateLayout()
 	self:updatePos()
+	gui.panel.invalidateLayout( self )
 end
 
 function optionsitemgroup:updatePos()
 	local parent = self:getParent()
 	local x, y = self:getPos()
-	local width, height = self:getSize()
+	local width, height = self:getDimensions()
 	local windowPadding = 4
 	if ( x + width > parent:getWidth() ) then
 		x = x - width

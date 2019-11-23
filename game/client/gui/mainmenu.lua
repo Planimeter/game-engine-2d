@@ -10,14 +10,14 @@ class "gui.mainmenu" ( "gui.box" )
 
 local mainmenu = gui.mainmenu
 
-function mainmenu:mainmenu()
+function mainmenu:mainmenu( parent, name )
 	gui.box.box( self, g_RootPanel, "Main Menu" )
 	self:setDisplay( "block" )
 	self:setPosition( "absolute" )
 
 	self.width       = love.graphics.getWidth()
 	self.height      = love.graphics.getHeight()
-	self:setUseFullscreenFramebuffer( true )
+	self:setUseFullscreenCanvas( true )
 
 	self.logo      = self:getScheme( "logo" )
 	self.logoSmall = self:getScheme( "logoSmall" )
@@ -39,12 +39,15 @@ local MAINMENU_ANIM_TIME = 0.2
 
 function mainmenu:activate()
 	if ( not self:isVisible() ) then
-		self:setOpacity( 0 )
+		-- self:setOpacity( 0 )
 		self:animate( {
 			opacity  = 1
 			-- y     = 0
 			-- scale = 1
-		}, MAINMENU_ANIM_TIME, "easeOutQuint" )
+		}, {
+			duration = MAINMENU_ANIM_TIME,
+			easing   = "easeOutQuint",
+		} )
 	end
 
 	self:setVisible( true )
@@ -69,14 +72,20 @@ function mainmenu:close()
 		opacity  = 0
 		-- y     = love.graphics.getHeight()
 		-- scale = 0
-	}, MAINMENU_ANIM_TIME, "easeOutQuint", function()
-		self:setVisible( false )
-		self:setOpacity( 1 )
+	}, {
+		duration = MAINMENU_ANIM_TIME,
+		easing   = "easeOutQuint",
+		complete = function()
+			self:setVisible( false )
+			self:setOpacity( 1 )
 
-		self.closing = nil
-	end )
+			self.closing = nil
+		end
+	} )
 
-	game.call( "client", "onMainMenuClose" )
+	if ( game ) then
+		game.call( "client", "onMainMenuClose" )
+	end
 end
 
 function mainmenu:createButtons()
@@ -95,7 +104,7 @@ function mainmenu:createButtons()
 	end
 	table.insert( self.buttons, self.joinLeaveServer )
 
-	table.insert( self.buttons, gui.mainmenubutton( self ) )
+	table.insert( self.buttons, gui.mainmenubutton( self, "" ) )
 
 	local options = gui.mainmenubutton( self, "Options" )
 	options.onClick = function()
@@ -129,7 +138,7 @@ function mainmenu:enableServerConnections()
 end
 
 function mainmenu:invalidateLayout()
-	self:setSize( love.graphics.getWidth(), love.graphics.getHeight() )
+	self:setDimensions( love.graphics.getWidth(), love.graphics.getHeight() )
 
 	local margin = gui.scale( 96 )
 	local y      = margin
@@ -173,12 +182,6 @@ function mainmenu:draw()
 	self:drawLogo()
 
 	gui.panel.draw( self )
-end
-
-function mainmenu:drawTranslucency()
-	if ( gui._translucencyFramebuffer ) then
-		gui._translucencyFramebuffer:draw()
-	end
 end
 
 function mainmenu:drawLogo()
@@ -231,7 +234,7 @@ function mainmenu:remove()
 end
 
 function mainmenu:update( dt )
-	if ( gui._translucencyFramebuffer and self:isVisible() ) then
+	if ( gui._translucencyCanvas and self:isVisible() ) then
 		self:invalidate()
 	end
 

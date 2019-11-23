@@ -11,36 +11,36 @@ local frametab = gui.frametab
 function frametab:frametab( parent, name, text )
 	gui.radiobutton.radiobutton( self, parent, name, text )
 	self:setDisplay( "inline-block" )
-	self.text     = text or "Frame Tab"
-	local font    = self:getScheme( "font" )
-	local padding = 24
-	self.width    = font:getWidth( self:getText() ) + 2 * padding
-	self.height   = 61
+	self:setPadding( 22 )
+	self.text:set( text )
+	self.width  = nil
+	self.height = nil
 end
 
 function frametab:draw()
 	self:drawBackground()
 	self:drawText()
-
-	gui.panel.draw( self )
+	gui.box.draw( self )
 end
 
 function frametab:drawBackground()
-	local color  = self:getScheme( "frametab.backgroundColor" )
-	local width  = self:getWidth()
-	local height = self:getHeight()
+	local color     = self:getScheme( "frametab.backgroundColor" )
+	local mouseover = self.mouseover or self:isChildMousedOver()
+	local width     = self:getWidth()
+	local height    = self:getHeight()
+
 
 	if ( self:isSelected() ) then
 		color = self:getScheme( "frametab.selected.backgroundColor" )
-	elseif ( self.mouseover ) then
+	elseif ( mouseover ) then
 		gui.panel.drawBackground( self, color )
 		color = self:getScheme( "frametab.mouseover.backgroundColor" )
 	end
 
 	love.graphics.setColor( color )
 
-	local selected  = self.mouseover or      self:isSelected()
-	local mouseover = self.mouseover and not self:isSelected()
+	local selected  = mouseover or      self:isSelected()
+	mouseover       = mouseover and not self:isSelected()
 	love.graphics.rectangle(
 		"fill",
 		0,
@@ -78,7 +78,7 @@ function frametab:drawBackground()
 end
 
 function frametab:mousepressed( x, y, button, istouch )
-	if ( self.mouseover and button == 1 ) then
+	if ( ( self.mouseover or self:isChildMousedOver() ) and button == 1 ) then
 		self.mousedown = true
 
 		if ( not self:isDisabled() ) then

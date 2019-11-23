@@ -4,12 +4,12 @@
 --
 --==========================================================================--
 
-class "gui.bindlistheader" ( "gui.panel" )
+class "gui.bindlistheader" ( "gui.box" )
 
 local bindlistheader = gui.bindlistheader
 
 function bindlistheader:bindlistheader( parent, name, text )
-	gui.panel.panel( self, parent, name )
+	gui.box.box( self, parent, name )
 	self.width  = parent:getWidth()
 	self.height = 46
 	self.text   = text or "Bind List Header"
@@ -38,7 +38,7 @@ function bindlistheader:draw()
 	local height = 1
 	love.graphics.rectangle( "fill", x, y, width, height )
 
-	gui.panel.draw( self )
+	gui.box.draw( self )
 end
 
 accessor( bindlistheader, "text" )

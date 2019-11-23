@@ -10,12 +10,12 @@ uniform float width;
 const   int   samples = 20;
 const   float pi      = 3.1415926535898f;
 
-vec4 effect( vec4 vcolor, Image tex, vec2 texcoord, vec2 pixcoord )
+vec4 effect( vec4 color, Image tex, vec2 texcoord, vec2 pixcoord )
 {
 	// Stroke
 	float alpha = 0.0f;
 	float angle = 0.0f;
-	for( int i = 0; i < samples; i++ )
+	for ( int i = 0; i < samples; i++ )
 	{
 		angle += 1.0f / ( float( samples ) / 2.0f ) * pi;
 
@@ -28,7 +28,7 @@ vec4 effect( vec4 vcolor, Image tex, vec2 texcoord, vec2 pixcoord )
 	}
 
 	// Texture
-	vec4 FragColor = vcolor * alpha;
+	vec4 FragColor = color * alpha;
 	vec4 texel     = Texel( tex, texcoord );
 	FragColor      = mix( FragColor, texel, texel.a );
 	return FragColor;

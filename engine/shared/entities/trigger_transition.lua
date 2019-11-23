@@ -121,19 +121,23 @@ end
 
 function trigger_transition:removeMap()
 	local properties = self:getProperties()
-	if ( properties ) then
-		local name = properties[ "map" ]
-		local r = map.getByName( name )
-		if ( r ) then
-			local players = player.getInOrNearMap( r )
-			if ( players == nil ) then
-				map.unload( name )
-			end
-		end
+	if ( properties == nil ) then
+		return
+	end
+
+	local name = properties[ "map" ]
+	local r = map.getByName( name )
+	if ( r == nil ) then
+		return
+	end
+
+	local players = player.getInOrNearMap( r )
+	if ( players == nil ) then
+		map.unload( name )
 	end
 end
 
-function trigger_transition:update( dt )
+function trigger_transition:tick( timestep )
 	for _, player in ipairs( player.getAll() ) do
 		if ( self:isVisibleToPlayer( player ) ) then
 			if ( not self.loaded ) then

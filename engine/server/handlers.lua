@@ -61,11 +61,18 @@ function quit()
 end
 
 function update( dt )
-	_G.map.update( dt )
+	local game   = _G.game and _G.game.server or nil
+	local entity = _G.entity
 
-	local game = _G.game and _G.game.server or nil
 	if ( game ) then
 		game.update( dt )
+
+		if ( entity ) then
+			local entities = entity.getAll()
+			for _, entity in ipairs( entities ) do
+				entity:update( dt )
+			end
+		end
 	end
 
 	local network = engine.server.network

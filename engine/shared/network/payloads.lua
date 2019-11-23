@@ -36,15 +36,15 @@ structs[ "upload" ] = {
 
 structs[ "clientInfo" ] = {
     keys = {
-        { name = "graphicsWidth",  type = "number" },
-        { name = "graphicsHeight", type = "number" }
+        { name = "graphicsWidth",  type = "float" },
+        { name = "graphicsHeight", type = "float" }
     }
 }
 
 structs[ "entitySpawned" ] = {
     keys = {
         { name = "classname",      type = "string" },
-        { name = "entIndex",       type = "number" },
+        { name = "entIndex",       type = "float" },
         { name = "networkVars",    type = "typelenvalues" }
     }
 }
@@ -52,7 +52,7 @@ structs[ "entitySpawned" ] = {
 structs[ "playerInitialized" ] = {
     keys = {
         { name = "player",         type = "entity" },
-        { name = "id",             type = "number" }
+        { name = "id",             type = "float" }
     }
 }
 
@@ -97,8 +97,9 @@ structs[ "playerMove" ] = {
 
 structs[ "usercmd" ] = {
     keys = {
-        { name = "commandNumber",  type = "number" },
-        { name = "buttons",        type = "number" }
+        { name = "commandNumber",  type = "float" },
+        { name = "move",           type = "vector" },
+        { name = "buttons",        type = "float" }
     }
 }
 
@@ -106,6 +107,12 @@ structs[ "playerUse" ] = {
     keys = {
         { name = "entity",         type = "entity" },
         { name = "value",          type = "string" }
+    }
+}
+
+structs[ "voice" ] = {
+    keys = {
+        { name = "data",           type = "string" }
     }
 }
 
@@ -119,7 +126,7 @@ structs[ "playerUse" ] = {
     structs[ "playerGotItem" ] = {
         keys = {
             { name = "item",       type = "string" },
-            { name = "count",      type = "number" }
+            { name = "count",      type = "float" }
         }
     }
 

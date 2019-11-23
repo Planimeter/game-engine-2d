@@ -56,7 +56,7 @@ if ( _VADVENTURE ) then
 	end
 end
 
-function onTick( timestep )
+function tick( timestep )
 end
 
 function quit()

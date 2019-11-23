@@ -173,7 +173,8 @@ end
 
 function shutdown()
 	if ( _G.entity ) then
-		_G.entity._shadowFramebuffer = nil
+		_G.entity._shadowCanvas:remove()
+		_G.entity._shadowCanvas = nil
 		_G.entity.removeAll()
 		_G.entity._lastEntIndex = 0
 	end

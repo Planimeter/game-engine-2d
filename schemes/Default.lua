@@ -1,4 +1,4 @@
---=========== Copyright © 2018, Planimeter, All rights reserved. ===========--
+--=========== Copyright © 2019, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: Default scheme
 --
@@ -147,6 +147,10 @@ t.hudmoveindicator            = {
     indicatorColor            = t.colors.gold
 }
 
+t.hudprofiler                 = {
+    textColor                 = t.colors.white
+}
+
 t.itembutton                  = {
     textColor                 = t.colors.gold
 }
@@ -156,7 +160,7 @@ t.label                       = {
 }
 
 t.mainmenu                    = {
-    backgroundColor           = color( t.colors.black, 0.27 * 255 ),
+    backgroundColor           = color( t.colors.black, 0.70 * 255 ),
     logo                      = love.graphics.newImage( "images/gui/logo.png" ),
     logoSmall                 = love.graphics.newImage( "images/gui/logo_small.png" )
 }
@@ -292,12 +296,37 @@ t.bindlistheader              = {
     borderColor               = color(  15,  15,  15,         255 ),
 }
 
-t.mainmenuFont                = love.graphics.newFont( "fonts/SourceSansPro-Regular.otf", 24 )
-t.titleFont                   = love.graphics.newFont( "fonts/SourceSansPro-Bold.otf", 18 )
-t.font                        = love.graphics.newFont( "fonts/SourceSansPro-Regular.otf", 14 )
-t.fontBold                    = love.graphics.newFont( "fonts/SourceSansPro-Bold.otf", 14 )
-t.fontSmall                   = love.graphics.newFont( "fonts/SourceSansPro-Regular.otf", 12 )
-t.consoleFont                 = love.graphics.newFont( "fonts/SourceCodePro-Light.otf", 12 )
-t.chatFont                    = love.graphics.newFont( "fonts/SourceCodePro-Light.otf", 14 )
-t.entityFont                  = love.graphics.newFont( "fonts/SourceSansPro-Regular.otf", 24 )
-t.itemCountFont               = love.graphics.newFont( "fonts/SourceSansPro-Regular.otf", 12 )
+-- NOTE: The following arguments to `newFont` are undocumented.
+local dpiscale = love.graphics.getDPIScale()
+local r_window_highdpi = convar.getConvar( "r_window_highdpi" )
+if ( r_window_highdpi:getNumber() == 2 ) then
+    dpiscale = 1
+end
+
+t.mainmenuFont                = love.graphics.newFont(
+    "fonts/SourceSansPro-Regular.otf", 24, "normal", dpiscale
+)
+t.titleFont                   = love.graphics.newFont(
+    "fonts/SourceSansPro-Bold.otf", 18, "normal", dpiscale
+)
+t.font                        = love.graphics.newFont(
+    "fonts/SourceSansPro-Regular.otf", 14, "normal", dpiscale
+)
+t.fontBold                    = love.graphics.newFont(
+    "fonts/SourceSansPro-Bold.otf", 14, "normal", dpiscale
+)
+t.fontSmall                   = love.graphics.newFont(
+    "fonts/SourceSansPro-Regular.otf", 12, "normal", dpiscale
+)
+t.consoleFont                 = love.graphics.newFont(
+    "fonts/SourceCodePro-Light.otf", 12, "normal", dpiscale
+)
+t.chatFont                    = love.graphics.newFont(
+    "fonts/SourceCodePro-Light.otf", 14, "normal", dpiscale
+)
+t.entityFont                  = love.graphics.newFont(
+    "fonts/SourceSansPro-Regular.otf", 24, "normal", dpiscale
+)
+t.itemCountFont               = love.graphics.newFont(
+    "fonts/SourceSansPro-Regular.otf", 12, "normal", dpiscale
+)

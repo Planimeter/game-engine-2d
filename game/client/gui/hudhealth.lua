@@ -14,12 +14,12 @@ function hudhealth:hudhealth( parent )
 	self:setDisplay( "block" )
 	self:setPosition( "absolute" )
 
-	self.text = gui.text( self, name .. " Text Node", "" )
+	self.text = gui.text( self, "" )
 	self.text:setDisplay( "block" )
 	self.text:setColor( self:getScheme( "hudmoveindicator.textColor" ) )
 	self.text:setFont( self:getScheme( "entityFont" ) )
 
-	local label = gui.text( self, name .. " Text Node", "Health" )
+	local label = gui.text( self, "Health" )
 	label:setColor( self:getScheme( "hudmoveindicator.smallTextColor" ) )
 
 	self:invalidateLayout()
@@ -33,7 +33,7 @@ end
 
 function hudhealth:drawHealth()
 	local health = localplayer:getNetworkVar( "health" )
-	self.text:setText( health )
+	self.text:set( health )
 end
 
 function hudhealth:invalidateLayout()

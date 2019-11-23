@@ -9,7 +9,6 @@ class "gui.audiooptionspanel" ( "gui.frametabpanel" )
 local audiooptionspanel = gui.audiooptionspanel
 
 function audiooptionspanel:audiooptionspanel( parent, name )
-	parent = parent or nil
 	name = name or "Audio Options Panel"
 	gui.frametabpanel.frametabpanel( self, parent, name )
 	local options = {}

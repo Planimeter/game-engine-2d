@@ -4,9 +4,9 @@
 --
 --==========================================================================--
 
-require( "engine.client.gui.panel" )
+require( "engine.client.gui.box" )
 
-class "gui.rootpanel" ( "gui.panel" )
+class "gui.rootpanel" ( "gui.box" )
 
 local rootpanel = gui.rootpanel
 
@@ -20,11 +20,11 @@ function rootpanel:rootpanel()
 	self.children = {}
 	self.scale    = 1
 	self.opacity  = 1
-	self:setUseFullscreenFramebuffer( true )
+	self:setUseFullscreenCanvas( true )
 end
 
 function rootpanel:invalidateLayout()
-	self:setSize( love.graphics.getWidth(), love.graphics.getHeight() )
+	self:setDimensions( love.graphics.getWidth(), love.graphics.getHeight() )
 
 	gui.panel.invalidateLayout( self )
 end

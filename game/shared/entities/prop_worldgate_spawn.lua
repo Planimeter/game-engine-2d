@@ -56,7 +56,7 @@ function prop_worldgate_spawn:spawn()
 	self:setCollisionBounds( min, max )
 end
 
-function prop_worldgate_spawn:update( dt )
+function prop_worldgate_spawn:tick( timestep )
 	local position = self:getPosition()
 	local players  = player.getAll()
 	for _, player in ipairs( players ) do

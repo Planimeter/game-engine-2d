@@ -13,7 +13,7 @@ entity._entities     = entity._entities     or {}
 entity._lastEntIndex = entity._lastEntIndex or 0
 
 if ( _CLIENT ) then
-	entity._shadowFramebuffer = entity._shadowFramebuffer or nil
+	entity._shadowCanvas = entity._shadowCanvas or nil
 end
 
 function entity.create( classname )
@@ -33,28 +33,45 @@ if ( _CLIENT ) then
 	local renderables = {}
 	local clear       = table.clear
 	local append      = table.append
+	local sort        = table.sort
 
-	local shallowcopy = function( from, to )
-		for k, v in pairs( from ) do
-			to[ k ] = v
+	-- local shallowcopy = function( to, from )
+	-- 	for i, v in ipairs( from ) do
+	-- 		to[ i ] = v
+	-- 	end
+	-- end
+
+	local filter = function( t, comp )
+		local world = map.getWorld()
+		if ( world == nil ) then
+			return
 		end
+
+		-- TODO: Change to camera bounds.
+		local min, max = localplayer:getGraphicsBounds()
+		world:queryBoundingBox( min.x, max.y, max.x, min.y, comp )
 	end
 
-	local depthSort = function( t )
-		table.sort( t, function( a, b )
-			local ay = a:getPosition().y
-			local al = a.getLocalPosition and a:getLocalPosition()
-			if ( al ) then
-				ay = ay + al.y
-			end
+	local visible = function( fixture )
+		local body    = fixture:getBody()
+		local entity  = body:getUserData()
+		table.insert( renderables, entity )
+		return true
+	end
 
-			local by = b:getPosition().y
-			local bl = b.getLocalPosition and b:getLocalPosition()
-			if ( bl ) then
-				by = by + bl.y
-			end
-			return ay < by
-		end )
+	local depth = function( a, b )
+		local ay = a:getPosition().y
+		local al = a.getLocalPosition and a:getLocalPosition()
+		if ( al ) then
+			ay = ay + al.y
+		end
+
+		local by = b:getPosition().y
+		local bl = b.getLocalPosition and b:getLocalPosition()
+		if ( bl ) then
+			by = by + bl.y
+		end
+		return ay < by
 	end
 
 	local r_draw_bounding_boxes = convar( "r_draw_bounding_boxes", "0", nil,
@@ -154,9 +171,10 @@ if ( _CLIENT ) then
 
 	function entity.drawAll()
 		clear( renderables )
-		shallowcopy( entity._entities, renderables )
+		-- shallowcopy( renderables, entity._entities )
+		filter( renderables, visible )
 		append( renderables, camera.getWorldContexts() )
-		depthSort( renderables )
+		sort( renderables, depth )
 
 		-- Draw bounding boxes
 		if ( r_draw_bounding_boxes:getBoolean() ) then
@@ -167,31 +185,42 @@ if ( _CLIENT ) then
 
 		-- Draw shadows
 		if ( r_draw_shadows:getBoolean() ) then
-			if ( entity._shadowFramebuffer == nil ) then
+			if ( entity._shadowCanvas == nil ) then
 				require( "engine.client.canvas" )
-				entity._shadowFramebuffer = love.graphics.newCanvas()
-				entity._shadowFramebuffer:setFilter( "nearest", "nearest" )
+				entity._shadowCanvas = fullscreencanvas( nil, nil, {
+					dpiscale = dpiscale
+				} )
+				entity._shadowCanvas:setFilter( "nearest", "nearest" )
 			end
 
 			love.graphics.push()
-				local canvas = love.graphics.getCanvas()
-				love.graphics.setCanvas( entity._shadowFramebuffer )
-				love.graphics.clear()
 				love.graphics.origin()
-				local x, y = camera.screenToWorld( 0, 0 )
-				love.graphics.translate( -x, -y )
-				for _, v in ipairs( renderables ) do
-					drawShadow( v )
-				end
-				love.graphics.setCanvas( canvas )
+
+				entity._shadowCanvas:renderTo( function()
+					love.graphics.clear()
+
+					-- Setup camera
+					local scale = camera.getZoom()
+					love.graphics.scale( scale )
+					local x, y = camera.getTranslation()
+					love.graphics.translate( x, y )
+
+					for _, v in ipairs( renderables ) do
+						drawShadow( v )
+					end
+				end )
 			love.graphics.pop()
 
 			love.graphics.push()
-				local x, y = camera.screenToWorld( 0, 0 )
-				love.graphics.translate( x, y )
+				love.graphics.origin()
 				love.graphics.setColor( color( color.white, 0.14 * 255 ) )
-				love.graphics.draw( entity._shadowFramebuffer )
+				entity._shadowCanvas:draw()
 			love.graphics.pop()
+		else
+			if ( entity._shadowCanvas ) then
+				entity._shadowCanvas:remove()
+				entity._shadowCanvas = nil
+			end
 		end
 
 		-- Draw entities
@@ -261,10 +290,25 @@ function entity:entity()
 
 	self:networkString( "name",       nil )
 	self:networkVector( "position",   vector() )
+	self:networkVector( "velocity",   vector() )
 	self:networkNumber( "worldIndex", 1 )
 	self:networkString( "animation",  nil )
 
 	table.insert( entity._entities, self )
+end
+
+if ( _SERVER ) then
+	function entity:broadcastNetworkVarChanges()
+		if ( self._networkVarChanges == nil ) then
+			return
+		end
+
+		for i, v in ipairs( self._networkVarChanges ) do
+			v.payload:broadcast()
+		end
+
+		table.clear( self._networkVarChanges )
+	end
 end
 
 accessor( entity, "body" )
@@ -282,11 +326,11 @@ if ( _CLIENT ) then
 			love.graphics.scale( 1 / camera.getZoom() )
 
 			-- Set color
-			local color = color( color.white, 0.14 * 255 )
+			local color = color( color.white, 0.3 * 255 )
 			love.graphics.setColor( color )
 
 			-- Set font
-			local font = scheme.getProperty( "Default", "fontSmall" )
+			local font = scheme.getProperty( "Console", "font" )
 			love.graphics.setFont( font )
 
 			-- Print text
@@ -354,6 +398,14 @@ if ( _CLIENT ) then
 end
 
 if ( _CLIENT ) then
+	function entity:emitSound( filename )
+		require( "engine.client.source" )
+		local source = source( filename )
+		source:play()
+	end
+end
+
+if ( _CLIENT ) then
 	function entity:getAnimation()
 		local sprite = self:getSprite()
 		if ( type( sprite ) ~= "sprite" ) then
@@ -404,7 +456,14 @@ function entity:getPosition()
 	return self:getNetworkVar( "position" )
 end
 
-accessor( entity, "predicted", "is" )
+function entity:getVelocity()
+	local body = self:getBody()
+	if ( body and not body:isDestroyed() ) then
+		return vector( body:getLinearVelocity() )
+	end
+	return self:getNetworkVar( "velocity" )
+end
+
 accessor( entity, "properties" )
 accessor( entity, "map" )
 
@@ -416,6 +475,8 @@ function entity:getWorldIndex()
 	return self:getNetworkVar( "worldIndex" )
 end
 
+local sv_friction = convar( "sv_friction", 4, nil, nil, "World friction." )
+
 function entity:initializePhysics( type )
 	local world    = map.getWorld()
 	local position = self:getPosition()
@@ -424,8 +485,69 @@ function entity:initializePhysics( type )
 	self.body      = love.physics.newBody( world, x, y, type )
 	self.body:setUserData( self )
 	self.body:setFixedRotation( true )
-	self.body:setLinearDamping( 16 )
+	self.body:setLinearDamping( sv_friction:getNumber() )
+
 	return self.body
+end
+
+if ( _SERVER ) then
+	function entity:insertNetworkVarChange( t )
+		self._networkVarChanges = self._networkVarChanges or {}
+
+		local hasChange = false
+		for i, v in ipairs( self._networkVarChanges ) do
+			if ( v.name == t.name ) then
+				self._networkVarChanges[ i ] = t
+				hasChange = true
+			end
+		end
+
+		if ( not hasChange ) then
+			table.insert( self._networkVarChanges, t )
+		end
+	end
+end
+
+function entity:interpolate()
+	-- No point in interpolating this client's entity.
+	if ( self == localplayer ) then
+		return
+	end
+
+	-- Find the two authoritative positions surrounding the rendering timestamp.
+	local buffer = self._interpolationBuffer
+	if ( buffer == nil ) then
+		return
+	end
+
+	-- Compute render timestamp.
+	local cl_updaterate = convar.getConvar( "cl_updaterate" )
+	local now = love.timer.getTime()
+	local renderTimestamp = now - ( 1 / cl_updaterate:getNumber() )
+
+	-- Drop older positions.
+	while ( #buffer >= 2 and buffer[ 2 ].time <= renderTimestamp ) do
+		table.remove( buffer, 1 )
+	end
+
+	local body = self:getBody()
+	if ( body == nil ) then
+		return
+	end
+
+	-- Interpolate between the two surrounding authoritative positions.
+	if ( #buffer >= 2 and
+	    buffer[ 1 ].time <= renderTimestamp and
+	    renderTimestamp <= buffer[ 2 ].time ) then
+		local p1 = buffer[ 1 ].value
+		local p2 = buffer[ 2 ].value
+		local t1 = buffer[ 1 ].time
+		local t2 = buffer[ 2 ].time
+		local dt = ( renderTimestamp - t1 ) / ( t2 - t1 )
+		local x  = math.lerp( p1.x, p2.x, dt )
+		local y  = math.lerp( p1.y, p2.y, dt )
+		body:setPosition( x, y )
+	end
 end
 
 function entity:isMoving()
@@ -442,12 +564,12 @@ function entity:isOnTile()
 	return vector( map.snapToGrid( position.x, position.y ) ) == position
 end
 
-if ( _CLIENT ) then
-	function entity:emitSound( filename )
-		require( "engine.client.source" )
-		local source = source( filename )
-		source:play()
-	end
+function entity:localToWorld( v )
+	return v + self:getPosition()
+end
+
+function entity:worldToLocal( v )
+	return v - self:getPosition()
 end
 
 function entity:networkVar( name, initialValue )
@@ -464,12 +586,12 @@ do
 		"boolean",
 		"number",
 		"string",
-		"vector"
+		"vector",
+		"entity"
 	}
 
-	for _, type in ipairs( networkableTypes ) do
-		entity[ "network" .. string.capitalize( type ) ] =
-		function( self, name, initialValue )
+	local networkType = function( type )
+		return function( self, name, initialValue )
 			local mt   = getmetatable( self )
 			local keys = rawget( mt, "networkVarKeys" ) or {}
 			rawset( mt, "networkVarKeys", keys )
@@ -482,6 +604,10 @@ do
 				end
 			end
 
+			if ( type == "number" ) then
+				type = "float"
+			end
+
 			if ( not keyExists ) then
 				table.insert( keys, {
 					name = name,
@@ -492,11 +618,15 @@ do
 			self:networkVar( name, initialValue )
 		end
 	end
+
+	for _, type in ipairs( networkableTypes ) do
+		entity[ "network" .. string.capitalize( type ) ] = networkType( type )
+	end
 end
 
 function entity:setNetworkVar( name, value )
 	if ( self._networkVars == nil or not self:hasNetworkVar( name ) ) then
-		error( "attempt to set nonexistent networkvar '" .. name .. "'", 2 )
+		error( "attempt to set networkvar '" .. name .. "' (a nil value)", 2 )
 	end
 
 	self._networkVars[ name ]:setValue( value )
@@ -539,40 +669,43 @@ function entity:getNetworkVarTypeLenValues()
 	return networkVars
 end
 
-local cl_interpolate = convar( "cl_interpolate", "1", nil, nil,
+local cl_interpolate = convar( "cl_interpolate", "0", nil, nil,
                                "Perform client-side interpolation" )
 
-local cl_predict = convar( "cl_predict", "1", nil, nil,
-                           "Perform client-side prediction" )
-
+-- Process all messages from the server, i.e. world updates.
+-- If enabled, do server reconciliation.
 function entity:onNetworkVarChanged( networkvar )
+	-- Received the authoritative position of this client's entity.
 	if ( networkvar:getName() == "position" ) then
-		if ( _CLIENT and not _SERVER and cl_interpolate:getBoolean() ) then
-			self._lastPosition = {
-				value = vector.copy( networkvar:getValue() ),
-				time = love.timer.getTime()
-			}
-		else
+		if ( self == localplayer or
+		   ( self ~= localplayer and not cl_interpolate:getBoolean() ) or
+		    _SERVER ) then
 			if ( _CLIENT and not _SERVER ) then
-				if ( self._lastPosition ) then
-					self._lastPosition = nil
-				end
-
-				if ( self._interpolationBuffer ) then
-					self._interpolationBuffer = nil
-				end
+				self:removeInterpolationBuffer()
 			end
 
+			-- Entity interpolation is disabled - just accept
+			-- the server's position.
 			local body = self:getBody()
 			if ( body ) then
 				local position = networkvar:getValue()
 				body:setPosition( position.x, position.y )
 			end
+		else
+			if ( _CLIENT and not _SERVER ) then
+				-- Add it to the position buffer.
+				self:updateInterpolationBuffer( {
+					value = vector.copy( networkvar:getValue() ),
+					time = love.timer.getTime()
+				} )
+			end
 		end
 	end
 
-	if ( _CLIENT and networkvar:getName() == "animation" ) then
-		self:setAnimation( networkvar:getValue() )
+	if ( networkvar:getName() == "animation" ) then
+		if ( _CLIENT ) then
+			self:setAnimation( networkvar:getValue() )
+		end
 	end
 
 	if ( _SERVER ) then
@@ -584,15 +717,17 @@ function entity:onNetworkVarChanged( networkvar )
 		networkVar:set( networkvar:getName(), networkvar:getValue() )
 		payload:set( "networkVars", networkVar )
 
-		payload:broadcast()
+		self:insertNetworkVarChange( {
+			name    = networkvar:getName(),
+			payload = payload
+		} )
 	end
 end
 
-function entity:localToWorld( v )
-	return self:getPosition() + v
-end
-
 if ( _CLIENT ) then
+	function entity:onNetworkVarReceived( k, v )
+	end
+
 	function entity:onAnimationEnd( animation )
 	end
 
@@ -600,22 +735,7 @@ if ( _CLIENT ) then
 	end
 end
 
-function entity:onTick( timestep )
-	if ( _SERVER ) then
-		return
-	end
-
-	local lastPosition = self._lastPosition
-	if ( lastPosition == nil ) then
-		return
-	end
-
-	if ( self._interpolationBuffer == nil ) then
-		self._interpolationBuffer = {}
-	end
-
-	table.insert( self._interpolationBuffer, lastPosition )
-	self._lastPosition = nil
+function entity:onPostWorldUpdate( timestep )
 end
 
 function entity:remove()
@@ -652,6 +772,18 @@ if ( _CLIENT ) then
 	payload.setHandler( onEntityRemoved, "entityRemoved" )
 end
 
+if ( _CLIENT ) then
+	function entity:removeInterpolationBuffer()
+		if ( self._lastPosition ) then
+			self._lastPosition = nil
+		end
+
+		if ( self._interpolationBuffer ) then
+			self._interpolationBuffer = nil
+		end
+	end
+end
+
 function entity:setAnimation( animation )
 	if ( _CLIENT ) then
 		local sprite = self:getSprite()
@@ -682,17 +814,40 @@ function entity:setCollisionBounds( min, max )
 		fixture:destroy()
 	end
 
-	-- BUGBUG: We use magic numbers here to shrink the bounding box of the
-	-- fixture.
-	local dimensions = max - min
-	dimensions.y     = -dimensions.y
-	local width      =  dimensions.x - 0.6
-	local height     =  dimensions.y - 0.6
-	local x          =   width / 2   + 0.3
-	local y          = -height / 2   - 0.3
-	local shape      = love.physics.newRectangleShape( x, y, width, height )
-	local fixture    = love.physics.newFixture( body, shape )
-	fixture:setFilterData( 1 --[[ COLLISION_GROUP_NONE ]], 0, 0 )
+	local dimensions    =  max - min
+	dimensions.y        = -dimensions.y
+	-- Remove polygon skin
+	-- See @erincatto/Box2D/blob/master/Box2D/Common/b2Settings.h#L81
+	local linearSlop    = 0.005
+	local polygonRadius = ( 2.0 * linearSlop )
+	local pixels        = polygonRadius * love.physics.getMeter()
+	local width         =  dimensions.x - 2 * pixels
+	local height        =  dimensions.y - 2 * pixels
+	local x             =  width  / 2       + pixels
+	local y             = -height / 2       - pixels
+	local shape         = love.physics.newRectangleShape( x, y, width, height )
+	local fixture       = love.physics.newFixture( body, shape )
+	fixture:setUserData( self )
+	-- fixture:setFriction( 0.3 * love.physics.getMeter() )
+	-- fixture:setFilterData( 1 --[[ COLLISION_GROUP_NONE ]], 0, 0 )
+
+	if ( self.body:getType() == "dynamic" ) then
+		local gravity = 10.0 * love.physics.getMeter()
+		local I = self.body:getInertia()
+		local mass = self.body:getMass()
+
+		local radius = math.sqrt( 2.0 * I / mass )
+
+		-- local joint = love.physics.newFrictionJoint(
+		-- 	map.getGroundBody(),
+		-- 	self.body,
+		-- 	0,
+		-- 	0,
+		-- 	true
+		-- )
+		-- joint:setMaxForce( mass * gravity )
+		-- joint:setMaxTorque( mass * radius * gravity )
+	end
 end
 
 if ( _CLIENT ) then
@@ -767,6 +922,12 @@ function entity:spawn()
 	end
 end
 
+function entity:startTouch( other, contact )
+end
+
+function entity:endTouch( other, contact )
+end
+
 function entity:testPoint( x, y )
 	local body = self:getBody()
 	if ( body and not body:isDestroyed() ) then
@@ -798,24 +959,12 @@ function entity:testPoint( x, y )
 	return false
 end
 
-function entity:updateNetworkVars( payload )
-	local struct      = self:getNetworkVarsStruct()
-	local networkVars = payload:get( "networkVars" )
-	networkVars:setStruct( struct )
-	networkVars:deserialize()
-	for k, v in pairs( networkVars:getData() ) do
-		self:setNetworkVar( k, v )
-	end
-end
-
-function entity:update( dt )
-	if ( _CLIENT and not _SERVER and cl_interpolate:getBoolean() ) then
-		self:updatePosition( self )
-	end
-
-	local body = self:getBody()
-	if ( body and not body:isDestroyed() ) then
-		self:setNetworkVar( "position", vector( body:getPosition() ) )
+function entity:tick( timestep )
+	if ( self.think     and
+	     self.nextThink and
+	     self.nextThink <= love.timer.getTime() ) then
+		self.nextThink = nil
+		self:think()
 	end
 
 	local currentMap = self:getMap()
@@ -824,11 +973,19 @@ function entity:update( dt )
 		self:setMap( map )
 	end
 
-	if ( self.think     and
-	     self.nextThink and
-	     self.nextThink <= love.timer.getTime() ) then
-		self.nextThink = nil
-		self:think()
+	if ( _SERVER ) then
+		local body = self:getBody()
+		if ( body and not body:isDestroyed() ) then
+			self:setNetworkVar( "position", vector( body:getPosition() ) )
+			self:setNetworkVar( "velocity", vector( body:getLinearVelocity() ) )
+		end
+	end
+end
+
+function entity:update( dt )
+	-- Interpolate other entities.
+	if ( _CLIENT and not _SERVER and cl_interpolate:getBoolean() ) then
+		self:interpolate()
 	end
 
 	if ( _CLIENT ) then
@@ -839,36 +996,26 @@ function entity:update( dt )
 	end
 end
 
-function entity:updatePosition()
-	local buffer = self._interpolationBuffer
-	if ( buffer == nil ) then
-		return
+if ( _CLIENT ) then
+	function entity:updateInterpolationBuffer( position )
+		if ( self._interpolationBuffer == nil ) then
+			self._interpolationBuffer = {}
+		end
+
+		table.insert( self._interpolationBuffer, position )
 	end
 
-	local cl_updaterate = convar.getConvar( "cl_updaterate" )
-	local now = love.timer.getTime()
-	local renderTimestamp = now - ( 1 / cl_updaterate:getNumber() )
-
-	while ( #buffer >= 2 and buffer[ 2 ].time <= renderTimestamp ) do
-		table.remove( buffer, 1 )
-	end
-
-	local body = self:getBody()
-	if ( body == nil ) then
-		return
-	end
-
-	if ( #buffer >= 2 and
-	    buffer[ 1 ].time <= renderTimestamp and
-	    renderTimestamp <= buffer[ 2 ].time ) then
-		local p1 = buffer[ 1 ].value
-		local p2 = buffer[ 2 ].value
-		local t1 = buffer[ 1 ].time
-		local t2 = buffer[ 2 ].time
-		local dt = ( renderTimestamp - t1 ) / ( t2 - t1 )
-		local x  = math.round( math.lerp( p1.x, p2.x, dt ) )
-		local y  = math.round( math.lerp( p1.y, p2.y, dt ) )
-		body:setPosition( x, y )
+	function entity:updateNetworkVars( payload )
+		local struct      = self:getNetworkVarsStruct()
+		local networkVars = payload:get( "networkVars" )
+		networkVars:setStruct( struct )
+		networkVars:deserialize()
+		for k, v in pairs( networkVars:getData() ) do
+			-- Should we reject the network var update?
+			if ( self:onNetworkVarReceived( k, v ) ~= false ) then
+				self:setNetworkVar( k, v )
+			end
+		end
 	end
 end
 

@@ -31,7 +31,7 @@ end
 function canvas.invalidateCanvases()
 	for _, v in ipairs( canvas._canvases ) do
 		if ( typeof( v, "fullscreencanvas" ) ) then
-			newCanvas( v )
+			newCanvas( v, unpack( v._args ) )
 		end
 
 		if ( v:shouldAutoRedraw() ) then
@@ -44,7 +44,7 @@ local function noop()
 end
 
 function canvas:canvas( ... )
-	local args       = { ... }
+	self._args       = { ... }
 	self._drawFunc   = noop
 	self.needsRedraw = false
 	self.autoRedraw  = true
@@ -78,6 +78,17 @@ function canvas:invalidate()
 	self.needsRedraw = true
 end
 
+function canvas:remove()
+	for i, v in ipairs( canvas._canvases ) do
+		if ( v == self ) then
+			table.remove( canvas._canvases, i )
+		end
+	end
+
+	collectgarbage()
+	collectgarbage()
+end
+
 function canvas:renderTo( func )
 	self._drawFunc = func
 	render( self )
@@ -93,16 +104,12 @@ function canvas:__tostring()
 	return s
 end
 
-function canvas:__gc()
-	for i, v in ipairs( canvas._canvases ) do
-		if ( v == self ) then
-			table.remove( canvas._canvases, i )
-		end
-	end
-end
+canvas.__gc = canvas.remove
 
 class "fullscreencanvas" ( "canvas" )
 
-function fullscreencanvas:fullscreencanvas()
-	canvas.canvas( self )
+function fullscreencanvas:fullscreencanvas( ... )
+	canvas.canvas( self, ... )
 end
+
+fullscreencanvas.__gc = canvas.remove

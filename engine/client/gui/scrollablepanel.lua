@@ -4,13 +4,15 @@
 --
 --==========================================================================--
 
-class "gui.scrollablepanel" ( "gui.panel" )
+class "gui.scrollablepanel" ( "gui.box" )
 
 local scrollablepanel = gui.scrollablepanel
 
 function scrollablepanel:scrollablepanel( parent, name )
-	gui.panel.panel( self, parent, name )
-	self.panel     = gui.panel( self, self:getName() .. " Inner Panel" )
+	gui.box.box( self, parent, name )
+	self.panel = gui.box( self, self:getName() .. " Inner Panel" )
+	self.panel:setPosition( "absolute" )
+
 	self.scrollbar = gui.scrollbar( self, self:getName() .. " Scrollbar" )
 	self.scrollbar.onValueChanged = function( _, oldValue, newValue )
 		self.panel:setY( -newValue )
@@ -24,7 +26,7 @@ accessor( scrollablepanel, "innerPanel", nil, "panel" )
 accessor( scrollablepanel, "scrollbar" )
 
 function scrollablepanel:invalidateLayout()
-	self:setSize( self:getSize() )
+	self:setDimensions( self:getDimensions() )
 	gui.panel.invalidateLayout( self )
 end
 

@@ -14,12 +14,12 @@ function hudmana:hudmana( parent )
 	self:setDisplay( "block" )
 	self:setPosition( "absolute" )
 
-	self.text = gui.text( self, name .. " Text Node", "" )
+	self.text = gui.text( self, "" )
 	self.text:setDisplay( "block" )
 	self.text:setColor( self:getScheme( "hudmoveindicator.textColor" ) )
 	self.text:setFont( self:getScheme( "entityFont" ) )
 
-	local label = gui.text( self, name .. " Text Node", "Mana" )
+	local label = gui.text( self, "Mana" )
 	label:setColor( self:getScheme( "hudmoveindicator.smallTextColor" ) )
 
 	self:invalidateLayout()
@@ -33,7 +33,7 @@ end
 
 function hudmana:drawMana()
 	local mana = localplayer:getNetworkVar( "mana" )
-	self.text:setText( mana )
+	self.text:set( mana )
 end
 
 function hudmana:invalidateLayout()

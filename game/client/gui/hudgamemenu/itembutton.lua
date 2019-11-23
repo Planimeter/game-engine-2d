@@ -118,10 +118,9 @@ local function addOptions( itembutton, classname )
 	local n = 0
 	for k, option in pairs( options ) do
 		local panelName = name .. " " .. n
-		optionsitem = gui.optionsitem( panelName, option.name )
+		optionsitem = gui.optionsitem( itembutton, panelName, option.name )
 		optionsitem:setEntity( item.data.name )
 		optionsitem:setValue( option.value )
-		itembutton:addItem( optionsitem )
 		n = n + 1
 	end
 	return n

@@ -57,6 +57,11 @@ if ( rawprint == nil and rawtype == nil ) then
 	end
 end
 
+function toboolean( v )
+	local n = tonumber( v )
+	return n ~= nil and n ~= 0
+end
+
 function typeof( object, class )
 	if ( type( object ) == class ) then
 		return true
@@ -142,5 +147,27 @@ concommand( "lua_dostring", "Loads and runs the given string",
 		else
 			print( err )
 		end
+	end
+)
+
+concommand( "lua_watch", "Watches an expression",
+	function( self, player, command, argString, argTable )
+		if ( argTable[ 1 ] == nil ) then
+			print( "lua_watch <expression>" )
+			return
+		end
+
+		if ( _G.g_Watch ) then
+			_G.g_Watch:remove()
+		end
+
+		if ( argTable[ 1 ] == "nil" ) then
+			return
+		end
+
+		-- Initialize watch expression
+		local watch = gui.watch( _G.g_Viewport )
+		watch:setExpression( argString )
+		_G.g_Watch = watch
 	end
 )

@@ -15,6 +15,18 @@ function vector:vector( x, y )
 	self.y = y or 0
 end
 
+function vector:approximately( b )
+	return math.approximately( self.x, b.x ) and
+	       math.approximately( self.y, b.y )
+end
+
+function vector:dot( b )
+	local ret = 0
+	ret = ret + self.x * b.x
+	ret = ret + self.y * b.y
+	return ret
+end
+
 function vector:length()
 	return math.sqrt( self:lengthSqr() )
 end
@@ -25,6 +37,10 @@ end
 
 function vector:normalize()
 	local length = self:length()
+	if ( length == 0 ) then
+		return vector()
+	end
+
 	return vector( self.x / length, self.y / length )
 end
 
@@ -53,6 +69,14 @@ function vector.__mul( a, b )
 		return vector( b * a.x, b * a.y )
 	else
 		return vector( a.x * b.x, a.y * b.y )
+	end
+end
+
+function vector.__div( a, b )
+	if ( type( b ) == "number" ) then
+		return vector( a.x / b, a.y / b )
+	else
+		return vector( a.x / b.x, a.y / b.y )
 	end
 end
 

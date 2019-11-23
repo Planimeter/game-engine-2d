@@ -50,6 +50,11 @@ function item_apple:spawn()
 	local max      = vector( tileSize, -tileSize )
 	self:initializePhysics( "dynamic" )
 	self:setCollisionBounds( min, max )
+
+	local body = self:getBody()
+	if ( body ) then
+		body:setMass( 0.1496855 )
+	end
 end
 
 function item_apple:useItem( activator, value )

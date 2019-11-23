@@ -4,22 +4,23 @@
 --
 --==========================================================================--
 
-class "gui.frametabpanel" ( "gui.panel" )
+class "gui.frametabpanel" ( "gui.box" )
 
 local frametabpanel = gui.frametabpanel
 
 function frametabpanel:frametabpanel( parent, name )
-	gui.panel.panel( self, parent, name )
-	self:setScheme( "Default" )
+	gui.box.box( self, parent, name )
+	self:setDisplay( "block" )
+	self:setPosition( "absolute" )
 end
 
 function frametabpanel:draw()
 	gui.panel.drawBackground( self, self:getScheme( "frame.backgroundColor" ) )
-	gui.panel.draw( self )
+	gui.box.draw( self )
 end
 
 function frametabpanel:invalidateLayout()
-	self:setSize( self:getParent():getSize() )
+	self:setDimensions( self:getParent():getDimensions() )
 	gui.panel.invalidateLayout( self )
 end
 

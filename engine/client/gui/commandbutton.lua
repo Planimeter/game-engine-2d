@@ -10,13 +10,14 @@ local commandbutton = gui.commandbutton
 
 function commandbutton:commandbutton( parent, name, text )
 	gui.button.button( self, parent, name, text )
-	self:setDisplay( "inline" )
+	self.width  = nil
+	self.height = nil
+	self:setDisplay( "inline-block" )
 	self:setPosition( "static" )
+	self:setPadding( 15, 18 )
+	self:setBorderWidth( 0 )
 
 	if ( text ) then
-		local font = self:getScheme( "font" )
-		local padding = 18
-		self:setWidth( font:getWidth( text ) + 2 * padding )
 		parent:invalidateLayout()
 	end
 end
@@ -39,11 +40,12 @@ function commandbutton:drawBackground()
 	width = isFirstChild and width - 2 or width - 1
 	height = height - 1
 
-	if ( self.mousedown and self.mouseover ) then
+	local mouseover = ( self.mouseover or self:isChildMousedOver() )
+	if ( self.mousedown and mouseover ) then
 		color = self:getScheme( "button.mousedown.backgroundColor" )
 		love.graphics.setColor( color )
 		love.graphics.rectangle( "fill", x, 1, width, height )
-	elseif ( self.mousedown or self.mouseover ) then
+	elseif ( self.mousedown or mouseover ) then
 		color = self:getScheme( "button.mouseover.backgroundColor" )
 		love.graphics.setColor( color )
 		love.graphics.rectangle( "fill", x, 1, width, height )

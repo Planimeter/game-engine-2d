@@ -9,12 +9,15 @@ require( "engine.client.gui" )
 require( "engine.shared.network.payload" )
 
 local concommand = concommand
+local convar     = convar
 local engine     = engine
 local gui        = gui
+local ipairs     = ipairs
 local love       = love
 local payload    = payload
 local pcall      = pcall
 local print      = print
+local profile    = profile
 local require    = require
 local tostring   = tostring
 local unrequire  = unrequire
@@ -152,8 +155,9 @@ function onDisconnect( event )
 		-- Shutdown game
 		local game = _G.game and _G.game.client or nil
 		if ( game ) then
-			gui._viewportFramebuffer = nil
-			gui._translucencyFramebuffer = nil
+			gui._viewportCanvas:remove()
+			gui._viewportCanvas = nil
+			gui._translucencyCanvas = nil
 			game.shutdown()
 			unrequire( "game.client" )
 			_G.game.client = nil
@@ -184,16 +188,97 @@ function onDisconnect( event )
 	engine.client.network = nil
 end
 
-function onTick( timestep )
-	local game = _G.game and _G.game.client or nil
-	if ( game ) then
-		game.onTick( timestep )
-	end
-end
-
 function sendClientInfo()
 	local payload = payload( "clientInfo" )
 	payload:set( "graphicsWidth",  love.graphics.getWidth() )
 	payload:set( "graphicsHeight", love.graphics.getHeight() )
 	payload:sendToServer()
+end
+
+local voice_loopback = convar( "voice_loopback", "0", nil, nil )
+
+function broadcastVoiceRecording()
+	local recordingDevice = love.audio.getRecordingDevices()[ 1 ]
+
+	if ( source == nil ) then
+		source = love.audio.newQueueableSource( 32000, 16, 1 )
+	end
+
+	local data = recordingDevice:getData()
+	if ( _voiceRecording and data ) then
+		if ( voice_loopback:getBoolean() ) then
+			source:queue( data )
+			love.audio.play( source )
+		end
+
+		local payload = payload( "voice" )
+		payload:set( "data", data:getString() )
+		payload:broadcast()
+	end
+end
+
+function sendVoiceRecording()
+	local recordingDevice = love.audio.getRecordingDevices()[ 1 ]
+
+	if ( source == nil ) then
+		source = love.audio.newQueueableSource( 32000, 16, 1 )
+	end
+
+	local data = recordingDevice:getData()
+	if ( _voiceRecording and data ) then
+		if ( voice_loopback:getBoolean() ) then
+			source:queue( data )
+			love.audio.play( source )
+		end
+
+		local payload = payload( "voice" )
+		payload:set( "data", data:getString() )
+		payload:sendToServer()
+	end
+end
+
+function startVoiceRecording()
+	local recordingDevice = love.audio.getRecordingDevices()[ 1 ]
+	if ( not recordingDevice:isRecording() ) then
+		recordingDevice:start( 32768, 32000 )
+	end
+	_voiceRecording = true
+end
+
+function stopVoiceRecording()
+	-- BUGBUG: This is expensive.
+	-- local recordingDevice = love.audio.getRecordingDevices()[ 1 ]
+	-- recordingDevice:stop()
+	_voiceRecording = false
+end
+
+concommand( "+voice", "Starts recording voice", startVoiceRecording )
+concommand( "-voice", "Stops recording voice", stopVoiceRecording )
+
+function tick( timestep )
+	local game   = _G.game and _G.game.client or nil
+	local entity = _G.entity
+	local map    = _G.map
+
+	if ( game == nil ) then
+		return
+	end
+
+	game.tick( timestep )
+
+	if ( entity ) then
+		local entities = entity.getAll()
+		for _, entity in ipairs( entities ) do
+			entity:tick( timestep )
+		end
+	end
+
+	map.tick( timestep )
+
+	if ( entity ) then
+		local entities = entity.getAll()
+		for _, entity in ipairs( entities ) do
+			entity:onPostWorldUpdate( timestep )
+		end
+	end
 end

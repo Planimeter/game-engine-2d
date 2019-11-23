@@ -15,6 +15,7 @@ local rawget = rawget
 local ipairs = ipairs
 local module = module
 local _G = _G
+local _R = debug.getregistry()
 
 -------------------------------------------------------------------------------
 -- new()
@@ -30,20 +31,20 @@ end
 
 -------------------------------------------------------------------------------
 -- getbaseclass()
--- Purpose: Get a base class
--- Input: class - Class metatable
--- Output: class
+-- Purpose: Gets a base class
+-- Input: metatable
+-- Output: metatable
 -------------------------------------------------------------------------------
-local function getbaseclass( class )
-	local name = class.__base
-	return package.loaded[ name ]
+local function getbaseclass( metatable )
+	local base = metatable.__base
+	return package.loaded[ base ]
 end
 
 _G.getbaseclass = getbaseclass
 
 -------------------------------------------------------------------------------
 -- eventnames
--- Purpose: Provide a list of all inheritable internal event names
+-- Purpose: Provides a list of all inheritable internal event names
 -------------------------------------------------------------------------------
 local eventnames = {
 	"__add", "__sub", "__mul", "__div", "__mod",
@@ -54,15 +55,15 @@ local eventnames = {
 
 -------------------------------------------------------------------------------
 -- metamethod()
--- Purpose: Creates a filler metamethod for metamethod inheritance
--- Input: class - Class metatable
---        eventname - Event name
+-- Purpose: Creates a placeholder metamethod for metamethod inheritance
+-- Input: metatable
+--        eventname
 -- Output: function
 -------------------------------------------------------------------------------
-local function metamethod( class, eventname )
+local function metamethod( metatable, eventname )
 	return function( ... )
 		local event = nil
-		local base = getbaseclass( class )
+		local base = getbaseclass( metatable )
 		while ( base ~= nil ) do
 			if ( base[ eventname ] ) then
 				event = base[ eventname ]
@@ -86,7 +87,7 @@ end
 
 -------------------------------------------------------------------------------
 -- setproxy()
--- Purpose: Set a proxy for __gc
+-- Purpose: Sets a proxy for __gc
 -- Input: object
 -------------------------------------------------------------------------------
 local function setproxy( object )
@@ -102,13 +103,16 @@ end
 _G.setproxy = setproxy
 
 -------------------------------------------------------------------------------
--- package.class
--- Purpose: Turns a module into a class
--- Input: module - Module table
+-- classinit
+-- Purpose: Initializes a class
+-- Input: module
 -------------------------------------------------------------------------------
-function package.class( module )
+local function classinit( module )
 	module.__index = module
 	module.__type = string.gsub( module._NAME, module._PACKAGE, "" )
+	module._M = nil
+	module._NAME = nil
+	module._PACKAGE = nil
 	-- Create a shortcut to name()
 	setmetatable( module, {
 		__call = function( self, ... )
@@ -132,11 +136,11 @@ function package.class( module )
 end
 
 -------------------------------------------------------------------------------
--- package.inherit
+-- inherit
 -- Purpose: Sets a base class
--- Input: base - Class name
+-- Input: base - Name of metatable
 -------------------------------------------------------------------------------
-function package.inherit( base )
+local function inherit( base )
 	return function( module )
 		-- Set our base class
 		module.__base = base
@@ -169,15 +173,16 @@ end
 -------------------------------------------------------------------------------
 -- class()
 -- Purpose: Creates a class
--- Input: name - Name of class
+-- Input: modname
 -------------------------------------------------------------------------------
-function class( name )
-	local function setmodule( name )
-		module( name, package.class )
-	end setmodule( name )
+function class( modname )
+	local function setmodule( modname )
+		module( modname, classinit )
+	end setmodule( modname )
+	_R[ modname ] = package.loaded[ modname ]
 	-- For syntactic sugar, return a function to set inheritance
 	return function( base )
-		local _M = package.loaded[ name ]
-		package.inherit( base )( _M )
+		local metatable = package.loaded[ modname ]
+		inherit( base )( metatable )
 	end
 end

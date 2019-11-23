@@ -19,7 +19,7 @@ function hudframe:hudframe( parent, name, title )
 		self.closeButton = nil
 	end
 
-	self:setUseFullscreenFramebuffer( false )
+	self:setUseFullscreenCanvas( false )
 	self:invalidateLayout()
 end
 
@@ -60,28 +60,14 @@ function hudframe:draw()
 end
 
 function hudframe:drawBackground()
-	if ( gui._translucencyFramebuffer == nil ) then
-		gui.panel.drawBackground( self, self:getScheme( "frame.backgroundColor" ) )
+	if ( gui._translucencyCanvas == nil ) then
+		gui.panel.drawBackground( self, self:getScheme(
+			"frame.backgroundColor"
+		) )
 		return
 	end
 
 	gui.box.drawBackground( self )
-end
-
-function hudframe:drawTranslucency()
-	if ( gui._translucencyFramebuffer == nil ) then
-		return
-	end
-
-	gui.panel._maskedPanel = self
-	love.graphics.stencil( gui.panel.drawMask )
-	love.graphics.setStencilTest( "greater", 0 )
-		love.graphics.push()
-			local x, y = self:localToScreen()
-			love.graphics.translate( -x, -y )
-			gui._translucencyFramebuffer:draw()
-		love.graphics.pop()
-	love.graphics.setStencilTest()
 end
 
 function hudframe:drawTitle()
@@ -95,7 +81,7 @@ function hudframe:drawTitle()
 end
 
 function hudframe:update( dt )
-	if ( gui._translucencyFramebuffer and self:isVisible() ) then
+	if ( gui._translucencyCanvas and self:isVisible() ) then
 		self:invalidate()
 	end
 

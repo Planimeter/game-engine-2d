@@ -4,15 +4,15 @@
 --
 --==========================================================================--
 
-class "gui.debugoverlaypanel" ( "gui.panel" )
+class "gui.debugoverlaypanel" ( "gui.box" )
 
 local debugoverlaypanel = gui.debugoverlaypanel
 
 function debugoverlaypanel:debugoverlaypanel( parent )
-	gui.panel.panel( self, parent, "Debug Overlay" )
+	gui.box.box( self, parent, "Debug Overlay" )
 	self.width  = love.graphics.getWidth()
 	self.height = love.graphics.getHeight()
-	self:setUseFullscreenFramebuffer( true )
+	self:setUseFullscreenCanvas( true )
 
 	self.overlays = {}
 end
@@ -66,10 +66,7 @@ function debugoverlaypanel:preDrawWorld()
 end
 
 function debugoverlaypanel:invalidateLayout()
-	self:setSize(
-		love.graphics.getWidth(),
-		love.graphics.getHeight()
-	)
+	self:setDimensions( love.graphics.getWidth(), love.graphics.getHeight() )
 
 	gui.panel.invalidateLayout( self )
 end

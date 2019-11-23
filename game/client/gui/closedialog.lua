@@ -26,6 +26,8 @@ function closedialog:closedialog( parent, name )
 	label:setWidth( font:getWidth( text ) )
 
 	local buttonYes = gui.button( self, "Close Dialog Yes Button", "Yes" )
+	buttonYes.height = nil
+	buttonYes:setPadding( 14, 18, 13 )
 	buttonYes:setPos( 36, 86 + label:getHeight() + 18 )
 	buttonYes.onClick = function()
 		love._shouldQuit = true
@@ -33,6 +35,8 @@ function closedialog:closedialog( parent, name )
 	end
 
 	local buttonNo = gui.button( self, "Close Dialog No Button", "No" )
+	buttonNo.height = nil
+	buttonNo:setPadding( 14, 18, 13 )
 	buttonNo:setPos( 288, 86 + label:getHeight() + 18 )
 	buttonNo.onClick = function()
 		self:close()

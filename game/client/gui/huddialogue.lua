@@ -19,12 +19,12 @@ function huddialogue:huddialogue( parent )
 	box:setHeight( self.height )
 	box:setPadding( 18 )
 
-	local header = gui.text( box, name .. " Header", "h1" )
+	local header = gui.text( box, "h1" )
 	header:setDisplay( "block" )
 	header:setMarginBottom( 8 )
 	header:setFont( self:getScheme( "fontBold" ) )
 
-	local dialogue = gui.text( box, name .. " Dialogue", "p" )
+	local dialogue = gui.text( box, "p" )
 	dialogue:setDisplay( "block" )
 
 	self:invalidateLayout()

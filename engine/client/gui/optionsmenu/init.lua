@@ -47,13 +47,16 @@ function optionsmenu:optionsmenu( parent )
 	end
 
 	require( "engine.client.gui.optionsmenu.keyboardoptionspanel" )
-	self:addTab( "Keyboard", gui.keyboardoptionspanel() )
+	self:addTab( "Keyboard", gui.keyboardoptionspanel )
 
 	require( "engine.client.gui.optionsmenu.videooptionspanel" )
-	self:addTab( "Video", gui.videooptionspanel() )
+	self:addTab( "Video", gui.videooptionspanel )
 
 	require( "engine.client.gui.optionsmenu.audiooptionspanel" )
-	self:addTab( "Audio", gui.audiooptionspanel() )
+	self:addTab( "Audio", gui.audiooptionspanel )
+
+	-- require( "engine.client.gui.optionsmenu.multiplayeroptionspanel" )
+	-- self:addTab( "Multiplayer", gui.multiplayeroptionspanel() )
 end
 
 function optionsmenu:activate()

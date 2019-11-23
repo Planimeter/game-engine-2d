@@ -13,17 +13,20 @@ local panel = gui.panel
 
 function panel.drawMask()
 	local self = panel._maskedPanel
-	love.graphics.rectangle( "fill", 0, 0, self:getSize() )
+	love.graphics.rectangle( "fill", 0, 0, self:getDimensions() )
 end
 
 function panel:panel( parent, name )
 	self.x       = 0
 	self.y       = 0
 	self.name    = name or ""
-	self:setParent( parent or g_RootPanel )
 	self.visible = true
 	self.scale   = 1
 	self.opacity = 1
+
+	if ( parent ) then
+		self:setParent( parent )
+	end
 end
 
 function panel:animate( properties, duration, easing, complete )
@@ -59,33 +62,45 @@ function panel:animate( properties, duration, easing, complete )
 	table.insert( self.animations, animation )
 end
 
-function panel:createFramebuffer( width, height )
+function panel:createCanvas( width, height )
 	if ( width == nil and height == nil ) then
-		width, height = self:getSize()
+		width, height = self:getDimensions()
 	end
 
 	if ( width == 0 or height == 0 ) then
 		width, height = nil, nil
 	end
 
-	if ( self.framebuffer and not self.needsRedraw ) then
+	if ( self.canvas and not self.needsRedraw ) then
 		return
 	end
 
-	if ( self.framebuffer == nil ) then
+	if ( self.canvas == nil ) then
+		local dpiscale = love.graphics.getDPIScale()
+		local r_window_highdpi = convar.getConvar( "r_window_highdpi" )
+		if ( r_window_highdpi:getNumber() == 2 ) then
+			dpiscale = 1
+		end
+
 		require( "engine.client.canvas" )
-		if ( self:shouldUseFullscreenFramebuffer() ) then
-			self.framebuffer = fullscreencanvas()
+		if ( self:shouldUseFullscreenCanvas() ) then
+			self.canvas = fullscreencanvas( nil, nil, {
+				dpiscale = dpiscale
+			} )
 		else
-			self.framebuffer = canvas( width, height )
+			self.canvas = canvas( width, height, {
+				dpiscale = dpiscale
+			} )
 		end
 	end
 
-	if ( self.framebuffer:shouldAutoRedraw() ) then
-		self.framebuffer:setAutoRedraw( false )
+	self.canvas:setFilter( "nearest", "nearest" )
+
+	if ( self.canvas:shouldAutoRedraw() ) then
+		self.canvas:setAutoRedraw( false )
 	end
 
-	self.framebuffer:renderTo( function()
+	self.canvas:renderTo( function()
 		love.graphics.clear()
 		self:draw()
 	end )
@@ -94,6 +109,8 @@ function panel:createFramebuffer( width, height )
 end
 
 function panel:draw()
+	panel._drawcalls = ( panel._drawcalls or 0 ) + 1
+
 	if ( not self:isVisible() ) then
 		return
 	end
@@ -104,46 +121,20 @@ function panel:draw()
 	end
 
 	for _, v in ipairs( children ) do
-		v:createFramebuffer()
+		v:createCanvas()
 	end
 
 	for _, v in ipairs( children ) do
 		v:preDraw()
-		v:drawFramebuffer()
+		v:drawCanvas()
 		v:postDraw()
 	end
 end
 
 function panel:drawBackground( color )
-	local width, height = self:getSize()
+	local width, height = self:getDimensions()
 	love.graphics.setColor( color )
 	love.graphics.rectangle( "fill", 0, 0, width, height )
-end
-
-function panel:drawSelection()
-	love.graphics.setColor( color.red )
-	local lineWidth = 1
-	love.graphics.setLineWidth( lineWidth )
-	love.graphics.rectangle(
-		"line",
-		lineWidth / 2,
-		lineWidth / 2,
-		self:getWidth()  - lineWidth,
-		self:getHeight() - lineWidth
-	)
-end
-
-function panel:drawName()
-	local font   = scheme.getProperty( "Default", "font" )
-	love.graphics.setFont( font )
-	local text   = self:getName()
-	local width  = font:getWidth( text )
-	local height = font:getHeight()
-	love.graphics.setColor( color.red )
-	love.graphics.rectangle( "fill", 0, 0, width + 6, height + 2 )
-
-	love.graphics.setColor( color.white )
-	love.graphics.print( text, 3, 1 )
 end
 
 function panel:drawBorder( color )
@@ -159,13 +150,13 @@ function panel:drawBorder( color )
 	)
 end
 
-function panel:drawFramebuffer()
+function panel:drawCanvas()
 	if ( not self:isVisible() ) then
 		return
 	end
 
-	if ( self.framebuffer == nil ) then
-		self:createFramebuffer()
+	if ( self.canvas == nil ) then
+		self:createCanvas()
 	end
 
 	love.graphics.push()
@@ -173,9 +164,38 @@ function panel:drawFramebuffer()
 		love.graphics.setBlendMode( "alpha", "premultiplied" )
 		local a = self:getOpacity()
 		love.graphics.setColor( a, a, a, a )
-		self.framebuffer:draw()
+		self.canvas:draw()
 		love.graphics.setBlendMode( b )
 	love.graphics.pop()
+end
+
+function panel:drawSelection()
+	love.graphics.setColor( color.red )
+	local lineWidth = 1
+	love.graphics.setLineWidth( lineWidth )
+	love.graphics.rectangle(
+		"line",
+		lineWidth / 2,
+		lineWidth / 2,
+		self:getWidth()  - lineWidth,
+		self:getHeight() - lineWidth
+	)
+end
+
+function panel:drawTranslucency()
+	if ( gui._translucencyCanvas == nil ) then
+		return
+	end
+
+	gui.panel._maskedPanel = self
+	love.graphics.stencil( gui.panel.drawMask )
+	love.graphics.setStencilTest( "greater", 0 )
+		love.graphics.push()
+			local x, y = self:localToScreen()
+			love.graphics.translate( -x, -y )
+			gui._translucencyCanvas:draw()
+		love.graphics.pop()
+	love.graphics.setStencilTest()
 end
 
 local filtered = function( panel, func, ... )
@@ -213,7 +233,7 @@ accessor( panel, "children" )
 accessor( panel, "name" )
 gui.accessor( panel, "opacity" )
 accessor( panel, "parent" )
-accessor( panel, "scale" )
+gui.accessor( panel, "scale" )
 
 function panel:getScheme( property )
 	return scheme.getProperty( self.scheme, property )
@@ -222,15 +242,54 @@ end
 gui.accessor( panel, "width",  nil, nil, 0 )
 gui.accessor( panel, "height", nil, nil, 0 )
 
-function panel:getSize()
+function panel:getDimensions()
 	return self:getWidth(), self:getHeight()
 end
 
-accessor( panel, "x" )
-accessor( panel, "y" )
+gui.accessor( panel, "x" )
+gui.accessor( panel, "y" )
 
 function panel:getPos()
 	return self:getX(), self:getY()
+end
+
+function panel:getRootPanel()
+	local panel = self
+	while ( panel ~= nil ) do
+		panel = panel:getParent()
+		if ( panel:getParent() == nil ) then
+			return panel
+		end
+	end
+end
+
+function panel:getPrevSibling()
+	local parent = self:getParent()
+	if ( parent == nil ) then
+		return
+	end
+
+	local children = parent:getChildren()
+	for i, v in ipairs( children ) do
+		if ( i < 1 and v == self ) then
+			return children[ i - 1 ]
+		end
+	end
+end
+
+function panel:getNextSibling()
+	local parent = self:getParent()
+	local parent = self:getParent()
+	if ( parent == nil ) then
+		return
+	end
+
+	local children = parent:getChildren()
+	for i, v in ipairs( children ) do
+		if ( i < #children and v == self ) then
+			return children[ i + 1 ]
+		end
+	end
 end
 
 function panel:getTopMostChildAtPos( x, y )
@@ -239,7 +298,7 @@ function panel:getTopMostChildAtPos( x, y )
 	end
 
 	local sx, sy = self:localToScreen()
-	local w,  h  = self:getSize()
+	local w,  h  = self:getDimensions()
 	if ( not math.pointinrect( x, y, sx, sy, w, h ) ) then
 		return nil
 	end
@@ -258,6 +317,8 @@ function panel:getTopMostChildAtPos( x, y )
 end
 
 function panel:invalidate()
+	panel._invalidations = ( panel._invalidations or 0 ) + 1
+
 	self.needsRedraw = true
 
 	local parent = self:getParent()
@@ -267,17 +328,17 @@ function panel:invalidate()
 	end
 end
 
-function panel:invalidateFramebuffer()
+function panel:invalidateCanvas()
 	local children = self:getChildren()
 	if ( children ) then
 		for _, v in ipairs( children ) do
-			v:invalidateFramebuffer()
+			v:invalidateCanvas()
 		end
 	end
 
-	if ( self:shouldUseFullscreenFramebuffer() ) then
-		self.framebuffer = nil
-		self:createFramebuffer()
+	if ( self:shouldUseFullscreenCanvas() ) then
+		self:removeCanvas()
+		self:createCanvas()
 	end
 end
 
@@ -454,7 +515,7 @@ function panel:preDraw()
 	end
 
 	local scale = self:getScale()
-	local width, height = self:getSize()
+	local width, height = self:getDimensions()
 	love.graphics.push()
 	love.graphics.translate( self:getX(), self:getY() )
 	love.graphics.scale( scale )
@@ -480,7 +541,6 @@ function panel:postDraw()
 	if ( gui_element_selection:getBoolean() ) then
 		if ( self.mouseover ) then
 			self:drawSelection()
-			self:drawName()
 		end
 	end
 
@@ -504,16 +564,20 @@ function panel:remove()
 	local parent = self:getParent()
 	if ( parent ) then
 		local children = parent:getChildren()
-		for i, v in ipairs( children ) do
-			if ( v == self ) then
-				table.remove( children, i )
+		if ( children ~= nil ) then
+			for i, v in ipairs( children ) do
+				if ( v == self ) then
+					table.remove( children, i )
+				end
+			end
+
+			if ( #children == 0 ) then
+				parent.children = nil
 			end
 		end
-
-		if ( #children == 0 ) then
-			parent.children = nil
-		end
 	end
+
+	self:removeCanvas()
 
 	self:onRemove()
 end
@@ -526,6 +590,13 @@ function panel:removeChildren()
 		end
 	end
 	self:invalidate()
+end
+
+function panel:removeCanvas()
+	if ( self.canvas ) then
+		self.canvas:remove()
+		self.canvas = nil
+	end
 end
 
 function panel:screenToLocal( x, y )
@@ -543,8 +614,8 @@ function panel:screenToLocal( x, y )
 	return x, y
 end
 
-function panel:setUseFullscreenFramebuffer( useFullscreenFramebuffer )
-	self.useFullscreenFramebuffer = useFullscreenFramebuffer and true or nil
+function panel:setUseFullscreenCanvas( useFullscreenCanvas )
+	self.useFullscreenCanvas = useFullscreenCanvas and true or nil
 end
 
 function panel:setNextThink( nextThink )
@@ -571,11 +642,6 @@ function panel:setParent( panel )
 	self.parent = panel
 end
 
-function panel:setScale( scale )
-	self.scale = scale
-	self:invalidate()
-end
-
 function panel:setScheme( name )
 	if ( not scheme.isLoaded( name ) ) then
 		scheme.load( name )
@@ -584,16 +650,16 @@ function panel:setScheme( name )
 end
 
 function panel:setWidth( width )
-	self.width = math.round( width )
+	self.width = type( width ) == "number" and math.round( width ) or width
 	self:invalidate()
 end
 
 function panel:setHeight( height )
-	self.height = math.round( height )
+	self.height = type( height ) == "number" and math.round( height ) or height
 	self:invalidate()
 end
 
-function panel:setSize( width, height )
+function panel:setDimensions( width, height )
 	self:setWidth( width )
 	self:setHeight( height )
 end
@@ -617,7 +683,7 @@ function panel:setPos( x, y )
 	self:setY( y )
 end
 
-accessor( panel, "useFullscreenFramebuffer", "should" )
+accessor( panel, "useFullscreenCanvas", "should" )
 
 function panel:textinput( text )
 	return cascadeInputToChildren( self, "textinput", text )

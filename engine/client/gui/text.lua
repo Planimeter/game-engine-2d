@@ -8,29 +8,38 @@ class "gui.text" ( "gui.box" )
 
 local text = gui.text
 
-function text:text( parent, name, text )
-	gui.box.box( self, parent, name )
+function text:text( parent, text )
+	gui.box.box( self, parent, nil )
+	self:set( text )
+end
 
-	local width, height = parent:getSize()
-	if ( width == nil and height == nil ) then
-		local font    = self:getFont()
-		width, height = font:getWidth( text ), font:getHeight()
-	end
-
-	self:createFramebuffer( width, height )
-
-	self:setText( text )
+function text:createCanvas()
 end
 
 function text:draw()
+	assert( false )
 	love.graphics.setColor( self:getColor() )
-	love.graphics.setFont( self:getFont() )
-	love.graphics.printf( self:getText(), 0, 0, self:getWidth() )
+	love.graphics.draw( self._text )
+end
+
+function text:drawCanvas()
+	if ( not self:isVisible() ) then
+		return
+	end
+
+	love.graphics.push()
+		local a = self:getOpacity()
+		local c = self:getColor()
+		love.graphics.setColor(
+			a * c[ 1 ], a * c[ 2 ], a * c[ 3 ], a * c[ 4 ]
+		)
+		love.graphics.draw( self._text )
+	love.graphics.pop()
 end
 
 function text:getWidth()
 	local font = self:getFont()
-	return font:getWidth( self:getText() )
+	return font:getWidth( self:get() )
 end
 
 function text:getHeight()
@@ -38,14 +47,26 @@ function text:getHeight()
 	return font:getHeight()
 end
 
-gui.accessor( text, "text" )
+function text:set( text )
+	self.text = text
 
-function text:getText()
+	if ( self._text ) then
+		self._text:set( text or "" )
+	else
+		self._text = love.graphics.newText( self:getFont(), text )
+	end
+end
+
+text.setText = text.set
+
+function text:get()
 	return rawget( self, "text" ) or ""
 end
 
-gui.accessor( text, "font" )
+function text:setFont( font )
+	self._text:setFont( font )
+end
 
 function text:getFont()
-	return self.font or self:getScheme( "font" )
+	return self._text and self._text:getFont() or self:getScheme( "font" )
 end

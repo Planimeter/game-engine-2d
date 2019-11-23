@@ -20,8 +20,7 @@ function scrollbar:scrollbar( parent, name )
 	self.rangeWindow = 0
 	self.value       = 0
 
-	self:setScheme( "Default" )
-	self:setUseFullscreenFramebuffer( true )
+	self:setUseFullscreenCanvas( true )
 end
 
 function scrollbar:draw()

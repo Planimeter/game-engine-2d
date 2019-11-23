@@ -13,11 +13,11 @@ local hudgamemenuinventory = gui.hudgamemenuinventory
 function hudgamemenuinventory:hudgamemenuinventory( parent )
 	gui.box.box( self, parent, "Inventory" )
 	self:setScheme( "Default" )
-	self:setSize( parent:getSize() )
+	self:setDimensions( parent:getDimensions() )
 
 	self.grid = gui.itemgrid( self, "Inventory Item Grid" )
 	self.grid:setPos( 36, 86 + 31 + 18 )
-	self.grid:setSize( parent:getWidth() - 2 * 36, 314 )
+	self.grid:setDimensions( parent:getWidth() - 2 * 36, 314 )
 	self.grid:setColumns( 4 )
 	self.grid:setRows( 7 )
 

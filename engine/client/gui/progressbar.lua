@@ -11,7 +11,6 @@ local progressbar = gui.progressbar
 function progressbar:progressbar( parent, name )
 	gui.box.box( self, parent, name )
 	self:setDisplay( "block" )
-	self:setPosition( "absolute" )
 	self:setBackgroundColor( self:getScheme( "progressbar.backgroundColor" ) )
 	self.width  = 216
 	self.height = 2

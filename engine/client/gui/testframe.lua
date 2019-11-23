@@ -28,7 +28,7 @@ function testframe:createTestPanels()
 	panelName = "Scrollable Panel"
 	local panel = gui.scrollablepanel( tab, getDebugName() )
 	panel.invalidateLayout = function( self )
-		self:setSize( self:getParent():getSize() )
+		self:setDimensions( self:getParent():getDimensions() )
 		gui.panel.invalidateLayout( self )
 	end
 	panel:setInnerHeight( 1386 )
@@ -90,12 +90,9 @@ function testframe:createTestPanels()
 	panelName = "Drop-Down List Item"
 	local dropdownlistitem = nil
 	item = getDebugName()
-	dropdownlistitem = gui.dropdownlistitem( item .. " 1", panelName .. " 1" )
-	dropdownlist:addItem( dropdownlistitem )
-	dropdownlistitem = gui.dropdownlistitem( item .. " 2", panelName .. " 2" )
-	dropdownlist:addItem( dropdownlistitem )
-	-- dropdownlistitem = gui.dropdownlistitem( item .. " 3", panelName .. " 3" )
-	-- dropdownlist:addItem( dropdownlistitem )
+	dropdownlistitem = gui.dropdownlistitem( dropdownlist, item .. " 1", panelName .. " 1" )
+	dropdownlistitem = gui.dropdownlistitem( dropdownlist, item .. " 2", panelName .. " 2" )
+	-- dropdownlistitem = gui.dropdownlistitem( dropdownlist, item .. " 3", panelName .. " 3" )
 
 	panelName = "Slider"
 	local slider = gui.slider( panel, getDebugName() )
@@ -123,7 +120,7 @@ function testframe:createTestPanels()
 	local image = gui.imagepanel( panel, "Image", nil )
 	x = margin
 	image:setPos( x, 1386 - margin - 32 )
-	image:setSize( 32, 32 )
+	image:setDimensions( 32, 32 )
 
 	self:addTab( "Tab", tab, true )
 end

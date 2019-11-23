@@ -17,7 +17,7 @@ function button:button( parent, name, text )
 	self:setBorderWidth( 1 )
 	self.width    = 216
 	self.height   = 46
-	self.text     = text or "Button"
+	self.text     = gui.text( self, text )
 	self.disabled = false
 
 	self:setScheme( "Default" )
@@ -39,9 +39,10 @@ function button:drawBorder()
 		return
 	end
 
-	if ( self.mousedown and ( self.mouseover or self:isChildMousedOver() ) ) then
+	local mouseover = ( self.mouseover or self:isChildMousedOver() )
+	if ( self.mousedown and mouseover ) then
 		color = self:getScheme( "button.mousedown.borderColor" )
-	elseif ( self.mousedown or ( self.mouseover or self:isChildMousedOver() ) or self.focus ) then
+	elseif ( self.mousedown or mouseover or self.focus ) then
 		color = self:getScheme( "button.mouseover.borderColor" )
 	end
 
@@ -55,14 +56,7 @@ function button:drawText()
 		color = self:getScheme( "button.disabled.textColor" )
 	end
 
-	love.graphics.setColor( color )
-
-	local font = self:getScheme( "font" )
-	love.graphics.setFont( font )
-	local text = self:getText()
-	local x = math.round( self:getWidth() / 2 - font:getWidth( text ) / 2 )
-	local y = math.round( self:getHeight() / 2 - font:getHeight() / 2 )
-	love.graphics.print( text, x, y )
+	self.text:setColor( color )
 end
 
 gui.accessor( button, "text" )
@@ -81,14 +75,16 @@ function button:keypressed( key, scancode, isrepeat )
 end
 
 function button:mousepressed( x, y, button, istouch )
-	if ( ( self.mouseover or self:isChildMousedOver() ) and button == 1 ) then
+	local mouseover = ( self.mouseover or self:isChildMousedOver() )
+	if ( mouseover and button == 1 ) then
 		self.mousedown = true
 		self:invalidate()
 	end
 end
 
 function button:mousereleased( x, y, button, istouch )
-	if ( ( self.mousedown and ( self.mouseover or self:isChildMousedOver() ) ) and not self:isDisabled() ) then
+	local mouseover = ( self.mouseover or self:isChildMousedOver() )
+	if ( ( self.mousedown and mouseover ) and not self:isDisabled() ) then
 		self:onClick()
 	end
 
@@ -102,18 +98,10 @@ function button:onClick()
 end
 
 function button:setText( text )
-	if ( type( self.text ) ~= "string" ) then
-		self.text:setText( text )
-	else
-		self.text = text
-	end
+	self.text:set( text )
 	self:invalidate()
 end
 
 function button:getText()
-	if ( type( self.text ) ~= "string" ) then
-		return self.text:getText()
-	else
-		return self.text
-	end
+	return self.text:get()
 end

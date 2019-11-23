@@ -181,12 +181,12 @@ end
 
 concommand( "zoomin", "Zooms the camera in", function()
 	local scale = getZoom()
-	setZoom( scale * 2 )
+	setZoom( scale + 1 )
 end )
 
 concommand( "zoomout", "Zooms the camera out", function()
 	local scale = getZoom()
-	setZoom( scale / 2 )
+	setZoom( scale - 1 )
 end )
 
 function update( dt )

@@ -4,17 +4,17 @@
 --
 --==========================================================================--
 
-class "gui.hudgamemenustats" ( "gui.panel" )
+class "gui.hudgamemenustats" ( "gui.box" )
 
 local hudgamemenustats = gui.hudgamemenustats
 
 function hudgamemenustats:hudgamemenustats( parent )
-	gui.panel.panel( self, parent, "Stats" )
-	self:setScheme( "Default" )
-	self:setSize( parent:getSize() )
+	gui.box.box( self, parent, "Stats" )
+	self:setDimensions( parent:getDimensions() )
 
 	local panel = gui.scrollablepanel( self, "Stats Scrollable Panel" )
-	panel:setSize( self:getWidth(), self:getHeight() - 135 )
+	panel:setPosition( "absolute" )
+	panel:setDimensions( self:getWidth(), self:getHeight() - 135 )
 	panel:setInnerHeight( 738 )
 	panel:setY( 86 + 31 + 18 )
 	panel = panel:getInnerPanel()

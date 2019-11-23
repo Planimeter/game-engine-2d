@@ -8,9 +8,9 @@ class "gui.optionsitem" ( "gui.dropdownlistitem" )
 
 local optionsitem = gui.optionsitem
 
-function optionsitem:optionsitem( name, text )
-	gui.dropdownlistitem.dropdownlistitem( self, name, text .. " " )
-	self.entityText = gui.text( self, name .. " Text Node", "" )
+function optionsitem:optionsitem( parent, name, text )
+	gui.dropdownlistitem.dropdownlistitem( self, parent, name, text .. " " )
+	self.entityText = gui.text( self, "" )
 	self.entityText:setFont( self:getScheme( "fontBold" ) )
 end
 
@@ -29,12 +29,13 @@ function optionsitem:drawText()
 	self.entityText:setColor( color )
 
 	local entity = self:getEntity()
+	local text = ""
 	if ( type( entity ) == "string" ) then
 		text = entity
 	else
 		text = entity and entity:getName() or ""
 	end
-	self.entityText:setText( text )
+	self.entityText:set( text )
 end
 
 function optionsitem:setDefault( default )

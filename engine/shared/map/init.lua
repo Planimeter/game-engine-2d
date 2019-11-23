@@ -11,6 +11,8 @@ class( "map" )
 map._maps = map._maps or {}
 
 if ( _CLIENT ) then
+	local r_draw_world = convar( "r_draw_world", "1", nil, nil, "Draws world" )
+
 	local function drawMap( map )
 		local worldIndex = camera.getWorldIndex()
 		if ( worldIndex ~= map:getWorldIndex() ) then
@@ -38,8 +40,10 @@ if ( _CLIENT ) then
 			love.graphics.translate( x, y )
 
 			-- Draw maps
-			for _, map in ipairs( map._maps ) do
-				drawMap( map )
+			if ( r_draw_world:getBoolean() ) then
+				for _, map in ipairs( map._maps ) do
+					drawMap( map )
+				end
 			end
 
 			-- Draw entities
@@ -91,6 +95,10 @@ end
 
 function map.getWorld()
 	return map._world
+end
+
+function map.getGroundBody()
+	return map._groundBody
 end
 
 function map.load( name, x, y, worldIndex )
@@ -155,9 +163,8 @@ end
 
 function map.unloadAll()
 	for i = #map._maps, 1, -1 do
-		local map = map._maps[ i ]
-		unrequire( "maps." .. map:getName() )
-		table.remove( map._maps, i )
+		local m = map._maps[ i ]
+		map.unload( m:getName() )
 	end
 end
 
@@ -251,11 +258,13 @@ function map:map( name, x, y, worldIndex )
 
 	self:parse()
 
-	require( "engine.client.canvas" )
-	local width  = self:getPixelWidth()
-	local height = self:getPixelHeight()
-	self.canvas  = canvas( width, height )
-	self.canvas:setFilter( "nearest", "nearest" )
+	if ( _CLIENT ) then
+		require( "engine.client.canvas" )
+		local width  = self:getPixelWidth()
+		local height = self:getPixelHeight()
+		self.canvas  = canvas( width, height, { dpiscale = 1 } )
+		self.canvas:setFilter( "nearest", "nearest" )
+	end
 
 	self.needsRedraw = true
 end
@@ -372,12 +381,68 @@ accessor( map, "worldIndex" )
 accessor( map, "x" )
 accessor( map, "y" )
 
+local function beginContact( a, b, contact )
+	a = a:getUserData()
+	b = b:getUserData()
+	if ( a ) then
+		a:startTouch( b, contact )
+	end
+end
+
+local function endContact( a, b, contact )
+	a = a:getUserData()
+	b = b:getUserData()
+	if ( a ) then
+		a:endTouch( b, contact )
+	end
+end
+
+local function preSolve( a, b, contact )
+end
+
+local function postSolve( a, b, contact, normalimpulse, tangentimpulse )
+end
+
 function map.initializeWorld()
 	if ( map._world ) then
 		return
 	end
 
-	map._world = love.physics.newWorld()
+	map._world  = love.physics.newWorld()
+	map._groundBody = love.physics.newBody( map.getWorld(), 0, 0 )
+
+	local world = map.getWorld()
+	world:setCallbacks( beginContact, endContact, preSolve, postSolve )
+end
+
+function map:initializePhysics()
+	-- If the map has trigger_transitions, let level designers set
+	-- up nodraws themselves.
+	if ( entity.findByClassname( "trigger_transition", self ) ) then
+		return false
+	end
+
+	local x       = self:getX()
+	local y       = self:getY()
+	local width   = self:getPixelWidth()
+	local height  = self:getPixelHeight()
+	local ground  = map.getGroundBody()
+
+	-- Top boundary
+	local shape   = love.physics.newEdgeShape( x + 0, y + 0, x + width, y + 0 )
+	local fixture = love.physics.newFixture( ground, shape )
+
+	-- Right boundary
+	shape         = love.physics.newEdgeShape( x + width, y + 0, x + width, y + height )
+	fixture       = love.physics.newFixture( ground, shape )
+
+	-- Bottom boundary
+	shape         = love.physics.newEdgeShape( x + width, y + height, x + 0, y + height )
+	fixture       = love.physics.newFixture( ground, shape )
+
+	-- Left boundary
+	shape         = love.physics.newEdgeShape( x + 0, y + height, x + 0, y + 0 )
+	fixture       = love.physics.newFixture( ground, shape )
 end
 
 local px            = 0
@@ -496,8 +561,13 @@ function map:parse()
 	self:setProperties( table.copy( data[ "properties" ] ) )
 
 	map.initializeWorld()
+	-- self:initializePhysics()
+
 	self:loadTilesets( data[ "tilesets" ] )
 	self:loadLayers( data[ "layers" ] )
+
+	-- NOTE: Do this here to detect trigger_transitions, instead.
+	self:initializePhysics()
 
 	self.data = nil
 end
@@ -505,8 +575,12 @@ end
 function map:remove()
 	self:cleanup()
 
-	local world = self:getWorld()
+	local world = map.getWorld()
 	if ( world and #map._maps == 1 ) then
+		local ground = map.getGroundBody()
+		ground:destroy()
+		map._groundBody = nil
+
 		world:destroy()
 		map._world = nil
 	end
@@ -529,10 +603,10 @@ function map:getTileSize()
 	return self:getTileWidth(), self:getTileHeight()
 end
 
-function map.update( dt )
+function map.tick( timestep )
 	local world = map.getWorld()
 	if ( world ) then
-		world:update( dt )
+		world:update( timestep )
 	end
 end
 

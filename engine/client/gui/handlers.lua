@@ -23,7 +23,7 @@ local function updateFramerate( convar )
 			return
 		end
 
-		local framerate = gui.framerate( nil, "Frame Rate" )
+		local framerate = gui.framerate( _rootPanel, "Frame Rate" )
 		_G.g_Framerate = framerate
 	else
 		_G.g_Framerate:remove()
@@ -44,13 +44,17 @@ local function updateNetGraph( convar )
 		local netgraph = gui.netgraph( nil, "Net Graph" )
 		_G.g_NetGraph = netgraph
 	else
+		if ( _G.g_NetGraph == nil ) then
+			return
+		end
+
 		_G.g_NetGraph:remove()
 		_G.g_NetGraph = nil
 	end
 end
 
 local perf_draw_net_graph = convar( "perf_draw_net_graph", "0", nil, nil,
-                                     "Draws the net graph", updateNetGraph )
+                                    "Draws the net graph", updateNetGraph )
 
 function load()
 	-- Initialize root panel
@@ -79,36 +83,37 @@ function load()
 	end
 end
 
-local function updateTranslucencyFramebuffer( convar )
+local function updateTranslucencyCanvas( convar )
 	local enabled = convar:getBoolean()
 	if ( enabled ) then
 		require( "shaders.gaussianblur" )
-		_translucencyFramebuffer = _G.shader.getShader( "gaussianblur" )
-		_translucencyFramebuffer:set( "sigma", love.window.toPixels( 20 ) )
+		_translucencyCanvas = _G.shader.getShader( "gaussianblur" )
+		_translucencyCanvas:set( "sigma", love.window.toPixels( 20 ) )
 	else
-		_translucencyFramebuffer = nil
+		_translucencyCanvas = nil
 	end
 end
 
 local gui_draw_translucency = convar( "gui_draw_translucency", "1", nil, nil,
                                       "Toggles gui translucency",
-                                      updateTranslucencyFramebuffer )
+                                      updateTranslucencyCanvas,
+                                      { "archive" } )
 
 function draw()
-	if ( _viewportFramebuffer and gui_draw_translucency:getBoolean() ) then
-		if ( _translucencyFramebuffer == nil ) then
+	if ( _viewportCanvas and gui_draw_translucency:getBoolean() ) then
+		if ( _translucencyCanvas == nil ) then
 			require( "shaders.gaussianblur" )
-			_translucencyFramebuffer = _G.shader.getShader( "gaussianblur" )
-			_translucencyFramebuffer:set( "sigma", love.window.toPixels( 12 ) )
+			_translucencyCanvas = _G.shader.getShader( "gaussianblur" )
+			_translucencyCanvas:set( "sigma", love.window.toPixels( 20 ) )
 		end
 
-		_translucencyFramebuffer:renderTo( function()
+		_translucencyCanvas:renderTo( function()
 			love.graphics.clear()
-			_viewportFramebuffer:draw()
+			_viewportCanvas:draw()
 		end )
 	end
 
-	_rootPanel:createFramebuffer()
+	_rootPanel:createCanvas()
 	_rootPanel:draw()
 end
 
@@ -169,6 +174,9 @@ function update( dt )
 	end
 
 	_rootPanel:update( dt )
+
+	panel._drawcalls = 0
+	panel._invalidations = 0
 end
 
 function wheelmoved( x, y )

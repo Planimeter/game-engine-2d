@@ -36,9 +36,14 @@ end
 
 function invalidateTree()
 	_rootPanel:invalidateLayout()
-	_rootPanel:invalidateFramebuffer()
-	_viewportFramebuffer     = nil
-	_translucencyFramebuffer = nil
+	_rootPanel:invalidateCanvas()
+
+	if ( _viewportCanvas ) then
+		_viewportCanvas:remove()
+	end
+
+	_viewportCanvas     = nil
+	_translucencyCanvas = nil
 end
 
 function preDrawWorld()

@@ -19,7 +19,7 @@ function tabbedframe:tabbedframe( parent, name, title )
 
 	local width     = 2 * padding + iconWidth - 1 - 8
 	local height    = 2 * padding + iconWidth - 3
-	self.closeButton:setSize( width, height )
+	self.closeButton:setDimensions( width, height )
 
 	local font             = self:getScheme( "titleFont" )
 	local titleWidth       = font:getWidth( self.title )
@@ -36,7 +36,7 @@ end
 
 function tabbedframe:addTab( tabName, tabPanel, default )
 	self.tabGroup:addTab( tabName, default )
-	self.tabPanels:addPanel( tabPanel, default )
+	local panel = self.tabPanels:addPanel( tabPanel, default )
 
 	local padding          = 24
 	local font             = self:getScheme( "titleFont" )
@@ -51,7 +51,7 @@ function tabbedframe:addTab( tabName, tabPanel, default )
 		  + 1
 		  + 8
 	)
-	tabPanel:invalidateLayout()
+	panel:invalidateLayout()
 end
 
 function tabbedframe:drawBackground()
@@ -131,16 +131,17 @@ accessor( tabbedframe, "tabPanels" )
 
 function tabbedframe:invalidateLayout()
 	local padding   = 24
-	local iconWidth = 16
 	if ( self.closeButton ) then
-		self.closeButton:setX( self:getWidth() - 2 * padding - iconWidth )
+		self.closeButton:setX(
+			self:getWidth() - self.closeButton:getWidth() - 8
+		)
 	end
 
 	local font       = self:getScheme( "titleFont" )
 	local titleWidth = font:getWidth( self.title )
 
 	self.tabGroup:setPos( 2 * padding + titleWidth, 1 )
-	self.tabPanels:setSize( self:getWidth(), self:getHeight() - 62 )
+	self.tabPanels:setDimensions( self:getWidth(), self:getHeight() - 62 )
 
 	gui.panel.invalidateLayout( self )
 end

@@ -2,7 +2,7 @@ return {
 	image = "images/player.png",
 	width = 16,
 	height = 32,
-	frametime = 0.2,
+	frametime = 0.25,
 	animations = {
 		idlenorth = {
 			from = 1,
@@ -19,6 +19,26 @@ return {
 		idlewest = {
 			from = 4,
 			to = 4
+		},
+		-- idlenorth
+		idlenortheast = {
+			from = 1,
+			to = 1,
+		},
+		-- idlesouth
+		idlesoutheast = {
+			from = 3,
+			to = 3,
+		},
+		-- idlesouth
+		idlesouthwest = {
+			from = 3,
+			to = 3,
+		},
+		-- idlenorth
+		idlenorthwest = {
+			from = 1,
+			to = 1,
 		},
 		walknorth = {
 			from = 33,

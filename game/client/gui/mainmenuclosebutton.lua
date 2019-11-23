@@ -4,9 +4,8 @@
 --
 --==========================================================================--
 
-local gui    = gui
-local love   = love
-local unpack = unpack
+local gui  = gui
+local love = love
 
 class "gui.mainmenuclosebutton" ( "gui.closebutton" )
 

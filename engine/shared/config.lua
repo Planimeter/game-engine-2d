@@ -6,9 +6,10 @@
 
 require( "engine.shared.convar" )
 
-local convar   = convar
-local love     = love
-local tonumber = tonumber
+local convar    = convar
+local love      = love
+local math      = math
+local tonumber  = tonumber
 
 module( "config" )
 
@@ -21,12 +22,14 @@ local function createConvars()
 	        "Sets the height of the window on load", nil, { "archive" } )
 	convar( "r_window_fullscreen", "0", nil, nil,
 	        "Toggles fullscreen mode", nil, { "archive" } )
+	convar( "r_window_fullscreentype", "desktop", nil, nil,
+	        "Sets the fullscreen type on load", nil, { "archive" } )
 	convar( "r_window_vsync", "1", nil, nil,
 	        "Toggles vertical synchronization", nil, { "archive" } )
 	convar( "r_window_borderless", "0", nil, nil,
 	        "Toggles borderless mode", nil, { "archive" } )
 	convar( "r_window_highdpi", "1", nil, nil,
-	        "Toggles high-dpi mode", nil, { "archive" } )
+	        "Sets the high-dpi mode on load", nil, { "archive" } )
 
 	local function updateVolume( convar )
 		local volume = convar:getNumber()
@@ -57,23 +60,28 @@ local function toboolean( v )
 end
 
 function setWindow( c )
-	local r_window_width      = convar.getConfig( "r_window_width" )
-	local r_window_height     = convar.getConfig( "r_window_height" )
-	local r_window_fullscreen = convar.getConfig( "r_window_fullscreen" )
-	local r_window_vsync      = convar.getConfig( "r_window_vsync" )
-	local r_window_borderless = convar.getConfig( "r_window_borderless" )
-	local r_window_highdpi    = convar.getConfig( "r_window_highdpi" )
+	local r_window_width          = convar.getConfig( "r_window_width" )
+	local r_window_height         = convar.getConfig( "r_window_height" )
+	local r_window_fullscreen     = convar.getConfig( "r_window_fullscreen" )
+	local r_window_fullscreentype = convar.getConfig( "r_window_fullscreentype" )
+	local r_window_vsync          = convar.getConfig( "r_window_vsync" )
+	local r_window_borderless     = convar.getConfig( "r_window_borderless" )
+	local r_window_highdpi        = convar.getConfig( "r_window_highdpi" )
 
 	if ( r_window_width ) then
-		c.window.width = tonumber( r_window_width )
+		c.window.width = math.max( 800, tonumber( r_window_width ) )
 	end
 
 	if ( r_window_height ) then
-		c.window.height = tonumber( r_window_height )
+		c.window.height = math.max( 600, tonumber( r_window_height ) )
 	end
 
 	if ( r_window_fullscreen ) then
 		c.window.fullscreen = toboolean( r_window_fullscreen )
+	end
+
+	if ( r_window_fullscreentype ) then
+		c.window.fullscreentype = r_window_fullscreentype
 	end
 
 	if ( r_window_vsync ) then

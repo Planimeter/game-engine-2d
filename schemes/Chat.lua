@@ -1,4 +1,4 @@
---=========== Copyright © 2018, Planimeter, All rights reserved. ===========--
+--=========== Copyright © 2019, Planimeter, All rights reserved. ===========--
 --
 -- Purpose: Chat HUD scheme
 --
@@ -22,4 +22,13 @@ chat.textbox        = {
     }
 }
 
-chat.font           = love.graphics.newFont( "fonts/SourceSansPro-Regular.otf", 14 )
+-- NOTE: The following arguments to `newFont` are undocumented.
+local dpiscale = love.graphics.getDPIScale()
+local r_window_highdpi = convar.getConvar( "r_window_highdpi" )
+if ( r_window_highdpi:getNumber() == 2 ) then
+    dpiscale = 1
+end
+
+chat.font           = love.graphics.newFont(
+    "fonts/SourceSansPro-Regular.otf", 14, "normal", dpiscale
+)

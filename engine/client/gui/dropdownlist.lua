@@ -10,6 +10,8 @@ local dropdownlist = gui.dropdownlist
 
 function dropdownlist:dropdownlist( parent, name )
 	gui.button.button( self, parent, name )
+	self.height = nil
+	self:setPadding( 14, 18, 13 )
 	self.icon = self:getScheme( "dropdownlist.icon" )
 	self.listItemGroup = gui.dropdownlistitemgroup( self, name .. " Item Group" )
 	self.active = false
@@ -71,8 +73,8 @@ function dropdownlist:drawIcon()
 
 	love.graphics.setColor( color )
 
-	local padding = 18
-	local x = self:getWidth() - self.icon:getWidth() - padding
+	local t, r, b, l = self:getPadding()
+	local x = self:getWidth() - self.icon:getWidth() - r
 	local y = self:getHeight() / 2 - self.icon:getHeight() / 2
 	love.graphics.draw( self.icon, x, y )
 end
@@ -189,4 +191,11 @@ function dropdownlist:setActive( active )
 	self:getListItemGroup():updatePos()
 	self.active = active
 	gui.setFocusedPanel( self, active )
+end
+
+function dropdownlist:setValue( value )
+	local listItemGroup = self:getListItemGroup()
+	if ( listItemGroup ) then
+		return listItemGroup:setValue( value )
+	end
 end

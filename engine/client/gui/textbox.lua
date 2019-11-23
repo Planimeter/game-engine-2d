@@ -43,8 +43,7 @@ function textbox:textbox( parent, name, placeholder )
 	self.editable       = true
 	self.multiline      = false
 
-	self:setScheme( "Default" )
-	self:setUseFullscreenFramebuffer( true )
+	self:setUseFullscreenCanvas( true )
 end
 
 function textbox:draw()
@@ -215,9 +214,10 @@ local function updateAutocomplete( self, suggestions )
 	local dropdownlistitem = nil
 	local name             = "Autocomplete Drop-Down List Item"
 	for i, suggestion in pairs( suggestions ) do
-		dropdownlistitem = gui.dropdownlistitem( name .. " " .. i, suggestion )
+		dropdownlistitem = gui.dropdownlistitem(
+			self.autocompleteItemGroup, name .. " " .. i, suggestion
+		)
 		dropdownlistitem:setValue( suggestion )
-		self.autocompleteItemGroup:addItem( dropdownlistitem )
 	end
 end
 
@@ -326,6 +326,7 @@ end
 
 accessor( textbox, "autocomplete" )
 accessor( textbox, "defocusOnEnter" )
+accessor( textbox, "maxLength" )
 accessor( textbox, "placeholder" )
 accessor( textbox, "text" )
 
@@ -341,13 +342,9 @@ local function updateScrollbarRange( self )
 end
 
 function textbox:insertText( text )
-	local underflow = getTextWidth( self ) < getInnerWidth( self )
-	local font      = self:getScheme( "font" )
-	local sub1      = utf8sub( self.text, self.cursorPos + 1 )
-	local sub2      = utf8sub( self.text, 1, self.cursorPos )
-	if ( self.cursorPos == 0 ) then
-		sub2 = ""
-	end
+	local underflow         = getTextWidth( self ) < getInnerWidth( self )
+	local font              = self:getScheme( "font" )
+	local resetScrollOffset = false
 
 	if ( getTextWidth( self ) + font:getWidth( text ) >
 	     getInnerWidth( self ) ) then
@@ -361,12 +358,27 @@ function textbox:insertText( text )
 		end
 	end
 
-	self.text = sub2 .. text .. sub1
+	-- Text after cursor.
+	local sub1 = utf8sub( self.text, 1, self.cursorPos )
+	if ( self.cursorPos == 0 ) then
+		sub1 = ""
+	end
+
+	-- Text after cursor.
+	local sub2 = utf8sub( self.text, self.cursorPos + 1 )
+
+	-- Insert text.
+	self.text = sub1 .. text .. sub2
+
+	-- Truncate the head.
+	local maxLength = self:getMaxLength()
+	if ( maxLength ) then
+		self.text = utf8sub( self.text, -maxLength )
+	end
+
 	updateOverflow( self )
 	if ( resetScrollOffset ) then
 		self.scrollOffset = 0
-		underflow         = false
-		resetScrollOffset = false
 	end
 	self.cursorPos = self.cursorPos + utf8len( text )
 
@@ -502,6 +514,14 @@ function textbox:keypressed( key, scancode, isrepeat )
 	if ( key == "backspace" ) then
 		self:doBackspace( controlDown and math.abs( nextWord( self, -1 ) ) or 1 )
 	elseif ( key == "delete" ) then
+		if ( self.autocompleteItemGroup ) then
+			if ( self.autocompleteItemGroup:keypressed(
+				key, scancode, isrepeat
+			) ) then
+				return true
+			end
+		end
+
 		self:doDelete( controlDown and nextWord( self, 1 ) or 1 )
 	elseif ( key == "end" ) then
 		if ( getTextWidth( self ) + getTextX( self ) >
@@ -701,6 +721,15 @@ function textbox:setEditable( editable )
 	self.canFocus = editable
 end
 
+function textbox:setMaxLength( maxLength )
+	self.maxLength = math.max( 0, maxLength )
+
+	local text = self:getText()
+	if ( string.utf8len( text ) > maxLength ) then
+		self:setText( utf8sub( text, 1, maxLength ) )
+	end
+end
+
 function textbox:setMultiline( multiline )
 	self.multiline = multiline
 	if ( multiline ) then
@@ -714,6 +743,11 @@ function textbox:setMultiline( multiline )
 end
 
 function textbox:setText( text )
+	local maxLength = self:getMaxLength()
+	if ( maxLength ) then
+		text = utf8sub( text, 1, maxLength )
+	end
+
 	self.text      = text
 	self.cursorPos = utf8len( text )
 

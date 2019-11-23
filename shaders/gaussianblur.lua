@@ -1,84 +1,35 @@
 --=========== Copyright © 2019, Planimeter, All rights reserved. ===========--
 --
--- Purpose: Gaussian Blur pixel shader
+-- Purpose: Gaussian blur fragment shader
 --
 --==========================================================================--
-
---[[
-The MIT License (MIT)
-
-Copyright (c) 2015 Matthias Richter
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-]]--
 
 require( "shaders.shader" )
 
 class "gaussianblur" ( "shader" )
 
--- unroll convolution loop
-local function build_shader(sigma)
-	local support = math.max(1, math.floor(3*sigma + .5))
-	local one_by_sigma_sq = sigma > 0 and 1 / (sigma * sigma) or 1
-	local norm = 0
-
-	local code = {[[
-		extern vec2 direction;
-		vec4 effect(vec4 color, Image texture, vec2 tc, vec2 _)
-		{ vec4 c = vec4(0.0f);
-	]]}
-	local blur_line = "c += vec4(%f) * Texel(texture, tc + vec2(%f) * direction);"
-
-	for i = -support,support do
-		local coeff = math.exp(-.5 * i*i * one_by_sigma_sq)
-		norm = norm + coeff
-		code[#code+1] = blur_line:format(coeff, i)
-	end
-
-	code[#code+1] = ("return c * vec4(%f) * color;}"):format(norm > 0 and 1/norm or 1)
-
-	return love.graphics.newShader(table.concat(code))
-end
-
-local gaussianblur = gaussianblur or shader._shaders[ "gaussianblur" ]
+local gaussianblur = shader._shaders[ "gaussianblur" ] or gaussianblur
 
 function gaussianblur:gaussianblur()
 	local width, height = love.graphics.getDimensions()
 	self.scale = 1 / 2
 	width  = width  * self.scale
 	height = height * self.scale
-	self.canvas_h = love.graphics.newCanvas( width, height, { dpiscale = 1 } )
-	self.canvas_v = love.graphics.newCanvas( width, height, { dpiscale = 1 } )
-	self.shader = build_shader(1)
-	self.shader:send("direction",{1.0,0.0})
+	self.horizontalPass  = love.graphics.newCanvas( width, height, { dpiscale = 1 } )
+	self.verticalPass    = love.graphics.newCanvas( width, height, { dpiscale = 1 } )
+	-- local fragmentShader = love.filesystem.read( "shaders/gaussianblur.frag" )
+	-- self.shader = love.graphics.newShader( fragmentShader )
 end
 
-function gaussianblur:renderTo(func)
-	local s = love.graphics.getShader()
+function gaussianblur:renderTo( func )
+	local shader = love.graphics.getShader()
+	love.graphics.setShader( self.shader )
 
-	love.graphics.setShader(self.shader)
-
-	-- first pass (horizontal blur)
-	self.shader:send('direction', {1 / love.graphics.getWidth(), 0})
-	-- draw scene
-	-- self.canvas_h:clear()
-	self.canvas_h:renderTo( function()
+	local width, height = love.graphics.getDimensions()
+	width  = width  * self.scale
+	height = height * self.scale
+	self.shader:send( "dir", { 1 / width, 0 } )
+	self.horizontalPass:renderTo( function()
 		love.graphics.push()
 			love.graphics.scale( self.scale, self.scale )
 			func()
@@ -86,34 +37,60 @@ function gaussianblur:renderTo(func)
 	end )
 
 	local b = love.graphics.getBlendMode()
-	love.graphics.setBlendMode('alpha', 'premultiplied')
+	love.graphics.setBlendMode( "alpha", "premultiplied" )
 
-	-- second pass (vertical blur)
-	self.shader:send('direction', {0, 1 / love.graphics.getHeight()})
-	-- self.canvas_v:clear()
-	self.canvas_v:renderTo(function() love.graphics.clear() love.graphics.draw(self.canvas_h, 0,0) end)
+	self.shader:send( "dir", { 0, 1 / height } )
+	self.verticalPass:renderTo( function()
+		love.graphics.clear()
+		love.graphics.draw( self.horizontalPass )
+	end )
 
-	-- love.graphics.draw(self.canvas_v, 0,0)
-
-	-- restore blendmode, shader and canvas
-	love.graphics.setBlendMode(b)
-	love.graphics.setShader(s)
+	love.graphics.setBlendMode( b )
+	love.graphics.setShader( shader )
 end
 
 function gaussianblur:draw()
 	love.graphics.setColor( color.white )
-	love.graphics.draw( self.canvas_v, 0, 0, 0, 1 / self.scale )
+	love.graphics.draw( self.verticalPass, 0, 0, 0, 1 / self.scale )
 end
 
-function gaussianblur:set(key, value)
-	-- Disable blur
-	-- value = 0
-	if key == "sigma" then
-		self.shader = build_shader(tonumber(value))
-	else
-		error("Unknown property: " .. tostring(key))
+function gaussianblur:set( key, value )
+	if ( key == "sigma" ) then
+		-- self.shader:send( "sigma", value )
+		-- self.shader:send( "norm", 1/(math.sqrt(2*math.pi)*value) )
+		-- self.shader:send( "support", (value * 3.0) )
+		self:generateShader( value, (value * 3.0) )
 	end
+
 	return self
+end
+
+function gaussianblur:generateShader( sigma, support )
+	-- See `shaders/gaussianblur.frag`
+	-- Loop unroll Gaussian convolution
+	local norm = 0
+	local forLoop = {}
+	local line = "acc += (Texel(tex, loc + %.1f * dir)) * %f;"
+	for i = -support, support do
+		local coeff = math.exp(-0.5 * i * i / (sigma * sigma));
+		table.insert( forLoop, ( norm > 0 and "\t" or "" ) ..
+			string.format( line, i, coeff )
+		)
+		norm = norm + coeff;
+	end
+	table.insert( forLoop, "\tacc *= 1/" .. norm .. ";\r\n" )
+
+	local fragmentShader = [[
+uniform vec2 dir;
+vec4 effect( vec4 color, Image tex, vec2 texcoord, vec2 pixcoord )
+{
+	vec2 loc = texcoord;
+	vec4 acc = vec4( 0.0 );
+	]] .. table.concat( forLoop, "\r\n" ) .. [[
+	return acc;
+}
+]]
+	self.shader = love.graphics.newShader( fragmentShader )
 end
 
 shader.register( gaussianblur, "gaussianblur" )

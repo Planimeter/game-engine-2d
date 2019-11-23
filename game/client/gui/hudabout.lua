@@ -4,10 +4,10 @@
 --
 --==========================================================================--
 
-class "gui.hudabout" ( "gui.panel" )
+class "gui.hudabout" ( "gui.box" )
 
 local hudabout = gui.hudabout
 
 function hudabout:hudabout( parent )
-	gui.panel.panel( self, parent, "HUD About" )
+	gui.box.box( self, parent, "HUD About" )
 end

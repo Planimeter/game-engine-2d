@@ -4,8 +4,6 @@
 --
 --==========================================================================--
 
-local gui = gui
-
 class "gui.textboxautocompleteitemgroup" ( "gui.dropdownlistitemgroup" )
 
 local textboxautocompleteitemgroup = gui.textboxautocompleteitemgroup
@@ -35,22 +33,6 @@ end
 
 accessor( textboxautocompleteitemgroup, "textbox" )
 
-function textboxautocompleteitemgroup:invalidateLayout()
-	self:updatePos()
-	self:setWidth( self:getTextbox():getWidth() )
-
-	local listItems = self:getItems()
-	if ( listItems ) then
-		local y = 0
-		for _, listItem in ipairs( listItems ) do
-			listItem:setY( y )
-			listItem:setWidth( self:getWidth() )
-			y = y + listItem:getHeight()
-		end
-		self:setHeight( y )
-	end
-end
-
 function textboxautocompleteitemgroup:isVisible()
 	local textbox     = self:getTextbox()
 	local children    = self:getChildren()
@@ -73,12 +55,4 @@ function textboxautocompleteitemgroup:mousepressed( x, y, button, istouch )
 end
 
 function textboxautocompleteitemgroup:onValueChanged( oldValue, newValue )
-end
-
-function textboxautocompleteitemgroup:updatePos()
-	local textbox = self:getTextbox()
-	if ( textbox ) then
-		local sx, sy = textbox:localToScreen()
-		self:setPos( sx, sy + textbox:getHeight() )
-	end
 end

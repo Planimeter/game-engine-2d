@@ -117,6 +117,14 @@ function table.hasvalue( t, value )
 	return nil
 end
 
+function table.keys( t )
+	local keys = {}
+	for k in pairs( t ) do
+		table.insert( keys, k )
+	end
+	return keys
+end
+
 function table.len( t )
 	if ( type( t ) ~= "table" ) then
 		typerror( 1, "table", t )

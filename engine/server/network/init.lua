@@ -78,33 +78,22 @@ function shutdownServer()
 	collectgarbage()
 end
 
-local sv_updaterate = convar( "sv_updaterate", 20, nil, nil,
-                              "Sets the server tick rate" )
+local tickrate = convar( "tickrate", 20, nil, nil,
+                         "Sets the server tick rate" )
 
--- local timestep = 1/20
-_accumulator      = _accumulator or 0
+_accumulator = _accumulator or 0
 
 function update( dt )
 	if ( _host == nil ) then
 		return
 	end
 
-	local timestep = 1 / sv_updaterate:getNumber()
-	_accumulator   = _accumulator + dt
+	local timestep = 1 / tickrate:getNumber()
+	_accumulator = _accumulator + dt
 
 	while ( _accumulator >= timestep ) do
+		engine.server.tick( timestep )
 		pollEvents()
-
-		local entity = _G.entity
-		if ( entity ) then
-			local entities = entity.getAll()
-			for _, entity in ipairs( entities ) do
-				entity:onTick( timestep )
-			end
-		end
-
-		engine.server.onTick( timestep )
-
 		_accumulator = _accumulator - timestep
 	end
 end
@@ -119,12 +108,20 @@ function updateSentReceived()
 	_prevTotalRcvdData  = _totalRcvdData or 0
 	_totalSentData      = _host:total_sent_data()
 	_totalRcvdData      = _host:total_received_data()
-	_avgSentData        = ( _totalSentData - _prevTotalSentData ) / 1000
-	_avgRcvdData        = ( _totalRcvdData - _prevTotalRcvdData ) / 1000
+	_avgSentData        = _totalSentData - _prevTotalSentData
+	_avgRcvdData        = _totalRcvdData - _prevTotalRcvdData
 	_sentRcvdUpdateTime = love.timer.getTime() + 1
 end
 
 function pollEvents()
+	local entity = _G.entity
+	if ( entity ) then
+		local entities = entity.getAll()
+		for _, entity in ipairs( entities ) do
+			entity:broadcastNetworkVarChanges()
+		end
+	end
+
 	local event = _host:service()
 	while ( event ~= nil ) do
 		if ( event.type == "connect" ) then

@@ -4,20 +4,20 @@
 --
 --==========================================================================--
 
-class "gui.viewport" ( "gui.panel" )
+class "gui.viewport" ( "gui.box" )
 
 local viewport = gui.viewport
 
 function viewport:viewport( parent )
-	gui.panel.panel( self, parent, "Viewport" )
+	gui.box.box( self, parent, "Viewport" )
 	self.width  = love.graphics.getWidth()
 	self.height = love.graphics.getHeight()
-	self:setUseFullscreenFramebuffer( true )
+	self:setUseFullscreenCanvas( true )
 	self:moveToBack()
 end
 
 function viewport:invalidateLayout()
-	self:setSize( love.graphics.getWidth(), love.graphics.getHeight() )
+	self:setDimensions( love.graphics.getWidth(), love.graphics.getHeight() )
 
 	gui.panel.invalidateLayout( self )
 end
