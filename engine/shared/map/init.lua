@@ -418,6 +418,7 @@ end
 function map:initializePhysics()
 	-- If the map has trigger_transitions, let level designers set
 	-- up nodraws themselves.
+	require( "engine.shared.entities.entity" )
 	if ( entity.findByClassname( "trigger_transition", self ) ) then
 		return false
 	end
