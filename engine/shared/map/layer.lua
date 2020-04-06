@@ -23,23 +23,6 @@ if ( _CLIENT ) then
 		local count = self:getWidth() * self:getHeight()
 		self.spritebatch = love.graphics.newSpriteBatch( image, count )
 	end
-
-	function layer:draw()
-		if ( self:getType() ~= "tilelayer" ) then
-			return
-		end
-
-		local spritebatch = self:getSpriteBatch()
-		if ( spritebatch == nil ) then
-			return
-		end
-
-		love.graphics.push()
-			love.graphics.translate( self:getX(), self:getY() )
-			love.graphics.setColor( color( color.white, self:getOpacity() * 255 ) )
-			love.graphics.draw( spritebatch )
-		love.graphics.pop()
-	end
 end
 
 accessor( layer, "data" )
@@ -59,10 +42,6 @@ accessor( layer, "opacity" )
 accessor( layer, "properties" )
 accessor( layer, "map" )
 
-if ( _CLIENT ) then
-	accessor( layer, "spriteBatch", nil, "spritebatch" )
-end
-
 accessor( layer, "tileset" )
 accessor( layer, "type" )
 accessor( layer, "width" )
@@ -72,32 +51,41 @@ accessor( layer, "y" )
 
 if ( _CLIENT ) then
 	function layer:initializeTiles()
-		self:createSpriteBatch()
+		self.spriteBatches = {}
 
-		local spritebatch = self:getSpriteBatch()
-		if ( spritebatch == nil ) then
-			return
-		end
-
-		local tileset  = self:getTileset()
-		local tileW    = tileset:getTileWidth()
-		local tileH    = tileset:getTileHeight()
-		local image    = tileset:getImage()
-		local imgW     = image:getWidth()
-		local imgH     = image:getHeight()
-		local quad     = love.graphics.newQuad( 0, 0, tileW, tileH, imgW, imgH )
-		local id       = 0
-		local tileX    = 0
-		local tileY    = 0
-		local firstgid = tileset:getFirstGid()
+		local id, firstgid, tileX, tileY, x, y, tileset, tileW, tileH, image, imgW, imgH, quad
 		local floor    = math.floor
-		local x        = 0
-		local y        = 0
-		local width    = self:getWidth()
-		local height   = self:getHeight()
+		local width = self:getWidth()
+		local height = self:getHeight()
+		local spritebatchCount = width * height
+		local mapTileSets = self:getMap().tilesets
 		table.foreachi( self:getData(), function( xy, gid )
 			if ( gid == 0 ) then
 				return
+			end
+
+			tileset = nil
+			for i, set in ipairs(mapTileSets) do
+				firstgid = set:getFirstGid()
+				if (gid >= firstgid and gid < firstgid + set:getTileCount()) then
+					tileset = set
+					break
+				end
+			end
+
+			assert(tileset ~= nil, string.format("Unable to find tileset for GID %i in layer %s", gid, self:getName()))
+
+			tileW = tileset:getTileWidth()
+			tileH = tileset:getTileHeight()
+			image = tileset:getImage()
+			imgW  = image:getWidth()
+			imgH  = image:getHeight()
+			quad  = love.graphics.newQuad( 0, 0, tileW, tileH, imgW, imgH )
+
+			local spritebatch = self.spriteBatches[tileset:getName()]
+			if (spritebatch == nil) then
+				spritebatch = love.graphics.newSpriteBatch( image, spritebatchCount )
+				self.spriteBatches[tileset:getName()] = spritebatch
 			end
 
 			id    = gid - firstgid
@@ -109,6 +97,21 @@ if ( _CLIENT ) then
 			y = floor( ( xy - 1 ) / width ) * tileH
 			spritebatch:add( quad, self:getX() + x, self:getY() + y )
 		end )
+	end
+
+	function layer:draw()
+		if ( self:getType() ~= "tilelayer" ) then
+			return
+		end
+
+		love.graphics.push()
+			love.graphics.translate( self:getX(), self:getY() )
+			love.graphics.setColor( color( color.white, self:getOpacity() * 255 ) )
+
+			for _, spritebatch in pairs(self.spriteBatches) do
+				love.graphics.draw( spritebatch )
+			end
+		love.graphics.pop()
 	end
 end
 
@@ -133,6 +136,11 @@ function layer:parse()
 	local type = self:getType()
 	if ( type == "tilelayer" ) then
 		self:setData( table.copy( data[ "data" ] ) )
+
+		if (_CLIENT) then
+			self:initializeTiles()
+		end
+
 		return
 	end
 
@@ -154,16 +162,6 @@ function layer:parse()
 	end
 
 	-- self.data = nil
-end
-
-function layer:setTileset( tileset )
-	self.tileset = tileset
-
-	if ( _CLIENT ) then
-		if ( self:getType() == "tilelayer" ) then
-			self:initializeTiles()
-		end
-	end
 end
 
 function layer:setVisible( visible )

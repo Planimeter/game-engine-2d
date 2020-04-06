@@ -361,17 +361,6 @@ end
 
 accessor( map, "properties" )
 
-function map:getTileset( layer )
-	local gid = layer:getHighestTileGid()
-	local tileset = nil
-	for _, t in ipairs( self:getTilesets() ) do
-		if ( t:getFirstGid() <= gid ) then
-			tileset = t
-		end
-	end
-	return tileset
-end
-
 accessor( map, "tilesets" )
 accessor( map, "tileWidth" )
 accessor( map, "tileHeight" )
@@ -540,9 +529,6 @@ function map:loadLayers( layers )
 		local layer = map.layer( layerData )
 		layer:setMap( self )
 		layer:parse()
-
-		local tileset = self:getTileset( layer )
-		layer:setTileset( tileset )
 		table.insert( self.layers, layer )
 	end
 end
