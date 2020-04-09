@@ -95,8 +95,8 @@ function sprite:update( dt )
 
 		if ( self.frame > animation.to ) then
 			local name = self:getAnimationName()
-			self:onAnimationEnd( name )
 			self.frame = animation.from
+			self:onAnimationEnd( name )
 		end
 
 		self:updateFrame()
