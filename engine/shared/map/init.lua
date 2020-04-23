@@ -387,6 +387,10 @@ local function beginContact( a, b, contact )
 	if ( a ) then
 		a:startTouch( b, contact )
 	end
+
+	if ( b ) then
+		b:startTouch( a, contact )
+	end
 end
 
 local function endContact( a, b, contact )
@@ -394,6 +398,10 @@ local function endContact( a, b, contact )
 	b = b:getUserData()
 	if ( a ) then
 		a:endTouch( b, contact )
+	end
+
+	if ( b ) then
+		b:endTouch( a, contact )
 	end
 end
 
