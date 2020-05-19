@@ -9,7 +9,7 @@ It was designed for multiplayer-first game experiences.
 [API Documentation](http://www.planimeter.org/grid-sdk/api/Home)
 
 ## Features
-* Add-ons
+* Add-ons/downloadable content (DLC)
 * Animation events
 * Binding configurations
 * Client-server model
@@ -28,6 +28,7 @@ It was designed for multiplayer-first game experiences.
 * Spritesheet animations
 * [Tiled](http://www.mapeditor.org/ "Tiled")-based maps
 * Tweening
+* Voice chat
 
 ## License
 MIT License
