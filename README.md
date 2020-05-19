@@ -13,6 +13,7 @@ It was designed for multiplayer-first game experiences.
 * Animation events
 * Binding configurations
 * Client-server model
+* Client-server code splitting
 * Client-side prediction
 * Dedicated servers
 * Entities
