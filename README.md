@@ -11,13 +11,17 @@ It was designed for multiplayer-first game experiences.
 ## Features
 * Add-ons
 * Animation events
+* Binding configurations
 * Client-server model
 * Client-side prediction
+* Dedicated servers
 * Entities
 * GUI
 * Level streaming
+* Listen servers
 * Live reloadable assets
 * Pathfinding
+* Pixel approximate physics
 * Real-time scripting
 * Retina support
 * Soundscripts
