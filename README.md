@@ -20,6 +20,7 @@ It was designed for multiplayer-first game experiences.
 * Level streaming
 * Listen servers
 * Live reloadable assets
+* Multiplayer file sending and receiving
 * Pathfinding
 * Pixel approximate physics
 * Real-time scripting
