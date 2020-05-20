@@ -12,7 +12,7 @@ It was designed for multiplayer-first game experiences.
 * Add-ons/downloadable content (DLC)
 * Animation events
 * Binding configurations
-* Client-server model
+* Client-server model with authoritative servers
 * Client-server code splitting
 * Client-side prediction
 * Dedicated servers
