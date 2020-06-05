@@ -4,6 +4,8 @@
 Grid is a game engine for Lua built by [Planimeter.](https://www.planimeter.org/)  
 It was designed for multiplayer-first game experiences.
 
+*Planimeter is a Steamworks partner.*
+
 ## Featured On
 [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/sindresorhus/awesome)  
 [ellisonleao / **magictools**](https://github.com/ellisonleao/magictools)  
