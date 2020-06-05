@@ -27,6 +27,7 @@ It was designed for multiplayer-first game experiences.
 * Level streaming
 * Listen servers
 * Live reloadable assets
+* Low violence flag support for international distribution
 * Multiplayer file sending and receiving
 * Pathfinding
 * Pixel approximate physics
