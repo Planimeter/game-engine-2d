@@ -38,6 +38,8 @@ It was designed for multiplayer-first game experiences.
 * Tweening
 * Voice chat
 
+[<img src="https://static.itch.io/images/badge.svg" height="36">](https://andrewmcwatters.itch.io/grid-sdk)
+
 ## License
 MIT License
 
