@@ -1,6 +1,4 @@
-<h1 class="mb-5">
-Features
-</h1>
+# Features
 
 <div class="alert alert-warning" role="alert">
   This page is a stub.
