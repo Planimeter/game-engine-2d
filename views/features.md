@@ -41,5 +41,5 @@ Input bindings allow your players to customize their controls and prevent you
 from needing to hard-code game commands.
 
 <p class="mb-5">
-  [Learn more about Binds →](/tutorials/Binds)
+  [Learn more about Binds →](tutorials/Binds)
 </p>
