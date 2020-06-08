@@ -1,6 +1,6 @@
 # Features
 
-<div class="alert alert-warning" role="alert">
+<div class="alert alert-warning mb-5" role="alert">
   This page is a stub.
 </div>
 
