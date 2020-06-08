@@ -12,13 +12,7 @@ s +back
 a +left
 d +right
 lshift +speed
-e +use
-tab +gamemenu
-wu zoomin
-wd zoomout
-y chat
-k +voice
-\ toggleconsole</code></pre>
+...</code></pre>
 
 <p class="mb-5">
   Input bindings allow your players to customize their controls and prevent you
