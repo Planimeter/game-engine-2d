@@ -42,8 +42,10 @@ simply remove the `engine/server/` and `game/server/` directories.
 
 ## Engine-game architecture
 
-As Grid continues to update, you can sync your fork and pull down changes.
-Engine code is contained in `engine/`, and sample game code in `game/`.
+<p class="mb-5">
+  As Grid continues to update, you can sync your fork and pull down changes.
+  Engine code is contained in `engine/`, and sample game code in `game/`.
+</p>
 
 ## Binds
 <pre><code>w +forward
@@ -58,5 +60,5 @@ from needing to hard-code game commands.
 
 <p class="mb-5">
   <!-- [Learn more about Binds →](tutorials/Binds) -->
-  Binds tutorial coming soon.
+  <small>Binds tutorial coming soon.</small>
 </p>
