@@ -40,4 +40,6 @@ lshift +speed
 <p class="mb-5">
   Input bindings allow your players to customize their controls and prevent you
   from needing to hard-code game commands.
+
+  [Learn more about Binds →](tutorials/Binds)
 </p>
