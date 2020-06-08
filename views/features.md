@@ -2,6 +2,21 @@
 Features
 </h1>
 
+## Binds
+<pre><code>w +forward
+s +back
+a +left
+d +right
+lshift +speed
+e +use
+tab +gamemenu
+wu zoomin
+wd zoomout
+y chat
+k +voice
+\ toggleconsole</code></pre>
+
 <p class="mb-5">
-  Coming soon.
+  Input bindings allow your players to customize their controls and prevent you
+  from needing to hard-code game commands.
 </p>
