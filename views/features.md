@@ -4,12 +4,21 @@
   This page is a stub.
 </div>
 
+## General purpose
+
+<p class="mb-5">
+  Grid is a general purpose 2D multiplayer game engine with first-class support
+  for tile-based games. It includes no integrated development environment to
+  lock you into the Grid Engine, and allows you to use the tools you prefer
+  instead.
+</p>
+
 ## Pure Lua
 
 <p class="mb-5">
   Grid is a pure Lua game engine. We don't use vendor-specific scripting, such
-  as a "GRDScript" to lock you in. If you decide to write portable Lua game
-  code, all the more power to you.
+  as a "GRDScript". If you decide to write portable Lua game code, all the more
+  power to you.
 </p>
 
 ## Powered by LÖVE
