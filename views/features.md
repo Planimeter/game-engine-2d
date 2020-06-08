@@ -2,6 +2,10 @@
 Features
 </h1>
 
+<div class="alert alert-warning" role="alert">
+  This page is a stub.
+</div>
+
 ## Binds
 <pre><code>w +forward
 s +back
