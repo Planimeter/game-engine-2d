@@ -17,8 +17,8 @@
 
 <p class="mb-5">
   Grid is a pure Lua game engine. We don't use vendor-specific scripting, such
-  as a "GRDScript". If you decide to write portable Lua game code, all the more
-  power to you.
+  as a "GRDScript". If you want to write portable Lua game code, more power
+  to you.
 </p>
 
 ## Powered by LÖVE
