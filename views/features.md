@@ -44,6 +44,17 @@
 
   <div class="col-6">
     <h2>
+      Engine-game architecture
+    </h2>
+
+    <p class="mb-5">
+      As Grid continues to update, you can sync your fork and pull down changes.
+      Engine code is contained in `engine/`, and sample game code in `game/`.
+    </p>
+  </div>
+
+  <div class="col-6">
+    <h2>
       Client-server architecture
     </h2>
 
@@ -54,17 +65,6 @@
     <p class="mb-5">
       Likewise, if you're distributing just the dedicated server, remove the
       `engine/client/` and `game/client/` directories.
-    </p>
-  </div>
-
-  <div class="col-6">
-    <h2>
-      Engine-game architecture
-    </h2>
-
-    <p class="mb-5">
-      As Grid continues to update, you can sync your fork and pull down changes.
-      Engine code is contained in `engine/`, and sample game code in `game/`.
     </p>
   </div>
 
