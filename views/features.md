@@ -11,10 +11,10 @@
     </h2>
 
     <p class="mb-5">
-      Grid is a general purpose 2D multiplayer game engine with first-class support
-      for tile-based games. It includes no integrated development environment to
-      lock you into the Grid Engine, and allows you to use the tools you prefer
-      instead.
+      Grid is a general purpose 2D multiplayer game engine with first-class
+      support for tile-based games. It includes no integrated development
+      environment to lock you into the Grid Engine, and allows you to use the
+      tools you prefer instead.
     </p>
   </div>
 
@@ -24,9 +24,9 @@
     </h2>
 
     <p class="mb-5">
-      Grid is a pure Lua game engine. We don't use vendor-specific scripting, such
-      as a "GRDScript". If you want to write portable Lua game code, more power
-      to you.
+      Grid is a pure Lua game engine. We don't use vendor-specific scripting,
+      such as a "GRDScript". If you want to write portable Lua game code, more
+      power to you.
     </p>
   </div>
 
@@ -36,9 +36,9 @@
     </h2>
 
     <p class="mb-5">
-      Grid is built on [LÖVE](https://love2d.org/). If you're familiar with LÖVE,
-      it'll be even easier to graduate to game engine features, and you can take
-      your LÖVE ecosystem software with you.
+      Grid is built on [LÖVE](https://love2d.org/). If you're familiar with
+      LÖVE, it'll be even easier to graduate to game engine features, and you
+      can take your LÖVE ecosystem software with you.
     </p>
   </div>
 
@@ -48,8 +48,9 @@
     </h2>
 
     <p class="mb-5">
-      As Grid continues to update, you can sync your fork and pull down changes.
-      Engine code is contained in `engine/`, and sample game code in `game/`.
+      As Grid continues to update, you can sync your fork and pull down
+      changes. Engine code is contained in `engine/`, and sample game code in
+      `game/`.
     </p>
   </div>
 
@@ -58,9 +59,11 @@
       Client-server architecture
     </h2>
 
-    Grid is split into client, server, and shared code. When you're ready to
-    distribute your game, if you want to hide its server-side implementation,
-    simply remove the `engine/server/` and `game/server/` directories.
+    <p>
+      Grid is split into client, server, and shared code. When you're ready to
+      distribute your game, if you want to hide its server-side implementation,
+      simply remove the `engine/server/` and `game/server/` directories.
+    </p>
 
     <p class="mb-5">
       Likewise, if you're distributing just the dedicated server, remove the
@@ -79,8 +82,32 @@ d +right
 lshift +speed
 ...</code></pre>
 
-    Input bindings allow your players to customize their controls and prevent you
-    from needing to hard-code game commands.
+    <p>
+      Input bindings allow your players to customize their controls and prevent
+      you from needing to hard-code game commands.
+    </p>
+
+    <p class="mb-5">
+      <!-- [Learn more about Binds →](tutorials/Binds) -->
+      <small>Binds tutorial coming soon.</small>
+    </p>
+  </div>
+
+  <div class="col-6">
+    <h2>
+      Graphical user interface
+    </h2>
+    <pre><code>w +forward
+s +back
+a +left
+d +right
+lshift +speed
+...</code></pre>
+
+    <p>
+      Input bindings allow your players to customize their controls and prevent you
+      from needing to hard-code game commands.
+    </p>
 
     <p class="mb-5">
       <!-- [Learn more about Binds →](tutorials/Binds) -->
