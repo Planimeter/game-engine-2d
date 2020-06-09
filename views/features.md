@@ -223,12 +223,6 @@ lshift +speed
 
   <div class="col-6 mb-5">
     <h2>
-      Engine-wide hot reloading
-    </h2>
-  </div>
-
-  <div class="col-6 mb-5">
-    <h2>
       Spritesheet animations
     </h2>
   </div>
