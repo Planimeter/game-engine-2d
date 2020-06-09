@@ -95,23 +95,21 @@ lshift +speed
 
   <div class="col-6">
     <h2>
-      Graphical user interface
+      W3C box model-based graphical user interfaces
     </h2>
-    <pre><code>w +forward
-s +back
-a +left
-d +right
-lshift +speed
-...</code></pre>
 
     <p>
-      Input bindings allow your players to customize their controls and prevent you
-      from needing to hard-code game commands.
+      Grid comes with generic reference implementations of default user
+      interfaces for common game engine functionality which can be used either
+      out of the box, or replaced with your own customized views using familiar
+      UI building techniques, industry standard layout algorithms, stylesheets,
+      and advanced panel compositing features like transluency and transform
+      animations.
     </p>
 
     <p class="mb-5">
-      <!-- [Learn more about Binds →](tutorials/Binds) -->
-      <small>Binds tutorial coming soon.</small>
+      <!-- [Learn more about GUIs →](tutorials/GUIs) -->
+      <small>GUI tutorial coming soon.</small>
     </p>
   </div>
 </div>
