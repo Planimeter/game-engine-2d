@@ -143,182 +143,182 @@ lshift +speed
     </p>
   </div>
 
-  <div class="col-6">
+  <div class="col-6 mb-5">
     <h2>
       Default HUD elements
     </h2>
   </div>
 
-  <div class="col-6">
+  <div class="col-6 mb-5">
     <h2>
       Multiplayer with client-side prediction and interpolation
     </h2>
   </div>
 
-  <div class="col-6">
+  <div class="col-6 mb-5">
     <h2>
       Camera
     </h2>
   </div>
 
-  <div class="col-6">
+  <div class="col-6 mb-5">
     <h2>
       Automatic framebuffer redraw
     </h2>
   </div>
 
-  <div class="col-6">
+  <div class="col-6 mb-5">
     <h2>
       Built-in chat with callbacks
     </h2>
   </div>
 
-  <div class="col-6">
+  <div class="col-6 mb-5">
     <h2>
       Worldspace debug overlays
     </h2>
   </div>
 
-  <div class="col-6">
+  <div class="col-6 mb-5">
     <h2>
       Automatic detection of high resolution asset variants
     </h2>
   </div>
 
-  <div class="col-6">
+  <div class="col-6 mb-5">
     <h2>
       Extensive engine-level and game-level callbacks
     </h2>
   </div>
 
-  <div class="col-6">
+  <div class="col-6 mb-5">
     <h2>
       Multiplayer file sending and receiving
     </h2>
   </div>
 
-  <div class="col-6">
+  <div class="col-6 mb-5">
     <h2>
       Voice chat
     </h2>
   </div>
 
-  <div class="col-6">
+  <div class="col-6 mb-5">
     <h2>
       Adjustable tick rate
     </h2>
   </div>
 
-  <div class="col-6">
+  <div class="col-6 mb-5">
     <h2>
       Type-length-value network payload system
     </h2>
   </div>
 
-  <div class="col-6">
+  <div class="col-6 mb-5">
     <h2>
       Engine-wide hot reloading
     </h2>
   </div>
 
-  <div class="col-6">
+  <div class="col-6 mb-5">
     <h2>
       Engine-wide hot reloading
     </h2>
   </div>
 
-  <div class="col-6">
+  <div class="col-6 mb-5">
     <h2>
       Spritesheet animations
     </h2>
   </div>
 
-  <div class="col-6">
+  <div class="col-6 mb-5">
     <h2>
       Default entity classes
     </h2>
   </div>
 
-  <div class="col-6">
+  <div class="col-6 mb-5">
     <h2>
       Tiled-based maps support
     </h2>
   </div>
 
-  <div class="col-6">
+  <div class="col-6 mb-5">
     <h2>
       Manhattan, Chebyshev, Euclidean, and customizable A* pathfinding
     </h2>
   </div>
 
-  <div class="col-6">
+  <div class="col-6 mb-5">
     <h2>
       Add-ons/downloadable content (DLC) support
     </h2>
   </div>
 
-  <div class="col-6">
+  <div class="col-6 mb-5">
     <h2>
       Lua 5.1.5 base library extensions
     </h2>
   </div>
 
-  <div class="col-6">
+  <div class="col-6 mb-5">
     <h2>
       Extensive engine-wide error protection
     </h2>
   </div>
 
-  <div class="col-6">
+  <div class="col-6 mb-5">
     <h2>
       Networkable button states
     </h2>
   </div>
 
-  <div class="col-6">
+  <div class="col-6 mb-5">
     <h2>
       Console commands, console variables, and player configs
     </h2>
   </div>
 
-  <div class="col-6">
+  <div class="col-6 mb-5">
     <h2>
       Engine, game, and gamemode hooks
     </h2>
   </div>
 
-  <div class="col-6">
+  <div class="col-6 mb-5">
     <h2>
       Profiling
     </h2>
   </div>
 
-  <div class="col-6">
+  <div class="col-6 mb-5">
     <h2>
       UTF-8 string library support
     </h2>
   </div>
 
-  <div class="col-6">
+  <div class="col-6 mb-5">
     <h2>
       Generic tweening interface
     </h2>
   </div>
 
-  <div class="col-6">
+  <div class="col-6 mb-5">
     <h2>
       Low violence flag support for international distribution
     </h2>
   </div>
 
-  <div class="col-6">
+  <div class="col-6 mb-5">
     <h2>
       Sample game code for modding-based game development, or total conversion
       mods
     </h2>
   </div>
 
-  <div class="col-6">
+  <div class="col-6 mb-5">
     <h2>
       Included shaders
     </h2>
