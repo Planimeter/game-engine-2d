@@ -115,4 +115,31 @@ lshift +speed
       <small>GUI tutorial coming soon.</small>
     </p>
   </div>
+
+  <div class="col-6">
+    <h2>
+      In-engine console
+    </h2>
+
+    <p>
+      Run console commands and set console variables from within Grid's
+      in-engine console.
+    </p>
+
+    <p class="mb-5">
+      <!-- [Learn more about the Console →](tutorials/Console) -->
+      <small>Console tutorial coming soon.</small>
+    </p>
+  </div>
+
+  <div class="col-6">
+    <h2>
+      Options menu
+    </h2>
+
+    <p>
+      Set input binds, configure your video and sound from Grid's out of the
+      box options menu.
+    </p>
+  </div>
 </div>
