@@ -6,7 +6,9 @@
 
 <div class="row">
   <div class="col-6">
-    ## General purpose
+    <h2>
+      General purpose
+    </h2>
 
     <p class="mb-5">
       Grid is a general purpose 2D multiplayer game engine with first-class support
@@ -17,7 +19,9 @@
   </div>
 
   <div class="col-6">
-    ## Pure Lua
+    <h2>
+      Pure Lua
+    </h2>
 
     <p class="mb-5">
       Grid is a pure Lua game engine. We don't use vendor-specific scripting, such
@@ -27,7 +31,9 @@
   </div>
 
   <div class="col-6">
-    ## Powered by LÖVE
+    <h2>
+      Powered by LÖVE
+    </h2>
 
     <p class="mb-5">
       Grid is built on [LÖVE](https://love2d.org/). If you're familiar with LÖVE,
@@ -37,7 +43,9 @@
   </div>
 
   <div class="col-6">
-    ## Client-server architecture
+    <h2>
+      Client-server architecture
+    </h2>
 
     Grid is split into client, server, and shared code. When you're ready to
     distribute your game, if you want to hide its server-side implementation,
@@ -50,7 +58,9 @@
   </div>
 
   <div class="col-6">
-    ## Engine-game architecture
+    <h2>
+      Engine-game architecture
+    </h2>
 
     <p class="mb-5">
       As Grid continues to update, you can sync your fork and pull down changes.
@@ -59,13 +69,15 @@
   </div>
 
   <div class="col-6">
-    ## Binds
+    <h2>
+      Binds
+    </h2>
     <pre><code>w +forward
-    s +back
-    a +left
-    d +right
-    lshift +speed
-    ...</code></pre>
+s +back
+a +left
+d +right
+lshift +speed
+...</code></pre>
 
     Input bindings allow your players to customize their controls and prevent you
     from needing to hard-code game commands.
