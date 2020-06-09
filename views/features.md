@@ -100,8 +100,11 @@ lshift +speed
 
     <p>
       Grid comes with generic reference implementations of default user
-      interfaces for common game engine functionality which can be used either
-      out of the box, or replaced with your own customized views using familiar
+      interfaces for common game engine functionality. The default UI can be
+      used either out of the box or replaced with your own customized views.
+    </p>
+
+    <p>
       UI building techniques, industry standard layout algorithms, stylesheets,
       and advanced panel compositing features like transluency and transform
       animations.
