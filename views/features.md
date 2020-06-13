@@ -235,7 +235,13 @@ lshift +speed
 
   <div class="col-6 mb-5">
     <h2>
-      Tiled-based maps support
+      Tiled-based map support
+    </h2>
+  </div>
+
+  <div class="col-6 mb-5">
+    <h2>
+      Level streaming and unloading
     </h2>
   </div>
 
@@ -266,12 +272,6 @@ lshift +speed
   <div class="col-6 mb-5">
     <h2>
       Networkable button states
-    </h2>
-  </div>
-
-  <div class="col-6 mb-5">
-    <h2>
-      Console commands, console variables, and player configs
     </h2>
   </div>
 
