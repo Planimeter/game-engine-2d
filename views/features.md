@@ -169,7 +169,7 @@ lshift +speed
 
   <div class="col-6 mb-5">
     <h2>
-      Built-in chat with callbacks
+      Built-in chat
     </h2>
   </div>
 
@@ -181,13 +181,13 @@ lshift +speed
 
   <div class="col-6 mb-5">
     <h2>
-      Automatic detection of high resolution asset variants
+      High-resolution asset variant detection
     </h2>
   </div>
 
   <div class="col-6 mb-5">
     <h2>
-      Extensive engine-level and game-level callbacks
+      Engine-level and game-level callbacks
     </h2>
   </div>
 
@@ -265,7 +265,7 @@ lshift +speed
 
   <div class="col-6 mb-5">
     <h2>
-      Extensive engine-wide error protection
+      Engine-wide error protection
     </h2>
   </div>
 
@@ -301,7 +301,7 @@ lshift +speed
 
   <div class="col-6 mb-5">
     <h2>
-      Low violence flag support for international distribution
+      Low violence support
     </h2>
   </div>
 
