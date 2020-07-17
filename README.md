@@ -9,9 +9,10 @@ It was designed for multiplayer-first game experiences.
 
 *Planimeter is a Steamworks partner.*
 
-## Featured On
-[![Hacker News](https://news.ycombinator.com/y18.gif) Hacker News](https://news.ycombinator.com/front?day=2020-06-07). June 7, 2020.  
-[![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/sindresorhus/awesome) [ellisonleao / **magictools**](https://github.com/ellisonleao/magictools). August 30, 2017.  
+## Featured On/In
+[GitHub Arctic Code Vault](https://archiveprogram.github.com/). July 16, 2020.  
+[Hacker News](https://news.ycombinator.com/front?day=2020-06-07). June 7, 2020.  
+[ellisonleao / **magictools**](https://github.com/ellisonleao/magictools). August 30, 2017.  
 
 ## Create a Project
 [Getting Started](http://www.planimeter.org/grid-sdk/tutorials/Getting_Started)  
