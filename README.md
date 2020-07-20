@@ -28,9 +28,9 @@ Planimeter @contributor, and we'll get to you ASAP.**
 * Client-server code splitting
 * Client-side prediction
 * [Configurable tick rate](https://www.planimeter.org/grid-sdk/api/Tick_rate_and_bandwidth)
+* CSS 2.1/CSS Backgrounds and Borders Level 3 based box model user interfaces
 * Dedicated servers
 * Entities
-* CSS 2.1/CSS Backgrounds and Borders Level 3 based box model user interfaces
 * Level streaming
 * Listen servers
 * Live reloadable assets
