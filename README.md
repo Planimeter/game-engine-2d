@@ -4,6 +4,9 @@ Grid is a 2D game engine written in pure Lua built by
 It was designed for multiplayer-first game experiences and to bring  
 professional-grade game engine features to the hobbyist community.
 
+Grid is the most feature-packed game engine you've never heard of, and  
+provides more functionality out-of-the-box than Defold and Solar2D combined.
+
 *Planimeter is a Steamworks partner.*
 
 ## Need Help?
