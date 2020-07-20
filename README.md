@@ -1,13 +1,15 @@
 # <img src="/images/gui/logo_dark@2x.png?raw=true" width="169" height="49" title="Grid">  
+Grid is a 2D game engine written in pure Lua built by
+[Planimeter.](https://www.planimeter.org/)  
+It was designed for multiplayer-first game experiences and to bring  
+professional-grade game engine features to the hobbyist community.
+
+*Planimeter is a Steamworks partner.*
+
 ## Need Help?
 [![Discord](https://img.shields.io/badge/chat-on%20discord-brightgreen.svg)](https://discord.gg/Gbj4jnv?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)  
 **Ask [@andrew](https://github.com/andrewmcwatters) or another
 Planimeter @contributor, and we'll get to you ASAP.**
-
-Grid is a game engine for Lua built by [Planimeter.](https://www.planimeter.org/)  
-It was designed for multiplayer-first game experiences.
-
-*Planimeter is a Steamworks partner.*
 
 ## Featured On/In
 [GitHub Arctic Code Vault](https://archiveprogram.github.com/). July 16, 2020.  
@@ -25,9 +27,10 @@ It was designed for multiplayer-first game experiences.
 * Client-server model with authoritative servers
 * Client-server code splitting
 * Client-side prediction
+* [Configurable tick rate](https://www.planimeter.org/grid-sdk/api/Tick_rate_and_bandwidth)
 * Dedicated servers
 * Entities
-* GUI
+* CSS 2.1/CSS Backgrounds and Borders Level 3 based box model user interfaces
 * Level streaming
 * Listen servers
 * Live reloadable assets
