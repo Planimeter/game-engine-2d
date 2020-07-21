@@ -45,6 +45,7 @@ Planimeter @contributor, and we'll get to you ASAP.**
 * Retina support
 * Soundscripts
 * Spritesheet animations
+* System font access
 * [Tiled](http://www.mapeditor.org/ "Tiled")-based maps
 * Tweening
 * Voice chat
