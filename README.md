@@ -1,5 +1,5 @@
 # <img src="/images/gui/logo_dark@2x.png?raw=true" width="169" height="49" title="Grid">  
-Grid is a 2D game engine written in pure Lua built by
+Grid is a 2D game engine written in pure Lua, built by
 [Planimeter.](https://www.planimeter.org/)  
 It was designed for multiplayer-first game experiences and to bring  
 professional-grade game engine features to the hobbyist community.
