@@ -53,8 +53,9 @@ function spriteAnimator:setAnimation( name )
 	local animations = self:getAnimations()
 	local animation  = animations[ name ]
 
-	if ( animation == nil ) then return end
+	assert(animation, string.format("Sprite Sheet %q does not contain animation %q", self.sprite:getSpriteSheetName(), name))
 	if ( animation == self:getAnimation() ) then return end
+	
 
 	self.animation     = animation
 	self.animationName = name
