@@ -4,6 +4,8 @@
 --
 --==========================================================================--
 
+require("engine.client.spriteAnimator")
+
 class( "sprite" )
 
 function sprite:sprite( spriteSheet )
@@ -25,11 +27,7 @@ function sprite:draw()
 	love.graphics.draw( image, self:getQuad() )
 end
 
-accessor( sprite, "animation" )
-accessor( sprite, "animationName" )
-accessor( sprite, "animations" )
-accessor( sprite, "events" )
-accessor( sprite, "frametime" )
+accessor( sprite, "animator" )
 
 function sprite:setFilter( ... )
 	local image = self:getSpriteSheet()
@@ -63,49 +61,24 @@ function sprite:onAnimationEvent( event )
 end
 
 function sprite:setAnimation( animation )
-	local animations = self:getAnimations()
-	local name = animation
-	animation  = animations[ name ]
-	if ( animation == nil ) then
-		return
-	end
-
-	if ( animation == self:getAnimation() ) then
-		return
-	end
-
-	self.animation     = animation
-	self.animationName = name
-	self.frame         = animation.from
-
-	self:updateFrame()
+	if (not self.animator) then return end
+	self.animator:setAnimation(animation)
 end
 
 function sprite:update( dt )
-	local animation = self:getAnimation()
-	if ( animation == nil ) then
-		return
-	end
-
-	self.curtime = self.curtime + dt
-
-	if ( self.curtime >= self.frametime ) then
-		self.curtime = 0
-		self.frame   = self.frame + 1
-
-		if ( self.frame > animation.to ) then
-			local name = self:getAnimationName()
-			self.frame = animation.from
-			self:onAnimationEnd( name )
-		end
-
-		self:updateFrame()
+	if (self.animator) then
+		self.animator:update(dt)
 	end
 end
 
-function sprite:updateFrame()
+function sprite:updateQuad()
+	if (not self.animator) then return end
+
+	local animation = self.animator:getAnimation()
+	if (#animation == 0) then return end
+
 	local quad       = self:getQuad()
-	local frame      = self.frame - 1
+	local frame      = animation[self.animator.frameIndex] - 1
 	local width      = self:getWidth()
 	local height     = self:getHeight()
 	local image      = self:getSpriteSheet()
@@ -113,12 +86,6 @@ function sprite:updateFrame()
 	local x          =             frame * width % imageWidth
 	local y          = math.floor( frame * width / imageWidth ) * height
 	quad:setViewport( x, y, width, height )
-
-	local events = self:getEvents()
-	local event  = events[ frame ]
-	if ( event ) then
-		self:onAnimationEvent( event )
-	end
 end
 
 function sprite:__tostring()
@@ -127,4 +94,17 @@ function sprite:__tostring()
 	local s = string.gsub( tostring( self ), "table", "sprite" )
 	setmetatable( self, t )
 	return s
+end
+
+function sprite:setSpriteSheet(spriteSheet)
+	local data       = require( spriteSheet )
+	self.spriteSheet = love.graphics.newImage( data[ "image" ] )
+
+	self.animator = spriteAnimator(self)
+	self.animator:setAnimations(data[ "animations" ] or {})
+	self.animator:setEvents(data[ "events" ] or {})
+	self.animator:setFrametime(data[ "frametime" ])
+
+	self.width       = data[ "width" ]
+	self.height      = data[ "height" ]
 end

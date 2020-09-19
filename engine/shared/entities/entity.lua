@@ -408,11 +408,12 @@ end
 if ( _CLIENT ) then
 	function entity:getAnimation()
 		local sprite = self:getSprite()
-		if ( type( sprite ) ~= "sprite" ) then
-			return
-		end
+		if ( type( sprite ) ~= "sprite" ) then return end
 
-		return sprite:getAnimationName()
+		local animator = sprite:getAnimator()
+		if (not animator) then return end
+
+		return sprite:getAnimator():getAnimationName()
 	end
 end
 
