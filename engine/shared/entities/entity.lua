@@ -410,10 +410,7 @@ if ( _CLIENT ) then
 		local sprite = self:getSprite()
 		if ( type( sprite ) ~= "sprite" ) then return end
 
-		local animator = sprite:getAnimator()
-		if (not animator) then return end
-
-		return sprite:getAnimator():getAnimationName()
+		return sprite:getAnimation()
 	end
 end
 
