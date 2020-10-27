@@ -9,7 +9,7 @@ return {
 		idlesouth = { 3 },
 		idlewest = { 4 },
 		-- idlenorth
-		idlenortheast = { 5 },
+		idlenortheast = { 1 },
 		-- idlesouth
 		idlesoutheast = { 3 },
 		-- idlesouth
