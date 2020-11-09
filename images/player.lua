@@ -4,26 +4,26 @@ return {
 	height = 32,
 	frametime = 0.25,
 	animations = {
-		idlenorth = { 1 },
-		idleeast = { 2 },
-		idlesouth = { 3 },
-		idlewest = { 4 },
+		idlenorth = 1,
+		idleeast = 2,
+		idlesouth = 3,
+		idlewest = 4,
 		-- idlenorth
-		idlenortheast = { 1 },
+		idlenortheast = 1,
 		-- idlesouth
-		idlesoutheast = { 3 },
+		idlesoutheast = 3,
 		-- idlesouth
-		idlesouthwest = { 3 },
+		idlesouthwest = 3,
 		-- idlenorth
-		idlenorthwest = { 1 },
-		walknorth = { { from = 33, to = 36 } },
-		walkeast = { { from = 65, to = 68 } },
-		walksouth = { { from = 97, to = 100 } },
-		walkwest = { { from = 129, to = 132 } },
-		walknortheast = { { from = 161, to = 164 } },
-		walksoutheast = { { from = 193, to = 196 } },
-		walksouthwest = { { from = 225, to = 228 } },
-		walknorthwest = { { from = 257, to = 260 } }
+		idlenorthwest = 1,
+		walknorth = { from = 33, to = 36 },
+		walkeast = { from = 65, to = 68 },
+		walksouth = { from = 97, to = 100 },
+		walkwest = { from = 129, to = 132 },
+		walknortheast = { from = 161, to = 164 },
+		walksoutheast = { from = 193, to = 196 },
+		walksouthwest = { from = 225, to = 228 },
+		walknorthwest = { from = 257, to = 260 }
 	},
 	events = {
 		-- walknorth

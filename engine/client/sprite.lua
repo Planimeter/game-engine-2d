@@ -16,6 +16,11 @@ accessor( sprite, "frameTime" )
 accessor( sprite, "animations" )
 accessor( sprite, "events" )
 
+sprite._commands = {
+	setFrameTime = 1,
+	setFrameIndex = 2
+}
+
 function sprite:sprite( spriteSheet )
 	-- Make sure this exists before loading a sprite sheet
 	self.animations      = {}
@@ -114,7 +119,7 @@ function sprite:updateQuad()
 	if (not self.curAnim) then return end
 
 	local quad       = self:getQuad()
-	local frame      = self.animations[self.curAnim:getAnimationName()][self.curAnim.frameIndex] - 1
+	local frame      = self.curAnim.frameIndex - 1
 	local width      = self:getWidth()
 	local height     = self:getHeight()
 	local image      = self:getSpriteSheet()
@@ -124,27 +129,57 @@ function sprite:updateQuad()
 	quad:setViewport( x, y, width, height )
 end
 
-function sprite:loadAnimations(animations)
-	assert(type(animations) == "table", "animTbl must be a table")
+local function processAnimFrame(spr, frame)
+	if (type(frame) == "number") then
+		return { { command = sprite._commands.setFrameIndex, value = frame } }
+	elseif (type(frame) == "function") then
+		local ret = {}
 
-	for animName, frameTbl in pairs(animations) do
-		local expanded = {}
+		while (true) do
+			local i = frame()
 
-		for index, frame in ipairs(frameTbl) do
-			if (type(frame) == "number") then
-				table.insert(expanded, frame)
-			elseif (type(frame) == "table") then
-				assert(type(frame["from"]) == "number", "frameTbl range table \"from\" must be a frame index")
-				assert(type(frame["to"]) == "number", "frameTbl range table \"to\" must be a frame index")
-				for frameIndex = frame.from, frame.to, (frame.to < frame.from and -1 or 1) do
-					table.insert(expanded, frameIndex)
-				end
-			else
-				assert(false, "frameTbl must contain frame indices, or a range table")
-			end
+			if (not i) then break end
+
+			table.insert(ret, { command = sprite._commands.setFrameIndex, value = i })
 		end
 
-		self.animations[animName] = expanded
+		return ret
+	elseif (type(frame) == "table") then
+		if (type(frame.frameTime) == "number" and frame.frames) then
+			local ret = processAnimFrame(spr, frame.frames)
+			table.insert(ret, 1, { command = sprite._commands.setFrameTime, value = frame.frameTime })
+			table.insert(ret, { command = sprite._commands.setFrameTime, value = spr:getFrameTime() })
+			return ret
+		elseif (type(frame.from) == "number" and type(frame.to) == "number") then
+			local ret = {}
+
+			for frameIndex = frame.from, frame.to, (frame.from < frame.to and 1 or -1) do
+				table.insert(ret, { command = sprite._commands.setFrameIndex, value = frameIndex })
+			end
+
+			return ret
+		else
+			local ret = {}
+
+			for i, v in ipairs(frame) do
+				table.append(ret, processAnimFrame(spr, v))
+			end
+
+			return ret
+		end
+	else
+		assert(false, "Frame table must contain frame indices, a range, or a frame sub-table")
+	end
+end
+
+function sprite:loadAnimations(animations)
+	if (not animations) then return end
+	assert(type(animations) == "table", "Animations must be a table")
+
+	for animName, frameTbl in pairs(animations) do
+		local sequence = processAnimFrame(self, frameTbl)
+		table.insert(sequence, 1, { command = sprite._commands.setFrameTime, value = self:getFrameTime() })
+		self.animations[animName] = sequence
 	end
 end
 
@@ -156,9 +191,8 @@ function sprite:createAnimInstance(animName)
 
 	local instance = spriteanim()
 	instance:setSprite(self)
-	instance:setFrameTime(self:getFrameTime())
 	instance:setAnimationName(animName)
-	instance:setFrames(frames)
+	instance:setSequence(frames)
 
 	table.insert(self.animInstances, instance)
 	instance.sprIndex = table.getn(self.animInstances)
@@ -166,12 +200,9 @@ function sprite:createAnimInstance(animName)
 	return instance
 end
 
+
 function sprite:__tostring()
-	local t = getmetatable( self )
-	setmetatable( self, {} )
-	local s = string.gsub( tostring( self ), "table", "sprite" )
-	setmetatable( self, t )
-	return s
+	return string.format("sprite: %q", self.spriteSheetName)
 end
 
 function sprite:setSpriteSheet(spriteSheet)
@@ -179,9 +210,9 @@ function sprite:setSpriteSheet(spriteSheet)
 	self.spriteSheet     = love.graphics.newImage( data[ "image" ] )
 	self.spriteSheetName = spriteSheet
 
-	self:loadAnimations(data[ "animations" ] or {})
 	self:setEvents(data[ "events" ] or {})
 	self:setFrameTime(data[ "frametime" ])
+	self:loadAnimations(data[ "animations" ]) -- load animations after the frametime is set
 
 	self.width       = data[ "width" ]
 	self.height      = data[ "height" ]

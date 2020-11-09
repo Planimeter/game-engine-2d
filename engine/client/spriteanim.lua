@@ -1,19 +1,29 @@
 class "spriteanim"
 
 accessor( spriteanim, "sprite" )
-accessor( spriteanim, "frameTime" )
 accessor( spriteanim, "animationName" )
-accessor( spriteanim, "frames" )
+accessor( spriteanim, "sequence" )
 
 function spriteanim:spriteanim()
 	self.sprIndex            = 0 -- This is the index in the owning sprite's animInstance table. (result of table.insert)
 	self.curTime             = 0
+	self.targetFrameTime     = 0
 	self.paused              = false
-	self.frames              = {}
+	self.sequence            = {}
+	self.sequenceIndex       = 1
 	self.frameIndex          = 1
 	self.singleFrameFinished = false
 	self.loop                = true
 	self.animEnded           = false
+end
+
+function spriteanim:__tostring()
+	return string.format("sprite animation: %q [frame: %i]", self.animationName, self.frameIndex)
+end
+
+function spriteanim:setSequence(sequence)
+	self.sequence = sequence
+	self:play()
 end
 
 function spriteanim:pause()
@@ -26,38 +36,69 @@ end
 
 function spriteanim:loop(bShouldLoop)
 	self.loop = toboolean(bShouldLoop)
-	self:play()
+
+	if (bShouldLoop) then
+		self:play()
+	end
 end
 
 function spriteanim:play()
-	self.frameIndex = 1
+	self.sequenceIndex = 1
 	self.curTime = 0
+	self:pollCommands()
+end
+
+function spriteanim:pollCommands()
+	if (self.paused) then return end
+
+	local sequence = self.sequence
+	if (self.sequenceIndex > #sequence) then return end
+
+	local command = sequence[self.sequenceIndex]
+
+	if (command.command == sprite._commands.setFrameTime) then
+		self.targetFrameTime = command.value
+		self.curTime = 0
+
+		-- increment sequence index and repoll to prevent frameIndex flickering
+		self.sequenceIndex = self.sequenceIndex + 1
+		self:pollCommands()
+		return
+	elseif (command.command == sprite._commands.setFrameIndex) then
+		self.frameIndex = command.value
+	else
+		error(string.format("Invalid sprite command %q", tostring(command.command)))
+	end
+
+	self.sequenceIndex = self.sequenceIndex + 1 -- Increment after so we dont have to bounds check it because lazy
+
+	if ( self.sequenceIndex > #sequence ) then
+		if (self.loop) then
+			self.sequenceIndex = 1
+		end
+
+		local name = self:getAnimationName()
+		local spr = self:getSprite()
+		local status, ret = pcall(spr.onAnimationEnd, spr, name )
+		if (not status) then print(ret) end
+	end
 end
 
 function spriteanim:update(dt)
-	local spr = self:getSprite()
-	local frames = self:getFrames()
+	if (self.paused) then return end
 
-	if ( not spr or #frames == 0 or (self.singleFrameFinished and #frames == 1)  or self.paused ) then return end
+	local spr = self:getSprite()
+	if (not spr) then return end
+
+	local sequence = self:getSequence()
+	if ( #sequence == 0 or (self.singleFrameFinished and #sequence == 1) ) then return end
 
 	self.curTime = self.curTime + dt
 
-	if ( self.curTime >= spr:getFrameTime() ) then
+	if ( self.curTime >= self.targetFrameTime ) then
 		self.curTime = 0
-		self.frameIndex = self.frameIndex + 1
 
-		-- This should always pass when the animation is a single frame
-		if ( self.frameIndex > #frames ) then
-			if (self.loop) then
-				self.frameIndex = 1
-			else
-				self.frameIndex = #frames
-			end
-
-			local name = self:getAnimationName()
-			local status, ret = pcall(spr.onAnimationEnd, spr, name )
-			if (not status) then print(ret) end
-		end
+		self:pollCommands()
 
 		spr:updateQuad()
 		self.singleFrameFinished = true
