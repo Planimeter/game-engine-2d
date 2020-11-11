@@ -23,6 +23,13 @@ end
 
 function spriteanim:setSequence(sequence)
 	self.sequence = sequence
+
+	-- `#sequence == 2` should be true only for single frame anims. The first sequence should be the frameTime command, second should be frameIndex.
+	-- This prevents single frame animations from constantly calling `spri:onAnimationEnd`, also single frame animations dont need to loop
+	if (#self.sequence == 2) then
+		self.loop = false
+	end
+
 	self:play()
 end
 
@@ -45,6 +52,8 @@ end
 function spriteanim:play()
 	self.sequenceIndex = 1
 	self.curTime = 0
+	self.singleFrameFinished = false
+	self:resume()
 	self:pollCommands()
 end
 
@@ -52,7 +61,10 @@ function spriteanim:pollCommands()
 	if (self.paused) then return end
 
 	local sequence = self.sequence
-	if (self.sequenceIndex > #sequence) then return end
+	if (self.sequenceIndex > #sequence) then
+		self:pause()
+		return
+	end
 
 	local command = sequence[self.sequenceIndex]
 	local spr = self:getSprite()
@@ -101,9 +113,6 @@ function spriteanim:update(dt)
 
 	local spr = self:getSprite()
 	if (not spr) then return end
-
-	local sequence = self:getSequence()
-	if ( #sequence == 0 or (self.singleFrameFinished and #sequence == 1) ) then return end
 
 	self.curTime = self.curTime + dt
 
