@@ -55,6 +55,7 @@ function spriteanim:pollCommands()
 	if (self.sequenceIndex > #sequence) then return end
 
 	local command = sequence[self.sequenceIndex]
+	local spr = self:getSprite()
 
 	if (command.command == sprite._commands.setFrameTime) then
 		self.targetFrameTime = command.value
@@ -66,6 +67,18 @@ function spriteanim:pollCommands()
 		return
 	elseif (command.command == sprite._commands.setFrameIndex) then
 		self.frameIndex = command.value
+
+		local event = spr.events[self.frameIndex]
+		if (event) then
+			if (type(event) ~= "table") then
+				event = { event }
+			end
+
+			for i, v in ipairs(event) do
+				local status, ret = pcall(spr.onAnimationEvent, spr, v)
+				if (not status) then print(ret) end
+			end
+		end
 	else
 		error(string.format("Invalid sprite command %q", tostring(command.command)))
 	end
@@ -78,7 +91,6 @@ function spriteanim:pollCommands()
 		end
 
 		local name = self:getAnimationName()
-		local spr = self:getSprite()
 		local status, ret = pcall(spr.onAnimationEnd, spr, name )
 		if (not status) then print(ret) end
 	end

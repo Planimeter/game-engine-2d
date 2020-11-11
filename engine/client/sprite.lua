@@ -105,12 +105,6 @@ function sprite:update( dt )
 		local instance = self.animInstances[index]
 		if (instance and not instance.paused) then
 			instance:update(dt)
-
-			local event = self.events[instance.frameIndex]
-			if (event) then
-				local status, ret = pcall(self.onAnimationEnd, self, event)
-				if (not status) then print(ret) end
-			end
 		end
 	end
 end
