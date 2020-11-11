@@ -87,7 +87,7 @@ function spriteanim:pollCommands()
 			end
 
 			for i, v in ipairs(event) do
-				local status, ret = pcall(spr.onAnimationEvent, spr, v)
+				local status, ret = pcall(spr.onAnimationEvent, spr, self, v)
 				if (not status) then print(ret) end
 			end
 		end

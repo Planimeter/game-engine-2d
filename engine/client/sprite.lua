@@ -72,7 +72,7 @@ end
 function sprite:onAnimationEnd( animation )
 end
 
-function sprite:onAnimationEvent( event )
+function sprite:onAnimationEvent( instance, event )
 end
 
 function sprite:setAnimation( animation )
