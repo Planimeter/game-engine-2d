@@ -89,8 +89,12 @@ function math.pointonlinesegment( x1, y1, x2, y2, px, py )
 	return math.pointonline( x1, y1, x2, y2, px, py )
 end
 
-function math.remap( n, inMin, inMax, outMin, outMax )
-	return ( n / ( inMax - inMin ) ) * ( outMax - outMin ) + outMin
+function math.remap(v, srcLow, srcHigh, destLow, destHigh)
+    return destLow + (destHigh - destLow) * (v - srcLow) / (srcHigh - srcLow)
+end
+
+function math.remapClamp(v, srcLow, srcHigh, destLow, destHigh)
+    return destLow + (destHigh - destLow) * math.clamp((v - srcLow) / (srcHigh - srcLow), 0, 1)
 end
 
 function math.round( n )
