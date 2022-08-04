@@ -22,8 +22,8 @@ Planimeter @contributor, and we'll get to you ASAP.**
 [ellisonleao / **magictools**](https://github.com/ellisonleao/magictools). August 30, 2017.  
 
 ## Create a Project
-[Getting Started](http://www.planimeter.org/grid-sdk/tutorials/Getting_Started)  
-[API Documentation](http://www.planimeter.org/grid-sdk/api/Home)
+[Getting Started](https://github.com/Planimeter/game-engine-2d/wiki/Getting_Started)  
+[API Documentation](https://github.com/Planimeter/game-engine-2d/wiki/Home)
 
 ## Features
 * Add-ons/downloadable content (DLC)
