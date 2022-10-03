@@ -58,6 +58,7 @@ if ( rawprint == nil and rawtype == nil ) then
 end
 
 function toboolean( v )
+	if (type(v) == "boolean") then return v end
 	local n = tonumber( v )
 	return n ~= nil and n ~= 0
 end
