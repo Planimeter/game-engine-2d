@@ -4,9 +4,6 @@ return {
 	height = 16,
 	frametime = 0.04,
 	animations = {
-		click = {
-			from = 1,
-			to = 8
-		}
+		click = { from = 1, to = 8 }
 	}
 }

@@ -363,7 +363,7 @@ if ( _CLIENT ) then
 	                             "Plays footstep sounds for players", nil,
 	                             { "archive" } )
 
-	function player:onAnimationEvent( event )
+	function player:onAnimationEvent( instance, event )
 		if ( cl_footsteps:getBoolean() ) then
 			updateStepSound( self, event )
 		end

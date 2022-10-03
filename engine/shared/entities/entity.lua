@@ -408,11 +408,9 @@ end
 if ( _CLIENT ) then
 	function entity:getAnimation()
 		local sprite = self:getSprite()
-		if ( type( sprite ) ~= "sprite" ) then
-			return
-		end
+		if ( type( sprite ) ~= "sprite" ) then return end
 
-		return sprite:getAnimationName()
+		return sprite:getAnimation()
 	end
 end
 
@@ -731,7 +729,7 @@ if ( _CLIENT ) then
 	function entity:onAnimationEnd( animation )
 	end
 
-	function entity:onAnimationEvent( event )
+	function entity:onAnimationEvent( instance, event )
 	end
 end
 
@@ -895,8 +893,8 @@ if ( _CLIENT ) then
 				self:onAnimationEnd( animation )
 			end
 
-			sprite.onAnimationEvent = function( _, event )
-				self:onAnimationEvent( event )
+			sprite.onAnimationEvent = function( _, instance, event )
+				self:onAnimationEvent( instance, event )
 			end
 		end
 
