@@ -170,7 +170,7 @@ function table.print( t, i, printed )
 	local indent = string.rep( "\t", i )
 	for k, v in pairs( t ) do
 		if ( type( v ) == "table" and not printed[ v ] ) then
-			print( indent .. k )
+			print( indent .. tostring( k ) )
 			table.print( v, i + 1, printed )
 		else
 			print( indent .. tostring( k ), v )
