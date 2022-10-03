@@ -141,10 +141,10 @@ if ( _CLIENT ) then
 		love.graphics.push()
 			local x, y   = renderable:getDrawPosition()
 			local sprite = renderable:getSprite()
-			local height = sprite:getHeight()
+			local height = sprite and sprite:getHeight() or game.tileSize
 			love.graphics.translate( x, y )
 			love.graphics.setColor( color.black )
-			love.graphics.translate( sprite:getWidth() / 2, height )
+			love.graphics.translate( (sprite and sprite:getWidth() or game.tileSize) / 2, height )
 			love.graphics.scale( 1, -1 )
 			renderable:drawShadow()
 		love.graphics.pop()
@@ -356,7 +356,7 @@ if ( _CLIENT ) then
 		local sprite = self:getSprite()
 		if ( type( sprite ) == "sprite" ) then
 			sprite:draw()
-		else
+		elseif (sprite) then
 			love.graphics.draw( sprite )
 		end
 
@@ -378,8 +378,8 @@ if ( _CLIENT ) then
 		local r      = math.rad( 0 )
 		local sx     = 1
 		local sy     = 1
-		local ox     = sprite:getWidth() / 2
-		local oy     = sprite:getHeight()
+		local ox     = (sprite and sprite:getWidth() or game.tileSize) / 2
+		local oy     = (sprite and sprite:getHeight() or game.tileSize)
 		local kx     = -1
 		local ky     = 0
 		if ( type( sprite ) == "sprite" ) then
@@ -388,7 +388,7 @@ if ( _CLIENT ) then
 				sprite:getQuad(),
 				x, y, r, sx, sy, ox, oy, kx, ky
 			)
-		else
+		elseif (sprite) then
 			love.graphics.draw(
 				sprite,
 				x, y, r, sx, sy, ox, oy, kx, ky
@@ -429,7 +429,7 @@ if ( _CLIENT ) then
 		local y = position.y
 
 		local sprite = self:getSprite()
-		local height = sprite:getHeight()
+		local height = sprite and sprite:getHeight() or game.tileSize
 		y = y - height
 
 		local localPosition = self:getLocalPosition()
